@@ -1,0 +1,25 @@
+{
+  "name": "create-oberon-app",
+  "version": "0.0.0",
+  "author": "Jon Vivian",
+  "repository": "tohuhono/oberon",
+  "bugs": "https://github.com/tohuhono/oberon",
+  "homepage": "https://tohuhono.com/oberon",
+  "private": false,
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-puck-app": "./index.js"
+  },
+  "files": [
+    "templates",
+    "index.js"
+  ],
+  "scripts": {
+    "generate": "node scripts/generate.js",
+    "prepublishOnly": "npm generate",
+    "removeGitignore": "mv templates/.gitignore templates/gitignore",
+    "restoreGitignore": "mv templates/gitignore templates/.gitignore"
+  },
+  "dependencies": {}
+}
