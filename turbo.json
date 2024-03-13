@@ -4,14 +4,28 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["lint:types", "lint:eslint"]
     },
+    "lint:types": {
+      "dependsOn": ["^build"]
+    },
+    "lint:eslint": {},
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^wait"]
+    },
+    "wait": {
+      "cache": false
+    },
+    "postinstall": {
+      "cache": false
+    },
+    "clean": {
+      "cache": false
     }
   }
 }

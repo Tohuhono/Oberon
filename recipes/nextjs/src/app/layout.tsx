@@ -1,7 +1,7 @@
-import "@/app/globals.css"
+import "src/app/globals.css"
 import { Montserrat } from "next/font/google"
-import Providers from "./providers"
-import { cn } from "@/lib/utils"
+
+import { cn } from "@oberon/utils"
 const font = Montserrat({ subsets: ["latin"] })
 
 export const metadata = {
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
         <ApplyMode />
       </head>
       <body className={cn(font.className, "bg-background text-foreground")}>
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   )

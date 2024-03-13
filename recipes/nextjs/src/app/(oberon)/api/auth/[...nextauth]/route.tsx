@@ -1,1 +1,1 @@
-export { GET, POST } from "@/puck/auth"
+export { GET, POST } from "src/auth/next-auth"

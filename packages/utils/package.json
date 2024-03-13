@@ -1,0 +1,25 @@
+{
+  "name": "@oberon/utils",
+  "version": "0.0.0",
+  "author": "Tohuhono ltd",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c --watch",
+    "wait": "wait-on dist/index.d.ts",
+    "lint:eslint": "eslint .",
+    "lint:types": "tsc"
+  },
+  "dependencies": {
+    "tailwind-merge": "^2.2.1"
+  },
+  "devDependencies": {
+    "@oberon/config": "*",
+    "@types/react": "18.2.64",
+    "rollup": "^4.12.1",
+    "typescript": "^5.4.2"
+  }
+}

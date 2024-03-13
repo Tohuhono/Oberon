@@ -1,11 +1,3 @@
-import { PropsWithChildren } from "react"
-import { ClassNameValue, twMerge } from "tailwind-merge"
-
-export type CNProps<T = unknown> = PropsWithChildren<T & { className?: string }>
-export function cn(...inputs: ClassNameValue[]) {
-  return twMerge(inputs)
-}
-
 /**
  * Returns a promise that resolves after @param ms
  */
