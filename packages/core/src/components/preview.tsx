@@ -11,7 +11,7 @@ export function Preview({
 }: {
   path: string
   config: Config
-  data?: Data
+  data: Data | null
 }) {
   const localData = useLocalData(path, config)[0] || data
 

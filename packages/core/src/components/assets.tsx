@@ -12,10 +12,10 @@ import { Asset, type Actions } from "src/schema"
 
 export function Assets({
   assets: initialAssets,
-  actions: { deleteAsset },
+  deleteAsset,
 }: {
   assets: Asset[]
-  actions: Actions
+  deleteAsset: Actions["deleteAsset"]
 }) {
   const [assets, setAssets] = useState(initialAssets)
 

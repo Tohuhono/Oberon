@@ -3,7 +3,6 @@ declare module "@auth/core/adapters" {
     role: "user" | "admin"
   }
 
-
   interface User {
     role: "user" | "admin"
   }
@@ -28,4 +27,3 @@ declare module "@auth/core/types" {
     role: "user" | "admin"
   }
 }
-

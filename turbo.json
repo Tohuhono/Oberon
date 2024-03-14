@@ -3,16 +3,18 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
+      "dotEnv": [".env.local", ".env"],
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
-      "dependsOn": ["lint:types", "lint:eslint"]
+      "dependsOn": ["lint:types", "lint:style", "lint:format"]
     },
     "lint:types": {
       "dependsOn": ["^build"]
     },
-    "lint:eslint": {},
+    "lint:style": {},
+    "lint:format": {},
     "dev": {
       "cache": false,
       "persistent": true,
@@ -21,11 +23,6 @@
     "wait": {
       "cache": false
     },
-    "postinstall": {
-      "cache": false
-    },
-    "clean": {
-      "cache": false
-    }
+    "postinstall": {}
   }
 }

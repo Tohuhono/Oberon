@@ -10,7 +10,7 @@
     "build": "rollup -c",
     "dev": "rollup -c --watch",
     "wait": "wait-on dist/index.d.ts",
-    "lint:eslint": "eslint .",
+    "lint:style": "eslint .",
     "lint:types": "tsc"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
   "devDependencies": {
     "@oberon/dev": "*",
     "@types/react": "18.2.64",
+    "@types/node": "^20.11.27",
     "rollup": "^4.12.1",
     "typescript": "^5.4.2"
   }

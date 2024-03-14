@@ -12,12 +12,12 @@ export function Editor({
   path,
   data,
   config,
-  actions: { publishPageData },
+  publishPageData,
 }: {
   path: string
-  data?: Data
+  data: Data | null
   config: Config
-  actions: Actions
+  publishPageData: Actions["publishPageData"]
 }) {
   const [localData, setLocalData] = useLocalData(path, config)
 

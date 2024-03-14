@@ -8,10 +8,10 @@ import type { Actions } from "src/schema"
 
 export function AllPages({
   keys,
-  actions: { deletePage },
+  deletePage,
 }: {
   keys: Route[]
-  actions: Actions
+  deletePage: Actions["deletePage"]
 }) {
   const [newPath, setNewPath] = useState("")
 

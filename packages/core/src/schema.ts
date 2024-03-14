@@ -46,19 +46,19 @@ export const primitives = ["div", "p", "h1", "h2", "h3", "ul", "li"] as const
 export type Primitive = (typeof primitives)[number]
 
 export type Actions = {
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<User | undefined>
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<User | null>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
-  ) => Promise<Pick<User, "id"> | undefined>
+  ) => Promise<Pick<User, "id"> | null>
   changeRole: (
     data: z.infer<typeof ChangeRoleSchema>,
-  ) => Promise<Pick<User, "role" | "id"> | undefined>
+  ) => Promise<Pick<User, "role" | "id"> | null>
   getAllUsers: () => Promise<User[]>
   getAllAssets: () => Promise<Asset[]>
   deleteAsset: (key: unknown) => Promise<void> // TODO uploadthing
   deletePage: (key: string) => Promise<void>
   publishPageData: (props: { key: string; data: Data }) => Promise<void>
-  getPageData: (url: string) => Promise<Data | undefined>
+  getPageData: (url: string) => Promise<Data | null>
   getAllKeys: () => Promise<Route[]>
   getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
 }

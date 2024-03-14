@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { Metadata } from "next/types"
 import { resolvePuckPath } from "./resolve-puck-path"
 import { renderConfig } from "./renderConfig"
-import { Actions } from "./schema"
+import { Actions } from "../schema"
 
 export function initGenerateStaticParams({ getAllPaths }: Actions) {
   return async function () {

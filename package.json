@@ -6,8 +6,9 @@
     "postinstall": "turbo postinstall",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "rimraf --glob ./*/*/dist ./dist ./*/*/.next ./*/*/.vercel"
+    "lint:fix": "turbo lint:style -- --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
+    "clean": "rimraf --glob ./apps/*/dist ./packages/*/dist ./recipes/*/dist ./dist"
   },
   "dependencies": {
     "dotenv": "^16.4.5"

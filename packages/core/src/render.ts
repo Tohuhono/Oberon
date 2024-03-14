@@ -1,1 +1,1 @@
-export * from "./puck-render"
+export * from "./app/puck-render"

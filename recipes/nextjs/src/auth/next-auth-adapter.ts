@@ -1,6 +1,8 @@
 import "server-only"
 
+import { randomUUID } from "crypto"
 import { eq, and } from "drizzle-orm"
+import type { Adapter, AdapterAccount } from "@auth/core/adapters"
 import {
   users,
   accounts,
@@ -8,8 +10,6 @@ import {
   verificationTokens,
 } from "src/db/schema/next-auth-schema"
 import { db } from "src/db/client"
-import type { Adapter, AdapterAccount } from "@auth/core/adapters"
-import { randomUUID } from "crypto"
 
 function LibsqlDrizzleAdapter(client: typeof db) {
   return {

@@ -1,1 +1,1 @@
-export * from "./puck-client"
+export * from "./app/puck-client"

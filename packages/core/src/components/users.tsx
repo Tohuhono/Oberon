@@ -24,10 +24,14 @@ import { Actions, AddUserSchema, User, roles } from "src/schema"
 
 export function Users({
   users: initialUsers,
-  actions: { addUser, changeRole, deleteUser },
+  addUser,
+  changeRole,
+  deleteUser,
 }: {
   users: User[]
-  actions: Actions
+  addUser: Actions["addUser"]
+  changeRole: Actions["changeRole"]
+  deleteUser: Actions["deleteUser"]
 }) {
   const [users, setUsers] = useState(initialUsers)
 

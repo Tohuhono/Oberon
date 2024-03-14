@@ -4,12 +4,11 @@
   "description": "",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/cjs/index.js"
+      "types": "./dist/schema.d.ts",
+      "import": "./dist/schema.js",
+      "require": "./dist/cjs/schema.js"
     },
     "./render": {
       "types": "./dist/render.d.ts",
@@ -25,8 +24,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c --watch",
-    "wait": "wait-on dist/index.d.ts",
-    "lint:eslint": "eslint .",
+    "wait": "wait-on dist",
+    "lint:style": "eslint .",
     "lint:types": "tsc -p tsconfig.json --pretty --noEmit"
   },
   "dependencies": {

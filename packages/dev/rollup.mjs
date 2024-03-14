@@ -19,7 +19,6 @@ const plugins = [
   }),
   // typescript build mostly using tsconfig
   swc({
-    minify: true,
     jsc: {
       minify: {
         sourceMap: true,

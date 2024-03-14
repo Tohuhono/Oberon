@@ -7,7 +7,7 @@ import { Assets } from "src/components/assets"
 import { Users } from "src/components/users"
 import { getTitle } from "@oberon/utils"
 import type { Metadata } from "next"
-import type { Actions } from "./schema"
+import type { Actions } from "../schema"
 import { resolvePuckPath } from "./resolve-puck-path"
 import { clientConfig } from "./clientConfig"
 
@@ -28,14 +28,25 @@ export async function PuckClient({
   route,
   path,
   config,
-  actions,
+  actions: {
+    getPageData,
+    getAllUsers,
+    getAllKeys,
+    getAllAssets,
+    publishPageData,
+    addUser,
+    changeRole,
+    deleteUser,
+    deleteAsset,
+    deletePage,
+  },
 }: {
   route: string
   path: string
   config: Config
   actions: Actions
 }) {
-  const { getPageData, getAllUsers, getAllKeys, getAllAssets } = actions
+  console.log("route", route, "path", path)
 
   if (route === "edit") {
     return (
@@ -43,7 +54,10 @@ export async function PuckClient({
         path={path}
         data={await getPageData(path)}
         config={config}
-        actions={actions}
+        publishPageData={async (props) => {
+          "use server"
+          return publishPageData(props)
+        }}
       />
     )
   }
@@ -58,13 +72,39 @@ export async function PuckClient({
     <>
       <PuckMenu title={getTitle(route, path)} path={`/cms${route}`} />
       {route === "users" && (
-        <Users users={await getAllUsers()} actions={actions} />
+        <Users
+          users={await getAllUsers()}
+          addUser={async (data) => {
+            "use server"
+            return addUser(data)
+          }}
+          changeRole={async (data) => {
+            "use server"
+            return changeRole(data)
+          }}
+          deleteUser={async (data) => {
+            "use server"
+            return deleteUser(data)
+          }}
+        />
       )}
       {route === "assets" && (
-        <Assets assets={await getAllAssets()} actions={actions} />
+        <Assets
+          assets={await getAllAssets()}
+          deleteAsset={async (key) => {
+            "use server"
+            return deleteAsset(key)
+          }}
+        />
       )}
       {(route === "pages" || !route) && (
-        <AllPages keys={await getAllKeys()} actions={actions} />
+        <AllPages
+          keys={await getAllKeys()}
+          deletePage={async (key) => {
+            "use server"
+            return deletePage(key)
+          }}
+        />
       )}
     </>
   )

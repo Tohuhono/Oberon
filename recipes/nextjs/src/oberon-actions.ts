@@ -62,7 +62,7 @@ const getPageDataCached = cache(async (url: string) => {
 
   const data = result[0]?.data
 
-  return data ? (JSON.parse(data) as Data) : undefined
+  return data ? (JSON.parse(data) as Data) : null
 })
 export const getPageData: Actions["getPageData"] = async (url) => {
   "use server"
@@ -112,6 +112,7 @@ export const getAllAssets: Actions["getAllAssets"] = async () => {
 
 // TODO uploadthing
 export const deleteAsset: Actions["deleteAsset"] = async (data) => {
+  "use server"
   console.warn("FIXME deleteAsset not implemented", data)
 }
 /*
@@ -148,7 +149,7 @@ export const changeRole: Actions["changeRole"] = async (data: unknown) => {
     return { role, id }
   } catch (_error) {
     console.error("Change role failed")
-    return undefined
+    return null
   }
 }
 
@@ -160,7 +161,7 @@ export const deleteUser: Actions["deleteUser"] = async (data: unknown) => {
     return { id }
   } catch (_error) {
     console.error("Delete user failed")
-    return undefined
+    return null
   }
 }
 
@@ -178,7 +179,7 @@ export const addUser: Actions["addUser"] = async (data: unknown) => {
     return { id, email, role }
   } catch (_error) {
     console.error("Create user failed")
-    return undefined
+    return null
   }
 }
 
