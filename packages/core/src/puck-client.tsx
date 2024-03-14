@@ -6,7 +6,23 @@ import { AllPages } from "src/components/all-pages"
 import { Assets } from "src/components/assets"
 import { Users } from "src/components/users"
 import { getTitle } from "@oberon/utils"
+import type { Metadata } from "next"
 import type { Actions } from "./schema"
+import { resolvePuckPath } from "./resolve-puck-path"
+import { clientConfig } from "./clientConfig"
+
+export async function generateMetadata({
+  params: { puckPath = [] },
+}: {
+  params: { puckPath: string[] }
+}): Promise<Metadata> {
+  const route = puckPath[0] || ""
+  const path = resolvePuckPath(puckPath.slice(1))
+
+  return {
+    title: getTitle(route, path),
+  }
+}
 
 export async function PuckClient({
   route,
@@ -51,5 +67,25 @@ export async function PuckClient({
         <AllPages keys={await getAllKeys()} actions={actions} />
       )}
     </>
+  )
+}
+
+export async function Client({
+  slug = [],
+  actions,
+}: {
+  slug?: string[]
+  actions: Actions
+}) {
+  const route = slug[0] || ""
+  const path = resolvePuckPath(slug.slice(1))
+
+  return (
+    <PuckClient
+      route={route}
+      path={path}
+      config={clientConfig}
+      actions={actions}
+    />
   )
 }

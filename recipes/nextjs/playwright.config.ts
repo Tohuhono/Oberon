@@ -1,6 +1,7 @@
 import { resolve } from "path"
 import { defineConfig, devices } from "@playwright/experimental-ct-react"
-import react from "@vitejs/plugin-react"
+// TODO: playwright
+// import react from "@vitejs/plugin-react"
 
 /**
  * Read environment variables from file.
@@ -38,7 +39,9 @@ export default defineConfig({
     /* Port to use for Playwright component endpoint. */
     ctPort: 3100,
     ctViteConfig: {
-      plugins: [react()],
+      plugins: [
+        /*react()*/
+      ],
       resolve: {
         alias: {
           "@": resolve(__dirname, "./src"),

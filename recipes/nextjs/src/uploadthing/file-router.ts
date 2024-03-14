@@ -1,4 +1,4 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next"
+import { createUploadthing, FileRouter } from "uploadthing/next"
 import { UploadThingError } from "uploadthing/server"
 
 import { db } from "src/db/client"
@@ -13,14 +13,13 @@ const imageMiddleware = async () => {
 
   // If you throw, the user will not be able to upload
   // @ts-expect-error TODO fix global type
-  if (!session?.user.email) throw new Error("Unauthorized")
+  if (!session?.user.email) throw new UploadThingError("Unauthorized")
 
   // Whatever is returned here is accessible in onUploadComplete as `metadata`
   return { creator: session.user.email }
 }
 
-// TODO dry
-
+// TODO dry = async
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
@@ -43,7 +42,7 @@ export const ourFileRouter = {
     image: { maxFileSize: "4MB", maxFileCount: 1 },
   })
     .middleware(imageMiddleware)
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       db.insert(assets)
         .values({

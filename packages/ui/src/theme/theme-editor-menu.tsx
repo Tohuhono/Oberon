@@ -1,3 +1,5 @@
+"use client"
+
 import { ClipboardCopyIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useState, ChangeEvent, Fragment } from "react"
 import { Button } from "src/components/button"

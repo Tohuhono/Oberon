@@ -18,7 +18,7 @@ export const Image: ComponentConfig<{
               endpoint="singleImageUploader"
               onClientUploadComplete={(res) => {
                 // Do something with the response
-                if (res) {
+                if (res[0]) {
                   //name: res[0].name,
                   onChange({ url: res[0].url })
                 }

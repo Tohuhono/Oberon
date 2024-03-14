@@ -111,6 +111,9 @@ export const getAllAssets: Actions["getAllAssets"] = async () => {
 }
 
 // TODO uploadthing
+export const deleteAsset: Actions["deleteAsset"] = async (data) => {
+  console.warn("FIXME deleteAsset not implemented", data)
+}
 /*
 export const deleteAsset = async (data: Pick<Asset, "key">) => { 
   const { key } = DeleteAssetSchema.parse(data)
@@ -186,8 +189,9 @@ export const actions = {
   getAllUsers,
   getAllAssets,
   deletePage,
+  deleteAsset,
   publishPageData,
   getPageData,
   getAllKeys,
   getAllPaths,
-}
+} satisfies Actions

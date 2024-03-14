@@ -7,13 +7,13 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "rimraf ./*/*/dist ./*/*/node_modules ./*/*/.turbo ./*/*/.next .*/*/rollup.cache ./dist ./node_modules ./.turbo"
+    "clean": "rimraf --glob ./*/*/dist ./dist ./*/*/.next ./*/*/.vercel"
   },
   "dependencies": {
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@oberon/config": "*",
+    "@oberon/dev": "*",
     "concurrently": "^8.2.1",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",

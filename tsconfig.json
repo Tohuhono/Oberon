@@ -9,6 +9,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
+    "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["es2022", "DOM", "DOM.Iterable"],

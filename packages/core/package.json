@@ -7,9 +7,19 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/cjs/index.js"
+    },
+    "./render": {
+      "types": "./dist/render.d.ts",
+      "import": "./dist/render.js",
+      "require": "./dist/cjs/render.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js",
+      "require": "./dist/cjs/client.js"
     }
   },
   "scripts": {
@@ -37,7 +47,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@oberon/config": "*",
+    "@oberon/dev": "*",
     "@types/react": "18.2.64",
     "@types/react-dom": "18.2.21",
     "@types/node": "20.11.26",

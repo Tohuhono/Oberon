@@ -1,4 +1,4 @@
-import config from "@oberon/config/eslint.mjs"
+import config from "@oberon/dev/eslint.mjs"
 
 /** @type {import("eslint").Linter.Config} */
 export default config

@@ -17,7 +17,7 @@
     "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
-    "@oberon/config": "*",
+    "@oberon/dev": "*",
     "@types/react": "18.2.64",
     "rollup": "^4.12.1",
     "typescript": "^5.4.2"

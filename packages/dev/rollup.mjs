@@ -2,7 +2,7 @@ import { defineConfig } from "rollup"
 import { swc } from "rollup-plugin-swc3"
 import { nodeExternals } from "rollup-plugin-node-externals"
 import preserveDirectives from "rollup-preserve-directives"
-import commonjs from "@rollup/plugin-commonjs"
+// import commonjs from "@rollup/plugin-commonjs"
 import { nodeResolve } from "@rollup/plugin-node-resolve"
 import typescript from "@rollup/plugin-typescript"
 import { dts } from "rollup-plugin-dts"
@@ -31,6 +31,8 @@ const plugins = [
   preserveDirectives(),
 ]
 
+// /** @type {(input?: string[]) => RollupOptions[]} TypeScript syntax */
+
 export const config = defineConfig([
   {
     input: "src/index.ts",
@@ -44,9 +46,8 @@ export const config = defineConfig([
     plugins: [
       ...plugins,
       typescript({
-        declarationDir: "dist",
-        noForceEmit: true,
         noEmit: false,
+        noForceEmit: true,
         emitDeclarationOnly: true,
       }),
     ],
@@ -56,8 +57,8 @@ export const config = defineConfig([
     output: {
       dir: "dist/cjs",
       format: "cjs",
-      sourcemap: true,
       exports: "named",
+      sourcemap: true,
       preserveModules: true,
       preserveModulesRoot: "src",
     },
@@ -76,4 +77,52 @@ export const config = defineConfig([
     ],
   },
 ])
-//plugins: [typescript({ noForceEmit: true })],
+
+export function initConfig(inputs = ["index"]) {
+  const sourceFiles = inputs.map((input) => `src/${input}.ts`)
+
+  return defineConfig([
+    {
+      input: sourceFiles,
+      output: {
+        dir: "dist",
+        format: "esm",
+        sourcemap: true,
+        preserveModules: true,
+        preserveModulesRoot: "src",
+      },
+      plugins: [
+        ...plugins,
+        typescript({
+          noEmit: false,
+          noForceEmit: true,
+          emitDeclarationOnly: true,
+        }),
+      ],
+    },
+    {
+      input: sourceFiles,
+      output: {
+        dir: "dist/cjs",
+        format: "cjs",
+        exports: "named",
+        sourcemap: true,
+        preserveModules: true,
+        preserveModulesRoot: "src",
+      },
+      plugins,
+    },
+    ...inputs.map((input) => ({
+      input: `dist/src/${input}.d.ts`,
+      output: [{ file: `dist/${input}.d.ts`, format: "es" }],
+      plugins: [
+        nodeExternals({
+          deps: true,
+          peerDeps: true,
+          devDeps: true,
+        }),
+        dts(),
+      ],
+    })),
+  ])
+}

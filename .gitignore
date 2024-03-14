@@ -26,7 +26,7 @@ coverage
 out/
 build
 dist
-
+.rollup.cache
 
 # Debug
 npm-debug.log*

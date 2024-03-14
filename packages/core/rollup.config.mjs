@@ -1,3 +1,3 @@
-import { config } from "@oberon/config/rollup.mjs"
+import { initConfig } from "@oberon/dev/rollup.mjs"
 
-export default config
+export default initConfig(["client", "render", "schema"])
