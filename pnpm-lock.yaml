@@ -156,6 +156,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.1.0
+        version: 3.3.4(react-hook-form@7.51.0)
       '@oberon/utils':
         specifier: '*'
         version: link:../utils
@@ -193,7 +196,7 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
       react-hook-form:
-        specifier: ^7.51.0
+        specifier: ^7.44.2
         version: 7.51.0(react@18.2.0)
       styled-jsx:
         specifier: ^5.1.2
