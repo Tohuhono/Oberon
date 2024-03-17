@@ -1,0 +1,13 @@
+diff --git a/dist/createSpawn.js b/dist/createSpawn.js
+index 63ef93295225401c5b8e0bedae6c8ad6f0c27be0..39027551de40971a7b6abdc805b434b8f663cf06 100644
+--- a/dist/createSpawn.js
++++ b/dist/createSpawn.js
+@@ -66,7 +66,7 @@ const createSpawn = (taskId, { cwd = process.cwd(), abortSignal, throttleOutput,
+         else {
+             onStdout = (chunk) => {
+                 // eslint-disable-next-line no-console
+-                console.log(formatChunk(chunk));
++                console.log(chunk.toString());
+             };
+             onStderr = (chunk) => {
+                 // eslint-disable-next-line no-console

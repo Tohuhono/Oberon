@@ -64,22 +64,9 @@ const getPageDataCached = cache(async (url: string) => {
 
   return data ? (JSON.parse(data) as Data) : null
 })
-const getPageDataServer: Actions["getPageData"] = async (url) => {
+const getPageData: Actions["getPageData"] = async (url) => {
   "use server"
   return getPageDataCached(url)
-}
-
-const getPageData: Actions["getPageData"] = async (url: string) => {
-  const result = await db
-    .select({
-      data: pages.data,
-    })
-    .from(pages)
-    .where(eq(pages.key, url))
-
-  const data = result[0]?.data
-
-  return data ? (JSON.parse(data) as Data) : null
 }
 
 // TODO zod ; return value

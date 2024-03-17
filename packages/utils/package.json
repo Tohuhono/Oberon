@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build",
-    "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",
+    "clean": "npx odt-clean",
     "dev": "vite build --watch",
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",

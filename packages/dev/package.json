@@ -17,9 +17,13 @@
       "import": "./dist/vite.config.js"
     }
   },
+  "bin": {
+    "odt-watch": "./dist/odt-watch.js",
+    "odt-clean": "./scripts/clean-package.mjs"
+  },
   "scripts": {
     "build": "vite build",
-    "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",
+    "clean": "node ./scripts/clean-package.mjs",
     "dev": "vite build --watch",
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",
@@ -45,6 +49,7 @@
     "vite": "^5.1.6",
     "vite-plugin-dts": "^3.7.3",
     "vite-plugin-externalize-deps": "^0.8.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^4.3.2",
+    "rimraf": "^5.0.5"
   }
 }

@@ -5,7 +5,7 @@
   "scripts": {
     "add": "pnpx shadcn-ui@latest add --",
     "build": "next build",
-    "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",
+    "clean": "npx odt-clean",
     "db:migrations:create": "drizzle-kit generate:sqlite",
     "deploy": "bash ./scripts/deploy.sh",
     "dev": "next dev",
