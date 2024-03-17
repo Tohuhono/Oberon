@@ -27,7 +27,7 @@ const getAllPathsCached = cache(async () => {
   }))
   return data
 })
-export const getAllPaths: Actions["getAllPaths"] = async () => {
+const getAllPaths: Actions["getAllPaths"] = async () => {
   "use server"
   return getAllPathsCached()
 }
@@ -46,7 +46,7 @@ const getAllKeysCached = cache(async () => {
   const data = result.sort(sortPages).map(({ key }) => key as Route)
   return data
 })
-export const getAllKeys: Actions["getAllKeys"] = async () => {
+const getAllKeys: Actions["getAllKeys"] = async () => {
   "use server"
   return getAllKeysCached()
 }
@@ -64,16 +64,26 @@ const getPageDataCached = cache(async (url: string) => {
 
   return data ? (JSON.parse(data) as Data) : null
 })
-export const getPageData: Actions["getPageData"] = async (url) => {
+const getPageDataServer: Actions["getPageData"] = async (url) => {
   "use server"
   return getPageDataCached(url)
 }
 
+const getPageData: Actions["getPageData"] = async (url: string) => {
+  const result = await db
+    .select({
+      data: pages.data,
+    })
+    .from(pages)
+    .where(eq(pages.key, url))
+
+  const data = result[0]?.data
+
+  return data ? (JSON.parse(data) as Data) : null
+}
+
 // TODO zod ; return value
-export const publishPageData: Actions["publishPageData"] = async ({
-  key,
-  data,
-}) => {
+const publishPageData: Actions["publishPageData"] = async ({ key, data }) => {
   "use server"
   const dataJSON = JSON.stringify(data)
   await db
@@ -86,7 +96,7 @@ export const publishPageData: Actions["publishPageData"] = async ({
 }
 
 // TODO zod ; return value
-export const deletePage: Actions["deletePage"] = async (key) => {
+const deletePage: Actions["deletePage"] = async (key) => {
   "use server"
   await db.delete(pages).where(eq(pages.key, key))
   revalidatePath(key)
@@ -96,7 +106,7 @@ export const deletePage: Actions["deletePage"] = async (key) => {
  * Asset actions
  */
 
-export const getAllAssets: Actions["getAllAssets"] = async () => {
+const getAllAssets: Actions["getAllAssets"] = async () => {
   "use server"
   const allAssets = await db
     .select({
@@ -111,12 +121,12 @@ export const getAllAssets: Actions["getAllAssets"] = async () => {
 }
 
 // TODO uploadthing
-export const deleteAsset: Actions["deleteAsset"] = async (data) => {
+const deleteAsset: Actions["deleteAsset"] = async (data) => {
   "use server"
   console.warn("FIXME deleteAsset not implemented", data)
 }
 /*
-export const deleteAsset = async (data: Pick<Asset, "key">) => { 
+const deleteAsset = async (data: Pick<Asset, "key">) => { 
   const { key } = DeleteAssetSchema.parse(data)
   try {
     await ourUploadthing.deleteFiles(key)
@@ -132,7 +142,7 @@ export const deleteAsset = async (data: Pick<Asset, "key">) => {
 /*
  * User actions
  */
-export const getAllUsers: Actions["getAllUsers"] = async () => {
+const getAllUsers: Actions["getAllUsers"] = async () => {
   "use server"
   const allUsers = await db
     .select({ id: users.id, email: users.email, role: users.role })
@@ -141,7 +151,7 @@ export const getAllUsers: Actions["getAllUsers"] = async () => {
   return allUsers || []
 }
 
-export const changeRole: Actions["changeRole"] = async (data: unknown) => {
+const changeRole: Actions["changeRole"] = async (data: unknown) => {
   "use server"
   const { role, id } = ChangeRoleSchema.parse(data)
   try {
@@ -153,7 +163,7 @@ export const changeRole: Actions["changeRole"] = async (data: unknown) => {
   }
 }
 
-export const deleteUser: Actions["deleteUser"] = async (data: unknown) => {
+const deleteUser: Actions["deleteUser"] = async (data: unknown) => {
   "use server"
   const { id } = DeleteUserSchema.parse(data)
   try {
@@ -165,7 +175,7 @@ export const deleteUser: Actions["deleteUser"] = async (data: unknown) => {
   }
 }
 
-export const addUser: Actions["addUser"] = async (data: unknown) => {
+const addUser: Actions["addUser"] = async (data: unknown) => {
   "use server"
   const { email, role } = AddUserSchema.parse(data)
 
@@ -183,6 +193,8 @@ export const addUser: Actions["addUser"] = async (data: unknown) => {
   }
 }
 
+const resolvePath = (slug: string[] = []) => `/${slug.join("/")}`
+
 export const actions = {
   addUser,
   deleteUser,
@@ -195,4 +207,5 @@ export const actions = {
   getPageData,
   getAllKeys,
   getAllPaths,
+  resolvePath,
 } satisfies Actions

@@ -26,10 +26,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "noUnusedParameters": true
   },
   "exclude": ["node_modules", "dist"]
 }

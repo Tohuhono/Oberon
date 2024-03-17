@@ -2,7 +2,6 @@ import { Config } from "@measured/puck"
 import { getTitle } from "@oberon/utils"
 import type { Metadata } from "next"
 import type { Actions } from "../schema"
-import { resolvePuckPath } from "./resolve-puck-path"
 import { clientConfig } from "./clientConfig"
 import { Editor } from "@/components/editor"
 import { Preview } from "@/components/preview"
@@ -11,14 +10,12 @@ import { AllPages } from "@/components/all-pages"
 import { Assets } from "@/components/assets"
 import { Users } from "@/components/users"
 
-export async function generateMetadata({
-  params: { puckPath = [] },
-}: {
-  params: { puckPath: string[] }
-}): Promise<Metadata> {
-  const route = puckPath[0] || ""
-  const path = resolvePuckPath(puckPath.slice(1))
-
+export function getMetaData(
+  slug: string[] = [],
+  { resolvePath }: Actions,
+): Metadata {
+  const route = slug[0] || ""
+  const path = resolvePath(slug.slice(1))
   return {
     title: getTitle(route, path),
   }
@@ -116,7 +113,7 @@ export async function Client({
   actions: Actions
 }) {
   const route = slug[0] || ""
-  const path = resolvePuckPath(slug.slice(1))
+  const path = actions.resolvePath(slug.slice(1))
 
   return (
     <PuckClient

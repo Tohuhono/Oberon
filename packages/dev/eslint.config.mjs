@@ -1,3 +1,5 @@
+// @ts-check
+
 import path from "path"
 import { fileURLToPath } from "url"
 import eslint from "@eslint/js"

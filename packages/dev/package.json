@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "types": "./src/*.ts",
   "exports": {
-    "./eslint": {
-      "types": "./dist/eslint.d.ts",
-      "import": "./dist/eslint.js"
+    "./eslint.config": {
+      "types": "./eslint.config.d.ts",
+      "import": "./eslint.config.mjs"
     },
     "./tailwind": {
       "types": "./dist/tailwind.config.d.ts",

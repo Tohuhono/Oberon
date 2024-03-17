@@ -5,8 +5,18 @@
   "author": "Tohuhono ltd",
   "license": "MIT",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    "./button": "./dist/button.js",
+    "./form": "./dist/form.js",
+    "./input": "./dist/input.js",
+    "./label": "./dist/label.js",
+    "./prose": "./dist/prose.js",
+    "./select": "./dist/select.js",
+    "./spinner": "./dist/spinner.js",
+    "./theme": "./dist/theme.js",
+    "./navigation-menu": "./dist/navigation-menu.js",
+    "./dropdown-menu.ts": "./dist/dropdown-menu.js"
+  },
   "scripts": {
     "build": "vite build",
     "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",

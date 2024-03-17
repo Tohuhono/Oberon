@@ -6,18 +6,9 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/schema.d.ts",
-      "import": "./dist/schema.js"
-    },
-    "./render": {
-      "types": "./dist/render.d.ts",
-      "import": "./dist/render.js"
-    },
-    "./client": {
-      "types": "./dist/client.d.ts",
-      "import": "./dist/client.js"
-    }
+    ".": "./dist/schema.js",
+    "./render": "./dist/render.js",
+    "./client": "./dist/client.js"
   },
   "scripts": {
     "build": "vite build",

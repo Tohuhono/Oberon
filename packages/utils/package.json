@@ -13,7 +13,8 @@
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",
     "lint:style": "eslint .",
-    "tsc": "tsc --pretty"
+    "tsc": "tsc --pretty",
+    "tsc:watch": "tsc --pretty --watch"
   },
   "dependencies": {
     "tailwind-merge": "^2.2.1"

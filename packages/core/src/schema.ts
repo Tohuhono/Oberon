@@ -61,4 +61,5 @@ export type Actions = {
   getPageData: (url: string) => Promise<Data | null>
   getAllKeys: () => Promise<Route[]>
   getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
+  resolvePath: (slug?: string[]) => string
 }

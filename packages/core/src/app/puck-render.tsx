@@ -1,41 +1,16 @@
 import { Render as PuckRender } from "@measured/puck/rsc"
 import { notFound } from "next/navigation"
-import { Metadata } from "next/types"
 import { Actions } from "../schema"
-import { resolvePuckPath } from "./resolve-puck-path"
 import { renderConfig } from "./renderConfig"
-
-export function initGenerateStaticParams({ getAllPaths }: Actions) {
-  return async function () {
-    return getAllPaths()
-  }
-}
-
-// TODO description
-export function initGenerateMetadata({ getPageData }: Actions) {
-  return async function ({
-    params: { puckPath },
-  }: {
-    params: { framework: string; uuid: string; puckPath: string[] }
-  }): Promise<Metadata> {
-    const path = resolvePuckPath(puckPath)
-
-    const data = await getPageData(path)
-
-    return {
-      title: data?.root.title || "Datacom Digital Experience Platforms",
-    }
-  }
-}
 
 export async function Render({
   slug = [],
-  actions: { getPageData },
+  actions: { getPageData, resolvePath },
 }: {
   slug?: string[]
   actions: Actions
 }) {
-  const path = resolvePuckPath(slug)
+  const path = resolvePath(slug)
 
   const data = await getPageData(path)
 
@@ -44,22 +19,4 @@ export async function Render({
   }
 
   return <PuckRender data={data} config={renderConfig} />
-}
-
-export function initRenderPage({ getPageData }: Actions) {
-  return async function ({
-    params: { puckPath },
-  }: {
-    params: { puckPath: string[] }
-  }) {
-    const path = resolvePuckPath(puckPath)
-
-    const data = await getPageData(path)
-
-    if (!data) {
-      return notFound()
-    }
-
-    return <PuckRender data={data} config={renderConfig} />
-  }
 }

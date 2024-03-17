@@ -1,14 +1,24 @@
-import {
-  Render,
-  initGenerateMetadata,
-  initGenerateStaticParams,
-} from "@oberon/core/render"
+import { Render } from "@oberon/core/render"
 
 import { actions } from "src/oberon-actions"
 
-export const generateStaticParams = initGenerateStaticParams(actions)
+export async function generateStaticParams() {
+  return await actions.getAllPaths()
+}
 
-export const generateMetadata = initGenerateMetadata(actions)
+export async function generateMetadata({
+  params: { slug },
+}: {
+  params: { framework: string; uuid: string; slug: string[] }
+}) {
+  const path = actions.resolvePath(slug)
+
+  const data = await actions.getPageData(path)
+
+  return {
+    title: data?.root.title || "Oberon CMS built with Puck",
+  }
+}
 
 export default function OberonRender({
   params: { slug },

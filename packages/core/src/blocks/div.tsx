@@ -1,4 +1,4 @@
-import { ComponentConfig } from "@measured/puck"
+import type { ComponentConfig } from "@measured/puck"
 export const Div: ComponentConfig<{
   className?: string
 }> = {

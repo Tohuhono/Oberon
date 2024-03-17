@@ -1,5 +1,5 @@
 import { ComponentConfig } from "@measured/puck"
-import { Prose as ProseUI } from "@oberon/ui"
+import { Prose as ProseUI } from "@oberon/ui/prose"
 
 export const Prose: ComponentConfig<{ className?: string }> = {
   fields: {

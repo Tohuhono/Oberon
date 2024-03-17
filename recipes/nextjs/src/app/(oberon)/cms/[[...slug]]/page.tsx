@@ -1,7 +1,13 @@
-import { Client } from "@oberon/core/client"
+import { Client, getMetaData } from "@oberon/core/client"
 import { actions } from "src/oberon-actions"
 
-export { generateMetadata } from "@oberon/core/client"
+export function generateMetadata({
+  params: { slug },
+}: {
+  params: { slug?: [] }
+}) {
+  return getMetaData(slug, actions)
+}
 
 export default function OberonClient({
   params: { slug },

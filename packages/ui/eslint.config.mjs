@@ -1,4 +1,1 @@
-import { config } from "@oberon/dev/eslint"
-
-/** @type {import("eslint").Linter.Config} */
-export default config
+export { default } from "@oberon/dev/eslint.config"

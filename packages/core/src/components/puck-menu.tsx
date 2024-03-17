@@ -4,7 +4,8 @@ import Link from "next/link"
 import { PropsWithChildren } from "react"
 import { Route } from "next"
 import { signOut, useSession } from "next-auth/react"
-import { Button, buttonVariants, ThemeEditorMenu } from "@oberon/ui"
+import { Button, buttonVariants } from "@oberon/ui/button"
+import { ThemeEditorMenu } from "@oberon/ui/theme"
 
 export const PuckMenu = ({
   title,
