@@ -1,11 +1,28 @@
 // @ts-check
 // vite.config.js
 import { writeFile, mkdir } from "fs/promises"
+import { exec } from "child_process"
 import { defineConfig, type Plugin } from "vite"
 import preserveDirectives from "rollup-preserve-directives"
 import fg from "fast-glob"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
 import tsconfigPaths from "vite-tsconfig-paths"
+
+function dts(): Plugin {
+  return {
+    name: "dts-generator",
+    enforce: "pre" as const,
+    buildEnd: (error?: Error) => {
+      if (!error) {
+        return new Promise((res, rej) => {
+          exec("tsc --emitDeclarationOnly --pretty", (err) =>
+            err ? rej(err) : res(),
+          )
+        })
+      }
+    },
+  }
+}
 
 function watchFile(): Plugin {
   return {
@@ -48,6 +65,7 @@ export function initConfig(entryPoints: string[] = ["src/*.ts"]) {
       externalizeDeps(),
       tsconfigPaths(),
       preserveDirectives(),
+      dts(),
       watchFile(),
     ],
     build: {

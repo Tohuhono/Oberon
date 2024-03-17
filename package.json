@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "clean": "turbo clean --continue || rimraf ./*/*/node_modules && rimraf ./dist ./turbo ./node_modules ",
-    "dev": "turbowatch",
+    "clean": "turbo clean --continue && rimraf ./dist ./turbo ./node_modules",
+    "dev": "turbo dev",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:style -- --fix",
@@ -22,7 +22,6 @@
     "prettier-plugin-tailwindcss": "^0.5.12",
     "rimraf": "^5.0.5",
     "turbo": "latest",
-    "turbowatch": "^2.29.4",
     "typescript": "5.3.3",
     "wait-on": "^7.2.0"
   },
@@ -36,10 +35,5 @@
     "apps/*",
     "packages/*",
     "recipes/*"
-  ],
-  "pnpm": {
-    "patchedDependencies": {
-      "turbowatch@2.29.4": "patches/turbowatch@2.29.4.patch"
-    }
-  }
+  ]
 }
