@@ -4,16 +4,18 @@
   "private": true,
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/index.js",
+  "type": "module",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c --watch",
-    "wait": "wait-on dist/index.d.ts",
+    "build": "vite build",
+    "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",
+    "dev": "vite build --watch",
+    "wait": "wait-on dist/version",
+    "wait:clean": "rimraf ./dist/version",
     "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint:style": "eslint .",
-    "lint:types": "tsc -p tsconfig.json --pretty --noEmit"
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "@oberon/utils": "*",
@@ -44,9 +46,12 @@
     "@types/eslint": "^8.56.5",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
-    "rollup": "^4.12.1",
-    "typescript": "^5.4.2"
+    "typescript": "5.3.3",
+    "vite": "^5.1.6",
+    "fast-glob": "^3.3.2",
+    "rollup-preserve-directives": "^1.1.1",
+    "vite-plugin-dts": "^3.7.3",
+    "vite-plugin-externalize-deps": "^0.8.0"
   }
 }

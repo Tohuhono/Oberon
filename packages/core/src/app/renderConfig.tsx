@@ -1,6 +1,6 @@
 import type { Config } from "@measured/puck"
-import { Prose } from "src/blocks/prose"
-import { Div } from "src/blocks/div"
+import { Prose } from "@/blocks/prose"
+import { Div } from "@/blocks/div"
 
 export const renderConfig = {
   components: {

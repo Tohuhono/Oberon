@@ -1,15 +1,15 @@
 import { Config } from "@measured/puck"
-import { Editor } from "src/components/editor"
-import { Preview } from "src/components/preview"
-import { PuckMenu } from "src/components/puck-menu"
-import { AllPages } from "src/components/all-pages"
-import { Assets } from "src/components/assets"
-import { Users } from "src/components/users"
 import { getTitle } from "@oberon/utils"
 import type { Metadata } from "next"
 import type { Actions } from "../schema"
 import { resolvePuckPath } from "./resolve-puck-path"
 import { clientConfig } from "./clientConfig"
+import { Editor } from "@/components/editor"
+import { Preview } from "@/components/preview"
+import { PuckMenu } from "@/components/puck-menu"
+import { AllPages } from "@/components/all-pages"
+import { Assets } from "@/components/assets"
+import { Users } from "@/components/users"
 
 export async function generateMetadata({
   params: { puckPath = [] },
@@ -46,8 +46,6 @@ export async function PuckClient({
   config: Config
   actions: Actions
 }) {
-  console.log("route", route, "path", path)
-
   if (route === "edit") {
     return (
       <Editor

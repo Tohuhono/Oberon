@@ -8,21 +8,25 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
-      "dependsOn": ["lint:types", "lint:style", "lint:format"]
+      "dependsOn": ["tsc", "lint:style", "lint:format"]
     },
-    "lint:types": {
-      "dependsOn": ["^build"]
+    "tsc": {
+      "dependsOn": ["^tsc"]
     },
     "lint:style": {},
     "lint:format": {},
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^wait"]
+      "dependsOn": ["wait:clean", "^wait"]
     },
     "wait": {
       "cache": false
     },
-    "postinstall": {}
+    "wait:clean": {
+      "cache": false
+    },
+    "postinstall": {},
+    "clean": { "cache": false }
   }
 }

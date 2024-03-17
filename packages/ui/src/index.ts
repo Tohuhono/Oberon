@@ -9,3 +9,4 @@ export * from "./components/select"
 export * from "./components/spinner"
 
 export * from "./theme/theme-editor-menu"
+export * from "./theme/dynamic-tailwind"

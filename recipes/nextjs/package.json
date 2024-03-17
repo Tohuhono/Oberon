@@ -3,22 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "prebuild": "node ./scripts/prebuild.mjs",
-    "build": "next build",
-    "start": "next start",
-    "deploy": "bash ./scripts/deploy.sh",
-    "lint:style": "next lint",
-    "lint:types": "tsc --pretty --noEmit",
-    "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "postinstall": "node ./scripts/postinstall.mjs",
-    "test:unit": "jest --watch",
-    "test:unit:ci": "jest --ci",
-    "test:smoke": "playwright test --grep @smoke",
-    "test:components": "playwright test --grep @component",
     "add": "pnpx shadcn-ui@latest add --",
+    "build": "next build",
+    "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",
     "db:migrations:create": "drizzle-kit generate:sqlite",
-    "test-ct": "playwright test -c playwright-ct.config.ts"
+    "deploy": "bash ./scripts/deploy.sh",
+    "dev": "next dev",
+    "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
+    "lint:style": "next lint",
+    "tsc": "tsc --pretty --noEmit --emitDeclarationOnly false",
+    "postinstall": "node ./scripts/postinstall.mjs",
+    "prebuild": "node ./scripts/prebuild.mjs",
+    "start": "next start",
+    "test:components": "playwright test --grep @component",
+    "test-ct": "playwright test -c playwright-ct.config.ts",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:unit": "jest --watch",
+    "test:unit:ci": "jest --ci"
   },
   "dependencies": {
     "@auth/core": "0.28.0",
@@ -52,6 +53,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "^3.4.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "5.3.3"
   }
 }

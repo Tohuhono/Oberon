@@ -4,7 +4,7 @@ import { Route } from "next"
 import Link from "next/link"
 import { Fragment, useState } from "react"
 import { Button, buttonVariants, Input } from "@oberon/ui"
-import type { Actions } from "src/schema"
+import type { Actions } from "@/schema"
 
 export function AllPages({
   keys,

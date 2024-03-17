@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@oberon/ui"
 
-import { Actions, AddUserSchema, User, roles } from "src/schema"
+import { Actions, AddUserSchema, User, roles } from "@/schema"
 
 export function Users({
   users: initialUsers,

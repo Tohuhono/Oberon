@@ -4,18 +4,17 @@
   "buildOnSave": false,
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
     "declaration": true,
     "declarationMap": true,
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
-    "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "noEmit": true,
+    "noEmit": false,
     "removeComments": false,
     "skipLibCheck": true,
     "strict": true,
@@ -29,7 +28,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "*": ["*"]
+      "@/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

@@ -3,24 +3,31 @@
   "version": "0.0.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
+  "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c --watch",
-    "wait": "wait-on dist/index.d.ts",
+    "build": "vite build",
+    "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",
+    "dev": "vite build --watch",
+    "wait": "wait-on dist/version",
+    "wait:clean": "rimraf ./dist/version",
     "lint:style": "eslint .",
-    "lint:types": "tsc"
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "tailwind-merge": "^2.2.1"
   },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
     "@oberon/dev": "*",
     "@types/react": "18.2.64",
+    "@types/react-dom": "18.2.22",
     "@types/node": "^20.11.27",
-    "rollup": "^4.12.1",
-    "typescript": "^5.4.2"
+    "typescript": "5.3.3",
+    "vite": "^5.1.6"
   }
 }

@@ -27,6 +27,7 @@ out/
 build
 dist
 .rollup.cache
+tsconfig.tsbuildinfo
 
 # Debug
 npm-debug.log*

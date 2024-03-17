@@ -2,26 +2,50 @@
   "name": "@oberon/dev",
   "version": "0.0.0",
   "private": true,
-  "files": [
-    "rollup.mjs",
-    "eslint.mjs",
-    "eslint.package.js"
-  ],
+  "type": "module",
+  "types": "./src/*.ts",
+  "exports": {
+    "./eslint": {
+      "types": "./dist/eslint.d.ts",
+      "import": "./dist/eslint.js"
+    },
+    "./tailwind": {
+      "types": "./dist/tailwind.config.d.ts",
+      "import": "./dist/tailwind.config.js"
+    },
+    "./vite": {
+      "types": "./dist/vite.config.d.ts",
+      "import": "./dist/vite.config.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "clean": "rimraf ./dist ./node_modules ./.rollup.cache ./.turbo ./.next ./.vercel",
+    "dev": "vite build --watch",
+    "wait": "wait-on dist/version",
+    "wait:clean": "rimraf ./dist/version",
+    "lint:style": "eslint .",
+    "tsc": "tsc --pretty"
+  },
   "dependencies": {
-    "@rollup/plugin-alias": "^5.1.0",
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.6",
+    "@eslint__eslintrc": "link:@types/@eslint__eslintrc",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/eslint__eslintrc": "^2.1.1",
+    "@types/eslint__js": "^8.42.3",
     "eslint": "8.57.0",
     "eslint-config-next": "^14.1.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
-    "rollup": "^4.12.1",
-    "rollup-plugin-dts": "^6.1.0",
-    "rollup-plugin-node-externals": "^7.0.1",
-    "rollup-plugin-swc3": "^0.11.0",
-    "rollup-plugin-typescript-paths": "^1.5.0",
+    "fast-glob": "^3.3.2",
     "rollup-preserve-directives": "^1.1.1",
-    "typescript-eslint": "^7.2.0"
+    "tailwindcss": "^3.4.1",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "5.3.3",
+    "typescript-eslint": "^7.2.0",
+    "vite": "^5.1.6",
+    "vite-plugin-dts": "^3.7.3",
+    "vite-plugin-externalize-deps": "^0.8.0",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }

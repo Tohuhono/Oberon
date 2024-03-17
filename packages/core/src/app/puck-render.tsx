@@ -1,9 +1,9 @@
 import { Render as PuckRender } from "@measured/puck/rsc"
 import { notFound } from "next/navigation"
 import { Metadata } from "next/types"
+import { Actions } from "../schema"
 import { resolvePuckPath } from "./resolve-puck-path"
 import { renderConfig } from "./renderConfig"
-import { Actions } from "../schema"
 
 export function initGenerateStaticParams({ getAllPaths }: Actions) {
   return async function () {

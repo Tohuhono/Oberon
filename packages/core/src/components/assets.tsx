@@ -7,8 +7,8 @@ import Link from "next/link"
 import { Route } from "next"
 import { Button } from "@oberon/ui"
 
-// import { UploadDropzone } from "src/puck/src/uploadthing/components"
-import { Asset, type Actions } from "src/schema"
+// import { UploadDropzone } from "@/puck/src/uploadthing/components"
+import { Asset, type Actions } from "@/schema"
 
 export function Assets({
   assets: initialAssets,

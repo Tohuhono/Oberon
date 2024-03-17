@@ -1,11 +1,9 @@
-// @ts-check
-
+import path from "path"
+import { fileURLToPath } from "url"
 import eslint from "@eslint/js"
 import tseslint from "typescript-eslint"
 import prettierConfig from "eslint-config-prettier"
 import { FlatCompat } from "@eslint/eslintrc"
-import path from "path"
-import { fileURLToPath } from "url"
 
 // https://github.com/import-js/eslint-plugin-import/issues/2556
 // mimic CommonJS variables -- not needed if using CommonJS
@@ -14,7 +12,6 @@ const __dirname = path.dirname(__filename)
 const compat = new FlatCompat({
   baseDirectory: __dirname,
 })
-const importOrder = compat.plugins("import")
 
 export default tseslint.config(
   {
@@ -28,8 +25,8 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   ...tseslint.configs.strict,
-  prettierConfig,
   ...compat.plugins("import"),
+  prettierConfig,
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "error",

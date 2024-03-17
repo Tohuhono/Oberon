@@ -1,5 +1,6 @@
-/** @type {import("eslint").Linter.Config} */
-module.exports = {
+import type { Linter } from "eslint"
+
+const config: Linter.Config = {
   plugins: ["@typescript-eslint"],
   ignorePatterns: [".next/**/*", ".vercel/**/*", "node_modules/**/*"],
   extends: [
@@ -23,3 +24,5 @@ module.exports = {
     ],
   },
 }
+
+export default config

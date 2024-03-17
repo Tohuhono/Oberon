@@ -3,12 +3,12 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "postinstall": "turbo postinstall",
+    "clean": "turbo clean && rimraf ./node_modules",
     "dev": "turbo dev",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:style -- --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "clean": "rimraf --glob ./apps/*/dist ./packages/*/dist ./recipes/*/dist ./dist"
+    "postinstall": "turbo postinstall"
   },
   "dependencies": {
     "dotenv": "^16.4.5"
@@ -21,7 +21,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "turbo": "latest",
-    "typescript": "^5.4.2",
+    "typescript": "5.3.3",
     "wait-on": "^7.2.0",
     "rimraf": "^5.0.5"
   },

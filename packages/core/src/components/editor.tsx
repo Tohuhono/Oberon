@@ -4,9 +4,9 @@ import "@measured/puck/dist/index.css"
 
 import { Config, Data, Puck } from "@measured/puck"
 import { Button } from "@oberon/ui"
-import { useLocalData } from "src/hooks"
-import type { Actions } from "src/schema"
 import { PuckMenu } from "./puck-menu"
+import { useLocalData } from "@/app/hooks"
+import type { Actions } from "@/schema"
 
 export function Editor({
   path,
