@@ -6,7 +6,13 @@ const config: Config = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}", "./tailwind.classes.txt"],
+  content: [
+    "./node_modules/@oberon/core/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/core/ui/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/core/utils/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./tailwind.classes.txt",
+  ],
   theme: {
     extend: {
       spacing: {

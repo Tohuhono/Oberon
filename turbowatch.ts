@@ -19,11 +19,13 @@ export default defineConfig({
       throttleOutput: { delay: 0 },
       expression: [
         "allof",
+        ["dirname", "packages"],
+        ["dirname", "src"],
         ["not", ["dirname", "node_modules"]],
         [
           "anyof",
-          ["match", "packages/*/src/**/*.ts", "basename"],
-          ["match", "packages/*/src/**/*.tsx", "basename"],
+          ["match", "*.ts", "basename"],
+          ["match", "*.tsx", "basename"],
         ],
       ],
       initialRun: true,
