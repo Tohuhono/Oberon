@@ -1,0 +1,31 @@
+.ToolbarButton {
+  background: transparent;
+  border: none;
+  color: var(--puck-color-grey-08);
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 50ms ease-in;
+}
+
+.ToolbarButton:focus-visible {
+  outline: 2px solid var(--puck-color-azure-05);
+  outline-offset: -2px;
+}
+
+@media (hover: hover) {
+  .ToolbarButton:hover {
+    background: var(--puck-color-grey-2);
+    color: var(--puck-color-azure-06);
+    cursor: pointer;
+  }
+}
+
+.ToolbarButton:active {
+  color: var(--puck-color-azure-07);
+  transition: none;
+}

@@ -15,7 +15,7 @@ function dts(): Plugin {
     buildEnd: (error?: Error) => {
       if (!error) {
         return new Promise((res, rej) => {
-          exec("tsc --emitDeclarationOnly --pretty", (err) =>
+          exec("tsc --noEmit false --emitDeclarationOnly --pretty", (err) =>
             err ? rej(err) : res(),
           )
         })
@@ -84,5 +84,3 @@ export function initConfig(entryPoints: string[] = ["src/*.ts"]) {
     },
   })
 }
-
-export const config = initConfig()

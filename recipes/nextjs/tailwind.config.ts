@@ -7,9 +7,8 @@ const config: Config = {
     hoverOnlyWhenSupported: true,
   },
   content: [
-    "./node_modules/@oberon/core/src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberon/core/ui/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberon/core/utils/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/ui/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/core/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./tailwind.classes.txt",
   ],

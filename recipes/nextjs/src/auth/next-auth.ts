@@ -14,7 +14,7 @@ const resend = new Resend(process.env.RESEND_SECRET)
 
 const config = {
   pages: {
-    verifyRequest: "/auth/verify",
+    verifyRequest: "/api/auth/verify",
   },
   providers: [
     {
@@ -82,7 +82,7 @@ const config = {
       ) {
         return true
       }
-      return "/api/auth/verify-request?provider=email&type=email"
+      return "/api/auth/verify?provider=email&type=email"
     },
     jwt({ token, user }) {
       if (user) {

@@ -3,8 +3,6 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "emitDeclarationOnly": true,
-    "noEmit": false,
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"]

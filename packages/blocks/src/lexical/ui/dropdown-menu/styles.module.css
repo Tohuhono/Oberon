@@ -1,0 +1,39 @@
+.DropdownMenu-content {
+  background: var(--puck-color-grey-01);
+  padding: 4px;
+  border-radius: 8px;
+  font-size: var(--puck-font-size-xxxs);
+  font-family: var(--puck-font-family);
+}
+
+.DropdownMenu-action {
+  background: transparent;
+  border: none;
+  color: var(--puck-color-grey-08);
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 50ms ease-in;
+}
+
+.DropdownMenu-action:focus-visible {
+  outline: 2px solid var(--puck-color-azure-05);
+  outline-offset: -2px;
+}
+
+@media (hover: hover) {
+  .DropdownMenu-action:hover {
+    background: var(--puck-color-grey-2);
+    color: var(--puck-color-azure-5);
+    cursor: pointer;
+  }
+}
+
+.DropdownMenu-action:active {
+  color: var(--puck-color-azure-07);
+  transition: none;
+}

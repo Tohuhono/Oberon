@@ -1,3 +1,3 @@
 import { initConfig } from "@oberon/dev/vite"
 
-export default initConfig()
+export default initConfig(["src/index.tsx"])
