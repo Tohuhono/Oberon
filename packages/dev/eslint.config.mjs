@@ -46,4 +46,11 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ["**/*.spec.ts"],
+    rules: {
+      // any is ok in test files
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 )

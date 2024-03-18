@@ -13,6 +13,9 @@ const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
 const resend = new Resend(process.env.RESEND_SECRET)
 
 const config = {
+  pages: {
+    verifyRequest: "/auth/verify",
+  },
   providers: [
     {
       id: "email",
@@ -79,7 +82,7 @@ const config = {
       ) {
         return true
       }
-      return false
+      return "/api/auth/verify-request?provider=email&type=email"
     },
     jwt({ token, user }) {
       if (user) {

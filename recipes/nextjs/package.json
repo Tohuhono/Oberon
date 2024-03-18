@@ -10,7 +10,7 @@
     "deploy": "bash ./scripts/deploy.sh",
     "dev": "next dev",
     "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "lint:style": "next lint",
+    "lint:style": "eslint .",
     "tsc": "tsc --pretty --noEmit --emitDeclarationOnly false",
     "postinstall": "node ./scripts/postinstall.mjs",
     "prebuild": "node ./scripts/prebuild.mjs",

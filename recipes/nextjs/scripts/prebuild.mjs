@@ -1,3 +1,4 @@
+/* eslint-env node */
 import { createWriteStream } from "fs"
 import dotenv from "dotenv"
 import { drizzle } from "drizzle-orm/libsql"
