@@ -19,7 +19,7 @@ export const PuckMenu = ({
   const isAdmin = session?.user.role === "admin"
 
   return (
-    <header className="grid w-full grid-cols-3 items-center bg-background p-2 text-foreground">
+    <div className="grid w-full grid-cols-3 items-center p-2 text-foreground">
       <div className="flex justify-start gap-1">{children}</div>
       <div className="flex justify-center">
         {path ? (
@@ -58,6 +58,6 @@ export const PuckMenu = ({
           Sign Out
         </Button>
       </div>
-    </header>
+    </div>
   )
 }

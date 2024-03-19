@@ -59,8 +59,9 @@ function parseEntryPoints(entryPoints: string[] = ["src/*.ts"]) {
   return Object.fromEntries(entities)
 }
 
-export function initConfig(entryPoints: string[] = ["src/*.ts"]) {
+export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
   return defineConfig({
+    logLevel: "warn",
     plugins: [
       externalizeDeps(),
       tsconfigPaths(),
