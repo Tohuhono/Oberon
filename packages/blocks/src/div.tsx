@@ -1,7 +1,6 @@
 import type { ComponentConfig } from "@measured/puck"
-export const Div: ComponentConfig<{
-  className?: string
-}> = {
+
+export const Div = {
   fields: {
     className: {
       type: "text",
@@ -10,4 +9,4 @@ export const Div: ComponentConfig<{
   render: ({ className, puck: { renderDropZone: DropZone } }) => {
     return <div className={className}>{<DropZone zone="div" />}</div>
   },
-}
+} satisfies ComponentConfig

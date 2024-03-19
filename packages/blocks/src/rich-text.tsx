@@ -3,11 +3,7 @@ import type { SerializedEditorState } from "lexical"
 import { Editor } from "./rich-text-editor/editor-client"
 import { Render } from "./rich-text-editor/render-client"
 
-export type RichTextEditorProps = {
-  state: SerializedEditorState
-}
-
-export const RichTextEditor: ComponentConfig<RichTextEditorProps> = {
+export const RichTextEditor = {
   fields: {
     state: {
       type: "custom",
@@ -22,4 +18,6 @@ export const RichTextEditor: ComponentConfig<RichTextEditorProps> = {
     id: string
     state: SerializedEditorState
   }) => (editMode ? <Editor {...props} /> : <Render {...props} />),
-}
+} satisfies ComponentConfig<{
+  state: SerializedEditorState
+}>

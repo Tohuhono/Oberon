@@ -13,7 +13,7 @@ import {
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"
 import { assets, pages, users } from "src/db/schema"
-import { adapter } from "./auth/next-auth-adapter"
+import { adapter } from "../../auth/next-auth-adapter"
 
 const cache = unstable_cache
 

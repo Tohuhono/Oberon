@@ -1,8 +1,7 @@
-import { Config } from "@measured/puck"
 import { getTitle } from "@oberon/utils"
 import type { Metadata } from "next"
-import type { Actions } from "../schema"
-import { clientConfig } from "./clientConfig"
+import type { Config } from "@measured/puck"
+import type { Actions, OberonConfig } from "../schema"
 import { Editor } from "@/components/editor"
 import { Preview } from "@/components/preview"
 import { PuckMenu } from "@/components/puck-menu"
@@ -105,11 +104,13 @@ export async function PuckClient({
   )
 }
 
-export async function Client({
+export async function Oberon({
   slug = [],
   actions,
+  config: { blocks },
 }: {
   slug?: string[]
+  config: OberonConfig
   actions: Actions
 }) {
   const route = slug[0] || ""
@@ -119,7 +120,7 @@ export async function Client({
     <PuckClient
       route={route}
       path={path}
-      config={clientConfig}
+      config={{ components: blocks }}
       actions={actions}
     />
   )

@@ -14,7 +14,7 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@oberon/dev": "*",
+    "@oberon/dev": "workspace:*",
     "concurrently": "^8.2.1",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",

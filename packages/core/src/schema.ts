@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { Data } from "@measured/puck"
 import { Route } from "next"
+import type { Config } from "@measured/puck"
 
 /*
  * Pages
@@ -62,4 +63,11 @@ export type Actions = {
   getAllKeys: () => Promise<Route[]>
   getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
   resolvePath: (slug?: string[]) => string
+}
+
+export type OberonConfig = {
+  // TODO: fix any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  blocks: Config["components"]
+  actions?: Actions
 }

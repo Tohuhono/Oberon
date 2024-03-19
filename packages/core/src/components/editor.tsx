@@ -4,6 +4,7 @@ import "@measured/puck/dist/index.css"
 
 import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@oberon/ui/button"
+import { DynamicTailwind } from "@oberon/ui/theme"
 import { PuckMenu } from "./puck-menu"
 import { useLocalData } from "@/app/hooks"
 import type { Actions } from "@/schema"
@@ -118,6 +119,8 @@ export function Editor({
       overrides={{
         header: () => <Header path={path} onPublish={onPublish} />,
       }}
-    />
+    >
+      <DynamicTailwind />
+    </Puck>
   )
 }

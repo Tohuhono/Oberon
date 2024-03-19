@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@measured/puck"
 import { Prose as ProseUI } from "@oberon/ui/prose"
 
-export const Prose: ComponentConfig<{ className?: string }> = {
+export const Prose = {
   fields: {
     className: {
       type: "text",
@@ -14,4 +14,4 @@ export const Prose: ComponentConfig<{ className?: string }> = {
       </ProseUI>
     )
   },
-}
+} satisfies ComponentConfig<{ className?: string }>

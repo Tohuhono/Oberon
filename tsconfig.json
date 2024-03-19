@@ -7,7 +7,6 @@
     "rootDir": ".",
     "outDir": "./dist",
     "declaration": true,
-    "declarationMap": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "preserve",

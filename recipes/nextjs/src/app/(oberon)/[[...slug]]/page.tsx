@@ -1,6 +1,7 @@
 import { Render } from "@oberon/core/render"
 
-import { actions } from "src/oberon-actions"
+import { actions } from "../actions"
+import { config } from "../config"
 
 export async function generateStaticParams() {
   return await actions.getAllPaths()
@@ -25,5 +26,5 @@ export default function OberonRender({
 }: {
   params: { slug?: [] }
 }) {
-  return <Render slug={slug} actions={actions} />
+  return <Render slug={slug} actions={actions} config={config} />
 }
