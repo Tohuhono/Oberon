@@ -26,7 +26,6 @@
     }
   },
   "bin": {
-    "odt-watch": "./dist/odt-watch.js",
     "odt-clean": "./scripts/clean-package.mjs"
   },
   "scripts": {
@@ -63,5 +62,8 @@
     "vite-plugin-dts": "^3.7.3",
     "vite-plugin-externalize-deps": "^0.8.0",
     "vite-tsconfig-paths": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.30"
   }
 }

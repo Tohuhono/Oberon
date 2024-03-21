@@ -2,7 +2,7 @@
 
 import { Config, Data, Render } from "@measured/puck"
 import { notFound } from "next/navigation"
-import { useLocalData } from "@/app/hooks"
+import { useLocalData } from "@/hooks/use-local-data"
 
 export function Preview({
   path,

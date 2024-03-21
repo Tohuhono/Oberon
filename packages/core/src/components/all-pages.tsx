@@ -5,24 +5,24 @@ import Link from "next/link"
 import { Fragment, useState } from "react"
 import { Button, buttonVariants } from "@oberon/ui/button"
 import { Input } from "@oberon/ui/input"
-import type { Actions } from "@/schema"
+import type { ServerActions } from "@/app/schema"
 
 export function AllPages({
-  keys,
+  routes,
   deletePage,
 }: {
-  keys: Route[]
-  deletePage: Actions["deletePage"]
+  routes: Route[]
+  deletePage: ServerActions["deletePage"]
 }) {
   const [newPath, setNewPath] = useState("")
 
   return (
     <>
       <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-1 pt-3">
-        {keys.map((path) => (
-          <Fragment key={path}>
-            <Link className="pr-6" href={path} prefetch={false}>
-              {path}
+        {routes.map((route) => (
+          <Fragment key={route}>
+            <Link className="pr-6" href={route} prefetch={false}>
+              {route}
             </Link>
 
             <Link
@@ -30,7 +30,7 @@ export function AllPages({
                 size: "sm",
                 className: "no-underline",
               })}
-              href={`/cms/edit/${path}`}
+              href={`/cms/edit/${route}`}
               target="_blank"
               prefetch={false}
             >
@@ -39,7 +39,7 @@ export function AllPages({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => deletePage(path)}
+              onClick={() => deletePage(route)}
             >
               Delete
             </Button>

@@ -3,7 +3,9 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "clean": "turbo clean --continue && rimraf ./dist ./turbo ./node_modules",
+    "clean": "turbo clean --continue",
+    "clean:node": "turbo clean --continue -- --node_modules && rimraf ./dist ./turbo ./node_modules",
+    "tsc": "turbo tsc",
     "dev": "turbo dev",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint",
@@ -14,7 +16,7 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@oberon/dev": "workspace:*",
+    "@oberon/dev": "*",
     "concurrently": "^8.2.1",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",
@@ -34,6 +36,7 @@
   "workspaces": [
     "apps/*",
     "packages/*",
+    "puck/*",
     "recipes/*"
   ]
 }

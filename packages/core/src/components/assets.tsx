@@ -6,16 +6,14 @@ import { filesize } from "filesize"
 import Link from "next/link"
 import { Route } from "next"
 import { Button } from "@oberon/ui/button"
-
-// import { UploadDropzone } from "@/puck/src/uploadthing/components"
-import { Asset, type Actions } from "@/schema"
+import type { Asset, ServerActions } from "@/app/schema"
 
 export function Assets({
   assets: initialAssets,
   deleteAsset,
 }: {
   assets: Asset[]
-  deleteAsset: Actions["deleteAsset"]
+  deleteAsset: ServerActions["deleteAsset"]
 }) {
   const [assets, setAssets] = useState(initialAssets)
 

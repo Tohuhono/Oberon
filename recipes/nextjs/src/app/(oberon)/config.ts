@@ -1,7 +1,7 @@
-import type { OberonConfig } from "@oberon/core"
 import { Prose } from "@oberon/blocks/prose"
 import { Div } from "@oberon/blocks/div"
-import { RichTextEditor } from "@oberon/blocks/rich-text"
+import { RichTextEditor } from "@tohuhono/puck-rich-text"
+import type { OberonConfig } from "@oberon/core"
 
 export const config: OberonConfig = {
   blocks: {
@@ -9,4 +9,5 @@ export const config: OberonConfig = {
     Div,
     RichTextEditor,
   },
+  resolvePath: (path: string[] = []) => `/${path.join("/")}`,
 }

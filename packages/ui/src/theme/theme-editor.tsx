@@ -5,6 +5,13 @@ import { useState } from "react"
 import { createStyleRegistry, StyleRegistry } from "styled-jsx"
 import { Theme } from "./default-theme"
 
+declare module "react" {
+  interface StyleHTMLAttributes<T> extends React.HTMLAttributes<T> {
+    jsx?: boolean
+    global?: boolean
+  }
+}
+
 const StyledJsxRegistry = ({ children }: { children: React.ReactNode }) => {
   // Only create stylesheet once with lazy initial state
   // x-ref: https://reactjs.org/docs/hooks-reference.html#lazy-initial-state

@@ -14,9 +14,19 @@ function dts(): Plugin {
     enforce: "pre" as const,
     buildEnd: (error?: Error) => {
       if (!error) {
-        return new Promise((res, rej) => {
-          exec("tsc --noEmit false --emitDeclarationOnly --pretty", (err) =>
-            err ? rej(err) : res(),
+        return new Promise((resolve, _reject) => {
+          exec(
+            "tsc --noEmit false --emitDeclarationOnly true --declarationMap true --pretty",
+            (_error, stdout, stderr) => {
+              if (stdout) {
+                console.log(stdout)
+              }
+              if (stderr) {
+                console.error(stderr)
+              }
+              // Swallow errors
+              return resolve()
+            },
           )
         })
       }
@@ -70,6 +80,7 @@ export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
       watchFile(),
     ],
     build: {
+      minify: false,
       lib: {
         entry: parseEntryPoints(entryPoints),
         name: "MyLib",

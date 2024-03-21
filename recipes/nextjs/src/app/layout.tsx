@@ -5,8 +5,8 @@ import { cn } from "@oberon/utils"
 const font = Montserrat({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Any Old Type",
-  description: "Discussing typescript types and any other unknowns",
+  title: "Oberon CMS",
+  description: "Built with puck by Tohuhono",
 }
 
 // Inline script to prevent fouc

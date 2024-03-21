@@ -2,24 +2,18 @@
 import path from "path"
 import { rimraf } from "rimraf"
 
-const outputs = [
+const dirs = [
   "./dist",
-  "./node_modules",
   "./.rollup.cache",
   "./.turbo",
   "./.next",
   "./.vercel",
   "./tsconfig.tsbuildinfo",
+  ...(globalThis.process.argv[2] === "--node_modules"
+    ? ["./node_modules"]
+    : []),
 ]
 
-globalThis.console.warn(`rm [${outputs}] in ${path.resolve()}`)
+globalThis.console.warn(`rm [${dirs}] in ${path.resolve()}`)
 
-rimraf([
-  "./dist",
-  "./node_modules",
-  "./.rollup.cache",
-  "./.turbo",
-  "./.next",
-  "./.vercel",
-  "./tsconfig.tsbuildinfo",
-])
+rimraf(dirs)

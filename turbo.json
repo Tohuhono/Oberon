@@ -11,7 +11,7 @@
       "dependsOn": ["tsc", "lint:style", "lint:format"]
     },
     "tsc": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^tsc"]
     },
     "lint:style": {},
     "lint:format": {},

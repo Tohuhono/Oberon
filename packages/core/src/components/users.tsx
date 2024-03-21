@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@oberon/ui/form"
 
-import { Actions, AddUserSchema, User, roles } from "@/schema"
+import { ServerActions, AddUserSchema, User, roles } from "@/app/schema"
 
 export function Users({
   users: initialUsers,
@@ -31,9 +31,9 @@ export function Users({
   deleteUser,
 }: {
   users: User[]
-  addUser: Actions["addUser"]
-  changeRole: Actions["changeRole"]
-  deleteUser: Actions["deleteUser"]
+  addUser: ServerActions["addUser"]
+  changeRole: ServerActions["changeRole"]
+  deleteUser: ServerActions["deleteUser"]
 }) {
   const [users, setUsers] = useState(initialUsers)
 

@@ -13,7 +13,9 @@
         "name": "next"
       }
     ],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "emitDeclarationOnly": false
   },
   "include": ["src", ".next/types/**/*.ts"]
 }

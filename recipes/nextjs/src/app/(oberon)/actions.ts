@@ -1,5 +1,4 @@
 import { Data } from "@measured/puck"
-
 import { eq } from "drizzle-orm"
 import { Route } from "next"
 import { revalidatePath, unstable_cache } from "next/cache"
@@ -7,7 +6,7 @@ import {
   ChangeRoleSchema,
   DeleteUserSchema,
   AddUserSchema,
-  Actions,
+  ServerActions,
 } from "@oberon/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
@@ -27,7 +26,7 @@ const getAllPathsCached = cache(async () => {
   }))
   return data
 })
-const getAllPaths: Actions["getAllPaths"] = async () => {
+const getAllPaths: ServerActions["getAllPaths"] = async () => {
   "use server"
   return getAllPathsCached()
 }
@@ -46,7 +45,7 @@ const getAllKeysCached = cache(async () => {
   const data = result.sort(sortPages).map(({ key }) => key as Route)
   return data
 })
-const getAllKeys: Actions["getAllKeys"] = async () => {
+const getAllKeys: ServerActions["getAllKeys"] = async () => {
   "use server"
   return getAllKeysCached()
 }
@@ -64,13 +63,16 @@ const getPageDataCached = cache(async (url: string) => {
 
   return data ? (JSON.parse(data) as Data) : null
 })
-const getPageData: Actions["getPageData"] = async (url) => {
+const getPageData: ServerActions["getPageData"] = async (url) => {
   "use server"
   return getPageDataCached(url)
 }
 
 // TODO zod ; return value
-const publishPageData: Actions["publishPageData"] = async ({ key, data }) => {
+const publishPageData: ServerActions["publishPageData"] = async ({
+  key,
+  data,
+}) => {
   "use server"
   const dataJSON = JSON.stringify(data)
   await db
@@ -83,7 +85,7 @@ const publishPageData: Actions["publishPageData"] = async ({ key, data }) => {
 }
 
 // TODO zod ; return value
-const deletePage: Actions["deletePage"] = async (key) => {
+const deletePage: ServerActions["deletePage"] = async (key) => {
   "use server"
   await db.delete(pages).where(eq(pages.key, key))
   revalidatePath(key)
@@ -93,7 +95,7 @@ const deletePage: Actions["deletePage"] = async (key) => {
  * Asset actions
  */
 
-const getAllAssets: Actions["getAllAssets"] = async () => {
+const getAllAssets: ServerActions["getAllAssets"] = async () => {
   "use server"
   const allAssets = await db
     .select({
@@ -108,7 +110,7 @@ const getAllAssets: Actions["getAllAssets"] = async () => {
 }
 
 // TODO uploadthing
-const deleteAsset: Actions["deleteAsset"] = async (data) => {
+const deleteAsset: ServerActions["deleteAsset"] = async (data) => {
   "use server"
   console.warn("FIXME deleteAsset not implemented", data)
 }
@@ -129,7 +131,7 @@ const deleteAsset = async (data: Pick<Asset, "key">) => {
 /*
  * User actions
  */
-const getAllUsers: Actions["getAllUsers"] = async () => {
+const getAllUsers: ServerActions["getAllUsers"] = async () => {
   "use server"
   const allUsers = await db
     .select({ id: users.id, email: users.email, role: users.role })
@@ -138,7 +140,7 @@ const getAllUsers: Actions["getAllUsers"] = async () => {
   return allUsers || []
 }
 
-const changeRole: Actions["changeRole"] = async (data: unknown) => {
+const changeRole: ServerActions["changeRole"] = async (data: unknown) => {
   "use server"
   const { role, id } = ChangeRoleSchema.parse(data)
   try {
@@ -150,7 +152,7 @@ const changeRole: Actions["changeRole"] = async (data: unknown) => {
   }
 }
 
-const deleteUser: Actions["deleteUser"] = async (data: unknown) => {
+const deleteUser: ServerActions["deleteUser"] = async (data: unknown) => {
   "use server"
   const { id } = DeleteUserSchema.parse(data)
   try {
@@ -162,7 +164,7 @@ const deleteUser: Actions["deleteUser"] = async (data: unknown) => {
   }
 }
 
-const addUser: Actions["addUser"] = async (data: unknown) => {
+const addUser: ServerActions["addUser"] = async (data: unknown) => {
   "use server"
   const { email, role } = AddUserSchema.parse(data)
 
@@ -180,8 +182,6 @@ const addUser: Actions["addUser"] = async (data: unknown) => {
   }
 }
 
-const resolvePath = (slug: string[] = []) => `/${slug.join("/")}`
-
 export const actions = {
   addUser,
   deleteUser,
@@ -194,5 +194,4 @@ export const actions = {
   getPageData,
   getAllKeys,
   getAllPaths,
-  resolvePath,
-} satisfies Actions
+} satisfies ServerActions
