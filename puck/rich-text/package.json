@@ -1,17 +1,20 @@
 {
   "name": "@tohuhono/puck-rich-text",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.0.6",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "type": "module",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "browser": "./dist/index.js",
-      "node": "./dist/server.js",
-      "types": "./dist/index.d.ts"
-    }
+      "node": "./dist/server.js"
+    },
+    "./legacy": "./dist/index.js"
   },
+  "files": [
+    "./dist"
+  ],
   "scripts": {
     "build": "vite build",
     "clean": "npx odt-clean",
@@ -41,10 +44,10 @@
     "lucide-react": "^0.358.0"
   },
   "peerDependencies": {
-    "next": "^14.1.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@measured/puck": "^0.13.1"
+    "next": ">=14.1",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0",
+    "@measured/puck": ">=0.13.1"
   },
   "devDependencies": {
     "@oberon/dev": "*",

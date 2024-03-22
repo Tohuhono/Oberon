@@ -2,7 +2,7 @@ import type { SerializedEditorState } from "lexical/LexicalEditorState"
 import type { ComponentConfig } from "@measured/puck"
 import { Render } from "./rich-text-editor/render-server"
 
-export const RichTextEditor = {
+export const PuckRichText = {
   fields: {
     state: {
       type: "custom",
