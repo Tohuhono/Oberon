@@ -1,8 +1,8 @@
 "use client"
 
 import type { SerializedEditorState } from "lexical/LexicalEditorState"
+import { useSelected } from "../compat/use-selected"
 import { InlineRichTextEditor } from "./lexical/rich-text-editor"
-import { useSelected } from "./use-selected"
 
 export type RichTextProps = {
   state: SerializedEditorState

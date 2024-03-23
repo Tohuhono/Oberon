@@ -1,15 +1,15 @@
 .DropdownMenu-content {
-  background: var(--puck-color-grey-01);
+  background: var(--puck-color-grey-0);
   padding: 4px;
   border-radius: 8px;
-  font-size: var(--puck-font-size-xxxs);
+  font-size: var(--puck-font-size-xxs);
   font-family: var(--puck-font-family);
 }
 
 .DropdownMenu-action {
   background: transparent;
   border: none;
-  color: var(--puck-color-grey-08);
+  color: var(--puck-color-grey-7);
   cursor: pointer;
   padding: 6px 8px;
   border-radius: 4px;
@@ -21,7 +21,7 @@
 }
 
 .DropdownMenu-action:focus-visible {
-  outline: 2px solid var(--puck-color-azure-05);
+  outline: 2px solid var(--puck-color-azure-5);
   outline-offset: -2px;
 }
 
@@ -34,6 +34,6 @@
 }
 
 .DropdownMenu-action:active {
-  color: var(--puck-color-azure-07);
+  color: var(--puck-color-azure-7);
   transition: none;
 }

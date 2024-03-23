@@ -1,3 +1,22 @@
 import { initConfig } from "@oberon/dev/vite"
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js"
 
-export default initConfig()
+const config = initConfig()
+
+export default {
+  ...config,
+  plugins: [
+    ...config.plugins,
+    // Bundle the css modules into the two output files
+    cssInjectedByJsPlugin({
+      jsAssetsFilterFunction: function customJsAssetsfilterFunction(
+        outputChunk,
+      ) {
+        return (
+          outputChunk.fileName === "index.js" ||
+          outputChunk.fileName === "server.js"
+        )
+      },
+    }),
+  ],
+}

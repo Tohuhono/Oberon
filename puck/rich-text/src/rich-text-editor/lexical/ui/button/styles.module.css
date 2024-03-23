@@ -1,7 +1,7 @@
 .ToolbarButton {
   background: transparent;
   border: none;
-  color: var(--puck-color-grey-08);
+  color: var(--puck-color-grey-8);
   cursor: pointer;
   padding: 6px 8px;
   border-radius: 4px;
@@ -13,19 +13,19 @@
 }
 
 .ToolbarButton:focus-visible {
-  outline: 2px solid var(--puck-color-azure-05);
+  outline: 2px solid var(--puck-color-azure-5);
   outline-offset: -2px;
 }
 
 @media (hover: hover) {
   .ToolbarButton:hover {
     background: var(--puck-color-grey-2);
-    color: var(--puck-color-azure-06);
+    color: var(--puck-color-azure-6);
     cursor: pointer;
   }
 }
 
 .ToolbarButton:active {
-  color: var(--puck-color-azure-07);
+  color: var(--puck-color-azure-7);
   transition: none;
 }
