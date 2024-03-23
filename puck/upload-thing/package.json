@@ -1,0 +1,46 @@
+{
+  "name": "@tohuhono/puck-upload-thing",
+  "version": "0.0.6",
+  "author": "Tohuhono ltd",
+  "license": "MIT",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "browser": "./dist/index.js",
+      "node": "./dist/server.js"
+    },
+    "./legacy": "./dist/index.js"
+  },
+  "files": [
+    "./dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "clean": "npx odt-clean",
+    "dev": "vite build --watch",
+    "wait": "wait-on dist/version",
+    "wait:clean": "rimraf ./dist/version",
+    "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
+    "lint:style": "eslint .",
+    "tsc": "tsc --pretty"
+  },
+  "dependencies": {
+    "@uploadthing/react": "^6.3.4",
+    "@uploadthing/shared": "^6.3.4"
+  },
+  "peerDependencies": {
+    "next": ">=14.1",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0",
+    "@measured/puck": ">=0.13.1"
+  },
+  "devDependencies": {
+    "@oberon/dev": "*",
+    "@types/react": "18.2.66",
+    "@types/react-dom": "18.2.22",
+    "eslint": "^8.57.0",
+    "typescript": "5.4.2",
+    "vite": "^5.1.6"
+  }
+}

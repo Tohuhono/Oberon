@@ -11,7 +11,7 @@
     "dev": "next dev",
     "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint:style": "eslint .",
-    "tsc": "tsc --pretty --noEmit --emitDeclarationOnly false",
+    "tsc": "tsc --pretty",
     "postinstall": "node ./scripts/postinstall.mjs",
     "prebuild": "node ./scripts/prebuild.mjs",
     "start": "next start",

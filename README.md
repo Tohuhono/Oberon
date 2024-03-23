@@ -1,81 +1,48 @@
-# Turborepo starter
+# Tohuhono Monorepo
 
-This is an official starter Turborepo.
+All things Tohuhono.
 
-## Using this example
+## Quick start
 
-Run the following command:
+This monorepo uses [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm or yarn ymmv.
 
-```sh
-npx create-turbo@latest
+```
+pnpm install
+
+pnpm build
+
+pnpm dev
+
+pnpm lint
 ```
 
 ## What's inside?
 
 This Turborepo includes the following packages/apps:
 
-### Apps and Packages
+### Apps
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@oberon/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@oberon/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@oberon/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `apps/tohuhono`
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+  https://tohuhono.com
 
-### Utilities
+- `apps/rich-text-demo`
 
-This Turborepo has some additional tools already setup for you:
+  an app demoing [puck-rich-text](https://www.npmjs.com/package/@tohuhono/puck-rich-text)
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+  https://puck-rich-text.tohuhono.com
 
-### Build
+### Utilities and Config
 
-To build all apps and packages, run the following command:
+- `packages/dev`
+  - [TypeScript](https://www.typescriptlang.org/) for static type checking
+  - [ESLint](https://eslint.org/) for code linting
+  - [Prettier](https://prettier.io) for code formatting
+- `packages/utils`
+  - `cn` - tailwind classname merge function
 
-```
-cd my-turborepo
-pnpm build
-```
+## What next?
 
-### Develop
+Under heavy development.
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+<img src="https://img.shields.io/badge/Current Status:%20-000.svg"><img src="https://img.shields.io/badge/Move%20fast%20and%20break%20things-red.svg">

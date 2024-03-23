@@ -1,7 +1,7 @@
 import { Data } from "@measured/puck"
 import { eq } from "drizzle-orm"
 import { Route } from "next"
-import { revalidatePath, unstable_cache } from "next/cache"
+import { revalidatePath, unstable_cache as cache } from "next/cache"
 import {
   ChangeRoleSchema,
   DeleteUserSchema,
@@ -13,8 +13,6 @@ import {
 import { db } from "src/db/client"
 import { assets, pages, users } from "src/db/schema"
 import { adapter } from "../../auth/next-auth-adapter"
-
-const cache = unstable_cache
 
 /*
  * Page actions

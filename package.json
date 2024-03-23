@@ -7,7 +7,7 @@
     "clean:node": "turbo clean --continue -- --node_modules && rimraf ./dist ./turbo ./node_modules",
     "tsc": "turbo tsc",
     "dev": "turbo dev",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
+    "format": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:style -- --fix",
     "postinstall": "turbo postinstall"

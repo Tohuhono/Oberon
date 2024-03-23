@@ -1,3 +1,3 @@
 export * from "./next-auth-schema"
 export * from "./puck-schema"
-export * from "./uploadthing-schema"
+export * from "./asset-schema"

@@ -1,0 +1,27 @@
+{
+  "name": "rich-text-demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint:style": "eslint .",
+    "tsc": "tsc --pretty"
+  },
+  "dependencies": {
+    "@measured/puck": "^0.13.1",
+    "@tohuhono/puck-rich-text": "*",
+    "classnames": "^2.5.1",
+    "next": "^14.1.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/react": "18.2.66",
+    "@types/react-dom": "18.2.22",
+    "eslint-config-custom": "*",
+    "typescript": "5.4.2"
+  }
+}
