@@ -15,6 +15,14 @@ node_modules
 # Testing
 coverage
 
+# Playwright
+test/playwright/report
+test/playwright/results
+test/playwright/.cache
+test-results
+playwright-report
+playwright/.cache
+
 # Turbo
 .turbo
 
@@ -29,6 +37,9 @@ dist
 .rollup.cache
 tsconfig.tsbuildinfo
 
+# Next.js
+next-env.d.ts
+
 # Debug
 npm-debug.log*
 yarn-debug.log*
@@ -37,3 +48,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Libsql
+.db
+
+# Genereated tailwind classes
+tailwind.classes.txt
+
