@@ -39,7 +39,5 @@ jobs:
           cache: "pnpm"
       - name: Alias build to production
         run: |
-          echo "hmm ${{ inputs.url }}" >> "$GITHUB_STEP_SUMMARY"
-
-#          pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
-#          echo "$(npx vercel alias ${{ inputs.url }} $DOMAIN --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})" >> "$GITHUB_STEP_SUMMARY"
+          pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
+          echo "$(npx vercel alias ${{ inputs.url }} $DOMAIN --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})" >> "$GITHUB_STEP_SUMMARY"
