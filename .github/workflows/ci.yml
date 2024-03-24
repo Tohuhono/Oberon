@@ -129,6 +129,21 @@ jobs:
     needs: [deploy_tohuhono, test-status]
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/promote.yml
-    secrets: inherit
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.TOHUHONO_VERCEL_ID }}
     with:
       url: ${{ needs.deploy_tohuhono.outputs.url }}
+
+  promote_rich_text:
+    name: Deploy Rich Text
+    needs: [deploy_rich_text, test-status]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/promote.yml
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
+    with:
+      url: ${{ needs.deploy_rich_text.outputs.url }}
