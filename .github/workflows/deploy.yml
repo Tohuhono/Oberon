@@ -6,17 +6,12 @@ on:
       environment:
         required: true
         type: string
-      project_id:
-        required: true
-        type: string
     outputs:
       url:
         description: The deployment url
         value: ${{ jobs.deploy.outputs.url }}
     secrets:
-      TOHUHONO_VERCEL_ID:
-        required: true
-      RICH_VERCEL_ID:
+      project_id:
         required: true
       VERCEL_API_TOKEN:
         required: true
@@ -27,11 +22,11 @@ jobs:
   deploy:
     name: Deploy to Vercel
     env:
-      VERCEL_ORG_ID: ${{ inputs.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ inputs[inputs.project_id] }}
-      VERCEL_API_TOKEN: ${{ inputs.VERCEL_API_TOKEN }}
-      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT: ${{ inputs.environment }}
+      VERCEL_PROJECT_ID: ${{ secrets.project_id }}
+      VERCEL_SCOPE: ${{ inputs.vercel_scope }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest

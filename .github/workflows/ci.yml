@@ -17,10 +17,12 @@ jobs:
   deploy:
     name: Deploy
     uses: ./.github/workflows/deploy.yml
-    secrets: inherit
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      vercel_project_id: ${{ secrets.TOHUHONO_VERCEL_ID }}
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
-      project_id: TOHUHONO_VERCEL_ID
 
   # deploy-status:
   #   name: Deploy Status
