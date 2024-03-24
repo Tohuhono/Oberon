@@ -6,7 +6,7 @@ on:
       environment:
         required: true
         type: string
-      project_secret:
+      project_id:
         required: true
         type: string
     outputs:
