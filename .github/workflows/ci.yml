@@ -14,39 +14,47 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    name: Deploy
+  deploy_tohuhono:
+    name: Deploy Tohuhono
     uses: ./.github/workflows/deploy.yml
-    secrets: inherit
-    strategy:
-      fail-fast: false
-      matrix:
-        project_secret: [TOHUHONO_VERCEL_ID, RICH_VERCEL_ID]
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
-      project_id: ${{ matrix.project_secret }}
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.TOHUHONO_VERCEL_ID }}
 
-  # deploy-status:
-  #   name: Deploy Status
-  #   needs: [deploy]
-  #   if: success() || failure()
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
-  #     MESSAGE: "Latest deployment available at ${{ needs.deploy.outputs.url }}"
-  #   steps:
-  #     - name: Add preview URL to job summary
-  #       run: |
-  #         echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
-  #     - name: Add preview URL to PR
-  #       if: github.event_name == 'pull_request'
-  #       uses: marocchino/sticky-pull-request-comment@v2
-  #       with:
-  #         message: |
-  #           "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}"
-  #     - name: Failing deploy
-  #       if: ${{ env.STATUS == 'failed' }}
-  #       run: exit 1
+  deploy_rich_text:
+    name: Deploy Rich Text
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
+
+  deploy-status:
+    name: Deploy Status
+    needs: [deploy_tohuhono, deploy_rich_text]
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    env:
+      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
+      MESSAGE: "Latest deployment available at ${{ needs.deploy.outputs.url }}"
+    steps:
+      - name: Add preview URL to job summary
+        run: |
+          echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
+      - name: Add preview URL to PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}"
+      - name: Failing deploy
+        if: ${{ env.STATUS == 'failed' }}
+        run: exit 1
 
   # smoke-test:
   #   name: Smoke Test
@@ -99,7 +107,7 @@ jobs:
   test-status:
     name: Test Status
     #    needs: [smoke-test, lint, unit-test, component-test]
-    needs: [deploy, lint, unit-test]
+    needs: [deploy-status, lint, unit-test]
     if: success() || failure()
     runs-on: ubuntu-latest
     env:
@@ -116,29 +124,11 @@ jobs:
         if: ${{ env.STATUS == 'failed' }}
         run: exit 1
 
-  promote:
-    name: Promote deployment to production
-    needs: [deploy, test-status]
+  promote_tohuhono:
+    name: Deploy Tohuhono
+    needs: [deploy_tohuhono, test-status]
     if: ${{ github.ref == 'refs/heads/main' }}
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-      - name: Use pNpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20.x"
-          cache: "pnpm"
-      - name: Alias build to production
-        run: |
-          echo "hmm ${{ needs.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
-        #  pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
-        #  echo "$(npx vercel alias ${{ needs.deploy.outputs.url }} $DOMAIN --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})" >> "$GITHUB_STEP_SUMMARY"
+    uses: ./.github/workflows/promote.yml
+    secrets: inherit
+    with:
+      url: ${{ needs.deploy_tohuhono.outputs.url }}

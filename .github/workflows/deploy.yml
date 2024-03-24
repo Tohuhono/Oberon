@@ -6,17 +6,12 @@ on:
       environment:
         required: true
         type: string
-      project_id:
-        required: true
-        type: string
     outputs:
       url:
         description: The deployment url
         value: ${{ jobs.deploy.outputs.url }}
     secrets:
-      RICH_VERCEL_ID:
-        required: true
-      TOHUHONO_VERCEL_ID:
+      VERCEL_PROJECT_ID:
         required: true
       VERCEL_API_TOKEN:
         required: true
@@ -30,7 +25,7 @@ jobs:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT: ${{ inputs.environment }}
-      VERCEL_PROJECT_ID: ${{ secrets[inputs.project_id] }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
@@ -69,3 +64,15 @@ jobs:
         run: |
           pnpm run deploy
           echo "url=$(tail .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
+
+  prove:
+    name: Prove
+    needs: [deploy, test_status]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - run: echo "here"
