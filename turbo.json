@@ -7,26 +7,28 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
-    "lint": {
-      "dependsOn": ["tsc", "lint:style", "lint:format"]
-    },
-    "tsc": {
-      "dependsOn": ["^tsc"]
-    },
-    "lint:style": {},
-    "lint:format": {},
+    "clean": { "cache": false },
     "dev": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["wait:clean", "^wait"]
     },
+    "jest": {},
+    "lint": {
+      "dependsOn": ["tsc", "lint:style", "lint:format"]
+    },
+    "lint:style": {},
+    "lint:format": {},
+    "postinstall": {},
+    "tsc": {
+      "dependsOn": ["^tsc"]
+    },
+
     "wait": {
       "cache": false
     },
     "wait:clean": {
       "cache": false
-    },
-    "postinstall": {},
-    "clean": { "cache": false }
+    }
   }
 }

@@ -7,7 +7,6 @@
     "build": "next build",
     "clean": "npx odt-clean",
     "db:migrations:create": "drizzle-kit generate:sqlite",
-    "deploy": "bash ./scripts/deploy.sh",
     "dev": "next dev",
     "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint:style": "eslint .",
@@ -15,11 +14,11 @@
     "postinstall": "node ./scripts/postinstall.mjs",
     "prebuild": "node ./scripts/prebuild.mjs",
     "start": "next start",
-    "test:components": "playwright test --grep @component",
-    "test-ct": "playwright test -c playwright-ct.config.ts",
-    "test:smoke": "playwright test --grep @smoke",
-    "test:unit": "jest --watch",
-    "test:unit:ci": "jest --ci"
+    "playwright:components": "playwright test --grep @component",
+    "playwright:all": "playwright test",
+    "playwright:smoke": "playwright test --grep @smoke",
+    "jest": "jest --ci",
+    "jest:watch": "jest --watch"
   },
   "dependencies": {
     "@libsql/client": "^0.5.6",

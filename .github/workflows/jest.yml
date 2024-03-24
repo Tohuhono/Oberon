@@ -1,0 +1,42 @@
+name: Jest tests
+
+on:
+  workflow_call:
+
+jobs:
+  jest:
+    name: Jest Test
+    env:
+      # Must be the length of the shardIndex array
+      SHARD_INDEX_LENGTH: 2
+    strategy:
+      fail-fast: false
+      matrix:
+        # Must be the length of env.SHARD_INDEX_LENGTH
+        SHARD_INDEX: [1, 2]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+      - name: Use pNpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+      - name: Install
+        run: pnpm i
+      - name: Package
+        run: pnpm jest --cache-dir .turbo -- --shard=${{ matrix.SHARD_INDEX }}/${{ env.SHARD_INDEX_LENGTH }}

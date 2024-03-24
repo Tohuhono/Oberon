@@ -1,0 +1,148 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy
+    uses: ./.github/workflows/deploy.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [tohuhono, rich] #Array of org mnemonics to use below
+        include:
+          # includes a new variable for each org (this is effectively a switch statement)
+          - project: tohuhono
+            project_secret: TOHUHONO_VERCEL_ID
+          - project: rich
+            project_secret: RICH_VERCEL_ID
+    secrets: inherit
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets[matrix.project_secret] }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+    with:
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+
+  # deploy-status:
+  #   name: Deploy Status
+  #   needs: [deploy]
+  #   if: success() || failure()
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
+  #     MESSAGE: "Latest deployment available at ${{ needs.deploy.outputs.url }}"
+  #   steps:
+  #     - name: Add preview URL to job summary
+  #       run: |
+  #         echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
+  #     - name: Add preview URL to PR
+  #       if: github.event_name == 'pull_request'
+  #       uses: marocchino/sticky-pull-request-comment@v2
+  #       with:
+  #         message: |
+  #           "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}"
+  #     - name: Failing deploy
+  #       if: ${{ env.STATUS == 'failed' }}
+  #       run: exit 1
+
+  # smoke-test:
+  #   name: Smoke Test
+  #   needs: [deploy]
+  #   uses: ./.github/workflows/playwright.yml
+  #   with:
+  #     url: ${{ needs.deploy.outputs.url }}
+  #     tag: "@smoke"
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+      - name: Install
+        run: pnpm i
+      - name: Package
+        run: pnpm lint --cach-dir=.turbo
+
+  unit-test:
+    name: Unit Test
+    uses: ./.github/workflows/jest.yml
+
+  #  component-test:
+  #    name: Component Test
+  #    uses: ./.github/workflows/playwright.yml
+  #    with:
+  #      url: ""
+  #      tag: "@component"
+
+  test-status:
+    name: Test Status
+    #    needs: [smoke-test, lint, unit-test, component-test]
+    needs: [deploy, lint, unit-test]
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    env:
+      STATUS: "${{ ( contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') ) && 'failed' || 'passed'}}"
+    steps:
+      - name: Add test status to PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          Append: true
+          message: |
+            Test suite ${{ env.STATUS }}
+      - name: Failing deploy
+        if: ${{ env.STATUS == 'failed' }}
+        run: exit 1
+
+  promote:
+    name: Promote deployment to production
+    needs: [test-status]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Use pNpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+      - name: Alias build to production
+        run: |
+          echo "hmm ${{ needs.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
+        #  pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
+        #  echo "$(npx vercel alias ${{ needs.deploy.outputs.url }} $DOMAIN --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})" >> "$GITHUB_STEP_SUMMARY"

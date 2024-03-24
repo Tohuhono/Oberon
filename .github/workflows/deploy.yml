@@ -1,0 +1,64 @@
+name: Deploy workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    outputs:
+      url:
+        description: The deployment url
+        value: ${{ jobs.deploy.outputs.url }}
+    secrets:
+      VERCEL_PROJECT_ID:
+        required: true
+      VERCEL_API_TOKEN:
+        required: true
+      VERCEL_ORG_ID:
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy to Vercel
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+      VERCEL_ENVIRONMENT: ${{ inputs.environment }}
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Reset PR message
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}"
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+      - name: Use pNpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+      - name: Build and deploy
+        id: deploy
+        run: |
+          pnpm run deploy
+          echo "url=$(tail .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"

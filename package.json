@@ -2,6 +2,7 @@
   "name": "oberon",
   "private": true,
   "scripts": {
+    "deploy": "bash ./scripts/deploy.sh",
     "build": "turbo build",
     "clean": "turbo clean --continue",
     "clean:node": "turbo clean --continue -- --node_modules && rimraf ./dist ./turbo ./node_modules",
@@ -10,7 +11,7 @@
     "format": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:style -- --fix",
-    "postinstall": "turbo postinstall"
+    "jest": "turbo jest"
   },
   "dependencies": {
     "dotenv": "^16.4.5"
