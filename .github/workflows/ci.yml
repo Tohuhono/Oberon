@@ -21,10 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         project: [TOHUHONO_VERCEL_ID, RICH_VERCEL_ID] #Array of org mnemonics to use below
-    secrets: inherit
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
       project_id: ${{ matrix.project }}
+    secrets: inherit
 
   # deploy-status:
   #   name: Deploy Status
