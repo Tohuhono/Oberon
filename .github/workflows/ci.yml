@@ -27,7 +27,7 @@ jobs:
             project_secret: TOHUHONO_VERCEL_ID
           - project: rich
             project_secret: RICH_VERCEL_ID
-    secrets: inherit
+    secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets[matrix.project_secret] }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
