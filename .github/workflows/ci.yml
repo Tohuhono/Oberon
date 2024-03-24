@@ -20,11 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project_secret: [TOHUHONO_VERCEL_ID, RICH_VERCEL_ID] #Array of org mnemonics to use below
+        project: [TOHUHONO_VERCEL_ID, RICH_VERCEL_ID] #Array of org mnemonics to use below
     secrets: inherit
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
-      project_secret: ${{ matrix.project_secret }}
+      project_id: ${{ matrix.project }}
 
   # deploy-status:
   #   name: Deploy Status
@@ -114,7 +114,7 @@ jobs:
 
   promote:
     name: Promote deployment to production
-    needs: [test-status]
+    needs: [deploy, test-status]
     if: ${{ github.ref == 'refs/heads/main' }}
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
