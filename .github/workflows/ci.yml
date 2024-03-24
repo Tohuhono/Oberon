@@ -24,7 +24,7 @@ jobs:
         project_secret: [TOHUHONO_VERCEL_ID, RICH_VERCEL_ID]
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
-      project_id: matrix.project_secret
+      project_id: ${{ matrix.project_secret }}
 
   # deploy-status:
   #   name: Deploy Status
@@ -83,7 +83,7 @@ jobs:
       - name: Install
         run: pnpm i
       - name: Package
-        run: pnpm lint --cach-dir=.turbo
+        run: pnpm lint --cache-dir=.turbo
 
   unit-test:
     name: Unit Test
