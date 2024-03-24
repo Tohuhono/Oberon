@@ -9,7 +9,7 @@
     "tsc": "turbo tsc",
     "dev": "turbo dev",
     "format": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "lint": "turbo lint",
+    "lint": "turbo lint --filter='!@tohuhono/puck-upload-thing' --filter='!@oberon/nextjs-recipe' --filter='!tohuhono'",
     "lint:fix": "turbo lint:style -- --fix",
     "jest": "turbo jest"
   },
