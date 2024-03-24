@@ -11,7 +11,7 @@ on:
         description: The deployment url
         value: ${{ jobs.deploy.outputs.url }}
     secrets:
-      project_id:
+      vercel_project_id:
         required: true
       VERCEL_API_TOKEN:
         required: true
@@ -25,7 +25,7 @@ jobs:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT: ${{ inputs.environment }}
-      VERCEL_PROJECT_ID: ${{ secrets.project_id }}
+      VERCEL_PROJECT_ID: ${{ secrets.vercel_project_id }}
       VERCEL_SCOPE: ${{ inputs.vercel_scope }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
