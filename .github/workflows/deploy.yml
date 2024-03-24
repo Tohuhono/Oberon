@@ -27,9 +27,9 @@ jobs:
   deploy:
     name: Deploy to Vercel
     env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets[inputs.project_id] }}
-      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_ORG_ID: ${{ inputs.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ inputs[inputs.project_id] }}
+      VERCEL_API_TOKEN: ${{ inputs.VERCEL_API_TOKEN }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       VERCEL_ENVIRONMENT: ${{ inputs.environment }}
     outputs:
