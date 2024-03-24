@@ -24,7 +24,7 @@ jobs:
     secrets: inherit
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
-      project_secret: ${{ secrets[matrix.project_secret] }}
+      project_secret: ${{ matrix.project_secret }}
 
   # deploy-status:
   #   name: Deploy Status
