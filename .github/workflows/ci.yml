@@ -17,6 +17,7 @@ jobs:
   deploy:
     name: Deploy
     uses: ./.github/workflows/deploy.yml
+    secrets: inherit
     strategy:
       fail-fast: false
       matrix:
