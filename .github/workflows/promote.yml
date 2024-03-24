@@ -1,0 +1,43 @@
+name: Promote Workflow
+
+on:
+  workflow_call:
+    inputs:
+      url:
+        required: true
+        type: string
+
+    secrets:
+      VERCEL_API_TOKEN:
+        required: true
+      VERCEL_ORG_ID:
+        required: true
+
+jobs:
+  promote:
+    name: Promote deployment to production
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Use pNpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+      - name: Alias build to production
+        run: |
+          echo "hmm ${{ needs.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
+
+#          pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
+#          echo "$(npx vercel alias ${{ inputs.url }} $DOMAIN --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})" >> "$GITHUB_STEP_SUMMARY"
