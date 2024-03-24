@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         # Must be the length of env.SHARD_INDEX_LENGTH
-        SHARD_INDEX: [1, 2]
+        SHARD_INDEX: [1]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
