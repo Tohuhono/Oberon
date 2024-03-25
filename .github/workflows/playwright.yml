@@ -1,0 +1,59 @@
+name: Playwright tests
+
+on:
+  workflow_call:
+    inputs:
+      url:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+
+jobs:
+  playwright:
+    name: Playwright test
+    runs-on: ubuntu-latest
+    container:
+      # should match the installed version
+      image: mcr.microsoft.com/playwright:v1.38.1-jammy
+    env:
+      # Must be the length of the shardIndex array
+      SHARD_INDEX_LENGTH: 1
+      PLAYWRIGHT_URL: ${{ inputs.url }}
+      PLAYWRIGHT_HEADER: ""
+      PLAYWRIGHT_DEV_SERVER: false
+    strategy:
+      fail-fast: false
+      matrix:
+        # must be defined in playwright.config
+        PROJECT: [chromium, webkit, firefox, chrome-mobile, safari-mobile]
+        # Must be the length of env.SHARD_INDEX_LENGTH
+        SHARD_INDEX: [1]
+    defaults:
+      run:
+        working-directory: "./"
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Use pNpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm i
+      - name: Run tests
+        # HOME=/root https://github.com/microsoft/playwright/issues/6500
+        run: HOME=/root pnpx playwright test --grep ${{ inputs.tag }} --project ${{ matrix.PROJECT }} --shard ${{ matrix.SHARD_INDEX }}/${{ env.SHARD_INDEX_LENGTH }}
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: Playwright report
+          path: test/playwright/report
+          retention-days: 10
