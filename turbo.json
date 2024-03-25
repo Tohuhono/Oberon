@@ -15,7 +15,7 @@
     },
     "jest": {},
     "lint": {
-      "dependsOn": ["tsc", "lint:style"]
+      "dependsOn": ["^build", "tsc", "lint:style"]
     },
     "lint:style": {},
     "lint:format": {},
