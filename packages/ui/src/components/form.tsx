@@ -14,6 +14,14 @@ import {
 import { cn } from "@oberon/utils"
 import { Label } from "./label"
 
+// https://github.com/radix-ui/primitives/issues/2309
+declare module "@radix-ui/react-label" {
+  export interface LabelProps {
+    className?: string
+    htmlFor?: string
+  }
+}
+
 const Form = FormProvider
 
 type FormFieldContextValue<

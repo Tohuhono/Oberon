@@ -13,6 +13,10 @@ declare module "@auth/core" {
     role: "user" | "admin"
   }
 
+  interface AdapterAccount {
+    access_token: string
+  }
+
   interface User {
     role: "user" | "admin"
   }

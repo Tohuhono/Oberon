@@ -7,6 +7,7 @@ import {
   DeleteUserSchema,
   AddUserSchema,
   ServerActions,
+  AssetSchema,
 } from "@oberon/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
@@ -107,6 +108,12 @@ const getAllAssets: ServerActions["getAllAssets"] = async () => {
   return allAssets || []
 }
 
+const addAsset: ServerActions["addAsset"] = async (data: unknown) => {
+  "use server"
+  const { key, url, name, size } = AssetSchema.parse(data)
+  await db.insert(assets).values({ key, url, name, size }).execute()
+}
+
 // TODO uploadthing
 const deleteAsset: ServerActions["deleteAsset"] = async (data) => {
   "use server"
@@ -192,4 +199,5 @@ export const actions = {
   getPageData,
   getAllKeys,
   getAllPaths,
+  addAsset,
 } satisfies ServerActions

@@ -15,7 +15,6 @@ export const PuckMenu = ({
   { title?: string; path: string } | { title: string; path?: string }
 >) => {
   const { data: session } = useSession()
-  // @ts-expect-error TODO fix global auth
   const isAdmin = session?.user.role === "admin"
 
   return (

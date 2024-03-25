@@ -3,8 +3,33 @@
 import * as React from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import * as SelectPrimitive from "@radix-ui/react-select"
-
 import { cn } from "@oberon/utils"
+
+// https://github.com/radix-ui/primitives/issues/2309
+declare module "@radix-ui/react-select" {
+  export interface SelectTriggerProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface SelectContentProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface SelectItemProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface SelectValueProps extends React.PropsWithChildren {}
+  export interface SelectViewportProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface SelectLabelProps {
+    className?: string
+  }
+  export interface SelectSeparatorProps {
+    className?: string
+  }
+  export interface SelectIconProps extends React.PropsWithChildren {
+    asChild: boolean
+  }
+}
 
 const Select = SelectPrimitive.Root
 

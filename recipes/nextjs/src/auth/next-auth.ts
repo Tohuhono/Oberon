@@ -102,7 +102,9 @@ const config = {
 // TODO added type annotation to fix https://github.com/nextauthjs/next-auth/discussions/9950
 const nextAuth = NextAuth(config)
 
-export const auth: NextAuthResult["auth"] = nextAuth.auth
+export type NextAuth = NextAuthResult["auth"]
+
+export const auth: NextAuth = nextAuth.auth
 
 export const authorize = (
   handler: (req: NextRequest) => Response,

@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@measured/puck"
 import NextImage from "next/image"
-import { UploadDropzone } from "src/uploadthing/components"
+import { UploadDropzone } from "@/uploadthing/components"
 
 export const Image: ComponentConfig<{
   image: {

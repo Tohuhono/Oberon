@@ -5,6 +5,26 @@ import { cva } from "class-variance-authority"
 
 import { cn } from "@oberon/utils"
 
+// https://github.com/radix-ui/primitives/issues/2309
+declare module "@radix-ui/react-navigation-menu" {
+  export interface NavigationMenuProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface NavigationMenuListProps {
+    className?: string
+  }
+  export interface NavigationMenuTriggerProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface NavigationMenuViewportProps {
+    className?: string
+  }
+  export interface NavigationMenuIndicatorProps
+    extends React.PropsWithChildren {
+    className?: string
+  }
+}
+
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>

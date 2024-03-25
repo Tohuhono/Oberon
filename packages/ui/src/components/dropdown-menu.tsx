@@ -10,6 +10,37 @@ import {
 
 import { cn } from "@oberon/utils"
 
+// https://github.com/radix-ui/primitives/issues/2309
+declare module "@radix-ui/react-dropdown-menu" {
+  export interface DropdownMenuTriggerProps extends React.PropsWithChildren {
+    asChild?: boolean
+  }
+  export interface DropdownMenuSubTriggerProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface DropdownMenuSubContentProps {
+    className?: string
+  }
+  export interface DropdownMenuItemProps extends React.PropsWithChildren {
+    className?: string
+    onClick: () => void
+  }
+  export interface DropdownMenuCheckboxItemProps
+    extends React.PropsWithChildren {
+    className?: string
+    checked: boolean
+  }
+  export interface DropdownMenuRadioItemProps extends React.PropsWithChildren {
+    className?: string
+  }
+  export interface DropdownMenuLabelProps {
+    className?: string
+  }
+  export interface DropdownMenuSeparatorProps {
+    className?: string
+  }
+}
+
 const DropdownMenu = DropdownMenuPrimitive.Root
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger

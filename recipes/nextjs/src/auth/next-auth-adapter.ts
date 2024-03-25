@@ -2,7 +2,7 @@ import "server-only"
 
 import { randomUUID } from "crypto"
 import { eq, and } from "drizzle-orm"
-import type { Adapter, AdapterAccount } from "@auth/core/adapters"
+import type { Adapter } from "@auth/core/adapters"
 import {
   users,
   accounts,
@@ -78,7 +78,7 @@ function LibsqlDrizzleAdapter(client: typeof db) {
         .returning()
         .get()
 
-      const account: AdapterAccount = {
+      const account = {
         ...updatedAccount,
         type: updatedAccount.type,
         access_token: updatedAccount.access_token ?? undefined,

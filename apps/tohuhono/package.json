@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint:style": "eslint .",
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "react": "^18.2.0",

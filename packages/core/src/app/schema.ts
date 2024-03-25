@@ -2,6 +2,7 @@ import { z } from "zod"
 import { Data } from "@measured/puck"
 import { Route } from "next"
 import type { Config } from "@measured/puck"
+import type { NextAuthResult } from "next-auth"
 
 export type OberonConfig = {
   blocks: Config["components"]
@@ -24,12 +25,18 @@ export type ServerActions = {
   ) => Promise<Pick<User, "role" | "id"> | null>
   getAllUsers: () => Promise<User[]>
   getAllAssets: () => Promise<Asset[]>
+  addAsset: (asset: Asset) => Promise<void>
   deleteAsset: (key: unknown) => Promise<void> // TODO uploadthing
   deletePage: (key: string) => Promise<void>
   publishPageData: (props: { key: string; data: Data }) => Promise<void>
   getPageData: (url: string) => Promise<Data | null>
   getAllKeys: () => Promise<Route[]>
   getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
+}
+
+export type OberonAdapter = {
+  auth: NextAuthResult["auth"]
+  actions: ServerActions
 }
 
 /*

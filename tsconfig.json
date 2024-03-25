@@ -15,6 +15,7 @@
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "preserveSymlinks": true,
     "removeComments": false,
     "skipLibCheck": true,
     "strict": true,

@@ -1,59 +1,60 @@
-import { createUploadthing, FileRouter } from "uploadthing/next"
+import {
+  createUploadthing,
+  createRouteHandler,
+  FileRouter,
+} from "uploadthing/next"
 import { UploadThingError } from "uploadthing/server"
-
-import { db } from "src/db/client"
-import { assets } from "src/db/schema"
-import { auth } from "src/auth/next-auth"
+import type { OberonAdapter } from "@oberon/core"
 
 const f = createUploadthing()
 
-const imageMiddleware = async () => {
-  // This code runs on your server before upload
-  const session = await auth()
-
-  // If you throw, the user will not be able to upload
-  // @ts-expect-error TODO fix global type
-  if (!session?.user.email) throw new UploadThingError("Unauthorized")
-
-  // Whatever is returned here is accessible in onUploadComplete as `metadata`
-  return { creator: session.user.email }
-}
-
 // TODO dry = async
 // FileRouter for your app, can contain multiple FileRoutes
-export const ourFileRouter = {
-  // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f({ image: { maxFileSize: "4MB" } })
-    // Set permissions and file types for this FileRoute
-    .middleware(imageMiddleware)
-    .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      db.insert(assets)
-        .values({
-          key: file.key,
-          url: file.url,
-          name: file.name,
-          size: file.size,
-        })
-        .execute()
-      console.log("Upload complete for userId:", metadata.creator)
-    }),
-  singleImageUploader: f({
-    image: { maxFileSize: "4MB", maxFileCount: 1 },
-  })
-    .middleware(imageMiddleware)
-    .onUploadComplete(({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      db.insert(assets)
-        .values({
-          key: file.key,
-          url: file.url,
-          name: file.name,
-          size: file.size,
-        })
-        .execute()
-      console.log("Upload complete for userId:", metadata.creator)
-    }),
-} satisfies FileRouter
+function initFileRouter({
+  auth,
+  actions: { addAsset },
+}: OberonAdapter): FileRouter {
+  const imageMiddleware = async () => {
+    // This code runs on your server before upload
+    const session = await auth()
 
-export type OurFileRouter = typeof ourFileRouter
+    // If you throw, the user will not be able to upload
+    if (!session?.user.email) throw new UploadThingError("Unauthorized")
+
+    // Whatever is returned here is accessible in onUploadComplete as `metadata`
+    return { creator: session.user.email }
+  }
+
+  return {
+    // Define as many FileRoutes as you like, each with a unique routeSlug
+    imageUploader: f({ image: { maxFileSize: "4MB" } })
+      // Set permissions and file types for this FileRoute
+      .middleware(imageMiddleware)
+      .onUploadComplete(
+        async ({ metadata, file: { key, url, name, size } }) => {
+          // This code RUNS ON YOUR SERVER after upload
+          // TODO add asset type
+          addAsset({ key, url, name, size })
+          console.log("Upload complete for userId:", metadata.creator)
+        },
+      ),
+    singleImageUploader: f({
+      image: { maxFileSize: "4MB", maxFileCount: 1 },
+    })
+      .middleware(imageMiddleware)
+      .onUploadComplete(({ metadata, file: { key, url, name, size } }) => {
+        // This code RUNS ON YOUR SERVER after upload
+        // TODO add asset type
+        addAsset({ key, url, name, size })
+        console.log("Upload complete for userId:", metadata.creator)
+      }),
+  }
+}
+
+export function initRouteHandler(adapter: OberonAdapter) {
+  return createRouteHandler({
+    router: initFileRouter(adapter),
+  })
+}
+
+export type OurFileRouter = ReturnType<typeof initFileRouter>

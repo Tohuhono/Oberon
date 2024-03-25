@@ -4,13 +4,13 @@
   "author": "Tohuhono ltd",
   "license": "MIT",
   "type": "module",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/server.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/server.d.ts",
       "browser": "./dist/index.js",
       "node": "./dist/server.js"
-    },
-    "./legacy": "./dist/index.js"
+    }
   },
   "files": [
     "./dist"
@@ -26,8 +26,10 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@uploadthing/react": "^6.3.4",
-    "@uploadthing/shared": "^6.3.4"
+    "@oberon/core": "*",
+    "@uploadthing/react": "^6.4.0",
+    "@uploadthing/shared": "^6.3.4",
+    "uploadthing": "^6.6.0"
   },
   "peerDependencies": {
     "next": ">=14.1",

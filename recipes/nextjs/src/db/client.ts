@@ -4,7 +4,7 @@ import "server-only"
 import { drizzle } from "drizzle-orm/libsql"
 
 // import type from here as
-import type { Client } from "@libsql/client"
+import type { Client } from "@libsql/core/api"
 
 import * as schema from "./schema"
 
