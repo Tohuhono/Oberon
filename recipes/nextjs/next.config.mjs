@@ -35,4 +35,4 @@ const withNextBundleAnalyzer = process.env.ANALYZE
     require("@next/bundle-analyzer")()
   : (config) => config
 
-module.exports = withNextBundleAnalyzer(nextConfig)
+export default withNextBundleAnalyzer(nextConfig)

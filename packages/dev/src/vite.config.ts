@@ -2,24 +2,34 @@
 // vite.config.js
 import { writeFile, mkdir } from "fs/promises"
 import { exec } from "child_process"
-import { defineConfig, type Plugin } from "vite"
+import { defineConfig, type Plugin as VitePlugin } from "vite"
 import preserveDirectives from "rollup-preserve-directives"
 import fg from "fast-glob"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
 import tsconfigPaths from "vite-tsconfig-paths"
 
-function dts(): Plugin {
+function dts(): VitePlugin {
   return {
     name: "dts-generator",
     enforce: "pre" as const,
     buildEnd: (error?: Error) => {
       if (!error) {
         return new Promise((resolve, _reject) => {
+          exec("tsc --version", (_error, stdout, stderr) => {
+            if (stdout) {
+              console.log("-", stdout)
+            }
+            if (stderr) {
+              console.error(stderr)
+            }
+            // Swallow errors
+            return resolve()
+          })
           exec(
-            "tsc --noEmit false --emitDeclarationOnly true --declarationMap true --pretty",
+            "tsc --noEmit false --emitDeclarationOnly true --declaration true --declarationMap true --pretty",
             (_error, stdout, stderr) => {
               if (stdout) {
-                console.log(stdout)
+                console.log("=", stdout)
               }
               if (stderr) {
                 console.error(stderr)
@@ -34,7 +44,7 @@ function dts(): Plugin {
   }
 }
 
-function watchFile(): Plugin {
+function watchFile(): VitePlugin {
   return {
     name: "watch-version",
     enforce: "post" as const,

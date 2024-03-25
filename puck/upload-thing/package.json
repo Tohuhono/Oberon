@@ -4,13 +4,10 @@
   "author": "Tohuhono ltd",
   "license": "MIT",
   "type": "module",
-  "types": "./dist/server.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/server.d.ts",
-      "browser": "./dist/index.js",
-      "node": "./dist/server.js"
-    }
+    ".": "./dist/index.js",
+    "./router": "./dist/router.js"
   },
   "files": [
     "./dist"

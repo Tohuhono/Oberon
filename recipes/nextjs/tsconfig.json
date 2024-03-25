@@ -15,7 +15,10 @@
     ],
     "resolveJsonModule": true,
     "noEmit": true,
-    "emitDeclarationOnly": false
+    "emitDeclarationOnly": false,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src", ".next/types/**/*.ts"]
 }

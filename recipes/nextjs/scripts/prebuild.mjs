@@ -29,7 +29,7 @@ const getClient = async () => {
   const client = await getClient()
 
   if (!client) {
-    console.log("No Database Connection Configured")
+    console.log("Prebuild: No Database Connection Configured")
     return
   }
 

@@ -1,4 +1,4 @@
-import { initRouteHandler } from "@tohuhono/puck-upload-thing"
+import { initRouteHandler } from "@tohuhono/puck-upload-thing/router"
 import { auth } from "src/auth/next-auth"
 import { actions } from "../../actions"
 

@@ -15,15 +15,12 @@
     },
     "jest": {},
     "lint": {
-      "dependsOn": ["tsc", "lint:style", "lint:format"]
+      "dependsOn": ["tsc", "lint:style"]
     },
     "lint:style": {},
     "lint:format": {},
     "postinstall": {},
-    "tsc": {
-      "dependsOn": ["^tsc"]
-    },
-
+    "tsc": {},
     "wait": {
       "cache": false
     },

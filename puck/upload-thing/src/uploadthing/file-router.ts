@@ -19,6 +19,7 @@ function initFileRouter({
     const session = await auth()
 
     // If you throw, the user will not be able to upload
+    // @ts-expect-error TODO fix global types
     if (!session?.user.email) throw new UploadThingError("Unauthorized")
 
     // Whatever is returned here is accessible in onUploadComplete as `metadata`
