@@ -35,18 +35,6 @@ else
 SCOPE_FLAG=
 fi
 
-if [[ -n $VERCEL_ORG_ID ]]
-then
-else
-fi
-
-if [[ -n $VERCEL_PROJECT_ID ]]
-then
-else
-TOKEN_FLAG=
-fi
-
-
 pnpx vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpx vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
 pnpx vercel deploy --prebuilt $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
