@@ -94,6 +94,8 @@ jobs:
         run: pnpm prettier
       - name: Lint
         run: pnpm lint --cache-dir=.turbo
+      - name: Types
+        run: pnpm tsc --cache-dir=.turbo
 
   unit-test:
     name: Unit Test

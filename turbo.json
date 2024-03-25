@@ -14,13 +14,8 @@
       "dependsOn": ["wait:clean", "^wait"]
     },
     "jest": {},
-    "lint": {
-      "dependsOn": ["^build", "tsc"]
-    },
-    "lint:style": {},
-    "lint:format": {},
-    "postinstall": {},
-    "tsc": {},
+    "lint": {},
+    "tsc": { "dependsOn": ["^build"] },
     "wait": {
       "cache": false
     },

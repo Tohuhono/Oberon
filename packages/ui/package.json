@@ -23,7 +23,6 @@
     "dev": "vite build --watch",
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",
-    "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
