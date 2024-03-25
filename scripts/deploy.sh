@@ -37,4 +37,4 @@ fi
 
 pnpx vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpx vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
-pnpx vercel deploy --prebuilt $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
+pnpx vercel deploy --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
