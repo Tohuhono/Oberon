@@ -139,6 +139,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.TOHUHONO_VERCEL_ID }}
     with:
       url: ${{ needs.deploy_tohuhono.outputs.url }}
+      domain: www.tohuhono.com
 
   promote_rich_text:
     name: Deploy Rich Text
@@ -151,3 +152,4 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
     with:
       url: ${{ needs.deploy_rich_text.outputs.url }}
+      domain: puck-rich-text.tohuhono.com

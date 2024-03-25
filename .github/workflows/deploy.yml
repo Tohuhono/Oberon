@@ -41,13 +41,6 @@ jobs:
         with:
           message: |
             "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}"
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
       - name: Use pNpm
         uses: pnpm/action-setup@v3
         with:
@@ -57,6 +50,13 @@ jobs:
         with:
           node-version: "20.x"
           cache: "pnpm"
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
       - name: Install
         run: pnpm i
       - name: Build and deploy

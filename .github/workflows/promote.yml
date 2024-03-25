@@ -6,6 +6,9 @@ on:
       url:
         required: true
         type: string
+      domain:
+        required: true
+        type: string
 
     secrets:
       VERCEL_API_TOKEN:
@@ -40,4 +43,4 @@ jobs:
       - name: Alias build to production
         run: |
           pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
-          echo "$(npx vercel alias ${{ inputs.url }} $DOMAIN --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})" >> "$GITHUB_STEP_SUMMARY"
+          echo "$(npx vercel alias ${{ inputs.url }} ${{ inputs.domain }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})" >> "$GITHUB_STEP_SUMMARY"
