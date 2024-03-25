@@ -3,16 +3,16 @@
   "private": true,
   "scripts": {
     "deploy": "bash ./scripts/deploy.sh",
-    "build": "turbo build --cache-dir=.turbo",
+    "build": "turbo build",
     "clean": "turbo clean --continue && rimraf ./dist ./.turbo",
     "clean:node": "turbo clean --continue -- --node_modules && rimraf ./dist ./.turbo ./node_modules",
-    "tsc": "turbo --cache-dir=.turbo tsc",
+    "tsc": "turbo tsc",
     "dev": "turbo dev --concurrency 20",
     "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "prettier:fix": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "lint": "turbo lint --cache-dir=.turbo --continue",
+    "lint": "turbo lint --continue",
     "lint:fix": "turbo lint -- --fix",
-    "jest": "turbo --cache-dir=.turbo jest"
+    "jest": "turbo jest"
   },
   "dependencies": {
     "dotenv": "^16.4.5"

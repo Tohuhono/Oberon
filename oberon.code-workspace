@@ -5,14 +5,28 @@
     },
   ],
   "settings": {
-    "editor.formatOnSave": true,
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "typescript.preferences.preferTypeOnlyAutoImports": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
     },
-    "eslint.validate": ["javascript"],
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "files.associations": {
+      "*.css": "tailwindcss",
+    },
+    "files.eol": "\n",
+    "typescript.preferences.preferTypeOnlyAutoImports": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
     "eslint.useFlatConfig": true,
     "eslint.workingDirectories": [{ "mode": "auto" }],
+    "eslint.format.enable": true,
+    "editor.quickSuggestions": {
+      "strings": "on",
+    },
   },
 }
