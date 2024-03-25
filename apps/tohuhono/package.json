@@ -7,7 +7,7 @@
     "clean": "npx odt-clean",
     "build": "next build",
     "start": "next start",
-    "lint:style": "eslint .",
+    "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
   "dependencies": {

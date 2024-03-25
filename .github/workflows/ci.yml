@@ -90,6 +90,8 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
+      - name: Prettier
+        run: pnpm prettier
       - name: Lint
         run: pnpm lint --cache-dir=.turbo
 

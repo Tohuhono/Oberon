@@ -16,7 +16,7 @@
     "dev": "vite build --watch",
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",
-    "lint:style": "eslint .",
+    "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
   "dependencies": {

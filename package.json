@@ -8,7 +8,8 @@
     "clean:node": "turbo clean --continue -- --node_modules && rimraf ./dist ./.turbo ./node_modules",
     "tsc": "turbo tsc",
     "dev": "turbo dev",
-    "format": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
+    "prettier": "prettier -l --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
+    "prettier:fix": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint --continue",
     "lint:fix": "turbo lint:style -- --fix",
     "jest": "turbo jest"

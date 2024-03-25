@@ -19,7 +19,7 @@
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",
     "lint:format": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "lint:style": "eslint .",
+    "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
   "dependencies": {
