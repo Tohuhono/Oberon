@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+/* eslint-env node */
 /* eslint-disable import/order */
 import dotenv from "dotenv"
 dotenv.config({ path: ".env.local" })
@@ -11,17 +13,19 @@ import { migrate } from "drizzle-orm/libsql/migrator"
     return
   }
 
-  await mkdir(".db", { recursive: true })
+  await mkdir(".oberon", { recursive: true })
 
   const db = createClient({
-    url: "file:.db/oberon.db",
+    url: "file:.oberon/oberon.db",
   })
 
   await db.execute(`PRAGMA journal_mode=WAL;`)
 
   const client = drizzle(db)
 
-  await migrate(client, { migrationsFolder: "./src/db/migrations" })
+  await migrate(client, {
+    migrationsFolder: "node_modules/@oberon/adapter-turso/src/db/migrations",
+  })
 
   console.log("Database migrations completed")
 })()

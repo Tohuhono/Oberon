@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import "server-only"
+// TODO import "server-only"
 
 import { drizzle } from "drizzle-orm/libsql"
 
@@ -30,7 +30,7 @@ const getClient = () => {
     const { createClient } = require("@libsql/client")
 
     return createClient({
-      url: "file:.db/oberon.db",
+      url: "file:.oberon/oberon.db",
     })
   }
   throw new Error("No Database Connection Configured")

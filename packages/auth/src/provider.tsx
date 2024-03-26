@@ -3,6 +3,6 @@
 import { PropsWithChildren } from "react"
 import { SessionProvider } from "next-auth/react"
 
-export function AuthProviders({ children }: PropsWithChildren) {
+export function AuthProvider({ children }: PropsWithChildren) {
   return <SessionProvider>{children}</SessionProvider>
 }

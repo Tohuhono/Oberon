@@ -1,8 +1,8 @@
 import { PropsWithChildren } from "react"
 
 import { redirect } from "next/navigation"
-import { AuthProviders } from "src/auth/providers"
-import { auth } from "src/auth/next-auth"
+import { AuthProvider } from "@oberon/auth/provider"
+import { auth } from "@/app/(oberon)/server-config"
 
 export default async function PuckLayout({ children }: PropsWithChildren) {
   const session = await auth()
@@ -11,5 +11,5 @@ export default async function PuckLayout({ children }: PropsWithChildren) {
     redirect("/api/auth/signin")
   }
 
-  return <AuthProviders>{children}</AuthProviders>
+  return <AuthProvider>{children}</AuthProvider>
 }

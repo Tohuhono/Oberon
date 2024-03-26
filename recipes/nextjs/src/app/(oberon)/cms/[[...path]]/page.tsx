@@ -1,8 +1,8 @@
 import { getMetaData, getServerProps, parseClientAction } from "@oberon/core"
 
-import { actions } from "../../actions"
-import { config } from "../../config"
 import { Client } from "./client"
+import { actions } from "@/app/(oberon)/server-config"
+import { config } from "@/app/(oberon)/client-config"
 
 export async function generateMetadata({
   params: { path = [] },

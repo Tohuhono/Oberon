@@ -26,6 +26,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": [],
+  "include": ["**/*.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

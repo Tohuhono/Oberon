@@ -1,3 +1,3 @@
-import { VerifyPage } from "src/auth/verify"
+import { VerifyPage } from "@oberon/auth/pages"
 
 export default VerifyPage

@@ -49,8 +49,8 @@ yarn-error.log*
 .DS_Store
 *.pem
 
-# Libsql
-.db
+# Oberon
+.oberon
 
 # Genereated tailwind classes
 tailwind.classes.txt

@@ -7,7 +7,7 @@ export const config: Config = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}", "./tailwind.classes.txt"],
+  content: [],
   theme: {
     extend: {
       spacing: {

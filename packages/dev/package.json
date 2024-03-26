@@ -4,26 +4,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./eslint.config": {
-      "types": "./eslint.config.d.ts",
-      "import": "./eslint.config.mjs"
-    },
-    "./eslint-react.config": {
-      "types": "./eslint-react.config.d.ts",
-      "import": "./eslint-react.config.mjs"
-    },
-    "./eslint-next.config": {
-      "types": "./eslint-next.config.d.ts",
-      "import": "./eslint-next.config.mjs"
-    },
-    "./tailwind": {
-      "types": "./dist/tailwind.config.d.ts",
-      "import": "./dist/tailwind.config.js"
-    },
-    "./vite": {
-      "types": "./dist/vite.config.d.ts",
-      "import": "./dist/vite.config.js"
-    }
+    "./eslint.config": "./eslint.config.mjs",
+    "./eslint-react.config": "./eslint-react.config.mjs",
+    "./eslint-next.config": "./eslint-next.config.mjs",
+    "./tailwind": "./dist/tailwind.config.js",
+    "./vite": "./dist/vite.config.js"
   },
   "bin": {
     "odt-clean": "./scripts/clean-package.mjs"
@@ -58,6 +43,7 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.4.2",
     "typescript-eslint": "^7.2.0",
+    "uploadthing": "^6.7.0",
     "vite": "^5.1.6",
     "vite-plugin-dts": "^3.7.3",
     "vite-plugin-externalize-deps": "^0.8.0",

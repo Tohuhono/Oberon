@@ -39,8 +39,8 @@ next-env.d.ts
 /playwright-report/
 /playwright/.cache/
 
-# libsql
-/.db
+# oberon
+/.oberon
 
 # genereated tailwind classes
 tailwind.classes.txt

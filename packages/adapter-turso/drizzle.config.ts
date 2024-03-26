@@ -8,6 +8,6 @@ export default {
   out: "./src/db/migrations",
   driver: "libsql",
   dbCredentials: {
-    url: "file://.db/oberon.db",
+    url: "file://.oberon/oberon.db",
   },
 } satisfies Config

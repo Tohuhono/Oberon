@@ -12,7 +12,6 @@ const pages = sqliteTable("pages", {
   data: text("data"),
 })
 
-/* eslint-disable @typescript-eslint/no-var-requires */
 const getClient = async () => {
   if (process.env.TURSO_URL && process.env.TURSO_TOKEN) {
     const { createClient } = await import("@libsql/client/web")
@@ -29,13 +28,15 @@ const getClient = async () => {
   const client = await getClient()
 
   if (!client) {
-    console.log("Prebuild: No Database Connection Configured")
+    console.log("Prepare: No Database Connection Configured")
     return
   }
 
   const db = drizzle(client)
 
-  await migrate(db, { migrationsFolder: "./src/db/migrations" })
+  await migrate(db, {
+    migrationsFolder: "node_modules/@oberon/adapter-turso/src/db/migrations",
+  })
 
   const results = await db
     .select({
@@ -49,7 +50,7 @@ const getClient = async () => {
 
   const regex = /"className":"([^"]*)"/gm
 
-  var outFile = createWriteStream("tailwind.classes.txt")
+  var outFile = createWriteStream(".oberon/tailwind.classes")
 
   for (const { data } of results) {
     if (data) {
@@ -63,5 +64,5 @@ const getClient = async () => {
   outFile.write("\n")
   outFile.end()
 
-  console.log("Prebuild script complete")
+  console.log("Prepare script complete")
 })()

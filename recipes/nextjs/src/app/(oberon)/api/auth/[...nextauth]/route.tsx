@@ -1,1 +1,3 @@
-export { GET, POST } from "src/auth/next-auth"
+import { handlers } from "@/app/(oberon)/server-config"
+
+export const { GET, POST } = handlers

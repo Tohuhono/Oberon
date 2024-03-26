@@ -13,7 +13,7 @@ import {
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"
 import { assets, pages, users } from "src/db/schema"
-import { adapter } from "../../auth/next-auth-adapter"
+import { adapter } from "../db/next-auth-adapter"
 
 /*
  * Page actions
@@ -25,7 +25,7 @@ const getAllPathsCached = cache(async () => {
   }))
   return data
 })
-const getAllPaths: ServerActions["getAllPaths"] = async () => {
+export const getAllPaths: ServerActions["getAllPaths"] = async () => {
   "use server"
   return getAllPathsCached()
 }
@@ -44,7 +44,7 @@ const getAllKeysCached = cache(async () => {
   const data = result.sort(sortPages).map(({ key }) => key as Route)
   return data
 })
-const getAllKeys: ServerActions["getAllKeys"] = async () => {
+export const getAllKeys: ServerActions["getAllKeys"] = async () => {
   "use server"
   return getAllKeysCached()
 }
@@ -62,13 +62,13 @@ const getPageDataCached = cache(async (url: string) => {
 
   return data ? (JSON.parse(data) as Data) : null
 })
-const getPageData: ServerActions["getPageData"] = async (url) => {
+export const getPageData: ServerActions["getPageData"] = async (url) => {
   "use server"
   return getPageDataCached(url)
 }
 
 // TODO zod ; return value
-const publishPageData: ServerActions["publishPageData"] = async ({
+export const publishPageData: ServerActions["publishPageData"] = async ({
   key,
   data,
 }) => {
@@ -84,7 +84,7 @@ const publishPageData: ServerActions["publishPageData"] = async ({
 }
 
 // TODO zod ; return value
-const deletePage: ServerActions["deletePage"] = async (key) => {
+export const deletePage: ServerActions["deletePage"] = async (key) => {
   "use server"
   await db.delete(pages).where(eq(pages.key, key))
   revalidatePath(key)
@@ -94,7 +94,7 @@ const deletePage: ServerActions["deletePage"] = async (key) => {
  * Asset actions
  */
 
-const getAllAssets: ServerActions["getAllAssets"] = async () => {
+export const getAllAssets: ServerActions["getAllAssets"] = async () => {
   "use server"
   const allAssets = await db
     .select({
@@ -108,14 +108,14 @@ const getAllAssets: ServerActions["getAllAssets"] = async () => {
   return allAssets || []
 }
 
-const addAsset: ServerActions["addAsset"] = async (data: unknown) => {
+export const addAsset: ServerActions["addAsset"] = async (data: unknown) => {
   "use server"
   const { key, url, name, size } = AssetSchema.parse(data)
   await db.insert(assets).values({ key, url, name, size }).execute()
 }
 
 // TODO uploadthing
-const deleteAsset: ServerActions["deleteAsset"] = async (data) => {
+export const deleteAsset: ServerActions["deleteAsset"] = async (data) => {
   "use server"
   console.warn("FIXME deleteAsset not implemented", data)
 }
@@ -136,7 +136,7 @@ const deleteAsset = async (data: Pick<Asset, "key">) => {
 /*
  * User actions
  */
-const getAllUsers: ServerActions["getAllUsers"] = async () => {
+export const getAllUsers: ServerActions["getAllUsers"] = async () => {
   "use server"
   const allUsers = await db
     .select({ id: users.id, email: users.email, role: users.role })
@@ -145,7 +145,9 @@ const getAllUsers: ServerActions["getAllUsers"] = async () => {
   return allUsers || []
 }
 
-const changeRole: ServerActions["changeRole"] = async (data: unknown) => {
+export const changeRole: ServerActions["changeRole"] = async (
+  data: unknown,
+) => {
   "use server"
   const { role, id } = ChangeRoleSchema.parse(data)
   try {
@@ -157,7 +159,9 @@ const changeRole: ServerActions["changeRole"] = async (data: unknown) => {
   }
 }
 
-const deleteUser: ServerActions["deleteUser"] = async (data: unknown) => {
+export const deleteUser: ServerActions["deleteUser"] = async (
+  data: unknown,
+) => {
   "use server"
   const { id } = DeleteUserSchema.parse(data)
   try {
@@ -169,7 +173,7 @@ const deleteUser: ServerActions["deleteUser"] = async (data: unknown) => {
   }
 }
 
-const addUser: ServerActions["addUser"] = async (data: unknown) => {
+export const addUser: ServerActions["addUser"] = async (data: unknown) => {
   "use server"
   const { email, role } = AddUserSchema.parse(data)
 
@@ -193,11 +197,11 @@ export const actions = {
   changeRole,
   getAllUsers,
   getAllAssets,
-  deletePage,
+  addAsset,
   deleteAsset,
+  deletePage,
   publishPageData,
   getPageData,
   getAllKeys,
   getAllPaths,
-  addAsset,
-} satisfies ServerActions
+}

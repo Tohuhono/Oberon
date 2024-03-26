@@ -1,5 +1,6 @@
 import { initRouteHandler } from "@tohuhono/puck-upload-thing/router"
-import { auth } from "src/auth/next-auth"
-import { actions } from "../../actions"
 
-export const { GET, POST } = initRouteHandler({ auth, actions })
+import { actions } from "@/app/(oberon)/server-config"
+import { auth } from "@/app/(oberon)/server-config"
+
+export const { GET, POST } = initRouteHandler({ auth, actions: actions })

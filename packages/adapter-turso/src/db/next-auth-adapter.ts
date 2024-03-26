@@ -1,5 +1,3 @@
-import "server-only"
-
 import { randomUUID } from "crypto"
 import { eq, and } from "drizzle-orm"
 import type { Adapter } from "@auth/core/adapters"

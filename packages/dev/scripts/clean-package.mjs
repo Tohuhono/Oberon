@@ -4,9 +4,10 @@ import { rimraf } from "rimraf"
 
 const dirs = [
   "./dist",
-  "./.rollup.cache",
-  "./.turbo",
   "./.next",
+  "./.oberon",
+  "./.turbo",
+  "./.rollup.cache",
   "./.vercel",
   "./tsconfig.tsbuildinfo",
   ...(globalThis.process.argv[2] === "--node_modules"
