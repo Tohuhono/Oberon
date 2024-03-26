@@ -10,8 +10,9 @@
     "dev": "turbo dev --concurrency 20",
     "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "prettier:fix": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "lint": "turbo lint --continue",
+    "lint": "turbo lint",
     "lint:fix": "turbo lint -- --fix",
+    "release": "turbo build && changeset publish",
     "jest": "turbo jest",
     "prepare": "husky"
   },
