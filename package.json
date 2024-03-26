@@ -12,16 +12,23 @@
     "prettier:fix": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint --continue",
     "lint:fix": "turbo lint -- --fix",
-    "jest": "turbo jest"
+    "jest": "turbo jest",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier -l --write"
   },
   "dependencies": {
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@oberon/dev": "*",
     "concurrently": "^8.2.1",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "rimraf": "^5.0.5",

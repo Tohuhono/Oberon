@@ -16,6 +16,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "npx odt-clean",
+    "db:migrations:create": "drizzle-kit generate:sqlite",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "tsc": "tsc --pretty",

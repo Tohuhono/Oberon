@@ -1,5 +1,9 @@
 node_modules
+build
 dist
+.turbo
+.oberon
 .next
 .vercel
+.rollup.cache
 **/meta/**
