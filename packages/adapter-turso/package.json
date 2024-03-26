@@ -36,6 +36,7 @@
     "@measured/puck": "^0.13.1"
   },
   "devDependencies": {
+    "@auth/core": "^0.28.1",
     "@oberon/blocks": "*",
     "@oberon/dev": "*",
     "@types/node": "20.11.26",
