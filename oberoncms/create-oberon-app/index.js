@@ -2,19 +2,14 @@
 
 import fs from "fs"
 import path from "path"
+import { execSync } from "child_process"
 import { program } from "commander"
 import inquirer from "inquirer"
 import Handlebars from "handlebars"
 import { glob } from "glob"
-import { execSync } from "child_process"
-import { dirname } from "path"
-import { fileURLToPath } from "url"
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
 
 const packageJson = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "./package.json")),
+  fs.readFileSync(path.join(import.meta.dirname, "./package.json")),
 )
 
 // Lifted from https://github.com/vercel/next.js/blob/c2d7bbd1b82c71808b99e9a7944fb16717a581db/packages/create-next-app/helpers/get-pkg-manager.ts
@@ -102,11 +97,11 @@ program
 
     fs.mkdirSync(appName)
 
-    const packageManager = !!options.useNpm
+    const packageManager = options.useNpm
       ? "npm"
-      : !!options.usePnpm
+      : options.usePnpm
         ? "pnpm"
-        : !!options.useYarn
+        : options.useYarn
           ? "yarn"
           : getPkgManager()
 

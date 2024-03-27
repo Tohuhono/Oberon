@@ -1,5 +1,5 @@
-import { initAuth } from "@oberon/auth"
-import { authAdapter } from "@oberon/adapter-turso/auth"
+import { initAuth } from "@oberoncms/auth"
+import { authAdapter } from "@oberoncms/adapter-turso/auth"
 export const { handlers, auth } = initAuth(authAdapter)
 
-export { actions } from "@oberon/adapter-turso"
+export { actions } from "@oberoncms/adapter-turso"

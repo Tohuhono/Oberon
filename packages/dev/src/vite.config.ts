@@ -19,7 +19,7 @@ function dts(): VitePlugin {
             "tsc --noEmit false --emitDeclarationOnly true --declaration true --declarationMap true --pretty",
             (_error, stdout, stderr) => {
               if (stdout) {
-                console.log("=", stdout)
+                console.log(stdout)
               }
               if (stderr) {
                 console.error(stderr)

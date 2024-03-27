@@ -1,5 +1,5 @@
 {
-  "name": "rich-text-demo",
+  "name": "@oberon/rich-text-demo",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -13,18 +13,17 @@
   "dependencies": {
     "@measured/puck": "^0.13.1",
     "@tohuhono/puck-rich-text": "*",
-    "classnames": "^2.5.1",
     "next": "^14.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@oberon/dev": "*",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20.11.30",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
     "autoprefixer": "^10.4.19",
-    "eslint-config-custom": "*",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",

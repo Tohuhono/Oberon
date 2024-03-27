@@ -4,8 +4,9 @@
   "scripts": {
     "deploy": "bash ./scripts/deploy.sh",
     "build": "turbo build",
+    "change": "changeset",
     "clean": "turbo clean --continue && rimraf ./dist ./.turbo",
-    "clean:node": "turbo clean --continue -- --node_modules && rimraf ./dist ./.turbo ./node_modules",
+    "clean:node": "turbo clean --continue -- --node_modules && npx odt-clean --node_modules",
     "tsc": "turbo tsc",
     "dev": "turbo dev --concurrency 20",
     "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
@@ -45,8 +46,9 @@
   },
   "workspaces": [
     "apps/*",
+    "oberoncms/*",
     "packages/*",
-    "puck/*",
+    "puyk/*",
     "recipes/*"
   ]
 }

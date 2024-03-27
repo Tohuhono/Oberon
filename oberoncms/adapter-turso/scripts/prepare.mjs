@@ -35,7 +35,7 @@ const getClient = async () => {
   const db = drizzle(client)
 
   await migrate(db, {
-    migrationsFolder: "node_modules/@oberon/adapter-turso/src/db/migrations",
+    migrationsFolder: "node_modules/@oberoncms/adapter-turso/src/db/migrations",
   })
 
   const results = await db

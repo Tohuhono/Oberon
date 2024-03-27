@@ -7,9 +7,9 @@ const config: Config = {
   },
   content: [
     "./node_modules/@oberon/ui/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberon/core/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/core/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@oberon/dev/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberon/blocks/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@tohuhono/puck-blocks/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./tailwind.classes.txt",
   ],

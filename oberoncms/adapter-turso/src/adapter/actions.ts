@@ -8,7 +8,7 @@ import {
   AddUserSchema,
   ServerActions,
   AssetSchema,
-} from "@oberon/core"
+} from "@oberoncms/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"

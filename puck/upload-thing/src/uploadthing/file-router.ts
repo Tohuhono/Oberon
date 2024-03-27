@@ -4,7 +4,7 @@ import {
   FileRouter,
 } from "uploadthing/next"
 import { UploadThingError } from "uploadthing/server"
-import type { OberonAdapter } from "@oberon/core"
+import type { OberonAdapter } from "@oberoncms/core"
 
 const f = createUploadthing()
 

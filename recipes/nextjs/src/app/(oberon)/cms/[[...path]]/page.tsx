@@ -1,4 +1,4 @@
-import { getMetaData, getServerProps, parseClientAction } from "@oberon/core"
+import { getMetaData, getServerProps, parseClientAction } from "@oberoncms/core"
 
 import { Client } from "./client"
 import { actions } from "@/app/(oberon)/server-config"

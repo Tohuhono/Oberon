@@ -22,10 +22,10 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@oberon/core": "*",
-    "@uploadthing/react": "^6.4.0",
-    "@uploadthing/shared": "^6.3.4",
-    "uploadthing": "^6.6.0"
+    "@oberoncms/core": "*",
+    "@uploadthing/react": "^6.4.1",
+    "@uploadthing/shared": "^6.4.0",
+    "uploadthing": "^6.7.0"
   },
   "peerDependencies": {
     "next": ">=14.1",

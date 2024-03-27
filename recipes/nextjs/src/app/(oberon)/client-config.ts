@@ -1,7 +1,7 @@
-import { Prose } from "@oberon/blocks/prose"
-import { Div } from "@oberon/blocks/div"
+import { Prose } from "@tohuhono/puck-blocks/prose"
+import { Div } from "@tohuhono/puck-blocks/div"
 import { PuckRichText } from "@tohuhono/puck-rich-text"
-import type { OberonConfig } from "@oberon/core"
+import type { OberonConfig } from "@oberoncms/core"
 
 export const config: OberonConfig = {
   blocks: {

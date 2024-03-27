@@ -1,6 +1,6 @@
-import { Render } from "@oberon/core/render"
+import { Render } from "@oberoncms/core/render"
 
-import { getMetaData } from "@oberon/core"
+import { getMetaData } from "@oberoncms/core"
 import { actions } from "@/app/(oberon)/server-config"
 import { config } from "@/app/(oberon)/client-config"
 
