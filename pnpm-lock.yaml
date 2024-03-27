@@ -57,6 +57,9 @@ importers:
       '@measured/puck':
         specifier: ^0.13.1
         version: 0.13.1(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)
+      '@oberon/ui':
+        specifier: '*'
+        version: link:../../packages/ui
       '@tohuhono/puck-rich-text':
         specifier: '*'
         version: link:../../puck/rich-text
@@ -66,6 +69,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+      react-click-away-listener:
+        specifier: ^2.2.3
+        version: 2.2.3(react-dom@18.2.0)(react@18.2.0)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
@@ -7246,6 +7252,16 @@ packages:
 
   /raf-schd@4.0.3:
     resolution: {integrity: sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ==}
+    dev: false
+
+  /react-click-away-listener@2.2.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-p63JRQtK9d085+QHUJ2Pje22P/N4tEaXsS2x7tbbptriQqZ9o8xEk7G1JrxwND5YmEVc/VO4fC3+cSBsqqgLUQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-dom@18.2.0(react@18.2.0):

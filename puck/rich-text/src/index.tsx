@@ -3,8 +3,10 @@ import type { SerializedEditorState } from "lexical"
 import { Editor } from "./rich-text-editor/editor-client"
 import { Render } from "./rich-text-editor/render-client"
 
+export type RichTextState = SerializedEditorState
+
 export type PuckRichTextProps = {
-  state: SerializedEditorState
+  state: RichTextState
 }
 
 export const PuckRichText = {
@@ -20,7 +22,7 @@ export const PuckRichText = {
   }: {
     editMode?: boolean
     id: string
-    state: SerializedEditorState
+    state: RichTextState
   }) => {
     return editMode ? <Editor {...props} /> : <Render {...props} />
   },

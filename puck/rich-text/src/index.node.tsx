@@ -1,6 +1,6 @@
-import type { SerializedEditorState } from "lexical/LexicalEditorState"
 import type { ComponentConfig } from "@measured/puck"
 import { Render } from "./rich-text-editor/render-server"
+import type { RichTextState } from "."
 
 export const PuckRichText = {
   fields: {
@@ -15,10 +15,10 @@ export const PuckRichText = {
   }: {
     editMode?: boolean
     id: string
-    state: SerializedEditorState
+    state: RichTextState
   }) => {
     return <Render {...props} />
   },
 } satisfies ComponentConfig<{
-  state: SerializedEditorState
+  state: RichTextState
 }>

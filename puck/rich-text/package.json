@@ -9,7 +9,12 @@
     ".": {
       "types": "./dist/index.d.ts",
       "browser": "./dist/index.js",
-      "node": "./dist/server.js"
+      "node": "./dist/index.node.js"
+    },
+    "./editor": {
+      "types": "./dist/editor.d.ts",
+      "browser": "./dist/editor.js",
+      "node": "./dist/editor.node.js"
     },
     "./legacy": "./dist/index.js"
   },

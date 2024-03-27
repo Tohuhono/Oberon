@@ -39,7 +39,6 @@ import { Bold, Italic, RemoveFormatting } from "lucide-react"
 import { getSelectedNode } from "../../utils/get-selected-node"
 import { sanitizeUrl } from "../../utils/url"
 import { Button } from "../../ui/button"
-import { getToolbarPortal } from "../../utils/get-toolbar-portal"
 
 import { isApple } from "../../utils/is-apple"
 import { BlockFormatDropDown, blockFormats } from "./block-format-dropdown"
@@ -48,11 +47,11 @@ import { ElementFormatDropdown } from "./element-format-dropdown"
 const IS_APPLE = isApple()
 
 export function ToolbarPlugin({
-  id,
+  portalTarget,
   showToolbar,
   setIsLinkEditMode,
 }: {
-  id: string
+  portalTarget: HTMLElement | null
   showToolbar: boolean
   setIsLinkEditMode: Dispatch<boolean>
 }) {
@@ -246,8 +245,6 @@ export function ToolbarPlugin({
     }
   }, [editor, isLink, setIsLinkEditMode]);
   */
-
-  const portalTarget = getToolbarPortal(id)
 
   if (!showToolbar) {
     return null
