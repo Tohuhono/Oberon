@@ -13,27 +13,40 @@ declare global {
   var oberonDb: Client
 }
 
-const getClient = () => {
-  if (
-    (process.env.NODE_ENV === "production" ||
-      process.env.TURSO_USE_REMOTE === "true") &&
-    process.env.TURSO_URL &&
-    process.env.TURSO_TOKEN
-  ) {
-    const { createClient } = require("@libsql/client/web")
-    return createClient({
-      url: process.env.TURSO_URL,
-      authToken: process.env.TURSO_TOKEN,
-    })
+const createRemoteClient = () => {
+  if (!process.env.TURSO_URL || !process.env.TURSO_TOKEN) {
+    throw new Error(
+      "No remote database credentials supplied: have you set TURSO_URL and TURSO_TOKEN?",
+    )
   }
-  if (process.env.NODE_ENV === "development") {
-    const { createClient } = require("@libsql/client")
 
-    return createClient({
-      url: "file:.oberon/oberon.db",
-    })
+  const { createClient } = require("@libsql/client/web")
+  return createClient({
+    url: process.env.TURSO_URL,
+    authToken: process.env.TURSO_TOKEN,
+  })
+}
+
+const createLocalClient = () => {
+  const { createClient } = require("@libsql/client")
+
+  return createClient({
+    url: process.env.TURSO_FILE || "file:.oberon/oberon.db",
+  })
+}
+
+const getClient = () => {
+  if (process.env.TURSO_USE_REMOTE === "true") {
+    return createRemoteClient()
   }
-  throw new Error("No Database Connection Configured")
+  if (process.env.TURSO_USE_REMOTE === "false") {
+    return createLocalClient()
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    return createRemoteClient()
+  }
+  return createLocalClient()
 }
 
 // ensure there is only one database client

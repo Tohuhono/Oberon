@@ -10,7 +10,7 @@ import type { Adapter } from "next-auth/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
-const resend = new Resend(process.env.RESEND_SECRET)
+// const resend = new Resend(process.env.RESEND_SECRET)
 
 export function initAuth(adapter: Adapter) {
   const config = {
@@ -39,6 +39,11 @@ export function initAuth(adapter: Adapter) {
             )
             return
           }
+
+          if (!process.env.RESEND_SECRET) {
+            throw new Error("No RESEND_SECRET configured")
+          }
+          const resend = new Resend(process.env.RESEND_SECRET)
 
           try {
             const { data } = await resend.emails.send({

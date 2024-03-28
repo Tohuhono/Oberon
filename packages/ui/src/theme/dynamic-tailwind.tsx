@@ -2,7 +2,7 @@
 
 import Script from "next/script"
 import { Config } from "tailwindcss"
-import { config } from "@oberon/dev/tailwind"
+import { config } from "@tohuhono/dev/tailwind"
 
 declare global {
   // eslint-disable-next-line no-var

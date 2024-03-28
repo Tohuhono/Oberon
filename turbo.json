@@ -4,14 +4,17 @@
   "pipeline": {
     "build": {
       "dotEnv": [".env.local", ".env"],
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "prebuild"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "clean": { "cache": false },
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["wait:clean", "^wait"]
+      "dependsOn": ["wait:clean", "^wait", "prebuild"]
+    },
+    "prebuild": {
+      "cache": false
     },
     "jest": {},
     "lint": {},

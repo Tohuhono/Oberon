@@ -12,16 +12,41 @@ const pages = sqliteTable("pages", {
   data: text("data"),
 })
 
-const getClient = async () => {
-  if (process.env.TURSO_URL && process.env.TURSO_TOKEN) {
-    const { createClient } = await import("@libsql/client/web")
-    return createClient({
-      url: process.env.TURSO_URL,
-      authToken: process.env.TURSO_TOKEN,
-    })
+const createRemoteClient = async () => {
+  if (!process.env.TURSO_URL || !process.env.TURSO_TOKEN) {
+    throw new Error(
+      "No remote database credentials supplied: have you set TURSO_URL and TURSO_TOKEN?",
+    )
   }
+
+  const { createClient } = await import("@libsql/client/web")
+  return createClient({
+    url: process.env.TURSO_URL,
+    authToken: process.env.TURSO_TOKEN,
+  })
 }
 
+const createLocalClient = async () => {
+  const { createClient } = await import("@libsql/client")
+
+  return createClient({
+    url: process.env.TURSO_FILE || "file:.oberon/oberon.db",
+  })
+}
+
+const getClient = () => {
+  if (process.env.TURSO_USE_REMOTE === "true") {
+    return createRemoteClient()
+  }
+  if (process.env.TURSO_USE_REMOTE === "false") {
+    return createLocalClient()
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    return createRemoteClient()
+  }
+  return createLocalClient()
+}
 ;(async () => {
   console.log(`Migrating database`)
 

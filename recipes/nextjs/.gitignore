@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn/install-state.gz
 
 # testing
 /coverage
@@ -27,23 +28,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# vercel
+.vercel
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# playwright
-/test/playwright/report/
-/test/playwright/results/
-/test/playwright/.cache
-/test-results/
-/playwright-report/
-/playwright/.cache/
-
-# oberon
-/.oberon
-
-# genereated tailwind classes
-tailwind.classes.txt
-
-# vercel
-.vercel

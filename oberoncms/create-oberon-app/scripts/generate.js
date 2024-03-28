@@ -1,27 +1,22 @@
 #!/usr/bin/env node
 
-import fs from "fs"
+import { readFile, mkdir, writeFile, copyFile, exists } from "fs/promises"
 import path from "path"
 import { glob } from "glob"
-import { dirname } from "path"
-import { fileURLToPath } from "url"
 
 const verbose = false
 
 const run = async () => {
-  const __filename = fileURLToPath(import.meta.url)
-  const __dirname = dirname(__filename)
-
   // Copy template files to the new directory
-  const recipePath = path.join(__dirname, "../../../recipes")
-  const templatePath = path.join(__dirname, "../templates")
+  const recipePath = path.join(import.meta.dirname, "../../../recipes")
+  const templatePath = path.join(import.meta.dirname, "../templates")
 
-  if (!fs.existsSync(recipePath)) {
+  if (!(await exists(recipePath))) {
     console.error(`No recipe directory could be found at ${recipePath}.`)
     return
   }
 
-  if (!fs.existsSync(templatePath)) {
+  if (!(await exists(templatePath))) {
     console.error(`No template directory could be found at ${templatePath}.`)
     return
   }
@@ -44,31 +39,33 @@ const run = async () => {
 
     const targetPath = filePath.replace(recipePath, templatePath)
 
+    const isTemplated = await exists(`${targetPath}.hbs`)
     // Don't copy file if it's templated by handlebars
-    if (fs.existsSync(`${targetPath}.hbs`)) {
+    if (isTemplated) {
       console.warn(`- ${recipeFile}`)
-    } else {
-      if (verbose) {
-        console.log(`Copying ${filePath} -> ${targetPath}`)
-      }
-
-      const data = await fs.readFileSync(filePath, "utf-8")
-
-      const dir = path.dirname(targetPath)
-
-      await fs.mkdirSync(dir, { recursive: true })
-
-      await fs.writeFileSync(targetPath, data)
-
-      if (targetPath.indexOf(".gitignore") > -1) {
-        await fs.copyFileSync(
-          filePath,
-          targetPath.replace(".gitignore", "gitignore"), // rename .gitignore to gitignore so NPM publish doesn't ignore it
-        )
-      }
-
-      counter += 1
+      return
     }
+
+    if (verbose) {
+      console.log(`Copying ${filePath} -> ${targetPath}`)
+    }
+
+    const data = await readFile(filePath, "utf-8")
+
+    const dir = path.dirname(targetPath)
+
+    await mkdir(dir, { recursive: true })
+
+    await writeFile(targetPath, data)
+
+    if (targetPath.indexOf(".gitignore") > -1) {
+      await copyFile(
+        filePath,
+        targetPath.replace(".gitignore", "gitignore"), // rename .gitignore to gitignore so NPM publish doesn't ignore it
+      )
+    }
+
+    counter += 1
   }
 
   console.log(`Copied ${counter} files into generator!`)

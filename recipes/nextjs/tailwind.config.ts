@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss"
-import { withUt } from "uploadthing/tw"
+import { withUt } from "@tohuhono/puck-upload-thing"
 
 const config: Config = {
   darkMode: ["class"],
@@ -7,8 +7,10 @@ const config: Config = {
     hoverOnlyWhenSupported: true,
   },
   content: [
-    "./node_modules/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./.oberon/tailwind.classes",
   ],
   theme: {

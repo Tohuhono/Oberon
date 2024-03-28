@@ -1,13 +1,12 @@
 {
-  "name": "@oberon/nextjs-recipe",
+  "name": "oberon-cms-example",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "next build",
     "clean": "npx odt-clean",
     "dev": "next dev",
-    "lint": "eslint .",
-    "tsc": "tsc --pretty",
+    "lint": "next lint",
     "postinstall": "odt-init",
     "prebuild": "odt-prepare",
     "start": "next start"
@@ -16,33 +15,32 @@
     "@oberoncms/adapter-turso": "*",
     "@oberoncms/auth": "*",
     "@oberoncms/core": "*",
-    "@oberon/utils": "*",
+    "@tohuhono/utils": "*",
     "@tohuhono/puck-blocks": "*",
     "@tohuhono/puck-rich-text": "*",
     "@tohuhono/puck-upload-thing": "*",
-    "next": "^14.1.4",
-    "uploadthing": "^6.5.2"
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "^14.1.4"
   },
   "peerDependencies": {
     "@auth/core": "0.28.0",
     "@measured/puck": "^0.13.1",
-    "next-auth": "5.0.0-beta.15",
-    "react": "^18.2.0",
-    "react-dom": "18.2.0"
+    "next-auth": "5.0.0-beta.15"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^14.1.3",
-    "@oberon/dev": "*",
-    "@tailwindcss/typography": "^0.5.10",
-    "@types/node": "20.11.25",
-    "@types/react": "18.2.66",
-    "@types/react-dom": "18.2.22",
-    "autoprefixer": "^10.4.18",
+    "@tohuhono/dev": "*",
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
     "postcss": "^8",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.12",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.3.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.4",
+    "@tailwindcss/typography": "^0.5.10",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "5.4.2"
+    "prettier-plugin-tailwindcss": "^0.5.12"
   }
 }
