@@ -5,7 +5,7 @@ import { Fragment, useState } from "react"
 import { filesize } from "filesize"
 import Link from "next/link"
 import { Route } from "next"
-import { Button } from "@tohuhono/ui/button"
+import { Button } from "@oberon/ui/button"
 import type { Asset, ServerActions } from "@/app/schema"
 
 export function Assets({

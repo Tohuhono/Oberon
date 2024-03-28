@@ -34,7 +34,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@tohuhono/ui": "*",
+    "@oberon/ui": "*",
+    "@oberon/utils": "*",
     "filesize": "^10.1.0",
     "next-auth": "5.0.0-beta.15",
     "react-hook-form": "^7.51.0",
@@ -47,7 +48,7 @@
     "@measured/puck": "^0.13.1"
   },
   "devDependencies": {
-    "@tohuhono/dev": "*",
+    "@oberon/dev": "*",
     "@types/node": "20.11.26",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",

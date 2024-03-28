@@ -1,4 +1,4 @@
-import { CNProps, cn } from "@tohuhono/utils"
+import { CNProps, cn } from "@oberon/utils"
 
 export const Prose = ({ children, className }: CNProps) => (
   <div

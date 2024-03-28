@@ -1,5 +1,5 @@
 {
-  "name": "@tohuhono/utils",
+  "name": "@oberon/utils",
   "version": "0.0.2",
   "author": "Tohuhono ltd",
   "private": true,
@@ -24,7 +24,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@tohuhono/dev": "*",
+    "@oberon/dev": "*",
     "@types/node": "^20.11.27",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",

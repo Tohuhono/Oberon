@@ -15,7 +15,6 @@
     "@oberoncms/adapter-turso": "*",
     "@oberoncms/auth": "*",
     "@oberoncms/core": "*",
-    "@tohuhono/utils": "*",
     "@tohuhono/puck-blocks": "*",
     "@tohuhono/puck-rich-text": "*",
     "@tohuhono/puck-upload-thing": "*",
@@ -29,7 +28,6 @@
     "next-auth": "5.0.0-beta.15"
   },
   "devDependencies": {
-    "@tohuhono/dev": "*",
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",

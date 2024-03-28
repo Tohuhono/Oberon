@@ -20,11 +20,7 @@
     "directory": "oberoncms/components"
   },
   "type": "module",
-  "exports": {
-    ".": "./dist/index.js",
-    "./provider": "./dist/provider.js",
-    "./pages": "./dist/pages.js"
-  },
+  "exports": "./dist/index.js",
   "scripts": {
     "build": "vite build",
     "clean": "npx odt-clean",
@@ -35,7 +31,7 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@tohuhono/ui": "*",
+    "@oberon/ui": "*",
     "next-auth": "5.0.0-beta.15",
     "resend": "^3.2.0"
   },
@@ -47,7 +43,7 @@
     "@measured/puck": "^0.13.1"
   },
   "devDependencies": {
-    "@tohuhono/dev": "*",
+    "@oberon/dev": "*",
     "@types/node": "20.11.26",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",

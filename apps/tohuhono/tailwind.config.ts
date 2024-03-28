@@ -6,9 +6,9 @@ const config: Config = {
     hoverOnlyWhenSupported: true,
   },
   content: [
-    "./node_modules/@tohuhono/ui/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/ui/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@oberoncms/core/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@tohuhono/dev/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/dev/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@tohuhono/puck-blocks/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./tailwind.classes.txt",

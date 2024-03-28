@@ -3,7 +3,7 @@
 import * as React from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import { cn } from "@tohuhono/utils"
+import { cn } from "@oberon/utils"
 
 // https://github.com/radix-ui/primitives/issues/2309
 declare module "@radix-ui/react-select" {

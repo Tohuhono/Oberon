@@ -2,8 +2,8 @@
 import { redirect } from "next/navigation"
 
 import { useState } from "react"
-import { Button } from "@tohuhono/ui/button"
-import { Input } from "@tohuhono/ui/input"
+import { Button } from "@oberon/ui/button"
+import { Input } from "@oberon/ui/input"
 
 // safe links bot workaround https://github.com/nextauthjs/next-auth/issues/4965
 export function ConfirmPage({

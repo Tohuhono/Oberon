@@ -1,3 +1,3 @@
-import { initConfig } from "@tohuhono/dev/rollup.mjs"
+import { initConfig } from "@oberon/dev/rollup.mjs"
 
 export default initConfig()

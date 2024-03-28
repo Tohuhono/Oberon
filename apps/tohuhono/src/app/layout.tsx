@@ -1,7 +1,7 @@
 import "src/app/globals.css"
 import { Montserrat } from "next/font/google"
 
-import { cn } from "@tohuhono/utils"
+import { cn } from "@oberon/utils"
 const font = Montserrat({ subsets: ["latin"] })
 
 export const metadata = {

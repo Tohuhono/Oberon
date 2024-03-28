@@ -1,1 +1,1 @@
-export { default } from "@tohuhono/dev/eslint.config"
+export { default } from "@oberon/dev/eslint.config"

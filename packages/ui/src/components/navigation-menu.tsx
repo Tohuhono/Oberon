@@ -3,7 +3,7 @@ import { ChevronDownIcon } from "@radix-ui/react-icons"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
 
-import { cn } from "@tohuhono/utils"
+import { cn } from "@oberon/utils"
 
 // https://github.com/radix-ui/primitives/issues/2309
 declare module "@radix-ui/react-navigation-menu" {

@@ -1,4 +1,4 @@
-import { CNProps, cn } from "@tohuhono/utils"
+import { CNProps, cn } from "@oberon/utils"
 
 export const Spinner = ({ className }: CNProps) => {
   return (

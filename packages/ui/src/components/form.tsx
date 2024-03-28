@@ -11,7 +11,7 @@ import {
   useFormContext,
 } from "react-hook-form"
 
-import { cn } from "@tohuhono/utils"
+import { cn } from "@oberon/utils"
 import { Label } from "./label"
 
 // https://github.com/radix-ui/primitives/issues/2309

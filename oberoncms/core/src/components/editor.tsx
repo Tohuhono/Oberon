@@ -3,8 +3,8 @@
 import "@measured/puck/dist/index.css"
 
 import { Config, Data, Puck, usePuck } from "@measured/puck"
-import { Button } from "@tohuhono/ui/button"
-import { DynamicTailwind } from "@tohuhono/ui/theme"
+import { Button } from "@oberon/ui/button"
+import { DynamicTailwind } from "@oberon/ui/theme"
 import { PuckMenu } from "./puck-menu"
 import { useLocalData } from "@/hooks/use-local-data"
 import type { ServerActions } from "@/app/schema"
