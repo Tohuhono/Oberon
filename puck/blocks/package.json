@@ -1,7 +1,6 @@
 {
   "name": "@tohuhono/puck-blocks",
   "version": "0.0.2",
-  "private": true,
   "author": "Tohuhono ltd",
   "license": "MIT",
   "type": "module",

@@ -5,7 +5,7 @@
   "repository": "tohuhono/oberon",
   "bugs": "https://github.com/tohuhono/oberon",
   "homepage": "https://tohuhono.com/oberon",
-  "private": false,
+  "private": true,
   "license": "MIT",
   "type": "module",
   "bin": {

@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "deploy": "bash ./scripts/deploy.sh",
-    "build": "turbo build",
+    "build": "turbo build ",
+    "build:packages": "turbo build --filter={./oberoncms/*}... --filter={./packages/*}... --filter={./puck/*}... ",
     "change": "changeset",
     "clean": "turbo clean --continue && rimraf ./dist ./.turbo",
     "clean:node": "turbo clean --continue -- --node_modules && npx odt-clean --node_modules",
@@ -13,7 +14,7 @@
     "prettier:fix": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "lint": "turbo lint",
     "lint:fix": "turbo lint -- --fix",
-    "release": "turbo build && changeset publish",
+    "release": "pnpm build:packages && changeset publish",
     "jest": "turbo jest",
     "prepare": "husky"
   },

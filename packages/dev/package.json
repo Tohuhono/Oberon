@@ -1,7 +1,6 @@
 {
   "name": "@tohuhono/dev",
   "version": "0.0.2",
-  "private": true,
   "type": "module",
   "exports": {
     "./eslint.config": "./eslint.config.mjs",
