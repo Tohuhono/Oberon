@@ -48,7 +48,7 @@
     "apps/*",
     "oberoncms/*",
     "packages/*",
-    "puyk/*",
+    "puck/*",
     "recipes/*"
   ]
 }
