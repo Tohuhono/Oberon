@@ -1,11 +1,11 @@
 {
   "name": "create-oberon-app",
   "version": "0.0.2",
-  "author": "Jon Vivian",
+  "author": "Tohuhono ltd",
+  "private": true,
   "repository": "tohuhono/oberon",
   "bugs": "https://github.com/tohuhono/oberon",
   "homepage": "https://tohuhono.com/oberon",
-  "private": true,
   "license": "MIT",
   "type": "module",
   "bin": {

@@ -3,6 +3,22 @@
   "version": "0.0.2",
   "author": "Tohuhono ltd",
   "license": "MIT",
+  "description": "A collection of puck components for building pages in OberonCMS",
+  "keywords": [
+    "oberon",
+    "oberoncms",
+    "cms",
+    "puck",
+    "block",
+    "component",
+    "nextjs",
+    "react"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "puck/blocks"
+  },
   "type": "module",
   "exports": {
     "./div": "./dist/div.js",

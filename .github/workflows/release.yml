@@ -10,6 +10,8 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions:
   contents: write
   pull-requests: write
+  ## for pnpm provenance
+  # id-token: write
 
 jobs:
   release:
@@ -45,3 +47,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          ## npm provenance
+          # NPM_CONFIG_PROVENANCE: true

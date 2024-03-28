@@ -2,6 +2,7 @@
   "name": "@tohuhono/ui",
   "version": "0.0.2",
   "author": "Tohuhono ltd",
+  "private": true,
   "license": "MIT",
   "type": "module",
   "exports": {

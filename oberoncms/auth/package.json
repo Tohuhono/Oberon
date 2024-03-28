@@ -1,9 +1,24 @@
 {
   "name": "@oberoncms/auth",
   "version": "0.0.2",
-  "description": "",
   "author": "Tohuhono ltd",
   "license": "MIT",
+  "description": "A next-auth provider OberonCMS using Resend for OTP",
+  "keywords": [
+    "oberon",
+    "oberoncms",
+    "cms",
+    "nextjs",
+    "react",
+    "provider",
+    "auth",
+    "resend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "oberoncms/auth"
+  },
   "type": "module",
   "exports": {
     ".": "./dist/index.js",

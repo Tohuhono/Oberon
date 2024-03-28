@@ -3,6 +3,26 @@
   "version": "0.0.9",
   "author": "Tohuhono ltd",
   "license": "MIT",
+  "description": "A puck component for rich text editing made for OberonCMS",
+  "keywords": [
+    "oberon",
+    "oberoncms",
+    "cms",
+    "puck",
+    "block",
+    "component",
+    "nextjs",
+    "react",
+    "rich",
+    "text",
+    "editor",
+    "content-editable"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "puck/rich-text"
+  },
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {

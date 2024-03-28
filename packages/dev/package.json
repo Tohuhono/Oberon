@@ -1,6 +1,10 @@
 {
   "name": "@tohuhono/dev",
   "version": "0.0.2",
+  "private": true,
+  "author": "Tohuhono ltd",
+  "license": "MIT",
+  "description": "Developer and build tools for OberonCMS",
   "type": "module",
   "exports": {
     "./eslint.config": "./eslint.config.mjs",

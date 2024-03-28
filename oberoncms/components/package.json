@@ -1,9 +1,24 @@
 {
   "name": "@oberoncms/components",
   "version": "0.0.2",
-  "description": "",
   "author": "Tohuhono ltd",
   "license": "MIT",
+  "description": "A collection of puck components and blocks for OberonCMS",
+  "keywords": [
+    "oberon",
+    "oberoncms",
+    "cms",
+    "puck",
+    "nextjs",
+    "components",
+    "blocks",
+    "react"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "oberoncms/components"
+  },
   "type": "module",
   "exports": {
     ".": "./dist/index.js",

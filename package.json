@@ -4,7 +4,7 @@
   "scripts": {
     "deploy": "bash ./scripts/deploy.sh",
     "build": "turbo build ",
-    "build:packages": "turbo build --filter={./oberoncms/*}... --filter={./packages/*}... --filter={./puck/*}... ",
+    "build:packages": "turbo build --filter={./oberoncms/*}... --filter={./puck/*}...",
     "change": "changeset",
     "clean": "turbo clean --continue && rimraf ./dist ./.turbo",
     "clean:node": "turbo clean --continue -- --node_modules && npx odt-clean --node_modules",
