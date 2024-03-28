@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/adapter-turso",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A Turso libsql database adapter for OberonCMS",

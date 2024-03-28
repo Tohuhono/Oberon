@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/puck-upload-thing",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A puck component for embeding uploadthing assets made for OberonCMS",

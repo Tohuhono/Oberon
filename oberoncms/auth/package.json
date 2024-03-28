@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/auth",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A next-auth provider OberonCMS using Resend for OTP",
