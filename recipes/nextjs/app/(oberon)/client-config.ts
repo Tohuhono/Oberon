@@ -1,6 +1,5 @@
-import { Prose } from "@tohuhono/puck-blocks/prose"
-import { Div } from "@tohuhono/puck-blocks/div"
-import { PuckRichText } from "@tohuhono/puck-rich-text"
+import { Div, PuckRichText, Prose } from "@oberoncms/components"
+import { Image } from "@oberoncms/upload-thing"
 import type { OberonConfig } from "@oberoncms/core"
 
 export const config: OberonConfig = {
@@ -8,6 +7,7 @@ export const config: OberonConfig = {
     Prose,
     Div,
     PuckRichText,
+    Image,
   },
   resolvePath: (path: string[] = []) => `/${path.join("/")}`,
 }

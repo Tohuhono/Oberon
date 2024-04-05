@@ -7,24 +7,23 @@
     "clean": "npx odt-clean",
     "dev": "next dev",
     "lint": "next lint",
+    "tsc": "tsc --pretty",
     "postinstall": "odt-init",
     "prebuild": "odt-prepare",
     "start": "next start"
   },
   "dependencies": {
-    "@oberoncms/adapter-turso": "*",
-    "@oberoncms/auth": "*",
-    "@oberoncms/core": "*",
-    "@tohuhono/puck-blocks": "*",
-    "@tohuhono/puck-rich-text": "*",
-    "@tohuhono/puck-upload-thing": "*",
+    "@oberoncms/adapter-turso": "workspace:*",
+    "@oberoncms/auth": "workspace:*",
+    "@oberoncms/core": "workspace:*",
+    "@oberoncms/components": "workspace:*",
+    "@oberoncms/upload-thing": "workspace:*",
     "react": "^18",
     "react-dom": "^18",
     "next": "^14.1.4"
   },
   "peerDependencies": {
     "@auth/core": "0.28.0",
-    "@measured/puck": "^0.13.1",
     "next-auth": "5.0.0-beta.15"
   },
   "devDependencies": {

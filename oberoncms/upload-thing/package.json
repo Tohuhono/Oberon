@@ -1,9 +1,9 @@
 {
-  "name": "@tohuhono/puck-upload-thing",
+  "name": "@oberoncms/upload-thing",
   "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "A puck component for embeding uploadthing assets made for OberonCMS",
+  "description": "An puck component for embeding uploadthing assets made for OberonCMS",
   "keywords": [
     "oberon",
     "oberoncms",
@@ -18,7 +18,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "puck/upload-thing"
+    "directory": "oberoncms/upload-thing"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -39,7 +39,7 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@oberoncms/core": "*",
+    "@oberoncms/core": "workspace:*",
     "@uploadthing/react": "^6.4.1",
     "@uploadthing/shared": "^6.4.0",
     "uploadthing": "^6.7.0"
@@ -47,11 +47,11 @@
   "peerDependencies": {
     "next": ">=14.1",
     "react": ">=18.2.0",
-    "react-dom": ">=18.2.0",
-    "@measured/puck": ">=0.13.1"
+    "react-dom": ">=18.2.0"
   },
   "devDependencies": {
-    "@oberon/dev": "*",
+    "@measured/puck": "^0.14.1",
+    "@oberon/dev": "workspace:*",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
     "eslint": "^8.57.0",

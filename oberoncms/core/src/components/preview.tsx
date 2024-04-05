@@ -1,8 +1,10 @@
-"use client"
-
-import { Config, Data, Render } from "@measured/puck"
+import type { Config, Data } from "@measured/puck"
 import { notFound } from "next/navigation"
+import { DynamicTailwind } from "@oberon/ui/theme"
+import dynamic from "next/dynamic"
 import { useLocalData } from "@/hooks/use-local-data"
+
+const Render = dynamic(import("@measured/puck").then((m) => m.Render))
 
 export function Preview({
   path,
@@ -15,9 +17,14 @@ export function Preview({
 }) {
   const localData = useLocalData(path, config)[0] || data
 
-  if (!localData) {
+  if (!localData || !data) {
     return notFound()
   }
 
-  return <Render data={localData} config={config} />
+  return (
+    <>
+      <Render data={localData} config={config} />
+      <DynamicTailwind />
+    </>
+  )
 }

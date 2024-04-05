@@ -11,14 +11,14 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@measured/puck": "^0.13.1",
-    "@tohuhono/puck-rich-text": "*",
+    "@measured/puck": "^0.14.1",
+    "@tohuhono/puck-rich-text": "workspace:*",
     "next": "^14.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@oberon/dev": "*",
+    "@oberon/dev": "workspace:*",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20.11.30",
     "@types/react": "18.2.66",

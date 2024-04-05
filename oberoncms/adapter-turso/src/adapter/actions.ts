@@ -1,4 +1,4 @@
-import { Data } from "@measured/puck"
+import type { Data } from "@measured/puck"
 import { eq } from "drizzle-orm"
 import { Route } from "next"
 import { revalidatePath, unstable_cache as cache } from "next/cache"

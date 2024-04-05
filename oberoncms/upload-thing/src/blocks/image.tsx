@@ -1,12 +1,8 @@
-import { ComponentConfig } from "@measured/puck"
+import type { ComponentConfig } from "@measured/puck"
 import NextImage from "next/image"
 import { UploadDropzone } from "@/uploadthing/components"
 
-export const Image: ComponentConfig<{
-  image: {
-    url: string
-  }
-}> = {
+export const Image = {
   fields: {
     image: {
       type: "custom",
@@ -42,4 +38,8 @@ export const Image: ComponentConfig<{
   render: ({ image: { url } }) => {
     return <NextImage src={url} alt="" fill />
   },
-}
+} satisfies ComponentConfig<{
+  image: {
+    url: string
+  }
+}>

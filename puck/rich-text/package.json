@@ -55,7 +55,7 @@
     "@lexical/rich-text": "^0.14.2",
     "@lexical/selection": "^0.14.2",
     "@lexical/utils": "^0.14.2",
-    "@measured/puck": "^0.13.1",
+    "@measured/puck": "^0.14.1",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "classnames": "^2.5.1",
     "dompurify": "^3.0.9",
@@ -66,11 +66,10 @@
   "peerDependencies": {
     "next": ">=14.1",
     "react": ">=18.2.0",
-    "react-dom": ">=18.2.0",
-    "@measured/puck": ">=0.13.1"
+    "react-dom": ">=18.2.0"
   },
   "devDependencies": {
-    "@oberon/dev": "*",
+    "@oberon/dev": "workspace:*",
     "@types/dompurify": "^3.0.5",
     "@types/jsdom": "^21.1.6",
     "@types/react": "18.2.66",
