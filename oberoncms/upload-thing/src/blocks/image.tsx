@@ -1,45 +1,29 @@
-import type { ComponentConfig } from "@measured/puck"
 import NextImage from "next/image"
-import { UploadDropzone } from "@/uploadthing/components"
+import { ImageIcon } from "@radix-ui/react-icons"
+import type { ComponentConfig } from "@measured/puck"
+
+export type OberonImage = {
+  url: string
+  height?: number
+  width?: number
+}
 
 export const Image = {
   fields: {
     image: {
       type: "custom",
-      render: ({ value, onChange, name }) => {
-        return (
-          <>
-            {`Name: ${name} Value: ${value.url}`}
-            <UploadDropzone
-              endpoint="singleImageUploader"
-              onClientUploadComplete={(res) => {
-                // Do something with the response
-                if (res[0]) {
-                  //name: res[0].name,
-                  onChange({ url: res[0].url })
-                }
-              }}
-              onUploadError={(error: Error) => {
-                alert(`ERROR! ${error.message}`)
-              }}
-              onUploadBegin={(name) => {
-                // Do something once upload begins
-                console.log("Uploading: ", name)
-              }}
-            />
-          </>
-        )
-      },
+      render: () => <></>, // only render on the client
     },
   },
   defaultProps: {
-    image: { url: "" },
+    image: { url: "", width: 100, height: 100 },
   },
-  render: ({ image: { url } }) => {
-    return <NextImage src={url} alt="" fill />
+  render: ({ image: { url, height, width } }: { image: OberonImage }) => {
+    if (!url) {
+      return <ImageIcon height={height} width={width} />
+    }
+    return <NextImage src={url} height={height} width={width} alt="" />
   },
 } satisfies ComponentConfig<{
-  image: {
-    url: string
-  }
+  image: OberonImage
 }>

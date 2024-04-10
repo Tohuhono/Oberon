@@ -6,6 +6,7 @@ import { filesize } from "filesize"
 import Link from "next/link"
 import { Route } from "next"
 import { Button } from "@oberon/ui/button"
+import Image from "next/image"
 import type { Asset, ServerActions } from "@/app/schema"
 
 export function Assets({
@@ -22,11 +23,12 @@ export function Assets({
       {assets.map(({ key, name, size, url }) => {
         return (
           <Fragment key={key}>
-            <div>
-              <Link href={url as Route} prefetch={false} target="_blank">
+            <Link href={url as Route} prefetch={false} target="_blank">
+              <div className="flex flex-row gap-2">
+                <Image src={url} width={24} height={24} alt={name} />
                 {name}
-              </Link>
-            </div>
+              </div>
+            </Link>
             <div>{filesize(size)}</div>
             <Button
               variant="destructive"
@@ -42,36 +44,6 @@ export function Assets({
           </Fragment>
         )
       })}
-
-      <div className="col-span-3">
-        TODO Uploadthing
-        {/*
-        <UploadDropzone
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            // Do something with the response
-            if (res) {
-              setAssets([
-                ...assets,
-                ...res.map(({ key, name, size, url }) => ({
-                  key,
-                  name,
-                  size,
-                  url,
-                })),
-              ])
-            }
-          }}
-          onUploadError={(error: Error) => {
-            alert(`ERROR! ${error.message}`)
-          }}
-          onUploadBegin={(name) => {
-            // Do something once upload begins
-            console.log("Uploading: ", name)
-          }}
-        />
-        */}
-      </div>
     </div>
   )
 }
