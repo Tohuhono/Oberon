@@ -40,9 +40,9 @@ export const PuckMenu = ({
         {isAdmin && (
           <Link
             className={buttonVariants({ variant: "outline", size: "sm" })}
-            href="/cms/assets"
+            href="/cms/images"
           >
-            Assets
+            Images
           </Link>
         )}
         {isAdmin && (

@@ -5,15 +5,10 @@ import Link from "next/link"
 import { Fragment, useState } from "react"
 import { Button, buttonVariants } from "@oberon/ui/button"
 import { Input } from "@oberon/ui/input"
-import type { ServerActions } from "@/app/schema"
+import { useOberon } from "@/hooks/use-oberon"
 
-export function AllPages({
-  routes,
-  deletePage,
-}: {
-  routes: Route[]
-  deletePage: ServerActions["deletePage"]
-}) {
+export function AllPages({ routes }: { routes: Route[] }) {
+  const { deletePage } = useOberon()
   const [newPath, setNewPath] = useState("")
 
   return (

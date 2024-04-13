@@ -20,5 +20,5 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["src", ".next/types/**/*.ts"]
+  "include": ["app", ".next/types/**/*.ts"]
 }

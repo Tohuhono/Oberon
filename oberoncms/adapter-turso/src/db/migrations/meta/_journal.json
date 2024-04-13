@@ -8,6 +8,13 @@
       "when": 1699264357862,
       "tag": "0000_shallow_random",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1713015107722,
+      "tag": "0001_chief_paper_doll",
+      "breakpoints": true
     }
   ]
 }

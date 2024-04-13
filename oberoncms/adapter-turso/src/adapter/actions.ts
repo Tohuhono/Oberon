@@ -7,12 +7,12 @@ import {
   DeleteUserSchema,
   AddUserSchema,
   ServerActions,
-  AssetSchema,
+  ImageSchema,
 } from "@oberoncms/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"
-import { assets, pages, users } from "src/db/schema"
+import { images, pages, users } from "src/db/schema"
 import { adapter } from "../db/next-auth-adapter"
 
 /*
@@ -91,43 +91,46 @@ export const deletePage: ServerActions["deletePage"] = async (key) => {
 }
 
 /*
- * Asset actions
+ * Image actions
  */
 
-export const getAllAssets: ServerActions["getAllAssets"] = async () => {
+export const getAllImages: ServerActions["getAllImages"] = async () => {
   "use server"
-  const allAssets = await db
+  const allImages = await db
     .select({
-      key: assets.key,
-      name: assets.name,
-      url: assets.url,
-      size: assets.size,
+      key: images.key,
+      alt: images.alt,
+      url: images.url,
+      size: images.size,
+      height: images.height,
+      width: images.width,
     })
-    .from(assets)
+    .from(images)
     .execute()
-  return allAssets || []
+  return allImages || []
 }
 
-export const addAsset: ServerActions["addAsset"] = async (data: unknown) => {
+export const addImage: ServerActions["addImage"] = async (data: unknown) => {
   "use server"
-  const { key, url, name, size } = AssetSchema.parse(data)
-  await db.insert(assets).values({ key, url, name, size }).execute()
+  const image = ImageSchema.parse(data)
+  await db.insert(images).values(image).execute()
+  return getAllImages()
 }
 
 // TODO uploadthing
-export const deleteAsset: ServerActions["deleteAsset"] = async (data) => {
+export const deleteImage: ServerActions["deleteImage"] = async (data) => {
   "use server"
-  console.warn("FIXME deleteAsset not implemented", data)
+  console.warn("FIXME deleteImage not implemented", data)
 }
 /*
-const deleteAsset = async (data: Pick<Asset, "key">) => { 
-  const { key } = DeleteAssetSchema.parse(data)
+const deleteImage = async (data: Pick<Image, "key">) => { 
+  const { key } = DeleteImageSchema.parse(data)
   try {
     await ourUploadthing.deleteFiles(key)
-    await db.delete(assets).where(eq(assets.key, key))
+    await db.delete(images).where(eq(images.key, key))
     return key
   } catch (_error) {
-    console.error("Delete asset failed")
+    console.error("Delete image failed")
     return null
   }
 }
@@ -196,12 +199,12 @@ export const actions = {
   deleteUser,
   changeRole,
   getAllUsers,
-  getAllAssets,
-  addAsset,
-  deleteAsset,
+  getAllImages,
+  addImage,
+  deleteImage,
   deletePage,
   publishPageData,
   getPageData,
   getAllKeys,
   getAllPaths,
-}
+} satisfies ServerActions

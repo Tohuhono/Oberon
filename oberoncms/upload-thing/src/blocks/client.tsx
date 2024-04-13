@@ -1,15 +1,16 @@
 import type { ComponentConfig } from "@measured/puck"
-import { Image as Base, type OberonImage } from "./image"
+import type { OberonImage } from "@oberoncms/core"
+import { Image as Base } from "./image"
 import { ImageField } from "./image-field"
 
 export const Image = {
   ...Base,
   fields: {
-    image: {
+    oberon: {
       type: "custom",
       render: (props) => <ImageField {...props} />,
     },
   },
 } satisfies ComponentConfig<{
-  image: OberonImage
+  oberon: { image: OberonImage | null }
 }>

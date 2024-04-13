@@ -6,8 +6,8 @@ import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@oberon/ui/button"
 import { DynamicTailwind } from "@oberon/ui/theme"
 import { PuckMenu } from "./puck-menu"
+import { useOberon } from "@/hooks/use-oberon"
 import { useLocalData } from "@/hooks/use-local-data"
-import type { ServerActions } from "@/app/schema"
 
 const Header = ({
   path,
@@ -82,13 +82,12 @@ export function Editor({
   path,
   data,
   config,
-  publishPageData,
 }: {
   path: string
   data: Data | null
   config: Config
-  publishPageData: ServerActions["publishPageData"]
 }) {
+  const { publishPageData } = useOberon()
   const [localData, setLocalData] = useLocalData(path, config)
 
   const onPublish = async (data: Data) => {
