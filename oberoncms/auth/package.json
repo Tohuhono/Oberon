@@ -29,19 +29,19 @@
     "build": "vite build",
     "clean": "npx odt-clean",
     "dev": "vite build --watch",
-    "wait": "wait-on dist/version",
+    "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
   "dependencies": {
+    "@auth/core": "0.29.0",
     "@oberon/ui": "workspace:*",
-    "next-auth": "5.0.0-beta.15",
+    "next": "^14.2.1",
+    "next-auth": "5.0.0-beta.16",
     "resend": "^3.2.0"
   },
   "peerDependencies": {
-    "@auth/core": "0.28.0",
-    "next": "^14.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -20,7 +20,7 @@
     "build": "vite build",
     "clean": "node ./scripts/clean-package.mjs",
     "dev": "vite build --watch",
-    "wait": "wait-on dist/version",
+    "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
@@ -42,7 +42,7 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.4.2",
     "typescript-eslint": "^7.2.0",
-    "uploadthing": "^6.7.0",
+    "uploadthing": "^6.9.0",
     "vite": "^5.1.6",
     "vite-plugin-dts": "^3.7.3",
     "vite-plugin-externalize-deps": "^0.8.0",

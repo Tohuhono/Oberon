@@ -11,5 +11,6 @@ export default async function PuckLayout({ children }: PropsWithChildren) {
     redirect("/api/auth/signin")
   }
 
+  // TODO auth: should not need this
   return <AuthProvider>{children}</AuthProvider>
 }

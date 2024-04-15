@@ -27,7 +27,7 @@
     "build": "vite build",
     "clean": "npx odt-clean",
     "dev": "vite build --watch",
-    "wait": "wait-on dist/version",
+    "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
@@ -38,7 +38,7 @@
     "@oberon/ui": "workspace:*",
     "@oberon/utils": "workspace:*",
     "filesize": "^10.1.0",
-    "next-auth": "5.0.0-beta.15",
+    "next-auth": "5.0.0-beta.16",
     "react-hook-form": "^7.51.0",
     "swr": "^2.2.5",
     "zod": "^3.22.4"

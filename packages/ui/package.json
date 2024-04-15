@@ -21,7 +21,7 @@
     "build": "vite build",
     "clean": "npx odt-clean",
     "dev": "vite build --watch",
-    "wait": "wait-on dist/version",
+    "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
@@ -34,17 +34,17 @@
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
-    "class-variance-authority": "^0.7.0",
-    "react-hook-form": "^7.44.2",
-    "styled-jsx": "^5.1.2"
-  },
-  "peerDependencies": {
     "@tailwindcss/typography": "^0.5.10",
-    "next": "^14.1.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "class-variance-authority": "^0.7.0",
+    "next": "^14.2.1",
+    "react-hook-form": "^7.44.2",
+    "styled-jsx": "^5.1.2",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@oberon/dev": "workspace:*",

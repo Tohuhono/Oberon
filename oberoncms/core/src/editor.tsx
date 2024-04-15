@@ -1,5 +1,6 @@
 import type { Route } from "next"
 import type { Data } from "@measured/puck"
+import { DynamicTailwind, PreviewFrameTailwind } from "@oberon/ui/theme"
 import type {
   OberonImage,
   User,
@@ -38,11 +39,43 @@ function Client({
   slug: string
 }) {
   if (action === "edit") {
-    return <Editor path={slug} data={data} config={{ components: blocks }} />
+    return (
+      <Editor
+        path={slug}
+        data={data}
+        config={{
+          root: {
+            render: ({ children }) => (
+              <>
+                <PreviewFrameTailwind />
+                {children}
+              </>
+            ),
+          },
+          components: blocks,
+        }}
+      />
+    )
   }
 
   if (action === "preview") {
-    return <Preview path={slug} data={data} config={{ components: blocks }} />
+    return (
+      <Preview
+        path={slug}
+        data={data}
+        config={{
+          root: {
+            render: ({ children }) => (
+              <>
+                <DynamicTailwind />
+                {children}
+              </>
+            ),
+          },
+          components: blocks,
+        }}
+      />
+    )
   }
 
   return (

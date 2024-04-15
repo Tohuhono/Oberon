@@ -4,7 +4,6 @@ import "@measured/puck/dist/index.css"
 
 import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@oberon/ui/button"
-import { DynamicTailwind } from "@oberon/ui/theme"
 import { PuckMenu } from "./puck-menu"
 import { useOberon } from "@/hooks/use-oberon"
 import { useLocalData } from "@/hooks/use-local-data"
@@ -106,23 +105,20 @@ export function Editor({
 
   /* TODO types need fixing */
   return (
-    <>
-      <Puck
-        config={config}
-        data={
-          data || localData || { content: [], root: { props: { title: "" } } }
-        }
-        onChange={(data: Data) => {
-          setLocalData(data)
-        }}
-        onPublish={() => {}}
-        plugins={[]}
-        headerPath={path}
-        overrides={{
-          header: () => <Header path={path} onPublish={onPublish} />,
-        }}
-      />
-      <DynamicTailwind />
-    </>
+    <Puck
+      config={config}
+      data={
+        data || localData || { content: [], root: { props: { title: "" } } }
+      }
+      onChange={(data: Data) => {
+        setLocalData(data)
+      }}
+      onPublish={() => {}}
+      plugins={[]}
+      headerPath={path}
+      overrides={{
+        header: () => <Header path={path} onPublish={onPublish} />,
+      }}
+    />
   )
 }

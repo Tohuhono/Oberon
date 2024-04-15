@@ -34,22 +34,22 @@
     "dev": "vite build --watch",
     "lint": "eslint .",
     "tsc": "tsc --pretty",
-    "wait": "wait-on dist/version",
+    "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
     "@libsql/client": "^0.5.6",
     "@libsql/core": "^0.5.6",
     "@oberoncms/core": "workspace:*",
-    "drizzle-orm": "^0.30.1"
+    "drizzle-orm": "^0.30.1",
+    "next": "^14.2.1"
   },
   "peerDependencies": {
-    "next": "^14.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@auth/core": "^0.28.1",
+    "@auth/core": "^0.29.0",
     "@measured/puck": "^0.14.1",
     "@oberon/dev": "workspace:*",
     "@types/node": "20.11.26",
