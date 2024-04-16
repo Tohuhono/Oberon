@@ -34,9 +34,21 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
 
+  deploy_playground:
+    name: Deploy Oberon Playground
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.DEV_PLAYGROUND_VERCEL_ID }}
+      TURSO_URL: ${{ secrets.TURSO_URL }}
+      TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
+
   deploy-status:
     name: Deploy Status
-    needs: [deploy_tohuhono, deploy_rich_text]
+    needs: [deploy_tohuhono, deploy_rich_text, deploy_playground]
     if: success() || failure()
     runs-on: ubuntu-latest
     env:
@@ -153,3 +165,16 @@ jobs:
     with:
       url: ${{ needs.deploy_rich_text.outputs.url }}
       domain: puck-rich-text.tohuhono.com
+
+  promote_playground:
+    name: Deploy Oberon Playground
+    needs: [deploy_playground, test-status]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/promote.yml
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.DEV_PLAYGROUND_VERCEL_ID }}
+    with:
+      url: ${{ needs.deploy_rich_text.outputs.url }}
+      domain: playground.tohuhono.com

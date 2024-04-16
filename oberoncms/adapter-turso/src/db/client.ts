@@ -2,6 +2,7 @@
 // TODO import "server-only"
 
 import { drizzle } from "drizzle-orm/libsql"
+import { createClient } from "@libsql/client/web"
 
 // import type from here as
 import type { Client } from "@libsql/core/api"
@@ -20,7 +21,6 @@ const createRemoteClient = () => {
     )
   }
 
-  const { createClient } = require("@libsql/client/web")
   return createClient({
     url: process.env.TURSO_URL,
     authToken: process.env.TURSO_TOKEN,
@@ -28,9 +28,9 @@ const createRemoteClient = () => {
 }
 
 const createLocalClient = () => {
-  const { createClient } = require("@libsql/client")
+  const localClient = require("@libsql/client")
 
-  return createClient({
+  return localClient.createClient({
     url: process.env.TURSO_FILE || "file:.oberon/oberon.db",
   })
 }
