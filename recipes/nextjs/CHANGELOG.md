@@ -1,4 +1,4 @@
-# @oberoncms/core
+# oberon-cms-example
 
 ## 0.2.0
 
@@ -13,11 +13,8 @@
 ### Patch Changes
 
 - Updated dependencies [63a21a9]
-  - @oberon/utils@0.1.0
-  - @oberon/ui@0.1.0
-
-## 0.1.0
-
-### Minor Changes
-
-- a38fe03: Initial publish
+  - @oberoncms/adapter-turso@0.2.0
+  - @oberoncms/upload-thing@0.2.0
+  - @oberoncms/components@0.2.0
+  - @oberoncms/auth@0.2.0
+  - @oberoncms/core@0.2.0
