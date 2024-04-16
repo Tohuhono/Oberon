@@ -1,5 +1,6 @@
 /* eslint-env node */
 import { createWriteStream } from "fs"
+import { mkdir } from "fs/promises"
 import dotenv from "dotenv"
 import { drizzle } from "drizzle-orm/libsql"
 import { migrate } from "drizzle-orm/libsql/migrator"
@@ -76,7 +77,8 @@ const getClient = () => {
 
   const regex = /"className":"([^"]*)"/gm
 
-  var outFile = createWriteStream(".oberon/tailwind.classes")
+  await mkdir(".oberon", { recursive: true })
+  var outFile = await createWriteStream(".oberon/tailwind.classes")
 
   for (const { data } of results) {
     if (data) {

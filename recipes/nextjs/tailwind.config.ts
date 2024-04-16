@@ -1,7 +1,9 @@
 import type { Config } from "tailwindcss"
-// import { withUt } from "@oberoncms/upload-thing"
 
-const config: Config = {
+// TODO uploadthing fix styles
+import { withUt } from "uploadthing/tw"
+
+const config = {
   darkMode: ["class"],
   future: {
     hoverOnlyWhenSupported: true,
@@ -84,6 +86,6 @@ const config: Config = {
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-}
+} satisfies Config
 
-export default config // withUt(config)
+export default withUt(config)
