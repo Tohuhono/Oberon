@@ -44,7 +44,7 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.DEV_PLAYGROUND_VERCEL_ID }}
       TURSO_URL: ${{ secrets.TURSO_URL }}
-      TORSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
+      TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
 
   deploy-status:
     name: Deploy Status
