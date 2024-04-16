@@ -1,4 +1,4 @@
-import { ComponentConfig } from "@measured/puck"
+import type { ComponentConfig } from "@measured/puck"
 import { Prose as ProseUI } from "@oberon/ui/prose"
 
 export const Prose = {

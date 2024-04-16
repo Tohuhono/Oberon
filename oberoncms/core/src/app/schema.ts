@@ -9,50 +9,24 @@ export type OberonConfig = {
   resolvePath: (path?: string[]) => string
 }
 
-export type ClientAction = "edit" | "preview" | "users" | "assets" | "pages"
+export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
 
 /*
- * Actions
+ * Images
  */
 
-export type ServerActions = {
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<User | null>
-  deleteUser: (
-    data: z.infer<typeof DeleteUserSchema>,
-  ) => Promise<Pick<User, "id"> | null>
-  changeRole: (
-    data: z.infer<typeof ChangeRoleSchema>,
-  ) => Promise<Pick<User, "role" | "id"> | null>
-  getAllUsers: () => Promise<User[]>
-  getAllAssets: () => Promise<Asset[]>
-  addAsset: (asset: Asset) => Promise<void>
-  deleteAsset: (key: unknown) => Promise<void> // TODO uploadthing
-  deletePage: (key: string) => Promise<void>
-  publishPageData: (props: { key: string; data: Data }) => Promise<void>
-  getPageData: (url: string) => Promise<Data | null>
-  getAllKeys: () => Promise<Route[]>
-  getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
-}
-
-export type OberonAdapter = {
-  auth: NextAuthResult["auth"]
-  actions: ServerActions
-}
-
-/*
- * Assets
- */
-
-export const AssetSchema = z.object({
+export const ImageSchema = z.object({
   key: z.string(),
-  url: z.string().url(),
+  url: z.string(),
   size: z.number(),
-  name: z.string(),
+  width: z.number().gt(0),
+  height: z.number().gt(0),
+  alt: z.string(),
 })
 
-export const DeleteAssetSchema = AssetSchema.pick({ key: true })
+export const DeleteImageSchema = ImageSchema.pick({ key: true })
 
-export type Asset = z.infer<typeof AssetSchema>
+export type OberonImage = z.infer<typeof ImageSchema>
 
 /*
  * Users
@@ -71,3 +45,31 @@ export const DeleteUserSchema = UserSchema.pick({ id: true })
 export type User = z.infer<typeof UserSchema>
 
 export const roles = ["user", "admin"] as const
+
+/*
+ * Actions
+ */
+
+export type ServerActions = {
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<User | null>
+  deleteUser: (
+    data: z.infer<typeof DeleteUserSchema>,
+  ) => Promise<Pick<User, "id"> | null>
+  changeRole: (
+    data: z.infer<typeof ChangeRoleSchema>,
+  ) => Promise<Pick<User, "role" | "id"> | null>
+  getAllUsers: () => Promise<User[]>
+  getAllImages: () => Promise<OberonImage[]>
+  addImage: (image: OberonImage) => Promise<OberonImage[]>
+  deleteImage: (key: unknown) => Promise<void> // TODO uploadthing
+  deletePage: (key: string) => Promise<void>
+  publishPageData: (props: { key: string; data: Data }) => Promise<void>
+  getPageData: (url: string) => Promise<Data | null>
+  getAllKeys: () => Promise<Route[]>
+  getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
+}
+
+export type OberonAdapter = {
+  auth: NextAuthResult["auth"]
+  actions: ServerActions
+}

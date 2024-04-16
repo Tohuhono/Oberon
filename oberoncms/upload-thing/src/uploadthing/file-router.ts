@@ -5,6 +5,8 @@ import {
 } from "uploadthing/next"
 import { UploadThingError } from "uploadthing/server"
 import type { OberonAdapter } from "@oberoncms/core"
+import "server-only"
+import { getImageSize } from "./get-image-size"
 
 const f = createUploadthing()
 
@@ -12,7 +14,7 @@ const f = createUploadthing()
 // FileRouter for your app, can contain multiple FileRoutes
 function initFileRouter({
   auth,
-  actions: { addAsset },
+  actions: { addImage },
 }: OberonAdapter): FileRouter {
   const imageMiddleware = async () => {
     // This code runs on your server before upload
@@ -34,21 +36,29 @@ function initFileRouter({
       .onUploadComplete(
         async ({ metadata, file: { key, url, name, size } }) => {
           // This code RUNS ON YOUR SERVER after upload
-          // TODO add asset type
-          addAsset({ key, url, name, size })
-          console.log("Upload complete for userId:", metadata.creator)
+          // TODO add image type
+          const { width, height } = await getImageSize(url)
+          await addImage({ key, url, alt: name, size, width, height })
+          console.log("Image Upload complete for userId:", metadata.creator)
         },
       ),
     singleImageUploader: f({
       image: { maxFileSize: "4MB", maxFileCount: 1 },
     })
       .middleware(imageMiddleware)
-      .onUploadComplete(({ metadata, file: { key, url, name, size } }) => {
-        // This code RUNS ON YOUR SERVER after upload
-        // TODO add asset type
-        addAsset({ key, url, name, size })
-        console.log("Upload complete for userId:", metadata.creator)
-      }),
+      .onUploadComplete(
+        async ({ metadata, file: { key, url, name, size } }) => {
+          // This code RUNS ON YOUR SERVER after upload
+          // TODO add image type
+          const { width, height } = await getImageSize(url)
+          await addImage({ key, url, alt: name, size, width, height })
+          console.log(
+            "Single Image Upload complete for userId:",
+            metadata.creator,
+          )
+          return { url, thor: "hmmm" }
+        },
+      ),
   }
 }
 

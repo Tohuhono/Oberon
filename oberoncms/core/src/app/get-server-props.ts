@@ -3,7 +3,7 @@ import { parseClientAction } from "./utils"
 
 export async function getServerProps(
   { resolvePath }: OberonConfig,
-  { getPageData, getAllAssets, getAllKeys, getAllUsers }: ServerActions,
+  { getPageData, getAllImages, getAllKeys, getAllUsers }: ServerActions,
   maybeAction: string,
   path: string[] = [],
 ) {
@@ -25,11 +25,11 @@ export async function getServerProps(
         slug,
         data: await getAllUsers(),
       }
-    case "assets":
+    case "images":
       return {
         action,
         slug,
-        data: await getAllAssets(),
+        data: await getAllImages(),
       }
     case "pages":
       return {

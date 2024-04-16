@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss"
-import { withUt } from "@tohuhono/puck-upload-thing"
+// import { withUt } from "@oberoncms/upload-thing"
 
 const config: Config = {
   darkMode: ["class"],
@@ -9,7 +9,9 @@ const config: Config = {
   content: [
     "./node_modules/@oberoncms/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@oberoncms/**/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./.oberon/tailwind.classes",
   ],
@@ -84,4 +86,4 @@ const config: Config = {
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 }
 
-export default withUt(config)
+export default config // withUt(config)

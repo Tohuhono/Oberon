@@ -22,19 +22,11 @@ import {
   FormMessage,
 } from "@oberon/ui/form"
 
-import { ServerActions, AddUserSchema, User, roles } from "@/app/schema"
+import { useOberon } from "@/hooks/use-oberon"
+import { AddUserSchema, User, roles } from "@/app/schema"
 
-export function Users({
-  users: initialUsers,
-  addUser,
-  changeRole,
-  deleteUser,
-}: {
-  users: User[]
-  addUser: ServerActions["addUser"]
-  changeRole: ServerActions["changeRole"]
-  deleteUser: ServerActions["deleteUser"]
-}) {
+export function Users({ users: initialUsers }: { users: User[] }) {
+  const { addUser, changeRole, deleteUser } = useOberon()
   const [users, setUsers] = useState(initialUsers)
 
   const form = useForm<z.infer<typeof AddUserSchema>>({

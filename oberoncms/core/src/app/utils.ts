@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import type { ClientAction } from "./schema"
 
 export function getTitle(action: ClientAction, slug?: string) {
@@ -6,7 +7,7 @@ export function getTitle(action: ClientAction, slug?: string) {
       return "Editing: " + slug
     case "preview":
       return "Previewing: " + slug
-    case "assets":
+    case "images":
       return "Manage Assets"
     case "users":
       return "Manage Users"
@@ -21,10 +22,10 @@ export const parseClientAction = (action: unknown): ClientAction => {
     case "edit":
     case "preview":
     case "users":
-    case "assets":
+    case "images":
     case "pages":
       return action
     default:
-      throw new Error("No maching client action")
+      return notFound()
   }
 }

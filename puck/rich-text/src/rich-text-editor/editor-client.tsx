@@ -1,6 +1,6 @@
 "use client"
 
-import type { SerializedEditorState } from "lexical/LexicalEditorState"
+import type { SerializedEditorState } from "lexical"
 import { useSelected } from "../compat/use-selected"
 import { InlineRichTextEditor } from "./lexical/rich-text-editor"
 

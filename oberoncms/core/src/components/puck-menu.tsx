@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import { PropsWithChildren } from "react"
 import { Route } from "next"
@@ -40,9 +38,9 @@ export const PuckMenu = ({
         {isAdmin && (
           <Link
             className={buttonVariants({ variant: "outline", size: "sm" })}
-            href="/cms/assets"
+            href="/cms/images"
           >
-            Assets
+            Images
           </Link>
         )}
         {isAdmin && (

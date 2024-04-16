@@ -1,9 +1,9 @@
 {
-  "name": "@tohuhono/puck-upload-thing",
+  "name": "@oberoncms/upload-thing",
   "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "A puck component for embeding uploadthing assets made for OberonCMS",
+  "description": "An puck component for embeding uploadthing assets made for OberonCMS",
   "keywords": [
     "oberon",
     "oberoncms",
@@ -18,12 +18,16 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "puck/upload-thing"
+    "directory": "oberoncms/upload-thing"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/index.js",
+      "node": "./dist/server.js"
+    },
     "./router": "./dist/router.js"
   },
   "files": [
@@ -33,25 +37,28 @@
     "build": "vite build",
     "clean": "npx odt-clean",
     "dev": "vite build --watch",
-    "wait": "wait-on dist/version",
+    "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@oberoncms/core": "*",
+    "@oberoncms/core": "workspace:*",
+    "@radix-ui/react-icons": "^1.3.0",
     "@uploadthing/react": "^6.4.1",
     "@uploadthing/shared": "^6.4.0",
-    "uploadthing": "^6.7.0"
+    "image-size": "1.1.1",
+    "next": "^14.2.1",
+    "server-only": "^0.0.1",
+    "uploadthing": "^6.9.0"
   },
   "peerDependencies": {
-    "next": ">=14.1",
     "react": ">=18.2.0",
-    "react-dom": ">=18.2.0",
-    "@measured/puck": ">=0.13.1"
+    "react-dom": ">=18.2.0"
   },
   "devDependencies": {
-    "@oberon/dev": "*",
+    "@measured/puck": "^0.14.1",
+    "@oberon/dev": "workspace:*",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
     "eslint": "^8.57.0",

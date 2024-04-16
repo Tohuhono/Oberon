@@ -4,10 +4,9 @@ import "@measured/puck/dist/index.css"
 
 import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@oberon/ui/button"
-import { DynamicTailwind } from "@oberon/ui/theme"
 import { PuckMenu } from "./puck-menu"
+import { useOberon } from "@/hooks/use-oberon"
 import { useLocalData } from "@/hooks/use-local-data"
-import type { ServerActions } from "@/app/schema"
 
 const Header = ({
   path,
@@ -82,13 +81,12 @@ export function Editor({
   path,
   data,
   config,
-  publishPageData,
 }: {
   path: string
   data: Data | null
   config: Config
-  publishPageData: ServerActions["publishPageData"]
 }) {
+  const { publishPageData } = useOberon()
   const [localData, setLocalData] = useLocalData(path, config)
 
   const onPublish = async (data: Data) => {
@@ -107,23 +105,20 @@ export function Editor({
 
   /* TODO types need fixing */
   return (
-    <>
-      <Puck
-        config={config}
-        data={
-          data || localData || { content: [], root: { props: { title: "" } } }
-        }
-        onChange={(data: Data) => {
-          setLocalData(data)
-        }}
-        onPublish={() => {}}
-        plugins={[]}
-        headerPath={path}
-        overrides={{
-          header: () => <Header path={path} onPublish={onPublish} />,
-        }}
-      />
-      <DynamicTailwind />
-    </>
+    <Puck
+      config={config}
+      data={
+        data || localData || { content: [], root: { props: { title: "" } } }
+      }
+      onChange={(data: Data) => {
+        setLocalData(data)
+      }}
+      onPublish={() => {}}
+      plugins={[]}
+      headerPath={path}
+      overrides={{
+        header: () => <Header path={path} onPublish={onPublish} />,
+      }}
+    />
   )
 }

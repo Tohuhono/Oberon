@@ -1,7 +1,4 @@
-"use client"
-
-import { Config, Data, Render } from "@measured/puck"
-import { notFound } from "next/navigation"
+import { Render, type Config, type Data } from "@measured/puck"
 import { useLocalData } from "@/hooks/use-local-data"
 
 export function Preview({
@@ -13,10 +10,10 @@ export function Preview({
   config: Config
   data: Data | null
 }) {
-  const localData = useLocalData(path, config)[0] || data
+  const localData = useLocalData(path, config)[0]
 
-  if (!localData) {
-    return notFound()
+  if (!localData || !data) {
+    return <></>
   }
 
   return <Render data={localData} config={config} />

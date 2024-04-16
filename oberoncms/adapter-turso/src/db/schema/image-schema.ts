@@ -1,8 +1,10 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
 
-export const assets = sqliteTable("assets", {
+export const images = sqliteTable("images", {
   key: text("key").notNull().primaryKey(),
   url: text("url").notNull(),
-  name: text("name").notNull(),
+  alt: text("alt").notNull(),
   size: integer("size").notNull(),
+  height: integer("height").notNull(),
+  width: integer("width").notNull(),
 })
