@@ -35,7 +35,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
 
   deploy_playground:
-    name: Deploy Dev Playground
+    name: Deploy Oberon Playground
     uses: ./.github/workflows/deploy.yml
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
@@ -167,7 +167,7 @@ jobs:
       domain: puck-rich-text.tohuhono.com
 
   promote_playground:
-    name: Deploy Playground
+    name: Deploy Oberon Playground
     needs: [deploy_playground, test-status]
     if: ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/promote.yml
