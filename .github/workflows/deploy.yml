@@ -19,7 +19,7 @@ on:
         required: true
       TURSO_URL:
         required: false
-      TURSO_SECRET:
+      TURSO_TOKEN:
         required: false
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       TURSO_URL: ${{ secrets.TURSO_URL }}
-      TURSO_SECRET: ${{ secrets.TURSO_SECRET }}
+      TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest

@@ -47,6 +47,7 @@ const getClient = () => {
   }
   return createLocalClient()
 }
+
 ;(async () => {
   console.log(`Migrating database`)
 
