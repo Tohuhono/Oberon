@@ -1,6 +1,6 @@
-# @oberoncms/core
+# @oberon/rich-text-demo
 
-## 0.2.0
+## 1.1.0
 
 ### Minor Changes
 
@@ -13,11 +13,4 @@
 ### Patch Changes
 
 - Updated dependencies [63a21a9]
-  - @oberon/utils@0.1.0
-  - @oberon/ui@0.1.0
-
-## 0.1.0
-
-### Minor Changes
-
-- a38fe03: Initial publish
+  - @tohuhono/puck-rich-text@0.2.0

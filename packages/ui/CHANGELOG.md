@@ -1,6 +1,6 @@
-# @oberoncms/core
+# @oberon/ui
 
-## 0.2.0
+## 0.1.0
 
 ### Minor Changes
 
@@ -14,10 +14,3 @@
 
 - Updated dependencies [63a21a9]
   - @oberon/utils@0.1.0
-  - @oberon/ui@0.1.0
-
-## 0.1.0
-
-### Minor Changes
-
-- a38fe03: Initial publish
