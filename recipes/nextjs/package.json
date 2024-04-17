@@ -13,6 +13,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@datacom-digital/ui-sample-components": "^0.3.2",
     "@oberoncms/adapter-turso": "workspace:*",
     "@oberoncms/auth": "workspace:*",
     "@oberoncms/components": "workspace:*",
@@ -23,6 +24,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "^18",
