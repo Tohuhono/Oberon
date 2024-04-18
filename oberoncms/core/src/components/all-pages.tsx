@@ -8,8 +8,8 @@ import { Input } from "@oberon/ui/input"
 import { useOberon } from "@/hooks/use-oberon"
 
 export function AllPages({ routes }: { routes: Route[] }) {
-  const { deletePage } = useOberon()
-  const [newPath, setNewPath] = useState("")
+  const { deletePage, addPage } = useOberon()
+  const [path, setPath] = useState("/")
 
   return (
     <>
@@ -41,20 +41,16 @@ export function AllPages({ routes }: { routes: Route[] }) {
           </Fragment>
         ))}
         <Input
-          value={newPath}
-          onChange={(e) => setNewPath(e.currentTarget.value)}
+          value={path}
+          onChange={(e) => {
+            const newPath = e.currentTarget.value
+
+            setPath(newPath.charAt(0) === "/" ? newPath : "/" + newPath)
+          }}
         />
-        <Link
-          className={buttonVariants({
-            size: "sm",
-            className: "col-span-2 no-underline",
-          })}
-          href={`/cms/edit/${newPath}`}
-          target="_blank"
-          prefetch={false}
-        >
+        <Button size="sm" onClick={() => addPage(path)} className="col-span-2">
           New Page
-        </Link>
+        </Button>
       </div>
     </>
   )

@@ -7,6 +7,7 @@ import { Button } from "@oberon/ui/button"
 import { PuckMenu } from "./puck-menu"
 import { useOberon } from "@/hooks/use-oberon"
 import { useLocalData } from "@/hooks/use-local-data"
+import { INITIAL_DATA } from "@/app/schema"
 
 const Header = ({
   path,
@@ -90,10 +91,6 @@ export function Editor({
   const [localData, setLocalData] = useLocalData(path, config)
 
   const onPublish = async (data: Data) => {
-    if (!localData) {
-      return
-    }
-
     console.log("start pub", data)
     const published = await publishPageData({
       key: path,
@@ -107,9 +104,7 @@ export function Editor({
   return (
     <Puck
       config={config}
-      data={
-        data || localData || { content: [], root: { props: { title: "" } } }
-      }
+      data={data || localData || INITIAL_DATA}
       onChange={(data: Data) => {
         setLocalData(data)
       }}

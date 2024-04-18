@@ -11,6 +11,11 @@ export type OberonConfig = {
 
 export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
 
+export const INITIAL_DATA = {
+  content: [],
+  root: { props: { title: "" } },
+} satisfies Data
+
 /*
  * Images
  */
@@ -62,6 +67,7 @@ export type ServerActions = {
   getAllImages: () => Promise<OberonImage[]>
   addImage: (image: OberonImage) => Promise<OberonImage[]>
   deleteImage: (key: unknown) => Promise<void> // TODO uploadthing
+  addPage: (key: string) => Promise<void>
   deletePage: (key: string) => Promise<void>
   publishPageData: (props: { key: string; data: Data }) => Promise<void>
   getPageData: (url: string) => Promise<Data | null>

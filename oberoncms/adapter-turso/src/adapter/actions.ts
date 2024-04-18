@@ -1,13 +1,18 @@
 import type { Data } from "@measured/puck"
 import { eq } from "drizzle-orm"
 import { Route } from "next"
-import { revalidatePath, unstable_cache as cache } from "next/cache"
+import {
+  revalidatePath,
+  revalidateTag,
+  unstable_cache as cache,
+} from "next/cache"
 import {
   ChangeRoleSchema,
   DeleteUserSchema,
   AddUserSchema,
   ServerActions,
   ImageSchema,
+  INITIAL_DATA,
 } from "@oberoncms/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
@@ -18,32 +23,40 @@ import { adapter } from "../db/next-auth-adapter"
 /*
  * Page actions
  */
-const getAllPathsCached = cache(async () => {
-  const result = await db.select({ key: pages.key }).from(pages)
-  const data = result.map((row) => ({
-    puckPath: row["key"].split("/").slice(1),
-  }))
-  return data
-})
+const getAllPathsCached = cache(
+  async () => {
+    const result = await db.select({ key: pages.key }).from(pages)
+    const data = result.map((row) => ({
+      puckPath: row["key"].split("/").slice(1),
+    }))
+    return data
+  },
+  undefined,
+  { tags: ["oberon-pages"] },
+)
 export const getAllPaths: ServerActions["getAllPaths"] = async () => {
   "use server"
   return getAllPathsCached()
 }
 
-const getAllKeysCached = cache(async () => {
-  const sortPages = (a: { key: string }, b: { key: string }) => {
-    if (a.key < b.key) {
-      return -1
+const getAllKeysCached = cache(
+  async () => {
+    const sortPages = (a: { key: string }, b: { key: string }) => {
+      if (a.key < b.key) {
+        return -1
+      }
+      if (a.key > b.key) {
+        return 1
+      }
+      return 0
     }
-    if (a.key > b.key) {
-      return 1
-    }
-    return 0
-  }
-  const result = await db.select({ key: pages.key }).from(pages)
-  const data = result.sort(sortPages).map(({ key }) => key as Route)
-  return data
-})
+    const result = await db.select({ key: pages.key }).from(pages)
+    const data = result.sort(sortPages).map(({ key }) => key as Route)
+    return data
+  },
+  undefined,
+  { tags: ["oberon-pages"] },
+)
 export const getAllKeys: ServerActions["getAllKeys"] = async () => {
   "use server"
   return getAllKeysCached()
@@ -68,6 +81,15 @@ export const getPageData: ServerActions["getPageData"] = async (url) => {
 }
 
 // TODO zod ; return value
+export const addPage: ServerActions["addPage"] = async (key) => {
+  "use server"
+  const dataJSON = JSON.stringify(INITIAL_DATA)
+  await db.insert(pages).values({ key, data: dataJSON })
+  revalidatePath(key)
+  revalidateTag("oberon-pages")
+}
+
+// TODO zod ; return value
 export const publishPageData: ServerActions["publishPageData"] = async ({
   key,
   data,
@@ -88,6 +110,7 @@ export const deletePage: ServerActions["deletePage"] = async (key) => {
   "use server"
   await db.delete(pages).where(eq(pages.key, key))
   revalidatePath(key)
+  revalidateTag("oberon-pages")
 }
 
 /*
@@ -199,12 +222,13 @@ export const actions = {
   deleteUser,
   changeRole,
   getAllUsers,
-  getAllImages,
   addImage,
   deleteImage,
+  getAllImages,
+  addPage,
   deletePage,
-  publishPageData,
   getPageData,
+  publishPageData,
   getAllKeys,
   getAllPaths,
 } satisfies ServerActions
