@@ -51,17 +51,11 @@ export function PreviewFrameTailwind() {
 
     iframe.contentDocument.body.classList.add(...document.body.classList)
 
-    const propogateTheme = () => {
-      const iframe: HTMLIFrameElement | null =
-        document.querySelector("#preview-frame")
-
-      if (document.documentElement.classList.contains("dark")) {
-        iframe?.contentDocument?.documentElement.classList.add("dark")
-      } else {
-        iframe?.contentDocument?.documentElement.classList.remove("dark")
-      }
+    if (document.documentElement.classList.contains("dark")) {
+      iframe?.contentDocument?.documentElement.classList.add("dark")
+    } else {
+      iframe?.contentDocument?.documentElement.classList.remove("dark")
     }
-    propogateTheme()
 
     darkModeObserver.current = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
@@ -69,10 +63,15 @@ export function PreviewFrameTailwind() {
           mutation.type === "attributes" &&
           mutation.attributeName === "class"
         ) {
-          propogateTheme()
+          if (document.documentElement.classList.contains("dark")) {
+            iframe?.contentDocument?.documentElement.classList.add("dark")
+          } else {
+            iframe?.contentDocument?.documentElement.classList.remove("dark")
+          }
         }
       }
     })
+
     darkModeObserver.current.observe(document.documentElement, {
       attributes: true,
     })
