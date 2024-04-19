@@ -1,3 +1,5 @@
+import "use-server"
+
 import type { Data } from "@measured/puck"
 import { eq } from "drizzle-orm"
 import { Route } from "next"
@@ -10,15 +12,70 @@ import {
   ChangeRoleSchema,
   DeleteUserSchema,
   AddUserSchema,
-  ServerActions,
+  OberonAdapter,
   ImageSchema,
   INITIAL_DATA,
+  type AdapterActionGroup,
+  type AdapterPermission,
 } from "@oberoncms/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"
 import { images, pages, users } from "src/db/schema"
-import { adapter } from "../db/next-auth-adapter"
+import { adapter as authAdapter } from "./db/next-auth-adapter"
+
+import { auth } from "./auth"
+
+const permissions: Record<
+  "unauthenticated" | "user",
+  Partial<Record<AdapterActionGroup, AdapterPermission>>
+> = {
+  unauthenticated: {
+    pages: "read",
+  },
+  user: {
+    cms: "read",
+    pages: "write",
+    images: "write",
+  },
+}
+
+const can: OberonAdapter["can"] = async (action, permission = "read") => {
+  "use server"
+  // Check unauthenticated first so we can do it outside of request context
+  if (
+    permissions.unauthenticated[action] === permission ||
+    permissions.unauthenticated[action] === "write"
+  ) {
+    return true
+  }
+
+  const session = await auth()
+
+  // Authentication will throw if used outside of request context
+  // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
+  switch (session?.user?.role) {
+    case "user":
+      return (
+        permissions.user[action] === permission ||
+        permissions.user[action] === "write"
+      )
+    case "admin":
+      return true
+    default:
+      return false
+  }
+}
+
+const will = async (
+  action: AdapterActionGroup,
+  permission: AdapterPermission,
+) => {
+  if (await can(action, permission)) {
+    return
+  }
+  throw new Error("Unauthorized")
+}
 
 /*
  * Page actions
@@ -34,8 +91,9 @@ const getAllPathsCached = cache(
   undefined,
   { tags: ["oberon-pages"] },
 )
-export const getAllPaths: ServerActions["getAllPaths"] = async () => {
+const getAllPaths: OberonAdapter["getAllPaths"] = async () => {
   "use server"
+  await will("pages", "read")
   return getAllPathsCached()
 }
 
@@ -57,8 +115,9 @@ const getAllKeysCached = cache(
   undefined,
   { tags: ["oberon-pages"] },
 )
-export const getAllKeys: ServerActions["getAllKeys"] = async () => {
+const getAllKeys: OberonAdapter["getAllKeys"] = async () => {
   "use server"
+  await will("pages", "read")
   return getAllKeysCached()
 }
 
@@ -75,14 +134,16 @@ const getPageDataCached = cache(async (url: string) => {
 
   return data ? (JSON.parse(data) as Data) : null
 })
-export const getPageData: ServerActions["getPageData"] = async (url) => {
+const getPageData: OberonAdapter["getPageData"] = async (url) => {
   "use server"
+  await will("pages", "read")
   return getPageDataCached(url)
 }
 
 // TODO zod ; return value
-export const addPage: ServerActions["addPage"] = async (key) => {
+const addPage: OberonAdapter["addPage"] = async (key) => {
   "use server"
+  await will("pages", "write")
   const dataJSON = JSON.stringify(INITIAL_DATA)
   await db.insert(pages).values({ key, data: dataJSON })
   revalidatePath(key)
@@ -90,11 +151,12 @@ export const addPage: ServerActions["addPage"] = async (key) => {
 }
 
 // TODO zod ; return value
-export const publishPageData: ServerActions["publishPageData"] = async ({
+const publishPageData: OberonAdapter["publishPageData"] = async ({
   key,
   data,
 }) => {
   "use server"
+  await will("pages", "write")
   const dataJSON = JSON.stringify(data)
   await db
     .insert(pages)
@@ -106,8 +168,9 @@ export const publishPageData: ServerActions["publishPageData"] = async ({
 }
 
 // TODO zod ; return value
-export const deletePage: ServerActions["deletePage"] = async (key) => {
+const deletePage: OberonAdapter["deletePage"] = async (key) => {
   "use server"
+  await will("pages", "write")
   await db.delete(pages).where(eq(pages.key, key))
   revalidatePath(key)
   revalidateTag("oberon-pages")
@@ -116,9 +179,10 @@ export const deletePage: ServerActions["deletePage"] = async (key) => {
 /*
  * Image actions
  */
-
-export const getAllImages: ServerActions["getAllImages"] = async () => {
+const getAllImages: OberonAdapter["getAllImages"] = async () => {
   "use server"
+  await will("images", "read")
+
   const allImages = await db
     .select({
       key: images.key,
@@ -133,16 +197,19 @@ export const getAllImages: ServerActions["getAllImages"] = async () => {
   return allImages || []
 }
 
-export const addImage: ServerActions["addImage"] = async (data: unknown) => {
+const addImage: OberonAdapter["addImage"] = async (data: unknown) => {
   "use server"
+  await will("images", "write")
+
   const image = ImageSchema.parse(data)
   await db.insert(images).values(image).execute()
   return getAllImages()
 }
 
 // TODO uploadthing
-export const deleteImage: ServerActions["deleteImage"] = async (data) => {
+const deleteImage: OberonAdapter["deleteImage"] = async (data) => {
   "use server"
+  await will("images", "write")
   console.warn("FIXME deleteImage not implemented", data)
 }
 /*
@@ -162,8 +229,9 @@ const deleteImage = async (data: Pick<Image, "key">) => {
 /*
  * User actions
  */
-export const getAllUsers: ServerActions["getAllUsers"] = async () => {
+const getAllUsers: OberonAdapter["getAllUsers"] = async () => {
   "use server"
+  await will("users", "read")
   const allUsers = await db
     .select({ id: users.id, email: users.email, role: users.role })
     .from(users)
@@ -171,10 +239,9 @@ export const getAllUsers: ServerActions["getAllUsers"] = async () => {
   return allUsers || []
 }
 
-export const changeRole: ServerActions["changeRole"] = async (
-  data: unknown,
-) => {
+const changeRole: OberonAdapter["changeRole"] = async (data: unknown) => {
   "use server"
+  await will("users", "write")
   const { role, id } = ChangeRoleSchema.parse(data)
   try {
     await db.update(users).set({ role }).where(eq(users.id, id))
@@ -185,13 +252,12 @@ export const changeRole: ServerActions["changeRole"] = async (
   }
 }
 
-export const deleteUser: ServerActions["deleteUser"] = async (
-  data: unknown,
-) => {
+const deleteUser: OberonAdapter["deleteUser"] = async (data: unknown) => {
   "use server"
+  await will("users", "write")
   const { id } = DeleteUserSchema.parse(data)
   try {
-    await adapter.deleteUser(id)
+    await authAdapter.deleteUser(id)
     return { id }
   } catch (_error) {
     console.error("Delete user failed")
@@ -199,14 +265,15 @@ export const deleteUser: ServerActions["deleteUser"] = async (
   }
 }
 
-export const addUser: ServerActions["addUser"] = async (data: unknown) => {
+const addUser: OberonAdapter["addUser"] = async (data: unknown) => {
   "use server"
+  await will("users", "write")
   const { email, role } = AddUserSchema.parse(data)
 
   try {
-    const { id } = await adapter.createUser({
+    const { id } = await authAdapter.createUser({
       email,
-      // @ts-expect-error TODO fix global auth
+      // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
       role,
       emailVerified: null,
     })
@@ -217,7 +284,7 @@ export const addUser: ServerActions["addUser"] = async (data: unknown) => {
   }
 }
 
-export const actions = {
+export const adapter = {
   addUser,
   deleteUser,
   changeRole,
@@ -231,4 +298,5 @@ export const actions = {
   publishPageData,
   getAllKeys,
   getAllPaths,
-} satisfies ServerActions
+  can,
+} satisfies OberonAdapter

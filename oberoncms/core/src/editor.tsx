@@ -5,7 +5,7 @@ import type {
   OberonImage,
   User,
   OberonConfig,
-  ServerActions,
+  OberonAdapter,
 } from "./app/schema"
 import { getTitle } from "./app/utils"
 import { OberonProvider } from "./components/provider"
@@ -25,7 +25,7 @@ type DescriminatedProps =
   | { action: "pages"; data: Route[] }
 
 export type OberonServerProps = DescriminatedProps & {
-  actions: ServerActions
+  adapter: OberonAdapter
   slug: string
 }
 
@@ -90,13 +90,13 @@ function Client({
 }
 
 export function OberonClient({
-  actions,
+  adapter,
   ...props
 }: OberonServerProps & {
   config: OberonConfig
 }) {
   return (
-    <OberonProvider actions={actions}>
+    <OberonProvider adapter={adapter}>
       <Client {...props} />
     </OberonProvider>
   )

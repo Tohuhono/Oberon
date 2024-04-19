@@ -1,8 +1,8 @@
 import "./globals.css"
-import { Montserrat } from "next/font/google"
+import { Noto_Sans } from "next/font/google"
 
 import { cn } from "@oberoncms/core"
-const font = Montserrat({ subsets: ["latin"] })
+const font = Noto_Sans({ subsets: ["latin"] })
 
 export const metadata = {
   title: "Oberon CMS",

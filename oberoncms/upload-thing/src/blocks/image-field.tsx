@@ -11,7 +11,7 @@ export const ImageField = ({
   value: OberonImage | null
   onChange: (value: { image: OberonImage | null }) => void
 }) => {
-  const { images, loading, mutate } = useOberonImages()
+  const { images, loading, add } = useOberonImages()
 
   const [imageKey, setImageKey] = useState<OberonImage["key"] | "">(
     value?.key || "",
@@ -41,8 +41,19 @@ export const ImageField = ({
       <UploadDropzone
         endpoint="singleImageUploader"
         onClientUploadComplete={async (res) => {
-          await mutate()
-          setImageKey(res[0]?.key || "")
+          if (!res[0]) {
+            return
+          }
+          const {
+            key,
+            name,
+            size,
+            url,
+            serverData: { width, height },
+          } = res[0]
+
+          add({ key, url, alt: name, size, width, height })
+          setImageKey?.(key || "")
         }}
         onUploadError={(error: Error) => {
           alert(`ERROR! ${error.message}`)

@@ -2,7 +2,6 @@ import { z } from "zod"
 import { Data } from "@measured/puck"
 import { Route } from "next"
 import type { Config } from "@measured/puck"
-import type { NextAuthResult } from "next-auth"
 
 export type OberonConfig = {
   blocks: Config["components"]
@@ -10,6 +9,8 @@ export type OberonConfig = {
 }
 
 export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
+export type AdapterActionGroup = "cms" | "users" | "images" | "pages"
+export type AdapterPermission = "read" | "write"
 
 export const INITIAL_DATA = {
   content: [],
@@ -55,7 +56,7 @@ export const roles = ["user", "admin"] as const
  * Actions
  */
 
-export type ServerActions = {
+export type OberonAdapter = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<User | null>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
@@ -73,9 +74,8 @@ export type ServerActions = {
   getPageData: (url: string) => Promise<Data | null>
   getAllKeys: () => Promise<Route[]>
   getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
-}
-
-export type OberonAdapter = {
-  auth: NextAuthResult["auth"]
-  actions: ServerActions
+  can: (
+    action: AdapterActionGroup,
+    permission?: AdapterPermission,
+  ) => Promise<boolean>
 }

@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import type { ClientAction, OberonConfig, ServerActions } from "./schema"
+import type { ClientAction, OberonConfig, OberonAdapter } from "./schema"
 import { getTitle } from "./utils"
 
 export async function getMetaData(
   { resolvePath }: OberonConfig,
-  { getPageData }: ServerActions,
+  { getPageData }: OberonAdapter,
   path: string[] = [],
   action?: ClientAction,
 ): Promise<Metadata> {

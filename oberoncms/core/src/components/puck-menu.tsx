@@ -1,9 +1,11 @@
 import Link from "next/link"
 import { PropsWithChildren } from "react"
 import { Route } from "next"
-import { signOut, useSession } from "next-auth/react"
+import { signOut } from "next-auth/react"
 import { Button, buttonVariants } from "@oberon/ui/button"
 import { ThemeEditorMenu } from "@oberon/ui/theme"
+import useSWR from "swr"
+import { useOberon } from "@/hooks/use-oberon"
 
 export const PuckMenu = ({
   title,
@@ -12,9 +14,10 @@ export const PuckMenu = ({
 }: PropsWithChildren<
   { title?: string; path: string } | { title: string; path?: string }
 >) => {
-  const { data: session } = useSession()
-  // @ts-expect-error TODO fix global types
-  const isAdmin = session?.user.role === "admin"
+  const { can } = useOberon()
+
+  const { data: showImages } = useSWR("/can/images", () => can("images"))
+  const { data: showUsers } = useSWR("/can/users", () => can("users"))
 
   return (
     <div className="grid w-full grid-cols-3 items-center p-2 text-foreground">
@@ -35,7 +38,7 @@ export const PuckMenu = ({
         >
           Pages
         </Link>
-        {isAdmin && (
+        {showImages && (
           <Link
             className={buttonVariants({ variant: "outline", size: "sm" })}
             href="/cms/images"
@@ -43,7 +46,7 @@ export const PuckMenu = ({
             Images
           </Link>
         )}
-        {isAdmin && (
+        {showUsers && (
           <Link
             className={buttonVariants({ variant: "outline", size: "sm" })}
             href="/cms/users"

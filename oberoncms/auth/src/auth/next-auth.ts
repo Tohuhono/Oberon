@@ -1,8 +1,6 @@
-// TODO: import "server-only"
-
 import { randomBytes } from "crypto"
 import { Resend } from "resend"
-import NextAuth, { NextAuthResult, NextAuthConfig } from "next-auth"
+import NextAuth, { NextAuthConfig } from "next-auth"
 
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
@@ -10,7 +8,6 @@ import type { Adapter } from "next-auth/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
-// const resend = new Resend(process.env.RESEND_SECRET)
 
 export function initAuth(adapter: Adapter) {
   const config = {
@@ -71,12 +68,12 @@ export function initAuth(adapter: Adapter) {
       async signIn({ user, profile }) {
         // Master user override
         if (user?.email && masterEmail && user.email === masterEmail) {
-          // @ts-expect-error TODO fix global type
+          // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
           user.role = "admin"
           return true
         }
         // Existing user or email verification
-        // @ts-expect-error TODO fix global type
+        // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
         if (user?.role) {
           return true
         }
@@ -92,23 +89,23 @@ export function initAuth(adapter: Adapter) {
       },
       jwt({ token, user }) {
         if (user) {
-          // @ts-expect-error TODO fix global type
+          // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
           token.role = user.email === masterEmail ? "admin" : user.role
         }
         return token
       },
       session({ session, token }) {
-        // @ts-expect-error TODO fix global type
+        // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
         session.user.role = token.role
         return session
       },
     },
   } satisfies NextAuthConfig
 
-  // TODO added type annotation to fix https://github.com/nextauthjs/next-auth/discussions/9950
   const nextAuth = NextAuth(config)
 
-  const auth: NextAuthResult["auth"] = nextAuth.auth
+  // TODO added type annotation to fix https://github.com/nextauthjs/next-auth/discussions/9950
+  const auth = nextAuth.auth
 
   const POST = nextAuth.handlers.POST
 
@@ -139,14 +136,3 @@ export function initAuth(adapter: Adapter) {
     },
   }
 }
-/*
-export const authorize = (
-  handler: (req: NextRequest) => Response,
-): ReturnType<NextAuthResult["auth"]> =>
-  auth((req) => {
-    if (!req.auth?.user) {
-      return NextResponse.json(null, { status: 401 })
-    }
-    return handler(req)
-  })
-*/
