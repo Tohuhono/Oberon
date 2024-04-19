@@ -15,8 +15,8 @@ import {
   OberonAdapter,
   ImageSchema,
   INITIAL_DATA,
-  type ClientAction,
-  type Permission,
+  type AdapterActionGroup,
+  type AdapterPermission,
 } from "@oberoncms/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
@@ -26,27 +26,55 @@ import { adapter as authAdapter } from "./db/next-auth-adapter"
 
 import { auth } from "./auth"
 
-// TODO implement auth
+const permissions: Record<
+  "unauthenticated" | "user",
+  Partial<Record<AdapterActionGroup, AdapterPermission>>
+> = {
+  unauthenticated: {
+    pages: "read",
+  },
+  user: {
+    cms: "read",
+    pages: "write",
+    images: "write",
+  },
+}
+
 const can: OberonAdapter["can"] = async (action, permission = "read") => {
   "use server"
-  if (action === "pages" && permission === "read") {
+  // Check unauthenticated first so we can do it outside of request context
+  if (
+    permissions.unauthenticated[action] === permission ||
+    permissions.unauthenticated[action] === "write"
+  ) {
     return true
   }
 
   const session = await auth()
 
-  if (!session?.user) {
-    return false
+  // Authentication will throw if used outside of request context
+  // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
+  switch (session?.user?.role) {
+    case "user":
+      return (
+        permissions.user[action] === permission ||
+        permissions.user[action] === "write"
+      )
+    case "admin":
+      return true
+    default:
+      return false
   }
-
-  return true
 }
 
-// TODO implement auth
-const will = async (action: ClientAction, permission: Permission) => {
-  if (!(await can(action, permission))) {
-    throw new Error("Unauthorized")
+const will = async (
+  action: AdapterActionGroup,
+  permission: AdapterPermission,
+) => {
+  if (await can(action, permission)) {
+    return
   }
+  throw new Error("Unauthorized")
 }
 
 /*
@@ -154,6 +182,7 @@ const deletePage: OberonAdapter["deletePage"] = async (key) => {
 const getAllImages: OberonAdapter["getAllImages"] = async () => {
   "use server"
   await will("images", "read")
+
   const allImages = await db
     .select({
       key: images.key,
@@ -171,6 +200,7 @@ const getAllImages: OberonAdapter["getAllImages"] = async () => {
 const addImage: OberonAdapter["addImage"] = async (data: unknown) => {
   "use server"
   await will("images", "write")
+
   const image = ImageSchema.parse(data)
   await db.insert(images).values(image).execute()
   return getAllImages()
@@ -243,7 +273,7 @@ const addUser: OberonAdapter["addUser"] = async (data: unknown) => {
   try {
     const { id } = await authAdapter.createUser({
       email,
-      // @ts-expect-error TODO fix global auth
+      // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
       role,
       emailVerified: null,
     })

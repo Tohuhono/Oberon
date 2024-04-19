@@ -4,23 +4,21 @@ import { Route } from "next"
 import { signOut } from "next-auth/react"
 import { Button, buttonVariants } from "@oberon/ui/button"
 import { ThemeEditorMenu } from "@oberon/ui/theme"
-
-type DescriminatedProps =
-  | { title?: string; path: string }
-  | { title: string; path?: string }
+import useSWR from "swr"
+import { useOberon } from "@/hooks/use-oberon"
 
 export const PuckMenu = ({
   title,
   path,
-  showImages,
-  showUsers,
   children,
 }: PropsWithChildren<
-  DescriminatedProps & {
-    showImages?: boolean
-    showUsers?: boolean
-  }
+  { title?: string; path: string } | { title: string; path?: string }
 >) => {
+  const { can } = useOberon()
+
+  const { data: showImages } = useSWR("/can/images", () => can("images"))
+  const { data: showUsers } = useSWR("/can/users", () => can("users"))
+
   return (
     <div className="grid w-full grid-cols-3 items-center p-2 text-foreground">
       <div className="flex justify-start gap-1">{children}</div>

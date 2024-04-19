@@ -9,7 +9,8 @@ export type OberonConfig = {
 }
 
 export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
-export type Permission = "read" | "write"
+export type AdapterActionGroup = "cms" | "users" | "images" | "pages"
+export type AdapterPermission = "read" | "write"
 
 export const INITIAL_DATA = {
   content: [],
@@ -73,5 +74,8 @@ export type OberonAdapter = {
   getPageData: (url: string) => Promise<Data | null>
   getAllKeys: () => Promise<Route[]>
   getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
-  can: (action: ClientAction, permission?: Permission) => Promise<boolean>
+  can: (
+    action: AdapterActionGroup,
+    permission?: AdapterPermission,
+  ) => Promise<boolean>
 }

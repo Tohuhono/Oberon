@@ -9,13 +9,12 @@ export const useOberonImages = () => {
     data: images,
     mutate,
     isLoading: loading,
-  } = useSWR("/oberon/images", getAllImages)
+  } = useSWR("/oberon/images", () => getAllImages())
 
   const add = (image: OberonImage) =>
-    mutate(async () => {
-      await addImage(image)
-      return await getAllImages()
+    mutate(async () => await addImage(image), {
+      optimisticData: (currentData) => [...(currentData || []), image],
     })
 
-  return { images, loading, add, mutate }
+  return { images, loading, add }
 }

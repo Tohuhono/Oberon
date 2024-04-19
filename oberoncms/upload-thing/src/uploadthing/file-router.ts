@@ -12,7 +12,7 @@ const f = createUploadthing()
 
 // TODO dry = async
 // FileRouter for your app, can contain multiple FileRoutes
-function initFileRouter({ can, addImage }: OberonAdapter): FileRouter {
+function initFileRouter({ can }: OberonAdapter): FileRouter {
   const imageMiddleware = async () => {
     // If you throw, the user will not be able to upload
     if (!(await can("images", "write"))) {
@@ -29,32 +29,22 @@ function initFileRouter({ can, addImage }: OberonAdapter): FileRouter {
     imageUploader: f({ image: { maxFileSize: "4MB" } })
       // Set permissions and file types for this FileRoute
       .middleware(imageMiddleware)
-      .onUploadComplete(
-        async ({ metadata, file: { key, url, name, size } }) => {
-          // This code RUNS ON YOUR SERVER after upload
-          // TODO add image type
-          const { width, height } = await getImageSize(url)
-          await addImage({ key, url, alt: name, size, width, height })
-          console.log("Image Upload complete for userId:", metadata.creator)
-        },
-      ),
+      .onUploadComplete(async ({ metadata: _metadata, file: { url } }) => {
+        // This code is unauthorised
+        // TODO add image type
+        const { width, height } = await getImageSize(url)
+        return { width, height }
+      }),
     singleImageUploader: f({
       image: { maxFileSize: "4MB", maxFileCount: 1 },
     })
       .middleware(imageMiddleware)
-      .onUploadComplete(
-        async ({ metadata, file: { key, url, name, size } }) => {
-          // This code RUNS ON YOUR SERVER after upload
-          // TODO add image type
-          const { width, height } = await getImageSize(url)
-          await addImage({ key, url, alt: name, size, width, height })
-          console.log(
-            "Single Image Upload complete for userId:",
-            metadata.creator,
-          )
-          return { url, thor: "hmmm" }
-        },
-      ),
+      .onUploadComplete(async ({ metadata: _metadata, file: { url } }) => {
+        // This code is unauthorised
+        // TODO add image type
+        const { width, height } = await getImageSize(url)
+        return { width, height }
+      }),
   }
 }
 
