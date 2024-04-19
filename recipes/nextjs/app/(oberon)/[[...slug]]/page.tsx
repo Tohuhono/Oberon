@@ -1,11 +1,12 @@
 import { Render } from "@oberoncms/core/render"
 
 import { getMetaData } from "@oberoncms/core"
-import { actions } from "@/app/(oberon)/server-config"
+
+import { adapter } from "@oberoncms/adapter-turso"
 import { config } from "@/app/(oberon)/client-config"
 
 export async function generateStaticParams() {
-  return await actions.getAllPaths()
+  return await adapter.getAllPaths()
 }
 
 export async function generateMetadata({
@@ -13,7 +14,7 @@ export async function generateMetadata({
 }: {
   params: { framework: string; uuid: string; slug: string[] }
 }) {
-  return getMetaData(config, actions, slug)
+  return getMetaData(config, adapter, slug)
 }
 
 export default function OberonRender({
@@ -21,5 +22,5 @@ export default function OberonRender({
 }: {
   params: { slug?: [] }
 }) {
-  return <Render slug={slug} actions={actions} config={config} />
+  return <Render slug={slug} adapter={adapter} config={config} />
 }

@@ -1,21 +1,26 @@
 import Link from "next/link"
 import { PropsWithChildren } from "react"
 import { Route } from "next"
-import { signOut, useSession } from "next-auth/react"
+import { signOut } from "next-auth/react"
 import { Button, buttonVariants } from "@oberon/ui/button"
 import { ThemeEditorMenu } from "@oberon/ui/theme"
+
+type DescriminatedProps =
+  | { title?: string; path: string }
+  | { title: string; path?: string }
 
 export const PuckMenu = ({
   title,
   path,
+  showImages,
+  showUsers,
   children,
 }: PropsWithChildren<
-  { title?: string; path: string } | { title: string; path?: string }
+  DescriminatedProps & {
+    showImages?: boolean
+    showUsers?: boolean
+  }
 >) => {
-  const { data: session } = useSession()
-  // @ts-expect-error TODO fix global types
-  const isAdmin = session?.user.role === "admin"
-
   return (
     <div className="grid w-full grid-cols-3 items-center p-2 text-foreground">
       <div className="flex justify-start gap-1">{children}</div>
@@ -35,7 +40,7 @@ export const PuckMenu = ({
         >
           Pages
         </Link>
-        {isAdmin && (
+        {showImages && (
           <Link
             className={buttonVariants({ variant: "outline", size: "sm" })}
             href="/cms/images"
@@ -43,7 +48,7 @@ export const PuckMenu = ({
             Images
           </Link>
         )}
-        {isAdmin && (
+        {showUsers && (
           <Link
             className={buttonVariants({ variant: "outline", size: "sm" })}
             href="/cms/users"

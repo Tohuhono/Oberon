@@ -1,16 +1,16 @@
 import { Render as PuckRender } from "@measured/puck/rsc"
 import { notFound } from "next/navigation"
 import type { Config } from "@measured/puck"
-import { ServerActions, type OberonConfig } from "./app/schema"
+import { OberonAdapter, type OberonConfig } from "./app/schema"
 
 export async function Render({
   slug = [],
-  actions: { getPageData },
   config: { blocks, resolvePath },
+  adapter: { getPageData },
 }: {
   slug?: string[]
   config: OberonConfig
-  actions: ServerActions
+  adapter: OberonAdapter
 }) {
   const path = resolvePath(slug)
 

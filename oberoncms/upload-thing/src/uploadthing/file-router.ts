@@ -12,20 +12,16 @@ const f = createUploadthing()
 
 // TODO dry = async
 // FileRouter for your app, can contain multiple FileRoutes
-function initFileRouter({
-  auth,
-  actions: { addImage },
-}: OberonAdapter): FileRouter {
+function initFileRouter({ can, addImage }: OberonAdapter): FileRouter {
   const imageMiddleware = async () => {
-    // This code runs on your server before upload
-    const session = await auth()
-
     // If you throw, the user will not be able to upload
-    // @ts-expect-error TODO fix global types
-    if (!session?.user.email) throw new UploadThingError("Unauthorized")
+    if (!(await can("images", "write"))) {
+      throw new UploadThingError("Unauthorized")
+    }
 
+    // TODO getUser
     // Whatever is returned here is accessible in onUploadComplete as `metadata`
-    return { creator: session.user.email }
+    return { creator: "unkown" }
   }
 
   return {

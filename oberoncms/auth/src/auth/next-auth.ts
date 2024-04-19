@@ -1,5 +1,3 @@
-// TODO: import "server-only"
-
 import { randomBytes } from "crypto"
 import { Resend } from "resend"
 import NextAuth, { NextAuthResult, NextAuthConfig } from "next-auth"
@@ -10,7 +8,6 @@ import type { Adapter } from "next-auth/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
-// const resend = new Resend(process.env.RESEND_SECRET)
 
 export function initAuth(adapter: Adapter) {
   const config = {
@@ -139,14 +136,3 @@ export function initAuth(adapter: Adapter) {
     },
   }
 }
-/*
-export const authorize = (
-  handler: (req: NextRequest) => Response,
-): ReturnType<NextAuthResult["auth"]> =>
-  auth((req) => {
-    if (!req.auth?.user) {
-      return NextResponse.json(null, { status: 401 })
-    }
-    return handler(req)
-  })
-*/
