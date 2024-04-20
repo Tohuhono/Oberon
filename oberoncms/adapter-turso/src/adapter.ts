@@ -229,14 +229,23 @@ const deleteImage = async (data: Pick<Image, "key">) => {
 /*
  * User actions
  */
+const getAllUsersCached = cache(
+  async () => {
+    const allUsers = await db
+      .select({ id: users.id, email: users.email, role: users.role })
+      .from(users)
+      .execute()
+    return allUsers || []
+  },
+  undefined,
+  {
+    tags: ["oberon-users"],
+  },
+)
 const getAllUsers: OberonAdapter["getAllUsers"] = async () => {
   "use server"
   await will("users", "read")
-  const allUsers = await db
-    .select({ id: users.id, email: users.email, role: users.role })
-    .from(users)
-    .execute()
-  return allUsers || []
+  return getAllUsersCached()
 }
 
 const changeRole: OberonAdapter["changeRole"] = async (data: unknown) => {
@@ -245,6 +254,7 @@ const changeRole: OberonAdapter["changeRole"] = async (data: unknown) => {
   const { role, id } = ChangeRoleSchema.parse(data)
   try {
     await db.update(users).set({ role }).where(eq(users.id, id))
+    revalidateTag("oberon-users")
     return { role, id }
   } catch (_error) {
     console.error("Change role failed")
@@ -258,6 +268,7 @@ const deleteUser: OberonAdapter["deleteUser"] = async (data: unknown) => {
   const { id } = DeleteUserSchema.parse(data)
   try {
     await authAdapter.deleteUser(id)
+    revalidateTag("oberon-users")
     return { id }
   } catch (_error) {
     console.error("Delete user failed")
@@ -277,6 +288,7 @@ const addUser: OberonAdapter["addUser"] = async (data: unknown) => {
       role,
       emailVerified: null,
     })
+    revalidateTag("oberon-users")
     return { id, email, role }
   } catch (_error) {
     console.error("Create user failed")

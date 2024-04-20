@@ -10,7 +10,7 @@
     "./eslint.config": "./eslint.config.mjs",
     "./eslint-react.config": "./eslint-react.config.mjs",
     "./eslint-next.config": "./eslint-next.config.mjs",
-    "./tailwind": "./dist/tailwind.config.js",
+    "./tailwind": "./tailwind.config.ts",
     "./vite": "./dist/vite.config.js"
   },
   "bin": {

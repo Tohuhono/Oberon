@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Fragment, useState } from "react"
+import { Fragment, startTransition, useOptimistic } from "react"
 
 import { Button } from "@oberon/ui/button"
 import { Input } from "@oberon/ui/input"
@@ -25,64 +25,99 @@ import {
 import { useOberon } from "@/hooks/use-oberon"
 import { AddUserSchema, User, roles } from "@/app/schema"
 
-export function Users({ users: initialUsers }: { users: User[] }) {
+type OptimisticUser = User & { pending?: boolean }
+
+const useOberonUsers = (users: User[]) => {
   const { addUser, changeRole, deleteUser } = useOberon()
-  const [users, setUsers] = useState(initialUsers)
+  const [optimisticUsers, optimisticUserUpdate] =
+    useOptimistic<OptimisticUser[]>(users)
+
+  return {
+    users: optimisticUsers,
+    addUser: (user: Pick<User, "email" | "role">) => {
+      startTransition(() => {
+        optimisticUserUpdate([
+          ...optimisticUsers,
+          { ...user, id: user.email, pending: true },
+        ])
+      })
+      return addUser(user)
+    },
+    deleteUser: async (id: User["id"]) => {
+      startTransition(() =>
+        optimisticUserUpdate(
+          optimisticUsers.map((user) =>
+            user.id === id ? { ...user, pending: true } : user,
+          ),
+        ),
+      )
+      return deleteUser({ id })
+    },
+    changeRole: async (id: User["id"], role: User["role"]) => {
+      startTransition(() =>
+        optimisticUserUpdate(
+          optimisticUsers.map((user) =>
+            user.id === id ? { ...user, role, pending: true } : user,
+          ),
+        ),
+      )
+      return changeRole({ id, role })
+    },
+  }
+}
+
+export function Users({ users: serverUsers }: { users: User[] }) {
+  const { users, addUser, deleteUser, changeRole } = useOberonUsers(serverUsers)
 
   const form = useForm<z.infer<typeof AddUserSchema>>({
     resolver: zodResolver(AddUserSchema),
     defaultValues: {
       email: "",
-      role: "admin",
+      role: "user",
     },
   })
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(async (data) => {
-          const user = await addUser(data)
-          if (user) {
-            setUsers([...users, user])
-          }
-        })}
-        className="space-y-8"
-      >
-        <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-1 pt-3">
-          {users.map(({ role, id, email }) => {
-            return (
-              <Fragment key={id}>
-                <div className="pr-6">{email}</div>
-                <Select
-                  onValueChange={(role: User["role"]) =>
-                    changeRole({ id, role })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={role} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roles.map((role) => (
-                      <SelectItem key={role} value={role}>
-                        {role}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => {
-                    setUsers(users.filter((user) => user.id === id))
-                    deleteUser({ id })
-                  }}
-                >
-                  Delete
-                </Button>
-              </Fragment>
-            )
-          })}
+    <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center justify gap-1 pt-3">
+      {users.map(({ role, id, email, pending }) => {
+        return (
+          <Fragment key={id}>
+            <div className="pr-6">{email}</div>
+            <Select
+              disabled={pending}
+              onValueChange={(role: User["role"]) => changeRole(id, role)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={role} />
+              </SelectTrigger>
+              <SelectContent>
+                {roles.map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {role}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={pending}
+              onClick={() => deleteUser(id)}
+            >
+              Delete
+            </Button>
+          </Fragment>
+        )
+      })}
 
+      <Form {...form}>
+        <form
+          className="contents"
+          onSubmit={form.handleSubmit((data) => {
+            addUser(data)
+            form.reset()
+          })}
+        >
           <FormField
             control={form.control}
             name="email"
@@ -91,7 +126,6 @@ export function Users({ users: initialUsers }: { users: User[] }) {
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -117,13 +151,14 @@ export function Users({ users: initialUsers }: { users: User[] }) {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
               </FormItem>
             )}
           />
           <Button type="submit">Add</Button>
-        </div>
-      </form>
-    </Form>
+          <FormMessage>{form.formState.errors.email?.message}</FormMessage>
+          <FormMessage>{form.formState.errors.role?.message}</FormMessage>
+        </form>
+      </Form>
+    </div>
   )
 }
