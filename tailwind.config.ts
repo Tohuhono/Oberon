@@ -1,13 +1,23 @@
 import type { Config } from "tailwindcss"
-import animate from "tailwindcss-animate"
-import typography from "@tailwindcss/typography"
 
-export const config: Config = {
+// TODO uploadthing fix styles
+import { withUt } from "uploadthing/tw"
+
+const config = {
   darkMode: ["class"],
   future: {
     hoverOnlyWhenSupported: true,
   },
-  content: [],
+  content: [
+    "./node_modules/@oberoncms/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@datacom-digital/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./.oberon/tailwind.classes",
+  ],
   theme: {
     extend: {
       spacing: {
@@ -76,5 +86,7 @@ export const config: Config = {
       },
     },
   },
-  plugins: [animate, typography],
-}
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+} satisfies Config
+
+export default withUt(config)
