@@ -23,18 +23,18 @@ import {
 } from "@oberon/ui/form"
 
 import { useOberon } from "@/hooks/use-oberon"
-import { AddUserSchema, User, roles } from "@/app/schema"
+import { AddUserSchema, OberonUser, roles } from "@/app/schema"
 
-type OptimisticUser = User & { pending?: boolean }
+type OptimisticUser = OberonUser & { pending?: boolean }
 
-const useOberonUsers = (users: User[]) => {
+const useOberonUsers = (users: OberonUser[]) => {
   const { addUser, changeRole, deleteUser } = useOberon()
   const [optimisticUsers, optimisticUserUpdate] =
     useOptimistic<OptimisticUser[]>(users)
 
   return {
     users: optimisticUsers,
-    addUser: (user: Pick<User, "email" | "role">) => {
+    addUser: (user: Pick<OberonUser, "email" | "role">) => {
       startTransition(() => {
         optimisticUserUpdate([
           ...optimisticUsers,
@@ -43,7 +43,7 @@ const useOberonUsers = (users: User[]) => {
       })
       return addUser(user)
     },
-    deleteUser: async (id: User["id"]) => {
+    deleteUser: async (id: OberonUser["id"]) => {
       startTransition(() =>
         optimisticUserUpdate(
           optimisticUsers.map((user) =>
@@ -53,7 +53,7 @@ const useOberonUsers = (users: User[]) => {
       )
       return deleteUser({ id })
     },
-    changeRole: async (id: User["id"], role: User["role"]) => {
+    changeRole: async (id: OberonUser["id"], role: OberonUser["role"]) => {
       startTransition(() =>
         optimisticUserUpdate(
           optimisticUsers.map((user) =>
@@ -66,7 +66,7 @@ const useOberonUsers = (users: User[]) => {
   }
 }
 
-export function Users({ users: serverUsers }: { users: User[] }) {
+export function Users({ users: serverUsers }: { users: OberonUser[] }) {
   const { users, addUser, deleteUser, changeRole } = useOberonUsers(serverUsers)
 
   const form = useForm<z.infer<typeof AddUserSchema>>({
@@ -85,7 +85,7 @@ export function Users({ users: serverUsers }: { users: User[] }) {
             <div className="pr-6">{email}</div>
             <Select
               disabled={pending}
-              onValueChange={(role: User["role"]) => changeRole(id, role)}
+              onValueChange={(role: OberonUser["role"]) => changeRole(id, role)}
             >
               <SelectTrigger>
                 <SelectValue placeholder={role} />

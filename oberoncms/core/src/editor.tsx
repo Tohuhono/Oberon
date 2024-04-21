@@ -1,11 +1,11 @@
-import type { Route } from "next"
 import type { Data } from "@measured/puck"
 import { DynamicTailwind, PreviewFrameTailwind } from "@oberon/ui/theme"
 import type {
   OberonImage,
-  User,
+  OberonUser,
   OberonConfig,
   OberonAdapter,
+  OberonPage,
 } from "./app/schema"
 import { getTitle } from "./app/utils"
 import { OberonProvider } from "./components/provider"
@@ -20,9 +20,9 @@ export { useOberonImages } from "./hooks/use-oberon-images"
 
 type DescriminatedProps =
   | { action: "edit" | "preview"; data: Data | null }
-  | { action: "users"; data: User[] }
+  | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: Route[] }
+  | { action: "pages"; data: OberonPage[] }
 
 export type OberonServerProps = DescriminatedProps & {
   adapter: OberonAdapter
@@ -84,7 +84,7 @@ function Client({
       <PuckMenu title={getTitle(action, slug)} path={`/cms/${action}`} />
       {action === "users" && <Users users={data} />}
       {action === "images" && <Images images={data} />}
-      {action === "pages" && <AllPages routes={data} />}
+      {action === "pages" && <AllPages pages={data} />}
     </>
   )
 }

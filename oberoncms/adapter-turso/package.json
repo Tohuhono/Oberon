@@ -20,7 +20,7 @@
   },
   "type": "module",
   "exports": {
-    ".": "./dist/adapter.js",
+    ".": "./dist/index.js",
     "./router": "./dist/router.js"
   },
   "bin": {

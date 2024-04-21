@@ -2,7 +2,6 @@ import "use-server"
 
 import type { Data } from "@measured/puck"
 import { eq } from "drizzle-orm"
-import { Route } from "next"
 import {
   revalidatePath,
   revalidateTag,
@@ -17,14 +16,16 @@ import {
   INITIAL_DATA,
   type AdapterActionGroup,
   type AdapterPermission,
+  PageSchema,
+  DeletePageSchema,
 } from "@oberoncms/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"
 import { images, pages, users } from "src/db/schema"
-import { adapter as authAdapter } from "./db/next-auth-adapter"
 
-import { auth } from "./auth"
+import { auth } from "@/auth"
+import { adapter as authAdapter } from "@/db/next-auth-adapter"
 
 const permissions: Record<
   "unauthenticated" | "user",
@@ -97,7 +98,7 @@ const getAllPaths: OberonAdapter["getAllPaths"] = async () => {
   return getAllPathsCached()
 }
 
-const getAllKeysCached = cache(
+const getAllPagesCached = cache(
   async () => {
     const sortPages = (a: { key: string }, b: { key: string }) => {
       if (a.key < b.key) {
@@ -109,16 +110,16 @@ const getAllKeysCached = cache(
       return 0
     }
     const result = await db.select({ key: pages.key }).from(pages)
-    const data = result.sort(sortPages).map(({ key }) => key as Route)
+    const data = result.sort(sortPages)
     return data
   },
   undefined,
   { tags: ["oberon-pages"] },
 )
-const getAllKeys: OberonAdapter["getAllKeys"] = async () => {
+const getAllPages: OberonAdapter["getAllPages"] = async () => {
   "use server"
   await will("pages", "read")
-  return getAllKeysCached()
+  return getAllPagesCached()
 }
 
 // TODO zod ; maybeGet
@@ -140,12 +141,23 @@ const getPageData: OberonAdapter["getPageData"] = async (url) => {
   return getPageDataCached(url)
 }
 
-// TODO zod ; return value
-const addPage: OberonAdapter["addPage"] = async (key) => {
+// TODO return value
+const addPage: OberonAdapter["addPage"] = async (data: unknown) => {
   "use server"
   await will("pages", "write")
+  const { key } = PageSchema.parse(data)
   const dataJSON = JSON.stringify(INITIAL_DATA)
   await db.insert(pages).values({ key, data: dataJSON })
+  revalidatePath(key)
+  revalidateTag("oberon-pages")
+}
+
+// TODO return value
+const deletePage: OberonAdapter["deletePage"] = async (data) => {
+  "use server"
+  await will("pages", "write")
+  const { key } = DeletePageSchema.parse(data)
+  await db.delete(pages).where(eq(pages.key, key))
   revalidatePath(key)
   revalidateTag("oberon-pages")
 }
@@ -165,15 +177,6 @@ const publishPageData: OberonAdapter["publishPageData"] = async ({
 
   console.log(`Revalidating ${key}`)
   revalidatePath(key)
-}
-
-// TODO zod ; return value
-const deletePage: OberonAdapter["deletePage"] = async (key) => {
-  "use server"
-  await will("pages", "write")
-  await db.delete(pages).where(eq(pages.key, key))
-  revalidatePath(key)
-  revalidateTag("oberon-pages")
 }
 
 /*
@@ -308,7 +311,7 @@ export const adapter = {
   deletePage,
   getPageData,
   publishPageData,
-  getAllKeys,
+  getAllPages,
   getAllPaths,
   can,
 } satisfies OberonAdapter
