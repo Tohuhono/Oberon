@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-// TODO import "server-only"
-
 import { drizzle } from "drizzle-orm/libsql"
 import { createClient } from "@libsql/client/web"
 

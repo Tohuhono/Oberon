@@ -1,0 +1,1 @@
+export { adapter } from "@/adapter"
