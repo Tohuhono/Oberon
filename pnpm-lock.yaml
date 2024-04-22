@@ -15,7 +15,7 @@ importers:
       '@changesets/cli':
         specifier: ^2.27.1
         version: 2.27.1
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:packages/dev
       concurrently:
@@ -70,12 +70,12 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@oberon/dev':
-        specifier: workspace:*
-        version: link:../../packages/dev
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/dev
       '@types/node':
         specifier: ^20.11.30
         version: 20.11.30
@@ -113,15 +113,15 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@oberon/dev':
-        specifier: workspace:*
-        version: link:../../packages/dev
-      '@oberon/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/dev
+      '@tohuhono/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@types/node':
         specifier: ^20
         version: 20.11.30
@@ -189,7 +189,7 @@ importers:
       '@measured/puck':
         specifier: ^0.14.1
         version: 0.14.1(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/dev
       '@types/node':
@@ -216,7 +216,7 @@ importers:
       '@auth/core':
         specifier: 0.29.0
         version: 0.29.0
-      '@oberon/ui':
+      '@tohuhono/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       next:
@@ -235,7 +235,7 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
     devDependencies:
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/dev
       '@types/node':
@@ -256,15 +256,15 @@ importers:
 
   oberoncms/components:
     dependencies:
-      '@oberon/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@tohuhono/puck-blocks':
         specifier: workspace:*
         version: link:../../puck/blocks
       '@tohuhono/puck-rich-text':
         specifier: workspace:*
         version: link:../../puck/rich-text
+      '@tohuhono/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       next:
         specifier: ^14.2.1
         version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
@@ -275,7 +275,7 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/dev
       '@types/node':
@@ -302,10 +302,10 @@ importers:
       '@measured/puck':
         specifier: ^0.14.1
         version: 0.14.1(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@oberon/ui':
+      '@tohuhono/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@oberon/utils':
+      '@tohuhono/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       filesize:
@@ -333,7 +333,7 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/dev
       '@types/node':
@@ -390,7 +390,7 @@ importers:
       '@measured/puck':
         specifier: ^0.14.1
         version: 0.14.1(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/dev
       '@types/react':
@@ -493,9 +493,6 @@ importers:
 
   packages/ui:
     dependencies:
-      '@oberon/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.0.6
         version: 2.0.6(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)
@@ -517,6 +514,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)
+      '@tohuhono/utils':
+        specifier: workspace:*
+        version: link:../utils
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -542,7 +542,7 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
     devDependencies:
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../dev
       '@types/node':
@@ -576,7 +576,7 @@ importers:
         specifier: ^2.2.1
         version: 2.2.2
     devDependencies:
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../dev
       '@types/node':
@@ -597,7 +597,7 @@ importers:
 
   puck/blocks:
     dependencies:
-      '@oberon/ui':
+      '@tohuhono/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       react:
@@ -610,7 +610,7 @@ importers:
       '@measured/puck':
         specifier: ^0.14.1
         version: 0.14.1(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/dev
       '@types/react':
@@ -689,7 +689,7 @@ importers:
         specifier: '>=18.2.0'
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@oberon/dev':
+      '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/dev
       '@types/dompurify':
