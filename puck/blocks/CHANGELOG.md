@@ -1,5 +1,16 @@
 # @tohuhono/puck-blocks
 
+## 0.3.0
+
+### Minor Changes
+
+- d4f6a5b: Publish dependant packages
+
+### Patch Changes
+
+- Updated dependencies [d4f6a5b]
+  - @tohuhono/ui@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes

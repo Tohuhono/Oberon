@@ -1,5 +1,16 @@
 # oberon-cms-example
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [d4f6a5b]
+  - @oberoncms/adapter-turso@0.4.0
+  - @oberoncms/upload-thing@0.4.0
+  - @oberoncms/components@0.3.0
+  - @oberoncms/auth@0.4.0
+  - @oberoncms/core@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

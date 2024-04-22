@@ -1,5 +1,16 @@
 # @tohuhono/puck-upload-thing
 
+## 0.4.0
+
+### Minor Changes
+
+- d4f6a5b: Publish dependant packages
+
+### Patch Changes
+
+- Updated dependencies [d4f6a5b]
+  - @oberoncms/core@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

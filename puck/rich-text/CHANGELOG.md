@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.3.0
+
+### Minor Changes
+
+- d4f6a5b: Publish dependant packages
+
 ## 0.2.0
 
 ### Minor Changes

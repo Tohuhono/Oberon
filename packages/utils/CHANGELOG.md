@@ -1,5 +1,11 @@
 # @oberon/utils
 
+## 0.2.0
+
+### Minor Changes
+
+- d4f6a5b: Publish dependant packages
+
 ## 0.1.0
 
 ### Minor Changes
