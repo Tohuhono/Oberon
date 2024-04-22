@@ -1,4 +1,4 @@
-import type { Data } from "@measured/puck"
+import type { Config, Data } from "@measured/puck"
 import { DynamicTailwind, PreviewFrameTailwind } from "@oberon/ui/theme"
 import type {
   OberonImage,
@@ -29,6 +29,28 @@ export type OberonServerProps = DescriminatedProps & {
   slug: string
 }
 
+const editorConfig: Partial<Config> = {
+  root: {
+    render: ({ children }) => (
+      <>
+        <PreviewFrameTailwind />
+        {children}
+      </>
+    ),
+  },
+}
+
+const previewConfig: Partial<Config> = {
+  root: {
+    render: ({ children }) => (
+      <>
+        <DynamicTailwind />
+        {children}
+      </>
+    ),
+  },
+}
+
 function Client({
   action,
   data,
@@ -43,17 +65,7 @@ function Client({
       <Editor
         path={slug}
         data={data}
-        config={{
-          root: {
-            render: ({ children }) => (
-              <>
-                <PreviewFrameTailwind />
-                {children}
-              </>
-            ),
-          },
-          components: blocks,
-        }}
+        config={{ ...editorConfig, components: blocks }}
       />
     )
   }
@@ -63,17 +75,7 @@ function Client({
       <Preview
         path={slug}
         data={data}
-        config={{
-          root: {
-            render: ({ children }) => (
-              <>
-                <DynamicTailwind />
-                {children}
-              </>
-            ),
-          },
-          components: blocks,
-        }}
+        config={{ ...previewConfig, components: blocks }}
       />
     )
   }

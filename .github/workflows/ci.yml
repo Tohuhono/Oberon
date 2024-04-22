@@ -54,9 +54,9 @@ jobs:
     env:
       STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
       MESSAGE: |
-        "Latest deployments available at: \
-          tohuhono: ${{ needs.deploy_tohuhono.outputs.url }} \
-          rich-text: ${{ needs.deploy_rich_text.outputs.url }} \
+        "Latest deployments available at: \\n\
+          tohuhono: ${{ needs.deploy_tohuhono.outputs.url }} \\n\
+          rich-text: ${{ needs.deploy_rich_text.outputs.url }} \\n\
           playground: ${{ needs.deploy_playground.outputs.url }}"
     steps:
       - name: Add preview URL to job summary
