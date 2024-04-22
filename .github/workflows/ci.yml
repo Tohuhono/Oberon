@@ -53,7 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
-      MESSAGE: "Latest deployment available at ${{ needs.deploy.outputs.url }}"
+      MESSAGE: |
+        "Latest deployments available at:\n ${{ needs.deploy_tohuhono.outputs.url }} \n ${{ needs.deploy_rich_text.outputs.url }} \n ${{ needs.deploy_playground.outputs.url }}"
+
     steps:
       - name: Add preview URL to job summary
         run: |
@@ -176,5 +178,5 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.DEV_PLAYGROUND_VERCEL_ID }}
     with:
-      url: ${{ needs.deploy_rich_text.outputs.url }}
+      url: ${{ needs.deploy_playground.outputs.url }}
       domain: playground.tohuhono.com
