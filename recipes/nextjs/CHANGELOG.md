@@ -1,5 +1,28 @@
 # oberon-cms-example
 
+## 0.3.0
+
+### Minor Changes
+
+- 5a0a961: Update theme
+  Propogate theme to preview iframe
+  Correctly invalidate server side cache on page mutate
+  Add createPage oberon action
+  Add example dashboard to recipe (maybe remvoe later?)
+- e10807b: Impliment role based authorization
+
+### Patch Changes
+
+- Updated dependencies [dd9dc69]
+- Updated dependencies [39b03d3]
+- Updated dependencies [5a0a961]
+- Updated dependencies [e10807b]
+  - @oberoncms/adapter-turso@0.3.0
+  - @oberoncms/core@0.3.0
+  - @oberoncms/upload-thing@0.3.0
+  - @oberoncms/auth@0.3.0
+  - @oberoncms/components@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

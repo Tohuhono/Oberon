@@ -1,5 +1,27 @@
 # @oberoncms/adapter-turso
 
+## 0.3.0
+
+### Minor Changes
+
+- dd9dc69: Implement optimistic pages
+- 39b03d3: Optimistically update the ui for oberon users
+- 5a0a961: Update theme
+  Propogate theme to preview iframe
+  Correctly invalidate server side cache on page mutate
+  Add createPage oberon action
+  Add example dashboard to recipe (maybe remvoe later?)
+- e10807b: Impliment role based authorization
+
+### Patch Changes
+
+- Updated dependencies [dd9dc69]
+- Updated dependencies [39b03d3]
+- Updated dependencies [5a0a961]
+- Updated dependencies [e10807b]
+  - @oberoncms/core@0.3.0
+  - @oberoncms/auth@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
