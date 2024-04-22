@@ -10,18 +10,6 @@ export const metadata = {
   description: "Built with puck by Tohuhono",
 }
 
-const isDarkMode = () => {
-  console.log("2isDarkMode?")
-  if (typeof localStorage !== "undefined" && localStorage.theme === "dark") {
-    return true
-  }
-  if (typeof localStorage !== "undefined" && localStorage.theme === "light") {
-    return false
-  }
-  console.log("2isDarkMode matchMedia")
-  return window?.matchMedia("(prefers-color-scheme: dark)").matches
-}
-
 // Inline script to prevent fouc
 // suppressHydrationWarning added to html tag
 const ApplyMode = () => (

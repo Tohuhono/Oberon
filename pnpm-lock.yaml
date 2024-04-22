@@ -682,6 +682,9 @@ importers:
       lucide-react:
         specifier: ^0.358.0
         version: 0.358.0(react@18.2.0)
+      next:
+        specifier: ^14.2.1
+        version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: '>=18.2.0'
         version: 18.2.0
@@ -707,9 +710,6 @@ importers:
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
-      next:
-        specifier: ^14.2.1
-        version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
       typescript:
         specifier: 5.4.2
         version: 5.4.2
