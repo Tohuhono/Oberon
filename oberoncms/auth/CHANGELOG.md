@@ -1,5 +1,17 @@
 # @oberoncms/auth
 
+## 0.3.0
+
+### Minor Changes
+
+- e10807b: Impliment role based authorization
+
+### Patch Changes
+
+- Updated dependencies [39b03d3]
+- Updated dependencies [5a0a961]
+  - @oberon/ui@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes

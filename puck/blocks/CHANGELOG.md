@@ -1,5 +1,13 @@
 # @tohuhono/puck-blocks
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [39b03d3]
+- Updated dependencies [5a0a961]
+  - @oberon/ui@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes
