@@ -157,7 +157,7 @@ jobs:
   promote_tohuhono:
     name: Deploy Tohuhono
     needs: [deploy_tohuhono, test-status]
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: always() && success() && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -170,7 +170,7 @@ jobs:
   promote_rich_text:
     name: Deploy Rich Text
     needs: [deploy_rich_text, test-status]
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: always() && success() && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -183,7 +183,7 @@ jobs:
   promote_playground:
     name: Deploy Oberon Playground
     needs: [deploy_playground, test-status]
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: always() && success() && ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
