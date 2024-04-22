@@ -52,7 +52,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Script strategy="beforeInteractive">
+        <Script id="dark-mode" strategy="beforeInteractive">
           {`
   const isDarkMode = () => {
     console.log('3isDarkMode?')
