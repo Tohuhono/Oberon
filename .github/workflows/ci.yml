@@ -14,8 +14,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changed-packages:
+    name: Determine which packages changed
+    uses: ./.github/workflows/changed-packages.yml
+
   deploy_tohuhono:
     name: Deploy Tohuhono
+    needs: [changed-packages]
+    if: ${{ contains(needs.changed-packages.outputs.changed_packages), '@oberon/tohuhono') }}
     uses: ./.github/workflows/deploy.yml
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
@@ -26,6 +32,8 @@ jobs:
 
   deploy_rich_text:
     name: Deploy Rich Text
+    needs: [changed-packages]
+    if: ${{ contains(needs.changed-packages.outputs.changed_packages), '@oberon/rich-text-demo') }}
     uses: ./.github/workflows/deploy.yml
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
@@ -36,6 +44,8 @@ jobs:
 
   deploy_playground:
     name: Deploy Oberon Playground
+    needs: [changed-packages]
+    if: ${{ contains(needs.changed-packages.outputs.changed_packages), 'oberon-cms-example') }}
     uses: ./.github/workflows/deploy.yml
     with:
       environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
@@ -55,9 +65,9 @@ jobs:
       STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
       MESSAGE: |
         Latest deployments available at:
-        [tohuhono](${{ needs.deploy_tohuhono.outputs.url }})
-        [rich-text](${{ needs.deploy_rich_text.outputs.url }})
-        [playground](${{ needs.deploy_playground.outputs.url }})
+        tohuhono: ${{ needs.deploy_tohuhono.outputs.url }}
+        rich-text: ${{ needs.deploy_rich_text.outputs.url }}
+        playground: ${{ needs.deploy_playground.outputs.url }}
     steps:
       - name: Add preview URL to job summary
         run: |

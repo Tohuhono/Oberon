@@ -1,6 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": [
+    "scripts/*",
+    ".github/**",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "tsconfig.json"
+  ],
+  "globalDotEnv": [".env", ".env.local"],
   "pipeline": {
     "build": {
       "dotEnv": [".env.local", ".env"],
