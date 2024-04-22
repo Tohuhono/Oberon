@@ -29,10 +29,7 @@ export function initAuth(adapter: Adapter) {
             .slice(0, 6)
         },
         sendVerificationRequest: async ({ identifier: email, url, token }) => {
-          if (
-            process.env.NODE_ENV === "development" ||
-            process.env.RESEND_USE_REMOTE === "false"
-          ) {
+          if (process.env.NODE_ENV !== "production") {
             console.log(
               `sendVerificationRequest email not sent in ${process.env.NODE_ENV}`,
               { email, url },
