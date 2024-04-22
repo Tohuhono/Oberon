@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/changed-packages.yml
 
   deploy_tohuhono:
-    name: Deploy Tohuhono
+    name: Tohuhono
     needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/tohuhono') }}
     uses: ./.github/workflows/deploy.yml
@@ -31,7 +31,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.TOHUHONO_VERCEL_ID }}
 
   deploy_rich_text:
-    name: Deploy Rich Text
+    name: Rich Text
     needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/rich-text-demo') }}
     uses: ./.github/workflows/deploy.yml
@@ -43,7 +43,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
 
   deploy_playground:
-    name: Deploy Oberon Playground
+    name: Oberon Playground
     needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, 'oberon-cms-example') }}
     uses: ./.github/workflows/deploy.yml
@@ -155,9 +155,14 @@ jobs:
         run: exit 1
 
   promote_tohuhono:
-    name: Deploy Tohuhono
+    name: Tohuhono
     needs: [deploy_tohuhono, test-status]
-    if: always() && success() && github.ref == 'refs/heads/main'
+    if: |
+      always() && 
+      ${{ github.ref == 'refs/heads/main' }} &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.test-status.result == 'success' &&
+      needs.deploy_tohuhono.result == 'success'
     uses: ./.github/workflows/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -168,9 +173,14 @@ jobs:
       domain: www.tohuhono.com
 
   promote_rich_text:
-    name: Deploy Rich Text
+    name: Rich Text
     needs: [deploy_rich_text, test-status]
-    if: always() && success() && github.ref == 'refs/heads/main'
+    if: |
+      always() && 
+      ${{ github.ref == 'refs/heads/main' }} &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.test-status.result == 'success' &&
+      needs.deploy_rich_text.result == 'success'
     uses: ./.github/workflows/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -181,9 +191,14 @@ jobs:
       domain: puck-rich-text.tohuhono.com
 
   promote_playground:
-    name: Deploy Oberon Playground
+    name: Oberon Playground
     needs: [deploy_playground, test-status]
-    if: always() && success() && ${{ github.ref == 'refs/heads/main' }}
+    if: |
+      always() && 
+      ${{ github.ref == 'refs/heads/main' }} &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.test-status.result == 'success' &&
+      needs.deploy_playground.result == 'success'
     uses: ./.github/workflows/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
