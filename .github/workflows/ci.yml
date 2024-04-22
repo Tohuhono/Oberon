@@ -159,9 +159,9 @@ jobs:
     needs: [deploy_tohuhono, test-status]
     if: |
       always() && 
-      ${{ github.ref == 'refs/heads/main' }} &&
+      github.ref == 'refs/heads/main' &&
       !contains(needs.*.result, 'cancelled') &&
-      needs.test-status.result == 'success' &&
+      !contains(needs.*.result, 'failure') &&
       needs.deploy_tohuhono.result == 'success'
     uses: ./.github/workflows/promote.yml
     secrets:
@@ -177,9 +177,9 @@ jobs:
     needs: [deploy_rich_text, test-status]
     if: |
       always() && 
-      ${{ github.ref == 'refs/heads/main' }} &&
+      github.ref == 'refs/heads/main' &&
       !contains(needs.*.result, 'cancelled') &&
-      needs.test-status.result == 'success' &&
+      !contains(needs.*.result, 'failure') &&
       needs.deploy_rich_text.result == 'success'
     uses: ./.github/workflows/promote.yml
     secrets:
@@ -195,9 +195,9 @@ jobs:
     needs: [deploy_playground, test-status]
     if: |
       always() && 
-      ${{ github.ref == 'refs/heads/main' }} &&
+      github.ref == 'refs/heads/main' &&
       !contains(needs.*.result, 'cancelled') &&
-      needs.test-status.result == 'success' &&
+      !contains(needs.*.result, 'failure') &&
       needs.deploy_playground.result == 'success'
     uses: ./.github/workflows/promote.yml
     secrets:
