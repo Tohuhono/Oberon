@@ -43,4 +43,4 @@ jobs:
       - name: Alias build to production
         run: |
           pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
-          npx vercel alias ${{ inputs.url }} ${{ inputs.domain }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }})
+          npx vercel alias ${{ inputs.url }} ${{ inputs.domain }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
