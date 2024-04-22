@@ -1,10 +1,14 @@
 {
-  "name": "@oberon/dev",
+  "name": "@tohuhono/dev",
   "version": "0.2.0",
-  "private": true,
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "Developer and build tools for OberonCMS",
+  "description": "Developer and build tools used by @tohuhono and @oberoncms packages",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "packages/dev"
+  },
   "type": "module",
   "exports": {
     "./eslint.config": "./eslint.config.mjs",

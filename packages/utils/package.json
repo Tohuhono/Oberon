@@ -1,9 +1,14 @@
 {
-  "name": "@oberon/utils",
+  "name": "@tohuhono/utils",
   "version": "0.1.0",
   "author": "Tohuhono ltd",
-  "private": true,
   "license": "MIT",
+  "description": "A collection of utility functions used by @tohuhono and @oberoncms packages",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "packages/utils"
+  },
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,7 +29,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@oberon/dev": "workspace:*",
+    "@tohuhono/dev": "workspace:*",
     "@types/node": "^20.11.27",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",

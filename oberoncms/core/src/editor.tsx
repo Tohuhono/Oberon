@@ -1,5 +1,5 @@
 import type { Config, Data } from "@measured/puck"
-import { DynamicTailwind, PreviewFrameTailwind } from "@oberon/ui/theme"
+import { DynamicTailwind, PreviewFrameTailwind } from "@tohuhono/ui/theme"
 import type {
   OberonImage,
   OberonUser,

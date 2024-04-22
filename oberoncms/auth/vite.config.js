@@ -1,3 +1,3 @@
-import { initConfig } from "@oberon/dev/vite"
+import { initConfig } from "@tohuhono/dev/vite"
 
 export default initConfig()

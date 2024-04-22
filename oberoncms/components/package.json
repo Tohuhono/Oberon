@@ -31,7 +31,7 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@oberon/ui": "workspace:*",
+    "@tohuhono/ui": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
     "@tohuhono/puck-rich-text": "workspace:*",
     "next": "^14.2.1"
@@ -41,7 +41,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@oberon/dev": "workspace:*",
+    "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
