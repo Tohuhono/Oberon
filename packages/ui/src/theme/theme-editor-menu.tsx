@@ -2,7 +2,7 @@
 
 import { ClipboardCopyIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useState, ChangeEvent, Fragment } from "react"
-import { cn } from "@oberon/utils"
+import { cn } from "@tohuhono/utils"
 import { ApplyTheme, copyToClipboard } from "./theme-editor"
 import { defaultTheme } from "./default-theme"
 import { getMode, setMode } from "./mode-toggle"

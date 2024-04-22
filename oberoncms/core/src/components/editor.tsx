@@ -3,7 +3,7 @@
 import "@measured/puck/dist/index.css"
 
 import { Config, Data, Puck, usePuck } from "@measured/puck"
-import { Button } from "@oberon/ui/button"
+import { Button } from "@tohuhono/ui/button"
 import { PuckMenu } from "./puck-menu"
 import { useOberon } from "@/hooks/use-oberon"
 import { useLocalData } from "@/hooks/use-local-data"

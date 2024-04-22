@@ -1,5 +1,5 @@
 "use client"
-import { Button } from "@oberon/ui/button"
+import { Button } from "@tohuhono/ui/button"
 import Link from "next/link"
 
 // safe links bot workaround https://github.com/nextauthjs/next-auth/issues/4965

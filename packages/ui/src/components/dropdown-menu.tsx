@@ -8,7 +8,7 @@ import {
   DotFilledIcon,
 } from "@radix-ui/react-icons"
 
-import { cn } from "@oberon/utils"
+import { cn } from "@tohuhono/utils"
 
 // https://github.com/radix-ui/primitives/issues/2309
 declare module "@radix-ui/react-dropdown-menu" {

@@ -2,7 +2,7 @@
 
 import Script from "next/script"
 import { Config } from "tailwindcss"
-import { config } from "@oberon/dev/tailwind"
+import { config } from "@tohuhono/dev/tailwind"
 import { useEffect, useRef } from "react"
 
 declare global {

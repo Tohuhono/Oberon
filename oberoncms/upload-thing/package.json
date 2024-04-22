@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@measured/puck": "^0.14.1",
-    "@oberon/dev": "workspace:*",
+    "@tohuhono/dev": "workspace:*",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
     "eslint": "^8.57.0",

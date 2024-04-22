@@ -16,8 +16,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@oberon/dev": "workspace:*",
-    "@oberon/utils": "workspace:*",
+    "@tohuhono/dev": "workspace:*",
+    "@tohuhono/utils": "workspace:*",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "18.2.66",

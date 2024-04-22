@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { Fragment, startTransition, useOptimistic } from "react"
-import { Button, buttonVariants } from "@oberon/ui/button"
-import { Input } from "@oberon/ui/input"
+import { Button, buttonVariants } from "@tohuhono/ui/button"
+import { Input } from "@tohuhono/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -12,7 +12,7 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "@oberon/ui/form"
+} from "@tohuhono/ui/form"
 import { useOberon } from "@/hooks/use-oberon"
 import { PageSchema, type OberonPage } from "@/app/schema"
 
