@@ -42,12 +42,19 @@ export function initAuth(adapter: Adapter) {
           }
           const resend = new Resend(process.env.RESEND_SECRET)
 
+          const withCallback = new URL(url)
+
+          withCallback.searchParams.set(
+            "callbackUrl",
+            `${withCallback.searchParams.get("callbackUrl")}/cms`,
+          )
+
           try {
             const { data } = await resend.emails.send({
               from: emailFrom,
               to: email,
               subject: "One time login to Oberon CMS",
-              text: `Sign in with code\n\n${token}\n\n ${url} \n\n`,
+              text: `Sign in with code\n\n${token}\n\n ${withCallback} \n\n`,
             })
             if (!data?.id) {
               console.error("Resend did not return valid response")
