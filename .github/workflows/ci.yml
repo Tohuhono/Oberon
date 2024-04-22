@@ -59,7 +59,9 @@ jobs:
   deploy-status:
     name: Deploy Status
     needs: [deploy_tohuhono, deploy_rich_text, deploy_playground]
-    if: success() || failure()
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
       STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
