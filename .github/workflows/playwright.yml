@@ -35,14 +35,14 @@ jobs:
         working-directory: "./"
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use pNpm
         uses: pnpm/action-setup@v3
         with:
           version: 8
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: "20.x"
           cache: "pnpm"

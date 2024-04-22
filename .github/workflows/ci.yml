@@ -54,8 +54,10 @@ jobs:
     env:
       STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
       MESSAGE: |
-        "Latest deployments available at:\n ${{ needs.deploy_tohuhono.outputs.url }} \n ${{ needs.deploy_rich_text.outputs.url }} \n ${{ needs.deploy_playground.outputs.url }}"
-
+        "Latest deployments available at:" \
+          "tohuhono: ${{ needs.deploy_tohuhono.outputs.url }}" \
+          "rich-text: ${{ needs.deploy_rich_text.outputs.url }}" \
+          "playground: ${{ needs.deploy_playground.outputs.url }}"
     steps:
       - name: Add preview URL to job summary
         run: |
@@ -83,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Cache turbo build setup
@@ -98,7 +100,7 @@ jobs:
         with:
           version: 8
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20.x"
           cache: "pnpm"
