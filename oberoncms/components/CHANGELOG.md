@@ -1,5 +1,14 @@
 # @oberoncms/components
 
+## 0.3.1
+
+### Patch Changes
+
+- 7e7aa38: Fix dependencies and server loading of rich-text
+- Updated dependencies [7e7aa38]
+  - @tohuhono/ui@0.3.1
+  - @tohuhono/puck-blocks@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes

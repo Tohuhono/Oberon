@@ -1,5 +1,13 @@
 # @oberoncms/auth
 
+## 0.4.1
+
+### Patch Changes
+
+- 7e7aa38: Fix dependencies and server loading of rich-text
+- Updated dependencies [7e7aa38]
+  - @tohuhono/ui@0.3.1
+
 ## 0.4.0
 
 ### Minor Changes

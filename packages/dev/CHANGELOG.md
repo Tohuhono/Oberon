@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.3.1
+
+### Patch Changes
+
+- bafbec6: Fix test status for changeset PR
+
 ## 0.3.0
 
 ### Minor Changes
