@@ -52,8 +52,5 @@ yarn-error.log*
 # Genereated tailwind classes
 tailwind.classes.txt
 
-# pNpn insists on non standard settings; vercel baulks
-.npmrc
-
 # vite doesn't know how to clean up after itself
 vite.config.*.timestamp-*
