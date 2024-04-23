@@ -1,5 +1,12 @@
 # oberon-cms-example
 
+## 0.3.3
+
+### Patch Changes
+
+- 9cb9f27: Testing changeset app
+- 541adb0: Test changeset app
+
 ## 0.3.2
 
 ### Patch Changes
