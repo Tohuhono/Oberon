@@ -21,8 +21,8 @@ jobs:
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
-          app-id: ${{ vars.CHANGSET_APP_ID }}
-          private-key: ${{ secrets.CHANGSET_APP_SECRET }}
+          app-id: ${{ vars.CHANGESET_APP_ID }}
+          private-key: ${{ secrets.CHANGESET_APP_SECRET }}
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
