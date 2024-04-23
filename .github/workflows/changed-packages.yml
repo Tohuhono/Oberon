@@ -44,18 +44,16 @@ jobs:
           echo "$(npx -y turbo build --dry-run=json --filter=...[$TURBO_REF_FILTER]  --global-deps=.github/*)" >> $GITHUB_OUTPUT
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
-      - name: Output changed packages
+      - name: skip
         if: github.ref == changeset-release/main
-        id: output-changed-packages
         run: |
-          echo "changed_packages={}" >> $GITHUB_OUTPUT
+          echo "Output empty package set"
 
       - name: Output changed packages
-        if: github.ref != changeset-release/main
         id: output-changed-packages
         run: |
           echo 'changed_packages<<CHANGED_PACKAGES_DELIMITER' >> $GITHUB_OUTPUT
-          echo "${{ toJSON(fromJSON(steps.changeset.outputs.result).packages) }}" >> $GITHUB_OUTPUT
+          echo "${{ github.ref == changeset-release/main && {} || toJSON(fromJSON(steps.changeset.outputs.result).packages) }}" >> $GITHUB_OUTPUT
           echo 'CHANGED_PACKAGES_DELIMITER' >> $GITHUB_OUTPUT
 
 #      Boolean check for specific package sets
