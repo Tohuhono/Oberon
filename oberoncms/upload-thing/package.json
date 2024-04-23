@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/upload-thing",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "An puck component for embeding uploadthing assets made for OberonCMS",
@@ -35,7 +35,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "clean": "npx odt-clean",
+    "clean": "pnpx odt-clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",

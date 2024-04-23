@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/adapter-turso",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A Turso libsql database adapter for OberonCMS",
@@ -29,7 +29,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "clean": "npx odt-clean",
+    "clean": "pnpx odt-clean",
     "db:migrations:create": "drizzle-kit generate:sqlite",
     "dev": "vite build --watch",
     "lint": "eslint .",

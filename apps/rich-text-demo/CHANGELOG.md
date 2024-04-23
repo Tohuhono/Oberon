@@ -1,5 +1,13 @@
 # @oberon/rich-text-demo
 
+## 1.2.1
+
+### Patch Changes
+
+- 7e7aa38: Fix dependencies and server loading of rich-text
+- Updated dependencies [7e7aa38]
+  - @tohuhono/puck-rich-text@0.3.1
+
 ## 1.2.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/puck-blocks",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A collection of puck components for building pages in OberonCMS",
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "clean": "npx odt-clean",
+    "clean": "pnpx odt-clean",
     "dev": "vite build --watch",
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",

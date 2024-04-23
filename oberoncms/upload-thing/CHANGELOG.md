@@ -1,5 +1,13 @@
 # @tohuhono/puck-upload-thing
 
+## 0.4.1
+
+### Patch Changes
+
+- 7e7aa38: Fix dependencies and server loading of rich-text
+- Updated dependencies [7e7aa38]
+  - @oberoncms/core@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

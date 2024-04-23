@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/ui",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A UI library used by @tohuhono and @oberoncms packages",
@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "clean": "npx odt-clean",
+    "clean": "pnpx odt-clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",

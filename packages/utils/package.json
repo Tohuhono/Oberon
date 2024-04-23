@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/utils",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A collection of utility functions used by @tohuhono and @oberoncms packages",
@@ -14,7 +14,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build",
-    "clean": "npx odt-clean",
+    "clean": "pnpx odt-clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",

@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/components",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A collection of puck components and blocks for OberonCMS",
@@ -23,7 +23,7 @@
   "exports": "./dist/index.js",
   "scripts": {
     "build": "vite build",
-    "clean": "npx odt-clean",
+    "clean": "pnpx odt-clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
@@ -33,7 +33,6 @@
   "dependencies": {
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
-    "@tohuhono/puck-rich-text": "workspace:*",
     "next": "^14.2.1"
   },
   "peerDependencies": {

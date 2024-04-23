@@ -1,5 +1,18 @@
 # oberon-cms-example
 
+## 0.3.2
+
+### Patch Changes
+
+- 7e7aa38: Fix dependencies and server loading of rich-text
+- Updated dependencies [7e7aa38]
+  - @oberoncms/adapter-turso@0.4.1
+  - @oberoncms/upload-thing@0.4.1
+  - @oberoncms/components@0.3.1
+  - @oberoncms/auth@0.4.1
+  - @oberoncms/core@0.4.1
+  - @tohuhono/puck-rich-text@0.3.1
+
 ## 0.3.1
 
 ### Patch Changes
