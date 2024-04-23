@@ -1,13 +1,8 @@
 import type { ComponentConfig } from "@measured/puck"
 import type { SerializedEditorState } from "lexical"
 
-import dynamic from "next/dynamic"
+import { Editor } from "./rich-text-editor/editor-client"
 import { Render } from "./rich-text-editor/render-client"
-
-const Editor = dynamic(
-  () => import("./rich-text-editor/editor-client").then((m) => m.Editor),
-  { ssr: false },
-)
 
 export type PuckRichTextProps = {
   state: SerializedEditorState

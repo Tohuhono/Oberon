@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "clean": "npx odt-clean",
+    "clean": "pnpx odt-clean",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

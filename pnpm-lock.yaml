@@ -740,6 +740,9 @@ importers:
       '@oberoncms/upload-thing':
         specifier: workspace:*
         version: link:../../oberoncms/upload-thing
+      '@tohuhono/puck-rich-text':
+        specifier: workspace:*
+        version: link:../../puck/rich-text
       next:
         specifier: ^14.2.1
         version: 14.2.1(react-dom@18.2.0)(react@18.2.0)

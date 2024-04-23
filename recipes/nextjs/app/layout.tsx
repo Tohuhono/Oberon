@@ -42,19 +42,19 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
       <head>
         <Script id="dark-mode" strategy="beforeInteractive">
           {`
-  const isDarkMode = () => {
-    console.log('3isDarkMode?')
+  const isDarkMode3 = () => {
+    console.log('isDarkMode3?')
     if (typeof localStorage !== "undefined" && localStorage.theme === "dark") {
       return true
     }
     if (typeof localStorage !== "undefined" && localStorage.theme === "light") {
       return false
     }
-    console.log('3isDarkMode matchMedia')
+    console.log('isDarkMode3 matchMedia')
     return window?.matchMedia("(prefers-color-scheme: dark)").matches
   };
-  if (isDarkMode()) {
-    console.log('3isDarkMode returned true')
+  if (isDarkMode3()) {
+    console.log('isDarkMode3 returned true')
     document.documentElement.classList.add("dark");
   }          
           `}
