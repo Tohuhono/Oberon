@@ -45,6 +45,13 @@ jobs:
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
       - name: Output changed packages
+        if: github.ref == changeset-release/main
+        id: output-changed-packages
+        run: |
+          echo "changed_packages={}" >> $GITHUB_OUTPUT
+
+      - name: Output changed packages
+        if: github.ref != changeset-release/main
         id: output-changed-packages
         run: |
           echo 'changed_packages<<CHANGED_PACKAGES_DELIMITER' >> $GITHUB_OUTPUT
