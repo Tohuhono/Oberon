@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.3.1
+
+### Patch Changes
+
+- 7e7aa38: Fix dependencies and server loading of rich-text
+
 ## 0.3.0
 
 ### Minor Changes
