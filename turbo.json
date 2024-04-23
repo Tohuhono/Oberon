@@ -26,6 +26,11 @@
     },
     "jest": {},
     "lint": {},
+    "start": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"]
+    },
     "tsc": { "dependsOn": ["^build"] },
     "wait": {
       "cache": false
