@@ -259,9 +259,6 @@ importers:
       '@tohuhono/puck-blocks':
         specifier: workspace:*
         version: link:../../puck/blocks
-      '@tohuhono/puck-rich-text':
-        specifier: workspace:*
-        version: link:../../puck/rich-text
       '@tohuhono/ui':
         specifier: workspace:*
         version: link:../../packages/ui

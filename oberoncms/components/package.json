@@ -33,7 +33,6 @@
   "dependencies": {
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
-    "@tohuhono/puck-rich-text": "workspace:*",
     "next": "^14.2.1"
   },
   "peerDependencies": {
