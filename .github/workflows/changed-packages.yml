@@ -45,7 +45,7 @@ jobs:
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
       - name: skip
-        if: github.ref == 'refs/heads/changeset-release/main'
+        if: github.head_ref == 'changeset-release/main'
         run: |
           echo "Output empty package set"
 
@@ -53,7 +53,7 @@ jobs:
         id: output-changed-packages
         run: |
           echo 'changed_packages<<CHANGED_PACKAGES_DELIMITER' >> $GITHUB_OUTPUT
-          echo "${{ github.ref == 'refs/heads/changeset-release/main' && '[]' || toJSON(fromJSON(steps.changeset.outputs.result).packages) }}" >> $GITHUB_OUTPUT
+          echo "${{ github.head_ref == 'changeset-release/main' && '[]' || toJSON(fromJSON(steps.changeset.outputs.result).packages) }}" >> $GITHUB_OUTPUT
           echo 'CHANGED_PACKAGES_DELIMITER' >> $GITHUB_OUTPUT
 
 #      Boolean check for specific package sets
