@@ -9,6 +9,7 @@
     "change": "changeset",
     "clean": "turbo clean --continue && rimraf ./dist ./.turbo",
     "clean:node": "turbo clean --continue -- --node_modules && npx odt-clean --node_modules",
+    "start:oberon": "turbo start --filter=oberon-cms-example",
     "tsc": "turbo tsc",
     "dev": "turbo dev --concurrency 20",
     "dev:oberon": "turbo dev --filter='./puck/*' --filter='./packages/*' --filter='./oberoncms/*' --filter=oberon-cms-example --concurrency 20",

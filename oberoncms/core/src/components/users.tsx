@@ -154,7 +154,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
               </FormItem>
             )}
           />
-          <Button type="submit">Add</Button>
+          <Button type="submit">Add Page</Button>
           <FormMessage>{form.formState.errors.email?.message}</FormMessage>
           <FormMessage>{form.formState.errors.role?.message}</FormMessage>
         </form>

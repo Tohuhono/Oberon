@@ -50,17 +50,19 @@ export function initAuth(adapter: Adapter) {
           )
 
           try {
-            const { data } = await resend.emails.send({
+            const response = await resend.emails.send({
               from: emailFrom,
               to: email,
               subject: "One time login to Oberon CMS",
               text: `Sign in with code\n\n${token}\n\n ${withCallback} \n\n`,
             })
-            if (!data?.id) {
-              console.error("Resend did not return valid response")
+
+            if (response.error || !response.data?.id) {
+              console.error("Resend response error", response.error)
               return
             }
-            console.log(`Sent email id ${data?.id}`)
+
+            console.log(`Sent email id ${response.data.id}`)
           } catch (error) {
             console.error("Signin email failed to send")
           }
