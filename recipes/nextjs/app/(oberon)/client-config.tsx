@@ -1,4 +1,5 @@
-import { Div, Prose, PuckRichText } from "@oberoncms/components"
+import { Div, Prose } from "@oberoncms/components"
+import { PuckRichText } from "@tohuhono/puck-rich-text"
 import { Image } from "@oberoncms/upload-thing"
 import { type OberonConfig } from "@oberoncms/core"
 import { Dashboard } from "../../components/dashboard"
