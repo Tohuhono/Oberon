@@ -45,7 +45,7 @@ jobs:
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
       - name: skip
-        if: github.ref == changeset-release/main
+        if: github.ref == 'changeset-release/main'
         run: |
           echo "Output empty package set"
 
