@@ -16,7 +16,6 @@
     "@datacom-digital/ui-sample-components": "^0.3.2",
     "@oberoncms/adapter-turso": "workspace:*",
     "@oberoncms/auth": "workspace:*",
-    "@oberoncms/components": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/upload-thing": "workspace:*",
     "@tohuhono/puck-rich-text": "workspace:*",

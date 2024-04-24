@@ -728,9 +728,6 @@ importers:
       '@oberoncms/auth':
         specifier: workspace:*
         version: link:../../oberoncms/auth
-      '@oberoncms/components':
-        specifier: workspace:*
-        version: link:../../oberoncms/components
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../oberoncms/core
