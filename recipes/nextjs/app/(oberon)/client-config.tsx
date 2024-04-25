@@ -1,4 +1,3 @@
-import { Div, Prose } from "@oberoncms/components"
 import { PuckRichText } from "@tohuhono/puck-rich-text"
 import { Image } from "@oberoncms/upload-thing"
 import { type OberonConfig } from "@oberoncms/core"
@@ -6,10 +5,25 @@ import { Dashboard } from "../../components/dashboard"
 
 export const config: OberonConfig = {
   blocks: {
-    Prose,
-    Div,
+    Box: {
+      fields: {
+        className: {
+          type: "text",
+        },
+      },
+      render: ({ className, puck: { renderDropZone: DropZone } }) => {
+        return <div className={className}>{<DropZone zone="box" />}</div>
+      },
+    },
     Image,
-    Text: PuckRichText,
+    Text: {
+      ...PuckRichText,
+      render: (props) => (
+        <div className="prose dark:prose-invert lg:prose-lg">
+          {PuckRichText.render(props)}
+        </div>
+      ),
+    },
     Dashboard: {
       render: () => <Dashboard />,
     },

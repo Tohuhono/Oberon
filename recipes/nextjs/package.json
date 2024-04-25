@@ -3,7 +3,7 @@
   "version": "0.3.3",
   "private": true,
   "scripts": {
-    "build": "rm -rf .next && next build",
+    "build": "rimraf .next && next build",
     "clean": "pnpx odt-clean",
     "dev": "next dev --turbo",
     "lint": "next lint",
@@ -16,7 +16,6 @@
     "@datacom-digital/ui-sample-components": "^0.3.2",
     "@oberoncms/adapter-turso": "workspace:*",
     "@oberoncms/auth": "workspace:*",
-    "@oberoncms/components": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/upload-thing": "workspace:*",
     "@tohuhono/puck-rich-text": "workspace:*",

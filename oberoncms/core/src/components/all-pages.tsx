@@ -123,7 +123,7 @@ export function AllPages({ pages: serverPages }: { pages: OberonPage[] }) {
             )}
           />
           <Button type="submit" className="col-span-2">
-            Add
+            Add Page
           </Button>
           <FormMessage>{form.formState.errors.key?.message}</FormMessage>
         </form>
