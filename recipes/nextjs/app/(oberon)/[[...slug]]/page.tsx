@@ -2,7 +2,7 @@ import { Render } from "@oberoncms/core/render"
 
 import { getMetaData } from "@oberoncms/core"
 
-import { adapter } from "@oberoncms/adapter-turso"
+import { adapter } from "@/app/(oberon)/server-config"
 import { config } from "@/app/(oberon)/client-config"
 
 export async function generateStaticParams() {

@@ -1,9 +1,9 @@
-import type { OberonConfig, OberonAdapter } from "./schema"
+import type { OberonConfig, OberonServerActions } from "./schema"
 import { parseClientAction } from "./utils"
 
 export async function getServerProps(
   { resolvePath }: OberonConfig,
-  { getPageData, getAllImages, getAllPages, getAllUsers }: OberonAdapter,
+  { getPageData, getAllImages, getAllPages, getAllUsers }: OberonServerActions,
   maybeAction: string,
   path: string[] = [],
 ) {

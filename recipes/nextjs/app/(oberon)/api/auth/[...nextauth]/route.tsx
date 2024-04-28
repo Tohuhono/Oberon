@@ -1,1 +1,3 @@
-export { GET, POST } from "@oberoncms/adapter-turso/router"
+import { handlers } from "@/app/(oberon)/auth"
+
+export const { GET, POST } = handlers

@@ -1,7 +1,7 @@
 import { getMetaData, getServerProps, parseClientAction } from "@oberoncms/core"
 
-import { adapter } from "@oberoncms/adapter-turso"
 import { Client } from "./client"
+import { actions } from "@/app/(oberon)/server-actions"
 
 import { config } from "@/app/(oberon)/client-config"
 
@@ -12,7 +12,7 @@ export async function generateMetadata({
 }) {
   const action = parseClientAction(path[0] || "pages")
   const slug = path.slice(1)
-  return await getMetaData(config, adapter, slug, action)
+  return await getMetaData(config, actions, slug, action)
 }
 
 export default async function OberonClient({
@@ -22,7 +22,7 @@ export default async function OberonClient({
 }) {
   const action = path[0] || "pages"
   const slug = path.slice(1)
-  const props = await getServerProps(config, adapter, action, slug)
+  const props = await getServerProps(config, actions, action, slug)
 
-  return <Client adapter={adapter} {...props} />
+  return <Client actions={actions} {...props} />
 }

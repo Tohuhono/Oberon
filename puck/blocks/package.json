@@ -26,7 +26,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "clean": "pnpx odt-clean",
+    "clean": "node ../../scripts/clean-package.mjs",
     "dev": "vite build --watch",
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",
