@@ -1,5 +1,11 @@
 # @oberon/tohuhono
 
+## 0.4.0
+
+### Minor Changes
+
+- eec8abb: Move auth to core
+
 ## 0.3.1
 
 ### Patch Changes

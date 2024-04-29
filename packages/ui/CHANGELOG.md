@@ -1,5 +1,16 @@
 # @oberon/ui
 
+## 0.4.0
+
+### Minor Changes
+
+- eec8abb: Move auth to core
+
+### Patch Changes
+
+- Updated dependencies [eec8abb]
+  - @tohuhono/utils@0.3.0
+
 ## 0.3.1
 
 ### Patch Changes
