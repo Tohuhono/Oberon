@@ -1,5 +1,18 @@
 # @oberoncms/core
 
+## 0.5.0
+
+### Minor Changes
+
+- eec8abb: Move auth to core
+
+### Patch Changes
+
+- d251149: Removed components package
+- Updated dependencies [eec8abb]
+  - @tohuhono/utils@0.3.0
+  - @tohuhono/ui@0.4.0
+
 ## 0.4.1
 
 ### Patch Changes

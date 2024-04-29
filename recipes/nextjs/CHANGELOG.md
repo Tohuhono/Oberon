@@ -1,5 +1,21 @@
 # oberon-cms-example
 
+## 0.4.0
+
+### Minor Changes
+
+- eec8abb: Move auth to core
+
+### Patch Changes
+
+- d251149: Removed components package
+- Updated dependencies [eec8abb]
+- Updated dependencies [d251149]
+  - @oberoncms/adapter-turso@0.5.0
+  - @oberoncms/upload-thing@0.5.0
+  - @oberoncms/core@0.5.0
+  - @tohuhono/puck-rich-text@0.4.0
+
 ## 0.3.3
 
 ### Patch Changes

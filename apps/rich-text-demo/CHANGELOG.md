@@ -1,5 +1,16 @@
 # @oberon/rich-text-demo
 
+## 1.3.0
+
+### Minor Changes
+
+- eec8abb: Move auth to core
+
+### Patch Changes
+
+- Updated dependencies [eec8abb]
+  - @tohuhono/puck-rich-text@0.4.0
+
 ## 1.2.1
 
 ### Patch Changes

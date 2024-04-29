@@ -1,5 +1,17 @@
 # @oberoncms/adapter-turso
 
+## 0.5.0
+
+### Minor Changes
+
+- eec8abb: Move auth to core
+
+### Patch Changes
+
+- Updated dependencies [eec8abb]
+- Updated dependencies [d251149]
+  - @oberoncms/core@0.5.0
+
 ## 0.4.1
 
 ### Patch Changes
