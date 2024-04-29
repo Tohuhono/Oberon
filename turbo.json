@@ -4,8 +4,6 @@
     "scripts/*",
     ".github/**",
     "package.json",
-    "pnpm-lock.yaml",
-    "pnpm-workspace.yaml",
     "tsconfig.json"
   ],
   "globalDotEnv": [".env", ".env.local"],

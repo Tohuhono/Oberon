@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1714365955581,
+      "tag": "0000_eager_supreme_intelligence",
+      "breakpoints": true
+    }
+  ]
+}
