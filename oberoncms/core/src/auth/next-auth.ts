@@ -7,6 +7,21 @@ import type { Adapter } from "next-auth/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
+const withCallback = (url: string) => {
+  const withCallback = new URL(url)
+
+  withCallback.searchParams.set(
+    "callbackUrl",
+    `${withCallback.searchParams.get("callbackUrl")}/cms`,
+  )
+
+  return withCallback.toString()
+}
+
+const SEND_VERIFICATION_REQUEST =
+  process.env.EMAIL_SEND === "true" ||
+  (process.env.NODE_ENV === "production" && process.env.EMAIL_SEND !== "false")
+
 export function initAuth({
   adapter,
   sendVerificationRequest,
@@ -36,25 +51,24 @@ export function initAuth({
             .toString()
             .slice(0, 6)
         },
-        sendVerificationRequest: async ({ identifier: email, url, token }) => {
-          if (process.env.NODE_ENV !== "production") {
-            console.log(
-              `sendVerificationRequest email not sent in ${process.env.NODE_ENV}`,
-              { email, url },
-            )
+        sendVerificationRequest: async ({
+          identifier: email,
+          url: baseUrl,
+          token,
+        }) => {
+          const url = withCallback(baseUrl)
+
+          if (!SEND_VERIFICATION_REQUEST) {
+            console.log(`sendVerificationRequest email not sent`, {
+              email,
+              url,
+            })
             return
           }
 
-          const withCallback = new URL(url)
-
-          withCallback.searchParams.set(
-            "callbackUrl",
-            `${withCallback.searchParams.get("callbackUrl")}/cms`,
-          )
-
           await sendVerificationRequest?.({
             email,
-            url: withCallback.toString(),
+            url,
             token,
           })
         },
