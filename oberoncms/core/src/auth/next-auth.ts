@@ -8,6 +8,20 @@ import type { Adapter } from "@auth/core/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
+const withCallback = (url: string) => {
+  const withCallback = new URL(url)
+
+  const callbackUrl = new URL(
+    withCallback.searchParams.get("callbackUrl") || "/cms",
+  )
+
+  callbackUrl.pathname = "/cms"
+
+  withCallback.searchParams.set("callbackUrl", callbackUrl.toString())
+
+  return withCallback.toString()
+}
+
 const SEND_VERIFICATION_REQUEST =
   process.env.EMAIL_SEND === "true" ||
   (process.env.NODE_ENV === "production" && process.env.EMAIL_SEND !== "false")
@@ -41,7 +55,13 @@ export function initAuth({
             .toString()
             .slice(0, 6)
         },
-        sendVerificationRequest: async ({ identifier: email, url, token }) => {
+        sendVerificationRequest: async ({
+          identifier: email,
+          url: baseUrl,
+          token,
+        }) => {
+          const url = withCallback(baseUrl)
+
           if (!SEND_VERIFICATION_REQUEST) {
             console.log(`sendVerificationRequest email not sent`, {
               email,

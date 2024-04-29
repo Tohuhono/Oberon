@@ -13,7 +13,7 @@ export function getTitle(action: ClientAction, slug?: string) {
       return "Manage Users"
     case "pages":
     default:
-      return "Oberon CMS"
+      return "Oberon CMS Pages"
   }
 }
 
