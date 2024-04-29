@@ -1,5 +1,11 @@
 # @oberon/utils
 
+## 0.3.0
+
+### Minor Changes
+
+- eec8abb: Move auth to core
+
 ## 0.2.1
 
 ### Patch Changes
