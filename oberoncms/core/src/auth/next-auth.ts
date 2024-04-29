@@ -1,19 +1,23 @@
 import { randomBytes } from "crypto"
-import NextAuth, { NextAuthConfig } from "next-auth"
+import { type AuthConfig } from "@auth/core"
+import NextAuth from "next-auth"
 
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
-import type { Adapter } from "next-auth/adapters"
+import type { Adapter } from "@auth/core/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
 const withCallback = (url: string) => {
   const withCallback = new URL(url)
 
-  withCallback.searchParams.set(
-    "callbackUrl",
-    `${withCallback.searchParams.get("callbackUrl")}/cms`,
+  const callbackUrl = new URL(
+    withCallback.searchParams.get("callbackUrl") || "/cms",
   )
+
+  callbackUrl.pathname = "/cms"
+
+  withCallback.searchParams.set("callbackUrl", callbackUrl.toString())
 
   return withCallback.toString()
 }
@@ -114,7 +118,7 @@ export function initAuth({
         return session
       },
     },
-  } satisfies NextAuthConfig
+  } satisfies AuthConfig
 
   const nextAuth = NextAuth(config)
 
