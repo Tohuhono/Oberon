@@ -2,7 +2,7 @@ import { z } from "zod"
 import { Data } from "@measured/puck"
 import { Route } from "next"
 import type { Config } from "@measured/puck"
-import type { Adapter } from "next-auth/adapters"
+import type { Adapter } from "@auth/core/adapters"
 
 export type OberonConfig = {
   blocks: Config["components"]

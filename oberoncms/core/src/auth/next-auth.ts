@@ -1,22 +1,12 @@
 import { randomBytes } from "crypto"
-import NextAuth, { NextAuthConfig } from "next-auth"
+import { type AuthConfig } from "@auth/core"
+import NextAuth from "next-auth"
 
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
-import type { Adapter } from "next-auth/adapters"
+import type { Adapter } from "@auth/core/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
-
-const withCallback = (url: string) => {
-  const withCallback = new URL(url)
-
-  withCallback.searchParams.set(
-    "callbackUrl",
-    `${withCallback.searchParams.get("callbackUrl")}/cms`,
-  )
-
-  return withCallback.toString()
-}
 
 const SEND_VERIFICATION_REQUEST =
   process.env.EMAIL_SEND === "true" ||
@@ -51,13 +41,7 @@ export function initAuth({
             .toString()
             .slice(0, 6)
         },
-        sendVerificationRequest: async ({
-          identifier: email,
-          url: baseUrl,
-          token,
-        }) => {
-          const url = withCallback(baseUrl)
-
+        sendVerificationRequest: async ({ identifier: email, url, token }) => {
           if (!SEND_VERIFICATION_REQUEST) {
             console.log(`sendVerificationRequest email not sent`, {
               email,
@@ -114,7 +98,7 @@ export function initAuth({
         return session
       },
     },
-  } satisfies NextAuthConfig
+  } satisfies AuthConfig
 
   const nextAuth = NextAuth(config)
 
