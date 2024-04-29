@@ -2,6 +2,7 @@ import { z } from "zod"
 import { Data } from "@measured/puck"
 import { Route } from "next"
 import type { Config } from "@measured/puck"
+import type { Adapter } from "next-auth/adapters"
 
 export type OberonConfig = {
   blocks: Config["components"]
@@ -78,6 +79,23 @@ export const roles = ["user", "admin"] as const
  */
 
 export type OberonAdapter = {
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
+  deleteUser: (
+    id: OberonUser["id"],
+  ) => Promise<Pick<OberonUser, "id"> | undefined>
+  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
+  getAllUsers: () => Promise<OberonUser[]>
+  getAllImages: () => Promise<OberonImage[]>
+  addImage: (image: OberonImage) => Promise<void>
+  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
+  addPage: (page: OberonPage & { data: string }) => Promise<void>
+  deletePage: (key: OberonPage["key"]) => Promise<void>
+  getAllPages: () => Promise<OberonPage[]>
+  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
+  getPageData: (key: OberonPage["key"]) => Promise<string | null>
+} & Adapter
+
+export type OberonServerActions = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,

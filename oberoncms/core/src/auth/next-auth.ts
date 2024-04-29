@@ -1,5 +1,4 @@
 import { randomBytes } from "crypto"
-import { Resend } from "resend"
 import NextAuth, { NextAuthConfig } from "next-auth"
 
 import { NextRequest } from "next/server"
@@ -7,9 +6,18 @@ import { redirect } from "next/navigation"
 import type { Adapter } from "next-auth/adapters"
 
 const masterEmail = process.env.MASTER_EMAIL || null
-const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
 
-export function initAuth(adapter: Adapter) {
+export function initAuth({
+  adapter,
+  sendVerificationRequest,
+}: {
+  adapter: Adapter
+  sendVerificationRequest?: (props: {
+    email: string
+    token: string
+    url: string
+  }) => Promise<void>
+}) {
   const config = {
     pages: {
       verifyRequest: "/api/auth/verify",
@@ -37,11 +45,6 @@ export function initAuth(adapter: Adapter) {
             return
           }
 
-          if (!process.env.RESEND_SECRET) {
-            throw new Error("No RESEND_SECRET configured")
-          }
-          const resend = new Resend(process.env.RESEND_SECRET)
-
           const withCallback = new URL(url)
 
           withCallback.searchParams.set(
@@ -49,23 +52,11 @@ export function initAuth(adapter: Adapter) {
             `${withCallback.searchParams.get("callbackUrl")}/cms`,
           )
 
-          try {
-            const response = await resend.emails.send({
-              from: emailFrom,
-              to: email,
-              subject: "One time login to Oberon CMS",
-              text: `Sign in with code\n\n${token}\n\n ${withCallback} \n\n`,
-            })
-
-            if (response.error || !response.data?.id) {
-              console.error("Resend response error", response.error)
-              return
-            }
-
-            console.log(`Sent email id ${response.data.id}`)
-          } catch (error) {
-            console.error("Signin email failed to send")
-          }
+          await sendVerificationRequest?.({
+            email,
+            url: withCallback.toString(),
+            token,
+          })
         },
       },
     ],
@@ -116,6 +107,12 @@ export function initAuth(adapter: Adapter) {
   // TODO added type annotation to fix https://github.com/nextauthjs/next-auth/discussions/9950
   const auth = nextAuth.auth
 
+  const getRole = async (): Promise<"user" | "admin" | null> => {
+    const session = await auth()
+    // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
+    return session?.user?.role || null
+  }
+
   const POST = nextAuth.handlers.POST
 
   const GET = (req: NextRequest) => {
@@ -138,6 +135,7 @@ export function initAuth(adapter: Adapter) {
   }
 
   return {
+    getRole,
     auth,
     handlers: {
       POST,

@@ -1,13 +1,13 @@
 import { createContext, type PropsWithChildren } from "react"
-import type { OberonAdapter } from "../app/schema"
+import type { OberonServerActions } from "../app/schema"
 
-export const OberonContext = createContext<OberonAdapter | null>(null)
+export const OberonContext = createContext<OberonServerActions | null>(null)
 
 export const OberonProvider = ({
   children,
-  adapter,
-}: PropsWithChildren<{ adapter: OberonAdapter }>) => {
+  actions,
+}: PropsWithChildren<{ actions: OberonServerActions }>) => {
   return (
-    <OberonContext.Provider value={adapter}>{children}</OberonContext.Provider>
+    <OberonContext.Provider value={actions}>{children}</OberonContext.Provider>
   )
 }

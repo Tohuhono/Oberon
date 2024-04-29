@@ -17,9 +17,6 @@
     "./tailwind": "./tailwind.config.ts",
     "./vite": "./dist/vite.config.js"
   },
-  "bin": {
-    "odt-clean": "./scripts/clean-package.mjs"
-  },
   "scripts": {
     "build": "vite build",
     "clean": "node ./scripts/clean-package.mjs",
