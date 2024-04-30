@@ -1,12 +1,13 @@
+#!/usr/bin/env node
 /* eslint-env node */
+import dotenv from "dotenv"
+dotenv.config({ path: ".env.local" })
+
 import { createWriteStream } from "fs"
 import { mkdir } from "fs/promises"
-import dotenv from "dotenv"
 import { drizzle } from "drizzle-orm/libsql"
 import { migrate } from "drizzle-orm/libsql/migrator"
 import { sqliteTable, text } from "drizzle-orm/sqlite-core"
-
-dotenv.config({ path: ".env.local" })
 
 const pages = sqliteTable("pages", {
   key: text("key").notNull().primaryKey(),

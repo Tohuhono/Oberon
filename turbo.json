@@ -4,8 +4,6 @@
     "scripts/*",
     ".github/**",
     "package.json",
-    "pnpm-lock.yaml",
-    "pnpm-workspace.yaml",
     "tsconfig.json"
   ],
   "globalDotEnv": [".env", ".env.local"],
@@ -22,7 +20,8 @@
       "dependsOn": ["wait:clean", "^wait", "prebuild"]
     },
     "prebuild": {
-      "cache": false
+      "cache": false,
+      "dependsOn": ["^build"]
     },
     "jest": {},
     "lint": {},

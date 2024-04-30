@@ -26,9 +26,6 @@ playwright/.cache
 # Turbo
 .turbo
 
-# Vercel
-.vercel
-
 # Build Outputs
 .next/
 out/
@@ -54,3 +51,6 @@ tailwind.classes.txt
 
 # vite doesn't know how to clean up after itself
 vite.config.*.timestamp-*
+
+# Vercel adds this if it's not last
+.vercel

@@ -41,7 +41,19 @@ export default tseslint.config(
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       // ensure consistant imports
-      "import/order": "error",
+      "import/order": [
+        "error",
+        {
+          pathGroups: [
+            {
+              pattern: "dotenv",
+              group: "builtin",
+              position: "before",
+            },
+          ],
+          pathGroupsExcludedImportTypes: ["dotenv"],
+        },
+      ], //"dotenv"
       // conflicts with the the smarter tsc version
       "@typescript-eslint/no-unused-vars": "off",
       // prevent enums
