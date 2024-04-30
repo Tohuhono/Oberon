@@ -49,7 +49,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@auth/core": "^0.29.0",
+    "@auth/core": "^0.30.0",
     "@measured/puck": "^0.14.1",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",
