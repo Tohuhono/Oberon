@@ -20,7 +20,8 @@
       "dependsOn": ["wait:clean", "^wait", "prebuild"]
     },
     "prebuild": {
-      "cache": false
+      "cache": false,
+      "dependsOn": ["^build"]
     },
     "jest": {},
     "lint": {},

@@ -17,7 +17,9 @@ export const databaseAdapter: OberonAdapter = {
       .from(users)
       .execute()
   },
+  // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
   addUser: async ({ email, role }) => {
+    // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
     return await adapter.createUser({
       email,
       // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493

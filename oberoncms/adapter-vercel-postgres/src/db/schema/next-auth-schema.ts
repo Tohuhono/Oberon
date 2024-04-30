@@ -15,6 +15,9 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  role: text("role", { enum: ["admin", "user"] })
+    .notNull()
+    .default("user"),
 })
 
 export const accounts = pgTable(

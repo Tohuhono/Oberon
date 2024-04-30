@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 /* eslint-env node */
-/* eslint-disable import/order */
 import dotenv from "dotenv"
 dotenv.config({ path: ".env.local" })
 

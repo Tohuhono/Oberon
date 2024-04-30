@@ -1,13 +1,14 @@
+#!/usr/bin/env node
 /* eslint-env node */
+import dotenv from "dotenv"
+dotenv.config({ path: ".env.local" })
+
 import { createWriteStream } from "fs"
 import { mkdir } from "fs/promises"
-import dotenv from "dotenv"
 import { drizzle } from "drizzle-orm/vercel-postgres"
-import { migrate } from "drizzle-orm/pg/migrator"
+import { migrate } from "drizzle-orm/vercel-postgres/migrator"
 import { sql } from "@vercel/postgres"
 import { pgTable, text } from "drizzle-orm/pg-core"
-
-dotenv.config({ path: ".env.local" })
 
 const pages = pgTable("pages", {
   key: text("key").notNull().primaryKey(),
@@ -20,7 +21,8 @@ const pages = pgTable("pages", {
   const db = drizzle(sql)
 
   await migrate(db, {
-    migrationsFolder: "node_modules/@oberoncms/adapter-turso/src/db/migrations",
+    migrationsFolder:
+      "node_modules/@oberoncms/adapter-vercel-postgres/src/db/migrations",
   })
 
   const results = await db
@@ -28,8 +30,6 @@ const pages = pgTable("pages", {
       data: pages.data,
     })
     .from(pages)
-
-  sql.close()
 
   console.log("Extracting tailwind classes")
 
