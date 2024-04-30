@@ -75,7 +75,6 @@ export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
     plugins: [
       externalizeDeps(),
       tsconfigPaths(),
-      // @ts-expect-error preserveDirectives not typed correctly https://github.com/huozhi/rollup-preserve-directives
       preserveDirectives(),
       dts(),
       watchFile(),
