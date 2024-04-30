@@ -1,12 +1,12 @@
 {
   "version": "5",
-  "dialect": "sqlite",
+  "dialect": "pg",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1714425975043,
-      "tag": "0000_slippery_captain_flint",
+      "when": 1714483569560,
+      "tag": "0000_modern_iron_fist",
       "breakpoints": true
     }
   ]
