@@ -1,5 +1,17 @@
 # @oberoncms/adapter-turso
 
+## 0.6.0
+
+### Minor Changes
+
+- 77f07d0: Added Vercel Postgres adapter
+
+### Patch Changes
+
+- fcff95c: Bump nextauth version
+- Updated dependencies [fcff95c]
+  - @oberoncms/core@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes

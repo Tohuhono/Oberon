@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/adapter-vercel-postgres",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A Vercel PostgreSQL database adapter for OberonCMS",
