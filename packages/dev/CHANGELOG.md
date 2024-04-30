@@ -1,5 +1,15 @@
 # @oberon/dev
 
+## 0.5.0
+
+### Minor Changes
+
+- 77f07d0: Added Vercel Postgres adapter
+
+### Patch Changes
+
+- fcff95c: Bump nextauth version
+
 ## 0.4.0
 
 ### Minor Changes

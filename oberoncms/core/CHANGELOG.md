@@ -1,5 +1,13 @@
 # @oberoncms/core
 
+## 0.5.1
+
+### Patch Changes
+
+- fcff95c: Bump nextauth version
+  - @tohuhono/ui@0.4.0
+  - @tohuhono/utils@0.3.0
+
 ## 0.5.0
 
 ### Minor Changes

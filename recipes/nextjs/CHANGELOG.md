@@ -1,5 +1,20 @@
 # oberon-cms-example
 
+## 0.5.0
+
+### Minor Changes
+
+- 77f07d0: Added Vercel Postgres adapter
+
+### Patch Changes
+
+- Updated dependencies [77f07d0]
+- Updated dependencies [fcff95c]
+  - @oberoncms/adapter-turso@0.6.0
+  - @oberoncms/core@0.5.1
+  - @oberoncms/upload-thing@0.5.1
+  - @tohuhono/puck-rich-text@0.4.0
+
 ## 0.4.0
 
 ### Minor Changes
