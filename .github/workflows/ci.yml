@@ -64,10 +64,10 @@ jobs:
     env:
       STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
       MESSAGE: |
-        Latest deployments available at:
-        tohuhono: ${{ needs.deploy_tohuhono.outputs.url }}
-        rich-text: ${{ needs.deploy_rich_text.outputs.url }}
-        playground: ${{ needs.deploy_playground.outputs.url }}
+        Latest deployments available at: 
+        ${{ needs.deploy_tohuhono.outputs.url && format('[tohuhono]({0}) ', needs.deploy_tohuhono.outputs.url) }}
+        ${{ needs.deploy_rich_text.outputs.url && format('[rich text]({0}) ', needs.deploy_rich_text.outputs.url) }}
+        ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
     steps:
       - name: Add preview URL to job summary
         run: |
@@ -76,8 +76,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          message: |
-            `${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}`
+          message: ${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}
       - name: Failing deploy
         if: ${{ env.STATUS == 'failed' }}
         run: exit 1
