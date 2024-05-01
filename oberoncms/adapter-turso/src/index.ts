@@ -1,4 +1,4 @@
-import "use-server"
+import "server-only"
 
 import { eq } from "drizzle-orm"
 import { type OberonAdapter } from "@oberoncms/core"

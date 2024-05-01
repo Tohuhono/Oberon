@@ -1,5 +1,3 @@
-import "use-server"
-
 import {
   revalidatePath,
   revalidateTag,

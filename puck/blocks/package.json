@@ -41,12 +41,12 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@measured/puck": "^0.14.1",
+    "@measured/puck": "^0.14.2",
     "@tohuhono/dev": "workspace:*",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
     "eslint": "^8.57.0",
-    "next": "^14.2.1",
+    "next": "^14.2.3",
     "typescript": "5.4.2",
     "vite": "^5.1.6"
   }
