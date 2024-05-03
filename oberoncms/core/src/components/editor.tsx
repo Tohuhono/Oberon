@@ -4,6 +4,7 @@ import "@measured/puck/dist/index.css"
 
 import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@tohuhono/ui/button"
+import { useState } from "react"
 import { PuckMenu } from "./puck-menu"
 import { useOberon } from "@/hooks/use-oberon"
 import { useLocalData } from "@/hooks/use-local-data"
@@ -14,9 +15,10 @@ const Header = ({
   onPublish,
 }: {
   path: string
-  onPublish: (data: Data) => void
+  onPublish: (data: Data) => Promise<void>
 }) => {
   const { appState, dispatch } = usePuck()
+  const [ispublishing, setIspublishing] = useState(false)
 
   const { leftSideBarVisible } = appState.ui
 
@@ -70,7 +72,15 @@ const Header = ({
         >
           View
         </Button>
-        <Button onClick={() => onPublish(appState.data)} size="sm">
+        <Button
+          disabled={ispublishing}
+          onClick={async () => {
+            setIspublishing(true)
+            await onPublish(appState.data)
+            setIspublishing(false)
+          }}
+          size="sm"
+        >
           Publish
         </Button>
       </PuckMenu>

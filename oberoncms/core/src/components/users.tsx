@@ -78,7 +78,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
   })
 
   return (
-    <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center justify gap-1 pt-3">
+    <div className="justify mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-1 pt-3">
       {users.map(({ role, id, email, pending }) => {
         return (
           <Fragment key={id}>
