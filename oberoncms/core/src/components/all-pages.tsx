@@ -64,7 +64,15 @@ export function AllPages({ pages: serverPages }: { pages: OberonPage[] }) {
     <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-1 pt-3">
       {pages.map(({ key: route, pending }) => (
         <Fragment key={route}>
-          <Link className="pr-6" href={route} prefetch={false}>
+          <Link
+            className={buttonVariants({
+              variant: "ghost",
+              size: "link",
+              className: "no-underline",
+            })}
+            href={route}
+            prefetch={false}
+          >
             {route}
           </Link>
 
@@ -76,9 +84,9 @@ export function AllPages({ pages: serverPages }: { pages: OberonPage[] }) {
             <Link
               className={buttonVariants({
                 size: "sm",
-                className: "no-underline dissabled",
+                className: "no-underline",
               })}
-              href={`/cms/edit/${route}`}
+              href={`/cms/edit${route}`}
               target="_blank"
               prefetch={false}
             >
