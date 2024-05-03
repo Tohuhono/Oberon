@@ -75,6 +75,8 @@ export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
     plugins: [
       externalizeDeps(),
       tsconfigPaths(),
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+      // @ts-ignore sometimes fails so can't use expect error
       preserveDirectives(),
       dts(),
       watchFile(),

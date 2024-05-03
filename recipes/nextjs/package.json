@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rimraf .next && next build",
     "clean": "node ../../scripts/clean-package.mjs",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "lint": "next lint",
     "tsc": "tsc --pretty",
     "postinstall": "odt-init",
@@ -18,10 +18,11 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/upload-thing": "workspace:*",
     "@tohuhono/puck-rich-text": "workspace:*",
-    "next": "^14.2.1",
+    "next": "^14.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "resend": "^3.2.0"
+    "resend": "^3.2.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.1",

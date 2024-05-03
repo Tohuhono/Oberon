@@ -42,8 +42,7 @@
     "@next/env": "^14.2.3",
     "@vercel/postgres": "0.8.0",
     "drizzle-orm": "^0.30.1",
-    "next": "^14.2.1",
-    "use-server": "^0.4.9"
+    "next": "^14.2.3"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -51,7 +50,7 @@
   },
   "devDependencies": {
     "@auth/core": "^0.30.0",
-    "@measured/puck": "^0.14.1",
+    "@measured/puck": "^0.14.2",
     "@oberoncms/core": "workspace:*",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",

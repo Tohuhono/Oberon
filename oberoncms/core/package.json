@@ -37,11 +37,11 @@
   "dependencies": {
     "@auth/core": "0.30.0",
     "@hookform/resolvers": "^3.3.4",
-    "@measured/puck": "^0.14.1",
+    "@measured/puck": "^0.14.2",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "filesize": "^10.1.0",
-    "next": "^14.2.1",
+    "next": "^14.2.3",
     "next-auth": "5.0.0-beta.17",
     "react-hook-form": "^7.51.0",
     "swr": "^2.2.5",

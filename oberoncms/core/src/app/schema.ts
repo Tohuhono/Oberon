@@ -26,7 +26,10 @@ const MaybeOptimistic = z.object({
  * Pages
  */
 export const PageSchema = MaybeOptimistic.extend({
-  key: z.string(),
+  key: z
+    .string()
+    .regex(/^[0-9a-zA-Z()_.-/]+$/, "Valid characters: 0-9 a-z A-Z (-_.)/")
+    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
 })
 
 export const DeletePageSchema = PageSchema.pick({ key: true })
