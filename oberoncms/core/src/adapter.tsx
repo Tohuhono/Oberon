@@ -14,8 +14,9 @@ import {
   PageSchema,
   type AdapterActionGroup,
   type AdapterPermission,
+  type OberonDatabaseAdapter,
   type OberonAdapter,
-  type OberonServerActions,
+  type OberonPlugin,
 } from "@/app/schema"
 
 export function initAdapter({
@@ -31,18 +32,17 @@ export function initAdapter({
     },
   },
   getRole,
+  plugins = [],
 }: {
-  db: OberonAdapter
+  db: OberonDatabaseAdapter
   getRole: () => Promise<"user" | "admin" | null>
   permissions?: Record<
     "unauthenticated" | "user",
     Partial<Record<AdapterActionGroup, AdapterPermission>>
   >
-}): OberonServerActions {
-  const can: OberonServerActions["can"] = async (
-    action,
-    permission = "read",
-  ) => {
+  plugins?: OberonPlugin[]
+}): OberonAdapter {
+  const can: OberonAdapter["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
     if (
       permissions.unauthenticated[action] === permission ||
@@ -126,7 +126,7 @@ export function initAdapter({
     },
   )
 
-  return {
+  const adapter = {
     /*
      * Page actions
      */
@@ -258,7 +258,11 @@ export function initAdapter({
         return null
       }
     },
-
     can,
-  }
+  } satisfies OberonAdapter
+
+  return plugins.reduce<OberonAdapter>(
+    (accumulator, plugin) => plugin(accumulator),
+    adapter,
+  )
 }

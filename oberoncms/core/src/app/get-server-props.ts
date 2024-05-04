@@ -1,16 +1,10 @@
-import type { OberonConfig, OberonServerActions } from "./schema"
-import { parseClientAction } from "./utils"
+import type { ClientAction, OberonActions } from "./schema"
 
 export async function getServerProps(
-  { resolvePath }: OberonConfig,
-  { getPageData, getAllImages, getAllPages, getAllUsers }: OberonServerActions,
-  maybeAction: string,
-  path: string[] = [],
+  { getPageData, getAllImages, getAllPages, getAllUsers }: OberonActions,
+  action: ClientAction,
+  slug: string,
 ) {
-  const action = parseClientAction(maybeAction)
-
-  const slug = resolvePath(path)
-
   switch (action) {
     case "edit":
     case "preview":

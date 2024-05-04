@@ -1,16 +1,15 @@
 import "server-only"
 
 import { eq } from "drizzle-orm"
-import { type OberonAdapter } from "@oberoncms/core"
+import { type OberonDatabaseAdapter } from "@oberoncms/core"
 
-// import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"
 import { images, pages, users } from "src/db/schema"
 
-import { adapter } from "@/db/next-auth-adapter"
+import { authAdapter } from "@/db/next-auth-adapter"
 
-export const databaseAdapter: OberonAdapter = {
-  ...adapter,
+export const oberonAdapter: OberonDatabaseAdapter = {
+  ...authAdapter,
   getAllUsers: async () => {
     return await db
       .select({ id: users.id, email: users.email, role: users.role })
@@ -18,7 +17,7 @@ export const databaseAdapter: OberonAdapter = {
       .execute()
   },
   addUser: async ({ email, role }) => {
-    return await adapter.createUser({
+    return await authAdapter.createUser({
       email,
       // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
       role,

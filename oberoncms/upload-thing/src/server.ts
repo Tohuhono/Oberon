@@ -1,1 +1,2 @@
-export * from "./blocks/image"
+export * from "./blocks/server"
+export * from "./uploadthing/plugin"

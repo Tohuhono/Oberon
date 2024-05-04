@@ -19,6 +19,8 @@ export function getTitle(action: ClientAction, slug?: string) {
 
 export const parseClientAction = (action: unknown): ClientAction => {
   switch (action) {
+    case undefined:
+      return "pages"
     case "edit":
     case "preview":
     case "users":
@@ -29,3 +31,5 @@ export const parseClientAction = (action: unknown): ClientAction => {
       return notFound()
   }
 }
+
+export const resolveSlug = (path: string[] = []) => `/${path.join("/")}`

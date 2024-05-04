@@ -7,11 +7,11 @@ import Link from "next/link"
 import { Route } from "next"
 import { Button } from "@tohuhono/ui/button"
 import Image from "next/image"
-import { useOberon } from "@/hooks/use-oberon"
+import { useOberonActions } from "@/hooks/use-oberon"
 import type { OberonImage } from "@/app/schema"
 
 export function Images({ images: initialImages }: { images: OberonImage[] }) {
-  const { deleteImage } = useOberon()
+  const { deleteImage } = useOberonActions()
   const [images, setImages] = useState(initialImages)
 
   return (

@@ -10,17 +10,17 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({
-  params: { slug },
+  params: { path },
 }: {
-  params: { framework: string; uuid: string; slug: string[] }
+  params: { framework: string; uuid: string; path: string[] }
 }) {
-  return getMetaData(config, adapter, slug)
+  return getMetaData(adapter, path)
 }
 
 export default function OberonRender({
-  params: { slug },
+  params: { path },
 }: {
-  params: { slug?: [] }
+  params: { path?: [] }
 }) {
-  return <Render slug={slug} adapter={adapter} config={config} />
+  return <Render path={path} adapter={adapter} config={config} />
 }

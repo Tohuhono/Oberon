@@ -1,12 +1,16 @@
 import { useContext } from "react"
 import { OberonContext } from "@/components/provider"
 
-export const useOberon = () => {
-  const actions = useContext(OberonContext)
+const useOberonContext = () => {
+  const context = useContext(OberonContext)
 
-  if (!actions) {
+  if (!context) {
     throw new Error("No Oberon Server Actions provided")
   }
 
-  return actions
+  return context
 }
+
+export const useOberonActions = () => useOberonContext().actions
+
+export const useOberonClientContext = () => useOberonContext().context
