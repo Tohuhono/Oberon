@@ -11,7 +11,7 @@ import { useOberonActions } from "@/hooks/use-oberon"
 import type { OberonImage } from "@/app/schema"
 
 const useOberonImages = (images: OberonImage[]) => {
-  const { deleteImage } = useOberon()
+  const { deleteImage } = useOberonActions()
   const [optimisticImages, optimisticImageUpdate] =
     useOptimistic<OberonImage[]>(images)
 

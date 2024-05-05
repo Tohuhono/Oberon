@@ -33,7 +33,9 @@ export const databaseAdapter: OberonDatabaseAdapter = {
   addImage: async (image) => {
     await db.insert(images).values(image).execute()
   },
-  deleteImage: async () => {},
+  deleteImage: async (key) => {
+    await db.delete(images).where(eq(images.key, key))
+  },
   getAllImages: async () => {
     return await db
       .select({

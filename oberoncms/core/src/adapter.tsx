@@ -20,7 +20,7 @@ import {
 } from "@/app/schema"
 
 export function initAdapter({
-  db,
+  databaseAdapter,
   permissions = {
     unauthenticated: {
       pages: "read",
@@ -34,7 +34,7 @@ export function initAdapter({
   getRole,
   plugins = [],
 }: {
-  db: OberonDatabaseAdapter
+  databaseAdapter: OberonDatabaseAdapter
   getRole: () => Promise<"user" | "admin" | null>
   permissions?: Record<
     "unauthenticated" | "user",
@@ -42,6 +42,11 @@ export function initAdapter({
   >
   plugins?: OberonPlugin[]
 }): OberonAdapter {
+  const db = plugins.reduce<OberonDatabaseAdapter>(
+    (accumulator, plugin) => plugin(accumulator),
+    databaseAdapter,
+  )
+
   const can: OberonAdapter["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
     if (
@@ -126,7 +131,7 @@ export function initAdapter({
     },
   )
 
-  const adapter = {
+  return {
     /*
      * Page actions
      */
@@ -195,17 +200,8 @@ export function initAdapter({
     // TODO uploadthing
     deleteImage: async function (data) {
       await will("images", "write")
-      console.warn("FIXME deleteImage not implemented", data)
-      /*
-    const { key } = DeleteImageSchema.parse(data)
-  try {
-    await ourUploadthing.deleteFiles(key)
-    await db.delete(images).where(eq(images.key, key))
-    return key
-  } catch (_error) {
-    console.error("Delete image failed")
-    return null
-  }*/
+
+      return db.deleteImage(data)
     },
 
     /*
@@ -260,9 +256,4 @@ export function initAdapter({
     },
     can,
   } satisfies OberonAdapter
-
-  return plugins.reduce<OberonAdapter>(
-    (accumulator, plugin) => plugin(accumulator),
-    adapter,
-  )
 }

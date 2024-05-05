@@ -137,4 +137,6 @@ export type OberonActions = {
 
 export type OberonAdapter = OberonActions
 
-export type OberonPlugin = (adapter: OberonAdapter) => OberonAdapter
+export type OberonPlugin = (
+  adapter: OberonDatabaseAdapter,
+) => OberonDatabaseAdapter

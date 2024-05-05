@@ -6,9 +6,9 @@ export const uploadthingPlugin = (
 ): OberonDatabaseAdapter => ({
   ...adapter,
   deleteImage: async (key) => {
-    await Promise.allSettled([
-      ourUploadthing.deleteFiles(key),
-      adapter.deleteUser(key),
+    await Promise.all([
+      await ourUploadthing.deleteFiles(key),
+      await adapter.deleteImage(key),
     ])
   },
 })

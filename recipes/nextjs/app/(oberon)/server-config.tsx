@@ -4,7 +4,7 @@ import { oberonAdapter } from "@oberoncms/adapter-turso"
 import { initAdapter } from "@oberoncms/core/adapter"
 import { initAuth } from "@oberoncms/core/auth"
 import { Resend } from "resend"
-// import { uploadthingPlugin } from "@oberoncms/upload-thing"
+import { uploadthingPlugin } from "@oberoncms/upload-thing/plugin"
 
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
 
@@ -47,7 +47,7 @@ export const { handlers, getRole } = initAuth({
 })
 
 export const adapter = initAdapter({
-  db: oberonAdapter,
+  databaseAdapter: oberonAdapter,
   getRole,
-  plugins: [],
+  plugins: [uploadthingPlugin],
 })
