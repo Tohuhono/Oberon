@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useState } from "react"
+import { Fragment, startTransition, useOptimistic } from "react"
 
 import { filesize } from "filesize"
 import Link from "next/link"
@@ -10,13 +10,32 @@ import Image from "next/image"
 import { useOberonActions } from "@/hooks/use-oberon"
 import type { OberonImage } from "@/app/schema"
 
+const useOberonImages = (images: OberonImage[]) => {
+  const { deleteImage } = useOberon()
+  const [optimisticImages, optimisticImageUpdate] =
+    useOptimistic<OberonImage[]>(images)
+
+  return {
+    images: optimisticImages,
+    deleteImage: async (key: OberonImage["key"]) => {
+      startTransition(() =>
+        optimisticImageUpdate(
+          optimisticImages.map((image) =>
+            image.key === key ? { ...image, pending: true } : image,
+          ),
+        ),
+      )
+      return deleteImage(key)
+    },
+  }
+}
+
 export function Images({ images: initialImages }: { images: OberonImage[] }) {
-  const { deleteImage } = useOberonActions()
-  const [images, setImages] = useState(initialImages)
+  const { images, deleteImage } = useOberonImages(initialImages)
 
   return (
     <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-3 pt-3">
-      {images.map(({ key, alt, size, url }) => {
+      {images.map(({ key, alt, size, url, pending }) => {
         return (
           <Fragment key={key}>
             <Link href={url as Route} prefetch={false} target="_blank">
@@ -29,11 +48,8 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
             <Button
               variant="destructive"
               size="sm"
-              onClick={async () => {
-                await deleteImage({ key })
-
-                setImages(images.filter((image) => image.key !== key))
-              }}
+              disabled={pending}
+              onClick={() => deleteImage(key)}
             >
               Delete
             </Button>
