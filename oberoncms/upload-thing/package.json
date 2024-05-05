@@ -26,8 +26,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "browser": "./dist/client.js",
-      "node": "./dist/server.js",
-      "default": "./dist/index.js"
+      "node": "./dist/server.js"
     },
     "./router": "./dist/router.js"
   },
