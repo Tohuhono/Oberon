@@ -3,7 +3,7 @@
 import Script from "next/script"
 import { Config } from "tailwindcss"
 import { config } from "@tohuhono/dev/tailwind"
-import { useEffect, useRef } from "react"
+import { useRef, useState } from "react"
 
 declare global {
   // eslint-disable-next-line no-var
@@ -19,6 +19,7 @@ export function DynamicTailwind() {
       <Script
         strategy="afterInteractive"
         src="https://cdn.tailwindcss.com"
+        id="dynamic-tailwind"
         onLoad={() => {
           window.tailwind.config = config
         }}
@@ -31,7 +32,7 @@ export function DynamicTailwind() {
 export function PreviewFrameTailwind() {
   const darkModeObserver = useRef<MutationObserver>()
 
-  useEffect(() => {
+  useState(() => {
     const iframe: HTMLIFrameElement | null =
       document.querySelector("#preview-frame")
 
@@ -40,14 +41,17 @@ export function PreviewFrameTailwind() {
       return
     }
 
-    const tailwindCDN = iframe.contentDocument.createElement("script")
-    tailwindCDN.setAttribute("src", "https://cdn.tailwindcss.com")
-    tailwindCDN.addEventListener("load", () => {
-      if (iframe.contentWindow?.tailwind) {
-        iframe.contentWindow.tailwind.config = config
-      }
-    })
-    iframe.contentDocument.head.appendChild(tailwindCDN)
+    if (!iframe.contentDocument.getElementById("preview-frame-tailwind")) {
+      const tailwindCDN = iframe.contentDocument.createElement("script")
+      tailwindCDN.setAttribute("id", "preview-frame-tailwind")
+      tailwindCDN.setAttribute("src", "https://cdn.tailwindcss.com")
+      tailwindCDN.addEventListener("load", () => {
+        if (iframe.contentWindow?.tailwind) {
+          iframe.contentWindow.tailwind.config = config
+        }
+      })
+      iframe.contentDocument.head.appendChild(tailwindCDN)
+    }
 
     iframe.contentDocument.body.classList.add(...document.body.classList)
 
@@ -79,7 +83,7 @@ export function PreviewFrameTailwind() {
     return () => {
       darkModeObserver.current?.disconnect()
     }
-  }, [])
+  })
 
   return null
 }
