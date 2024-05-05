@@ -25,10 +25,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "browser": "./dist/client.js",
+      "browser": "./dist/index.js",
       "node": "./dist/server.js"
     },
-    "./router": "./dist/router.js"
+    "./router": "./dist/router.js",
+    "./plugin": "./dist/plugin.js"
   },
   "files": [
     "./dist"
