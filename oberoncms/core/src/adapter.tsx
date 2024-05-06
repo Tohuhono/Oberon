@@ -122,12 +122,23 @@ export function initAdapter({
 
   const getAllUsersCached = cache(
     async () => {
-      const allUsers = db.getAllUsers()
+      const allUsers = await db.getAllUsers()
       return allUsers || []
     },
     undefined,
     {
       tags: ["oberon-users"],
+    },
+  )
+
+  const getAllImagesCached = cache(
+    async () => {
+      const allImages = await db.getAllImages()
+      return allImages || []
+    },
+    undefined,
+    {
+      tags: ["oberon-images"],
     },
   )
 
@@ -185,8 +196,7 @@ export function initAdapter({
      */
     getAllImages: async function () {
       await will("images", "read")
-      const allImages = await db.getAllImages()
-      return allImages || []
+      return getAllImagesCached()
     },
 
     addImage: async function (data: unknown) {
@@ -194,13 +204,14 @@ export function initAdapter({
 
       const image = ImageSchema.parse(data)
       await db.addImage(image)
+      revalidateTag("oberon-images")
       return db.getAllImages()
     },
 
     // TODO uploadthing
     deleteImage: async function (data) {
       await will("images", "write")
-
+      revalidateTag("oberon-images")
       return db.deleteImage(data)
     },
 
