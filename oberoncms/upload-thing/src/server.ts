@@ -1,1 +1,1 @@
-export * from "./blocks/image"
+export * from "./blocks/server"

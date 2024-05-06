@@ -28,5 +28,4 @@ export const config: OberonConfig = {
       render: () => <Dashboard />,
     },
   },
-  resolvePath: (path: string[] = []) => `/${path.join("/")}`,
 }

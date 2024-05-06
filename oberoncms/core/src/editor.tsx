@@ -1,14 +1,8 @@
-import type { Config, Data } from "@measured/puck"
+import type { Config } from "@measured/puck"
 import { DynamicTailwind, PreviewFrameTailwind } from "@tohuhono/ui/theme"
-import type {
-  OberonImage,
-  OberonUser,
-  OberonConfig,
-  OberonServerActions,
-  OberonPage,
-} from "./app/schema"
+import type { OberonConfig } from "./app/schema"
 import { getTitle } from "./app/utils"
-import { OberonProvider } from "./components/provider"
+import { useOberonClientContext } from "./hooks/use-oberon"
 import { Editor } from "@/components/editor"
 import { Preview } from "@/components/preview"
 import { PuckMenu } from "@/components/puck-menu"
@@ -17,17 +11,6 @@ import { Images } from "@/components/images"
 import { Users } from "@/components/users"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
-
-type DescriminatedProps =
-  | { action: "edit" | "preview"; data: Data | null }
-  | { action: "users"; data: OberonUser[] }
-  | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: OberonPage[] }
-
-export type OberonServerProps = DescriminatedProps & {
-  actions: OberonServerActions
-  slug: string
-}
 
 const editorConfig: Partial<Config> = {
   root: {
@@ -51,15 +34,9 @@ const previewConfig: Partial<Config> = {
   },
 }
 
-function Client({
-  action,
-  data,
-  slug,
-  config: { blocks },
-}: DescriminatedProps & {
-  config: OberonConfig
-  slug: string
-}) {
+export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
+  const { action, data, slug } = useOberonClientContext()
+
   if (action === "edit") {
     return (
       <Editor
@@ -88,18 +65,5 @@ function Client({
       {action === "images" && <Images images={data} />}
       {action === "pages" && <AllPages pages={data} />}
     </>
-  )
-}
-
-export function OberonClient({
-  actions,
-  ...props
-}: OberonServerProps & {
-  config: OberonConfig
-}) {
-  return (
-    <OberonProvider actions={actions}>
-      <Client {...props} />
-    </OberonProvider>
   )
 }

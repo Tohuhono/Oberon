@@ -1,28 +1,83 @@
-import { getMetaData, getServerProps, parseClientAction } from "@oberoncms/core"
-
+import { getMetaData, type OberonActions } from "@oberoncms/core"
+import { OberonProvider } from "@oberoncms/core/provider"
 import { Client } from "./client"
-import { actions } from "@/app/(oberon)/server-config"
-
-import { config } from "@/app/(oberon)/client-config"
+import { adapter } from "@/app/(oberon)/server-config"
 
 export async function generateMetadata({
   params: { path = [] },
 }: {
   params: { path?: string[] }
 }) {
-  const action = parseClientAction(path[0] || "pages")
-  const slug = path.slice(1)
-  return await getMetaData(config, actions, slug, action)
+  return await getMetaData(adapter, path.slice(1), path[0])
 }
 
-export default async function OberonClient({
+export default async function Oberon({
   params: { path = [] },
 }: {
   params: { path?: string[] }
 }) {
-  const action = path[0] || "pages"
-  const slug = path.slice(1)
-  const props = await getServerProps(config, actions, action, slug)
-
-  return <Client actions={actions} {...props} />
+  return (
+    <OberonProvider actions={actions} path={path}>
+      <Client />
+    </OberonProvider>
+  )
 }
+
+const actions = {
+  getAllPaths: async () => {
+    "use server"
+    return adapter.getAllPaths()
+  },
+  getAllPages: async () => {
+    "use server"
+    return adapter.getAllPages()
+  },
+  getPageData: async (key) => {
+    "use server"
+    return adapter.getPageData(key)
+  },
+  addPage: async (data) => {
+    "use server"
+    return adapter.addPage(data)
+  },
+  deletePage: async (data) => {
+    "use server"
+    return adapter.deletePage(data)
+  },
+  publishPageData: async (data) => {
+    "use server"
+    return adapter.publishPageData(data)
+  },
+  getAllImages: async () => {
+    "use server"
+    return adapter.getAllImages()
+  },
+  addImage: async (data) => {
+    "use server"
+    return adapter.addImage(data)
+  },
+  deleteImage: async (key) => {
+    "use server"
+    return adapter.deleteImage(key)
+  },
+  getAllUsers: async () => {
+    "use server"
+    return adapter.getAllUsers()
+  },
+  addUser: async (data) => {
+    "use server"
+    return adapter.addUser(data)
+  },
+  deleteUser: async (data) => {
+    "use server"
+    return adapter.deleteUser(data)
+  },
+  changeRole: async (data) => {
+    "use server"
+    return adapter.changeRole(data)
+  },
+  can: async (action, permission) => {
+    "use server"
+    return adapter.can(action, permission)
+  },
+} satisfies OberonActions

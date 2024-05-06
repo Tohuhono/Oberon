@@ -2,11 +2,10 @@ import { z } from "zod"
 import { Data } from "@measured/puck"
 import { Route } from "next"
 import type { Config } from "@measured/puck"
-import type { Adapter } from "@auth/core/adapters"
+import type { Adapter as AuthAdapter } from "@auth/core/adapters"
 
 export type OberonConfig = {
   blocks: Config["components"]
-  resolvePath: (path?: string[]) => string
 }
 
 export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
@@ -28,7 +27,7 @@ const MaybeOptimistic = z.object({
 export const PageSchema = MaybeOptimistic.extend({
   key: z
     .string()
-    .regex(/^[0-9a-zA-Z()_.-/]+$/, "Valid characters: 0-9 a-z A-Z (-_.)/")
+    .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
     .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
 })
 
@@ -78,10 +77,24 @@ export type OberonUser = z.infer<typeof UserSchema>
 export const roles = ["user", "admin"] as const
 
 /*
- * Actions
+ * Context
  */
 
-export type OberonAdapter = {
+type DescriminatedContext =
+  | { action: "edit" | "preview"; data: Data | null }
+  | { action: "users"; data: OberonUser[] }
+  | { action: "images"; data: OberonImage[] }
+  | { action: "pages"; data: OberonPage[] }
+
+export type OberonClientContext = DescriminatedContext & {
+  slug: string
+}
+
+/*
+ * Adapter
+ */
+
+export type OberonDatabaseAdapter = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (
     id: OberonUser["id"],
@@ -96,9 +109,9 @@ export type OberonAdapter = {
   getAllPages: () => Promise<OberonPage[]>
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
   getPageData: (key: OberonPage["key"]) => Promise<string | null>
-} & Adapter
+} & AuthAdapter
 
-export type OberonServerActions = {
+export type OberonActions = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
@@ -121,3 +134,9 @@ export type OberonServerActions = {
     permission?: AdapterPermission,
   ) => Promise<boolean>
 }
+
+export type OberonAdapter = OberonActions
+
+export type OberonPlugin = (
+  adapter: OberonDatabaseAdapter,
+) => OberonDatabaseAdapter

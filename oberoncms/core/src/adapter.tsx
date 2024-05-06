@@ -14,12 +14,13 @@ import {
   PageSchema,
   type AdapterActionGroup,
   type AdapterPermission,
+  type OberonDatabaseAdapter,
   type OberonAdapter,
-  type OberonServerActions,
+  type OberonPlugin,
 } from "@/app/schema"
 
 export function initAdapter({
-  db,
+  databaseAdapter,
   permissions = {
     unauthenticated: {
       pages: "read",
@@ -31,18 +32,22 @@ export function initAdapter({
     },
   },
   getRole,
+  plugins = [],
 }: {
-  db: OberonAdapter
+  databaseAdapter: OberonDatabaseAdapter
   getRole: () => Promise<"user" | "admin" | null>
   permissions?: Record<
     "unauthenticated" | "user",
     Partial<Record<AdapterActionGroup, AdapterPermission>>
   >
-}): OberonServerActions {
-  const can: OberonServerActions["can"] = async (
-    action,
-    permission = "read",
-  ) => {
+  plugins?: OberonPlugin[]
+}): OberonAdapter {
+  const db = plugins.reduce<OberonDatabaseAdapter>(
+    (accumulator, plugin) => plugin(accumulator),
+    databaseAdapter,
+  )
+
+  const can: OberonAdapter["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
     if (
       permissions.unauthenticated[action] === permission ||
@@ -117,12 +122,23 @@ export function initAdapter({
 
   const getAllUsersCached = cache(
     async () => {
-      const allUsers = db.getAllUsers()
+      const allUsers = await db.getAllUsers()
       return allUsers || []
     },
     undefined,
     {
       tags: ["oberon-users"],
+    },
+  )
+
+  const getAllImagesCached = cache(
+    async () => {
+      const allImages = await db.getAllImages()
+      return allImages || []
+    },
+    undefined,
+    {
+      tags: ["oberon-images"],
     },
   )
 
@@ -180,8 +196,7 @@ export function initAdapter({
      */
     getAllImages: async function () {
       await will("images", "read")
-      const allImages = await db.getAllImages()
-      return allImages || []
+      return getAllImagesCached()
     },
 
     addImage: async function (data: unknown) {
@@ -189,23 +204,15 @@ export function initAdapter({
 
       const image = ImageSchema.parse(data)
       await db.addImage(image)
+      revalidateTag("oberon-images")
       return db.getAllImages()
     },
 
     // TODO uploadthing
     deleteImage: async function (data) {
       await will("images", "write")
-      console.warn("FIXME deleteImage not implemented", data)
-      /*
-    const { key } = DeleteImageSchema.parse(data)
-  try {
-    await ourUploadthing.deleteFiles(key)
-    await db.delete(images).where(eq(images.key, key))
-    return key
-  } catch (_error) {
-    console.error("Delete image failed")
-    return null
-  }*/
+      revalidateTag("oberon-images")
+      return db.deleteImage(data)
     },
 
     /*
@@ -258,7 +265,6 @@ export function initAdapter({
         return null
       }
     },
-
     can,
-  }
+  } satisfies OberonAdapter
 }

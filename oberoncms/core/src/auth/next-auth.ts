@@ -27,10 +27,10 @@ const SEND_VERIFICATION_REQUEST =
   (process.env.NODE_ENV === "production" && process.env.EMAIL_SEND !== "false")
 
 export function initAuth({
-  adapter,
+  databaseAdapter: db,
   sendVerificationRequest,
 }: {
-  adapter: Adapter
+  databaseAdapter: Adapter
   sendVerificationRequest?: (props: {
     email: string
     token: string
@@ -81,7 +81,7 @@ export function initAuth({
     session: {
       strategy: "jwt",
     },
-    adapter,
+    adapter: db,
     callbacks: {
       async signIn({ user, profile }) {
         // Master user override
@@ -99,7 +99,7 @@ export function initAuth({
         if (
           profile?.email_verified &&
           profile.email &&
-          (await adapter.getUserByEmail?.(profile.email))
+          (await db.getUserByEmail?.(profile.email))
         ) {
           return true
         }

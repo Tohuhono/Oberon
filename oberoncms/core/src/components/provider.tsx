@@ -1,13 +1,25 @@
+"use client"
+
 import { createContext, type PropsWithChildren } from "react"
-import type { OberonServerActions } from "../app/schema"
+import type { OberonActions, OberonClientContext } from "../app/schema"
 
-export const OberonContext = createContext<OberonServerActions | null>(null)
+export const ClientContext = createContext<OberonClientContext | null>(null)
 
-export const OberonProvider = ({
+export const ActionsContext = createContext<OberonActions | null>(null)
+
+export const OberonClientProvider = ({
   children,
   actions,
-}: PropsWithChildren<{ actions: OberonServerActions }>) => {
+  context,
+}: PropsWithChildren<{
+  actions: OberonActions
+  context: OberonClientContext
+}>) => {
   return (
-    <OberonContext.Provider value={actions}>{children}</OberonContext.Provider>
+    <ActionsContext.Provider value={actions}>
+      <ClientContext.Provider value={context}>
+        {children}
+      </ClientContext.Provider>
+    </ActionsContext.Provider>
   )
 }

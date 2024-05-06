@@ -23,7 +23,8 @@
     "./auth": "./dist/auth.js",
     "./adapter": "./dist/adapter.js",
     "./render": "./dist/render.js",
-    "./editor": "./dist/editor.js"
+    "./editor": "./dist/editor.js",
+    "./provider": "./dist/provider.js"
   },
   "scripts": {
     "build": "vite build",

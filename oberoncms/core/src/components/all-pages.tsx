@@ -13,11 +13,11 @@ import {
   FormItem,
   FormMessage,
 } from "@tohuhono/ui/form"
-import { useOberon } from "@/hooks/use-oberon"
+import { useOberonActions } from "@/hooks/use-oberon"
 import { PageSchema, type OberonPage } from "@/app/schema"
 
 const useOberonPages = (pages: OberonPage[]) => {
-  const { deletePage, addPage } = useOberon()
+  const { deletePage, addPage } = useOberonActions()
   const [optimisticPages, optimisticPageUpdate] =
     useOptimistic<OberonPage[]>(pages)
 
@@ -87,7 +87,6 @@ export function AllPages({ pages: serverPages }: { pages: OberonPage[] }) {
                 className: "no-underline",
               })}
               href={`/cms/edit${route}`}
-              target="_blank"
               prefetch={false}
             >
               Edit

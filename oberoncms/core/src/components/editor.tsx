@@ -6,7 +6,7 @@ import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@tohuhono/ui/button"
 import { useState } from "react"
 import { PuckMenu } from "./puck-menu"
-import { useOberon } from "@/hooks/use-oberon"
+import { useOberonActions } from "@/hooks/use-oberon"
 import { useLocalData } from "@/hooks/use-local-data"
 import { INITIAL_DATA } from "@/app/schema"
 
@@ -97,7 +97,7 @@ export function Editor({
   data: Data | null
   config: Config
 }) {
-  const { publishPageData } = useOberon()
+  const { publishPageData } = useOberonActions()
   const [localData, setLocalData] = useLocalData(path, config)
 
   const onPublish = async (data: Data) => {

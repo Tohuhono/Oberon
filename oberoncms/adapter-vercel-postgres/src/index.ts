@@ -1,7 +1,7 @@
 import "server-only"
 
 import { eq } from "drizzle-orm"
-import { type OberonAdapter } from "@oberoncms/core"
+import { type OberonDatabaseAdapter } from "@oberoncms/core"
 
 // import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
 import { db } from "src/db/client"
@@ -9,7 +9,7 @@ import { images, pages, users } from "src/db/schema"
 
 import { adapter } from "@/db/next-auth-adapter"
 
-export const databaseAdapter: OberonAdapter = {
+export const databaseAdapter: OberonDatabaseAdapter = {
   ...adapter,
   getAllUsers: async () => {
     return await db
@@ -33,7 +33,9 @@ export const databaseAdapter: OberonAdapter = {
   addImage: async (image) => {
     await db.insert(images).values(image).execute()
   },
-  deleteImage: async () => {},
+  deleteImage: async (key) => {
+    await db.delete(images).where(eq(images.key, key))
+  },
   getAllImages: async () => {
     return await db
       .select({

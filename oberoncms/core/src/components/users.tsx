@@ -22,13 +22,13 @@ import {
   FormMessage,
 } from "@tohuhono/ui/form"
 
-import { useOberon } from "@/hooks/use-oberon"
+import { useOberonActions } from "@/hooks/use-oberon"
 import { AddUserSchema, OberonUser, roles } from "@/app/schema"
 
 type OptimisticUser = OberonUser & { pending?: boolean }
 
 const useOberonUsers = (users: OberonUser[]) => {
-  const { addUser, changeRole, deleteUser } = useOberon()
+  const { addUser, changeRole, deleteUser } = useOberonActions()
   const [optimisticUsers, optimisticUserUpdate] =
     useOptimistic<OptimisticUser[]>(users)
 

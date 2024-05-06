@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
 import { ThemeEditorMenu } from "@tohuhono/ui/theme"
 import useSWR from "swr"
-import { useOberon } from "@/hooks/use-oberon"
+import { useOberonActions } from "@/hooks/use-oberon"
 
 export const PuckMenu = ({
   title,
@@ -14,7 +14,7 @@ export const PuckMenu = ({
 }: PropsWithChildren<
   { title?: string; path: string } | { title: string; path?: string }
 >) => {
-  const { can } = useOberon()
+  const { can } = useOberonActions()
 
   const { data: showImages } = useSWR("/can/images", () => can("images"))
   const { data: showUsers } = useSWR("/can/users", () => can("users"))
