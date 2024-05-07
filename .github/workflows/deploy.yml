@@ -33,6 +33,7 @@ jobs:
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       TURSO_URL: ${{ secrets.TURSO_URL }}
       TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
+      UPLOADTHING_SECRET: sk_overridden
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest
