@@ -1,5 +1,5 @@
 import type { OberonDatabaseAdapter } from "@oberoncms/core"
-import { ourUploadthing } from "./api"
+import { deleteImage } from "./api"
 
 export const uploadthingPlugin = (
   adapter: OberonDatabaseAdapter,
@@ -7,7 +7,8 @@ export const uploadthingPlugin = (
   ...adapter,
   deleteImage: async (key) => {
     await Promise.all([
-      await ourUploadthing.deleteFiles(key),
+      //
+      await deleteImage(key),
       await adapter.deleteImage(key),
     ])
   },
