@@ -79,7 +79,7 @@ const getClient = () => {
   const regex = /"className":"([^"]*)"/gm
 
   await mkdir(".oberon", { recursive: true })
-  var outFile = await createWriteStream(".oberon/tailwind.classes")
+  var outFile = createWriteStream(".oberon/tailwind.classes")
 
   for (const { data } of results) {
     if (data) {

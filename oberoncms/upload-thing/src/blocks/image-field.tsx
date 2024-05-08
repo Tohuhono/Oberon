@@ -49,10 +49,21 @@ export const ImageField = ({
             name,
             size,
             url,
+
             serverData: { width, height },
           } = res[0]
 
-          add({ key, url, alt: name, size, width, height })
+          add({
+            key,
+            url,
+            alt: name,
+            size,
+            width,
+            height,
+            updatedAt: new Date(),
+            updatedBy: "unknown",
+            blarg: "ddd",
+          })
           setImageKey?.(key || "")
         }}
         onUploadError={(error: Error) => {

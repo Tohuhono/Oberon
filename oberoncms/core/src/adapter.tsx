@@ -5,12 +5,12 @@ import {
 } from "next/cache"
 import { type Data } from "@measured/puck"
 import {
+  AddImageSchema,
   AddUserSchema,
   ChangeRoleSchema,
   DeletePageSchema,
   DeleteUserSchema,
   INITIAL_DATA,
-  ImageSchema,
   PageSchema,
   type AdapterActionGroup,
   type AdapterPermission,
@@ -202,7 +202,7 @@ export function initAdapter({
     addImage: async function (data: unknown) {
       await will("images", "write")
 
-      const image = ImageSchema.parse(data)
+      const image = AddImageSchema.parse(data)
       await db.addImage(image)
       revalidateTag("oberon-images")
       return db.getAllImages()

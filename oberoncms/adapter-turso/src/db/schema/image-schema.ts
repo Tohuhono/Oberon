@@ -7,4 +7,6 @@ export const images = sqliteTable("images", {
   size: integer("size").notNull(),
   height: integer("height").notNull(),
   width: integer("width").notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  updatedBy: text("updated_by").notNull(),
 })

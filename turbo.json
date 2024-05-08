@@ -19,6 +19,7 @@
       "persistent": true,
       "dependsOn": ["wait:clean", "^wait", "prebuild"]
     },
+    "generate:migrations": {},
     "prebuild": {
       "cache": false,
       "dependsOn": ["^build"]
