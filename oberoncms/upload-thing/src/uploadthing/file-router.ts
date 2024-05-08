@@ -5,6 +5,7 @@ import {
 } from "uploadthing/next"
 import { UploadThingError } from "uploadthing/server"
 import type { OberonAdapter } from "@oberoncms/core"
+// TODO https://github.com/pingdotgg/uploadthing/issues/790
 import type {} from "@uploadthing/shared"
 import { getImageSize } from "./get-image-size"
 
