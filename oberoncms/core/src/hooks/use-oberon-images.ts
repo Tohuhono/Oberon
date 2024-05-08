@@ -1,6 +1,6 @@
 import useSWR from "swr"
-import type { OberonImage } from ".."
 import { useOberonActions } from "./use-oberon"
+import type { OberonImage } from "@/app/schema"
 
 export const useOberonImages = () => {
   const { getAllImages, addImage } = useOberonActions()

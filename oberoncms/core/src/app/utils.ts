@@ -8,7 +8,7 @@ export function getTitle(action: ClientAction, slug?: string) {
     case "preview":
       return "Previewing: " + slug
     case "images":
-      return "Manage Assets"
+      return "Manage Images"
     case "users":
       return "Manage Users"
     case "pages":

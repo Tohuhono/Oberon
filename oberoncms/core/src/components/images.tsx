@@ -1,12 +1,18 @@
 "use client"
 
-import { Fragment, startTransition, useOptimistic } from "react"
+import {
+  Fragment,
+  startTransition,
+  useOptimistic,
+  type PropsWithChildren,
+} from "react"
 
 import { filesize } from "filesize"
 import Link from "next/link"
 import { Route } from "next"
 import { Button } from "@tohuhono/ui/button"
 import Image from "next/image"
+import { format } from "@tohuhono/utils"
 import { useOberonActions } from "@/hooks/use-oberon"
 import type { OberonImage } from "@/app/schema"
 
@@ -30,21 +36,31 @@ const useOberonImages = (images: OberonImage[]) => {
   }
 }
 
+const ColumnHeading = ({ children }: PropsWithChildren) =>
+  children ? <div className="border-b-2 py-1">{children}</div> : <div />
+
 export function Images({ images: initialImages }: { images: OberonImage[] }) {
   const { images, deleteImage } = useOberonImages(initialImages)
 
   return (
-    <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-3 pt-3">
-      {images.map(({ key, alt, size, url, pending }) => {
+    <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto_auto_auto_auto] items-center gap-3 pt-3">
+      <ColumnHeading></ColumnHeading>
+      <ColumnHeading>Name</ColumnHeading>
+      <ColumnHeading>Size</ColumnHeading>
+      <ColumnHeading>Uploaded</ColumnHeading>
+      <ColumnHeading>By</ColumnHeading>
+      <ColumnHeading />
+
+      {images.map(({ key, alt, size, updatedAt, updatedBy, url, pending }) => {
         return (
           <Fragment key={key}>
             <Link href={url as Route} prefetch={false} target="_blank">
-              <div className="flex flex-row gap-2">
-                <Image src={url} width={24} height={24} alt={alt} />
-                {alt}
-              </div>
+              <Image src={url} width={24} height={24} alt={alt} />
             </Link>
+            <div className="flex flex-row gap-2">{alt}</div>
             <div>{filesize(size)}</div>
+            <div>{format(updatedAt)}</div>
+            <div>{updatedBy}</div>
             <Button
               variant="destructive"
               size="sm"

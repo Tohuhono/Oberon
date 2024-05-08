@@ -9,6 +9,7 @@
     "change": "changeset",
     "clean": "turbo clean --filter=!dev --continue && rimraf ./dist ./.turbo",
     "clean:node": "turbo clean --filter=!dev --continue -- --node_modules && npx odt-clean --node_modules",
+    "generate:migrations": "turbo generate:migrations",
     "start:oberon": "turbo start --filter=oberon-cms-example",
     "tsc": "turbo tsc",
     "dev": "turbo dev --concurrency 20",

@@ -30,7 +30,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "node ../../scripts/clean-package.mjs",
-    "db:migrations:create": "drizzle-kit generate:pg",
+    "generate:migrations": "drizzle-kit generate:pg",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "tsc": "tsc --pretty",

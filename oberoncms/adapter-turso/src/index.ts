@@ -42,6 +42,8 @@ export const oberonAdapter: OberonDatabaseAdapter = {
         size: images.size,
         height: images.height,
         width: images.width,
+        updatedAt: images.updatedAt,
+        updatedBy: images.updatedBy,
       })
       .from(images)
       .execute()

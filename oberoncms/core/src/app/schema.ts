@@ -17,14 +17,14 @@ export const INITIAL_DATA = {
   root: { props: { title: "" } },
 } satisfies Data
 
-const MaybeOptimistic = z.object({
-  pending: z.boolean().optional(),
-})
+export type MaybeOptimistic<T> = T & {
+  pending?: boolean
+}
 
 /*
  * Pages
  */
-export const PageSchema = MaybeOptimistic.extend({
+export const PageSchema = z.object({
   key: z
     .string()
     .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
@@ -38,31 +38,37 @@ export const PublishPageSchema = PageSchema.pick({ key: true }).extend({
 })
 
 // Cannot infer from zod because we need nextjs to understand key is a valid Route
-export type OberonPage = z.infer<typeof PageSchema> & {
-  key: Route
-}
+export type OberonPage = MaybeOptimistic<
+  z.infer<typeof PageSchema> & {
+    key: Route
+  }
+>
 
 /*
  * Images
  */
 
-export const ImageSchema = MaybeOptimistic.extend({
+export const ImageSchema = z.object({
   key: z.string(),
   url: z.string(),
   size: z.number(),
   width: z.number().gt(0),
   height: z.number().gt(0),
   alt: z.string(),
+  updatedAt: z.date(),
+  updatedBy: z.string(),
 })
+
+export const AddImageSchema = ImageSchema
 
 export const DeleteImageSchema = ImageSchema.pick({ key: true })
 
-export type OberonImage = z.infer<typeof ImageSchema>
+export type OberonImage = MaybeOptimistic<z.infer<typeof ImageSchema>>
 
 /*
  * Users
  */
-export const UserSchema = MaybeOptimistic.extend({
+export const UserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   role: z.enum(["user", "admin"]),
@@ -72,7 +78,7 @@ export const AddUserSchema = UserSchema.pick({ email: true, role: true })
 export const ChangeRoleSchema = UserSchema.pick({ id: true, role: true })
 export const DeleteUserSchema = UserSchema.pick({ id: true })
 
-export type OberonUser = z.infer<typeof UserSchema>
+export type OberonUser = MaybeOptimistic<z.infer<typeof UserSchema>>
 
 export const roles = ["user", "admin"] as const
 
@@ -102,7 +108,7 @@ export type OberonDatabaseAdapter = {
   changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
   getAllUsers: () => Promise<OberonUser[]>
   getAllImages: () => Promise<OberonImage[]>
-  addImage: (image: OberonImage) => Promise<void>
+  addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   addPage: (page: OberonPage & { data: string }) => Promise<void>
   deletePage: (key: OberonPage["key"]) => Promise<void>
@@ -121,7 +127,7 @@ export type OberonActions = {
   ) => Promise<Pick<OberonUser, "role" | "id"> | null>
   getAllUsers: () => Promise<OberonUser[]>
   getAllImages: () => Promise<OberonImage[]>
-  addImage: (image: OberonImage) => Promise<OberonImage[]>
+  addImage: (data: z.infer<typeof AddImageSchema>) => Promise<OberonImage[]>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   addPage: (page: OberonPage) => Promise<void>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
