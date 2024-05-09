@@ -3,11 +3,9 @@ import "server-only"
 import { eq } from "drizzle-orm"
 import { type OberonDatabaseAdapter } from "@oberoncms/core"
 
-// import { ourUploadthing } from "src/puck/uploadthing/api" // TODO uploadthing
-import { db } from "src/db/client"
-import { images, pages, users } from "src/db/schema"
-
-import { adapter } from "@/db/next-auth-adapter"
+import { db } from "./db/client"
+import { images, pages, users } from "./db/schema"
+import { adapter } from "./db/next-auth-adapter"
 
 export const databaseAdapter: OberonDatabaseAdapter = {
   ...adapter,

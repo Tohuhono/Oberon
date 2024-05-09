@@ -10,7 +10,7 @@
   "pipeline": {
     "build": {
       "dotEnv": [".env.local", ".env"],
-      "dependsOn": ["^build", "prebuild"],
+      "dependsOn": ["wait:clean", "^build", "prebuild"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "clean": { "cache": false },
@@ -22,7 +22,7 @@
     "generate:migrations": {},
     "prebuild": {
       "cache": false,
-      "dependsOn": ["^build"]
+      "dependsOn": ["^wait"]
     },
     "jest": {},
     "lint": {},

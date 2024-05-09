@@ -13,8 +13,8 @@ import {
   FormItem,
   FormMessage,
 } from "@tohuhono/ui/form"
-import { useOberonActions } from "@/hooks/use-oberon"
-import { PageSchema, type OberonPage } from "@/app/schema"
+import { useOberonActions } from "../hooks/use-oberon"
+import { PageSchema, type OberonPage } from "../app/schema"
 
 const useOberonPages = (pages: OberonPage[]) => {
   const { deletePage, addPage } = useOberonActions()

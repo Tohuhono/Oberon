@@ -3,6 +3,7 @@ import { Data } from "@measured/puck"
 import { Route } from "next"
 import type { Config } from "@measured/puck"
 import type { Adapter as AuthAdapter } from "@auth/core/adapters"
+import type { NextAuthResult } from "next-auth"
 
 export type OberonConfig = {
   blocks: Config["components"]
@@ -11,6 +12,10 @@ export type OberonConfig = {
 export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
 export type AdapterActionGroup = "cms" | "users" | "images" | "pages"
 export type AdapterPermission = "read" | "write"
+
+export type OberonAuth = NextAuthResult & {
+  getRole: () => Promise<"user" | "admin" | null>
+}
 
 export const INITIAL_DATA = {
   content: [],
@@ -127,7 +132,7 @@ export type OberonActions = {
   ) => Promise<Pick<OberonUser, "role" | "id"> | null>
   getAllUsers: () => Promise<OberonUser[]>
   getAllImages: () => Promise<OberonImage[]>
-  addImage: (data: z.infer<typeof AddImageSchema>) => Promise<OberonImage[]>
+  addImage: (data: OberonImage) => Promise<OberonImage[]>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   addPage: (page: OberonPage) => Promise<void>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>

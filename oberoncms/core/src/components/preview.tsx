@@ -1,5 +1,5 @@
 import { Render, type Config, type Data } from "@measured/puck"
-import { useLocalData } from "@/hooks/use-local-data"
+import { useLocalData } from "../hooks/use-local-data"
 
 export function Preview({
   path,

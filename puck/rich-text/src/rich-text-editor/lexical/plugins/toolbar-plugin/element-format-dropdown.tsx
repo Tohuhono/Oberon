@@ -16,7 +16,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "../../ui/dropdown-menu"
+} from "../../../../rich-text-editor/lexical/ui/dropdown-menu"
 
 const ELEMENT_FORMAT_OPTIONS: {
   [key in Exclude<ElementFormatType, "">]: {

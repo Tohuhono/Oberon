@@ -1,4 +1,4 @@
-import "@/db/env-config"
+import "./src/db/env-config"
 
 import type { Config } from "drizzle-kit"
 

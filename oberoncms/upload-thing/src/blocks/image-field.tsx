@@ -2,7 +2,7 @@ import { FieldLabel } from "@measured/puck"
 import { useEffect, useState } from "react"
 import { useOberonImages } from "@oberoncms/core/editor"
 import type { OberonImage } from "@oberoncms/core"
-import { UploadDropzone } from "@/uploadthing/components"
+import { UploadDropzone } from "../uploadthing/components"
 
 export const ImageField = ({
   value,
@@ -11,7 +11,7 @@ export const ImageField = ({
   value: OberonImage | null
   onChange: (value: { image: OberonImage | null }) => void
 }) => {
-  const { images, loading, add } = useOberonImages()
+  const { images, loading, addImage } = useOberonImages()
 
   const [imageKey, setImageKey] = useState<OberonImage["key"] | "">(
     value?.key || "",
@@ -49,11 +49,10 @@ export const ImageField = ({
             name,
             size,
             url,
-
             serverData: { width, height },
           } = res[0]
 
-          add({
+          addImage({
             key,
             url,
             alt: name,
@@ -62,7 +61,6 @@ export const ImageField = ({
             height,
             updatedAt: new Date(),
             updatedBy: "unknown",
-            blarg: "ddd",
           })
           setImageKey?.(key || "")
         }}

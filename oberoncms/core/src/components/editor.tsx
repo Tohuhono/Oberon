@@ -5,10 +5,10 @@ import "@measured/puck/dist/index.css"
 import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@tohuhono/ui/button"
 import { useState } from "react"
+import { useLocalData } from "../hooks/use-local-data"
+import { INITIAL_DATA } from "../app/schema"
+import { useOberonActions } from "../hooks/use-oberon"
 import { PuckMenu } from "./puck-menu"
-import { useOberonActions } from "@/hooks/use-oberon"
-import { useLocalData } from "@/hooks/use-local-data"
-import { INITIAL_DATA } from "@/app/schema"
 
 const Header = ({
   path,

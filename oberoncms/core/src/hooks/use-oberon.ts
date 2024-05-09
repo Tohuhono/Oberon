@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { ActionsContext, ClientContext } from "@/components/provider"
+import { ActionsContext, ClientContext } from "../components/provider"
 
 export const useOberonActions = () => {
   const context = useContext(ActionsContext)

@@ -6,8 +6,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/dropdown-menu"
-import { Button } from "@/components/button"
+} from "../dropdown-menu"
+import { Button } from "../button"
 
 export const setMode = (theme: "light" | "dark" | "system") => {
   if (theme === "system") {

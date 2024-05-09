@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
 import { ThemeEditorMenu } from "@tohuhono/ui/theme"
 import useSWR from "swr"
-import { useOberonActions } from "@/hooks/use-oberon"
+import { useOberonActions } from "../hooks/use-oberon"
 
 export const PuckMenu = ({
   title,

@@ -3,17 +3,17 @@
 import { ClipboardCopyIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useState, ChangeEvent, Fragment } from "react"
 import { cn } from "@tohuhono/utils"
-import { ApplyTheme, copyToClipboard } from "./theme-editor"
-import { defaultTheme } from "./default-theme"
-import { getMode, setMode } from "./mode-toggle"
-import { Button } from "@/components/button"
+import { Input } from "../input"
+import { Label } from "../label"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/dropdown-menu"
-import { Label } from "@/components/label"
-import { Input } from "@/components/input"
+} from "../dropdown-menu"
+import { Button } from "../button"
+import { ApplyTheme, copyToClipboard } from "./theme-editor"
+import { defaultTheme } from "./default-theme"
+import { getMode, setMode } from "./mode-toggle"
 
 export const ThemeEditorMenu = ({ className }: { className?: string }) => {
   const [theme, setTheme] = useState(defaultTheme)

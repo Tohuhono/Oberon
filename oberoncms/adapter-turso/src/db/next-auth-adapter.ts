@@ -1,13 +1,13 @@
 import { randomUUID } from "crypto"
 import { eq, and } from "drizzle-orm"
 import type { Adapter } from "@auth/core/adapters"
+import { db } from "../db/client"
 import {
   users,
   accounts,
   sessions,
   verificationTokens,
-} from "src/db/schema/next-auth-schema"
-import { db } from "src/db/client"
+} from "../db/schema/next-auth-schema"
 
 function LibsqlDrizzleAdapter(client: typeof db) {
   return {
