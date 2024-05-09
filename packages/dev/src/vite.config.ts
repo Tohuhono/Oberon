@@ -6,7 +6,6 @@ import { createLogger, defineConfig, type Plugin as VitePlugin } from "vite"
 import preserveDirectives from "rollup-preserve-directives"
 import fg from "fast-glob"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
-import tsconfigPaths from "vite-tsconfig-paths"
 
 function dts(): VitePlugin {
   return {
@@ -87,7 +86,6 @@ export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
     },
     plugins: [
       externalizeDeps(),
-      tsconfigPaths(),
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
       // @ts-ignore sometimes fails so can't use expect error
       preserveDirectives(),
