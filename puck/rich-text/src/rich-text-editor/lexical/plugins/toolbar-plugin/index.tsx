@@ -36,12 +36,12 @@ import { Dispatch, useCallback, useEffect, useState } from "react"
 
 import { createPortal } from "react-dom"
 import { Bold, Italic, RemoveFormatting } from "lucide-react"
-import { getSelectedNode } from "../../utils/get-selected-node"
-import { sanitizeUrl } from "../../utils/url"
-import { Button } from "../../ui/button"
-import { getToolbarPortal } from "../../utils/get-toolbar-portal"
+import { getSelectedNode } from "../../../../rich-text-editor/lexical/utils/get-selected-node"
+import { sanitizeUrl } from "../../../../rich-text-editor/lexical/utils/url"
+import { Button } from "../../../../rich-text-editor/lexical/ui/button"
+import { getToolbarPortal } from "../../../../rich-text-editor/lexical/utils/get-toolbar-portal"
 
-import { isApple } from "../../utils/is-apple"
+import { isApple } from "../../../../rich-text-editor/lexical/utils/is-apple"
 import { BlockFormatDropDown, blockFormats } from "./block-format-dropdown"
 import { ElementFormatDropdown } from "./element-format-dropdown"
 

@@ -17,7 +17,7 @@ import {
   type OberonDatabaseAdapter,
   type OberonAdapter,
   type OberonPlugin,
-} from "@/app/schema"
+} from "./app/schema"
 
 export function initAdapter({
   databaseAdapter,

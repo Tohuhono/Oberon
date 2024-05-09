@@ -12,6 +12,7 @@
   "type": "module",
   "exports": {
     "./button": "./dist/button.js",
+    "./date": "./dist/date.js",
     "./form": "./dist/form.js",
     "./input": "./dist/input.js",
     "./label": "./dist/label.js",

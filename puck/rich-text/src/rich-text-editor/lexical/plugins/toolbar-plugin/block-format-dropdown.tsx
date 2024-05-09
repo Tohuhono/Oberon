@@ -8,6 +8,7 @@ import {
   HeadingTagType,
 } from "@lexical/rich-text"
 import { $setBlocksType } from "@lexical/selection"
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu"
 import { $createParagraphNode, $getSelection, LexicalEditor } from "lexical"
 import {
   Pilcrow,
@@ -23,11 +24,10 @@ import {
   TextQuote,
 } from "lucide-react"
 import {
+  DropdownTrigger,
   DropdownContent,
   DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "../../ui/dropdown-menu"
+} from "../../../../rich-text-editor/lexical/ui/dropdown-menu"
 
 export const blockFormats = {
   paragraph: { label: "Paragaph", Icon: Pilcrow },

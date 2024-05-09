@@ -22,8 +22,8 @@ import {
   FormMessage,
 } from "@tohuhono/ui/form"
 
-import { useOberonActions } from "@/hooks/use-oberon"
-import { AddUserSchema, OberonUser, roles } from "@/app/schema"
+import { AddUserSchema, OberonUser, roles } from "../app/schema"
+import { useOberonActions } from "../hooks/use-oberon"
 
 type OptimisticUser = OberonUser & { pending?: boolean }
 

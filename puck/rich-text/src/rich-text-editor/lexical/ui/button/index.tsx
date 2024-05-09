@@ -1,7 +1,7 @@
 import { ComponentProps } from "react"
 
+import { getClassNameFactory } from "../../../../compat/get-class-name-factory"
 import styles from "./styles.module.css"
-import { getClassNameFactory } from "@/compat/get-class-name-factory"
 
 const getClassName = getClassNameFactory("ToolbarButton", styles)
 

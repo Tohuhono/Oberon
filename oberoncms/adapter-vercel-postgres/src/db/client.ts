@@ -1,4 +1,4 @@
-import "@/db/env-config"
+import "./env-config"
 import { drizzle } from "drizzle-orm/vercel-postgres"
 import { sql } from "@vercel/postgres"
 import * as schema from "./schema"

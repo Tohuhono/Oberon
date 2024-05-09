@@ -5,6 +5,7 @@ import NextAuth from "next-auth"
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
 import type { Adapter } from "@auth/core/adapters"
+import type { OberonAuth } from ".."
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
@@ -36,7 +37,7 @@ export function initAuth({
     token: string
     url: string
   }) => Promise<void>
-}) {
+}): OberonAuth {
   const config = {
     pages: {
       verifyRequest: "/api/auth/verify",
@@ -131,9 +132,7 @@ export function initAuth({
     return session?.user?.role || null
   }
 
-  const POST = nextAuth.handlers.POST
-
-  const GET = (req: NextRequest) => {
+  const GET = async (req: NextRequest) => {
     // safe links bot workaround https://github.com/nextauthjs/next-auth/issues/4965
     if (
       req.method === "GET" &&
@@ -153,11 +152,11 @@ export function initAuth({
   }
 
   return {
-    getRole,
-    auth,
+    ...nextAuth,
     handlers: {
-      POST,
+      ...nextAuth.handlers,
       GET,
     },
+    getRole,
   }
 }

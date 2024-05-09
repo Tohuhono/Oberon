@@ -46,8 +46,7 @@
     "uploadthing": "^6.10.1",
     "vite": "^5.1.6",
     "vite-plugin-dts": "^3.7.3",
-    "vite-plugin-externalize-deps": "^0.8.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-plugin-externalize-deps": "^0.8.0"
   },
   "devDependencies": {
     "@types/eslint-config-prettier": "^6.11.3",

@@ -1,6 +1,6 @@
 import useSWR from "swr"
+import { OberonImage } from "../app/schema"
 import { useOberonActions } from "./use-oberon"
-import type { OberonImage } from "@/app/schema"
 
 export const useOberonImages = () => {
   const { getAllImages, addImage } = useOberonActions()
@@ -11,10 +11,13 @@ export const useOberonImages = () => {
     isLoading: loading,
   } = useSWR("/oberon/images", () => getAllImages())
 
-  const add = (image: OberonImage) =>
-    mutate(async () => await addImage(image), {
-      optimisticData: (currentData) => [...(currentData || []), image],
-    })
-
-  return { images, loading, add }
+  return {
+    images,
+    loading,
+    addImage: (image: OberonImage) => {
+      mutate(async () => await addImage(image), {
+        optimisticData: (currentData) => [...(currentData || []), image],
+      })
+    },
+  }
 }

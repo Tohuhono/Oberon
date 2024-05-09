@@ -11,10 +11,11 @@ import { filesize } from "filesize"
 import Link from "next/link"
 import { Route } from "next"
 import { Button } from "@tohuhono/ui/button"
+import { LocalDate } from "@tohuhono/ui/date"
 import Image from "next/image"
-import { format } from "@tohuhono/utils"
-import { useOberonActions } from "@/hooks/use-oberon"
-import type { OberonImage } from "@/app/schema"
+
+import { useOberonActions } from "../hooks/use-oberon"
+import type { OberonImage } from "../app/schema"
 
 const useOberonImages = (images: OberonImage[]) => {
   const { deleteImage } = useOberonActions()
@@ -51,7 +52,8 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
       <ColumnHeading>By</ColumnHeading>
       <ColumnHeading />
 
-      {images.map(({ key, alt, size, updatedAt, updatedBy, url, pending }) => {
+      {images.map(({ key, alt, size, updatedAt, updatedBy, url }) => {
+        const pending = false
         return (
           <Fragment key={key}>
             <Link href={url as Route} prefetch={false} target="_blank">
@@ -59,7 +61,9 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
             </Link>
             <div className="flex flex-row gap-2">{alt}</div>
             <div>{filesize(size)}</div>
-            <div>{format(updatedAt)}</div>
+            <div>
+              <LocalDate date={updatedAt} />
+            </div>
             <div>{updatedBy}</div>
             <Button
               variant="destructive"

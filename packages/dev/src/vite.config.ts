@@ -2,11 +2,10 @@
 // vite.config.js
 import { writeFile, mkdir } from "fs/promises"
 import { exec } from "child_process"
-import { defineConfig, type Plugin as VitePlugin } from "vite"
+import { createLogger, defineConfig, type Plugin as VitePlugin } from "vite"
 import preserveDirectives from "rollup-preserve-directives"
 import fg from "fast-glob"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
-import tsconfigPaths from "vite-tsconfig-paths"
 
 function dts(): VitePlugin {
   return {
@@ -34,6 +33,7 @@ function dts(): VitePlugin {
   }
 }
 
+// Tells turbo in dev mode that the first build has finished
 function watchFile(): VitePlugin {
   return {
     name: "watch-version",
@@ -70,11 +70,22 @@ function parseEntryPoints(entryPoints: string[] = ["src/*.ts"]) {
 }
 
 export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
+  const logger = createLogger()
+
   return defineConfig({
-    logLevel: "warn",
+    logLevel: "info",
+    customLogger: {
+      ...logger,
+      info: (msg, options) => {
+        // Clean gzip output
+        if (msg.includes("dist/") && msg.includes(" gzip: ")) {
+          return
+        }
+        logger.info(msg, options)
+      },
+    },
     plugins: [
       externalizeDeps(),
-      tsconfigPaths(),
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
       // @ts-ignore sometimes fails so can't use expect error
       preserveDirectives(),
