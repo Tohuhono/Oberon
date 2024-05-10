@@ -49,8 +49,8 @@ export const databaseAdapter: OberonDatabaseAdapter = {
       .from(images)
       .execute()
   },
-  addPage: async ({ key, data }) => {
-    await db.insert(pages).values({ key, data })
+  addPage: async ({ key, data, updatedAt, updatedBy }) => {
+    await db.insert(pages).values({ key, data, updatedAt, updatedBy })
   },
   deletePage: async (key) => {
     await db.delete(pages).where(eq(pages.key, key))
@@ -65,13 +65,22 @@ export const databaseAdapter: OberonDatabaseAdapter = {
 
     return result[0]?.data || null
   },
-  publishPageData: async ({ key, data }) => {
+  publishPageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db
       .insert(pages)
-      .values({ key, data })
-      .onConflictDoUpdate({ target: pages.key, set: { data } })
+      .values({ key, data, updatedAt, updatedBy })
+      .onConflictDoUpdate({
+        target: pages.key,
+        set: { data, updatedAt, updatedBy },
+      })
   },
   getAllPages: async () => {
-    return await db.select({ key: pages.key }).from(pages)
+    return await db
+      .select({
+        key: pages.key,
+        updatedAt: pages.updatedAt,
+        updatedBy: pages.updatedBy,
+      })
+      .from(pages)
   },
 }

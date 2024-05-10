@@ -3,19 +3,20 @@ import { Data } from "@measured/puck"
 import { Route } from "next"
 import type { Config } from "@measured/puck"
 import type { Adapter as AuthAdapter } from "@auth/core/adapters"
-import type { NextAuthResult } from "next-auth"
 
 export type OberonConfig = {
   blocks: Config["components"]
 }
 
 export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
-export type AdapterActionGroup = "cms" | "users" | "images" | "pages"
-export type AdapterPermission = "read" | "write"
+export type AdapterActionGroup = "all" | "cms" | "users" | "images" | "pages"
+export type AdapterPermission = "unauthenticated" | "read" | "write"
+export type OberonRole = "user" | "admin"
 
-export type OberonAuth = NextAuthResult & {
-  getRole: () => Promise<"user" | "admin" | null>
-}
+export type OberonPermissions = Record<
+  "unauthenticated" | "user",
+  Partial<Record<AdapterActionGroup, AdapterPermission>>
+>
 
 export const INITIAL_DATA = {
   content: [],
@@ -34,13 +35,16 @@ export const PageSchema = z.object({
     .string()
     .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
     .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
+  data: z.any(),
+  updatedAt: z.date(),
+  updatedBy: z.string(),
 })
+
+export const AddPageSchema = PageSchema.pick({ key: true })
 
 export const DeletePageSchema = PageSchema.pick({ key: true })
 
-export const PublishPageSchema = PageSchema.pick({ key: true }).extend({
-  data: z.any(),
-})
+export const PublishPageSchema = PageSchema.pick({ key: true, data: true })
 
 // Cannot infer from zod because we need nextjs to understand key is a valid Route
 export type OberonPage = MaybeOptimistic<
@@ -85,7 +89,7 @@ export const DeleteUserSchema = UserSchema.pick({ id: true })
 
 export type OberonUser = MaybeOptimistic<z.infer<typeof UserSchema>>
 
-export const roles = ["user", "admin"] as const
+export const roles: OberonRole[] = ["user", "admin"] as const
 
 /*
  * Context
@@ -115,10 +119,10 @@ export type OberonDatabaseAdapter = {
   getAllImages: () => Promise<OberonImage[]>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
-  addPage: (page: OberonPage & { data: string }) => Promise<void>
+  addPage: (page: OberonPage) => Promise<void>
   deletePage: (key: OberonPage["key"]) => Promise<void>
   getAllPages: () => Promise<OberonPage[]>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
+  publishPageData: (data: z.infer<typeof PageSchema>) => Promise<void>
   getPageData: (key: OberonPage["key"]) => Promise<string | null>
 } & AuthAdapter
 
@@ -134,7 +138,7 @@ export type OberonActions = {
   getAllImages: () => Promise<OberonImage[]>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
-  addPage: (page: OberonPage) => Promise<void>
+  addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
   getAllPages: () => Promise<OberonPage[]>
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>

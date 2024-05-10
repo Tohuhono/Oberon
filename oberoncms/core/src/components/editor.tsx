@@ -101,13 +101,10 @@ export function Editor({
   const [localData, setLocalData] = useLocalData(path, config)
 
   const onPublish = async (data: Data) => {
-    console.log("start pub", data)
-    const published = await publishPageData({
+    await publishPageData({
       key: path,
       data,
     })
-    console.log("end pub", published)
-    // TODO notify? dissable button?
   }
 
   /* TODO types need fixing */

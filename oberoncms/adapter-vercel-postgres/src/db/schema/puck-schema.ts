@@ -1,4 +1,4 @@
-import { pgTable, text, uniqueIndex } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
 
 // TODO schema version
 export const pages = pgTable(
@@ -6,6 +6,8 @@ export const pages = pgTable(
   {
     key: text("key").notNull().primaryKey(),
     data: text("data"),
+    updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
+    updatedBy: text("updated_by").notNull(),
   },
   (pages) => {
     return {

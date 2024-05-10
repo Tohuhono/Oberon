@@ -11,36 +11,55 @@ import {
   DeletePageSchema,
   DeleteUserSchema,
   INITIAL_DATA,
-  PageSchema,
+  AddPageSchema,
   type AdapterActionGroup,
   type AdapterPermission,
   type OberonDatabaseAdapter,
   type OberonAdapter,
   type OberonPlugin,
+  type OberonUser,
+  type OberonPermissions,
+  type OberonRole,
+  PublishPageSchema,
 } from "./app/schema"
+
+const permissions: OberonPermissions = {
+  unauthenticated: {
+    pages: "read",
+  },
+  user: {
+    cms: "read",
+    pages: "write",
+    images: "write",
+  },
+}
 
 export function initAdapter({
   databaseAdapter,
-  permissions = {
-    unauthenticated: {
-      pages: "read",
-    },
-    user: {
-      cms: "read",
-      pages: "write",
-      images: "write",
-    },
-  },
-  getRole,
+  getUser,
   plugins = [],
+  hasPermission = ({
+    role = "unauthenticated" as const,
+    action,
+    permission,
+  }) => {
+    if (role === "admin") {
+      return true
+    }
+    return (
+      permissions[role][action] === permission ||
+      permissions[role][action] === "write"
+    )
+  },
 }: {
   databaseAdapter: OberonDatabaseAdapter
-  getRole: () => Promise<"user" | "admin" | null>
-  permissions?: Record<
-    "unauthenticated" | "user",
-    Partial<Record<AdapterActionGroup, AdapterPermission>>
-  >
+  getUser: () => Promise<OberonUser | null>
   plugins?: OberonPlugin[]
+  hasPermission?: (props: {
+    role?: OberonRole
+    action: AdapterActionGroup
+    permission: AdapterPermission
+  }) => boolean
 }): OberonAdapter {
   const db = plugins.reduce<OberonDatabaseAdapter>(
     (accumulator, plugin) => plugin(accumulator),
@@ -49,27 +68,13 @@ export function initAdapter({
 
   const can: OberonAdapter["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
-    if (
-      permissions.unauthenticated[action] === permission ||
-      permissions.unauthenticated[action] === "write"
-    ) {
+    if (hasPermission({ action, permission })) {
       return true
     }
 
-    const role = await getRole()
+    const user = await getUser()
 
-    // Authentication will throw if used outside of request context
-    switch (role) {
-      case "user":
-        return (
-          permissions.user[action] === permission ||
-          permissions.user[action] === "write"
-        )
-      case "admin":
-        return true
-      default:
-        return false
-    }
+    return hasPermission({ role: user?.role, action, permission })
   }
 
   const will = async (
@@ -81,6 +86,19 @@ export function initAdapter({
     }
     throw new Error("Unauthorized")
   }
+
+  const whoWill = async (
+    action: AdapterActionGroup,
+    permission: AdapterPermission,
+  ) => {
+    const user = await getUser()
+
+    if (user && hasPermission({ role: user.role, action, permission })) {
+      return user
+    }
+    throw new Error("Unauthorized")
+  }
+
   const getAllPagesCached = cache(
     async () => {
       const sortPages = (a: { key: string }, b: { key: string }) => {
@@ -164,16 +182,21 @@ export function initAdapter({
 
     // TODO return value
     addPage: async function (data: unknown) {
-      await will("pages", "write")
-      const { key } = PageSchema.parse(data)
+      const user = await whoWill("pages", "write")
+      const { key } = AddPageSchema.parse(data)
       const initialData = JSON.stringify(INITIAL_DATA)
-      await db.addPage({ key, data: initialData })
+      await db.addPage({
+        key,
+        data: initialData,
+        updatedAt: new Date(),
+        updatedBy: user.email,
+      })
       revalidatePath(key)
       revalidateTag("oberon-pages")
     },
 
     // TODO return value
-    deletePage: async function (data) {
+    deletePage: async function (data: unknown) {
       await will("pages", "write")
       const { key } = DeletePageSchema.parse(data)
       await db.deletePage(key)
@@ -182,12 +205,16 @@ export function initAdapter({
     },
 
     // TODO zod ; return value
-    publishPageData: async function ({ key, data }) {
-      await will("pages", "write")
-      const dataJSON = JSON.stringify(data)
-      await db.publishPageData({ key, data: dataJSON })
-
-      console.log(`Revalidating ${key}`)
+    publishPageData: async function (data: unknown) {
+      const user = await whoWill("pages", "write")
+      const { key, data: pageData } = PublishPageSchema.parse(data)
+      const dataJSON = JSON.stringify(pageData)
+      await db.publishPageData({
+        key,
+        data: dataJSON,
+        updatedAt: new Date(),
+        updatedBy: user.email,
+      })
       revalidatePath(key)
     },
 
@@ -265,6 +292,7 @@ export function initAdapter({
         return null
       }
     },
+
     can,
   } satisfies OberonAdapter
 }

@@ -1,11 +1,11 @@
 import { randomBytes } from "crypto"
 import { type AuthConfig } from "@auth/core"
-import NextAuth from "next-auth"
+import NextAuth, { type NextAuthResult } from "next-auth"
 
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
 import type { Adapter } from "@auth/core/adapters"
-import type { OberonAuth } from ".."
+import type { OberonUser } from ".."
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
@@ -37,7 +37,7 @@ export function initAuth({
     token: string
     url: string
   }) => Promise<void>
-}): OberonAuth {
+}): NextAuthResult {
   const config = {
     pages: {
       verifyRequest: "/api/auth/verify",
@@ -108,8 +108,9 @@ export function initAuth({
       },
       jwt({ token, user }) {
         if (user) {
-          // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
-          token.role = user.email === masterEmail ? "admin" : user.role
+          const role =
+            user.email === masterEmail ? "admin" : (user as OberonUser).role
+          token.role = role
         }
         return token
       },
@@ -122,15 +123,6 @@ export function initAuth({
   } satisfies AuthConfig
 
   const nextAuth = NextAuth(config)
-
-  // TODO added type annotation to fix https://github.com/nextauthjs/next-auth/discussions/9950
-  const auth = nextAuth.auth
-
-  const getRole = async (): Promise<"user" | "admin" | null> => {
-    const session = await auth()
-    // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
-    return session?.user?.role || null
-  }
 
   const GET = async (req: NextRequest) => {
     // safe links bot workaround https://github.com/nextauthjs/next-auth/issues/4965
@@ -157,6 +149,5 @@ export function initAuth({
       ...nextAuth.handlers,
       GET,
     },
-    getRole,
   }
 }
