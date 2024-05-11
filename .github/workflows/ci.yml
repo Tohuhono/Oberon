@@ -24,7 +24,7 @@ jobs:
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/tohuhono') }}
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'staging-tohuhono' || 'preview-tohuhono' }}"
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/rich-text-demo') }}
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'staging-rich-text' || 'preview-rich-text' }}"
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, 'oberon-cms-example') }}
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'staging-playground' || 'preview-playground' }}"
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
