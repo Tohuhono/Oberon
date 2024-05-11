@@ -1,5 +1,20 @@
 # @oberon/ui
 
+## 0.5.0
+
+### Minor Changes
+
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+
+### Patch Changes
+
+- c6960f3: Fixing adapter plugin
+- a5e6827: Publish button feedback
+- 25bb5bf: Bump packages, improve View Page validation
+- Updated dependencies [2deb902]
+- Updated dependencies [4e6430b]
+  - @tohuhono/utils@0.4.0
+
 ## 0.4.0
 
 ### Minor Changes

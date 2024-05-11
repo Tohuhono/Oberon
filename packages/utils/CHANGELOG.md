@@ -1,5 +1,13 @@
 # @oberon/utils
 
+## 0.4.0
+
+### Minor Changes
+
+- 2deb902: Added updatedAt and updatedBy to images
+  Resolved uploadingthing type declaration error
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,14 @@
 # @oberon/rich-text-demo
 
+## 1.3.1
+
+### Patch Changes
+
+- 25bb5bf: Bump packages, improve View Page validation
+- Updated dependencies [4e6430b]
+- Updated dependencies [25bb5bf]
+  - @tohuhono/puck-rich-text@0.5.0
+
 ## 1.3.0
 
 ### Minor Changes
