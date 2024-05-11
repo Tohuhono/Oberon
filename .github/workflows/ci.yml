@@ -24,11 +24,12 @@ jobs:
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/tohuhono') }}
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'staging' || 'preview' }}"
+      project: tohuhono
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.TOHUHONO_VERCEL_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy_rich_text:
     name: Rich Text
@@ -36,11 +37,12 @@ jobs:
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/rich-text-demo') }}
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'staging' || 'preview' }}"
+      project: rich_text
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy_playground:
     name: Oberon Playground
@@ -48,11 +50,12 @@ jobs:
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, 'oberon-cms-example') }}
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'staging' || 'preview' }}"
+      project: playground
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.DEV_PLAYGROUND_VERCEL_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       TURSO_URL: ${{ secrets.TURSO_URL }}
       TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
 
@@ -166,10 +169,12 @@ jobs:
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.TOHUHONO_VERCEL_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     with:
-      url: ${{ needs.deploy_tohuhono.outputs.url }}
-      domain: www.tohuhono.com
+      environment: staging
+      project: tohuhono
+      staging_url: ${{ needs.deploy_tohuhono.outputs.url }}
+      production_url: www.tohuhono.com
 
   promote_rich_text:
     name: Rich Text
@@ -184,10 +189,12 @@ jobs:
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.RICH_VERCEL_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     with:
-      url: ${{ needs.deploy_rich_text.outputs.url }}
-      domain: puck-rich-text.tohuhono.com
+      environment: staging
+      project: rich_text
+      staging_url: ${{ needs.deploy_rich_text.outputs.url }}
+      production_url: puck-rich-text.tohuhono.com
 
   promote_playground:
     name: Oberon Playground
@@ -202,7 +209,9 @@ jobs:
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.DEV_PLAYGROUND_VERCEL_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     with:
-      url: ${{ needs.deploy_playground.outputs.url }}
-      domain: playground.tohuhono.com
+      environment: staging
+      project: playground
+      staging_url: ${{ needs.deploy_playground.outputs.url }}
+      production_url: playground.tohuhono.com

@@ -37,7 +37,9 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pages" (
 	"key" text PRIMARY KEY NOT NULL,
-	"data" text
+	"data" text,
+	"updated_at" timestamp NOT NULL,
+	"updated_by" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "images" (
@@ -46,7 +48,9 @@ CREATE TABLE IF NOT EXISTS "images" (
 	"alt" text NOT NULL,
 	"size" integer NOT NULL,
 	"height" integer NOT NULL,
-	"width" integer NOT NULL
+	"width" integer NOT NULL,
+	"updated_at" timestamp NOT NULL,
+	"updated_by" text NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "pages_key_idx" ON "pages" ("key");--> statement-breakpoint

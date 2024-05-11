@@ -3,13 +3,18 @@ name: Promote Workflow
 on:
   workflow_call:
     inputs:
-      url:
+      environment:
         required: true
         type: string
-      domain:
+      project:
         required: true
         type: string
-
+      staging_url:
+        required: true
+        type: string
+      production_url:
+        required: true
+        type: string
     secrets:
       VERCEL_API_TOKEN:
         required: true
@@ -43,4 +48,4 @@ jobs:
       - name: Alias build to production
         run: |
           pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
-          npx vercel alias ${{ inputs.url }} ${{ inputs.domain }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+          npx vercel alias ${{ inputs.staging_url }} ${{ inputs.production_url }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}

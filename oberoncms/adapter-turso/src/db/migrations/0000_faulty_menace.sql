@@ -39,12 +39,18 @@ CREATE TABLE `verificationToken` (
 --> statement-breakpoint
 CREATE TABLE `pages` (
 	`key` text PRIMARY KEY NOT NULL,
-	`data` text
-) WITHOUT ROWID;
+	`data` text,
+	`updated_at` integer NOT NULL,
+	`updated_by` text NOT NULL
+);
 --> statement-breakpoint
-CREATE TABLE `assets` (
+CREATE TABLE `images` (
 	`key` text PRIMARY KEY NOT NULL,
 	`url` text NOT NULL,
-	`name` text NOT NULL,
-	`size` integer NOT NULL
-) WITHOUT ROWID;
+	`alt` text NOT NULL,
+	`size` integer NOT NULL,
+	`height` integer NOT NULL,
+	`width` integer NOT NULL,
+	`updated_at` integer NOT NULL,
+	`updated_by` text NOT NULL
+);

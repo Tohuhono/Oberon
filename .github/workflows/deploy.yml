@@ -6,6 +6,9 @@ on:
       environment:
         required: true
         type: string
+      project:
+        required: true
+        type: string
     outputs:
       url:
         description: The deployment url
@@ -25,6 +28,9 @@ on:
 jobs:
   deploy:
     name: Deploy
+    environment:
+      name: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
+      url: ${{ steps.deploy.outputs.url }}
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
