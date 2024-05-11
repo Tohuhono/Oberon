@@ -1,5 +1,33 @@
 # @oberoncms/core
 
+## 0.6.0
+
+### Minor Changes
+
+- c6960f3: Implement Adapter Plugins
+  Refactor OberonProvider
+  Add cleanup for uploadthing image removal
+- 2deb902: Added updatedAt and updatedBy to images
+  Resolved uploadingthing type declaration error
+- eae691f: CAUTION BREAKING CHANGE
+  databases created before this patch will need to be manually updated
+  added updatedAt and updatedBy cloumns
+  reset the drizzle database migrations
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+
+### Patch Changes
+
+- c6960f3: Fixing adapter plugin
+- a5e6827: Publish button feedback
+- 25bb5bf: Bump packages, improve View Page validation
+- Updated dependencies [c6960f3]
+- Updated dependencies [2deb902]
+- Updated dependencies [4e6430b]
+- Updated dependencies [a5e6827]
+- Updated dependencies [25bb5bf]
+  - @tohuhono/ui@0.5.0
+  - @tohuhono/utils@0.4.0
+
 ## 0.5.1
 
 ### Patch Changes

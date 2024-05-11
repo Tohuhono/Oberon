@@ -1,5 +1,15 @@
 # @tohuhono/puck-rich-text
 
+## 0.5.0
+
+### Minor Changes
+
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+
+### Patch Changes
+
+- 25bb5bf: Bump packages, improve View Page validation
+
 ## 0.4.0
 
 ### Minor Changes

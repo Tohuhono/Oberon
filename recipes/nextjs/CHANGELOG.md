@@ -1,5 +1,33 @@
 # oberon-cms-example
 
+## 0.6.0
+
+### Minor Changes
+
+- c6960f3: Implement Adapter Plugins
+  Refactor OberonProvider
+  Add cleanup for uploadthing image removal
+- eae691f: CAUTION BREAKING CHANGE
+  databases created before this patch will need to be manually updated
+  added updatedAt and updatedBy cloumns
+  reset the drizzle database migrations
+
+### Patch Changes
+
+- c6960f3: Fixing adapter plugin
+- 25bb5bf: Bump packages, improve View Page validation
+- Updated dependencies [c6960f3]
+- Updated dependencies [c6960f3]
+- Updated dependencies [2deb902]
+- Updated dependencies [eae691f]
+- Updated dependencies [4e6430b]
+- Updated dependencies [a5e6827]
+- Updated dependencies [25bb5bf]
+  - @oberoncms/adapter-turso@0.7.0
+  - @oberoncms/upload-thing@0.6.0
+  - @oberoncms/core@0.6.0
+  - @tohuhono/puck-rich-text@0.5.0
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,5 +1,20 @@
 # @tohuhono/puck-blocks
 
+## 0.5.0
+
+### Minor Changes
+
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+
+### Patch Changes
+
+- 25bb5bf: Bump packages, improve View Page validation
+- Updated dependencies [c6960f3]
+- Updated dependencies [4e6430b]
+- Updated dependencies [a5e6827]
+- Updated dependencies [25bb5bf]
+  - @tohuhono/ui@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes

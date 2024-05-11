@@ -1,5 +1,19 @@
 # @oberon/dev
 
+## 0.6.0
+
+### Minor Changes
+
+- c6960f3: Implement Adapter Plugins
+  Refactor OberonProvider
+  Add cleanup for uploadthing image removal
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+
+### Patch Changes
+
+- c6960f3: Fixing adapter plugin
+- 25bb5bf: Bump packages, improve View Page validation
+
 ## 0.5.0
 
 ### Minor Changes
