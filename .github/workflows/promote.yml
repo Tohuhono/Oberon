@@ -26,6 +26,7 @@ on:
 jobs:
   promote:
     name: Promote
+    environment: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
