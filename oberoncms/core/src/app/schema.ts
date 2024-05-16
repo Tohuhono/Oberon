@@ -1,15 +1,47 @@
 import { z } from "zod"
 import { Data } from "@measured/puck"
 import { Route } from "next"
-import type { Config } from "@measured/puck"
+import type {
+  ComponentConfig,
+  Config,
+  DefaultComponentProps,
+} from "@measured/puck"
 import type { Adapter as AuthAdapter } from "@auth/core/adapters"
+import type { StreamResponseChunk } from "@tohuhono/utils"
 
-export type OberonConfig = {
-  blocks: Config["components"]
+// TODO fix types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Transforms = Array<(props: any) => any>
+
+export type PageData = Data
+
+export type OberonConfig = Config & {
+  version: 1
+  components: Record<
+    string,
+    {
+      transforms?: Transforms
+    }
+  >
 }
 
-export type ClientAction = "edit" | "preview" | "users" | "images" | "pages"
-export type AdapterActionGroup = "all" | "cms" | "users" | "images" | "pages"
+export type OberonComponent<
+  ComponentProps extends DefaultComponentProps = DefaultComponentProps,
+  Transforms extends Array<
+    (props: Record<string, unknown>) => Record<string, unknown>
+  > = Array<(props: Record<string, unknown>) => Record<string, unknown>>,
+> = ComponentConfig<ComponentProps> & {
+  transforms?: Transforms
+}
+
+export type ClientAction =
+  | "edit"
+  | "preview"
+  | "users"
+  | "images"
+  | "pages"
+  | "site"
+export type AdapterActionGroup = "all" | "users" | "images" | "pages" | "site"
 export type AdapterPermission = "unauthenticated" | "read" | "write"
 export type OberonRole = "user" | "admin"
 
@@ -28,6 +60,42 @@ export type MaybeOptimistic<T> = T & {
 }
 
 /*
+ * Site
+ */
+type TransformStatus = "error" | "success"
+
+export type TransformResult = {
+  type: "transform"
+  key: string
+  status: "success" | "error"
+}
+
+export type MigrationResult = {
+  type: "summary"
+  total: number
+} & {
+  [key in TransformStatus]: string[]
+}
+
+export type TransformVersions = Record<string, number>
+
+export type OberonSiteConfig = MaybeOptimistic<{
+  version: string
+  plugins: Record<string, string>
+  components: TransformVersions
+  pendingMigrations: string[] | false
+}>
+
+export const SiteSchema = z.object({
+  version: z.number(),
+  components: z.record(z.string(), z.number()),
+  updatedAt: z.date(),
+  updatedBy: z.string(),
+})
+
+export type OberonSite = z.infer<typeof SiteSchema>
+
+/*
  * Pages
  */
 export const PageSchema = z.object({
@@ -35,7 +103,7 @@ export const PageSchema = z.object({
     .string()
     .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
     .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
-  data: z.any(),
+  data: z.object({}).passthrough(),
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
@@ -46,9 +114,20 @@ export const DeletePageSchema = PageSchema.pick({ key: true })
 
 export const PublishPageSchema = PageSchema.pick({ key: true, data: true })
 
+export const PageMetaSchema = PageSchema.pick({
+  key: true,
+  updatedAt: true,
+  updatedBy: true,
+})
+
+export type OberonPage = z.infer<typeof PageSchema> & {
+  data: PageData
+  key: Route
+}
+
 // Cannot infer from zod because we need nextjs to understand key is a valid Route
-export type OberonPage = MaybeOptimistic<
-  z.infer<typeof PageSchema> & {
+export type OberonPageMeta = MaybeOptimistic<
+  z.infer<typeof PageMetaSchema> & {
     key: Route
   }
 >
@@ -99,7 +178,8 @@ type DescriminatedContext =
   | { action: "edit" | "preview"; data: Data | null }
   | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: OberonPage[] }
+  | { action: "pages"; data: OberonPageMeta[] }
+  | { action: "site"; data: OberonSiteConfig }
 
 export type OberonClientContext = DescriminatedContext & {
   slug: string
@@ -120,10 +200,13 @@ export type OberonDatabaseAdapter = {
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   addPage: (page: OberonPage) => Promise<void>
-  deletePage: (key: OberonPage["key"]) => Promise<void>
-  getAllPages: () => Promise<OberonPage[]>
-  publishPageData: (data: z.infer<typeof PageSchema>) => Promise<void>
-  getPageData: (key: OberonPage["key"]) => Promise<string | null>
+  deletePage: (key: OberonPageMeta["key"]) => Promise<void>
+  getAllPages: () => Promise<OberonPageMeta[]>
+  updatePageData: (data: OberonPage) => Promise<void>
+  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
+  getSite: () => Promise<OberonSite | undefined>
+  updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
+  plugins: Record<string, string>
 } & AuthAdapter
 
 export type OberonActions = {
@@ -140,10 +223,14 @@ export type OberonActions = {
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
-  getAllPages: () => Promise<OberonPage[]>
+  getAllPages: () => Promise<OberonPageMeta[]>
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
-  getPageData: (key: OberonPage["key"]) => Promise<Data | null>
+  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
   getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
+  getConfig: () => Promise<OberonSiteConfig>
+  migrateData: () => Promise<
+    StreamResponseChunk<TransformResult | MigrationResult>
+  >
   can: (
     action: AdapterActionGroup,
     permission?: AdapterPermission,

@@ -9,6 +9,7 @@ import { PuckMenu } from "./components/puck-menu"
 import { AllPages } from "./components/all-pages"
 import { Images } from "./components/images"
 import { Users } from "./components/users"
+import { SiteSettings } from "./components/site-settings"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
 
@@ -34,7 +35,11 @@ const previewConfig: Partial<Config> = {
   },
 }
 
-export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
+export function OberonClient({
+  config: { components },
+}: {
+  config: OberonConfig
+}) {
   const { action, data, slug } = useOberonClientContext()
 
   if (action === "edit") {
@@ -42,7 +47,7 @@ export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
       <Editor
         path={slug}
         data={data}
-        config={{ ...editorConfig, components: blocks }}
+        config={{ ...editorConfig, components: components }}
       />
     )
   }
@@ -52,7 +57,7 @@ export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
       <Preview
         path={slug}
         data={data}
-        config={{ ...previewConfig, components: blocks }}
+        config={{ ...previewConfig, components: components }}
       />
     )
   }
@@ -61,9 +66,14 @@ export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
     <>
       {/* TODO fix path to be dynamic */}
       <PuckMenu title={getTitle(action, slug)} path={`/cms/${action}`} />
-      {action === "users" && <Users users={data} />}
-      {action === "images" && <Images images={data} />}
-      {action === "pages" && <AllPages pages={data} />}
+      <div className="flex w-full justify-center">
+        <div className="prose w-full rounded bg-secondary p-3 pb-10 dark:prose-invert lg:prose-lg lg:p-5 lg:pb-10">
+          {action === "users" && <Users users={data} />}
+          {action === "images" && <Images images={data} />}
+          {action === "pages" && <AllPages pages={data} />}
+          {action === "site" && <SiteSettings config={data} />}
+        </div>
+      </div>
     </>
   )
 }

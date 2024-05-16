@@ -24,6 +24,14 @@ export default async function Oberon({
 }
 
 const actions = {
+  getConfig: async () => {
+    "use server"
+    return adapter.getConfig()
+  },
+  migrateData: async () => {
+    "use server"
+    return adapter.migrateData()
+  },
   getAllPaths: async () => {
     "use server"
     return adapter.getAllPaths()

@@ -36,6 +36,12 @@ export const PuckMenu = ({
           className={buttonVariants({ variant: "outline", size: "sm" })}
           href="/cms"
         >
+          Site
+        </Link>
+        <Link
+          className={buttonVariants({ variant: "outline", size: "sm" })}
+          href="/cms/pages"
+        >
           Pages
         </Link>
         {showImages && (

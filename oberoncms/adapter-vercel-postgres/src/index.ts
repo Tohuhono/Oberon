@@ -65,7 +65,7 @@ export const databaseAdapter: OberonDatabaseAdapter = {
 
     return result[0]?.data || null
   },
-  publishPageData: async ({ key, data, updatedAt, updatedBy }) => {
+  updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db
       .insert(pages)
       .values({ key, data, updatedAt, updatedBy })

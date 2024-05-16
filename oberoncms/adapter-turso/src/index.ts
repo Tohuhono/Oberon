@@ -1,15 +1,39 @@
 import "server-only"
 
 import { eq } from "drizzle-orm"
-import { type OberonDatabaseAdapter } from "@oberoncms/core"
+import { type OberonDatabaseAdapter, type PageData } from "@oberoncms/core"
 
-import { images, pages, users } from "./db/schema"
+import { name, version } from "../package.json" with { type: "json" }
+
+import { images, pages, site, users } from "./db/schema"
 import { db } from "./db/client"
 
 import { authAdapter } from "./db/next-auth-adapter"
 
 export const oberonAdapter: OberonDatabaseAdapter = {
   ...authAdapter,
+  plugins: { [name]: version },
+  getSite: async () => {
+    const result = await db
+      .select({
+        version: site.version,
+        components: site.components,
+        updatedAt: site.updatedAt,
+        updatedBy: site.updatedBy,
+      })
+      .from(site)
+      .where(eq(site.id, 1))
+    return result[0]
+  },
+  updateSite: async ({ version, components, updatedAt, updatedBy }) => {
+    await db
+      .insert(site)
+      .values({ id: 1, version, components, updatedAt, updatedBy })
+      .onConflictDoUpdate({
+        target: site.id,
+        set: { version, components, updatedAt, updatedBy },
+      })
+  },
   getAllUsers: async () => {
     return await db
       .select({ id: users.id, email: users.email, role: users.role })
@@ -62,9 +86,9 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       .from(pages)
       .where(eq(pages.key, key))
 
-    return result[0]?.data || null
+    return (result[0]?.data as PageData) || null
   },
-  publishPageData: async ({ key, data, updatedAt, updatedBy }) => {
+  updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db
       .insert(pages)
       .values({ key, data, updatedAt, updatedBy })

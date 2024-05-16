@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@tohuhono/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center text-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -21,10 +21,10 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-8 justify-center px-4 py-2",
+        default: "h-8 justify-center px-4 py-2 text-sm",
         sm: "h-6 justify-center rounded-md px-2 text-xs",
-        link: "h-6 justify-start rounded-md px-2",
-        lg: "h-10 justify-center rounded-md px-8",
+        link: "h-6 justify-start rounded-md px-2 text-base",
+        lg: "h-10 justify-center rounded-md px-8 text-sm",
         icon: "h-8 w-8 justify-center",
       },
     },

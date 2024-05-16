@@ -13,23 +13,29 @@ import {
   FormItem,
   FormMessage,
 } from "@tohuhono/ui/form"
+import { z } from "zod"
+import { ColumnHeading, Table } from "@tohuhono/ui/table"
+import { LocalDate } from "@tohuhono/ui/date"
 import { useOberonActions } from "../hooks/use-oberon"
-import { PageSchema, type OberonPage } from "../app/schema"
+import { AddPageSchema, type OberonPageMeta } from "../app/schema"
 
-const useOberonPages = (pages: OberonPage[]) => {
+const useOberonPages = (pages: OberonPageMeta[]) => {
   const { deletePage, addPage } = useOberonActions()
   const [optimisticPages, optimisticPageUpdate] =
-    useOptimistic<OberonPage[]>(pages)
+    useOptimistic<OberonPageMeta[]>(pages)
 
   return {
     pages: optimisticPages,
-    addPage: (page: OberonPage) => {
+    addPage: (page: z.infer<typeof AddPageSchema>) => {
       startTransition(() => {
-        optimisticPageUpdate([...optimisticPages, { ...page, pending: true }])
+        optimisticPageUpdate([
+          ...optimisticPages,
+          { ...page, updatedAt: new Date(), updatedBy: "", pending: true },
+        ])
       })
       return addPage(page)
     },
-    deletePage: async (key: OberonPage["key"]) => {
+    deletePage: async (key: OberonPageMeta["key"]) => {
       startTransition(() =>
         optimisticPageUpdate(
           optimisticPages.map((page) =>
@@ -50,19 +56,55 @@ const parsePath = (key: string) => {
   return (key.charAt(0) === "/" ? key : "/" + key).replace(" ", "_")
 }
 
-export function AllPages({ pages: serverPages }: { pages: OberonPage[] }) {
+export function AllPages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
   const { pages, deletePage, addPage } = useOberonPages(serverPages)
 
-  const form = useForm<OberonPage>({
-    resolver: zodResolver(PageSchema),
+  const form = useForm<z.infer<typeof AddPageSchema>>({
+    resolver: zodResolver(AddPageSchema),
     defaultValues: {
       key: "",
     },
   })
 
   return (
-    <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-1 pt-3">
-      {pages.map(({ key: route, pending }) => (
+    <Table className="grid-cols-[1fr_auto_auto_auto_auto]">
+      <Form {...form}>
+        <form
+          className="contents"
+          onSubmit={form.handleSubmit((data) => {
+            addPage(data)
+            form.reset()
+          })}
+        >
+          <FormField
+            control={form.control}
+            name="key"
+            render={({ field }) => (
+              <FormItem className="col-span-3 row-span-2">
+                <FormControl>
+                  <Input
+                    placeholder=""
+                    {...field}
+                    onChange={(e) => {
+                      form.setValue("key", parsePath(e.currentTarget.value))
+                    }}
+                  />
+                </FormControl>
+                <FormMessage>{form.formState.errors.key?.message}</FormMessage>
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="col-span-2 row-span-2">
+            Add Page
+          </Button>
+        </form>
+      </Form>
+      <ColumnHeading>Path</ColumnHeading>
+      <ColumnHeading>Updated</ColumnHeading>
+      <ColumnHeading>By</ColumnHeading>
+      <ColumnHeading></ColumnHeading>
+      <ColumnHeading></ColumnHeading>
+      {pages.map(({ key: route, updatedBy, updatedAt, pending }) => (
         <Fragment key={route}>
           <Link
             className={buttonVariants({
@@ -75,7 +117,10 @@ export function AllPages({ pages: serverPages }: { pages: OberonPage[] }) {
           >
             {route}
           </Link>
-
+          <div className="text-sm">
+            <LocalDate date={updatedAt} />
+          </div>
+          <div className="text-sm">{updatedBy}</div>
           {pending ? (
             <Button size="sm" disabled>
               Edit
@@ -103,38 +148,6 @@ export function AllPages({ pages: serverPages }: { pages: OberonPage[] }) {
           </Button>
         </Fragment>
       ))}
-
-      <Form {...form}>
-        <form
-          className="contents "
-          onSubmit={form.handleSubmit((data) => {
-            addPage(data)
-            form.reset()
-          })}
-        >
-          <FormField
-            control={form.control}
-            name="key"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    {...field}
-                    onChange={(e) => {
-                      form.setValue("key", parsePath(e.currentTarget.value))
-                    }}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="col-span-2">
-            Add Page
-          </Button>
-          <FormMessage>{form.formState.errors.key?.message}</FormMessage>
-        </form>
-      </Form>
-    </div>
+    </Table>
   )
 }

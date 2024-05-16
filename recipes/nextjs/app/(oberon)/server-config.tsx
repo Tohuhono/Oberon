@@ -6,6 +6,7 @@ import { initAuth } from "@oberoncms/core/auth"
 import { Resend } from "resend"
 import { uploadthingPlugin } from "@oberoncms/upload-thing/plugin"
 import type { OberonUser } from "@oberoncms/core"
+import { config } from "./component-config"
 
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
 
@@ -42,15 +43,18 @@ const sendVerificationRequest = async ({
   }
 }
 
-export const { handlers, auth } = initAuth({
+const oberonAuth = initAuth({
   databaseAdapter: oberonAdapter,
   sendVerificationRequest,
 })
 
+export const handlers = oberonAuth.handlers
+
 export const adapter = initAdapter({
+  config,
   databaseAdapter: oberonAdapter,
-  getUser: async () => {
-    const session = await auth()
+  getCurrentUser: async () => {
+    const session = await oberonAuth.auth()
 
     return (session?.user as OberonUser) || null
   },

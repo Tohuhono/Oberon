@@ -4,23 +4,25 @@ import type { ClientAction } from "./schema"
 export function getTitle(action: ClientAction, slug?: string) {
   switch (action) {
     case "edit":
-      return "Editing: " + slug
+      return `Editing: ${slug}`
     case "preview":
-      return "Previewing: " + slug
+      return `Previewing: ${slug}`
     case "images":
       return "Manage Images"
     case "users":
       return "Manage Users"
     case "pages":
+      return "Manage Pages"
+    case "site":
     default:
-      return "Oberon CMS Pages"
+      return "Oberon CMS"
   }
 }
 
 export const parseClientAction = (action: unknown): ClientAction => {
   switch (action) {
     case undefined:
-      return "pages"
+      return "site"
     case "edit":
     case "preview":
     case "users":
