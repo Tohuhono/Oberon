@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1715379816893,
-      "tag": "0000_rapid_shocker",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1715905742085,
-      "tag": "0001_complete_mister_sinister",
+      "when": 1715920897006,
+      "tag": "0000_curly_spectrum",
       "breakpoints": true
     }
   ]

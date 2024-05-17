@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pages" (
 	"key" text PRIMARY KEY NOT NULL,
-	"data" text,
+	"data" jsonb NOT NULL,
 	"updated_at" timestamp NOT NULL,
 	"updated_by" text NOT NULL
 );
@@ -53,8 +53,17 @@ CREATE TABLE IF NOT EXISTS "images" (
 	"updated_by" text NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "site" (
+	"id" integer PRIMARY KEY NOT NULL,
+	"version" integer NOT NULL,
+	"components" jsonb NOT NULL,
+	"updated_at" timestamp NOT NULL,
+	"updated_by" text NOT NULL
+);
+--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "pages_key_idx" ON "pages" ("key");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "images_key_idx" ON "images" ("key");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "site_id_idx" ON "site" ("id");--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION

@@ -1,7 +1,7 @@
 import type { TransformVersions } from "@oberoncms/core"
 import {
   pgTable,
-  json,
+  jsonb,
   text,
   timestamp,
   uniqueIndex,
@@ -13,7 +13,7 @@ export const site = pgTable(
   {
     id: integer("id").notNull().primaryKey(),
     version: integer("version").notNull(),
-    components: json("components").notNull().$type<TransformVersions>(),
+    components: jsonb("components").notNull().$type<TransformVersions>(),
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },
