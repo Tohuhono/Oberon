@@ -3,13 +3,15 @@ import "server-only"
 import { eq } from "drizzle-orm"
 import { type OberonDatabaseAdapter } from "@oberoncms/core"
 
-import { db } from "./db/client"
-import { images, pages, users } from "./db/schema"
-import { adapter } from "./db/next-auth-adapter"
-import { site } from "./db/schema/site-schema"
+import { name, version } from "../package.json" with { type: "json" }
 
-export const databaseAdapter: OberonDatabaseAdapter = {
-  ...adapter,
+import { db } from "./db/client"
+import { images, pages, users, site } from "./db/schema"
+import { authAdapter } from "./db/next-auth-adapter"
+
+export const oberonAdapter: OberonDatabaseAdapter = {
+  ...authAdapter,
+  plugins: { [name]: version },
   getSite: async () => {
     const result = await db
       .select({
@@ -42,7 +44,7 @@ export const databaseAdapter: OberonDatabaseAdapter = {
   // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
   addUser: async ({ email, role }) => {
     // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
-    return await adapter.createUser({
+    return await authAdapter.createUser({
       email,
       // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
       role,

@@ -42,7 +42,8 @@
     "@next/env": "^14.2.3",
     "@vercel/postgres": "0.8.0",
     "drizzle-orm": "^0.30.10",
-    "next": "^14.2.3"
+    "next": "^14.2.3",
+    "server-only": "^0.0.1"
   },
   "peerDependencies": {
     "react": "^18.2.0",

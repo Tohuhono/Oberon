@@ -1,7 +1,7 @@
 import type { PageData } from "@oberoncms/core"
 import {
   pgTable,
-  json,
+  jsonb,
   text,
   timestamp,
   uniqueIndex,
@@ -11,7 +11,7 @@ export const pages = pgTable(
   "pages",
   {
     key: text("key").notNull().primaryKey(),
-    data: json("data").notNull().$type<PageData>(),
+    data: jsonb("data").notNull().$type<PageData>(),
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },
