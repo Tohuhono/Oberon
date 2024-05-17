@@ -7,26 +7,34 @@ export function cn(...inputs: ClassNameValue[]) {
 }
 
 /**
- * Returns a promise that resolves after @param ms
- */
-export function wait(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
-}
-
-/**
+ * CAUTION not cryptographically secure or true random
  * Returns a random integer with
- * CAUTION not cryptographically secure or truelly random
  * @param start lower bound
- * @param range
+ * @param end upper bound
  */
-export function getRandomInt(start: number, range: number) {
+export function getRandomInt(start: number, end: number) {
+  const range = end > start ? end - start : 0
   return Math.floor(Math.random() * range + start)
 }
 
+/**
+ * Returns a promise that resolves after
+ * @param ms time in ms
+ */
+export function wait(ms: number): Promise<void>
+/**
+ * Returns a promise that resolves after a random time between
+ * @param lower time in ms
+ * @param upper time in ms
+ */
+export function wait(lower: number, upper: number = 0): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, getRandomInt(lower, upper))
+  })
+}
+
 /*
- * Generate streamed responses for server actions
+ * Response chunk for streamed server action
  */
 export type StreamResponseChunk<T, R = void> = {
   iteratorResult: IteratorResult<T, R>
@@ -47,6 +55,9 @@ async function streamChunk<T, R = void>(generator: AsyncGenerator<T, R>) {
   })
 }
 
+/*
+ * Wrap a generator function suitable to be returned by a server action
+ */
 export function streamResponse<T, P extends unknown[] = unknown[]>(
   createGenerator: (...args: P) => AsyncGenerator<T>,
 ) {
@@ -56,6 +67,9 @@ export function streamResponse<T, P extends unknown[] = unknown[]>(
   }
 }
 
+/*
+ * Unwrap a streamed server action on the client
+ */
 export function iterateStreamResponse<T>(
   streamResponse: Promise<StreamResponseChunk<T>>,
 ) {

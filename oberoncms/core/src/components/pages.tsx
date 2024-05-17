@@ -56,7 +56,7 @@ const parsePath = (key: string) => {
   return (key.charAt(0) === "/" ? key : "/" + key).replace(" ", "_")
 }
 
-export function AllPages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
+export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
   const { pages, deletePage, addPage } = useOberonPages(serverPages)
 
   const form = useForm<z.infer<typeof AddPageSchema>>({
@@ -68,6 +68,10 @@ export function AllPages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
 
   return (
     <Table className="grid-cols-[1fr_auto_auto_auto_auto]">
+      <ColumnHeading>Path</ColumnHeading>
+      <ColumnHeading>Updated</ColumnHeading>
+      <ColumnHeading>By</ColumnHeading>
+      <ColumnHeading className="col-span-2" />
       <Form {...form}>
         <form
           className="contents"
@@ -80,7 +84,7 @@ export function AllPages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
             control={form.control}
             name="key"
             render={({ field }) => (
-              <FormItem className="col-span-3 row-span-2">
+              <FormItem className="row-span-2">
                 <FormControl>
                   <Input
                     placeholder=""
@@ -94,16 +98,12 @@ export function AllPages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
               </FormItem>
             )}
           />
+          <div className="col-span-2 row-span-2" />
           <Button type="submit" className="col-span-2 row-span-2">
             Add Page
           </Button>
         </form>
       </Form>
-      <ColumnHeading>Path</ColumnHeading>
-      <ColumnHeading>Updated</ColumnHeading>
-      <ColumnHeading>By</ColumnHeading>
-      <ColumnHeading></ColumnHeading>
-      <ColumnHeading></ColumnHeading>
       {pages.map(({ key: route, updatedBy, updatedAt, pending }) => (
         <Fragment key={route}>
           <Link

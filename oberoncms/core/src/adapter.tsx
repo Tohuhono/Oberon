@@ -4,7 +4,7 @@ import {
   unstable_cache as cache,
 } from "next/cache"
 import { type Data } from "@measured/puck"
-import { streamResponse, wait } from "@tohuhono/utils"
+import { streamResponse } from "@tohuhono/utils"
 import { version } from "../package.json" with { type: "json" }
 import {
   AddImageSchema,
@@ -24,7 +24,6 @@ import {
   type OberonRole,
   PublishPageSchema,
   type OberonConfig,
-  type OberonPageMeta,
   type MigrationResult,
   type TransformResult,
   type OberonPage,
@@ -252,8 +251,6 @@ export function initAdapter({
       summary[result.status].push(result.key)
       yield result
     }
-
-    await wait(1000)
 
     await db.updateSite({
       version: config.version,

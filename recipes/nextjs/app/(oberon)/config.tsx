@@ -4,7 +4,8 @@ import { type OberonConfig } from "@oberoncms/core"
 import { Dashboard } from "../../components/dashboard"
 
 export const config: OberonConfig = {
-  blocks: {
+  version: 1,
+  components: {
     Box: {
       fields: {
         className: {

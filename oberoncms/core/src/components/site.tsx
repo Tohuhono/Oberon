@@ -1,18 +1,11 @@
 "use client"
 
-import {
-  Fragment,
-  startTransition,
-  useEffect,
-  useOptimistic,
-  useRef,
-  useState,
-} from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 
 import { ColumnHeading, Table } from "@tohuhono/ui/table"
 import { Button } from "@tohuhono/ui/button"
 import { ScrollArea } from "@tohuhono/ui/scroll-area"
-import { iterateStreamResponse, wait } from "@tohuhono/utils"
+import { iterateStreamResponse } from "@tohuhono/utils"
 import { useRouter } from "next/navigation"
 import { useOberonActions } from "../hooks/use-oberon"
 import {
@@ -65,7 +58,7 @@ function useMigration() {
   }
 }
 
-export function SiteSettings({
+export function Site({
   config: { plugins, version: coreVersion, pendingMigrations },
 }: {
   config: OberonSiteConfig
@@ -114,7 +107,7 @@ export function SiteSettings({
         </div>
       )}
 
-      <h3>Installed Packages</h3>
+      <h2>Installed Packages</h2>
       <Table className="grid-cols-[1fr_auto]">
         <ColumnHeading>Core</ColumnHeading>
         <ColumnHeading>Version</ColumnHeading>

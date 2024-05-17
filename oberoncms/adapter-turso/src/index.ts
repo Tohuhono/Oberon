@@ -23,6 +23,7 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       })
       .from(site)
       .where(eq(site.id, 1))
+      .execute()
     return result[0]
   },
   updateSite: async ({ version, components, updatedAt, updatedBy }) => {
@@ -33,6 +34,7 @@ export const oberonAdapter: OberonDatabaseAdapter = {
         target: site.id,
         set: { version, components, updatedAt, updatedBy },
       })
+      .execute()
   },
   getAllUsers: async () => {
     return await db
@@ -49,13 +51,13 @@ export const oberonAdapter: OberonDatabaseAdapter = {
     })
   },
   changeRole: async ({ role, id }) => {
-    await db.update(users).set({ role }).where(eq(users.id, id))
+    await db.update(users).set({ role }).where(eq(users.id, id)).execute()
   },
   addImage: async (image) => {
     await db.insert(images).values(image).execute()
   },
   deleteImage: async (key) => {
-    await db.delete(images).where(eq(images.key, key))
+    await db.delete(images).where(eq(images.key, key)).execute()
   },
   getAllImages: async () => {
     return await db
@@ -73,10 +75,10 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       .execute()
   },
   addPage: async ({ key, data, updatedAt, updatedBy }) => {
-    await db.insert(pages).values({ key, data, updatedAt, updatedBy })
+    await db.insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
   },
   deletePage: async (key) => {
-    await db.delete(pages).where(eq(pages.key, key))
+    await db.delete(pages).where(eq(pages.key, key)).execute()
   },
   getPageData: async (key) => {
     const result = await db
@@ -85,6 +87,7 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       })
       .from(pages)
       .where(eq(pages.key, key))
+      .execute()
 
     return (result[0]?.data as PageData) || null
   },
@@ -93,6 +96,7 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       .insert(pages)
       .values({ key, data, updatedAt, updatedBy })
       .onConflictDoUpdate({ target: pages.key, set: { data } })
+      .execute()
   },
   getAllPages: async () => {
     return await db
@@ -102,5 +106,6 @@ export const oberonAdapter: OberonDatabaseAdapter = {
         updatedBy: pages.updatedBy,
       })
       .from(pages)
+      .execute()
   },
 }

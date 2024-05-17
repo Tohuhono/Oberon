@@ -6,9 +6,33 @@ import { type OberonDatabaseAdapter } from "@oberoncms/core"
 import { db } from "./db/client"
 import { images, pages, users } from "./db/schema"
 import { adapter } from "./db/next-auth-adapter"
+import { site } from "./db/schema/site-schema"
 
 export const databaseAdapter: OberonDatabaseAdapter = {
   ...adapter,
+  getSite: async () => {
+    const result = await db
+      .select({
+        version: site.version,
+        components: site.components,
+        updatedAt: site.updatedAt,
+        updatedBy: site.updatedBy,
+      })
+      .from(site)
+      .where(eq(site.id, 1))
+      .execute()
+    return result[0]
+  },
+  updateSite: async ({ version, components, updatedAt, updatedBy }) => {
+    await db
+      .insert(site)
+      .values({ id: 1, version, components, updatedAt, updatedBy })
+      .onConflictDoUpdate({
+        target: site.id,
+        set: { version, components, updatedAt, updatedBy },
+      })
+      .execute()
+  },
   getAllUsers: async () => {
     return await db
       .select({ id: users.id, email: users.email, role: users.role })
@@ -26,13 +50,13 @@ export const databaseAdapter: OberonDatabaseAdapter = {
     })
   },
   changeRole: async ({ role, id }) => {
-    await db.update(users).set({ role }).where(eq(users.id, id))
+    await db.update(users).set({ role }).where(eq(users.id, id)).execute()
   },
   addImage: async (image) => {
     await db.insert(images).values(image).execute()
   },
   deleteImage: async (key) => {
-    await db.delete(images).where(eq(images.key, key))
+    await db.delete(images).where(eq(images.key, key)).execute()
   },
   getAllImages: async () => {
     return await db
@@ -50,10 +74,10 @@ export const databaseAdapter: OberonDatabaseAdapter = {
       .execute()
   },
   addPage: async ({ key, data, updatedAt, updatedBy }) => {
-    await db.insert(pages).values({ key, data, updatedAt, updatedBy })
+    await db.insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
   },
   deletePage: async (key) => {
-    await db.delete(pages).where(eq(pages.key, key))
+    await db.delete(pages).where(eq(pages.key, key)).execute()
   },
   getPageData: async (key) => {
     const result = await db
@@ -62,6 +86,7 @@ export const databaseAdapter: OberonDatabaseAdapter = {
       })
       .from(pages)
       .where(eq(pages.key, key))
+      .execute()
 
     return result[0]?.data || null
   },
@@ -73,6 +98,7 @@ export const databaseAdapter: OberonDatabaseAdapter = {
         target: pages.key,
         set: { data, updatedAt, updatedBy },
       })
+      .execute()
   },
   getAllPages: async () => {
     return await db
@@ -82,5 +108,6 @@ export const databaseAdapter: OberonDatabaseAdapter = {
         updatedBy: pages.updatedBy,
       })
       .from(pages)
+      .execute()
   },
 }

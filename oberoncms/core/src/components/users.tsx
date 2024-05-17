@@ -80,6 +80,9 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
 
   return (
     <Table className="grid-cols-[1fr_auto_auto]">
+      <ColumnHeading>Email</ColumnHeading>
+      <ColumnHeading>Role</ColumnHeading>
+      <ColumnHeading></ColumnHeading>
       <Form {...form}>
         <form
           className="contents"
@@ -128,14 +131,11 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
               </FormItem>
             )}
           />
-          <Button className="row-span-2 self-baseline" type="submit">
+          <Button className="row-span-2" type="submit">
             Add User
           </Button>
         </form>
       </Form>
-      <ColumnHeading>Email</ColumnHeading>
-      <ColumnHeading>Role</ColumnHeading>
-      <ColumnHeading></ColumnHeading>
       {users.map(({ role, id, email, pending }) => {
         return (
           <Fragment key={id}>

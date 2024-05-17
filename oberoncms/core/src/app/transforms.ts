@@ -9,7 +9,6 @@ import type {
   DefaultRootProps,
   Data,
 } from "@measured/puck"
-import { getRandomInt, wait } from "@tohuhono/utils"
 
 type PropTransform<
   Props extends DefaultComponentProps = DefaultComponentProps,
@@ -80,8 +79,6 @@ async function applyTransform(
 ): Promise<TransformResult> {
   try {
     const data = await getPageData(key)
-
-    await wait(getRandomInt(1000, 2000))
 
     if (!data) {
       return {

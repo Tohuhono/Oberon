@@ -1,7 +1,7 @@
 import { getMetaData, type OberonActions } from "@oberoncms/core"
 import { OberonProvider } from "@oberoncms/core/provider"
 import { Client } from "./client"
-import { adapter } from "@/app/(oberon)/server-config"
+import { adapter } from "@/app/(oberon)/adapter"
 
 export async function generateMetadata({
   params: { path = [] },
