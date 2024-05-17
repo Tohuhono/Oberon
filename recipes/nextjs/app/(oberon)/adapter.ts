@@ -1,6 +1,5 @@
 import "server-only"
-
-import { oberonAdapter } from "@oberoncms/adapter-turso"
+import { oberonAdapter } from "@oberoncms/adapter-vercel-postgres"
 import { initAdapter } from "@oberoncms/core/adapter"
 import { initAuth } from "@oberoncms/core/auth"
 import { Resend } from "resend"
