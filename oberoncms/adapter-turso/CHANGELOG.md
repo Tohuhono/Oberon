@@ -1,5 +1,20 @@
 # @oberoncms/adapter-turso
 
+## 0.8.0
+
+### Minor Changes
+
+- 26d9c91: Updated adapter-vercel-postgres for site config and version support
+- 26d9c91: Added site manager page and page data migration functionality
+- 26d9c91: BREAKING CHANGE changed sqlite columns storing json data to use new mode
+
+### Patch Changes
+
+- Updated dependencies [26d9c91]
+- Updated dependencies [26d9c91]
+- Updated dependencies [26d9c91]
+  - @oberoncms/core@0.7.0
+
 ## 0.7.0
 
 ### Minor Changes
