@@ -1,5 +1,12 @@
 # @oberon/utils
 
+## 0.5.0
+
+### Minor Changes
+
+- 26d9c91: Updated adapter-vercel-postgres for site config and version support
+- 26d9c91: Added site manager page and page data migration functionality
+
 ## 0.4.0
 
 ### Minor Changes
