@@ -7,7 +7,7 @@ import { ThemeEditorMenu } from "@tohuhono/ui/theme"
 import useSWR from "swr"
 import { useOberonActions } from "../hooks/use-oberon"
 
-export const PuckMenu = ({
+export const Menu = ({
   title,
   path,
   children,
@@ -35,6 +35,12 @@ export const PuckMenu = ({
         <Link
           className={buttonVariants({ variant: "outline", size: "sm" })}
           href="/cms"
+        >
+          Site
+        </Link>
+        <Link
+          className={buttonVariants({ variant: "outline", size: "sm" })}
+          href="/cms/pages"
         >
           Pages
         </Link>

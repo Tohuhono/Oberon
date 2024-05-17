@@ -8,7 +8,7 @@ import { useState } from "react"
 import { useLocalData } from "../hooks/use-local-data"
 import { INITIAL_DATA } from "../app/schema"
 import { useOberonActions } from "../hooks/use-oberon"
-import { PuckMenu } from "./puck-menu"
+import { Menu } from "./menu"
 
 const Header = ({
   path,
@@ -24,7 +24,7 @@ const Header = ({
 
   return (
     <div style={{ gridArea: "header" }}>
-      <PuckMenu title={appState.data.root.title} path={path}>
+      <Menu title={appState.data.root.title} path={path}>
         <Button
           onClick={() =>
             dispatch({
@@ -83,7 +83,7 @@ const Header = ({
         >
           Publish
         </Button>
-      </PuckMenu>
+      </Menu>
     </div>
   )
 }

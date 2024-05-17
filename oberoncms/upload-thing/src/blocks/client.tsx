@@ -1,16 +1,16 @@
-import type { ComponentConfig } from "@measured/puck"
-import type { OberonImage } from "@oberoncms/core"
+import type { OberonComponent, OberonImage } from "@oberoncms/core"
 import { Image as Base } from "./server"
 import { ImageField } from "./image-field"
 
 export const Image = {
   ...Base,
   fields: {
-    oberon: {
+    image: {
       type: "custom",
+      // @ts-expect-error TODO puck custom field types doesn't allow null
       render: (props) => <ImageField {...props} />,
     },
   },
-} satisfies ComponentConfig<{
-  oberon: { image: OberonImage | null }
+} satisfies OberonComponent<{
+  image: OberonImage | null
 }>

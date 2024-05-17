@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@tohuhono/ui/form"
 
+import { ColumnHeading, Table } from "@tohuhono/ui/table"
 import { AddUserSchema, OberonUser, roles } from "../app/schema"
 import { useOberonActions } from "../hooks/use-oberon"
 
@@ -78,7 +79,63 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
   })
 
   return (
-    <div className="justify mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-1 pt-3">
+    <Table className="grid-cols-[1fr_auto_auto]">
+      <ColumnHeading>Email</ColumnHeading>
+      <ColumnHeading>Role</ColumnHeading>
+      <ColumnHeading></ColumnHeading>
+      <Form {...form}>
+        <form
+          className="contents"
+          onSubmit={form.handleSubmit((data) => {
+            addUser(data)
+            form.reset()
+          })}
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="row-span-2">
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage>
+                  {form.formState.errors.email?.message}
+                </FormMessage>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem className="row-span-2">
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {roles.map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage>{form.formState.errors.role?.message}</FormMessage>
+              </FormItem>
+            )}
+          />
+          <Button className="row-span-2" type="submit">
+            Add User
+          </Button>
+        </form>
+      </Form>
       {users.map(({ role, id, email, pending }) => {
         return (
           <Fragment key={id}>
@@ -87,7 +144,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
               disabled={pending}
               onValueChange={(role: OberonUser["role"]) => changeRole(id, role)}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-6 text-xs">
                 <SelectValue placeholder={role} />
               </SelectTrigger>
               <SelectContent>
@@ -109,56 +166,6 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
           </Fragment>
         )
       })}
-
-      <Form {...form}>
-        <form
-          className="contents"
-          onSubmit={form.handleSubmit((data) => {
-            addUser(data)
-            form.reset()
-          })}
-        >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {roles.map((role) => (
-                      <SelectItem key={role} value={role}>
-                        {role}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Add User</Button>
-          <FormMessage>{form.formState.errors.email?.message}</FormMessage>
-          <FormMessage>{form.formState.errors.role?.message}</FormMessage>
-        </form>
-      </Form>
-    </div>
+    </Table>
   )
 }

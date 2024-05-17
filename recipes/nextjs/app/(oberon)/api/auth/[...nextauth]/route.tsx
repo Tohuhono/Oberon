@@ -1,3 +1,3 @@
-import { handlers } from "@/app/(oberon)/server-config"
+import { authHandlers } from "@/app/(oberon)/adapter"
 
-export const { GET, POST } = handlers
+export const { GET, POST } = authHandlers

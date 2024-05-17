@@ -1,11 +1,17 @@
-import { pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
+import type { PageData } from "@oberoncms/core"
+import {
+  pgTable,
+  json,
+  text,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core"
 
-// TODO schema version
 export const pages = pgTable(
   "pages",
   {
     key: text("key").notNull().primaryKey(),
-    data: text("data"),
+    data: json("data").notNull().$type<PageData>(),
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },

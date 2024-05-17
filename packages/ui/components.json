@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "../../tailwind.config.js",
+    "css": "../../recipes/nextjs/app/globals.css",
+    "baseColor": "stone",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "src",
+    "utils": "@tohuhono/utils",
+    "ui": "src/components"
+  }
+}

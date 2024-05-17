@@ -5,7 +5,13 @@ import type { ClientAction, OberonActions } from "./app/schema"
 import { parseClientAction, resolveSlug } from "./app/utils"
 
 async function getContext(
-  { getPageData, getAllImages, getAllPages, getAllUsers }: OberonActions,
+  {
+    getPageData,
+    getAllImages,
+    getAllPages,
+    getAllUsers,
+    getConfig,
+  }: OberonActions,
   action: ClientAction,
   slug: string,
 ) {
@@ -28,6 +34,12 @@ async function getContext(
         action,
         slug,
         data: await getAllImages(),
+      }
+    case "site":
+      return {
+        action,
+        slug,
+        data: await getConfig(),
       }
     case "pages":
       return {

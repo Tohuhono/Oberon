@@ -1,11 +1,6 @@
 "use client"
 
-import {
-  Fragment,
-  startTransition,
-  useOptimistic,
-  type PropsWithChildren,
-} from "react"
+import { Fragment, startTransition, useOptimistic } from "react"
 
 import { filesize } from "filesize"
 import Link from "next/link"
@@ -13,6 +8,8 @@ import { Route } from "next"
 import { Button } from "@tohuhono/ui/button"
 import { LocalDate } from "@tohuhono/ui/date"
 import Image from "next/image"
+
+import { Table, ColumnHeading } from "@tohuhono/ui/table"
 
 import { useOberonActions } from "../hooks/use-oberon"
 import type { OberonImage } from "../app/schema"
@@ -37,14 +34,11 @@ const useOberonImages = (images: OberonImage[]) => {
   }
 }
 
-const ColumnHeading = ({ children }: PropsWithChildren) =>
-  children ? <div className="border-b-2 py-1">{children}</div> : <div />
-
 export function Images({ images: initialImages }: { images: OberonImage[] }) {
   const { images, deleteImage } = useOberonImages(initialImages)
 
   return (
-    <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto_auto_auto_auto] items-center gap-3 pt-3">
+    <Table className="grid-cols-[auto_1fr_auto_auto_auto_auto]">
       <ColumnHeading></ColumnHeading>
       <ColumnHeading>Name</ColumnHeading>
       <ColumnHeading>Size</ColumnHeading>
@@ -57,9 +51,16 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
         return (
           <Fragment key={key}>
             <Link href={url as Route} prefetch={false} target="_blank">
-              <Image src={url} width={24} height={24} alt={alt} />
+              <Image
+                src={url}
+                width={28}
+                height={28}
+                alt={alt}
+                className="m-0 lg:m-0"
+              />
             </Link>
-            <div className="flex flex-row gap-2">{alt}</div>
+
+            <div>{alt}</div>
             <div>{filesize(size)}</div>
             <div>
               <LocalDate date={updatedAt} />
@@ -76,6 +77,6 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
           </Fragment>
         )
       })}
-    </div>
+    </Table>
   )
 }

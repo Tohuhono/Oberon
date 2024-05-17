@@ -1,5 +1,6 @@
 // @ts-check
 
+// TODO bundle analyzer is not compatible with turbo
 // import withBundleAnalyzer from "@next/bundle-analyzer"
 
 /** @type {import('next').NextConfig} */
@@ -29,6 +30,7 @@ const nextConfig = {
   },
 }
 
+// TODO bundle analyzer is not compatible with turbo
 //withBundleAnalyzer({ enabled: process.env.ANALYZE === "true" })(nextConfig)
 
 export default nextConfig

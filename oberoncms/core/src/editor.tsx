@@ -5,10 +5,11 @@ import { getTitle } from "./app/utils"
 import { useOberonClientContext } from "./hooks/use-oberon"
 import { Editor } from "./components/editor"
 import { Preview } from "./components/preview"
-import { PuckMenu } from "./components/puck-menu"
-import { AllPages } from "./components/all-pages"
+import { Menu } from "./components/menu"
+import { Pages } from "./components/pages"
 import { Images } from "./components/images"
 import { Users } from "./components/users"
+import { Site } from "./components/site"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
 
@@ -34,7 +35,11 @@ const previewConfig: Partial<Config> = {
   },
 }
 
-export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
+export function OberonClient({
+  config: { components },
+}: {
+  config: OberonConfig
+}) {
   const { action, data, slug } = useOberonClientContext()
 
   if (action === "edit") {
@@ -42,7 +47,7 @@ export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
       <Editor
         path={slug}
         data={data}
-        config={{ ...editorConfig, components: blocks }}
+        config={{ ...editorConfig, components: components }}
       />
     )
   }
@@ -52,7 +57,7 @@ export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
       <Preview
         path={slug}
         data={data}
-        config={{ ...previewConfig, components: blocks }}
+        config={{ ...previewConfig, components: components }}
       />
     )
   }
@@ -60,10 +65,15 @@ export function OberonClient({ config: { blocks } }: { config: OberonConfig }) {
   return (
     <>
       {/* TODO fix path to be dynamic */}
-      <PuckMenu title={getTitle(action, slug)} path={`/cms/${action}`} />
-      {action === "users" && <Users users={data} />}
-      {action === "images" && <Images images={data} />}
-      {action === "pages" && <AllPages pages={data} />}
+      <Menu title={getTitle(action, slug)} path={`/cms/${action}`} />
+      <div className="flex w-full justify-center">
+        <div className="prose w-full rounded bg-secondary p-3 pb-10 dark:prose-invert lg:prose-lg lg:p-5 lg:pb-10">
+          {action === "users" && <Users users={data} />}
+          {action === "images" && <Images images={data} />}
+          {action === "pages" && <Pages pages={data} />}
+          {action === "site" && <Site config={data} />}
+        </div>
+      </div>
     </>
   )
 }

@@ -6,7 +6,7 @@ import { resolveSlug } from "./app/utils"
 
 export async function Render({
   path = [],
-  config: { blocks },
+  config: { components },
   adapter: { getPageData },
 }: {
   path?: string[]
@@ -21,5 +21,5 @@ export async function Render({
     return notFound()
   }
 
-  return <PuckRender data={data} config={{ components: blocks } as Config} />
+  return <PuckRender data={data} config={{ components } as Config} />
 }
