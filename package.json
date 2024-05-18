@@ -7,7 +7,7 @@
     "build:packages": "turbo build --filter={./oberoncms/*}... --filter={./puck/*}...",
     "build:nextjs-recipe": "turbo build --filter oberon-cms-example...",
     "change": "changeset",
-    "clean": "turbo clean --filter=!dev --continue && rimraf ./dist ./.turbo ./vercel",
+    "clean:build": "turbo clean --filter=!dev --continue && rimraf ./dist ./.turbo ./vercel",
     "clean:next": "turbo clean --filter=!dev --continue -- --only ./.next",
     "clean:node": "turbo clean --filter=!dev --continue -- --with ./node_modules && npx odt-clean --node_modules",
     "generate:migrations": "turbo generate:migrations",
