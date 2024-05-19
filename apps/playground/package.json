@@ -1,6 +1,6 @@
 {
-  "name": "oberon-cms-example",
-  "version": "0.7.0",
+  "name": "@oberon/playground",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "rimraf .next && next build",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@datacom-digital/ui-sample-components": "^0.3.2",
-    "@oberoncms/adapter-vercel-postgres": "workspace:*",
+    "@oberoncms/adapter-turso": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/upload-thing": "workspace:*",
     "@tohuhono/puck-rich-text": "workspace:*",
