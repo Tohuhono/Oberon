@@ -13,7 +13,7 @@ pnpm install
 
 pnpm build
 
-pnpm dev
+pnpm dev:oberon
 
 pnpm lint
 ```
