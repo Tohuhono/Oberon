@@ -50,4 +50,38 @@ Under heavy development.
 ## Contributors
 
 <!-- readme: collaborators,contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/4leite">
+                    <img src="https://avatars.githubusercontent.com/u/2586037?v=4" width="100;" alt="4leite"/>
+                    <br />
+                    <sub><b>4leite</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/turbobot-temp">
+                    <img src="https://avatars.githubusercontent.com/u/145653950?v=4" width="100;" alt="turbobot-temp"/>
+                    <br />
+                    <sub><b>turbobot-temp</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/ahmedrowaihi">
+                    <img src="https://avatars.githubusercontent.com/u/67356781?v=4" width="100;" alt="ahmedrowaihi"/>
+                    <br />
+                    <sub><b>ahmedrowaihi</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/oberoncms">
+                    <img src="https://avatars.githubusercontent.com/u/170320460?v=4" width="100;" alt="oberoncms"/>
+                    <br />
+                    <sub><b>oberoncms</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: collaborators,contributors -end -->
