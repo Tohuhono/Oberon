@@ -49,5 +49,5 @@ Under heavy development.
 
 ## Contributors
 
-<!-- readme: collaborators,contributors,turbobot-temp/- -start -->
-<!-- readme: collaborators,contributors,turbobot-temp/- -end -->
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
