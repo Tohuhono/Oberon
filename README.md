@@ -46,3 +46,8 @@ This Turborepo includes the following packages/apps:
 ## What next?
 
 Under heavy development.
+
+## Contributors
+
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
