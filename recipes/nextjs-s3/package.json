@@ -1,0 +1,43 @@
+{
+  "name": "oberon-cms-s3-example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "rimraf .next && next build",
+    "clean": "node ../../scripts/clean-package.mjs",
+    "dev": "next dev",
+    "lint": "next lint",
+    "tsc": "tsc --pretty",
+    "postinstall": "odt-init",
+    "prebuild": "odt-prepare",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@datacom-digital/ui-sample-components": "^0.3.2",
+    "@oberoncms/adapter-turso": "workspace:*",
+    "@oberoncms/core": "workspace:*",
+    "@aws-sdk/client-s3": "^3.577.0",
+    "@oberoncms/s3": "workspace:*",
+    "@tohuhono/puck-rich-text": "workspace:*",
+    "next": "^14.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "resend": "^3.2.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.4",
+    "postcss": "^8",
+    "prettier-plugin-tailwindcss": "^0.5.12",
+    "tailwindcss": "^3.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5"
+  }
+}
