@@ -140,13 +140,6 @@ jobs:
     env:
       STATUS: "${{ ( contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') ) && 'failed' || 'passed'}}"
     steps:
-      - name: Add test status to PR
-        if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          Append: true
-          message: |
-            Test suite ${{ env.STATUS }}
       - name: Failing deploy
         if: ${{ env.STATUS == 'failed' }}
         run: exit 1
