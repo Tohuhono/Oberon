@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/adapter-pgsql",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A PostgreSQL database adapter for OberonCMS",
