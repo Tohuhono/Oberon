@@ -1,5 +1,11 @@
 # @tohuhono/puck-upload-thing
 
+## 0.7.1
+
+### Patch Changes
+
+- e48bd75: Update dependencies
+
 ## 0.7.0
 
 ### Minor Changes
