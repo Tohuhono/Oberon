@@ -19,7 +19,7 @@ const pages = pgTable("pages", {
   data: text("data"),
 })
 
-const createRemoteClient = async () => {
+const createRemoteClient = () => {
   if (!process.env.DATABASE_URL) {
     throw new Error(
       "No remote database credentials supplied: have you set database credentials?",
@@ -30,26 +30,9 @@ const createRemoteClient = async () => {
   })
 }
 
-const createLocalClient = async () => {
-  if (!process.env.DATABASE_URL) {
-    throw new Error(
-      "No local database credentials supplied: have you set database credentials?",
-    )
-  }
-  return new Pool({
-    connectionString: process.env.DATABASE_URL,
-  })
-}
-
-const getClient = () => {
-  if (process.env.NODE_ENV === "development") return createLocalClient()
-  if (process.env.NODE_ENV === "production") return createRemoteClient()
-  return createLocalClient()
-}
-
 ;(async () => {
   console.log(`Migrating database`)
-  const client = await getClient()
+  const client = createRemoteClient()
   if (!client) {
     console.log("Prepare: No Database Connection Configured")
     return
