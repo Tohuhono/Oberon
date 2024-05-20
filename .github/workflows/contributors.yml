@@ -1,5 +1,5 @@
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -11,9 +11,15 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.CHANGESET_APP_ID }}
+          private-key: ${{ secrets.CHANGESET_APP_SECRET }}
       - name: Contribute List
+        if: github.head_ref == 'changeset-release/main'
         uses: akhilmhdh/contributors-readme-action@v2.3.10
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           use_username: true
