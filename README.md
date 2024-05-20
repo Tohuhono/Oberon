@@ -48,6 +48,3 @@ This Turborepo includes the following packages/apps:
 Under heavy development.
 
 ## Contributors
-
-<!-- readme: collaborators,contributors,turbobot-temp/- -start -->
-<!-- readme: collaborators,contributors,turbobot-temp/- -end -->

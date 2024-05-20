@@ -1,25 +1,23 @@
+name: Add contributors
+
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - changeset-release/main
 
 jobs:
-  contrib-readme-job:
+  add-contributors:
     runs-on: ubuntu-latest
-    name: A job to automate contrib in readme
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
-      - uses: actions/create-github-app-token@v1
-        id: app-token
+      - uses: actions/checkout@v2
+      - uses: BobAnkh/add-contributors@master
         with:
-          app-id: ${{ vars.CHANGESET_APP_ID }}
-          private-key: ${{ secrets.CHANGESET_APP_SECRET }}
-      - name: Contribute List
-        if: github.head_ref == 'changeset-release/main'
-        uses: akhilmhdh/contributors-readme-action@v2.3.10
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        with:
-          use_username: true
+          CONTRIBUTOR: "## Contributors"
+          COLUMN_PER_ROW: "6"
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMG_WIDTH: "100"
+          FONT_SIZE: "14"
+          BRANCH: "changeset-release/main"
+          PATH: "/README.md"
+          COMMIT_MESSAGE: "docs(README): update contributors"
+          AVATAR_SHAPE: "round"
