@@ -24,10 +24,6 @@ on:
       TURSO_TOKEN:
         required: false
 
-concurrency:
-  group: "${{ github.workflow }} @ ${{ inputs.ref }}"
-  cancel-in-progress: true
-
 jobs:
   changed-packages:
     name: Determine which packages changed
