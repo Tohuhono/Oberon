@@ -9,6 +9,12 @@ on:
       tag:
         required: true
         type: string
+      repository:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
 
 jobs:
   playwright:
@@ -37,6 +43,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
       - name: Use pNpm
         uses: pnpm/action-setup@v3
