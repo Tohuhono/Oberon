@@ -1,4 +1,4 @@
-name: Promote Workflow
+run-name: ${{ format('Promote {0}', inputs.project ) }}
 
 on:
   workflow_call:
@@ -25,7 +25,6 @@ on:
 
 jobs:
   promote:
-    name: Promote ${{ inputs.project }}
     environment: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
