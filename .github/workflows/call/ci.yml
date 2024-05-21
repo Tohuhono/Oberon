@@ -1,30 +1,50 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
-  pull_request_target:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      repository:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
+    secrets:
+      VERCEL_PROJECT_ID:
+        required: true
+      VERCEL_API_TOKEN:
+        required: true
+      VERCEL_ORG_ID:
+        required: true
+      TURSO_URL:
+        required: false
+      TURSO_TOKEN:
+        required: false
 
 concurrency:
-  group: "${{ github.workflow }} @ ${{ github.event.pull_request_target.head.label || github.head_ref || github.ref }}"
+  group: "${{ github.workflow }} @ ${{ inputs.ref }}"
   cancel-in-progress: true
 
 jobs:
   changed-packages:
     name: Determine which packages changed
-    uses: ./.github/workflows/changed-packages.yml
+    uses: ./.github/workflows/call/changed-packages.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
 
   deploy_tohuhono:
     name: Tohuhono
     needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/tohuhono') }}
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/call/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: ${{ inputs.environment }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
       project: tohuhono
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -35,9 +55,11 @@ jobs:
     name: Rich Text
     needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/rich-text-demo') }}
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/call/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: ${{ inputs.environment }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
       project: rich_text
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -48,9 +70,11 @@ jobs:
     name: Oberon Playground
     needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, 'oberon-cms-example') }}
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/call/deploy.yml
     with:
-      environment: "${{ ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) && 'production' || 'preview' }}"
+      environment: ${{ inputs.environment }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
       project: playground
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -82,18 +106,20 @@ jobs:
   # smoke-test:
   #   name: Smoke Test
   #   needs: [deploy]
-  #   uses: ./.github/workflows/playwright.yml
+  #   uses: ./.github/workflows/call/playwright.yml
   #   with:
   #     url: ${{ needs.deploy.outputs.url }}
   #     tag: "@smoke"
 
   lint:
-    name: Lint
+    name: Lint and Type Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
       - name: Cache turbo build setup
         uses: actions/cache@v4
@@ -122,11 +148,14 @@ jobs:
 
   unit-test:
     name: Unit Test
-    uses: ./.github/workflows/jest.yml
+    uses: ./.github/workflows/call/jest.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
 
   #  component-test:
   #    name: Component Test
-  #    uses: ./.github/workflows/playwright.yml
+  #    uses: ./.github/workflows/call/playwright.yml
   #    with:
   #      url: ""
   #      tag: "@component"
@@ -153,7 +182,7 @@ jobs:
       !contains(needs.*.result, 'cancelled') &&
       !contains(needs.*.result, 'failure') &&
       needs.deploy_tohuhono.result == 'success'
-    uses: ./.github/workflows/promote.yml
+    uses: ./.github/workflows/call/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
@@ -173,7 +202,7 @@ jobs:
       !contains(needs.*.result, 'cancelled') &&
       !contains(needs.*.result, 'failure') &&
       needs.deploy_rich_text.result == 'success'
-    uses: ./.github/workflows/promote.yml
+    uses: ./.github/workflows/call/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
@@ -193,7 +222,7 @@ jobs:
       !contains(needs.*.result, 'cancelled') &&
       !contains(needs.*.result, 'failure') &&
       needs.deploy_playground.result == 'success'
-    uses: ./.github/workflows/promote.yml
+    uses: ./.github/workflows/call/promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
