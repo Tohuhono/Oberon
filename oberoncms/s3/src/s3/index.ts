@@ -1,6 +1,7 @@
 "use server"
 import "server-only"
 
+import { randomUUID } from "crypto"
 import {
   DeleteObjectCommand,
   PutObjectCommand,
@@ -22,7 +23,7 @@ export class S3ClientFactory {
   constructor({ client, bucket, generateUUID }: S3ClientFactoryProps) {
     this.s3 = client
     this.bucket = bucket
-    this.generateUUID = generateUUID || require("crypto").randomUUID
+    this.generateUUID = generateUUID || randomUUID
   }
 
   async uploadFile(

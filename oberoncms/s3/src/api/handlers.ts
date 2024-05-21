@@ -1,5 +1,5 @@
-import { NextRequest } from "next/server"
 import path from "path"
+import { NextRequest } from "next/server"
 import { S3ClientFactory } from "../s3"
 import { getImageSize } from "./get-image-size"
 export type OurFileRouter = ReturnType<typeof initRouteHandler>
@@ -9,7 +9,7 @@ export function initRouteHandler(client: S3ClientFactory): {
   GET: (req: NextRequest) => Response
 } {
   const POST: (req: NextRequest) => Promise<Response> = async (req) => {
-    const image = (await req.formData()!).get("image") as File
+    const image = (await req.formData()).get("image") as File | null
     if (!image) return new Response("No image provided", { status: 400 })
 
     const buffer = Buffer.from(await image.arrayBuffer())
