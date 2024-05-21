@@ -1,4 +1,4 @@
-name: Production CI
+name: Production
 
 on:
   push:
@@ -12,11 +12,13 @@ concurrency:
 
 jobs:
   ci:
+    name: _
     uses: ./.github/workflows/call-ci.yml
     with:
       environment: production
       repository: ${{ github.repository }}
       ref: ${{ github.ref }}
+      base: ${{ github.event.before }}
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}

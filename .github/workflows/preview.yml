@@ -1,4 +1,4 @@
-name: Preview CI
+name: Preview
 
 on:
   pull_request_target:
@@ -11,12 +11,13 @@ concurrency:
 
 jobs:
   ci:
-    name:
+    name: _
     uses: ./.github/workflows/call-ci.yml
     with:
       environment: preview
       repository: ${{ github.event.pull_request.head.repo.full_name }}
       ref: ${{ github.event.pull_request.head.ref }}
+      base: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.base.sha }}
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
