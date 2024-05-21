@@ -33,7 +33,7 @@ on:
 
 jobs:
   deploy:
-    name: _
+    name: ${{ format('{0} {1}', inputs.environment, inputs.project) }}
     environment:
       name: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
       url: ${{ steps.deploy.outputs.url }}
