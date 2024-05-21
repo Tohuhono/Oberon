@@ -1,5 +1,3 @@
-name: CI
-
 on:
   workflow_call:
     inputs:
@@ -28,8 +26,8 @@ on:
         required: false
 
 jobs:
-  changed-apps:
-    name: Changed Apps
+  changed-packages:
+    name: Changed Packages
     uses: ./.github/workflows/call-changed-packages.yml
     with:
       repository: ${{ inputs.repository }}
@@ -38,7 +36,7 @@ jobs:
 
   deploy_tohuhono:
     name: Tohuhono
-    needs: [changed-apps]
+    needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/tohuhono') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
@@ -53,7 +51,7 @@ jobs:
 
   deploy_rich_text:
     name: Rich Text
-    needs: [changed-apps]
+    needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/rich-text-demo') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
@@ -68,7 +66,7 @@ jobs:
 
   deploy_playground:
     name: Oberon Playground
-    needs: [changed-apps]
+    needs: [changed-packages]
     if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/playground') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
@@ -85,7 +83,8 @@ jobs:
 
   deploy-status:
     name: Deploy Status
-    needs: [changed-apps, deploy_tohuhono, deploy_rich_text, deploy_playground]
+    needs:
+      [changed-packages, deploy_tohuhono, deploy_rich_text, deploy_playground]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
