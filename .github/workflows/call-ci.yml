@@ -179,7 +179,7 @@ jobs:
     needs: [deploy_tohuhono, test-status]
     if: |
       always() && 
-      github.ref == 'refs/heads/main' &&
+      inputs.environment == 'production' &&
       !contains(needs.*.result, 'cancelled') &&
       !contains(needs.*.result, 'failure') &&
       needs.deploy_tohuhono.result == 'success'
@@ -189,7 +189,7 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     with:
-      environment: production
+      environment: ${{ inputs.environment }}
       project: tohuhono
       staging_url: ${{ needs.deploy_tohuhono.outputs.url }}
       production_url: www.tohuhono.com
@@ -199,7 +199,7 @@ jobs:
     needs: [deploy_rich_text, test-status]
     if: |
       always() && 
-      github.ref == 'refs/heads/main' &&
+      inputs.environment == 'production' &&
       !contains(needs.*.result, 'cancelled') &&
       !contains(needs.*.result, 'failure') &&
       needs.deploy_rich_text.result == 'success'
@@ -209,7 +209,7 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     with:
-      environment: production
+      environment: ${{ inputs.environment }}
       project: rich_text
       staging_url: ${{ needs.deploy_rich_text.outputs.url }}
       production_url: puck-rich-text.tohuhono.com
@@ -219,7 +219,7 @@ jobs:
     needs: [deploy_playground, test-status]
     if: |
       always() && 
-      github.ref == 'refs/heads/main' &&
+      inputs.environment == 'production' &&
       !contains(needs.*.result, 'cancelled') &&
       !contains(needs.*.result, 'failure') &&
       needs.deploy_playground.result == 'success'
@@ -229,7 +229,7 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     with:
-      environment: production
+      environment: ${{ inputs.environment }}
       project: playground
       staging_url: ${{ needs.deploy_playground.outputs.url }}
       production_url: playground.tohuhono.com
