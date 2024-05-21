@@ -1,4 +1,3 @@
-run-name: ${{ format('Deploy {0}', inputs.project ) }}
 name: Deploy
 
 on:
@@ -31,6 +30,8 @@ on:
         required: false
       TURSO_TOKEN:
         required: false
+
+run-name: ${{ format('Deploy {0}', inputs.project ) }}
 
 jobs:
   deploy:

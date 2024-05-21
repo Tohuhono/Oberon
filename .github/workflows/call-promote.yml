@@ -1,4 +1,3 @@
-run-name: ${{ format('Promote {0}', inputs.project ) }}
 name: Promote
 
 on:
@@ -23,6 +22,8 @@ on:
         required: true
       VERCEL_PROJECT_ID:
         required: true
+
+run-name: ${{ format('Promote {0}', inputs.project ) }}
 
 jobs:
   promote:
