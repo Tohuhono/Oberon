@@ -69,7 +69,7 @@ jobs:
   deploy_playground:
     name: Oberon Playground
     needs: [changed-apps]
-    if: ${{ contains(needs.changed-packages.outputs.changed_packages, 'oberon-cms-example') }}
+    if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/playground') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
       environment: ${{ inputs.environment }}
