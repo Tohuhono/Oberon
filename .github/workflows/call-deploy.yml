@@ -1,4 +1,5 @@
 run-name: ${{ format('Deploy {0}', inputs.project ) }}
+name: Deploy
 
 on:
   workflow_call:
