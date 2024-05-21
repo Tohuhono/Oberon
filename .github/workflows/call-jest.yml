@@ -12,7 +12,7 @@ on:
 
 jobs:
   jest:
-    name: Jest Test
+    name: Jest
     env:
       # Must be the length of the shardIndex array
       SHARD_INDEX_LENGTH: 2
