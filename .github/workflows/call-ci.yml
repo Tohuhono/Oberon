@@ -12,6 +12,9 @@ on:
       ref:
         required: true
         type: string
+      base:
+        required: true
+        type: string
     secrets:
       VERCEL_PROJECT_ID:
         required: true
@@ -31,6 +34,7 @@ jobs:
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
+      base: ${{ inputs.base }}
 
   deploy_tohuhono:
     name: Tohuhono
