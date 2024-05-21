@@ -10,6 +10,9 @@ on:
       ref:
         required: true
         type: string
+      base:
+        required: true
+        type: string
     outputs:
       changed_packages:
         description: "Stringified JSON array of changed packages in this changeset"
@@ -27,7 +30,7 @@ jobs:
       # For PRs, we want to use `github.event.pull_request.base.sha` to tell turbo to see which packages changed since that SHA
       # For a branch push/merges, the above sha isn't available, so instead, we reference `github.event.before` to determine the previous `HEAD` of the branch we just pushed onto
       #   See SO answer for more info https://stackoverflow.com/a/61861763/2379922
-      TURBO_REF_FILTER: ${{ github.event_name == 'pull_request_target' && github.base_ref || github.event.before }}
+      TURBO_REF_FILTER: ${{ inputs.base }}
     outputs:
       # Defining a job output for used by the next jobs:
       # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs

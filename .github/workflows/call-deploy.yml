@@ -1,4 +1,4 @@
-name: Deploy workflow
+name: Deploy
 
 on:
   workflow_call:
@@ -33,7 +33,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy
+    name: _
     environment:
       name: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
       url: ${{ steps.deploy.outputs.url }}
