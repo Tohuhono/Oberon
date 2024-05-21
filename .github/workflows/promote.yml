@@ -33,20 +33,10 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      - name: Use pNpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20.x"
-          cache: "pnpm"
       - name: Alias build to production
         run: |
-          pnpx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_API_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }}
           npx vercel alias ${{ inputs.staging_url }} ${{ inputs.production_url }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
