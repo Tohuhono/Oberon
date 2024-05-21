@@ -75,6 +75,8 @@ export function initAdapter({
     permission: AdapterPermission
   }) => boolean
 }): OberonAdapter {
+  console.log("Initialising adapter")
+
   const db = plugins.reduce<OberonDatabaseAdapter>(
     (accumulator, plugin) => plugin(accumulator),
     databaseAdapter,
