@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   ci:
+    name:
     uses: ./.github/workflows/call-ci.yml
     with:
       environment: preview
