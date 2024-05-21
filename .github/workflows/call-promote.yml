@@ -1,4 +1,5 @@
 run-name: ${{ format('Promote {0}', inputs.project ) }}
+name: Promote
 
 on:
   workflow_call:
