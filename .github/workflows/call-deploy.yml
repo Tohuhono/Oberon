@@ -1,4 +1,4 @@
-name: Deploy
+run-name: ${{ format('{0} {1}', inputs.environment, inputs.project) }}
 
 on:
   workflow_call:
