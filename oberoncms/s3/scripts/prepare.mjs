@@ -33,6 +33,8 @@ const env = {
 }
 {
   const validateEnv = (env) => {
+    // fallback to development
+    if (!env.NODE_ENV) env.NODE_ENV = "development"
     if (
       !env.NODE_ENV ||
       !["development", "test", "production"].includes(env.NODE_ENV)
