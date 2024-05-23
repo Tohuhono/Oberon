@@ -902,9 +902,6 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
     devDependencies:
-      '@next/bundle-analyzer':
-        specifier: ^14.2.1
-        version: 14.2.1
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)

@@ -188,57 +188,66 @@ export type OberonClientContext = DescriminatedContext & {
 /*
  * Adapter
  */
+export type OberonAuthAdapter = AuthAdapter
 
 export type OberonDatabaseAdapter = {
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
-  deleteUser: (
-    id: OberonUser["id"],
-  ) => Promise<Pick<OberonUser, "id"> | undefined>
-  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
-  getAllUsers: () => Promise<OberonUser[]>
-  getAllImages: () => Promise<OberonImage[]>
-  addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   addPage: (page: OberonPage) => Promise<void>
+  addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deletePage: (key: OberonPageMeta["key"]) => Promise<void>
+  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
+  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
+  getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
-  updatePageData: (data: OberonPage) => Promise<void>
+  getAllUsers: () => Promise<OberonUser[]>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
   getSite: () => Promise<OberonSite | undefined>
+  updatePageData: (data: OberonPage) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
-  plugins: Record<string, string>
-} & AuthAdapter
+}
 
-export type OberonActions = {
+export type OberonPluginAdapter = OberonDatabaseAdapter & {
+  plugins: { [name: string]: string }
+  getCurrentUser: () => Promise<OberonUser | null>
+  hasPermission: (props: {
+    user?: OberonUser | null
+    action: AdapterActionGroup
+    permission: AdapterPermission
+  }) => boolean
+}
+
+export type OberonPlugin = (adapter: OberonPluginAdapter) => {
+  name?: string
+  version?: string
+} & Partial<OberonPluginAdapter>
+
+export type OberonAdapter = {
+  addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
+  addImage: (data: OberonImage) => Promise<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
+  deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
+  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
   ) => Promise<Pick<OberonUser, "id"> | null>
-  changeRole: (
-    data: z.infer<typeof ChangeRoleSchema>,
-  ) => Promise<Pick<OberonUser, "role" | "id"> | null>
-  getAllUsers: () => Promise<OberonUser[]>
-  getAllImages: () => Promise<OberonImage[]>
-  addImage: (data: OberonImage) => Promise<OberonImage[]>
-  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
-  addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
-  getAllPages: () => Promise<OberonPageMeta[]>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
-  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
-  getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
-  getConfig: () => Promise<OberonSiteConfig>
-  migrateData: () => Promise<
-    StreamResponseChunk<TransformResult | MigrationResult>
-  >
   can: (
     action: AdapterActionGroup,
     permission?: AdapterPermission,
   ) => Promise<boolean>
+  changeRole: (
+    data: z.infer<typeof ChangeRoleSchema>,
+  ) => Promise<Pick<OberonUser, "role" | "id"> | null>
+  getAllImages: () => Promise<OberonImage[]>
+  getAllPages: () => Promise<OberonPageMeta[]>
+  getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
+  getAllUsers: () => Promise<OberonUser[]>
+  getConfig: () => Promise<OberonSiteConfig>
+  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
+  migrateData: () => Promise<
+    StreamResponseChunk<TransformResult | MigrationResult>
+  >
+  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
 }
 
-export type OberonAdapter = OberonActions
-
-export type OberonPlugin = (
-  adapter: OberonDatabaseAdapter,
-) => OberonDatabaseAdapter
+export type OberonActions = OberonAdapter

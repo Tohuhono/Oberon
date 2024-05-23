@@ -3,16 +3,15 @@
   "version": "0.7.1",
   "private": true,
   "scripts": {
-    "build": "rimraf .next && next build",
-    "clean": "node ../../scripts/clean-package.mjs",
+    "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "tsc": "tsc --pretty",
-    "postinstall": "odt-init",
-    "prebuild": "odt-prepare",
+    "postinstall": "",
+    "prebuild": "",
     "start": "next start"
   },
   "dependencies": {
+    "@oberoncms/adapter-turso": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/adapter-turso": "workspace:*",
     "next": "^14.2.3",
@@ -22,7 +21,6 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^14.2.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "^18",

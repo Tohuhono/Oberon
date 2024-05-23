@@ -14,83 +14,58 @@ import {
   DeleteUserSchema,
   INITIAL_DATA,
   AddPageSchema,
+  PublishPageSchema,
   type AdapterActionGroup,
   type AdapterPermission,
-  type OberonDatabaseAdapter,
   type OberonAdapter,
   type OberonPlugin,
   type OberonUser,
-  type OberonPermissions,
-  type OberonRole,
-  PublishPageSchema,
   type OberonConfig,
   type MigrationResult,
   type TransformResult,
   type OberonPage,
   type PageData,
+  type OberonPluginAdapter,
 } from "./app/schema"
 import {
   applyTransforms,
   getComponentTransformVersions,
   getTransforms,
 } from "./app/transforms"
+import { baseAdapter } from "./app/base-adapter"
 
-const permissions: OberonPermissions = {
-  unauthenticated: {
-    pages: "read",
-  },
-  user: {
-    site: "read",
-    pages: "write",
-    images: "write",
-  },
-}
+export { mockPlugin } from "./app/mock-plugin"
 
 export function initAdapter({
-  databaseAdapter,
   config,
-  getCurrentUser,
   plugins = [],
-  hasPermission = ({
-    role = "unauthenticated" as const,
-    action,
-    permission,
-  }) => {
-    if (role === "admin") {
-      return true
-    }
-    return (
-      permissions[role][action] === permission ||
-      permissions[role][action] === "write"
-    )
-  },
 }: {
-  databaseAdapter: OberonDatabaseAdapter
   config: OberonConfig
-  getCurrentUser: () => Promise<OberonUser | null>
   plugins?: OberonPlugin[]
-  hasPermission?: (props: {
-    role?: OberonRole
-    action: AdapterActionGroup
-    permission: AdapterPermission
-  }) => boolean
 }): OberonAdapter {
   console.log("Initialising adapter")
 
-  const db = plugins.reduce<OberonDatabaseAdapter>(
-    (accumulator, plugin) => plugin(accumulator),
-    databaseAdapter,
-  )
+  const adapter = plugins.reduce<OberonPluginAdapter>((accumulator, plugin) => {
+    const { name, version, ...rest } = plugin(accumulator)
+    return {
+      ...accumulator,
+      plugins: {
+        ...accumulator.plugins,
+        ...(name && { [name]: version || "" }),
+      },
+      ...rest,
+    }
+  }, baseAdapter)
 
   const can: OberonAdapter["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
-    if (hasPermission({ action, permission })) {
+    if (adapter.hasPermission({ action, permission })) {
       return true
     }
 
-    const user = await getCurrentUser()
+    const user = await adapter.getCurrentUser()
 
-    return hasPermission({ role: user?.role, action, permission })
+    return adapter.hasPermission({ user, action, permission })
   }
 
   const will = async (
@@ -107,9 +82,9 @@ export function initAdapter({
     action: AdapterActionGroup,
     permission: AdapterPermission,
   ) => {
-    const user = await getCurrentUser()
+    const user = await adapter.getCurrentUser()
 
-    if (user && hasPermission({ role: user.role, action, permission })) {
+    if (user && adapter.hasPermission({ user, action, permission })) {
       return user
     }
     throw new Error("Unauthorized")
@@ -126,7 +101,7 @@ export function initAdapter({
         }
         return 0
       }
-      const result = await db.getAllPages()
+      const result = await adapter.getAllPages()
 
       const data = result.sort(sortPages)
       return data
@@ -137,7 +112,7 @@ export function initAdapter({
 
   const getAllPathsCached = cache(
     async () => {
-      const result = await db.getAllPages()
+      const result = await adapter.getAllPages()
       const data = result.map((row) => ({
         puckPath: row["key"].split("/").slice(1),
       }))
@@ -149,14 +124,14 @@ export function initAdapter({
 
   // TODO zod ; maybeGet
   const getPageDataCached = async (key: string): Promise<Data | null> => {
-    const dataString = await db.getPageData(key)
+    const dataString = await adapter.getPageData(key)
 
     return dataString
   }
 
   const getAllUsersCached = cache(
     async () => {
-      const allUsers = await db.getAllUsers()
+      const allUsers = await adapter.getAllUsers()
       return allUsers || []
     },
     undefined,
@@ -167,7 +142,7 @@ export function initAdapter({
 
   const getAllImagesCached = cache(
     async () => {
-      const allImages = await db.getAllImages()
+      const allImages = await adapter.getAllImages()
       return allImages || []
     },
     undefined,
@@ -181,7 +156,7 @@ export function initAdapter({
     data,
     updatedBy,
   }: Pick<OberonPage, "key" | "data" | "updatedBy">) => {
-    await db.updatePageData({
+    await adapter.updatePageData({
       key,
       data,
       updatedAt: new Date(),
@@ -193,19 +168,19 @@ export function initAdapter({
 
   const getConfigCached = cache(
     async () => {
-      const site = await db.getSite()
+      const site = await adapter.getSite()
 
       const { components, transforms } = getTransforms(site?.components, config)
 
       const siteConfig = {
         version,
-        plugins: db.plugins,
+        plugins: adapter.plugins,
         components,
         pendingMigrations: transforms && Object.keys(transforms),
       }
 
       if (!site) {
-        await db.updateSite({
+        await adapter.updateSite({
           version: config.version,
           components: getComponentTransformVersions(config),
           updatedAt: new Date(),
@@ -232,7 +207,7 @@ export function initAdapter({
       total: 0,
     }
 
-    const site = await db.getSite()
+    const site = await adapter.getSite()
 
     const { transforms } = getTransforms(site?.components, config)
 
@@ -254,7 +229,7 @@ export function initAdapter({
       yield result
     }
 
-    await db.updateSite({
+    await adapter.updateSite({
       version: config.version,
       components: getComponentTransformVersions(config),
       updatedAt: new Date(),
@@ -302,7 +277,7 @@ export function initAdapter({
     addPage: async function (data: unknown) {
       const user = await whoWill("pages", "write")
       const { key } = AddPageSchema.parse(data)
-      await db.addPage({
+      await adapter.addPage({
         key,
         data: INITIAL_DATA,
         updatedAt: new Date(),
@@ -315,7 +290,7 @@ export function initAdapter({
     deletePage: async function (data: unknown) {
       await will("pages", "write")
       const { key } = DeletePageSchema.parse(data)
-      await db.deletePage(key)
+      await adapter.deletePage(key)
       revalidatePath(key)
       revalidateTag("oberon-pages")
     },
@@ -341,15 +316,15 @@ export function initAdapter({
       await will("images", "write")
 
       const image = AddImageSchema.parse(data)
-      await db.addImage(image)
+      await adapter.addImage(image)
       revalidateTag("oberon-images")
-      return db.getAllImages()
+      return adapter.getAllImages()
     },
     // TODO uploadthing
     deleteImage: async function (data) {
       await will("images", "write")
       revalidateTag("oberon-images")
-      return db.deleteImage(data)
+      return adapter.deleteImage(data)
     },
 
     /*
@@ -364,7 +339,7 @@ export function initAdapter({
       const { email, role } = AddUserSchema.parse(data)
 
       try {
-        const { id } = await db.addUser({
+        const { id } = await adapter.addUser({
           email,
           role,
         })
@@ -379,7 +354,7 @@ export function initAdapter({
       await will("users", "write")
       const { id } = DeleteUserSchema.parse(data)
       try {
-        await db.deleteUser(id)
+        await adapter.deleteUser(id)
         revalidateTag("oberon-users")
         return { id }
       } catch (_error) {
@@ -391,7 +366,7 @@ export function initAdapter({
       await will("users", "write")
       const { role, id } = ChangeRoleSchema.parse(data)
       try {
-        await db.changeRole({ role, id })
+        await adapter.changeRole({ role, id })
         revalidateTag("oberon-users")
         return { role, id }
       } catch (_error) {
@@ -399,5 +374,5 @@ export function initAdapter({
         return null
       }
     },
-  } satisfies OberonAdapter
+  }
 }
