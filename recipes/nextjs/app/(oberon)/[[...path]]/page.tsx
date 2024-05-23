@@ -1,5 +1,4 @@
 import { Render } from "@oberoncms/core/render"
-
 import { getMetaData } from "@oberoncms/core"
 
 import { adapter } from "@/app/(oberon)/adapter"
