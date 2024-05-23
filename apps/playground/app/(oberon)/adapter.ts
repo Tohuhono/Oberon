@@ -5,7 +5,6 @@ import { initAdapter } from "@oberoncms/core/adapter"
 import { initAuth } from "@oberoncms/core/auth"
 import { Resend } from "resend"
 import { uploadthingPlugin } from "@oberoncms/upload-thing/plugin"
-import type { OberonUser } from "@oberoncms/core"
 import { config } from "./config"
 
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
