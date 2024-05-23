@@ -1,6 +1,6 @@
 import "server-only"
 
-import { oberonAdapter } from "@oberoncms/adapter-turso"
+import { tursoPlugin, authAdapter } from "@oberoncms/adapter-turso"
 import { initAdapter } from "@oberoncms/core/adapter"
 import { initAuth } from "@oberoncms/core/auth"
 import { Resend } from "resend"
@@ -44,7 +44,7 @@ const sendVerificationRequest = async ({
 }
 
 const oberonAuth = initAuth({
-  databaseAdapter: oberonAdapter,
+  databaseAdapter: authAdapter,
   sendVerificationRequest,
 })
 
@@ -52,11 +52,5 @@ export const authHandlers = oberonAuth.handlers
 
 export const adapter = initAdapter({
   config,
-  databaseAdapter: oberonAdapter,
-  getCurrentUser: async () => {
-    const session = await oberonAuth.auth()
-
-    return (session?.user as OberonUser) || null
-  },
-  plugins: [uploadthingPlugin],
+  plugins: [oberonAuth.plugin, tursoPlugin, uploadthingPlugin],
 })

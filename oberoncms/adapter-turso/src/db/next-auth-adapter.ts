@@ -155,4 +155,4 @@ function LibsqlDrizzleAdapter(client: typeof db) {
   } satisfies Adapter
 }
 
-export const authAdapter = LibsqlDrizzleAdapter(db)
+export const nextAuthAdapter = LibsqlDrizzleAdapter(db)

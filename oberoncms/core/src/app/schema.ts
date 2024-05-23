@@ -188,12 +188,11 @@ export type OberonClientContext = DescriminatedContext & {
 /*
  * Adapter
  */
+export type OberonAuthAdapter = AuthAdapter
 
 export type OberonDatabaseAdapter = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
-  deleteUser: (
-    id: OberonUser["id"],
-  ) => Promise<Pick<OberonUser, "id"> | undefined>
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
   changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
   getAllUsers: () => Promise<OberonUser[]>
   getAllImages: () => Promise<OberonImage[]>
@@ -206,10 +205,24 @@ export type OberonDatabaseAdapter = {
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
   getSite: () => Promise<OberonSite | undefined>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
-  plugins: Record<string, string>
-} & AuthAdapter
+}
 
-export type OberonActions = {
+export type OberonPluginAdapter = OberonDatabaseAdapter & {
+  plugins: { [name: string]: string }
+  getCurrentUser: () => Promise<OberonUser | null>
+  hasPermission: (props: {
+    user?: OberonUser | null
+    action: AdapterActionGroup
+    permission: AdapterPermission
+  }) => boolean
+}
+
+export type OberonPlugin = (adapter: OberonPluginAdapter) => {
+  name?: string
+  version?: string
+} & Partial<OberonPluginAdapter>
+
+export type OberonAdapter = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
@@ -237,8 +250,4 @@ export type OberonActions = {
   ) => Promise<boolean>
 }
 
-export type OberonAdapter = OberonActions
-
-export type OberonPlugin = (
-  adapter: OberonDatabaseAdapter,
-) => OberonDatabaseAdapter
+export type OberonActions = OberonAdapter

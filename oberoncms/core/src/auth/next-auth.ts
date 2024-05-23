@@ -5,7 +5,7 @@ import NextAuth, { type NextAuthResult } from "next-auth"
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
 import type { Adapter } from "@auth/core/adapters"
-import type { OberonUser } from ".."
+import type { OberonPlugin, OberonUser } from ".."
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
@@ -37,7 +37,7 @@ export function initAuth({
     token: string
     url: string
   }) => Promise<void>
-}): NextAuthResult {
+}): NextAuthResult & { plugin: OberonPlugin } {
   const config = {
     pages: {
       verifyRequest: "/api/auth/verify",
@@ -143,11 +143,20 @@ export function initAuth({
     return nextAuth.handlers.GET(req)
   }
 
+  const plugin = () => ({
+    getCurrentUser: async () => {
+      const session = await nextAuth.auth()
+
+      return (session?.user as OberonUser) || null
+    },
+  })
+
   return {
     ...nextAuth,
     handlers: {
       ...nextAuth.handlers,
       GET,
     },
+    plugin,
   }
 }

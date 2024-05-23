@@ -1,18 +1,44 @@
 import "server-only"
 
 import { eq } from "drizzle-orm"
-import { type OberonDatabaseAdapter, type PageData } from "@oberoncms/core"
+import {
+  type OberonAuthAdapter,
+  type OberonPlugin,
+  type PageData,
+} from "@oberoncms/core"
 
 import { name, version } from "../package.json" with { type: "json" }
 
 import { images, pages, site, users } from "./db/schema"
 import { db } from "./db/client"
 
-import { authAdapter } from "./db/next-auth-adapter"
+import { nextAuthAdapter } from "./db/next-auth-adapter"
 
-export const oberonAdapter: OberonDatabaseAdapter = {
-  ...authAdapter,
-  plugins: { [name]: version },
+export const authAdapter: OberonAuthAdapter = nextAuthAdapter
+
+export const tursoPlugin: OberonPlugin = () => ({
+  name: `${name}-db`,
+  version,
+  getAllUsers: async () => {
+    return await db
+      .select({ id: users.id, email: users.email, role: users.role })
+      .from(users)
+      .execute()
+  },
+  addUser: async ({ email, role }) => {
+    return await nextAuthAdapter.createUser({
+      email,
+      // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
+      role,
+      emailVerified: null,
+    })
+  },
+  deleteUser: async (id) => {
+    await nextAuthAdapter.deleteUser(id)
+  },
+  changeRole: async ({ role, id }) => {
+    await db.update(users).set({ role }).where(eq(users.id, id)).execute()
+  },
   getSite: async () => {
     const result = await db
       .select({
@@ -35,23 +61,6 @@ export const oberonAdapter: OberonDatabaseAdapter = {
         set: { version, components, updatedAt, updatedBy },
       })
       .execute()
-  },
-  getAllUsers: async () => {
-    return await db
-      .select({ id: users.id, email: users.email, role: users.role })
-      .from(users)
-      .execute()
-  },
-  addUser: async ({ email, role }) => {
-    return await authAdapter.createUser({
-      email,
-      // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
-      role,
-      emailVerified: null,
-    })
-  },
-  changeRole: async ({ role, id }) => {
-    await db.update(users).set({ role }).where(eq(users.id, id)).execute()
   },
   addImage: async (image) => {
     await db.insert(images).values(image).execute()
@@ -108,4 +117,4 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       .from(pages)
       .execute()
   },
-}
+})
