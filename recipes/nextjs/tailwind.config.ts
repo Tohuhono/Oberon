@@ -1,8 +1,5 @@
 import type { Config } from "tailwindcss"
 
-// TODO uploadthing fix styles
-import { withUt } from "uploadthing/tw"
-
 const config = {
   darkMode: ["class"],
   future: {
@@ -88,5 +85,3 @@ const config = {
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config
-
-export default withUt(config)
