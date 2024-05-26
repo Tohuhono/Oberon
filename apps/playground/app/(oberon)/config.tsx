@@ -1,5 +1,5 @@
 import { PuckRichText } from "@tohuhono/puck-rich-text"
-import { Image } from "@oberoncms/upload-thing"
+import { Image } from "@oberoncms/plugin-uploadthing"
 import { type OberonConfig } from "@oberoncms/core"
 import { Dashboard } from "../../components/dashboard"
 

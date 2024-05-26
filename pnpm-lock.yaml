@@ -118,15 +118,15 @@ importers:
       '@datacom-digital/ui-sample-components':
         specifier: ^0.3.2
         version: 0.3.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
-      '@oberoncms/adapter-turso':
-        specifier: workspace:*
-        version: link:../../oberoncms/adapter-turso
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../oberoncms/core
-      '@oberoncms/upload-thing':
+      '@oberoncms/plugin-turso':
         specifier: workspace:*
-        version: link:../../oberoncms/upload-thing
+        version: link:../../plugins/turso
+      '@oberoncms/plugin-uploadthing':
+        specifier: workspace:*
+        version: link:../../plugins/uploadthing
       '@tohuhono/puck-rich-text':
         specifier: workspace:*
         version: link:../../puck/rich-text
@@ -287,171 +287,6 @@ importers:
         specifier: 5.4.2
         version: 5.4.2
 
-  oberoncms/adapter-pgsql:
-    dependencies:
-      '@oberoncms/core':
-        specifier: workspace:*
-        version: link:../core
-      drizzle-orm:
-        specifier: ^0.30.10
-        version: 0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5)(react@18.2.0)
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
-      pg:
-        specifier: ^8.11.5
-        version: 8.11.5
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      server-only:
-        specifier: ^0.0.1
-        version: 0.0.1
-    devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@tohuhono/dev':
-        specifier: workspace:*
-        version: link:../../packages/dev
-      '@types/node':
-        specifier: 20.11.26
-        version: 20.11.26
-      '@types/pg':
-        specifier: ^8.11.6
-        version: 8.11.6
-      '@types/react':
-        specifier: 18.2.66
-        version: 18.2.66
-      '@types/react-dom':
-        specifier: 18.2.22
-        version: 18.2.22
-      drizzle-kit:
-        specifier: ^0.20.18
-        version: 0.20.18
-      typescript:
-        specifier: 5.4.2
-        version: 5.4.2
-      vite:
-        specifier: ^5.1.6
-        version: 5.2.8(@types/node@20.11.26)
-
-  oberoncms/adapter-turso:
-    dependencies:
-      '@libsql/client':
-        specifier: ^0.5.6
-        version: 0.5.6
-      '@libsql/core':
-        specifier: ^0.5.6
-        version: 0.5.6
-      '@oberoncms/core':
-        specifier: workspace:*
-        version: link:../core
-      drizzle-orm:
-        specifier: ^0.30.10
-        version: 0.30.10(@libsql/client@0.5.6)(@types/react@18.2.66)(react@18.2.0)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      server-only:
-        specifier: ^0.0.1
-        version: 0.0.1
-    devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@tohuhono/dev':
-        specifier: workspace:*
-        version: link:../../packages/dev
-      '@types/node':
-        specifier: 20.11.26
-        version: 20.11.26
-      '@types/react':
-        specifier: 18.2.66
-        version: 18.2.66
-      '@types/react-dom':
-        specifier: 18.2.22
-        version: 18.2.22
-      drizzle-kit:
-        specifier: ^0.20.18
-        version: 0.20.18
-      typescript:
-        specifier: 5.4.2
-        version: 5.4.2
-      vite:
-        specifier: ^5.1.6
-        version: 5.2.8(@types/node@20.11.26)
-
-  oberoncms/adapter-vercel-postgres:
-    dependencies:
-      '@auth/drizzle-adapter':
-        specifier: ^1.0.1
-        version: 1.0.1
-      '@next/env':
-        specifier: ^14.2.3
-        version: 14.2.3
-      '@vercel/postgres':
-        specifier: 0.8.0
-        version: 0.8.0
-      drizzle-orm:
-        specifier: ^0.30.10
-        version: 0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0)(react@18.2.0)
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      server-only:
-        specifier: ^0.0.1
-        version: 0.0.1
-    devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@oberoncms/core':
-        specifier: workspace:*
-        version: link:../core
-      '@tohuhono/dev':
-        specifier: workspace:*
-        version: link:../../packages/dev
-      '@types/node':
-        specifier: 20.11.26
-        version: 20.11.26
-      '@types/react':
-        specifier: 18.2.66
-        version: 18.2.66
-      '@types/react-dom':
-        specifier: 18.2.22
-        version: 18.2.22
-      drizzle-kit:
-        specifier: ^0.20.18
-        version: 0.20.18
-      typescript:
-        specifier: 5.4.2
-        version: 5.4.2
-      vite:
-        specifier: ^5.1.6
-        version: 5.2.8(@types/node@20.11.26)
-
   oberoncms/core:
     dependencies:
       '@auth/core':
@@ -514,63 +349,6 @@ importers:
         version: 5.2.8(@types/node@20.11.26)
 
   oberoncms/create-oberon-app: {}
-
-  oberoncms/create-oberon-app-inquire: {}
-
-  oberoncms/upload-thing:
-    dependencies:
-      '@oberoncms/core':
-        specifier: workspace:*
-        version: link:../core
-      '@radix-ui/react-icons':
-        specifier: ^1.3.0
-        version: 1.3.0(react@18.2.0)
-      '@uploadthing/react':
-        specifier: ^6.5.4
-        version: 6.5.4(next@14.2.3)(react@18.2.0)(uploadthing@6.10.4)
-      '@uploadthing/shared':
-        specifier: ^6.7.4
-        version: 6.7.4(@uploadthing/mime-types@0.2.10)
-      image-size:
-        specifier: 1.1.1
-        version: 1.1.1
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: '>=18.2.0'
-        version: 18.2.0
-      react-dom:
-        specifier: '>=18.2.0'
-        version: 18.2.0(react@18.2.0)
-      server-only:
-        specifier: ^0.0.1
-        version: 0.0.1
-      uploadthing:
-        specifier: ^6.10.4
-        version: 6.10.4(next@14.2.3)
-    devDependencies:
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@tohuhono/dev':
-        specifier: workspace:*
-        version: link:../../packages/dev
-      '@types/react':
-        specifier: 18.2.66
-        version: 18.2.66
-      '@types/react-dom':
-        specifier: 18.2.22
-        version: 18.2.22
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.0
-      typescript:
-        specifier: 5.4.2
-        version: 5.4.2
-      vite:
-        specifier: ^5.1.6
-        version: 5.2.8(@types/node@20.11.30)
 
   packages/dev:
     dependencies:
@@ -755,6 +533,226 @@ importers:
         specifier: ^5.1.6
         version: 5.2.8(@types/node@20.11.30)
 
+  plugins/pgsql:
+    dependencies:
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../../oberoncms/core
+      drizzle-orm:
+        specifier: ^0.30.10
+        version: 0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5)(react@18.2.0)
+      next:
+        specifier: ^14.2.3
+        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
+      pg:
+        specifier: ^8.11.5
+        version: 8.11.5
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+    devDependencies:
+      '@auth/core':
+        specifier: ^0.30.0
+        version: 0.30.0
+      '@measured/puck':
+        specifier: ^0.14.2
+        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/dev
+      '@types/node':
+        specifier: 20.11.26
+        version: 20.11.26
+      '@types/pg':
+        specifier: ^8.11.6
+        version: 8.11.6
+      '@types/react':
+        specifier: 18.2.66
+        version: 18.2.66
+      '@types/react-dom':
+        specifier: 18.2.22
+        version: 18.2.22
+      drizzle-kit:
+        specifier: ^0.20.18
+        version: 0.20.18
+      typescript:
+        specifier: 5.4.2
+        version: 5.4.2
+      vite:
+        specifier: ^5.1.6
+        version: 5.2.8(@types/node@20.11.26)
+
+  plugins/turso:
+    dependencies:
+      '@libsql/client':
+        specifier: ^0.5.6
+        version: 0.5.6
+      '@libsql/core':
+        specifier: ^0.5.6
+        version: 0.5.6
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../../oberoncms/core
+      drizzle-orm:
+        specifier: ^0.30.10
+        version: 0.30.10(@libsql/client@0.5.6)(@types/react@18.2.66)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+    devDependencies:
+      '@auth/core':
+        specifier: ^0.30.0
+        version: 0.30.0
+      '@measured/puck':
+        specifier: ^0.14.2
+        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/dev
+      '@types/node':
+        specifier: 20.11.26
+        version: 20.11.26
+      '@types/react':
+        specifier: 18.2.66
+        version: 18.2.66
+      '@types/react-dom':
+        specifier: 18.2.22
+        version: 18.2.22
+      drizzle-kit:
+        specifier: ^0.20.18
+        version: 0.20.18
+      typescript:
+        specifier: 5.4.2
+        version: 5.4.2
+      vite:
+        specifier: ^5.1.6
+        version: 5.2.8(@types/node@20.11.26)
+
+  plugins/uploadthing:
+    dependencies:
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../../oberoncms/core
+      '@radix-ui/react-icons':
+        specifier: ^1.3.0
+        version: 1.3.0(react@18.2.0)
+      '@uploadthing/react':
+        specifier: ^6.5.4
+        version: 6.5.4(next@14.2.3)(react@18.2.0)(uploadthing@6.10.4)
+      '@uploadthing/shared':
+        specifier: ^6.7.4
+        version: 6.7.4(@uploadthing/mime-types@0.2.10)
+      image-size:
+        specifier: 1.1.1
+        version: 1.1.1
+      next:
+        specifier: ^14.2.3
+        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: '>=18.2.0'
+        version: 18.2.0
+      react-dom:
+        specifier: '>=18.2.0'
+        version: 18.2.0(react@18.2.0)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+      uploadthing:
+        specifier: ^6.10.4
+        version: 6.10.4(next@14.2.3)
+    devDependencies:
+      '@measured/puck':
+        specifier: ^0.14.2
+        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/dev
+      '@types/react':
+        specifier: 18.2.66
+        version: 18.2.66
+      '@types/react-dom':
+        specifier: 18.2.22
+        version: 18.2.22
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      typescript:
+        specifier: 5.4.2
+        version: 5.4.2
+      vite:
+        specifier: ^5.1.6
+        version: 5.2.8(@types/node@20.11.30)
+
+  plugins/vercel-postgres:
+    dependencies:
+      '@auth/drizzle-adapter':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@next/env':
+        specifier: ^14.2.3
+        version: 14.2.3
+      '@vercel/postgres':
+        specifier: 0.8.0
+        version: 0.8.0
+      drizzle-orm:
+        specifier: ^0.30.10
+        version: 0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0)(react@18.2.0)
+      next:
+        specifier: ^14.2.3
+        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+    devDependencies:
+      '@auth/core':
+        specifier: ^0.30.0
+        version: 0.30.0
+      '@measured/puck':
+        specifier: ^0.14.2
+        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../../oberoncms/core
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/dev
+      '@types/node':
+        specifier: 20.11.26
+        version: 20.11.26
+      '@types/react':
+        specifier: 18.2.66
+        version: 18.2.66
+      '@types/react-dom':
+        specifier: 18.2.22
+        version: 18.2.22
+      drizzle-kit:
+        specifier: ^0.20.18
+        version: 0.20.18
+      typescript:
+        specifier: 5.4.2
+        version: 5.4.2
+      vite:
+        specifier: ^5.1.6
+        version: 5.2.8(@types/node@20.11.26)
+
   puck/blocks:
     dependencies:
       '@tohuhono/ui':
@@ -882,12 +880,12 @@ importers:
 
   recipes/nextjs:
     dependencies:
-      '@oberoncms/adapter-turso':
-        specifier: workspace:*
-        version: link:../../oberoncms/adapter-turso
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../oberoncms/core
+      '@oberoncms/plugin-turso':
+        specifier: workspace:*
+        version: link:../../plugins/turso
       next:
         specifier: ^14.2.3
         version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
@@ -5929,7 +5927,7 @@ packages:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
-      semver: 7.6.0
+      semver: 7.6.2
     dev: false
 
   /effect@3.1.2:
@@ -6916,6 +6914,7 @@ packages:
   /glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
+    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6

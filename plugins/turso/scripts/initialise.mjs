@@ -23,7 +23,7 @@ import { migrate } from "drizzle-orm/libsql/migrator"
   const client = drizzle(db)
 
   await migrate(client, {
-    migrationsFolder: "node_modules/@oberoncms/adapter-turso/src/db/migrations",
+    migrationsFolder: "node_modules/@oberoncms/plugin-turso/src/db/migrations",
   })
 
   console.log("Database migrations completed")

@@ -1,15 +1,16 @@
 {
-  "name": "@oberoncms/adapter-vercel-postgres",
+  "name": "@oberoncms/plugin-vercel-postgres",
   "version": "0.4.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "A Vercel PostgreSQL database adapter for OberonCMS",
+  "description": "A Vercel PostgreSQL database plugin for OberonCMS",
   "keywords": [
     "oberon",
     "oberoncms",
     "cms",
     "nextjs",
     "react",
+    "plugin",
     "adapter",
     "postgres",
     "postgresql"

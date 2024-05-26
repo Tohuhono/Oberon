@@ -1,8 +1,8 @@
 ---
-"@oberoncms/adapter-vercel-postgres": minor
-"@oberoncms/adapter-pgsql": minor
-"@oberoncms/adapter-turso": minor
-"@oberoncms/upload-thing": minor
+"@oberoncms/plugin-vercel-postgres": minor
+"@oberoncms/plugin-pgsql": minor
+"@oberoncms/plugin-turso": minor
+"@oberoncms/plugin-uploadthing": minor
 "@oberon/playground": minor
 "@oberoncms/core": minor
 "@tohuhono/utils": minor

@@ -59,6 +59,7 @@
     "apps/*",
     "oberoncms/*",
     "packages/*",
+    "plugins/*",
     "puck/*",
     "recipes/*"
   ]
