@@ -17,7 +17,7 @@ import {
   PublishPageSchema,
   type AdapterActionGroup,
   type AdapterPermission,
-  type OberonAdapter,
+  type OberonActions,
   type OberonPlugin,
   type OberonUser,
   type OberonConfig,
@@ -25,7 +25,7 @@ import {
   type TransformResult,
   type OberonPage,
   type PageData,
-  type OberonPluginAdapter,
+  type OberonAdapter,
 } from "./app/schema"
 import {
   applyTransforms,
@@ -36,28 +36,34 @@ import { baseAdapter } from "./app/base-adapter"
 
 export { mockPlugin } from "./app/mock-plugin"
 
-export function initAdapter({
-  config,
-  plugins = [],
-}: {
-  config: OberonConfig
-  plugins?: OberonPlugin[]
-}): OberonAdapter {
-  console.log("Initialising adapter")
-
-  const adapter = plugins.reduce<OberonPluginAdapter>((accumulator, plugin) => {
-    const { name, version, ...rest } = plugin(accumulator)
+export function initAdapter(plugins: OberonPlugin[] = []) {
+  return plugins.reduce<OberonAdapter>((accumulator, plugin) => {
+    const { name, version, adapter, handlers = {} } = plugin(accumulator)
     return {
       ...accumulator,
       plugins: {
         ...accumulator.plugins,
         ...(name && { [name]: version || "" }),
       },
-      ...rest,
+      handlers: {
+        ...accumulator.handlers,
+        ...handlers,
+      },
+      ...adapter,
     }
   }, baseAdapter)
+}
 
-  const can: OberonAdapter["can"] = async (action, permission = "read") => {
+export function initActions({
+  config,
+  adapter,
+}: {
+  config: OberonConfig
+  adapter: OberonAdapter
+}): OberonActions {
+  console.log("Initialising adapter")
+
+  const can: OberonActions["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
     if (adapter.hasPermission({ action, permission })) {
       return true

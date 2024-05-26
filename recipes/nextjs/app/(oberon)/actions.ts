@@ -1,69 +1,101 @@
-import type { OberonActions } from "@oberoncms/core"
+import "server-only"
+
+import type { AdapterPermission, OberonActions } from "@oberoncms/core"
+import { initActions } from "@oberoncms/core/adapter"
+import { config } from "./config"
 import { adapter } from "./adapter"
 
+const {
+  addImage,
+  addPage,
+  addUser,
+  changeRole,
+  deleteImage,
+  deletePage,
+  deleteUser,
+  getAllImages,
+  getAllPages,
+  getAllPaths,
+  getAllUsers,
+  getConfig,
+  getPageData,
+  migrateData,
+  publishPageData,
+  can,
+} = initActions({
+  config,
+  adapter,
+})
+
 export const actions = {
-  getConfig: async () => {
+  addImage: async (data) => {
     "use server"
-    return adapter.getConfig()
-  },
-  migrateData: async () => {
-    "use server"
-    return adapter.migrateData()
-  },
-  getAllPaths: async () => {
-    "use server"
-    return adapter.getAllPaths()
-  },
-  getAllPages: async () => {
-    "use server"
-    return adapter.getAllPages()
-  },
-  getPageData: async (key) => {
-    "use server"
-    return adapter.getPageData(key)
+    return addImage(data)
   },
   addPage: async (data) => {
     "use server"
-    return adapter.addPage(data)
+    return addPage(data)
   },
-  deletePage: async (data) => {
-    "use server"
-    return adapter.deletePage(data)
-  },
-  publishPageData: async (data) => {
-    "use server"
-    return adapter.publishPageData(data)
-  },
-  getAllImages: async () => {
-    "use server"
-    return adapter.getAllImages()
-  },
-  addImage: async (data) => {
-    "use server"
-    return adapter.addImage(data)
-  },
-  deleteImage: async (key) => {
-    "use server"
-    return adapter.deleteImage(key)
-  },
-  getAllUsers: async () => {
-    "use server"
-    return adapter.getAllUsers()
-  },
+
   addUser: async (data) => {
     "use server"
-    return adapter.addUser(data)
+    return addUser(data)
   },
-  deleteUser: async (data) => {
+
+  can: async (action, permission?: AdapterPermission) => {
     "use server"
-    return adapter.deleteUser(data)
+    return can(action, permission)
   },
   changeRole: async (data) => {
     "use server"
-    return adapter.changeRole(data)
+    return changeRole(data)
   },
-  can: async (action, permission) => {
+  deleteImage: async (key) => {
     "use server"
-    return adapter.can(action, permission)
+    return deleteImage(key)
+  },
+  deletePage: async (data) => {
+    "use server"
+    return deletePage(data)
+  },
+  deleteUser: async (data) => {
+    "use server"
+    return deleteUser(data)
+  },
+  getAllImages: async () => {
+    "use server"
+    return getAllImages()
+  },
+
+  getAllPages: async () => {
+    "use server"
+    return getAllPages()
+  },
+  getAllPaths: async () => {
+    "use server"
+    return getAllPaths()
+  },
+
+  getAllUsers: async () => {
+    "use server"
+    return getAllUsers()
+  },
+  getConfig: async () => {
+    "use server"
+    return getConfig()
+  },
+
+  getPageData: async (key) => {
+    "use server"
+    return getPageData(key)
+  },
+  migrateData: async () => {
+    "use server"
+    return migrateData()
+  },
+
+  publishPageData: async (data) => {
+    "use server"
+    return publishPageData(data)
   },
 } satisfies OberonActions
