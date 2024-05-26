@@ -2,11 +2,11 @@ import { Render } from "@oberoncms/core/render"
 
 import { getMetaData } from "@oberoncms/core"
 
-import { adapter } from "@/app/(oberon)/adapter"
+import { actions } from "@/app/(oberon)/actions"
 import { config } from "@/app/(oberon)/config"
 
 export async function generateStaticParams() {
-  return await adapter.getAllPaths()
+  return await actions.getAllPaths()
 }
 
 export async function generateMetadata({
@@ -14,7 +14,7 @@ export async function generateMetadata({
 }: {
   params: { framework: string; uuid: string; path: string[] }
 }) {
-  return getMetaData(adapter, path)
+  return getMetaData(actions, path)
 }
 
 export default function OberonRender({
@@ -22,5 +22,5 @@ export default function OberonRender({
 }: {
   params: { path?: [] }
 }) {
-  return <Render path={path} adapter={adapter} config={config} />
+  return <Render path={path} actions={actions} config={config} />
 }

@@ -5,11 +5,13 @@ import { deleteImage } from "./api"
 export const uploadthingPlugin: OberonPlugin = (adapter) => ({
   name,
   version,
-  deleteImage: async (key) => {
-    await Promise.allSettled([
-      //
-      deleteImage(key),
-      adapter.deleteImage(key),
-    ])
+  adapter: {
+    deleteImage: async (key) => {
+      await Promise.allSettled([
+        //
+        deleteImage(key),
+        adapter.deleteImage(key),
+      ])
+    },
   },
 })

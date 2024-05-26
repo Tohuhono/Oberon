@@ -1,3 +1,3 @@
-import { authHandlers } from "@/app/(oberon)/adapter"
+import { adapter } from "@/app/(oberon)/adapter"
 
-export const { GET, POST } = authHandlers
+export const { GET, POST } = adapter.handlers.auth || {}

@@ -13,7 +13,6 @@
   "dependencies": {
     "@oberoncms/adapter-turso": "workspace:*",
     "@oberoncms/core": "workspace:*",
-    "@oberoncms/adapter-turso": "workspace:*",
     "next": "^14.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

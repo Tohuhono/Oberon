@@ -6,8 +6,10 @@ import type {
   Config,
   DefaultComponentProps,
 } from "@measured/puck"
-import type { Adapter as AuthAdapter } from "@auth/core/adapters"
+import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
+import type { NextAuthResult } from "next-auth"
+import type { Awaitable } from "@auth/core/types"
 
 // TODO fix types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -188,7 +190,30 @@ export type OberonClientContext = DescriminatedContext & {
 /*
  * Adapter
  */
-export type OberonAuthAdapter = AuthAdapter
+export type OberonAuthAdapter = Required<
+  Pick<
+    AuthAdapter,
+    | "createSession"
+    | "createUser"
+    | "createVerificationToken"
+    | "deleteSession"
+    | "deleteUser"
+    | "getSessionAndUser"
+    | "getUser"
+    | "getUserByAccount"
+    | "getUserByEmail"
+    | "linkAccount"
+    | "unlinkAccount"
+    | "updateSession"
+    | "updateUser"
+    | "useVerificationToken"
+  >
+> & {
+  createUser(
+    user: Omit<AdapterUser & { role: OberonRole }, "id">,
+  ): Awaitable<AdapterUser & { role: OberonRole }>
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
+}
 
 export type OberonDatabaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
@@ -207,22 +232,37 @@ export type OberonDatabaseAdapter = {
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
 }
 
-export type OberonPluginAdapter = OberonDatabaseAdapter & {
-  plugins: { [name: string]: string }
-  getCurrentUser: () => Promise<OberonUser | null>
-  hasPermission: (props: {
-    user?: OberonUser | null
-    action: AdapterActionGroup
-    permission: AdapterPermission
-  }) => boolean
+export type OberonSendAdapter = {
+  sendVerificationRequest: (props: {
+    email: string
+    token: string
+    url: string
+  }) => Promise<void>
 }
 
-export type OberonPlugin = (adapter: OberonPluginAdapter) => {
+type OberonRouteHandler = NextAuthResult["handlers"]
+
+export type OberonAdapter = OberonDatabaseAdapter &
+  OberonAuthAdapter &
+  OberonSendAdapter & {
+    plugins: { [name: string]: string }
+    handlers: Record<string, OberonRouteHandler>
+    getCurrentUser: () => Promise<OberonUser | null>
+    hasPermission: (props: {
+      user?: OberonUser | null
+      action: AdapterActionGroup
+      permission: AdapterPermission
+    }) => boolean
+  }
+
+export type OberonPlugin = (adapter: OberonAdapter) => {
   name?: string
   version?: string
-} & Partial<OberonPluginAdapter>
+  handlers?: Record<string, OberonRouteHandler>
+  adapter: Partial<OberonAdapter>
+}
 
-export type OberonAdapter = {
+export type OberonActions = {
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
@@ -249,5 +289,3 @@ export type OberonAdapter = {
   >
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
 }
-
-export type OberonActions = OberonAdapter
