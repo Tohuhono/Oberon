@@ -515,6 +515,8 @@ importers:
 
   oberoncms/create-oberon-app: {}
 
+  oberoncms/create-oberon-app-inquire: {}
+
   oberoncms/upload-thing:
     dependencies:
       '@oberoncms/core':
@@ -880,9 +882,6 @@ importers:
 
   recipes/nextjs:
     dependencies:
-      '@datacom-digital/ui-sample-components':
-        specifier: ^0.3.2
-        version: 0.3.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
       '@oberoncms/adapter-vercel-postgres':
         specifier: workspace:*
         version: link:../../oberoncms/adapter-vercel-postgres
