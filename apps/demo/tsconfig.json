@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Next.js",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "allowJs": true,
+    "checkJs": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "emitDeclarationOnly": false,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["app", ".next/types/**/*.ts", "components"]
+}
