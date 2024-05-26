@@ -1,17 +1,20 @@
 import "server-only"
 
 import { eq } from "drizzle-orm"
-import { type OberonDatabaseAdapter } from "@oberoncms/core"
+
+import { type OberonAuthAdapter, type OberonPlugin } from "@oberoncms/core"
 
 import { name, version } from "../package.json" with { type: "json" }
 
 import { db } from "./db/client"
 import { images, pages, users, site } from "./db/schema"
-import { authAdapter } from "./db/next-auth-adapter"
+import { nextAuthAdapter } from "./db/next-auth-adapter"
 
-export const oberonAdapter: OberonDatabaseAdapter = {
-  ...authAdapter,
-  plugins: { [name]: version },
+export const authAdapter: OberonAuthAdapter = nextAuthAdapter
+
+export const vercelPostgresqlPlugin: OberonPlugin = () => ({
+  name: `${name}-db`,
+  version,
   getSite: async () => {
     const result = await db
       .select({
@@ -50,6 +53,9 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       role,
       emailVerified: null,
     })
+  },
+  deleteUser: async (id) => {
+    await authAdapter.deleteUser?.(id)
   },
   changeRole: async ({ role, id }) => {
     await db.update(users).set({ role }).where(eq(users.id, id)).execute()
@@ -112,4 +118,4 @@ export const oberonAdapter: OberonDatabaseAdapter = {
       .from(pages)
       .execute()
   },
-}
+})
