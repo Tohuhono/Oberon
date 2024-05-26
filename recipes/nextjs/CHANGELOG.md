@@ -5,7 +5,7 @@
 ### Patch Changes
 
 - Updated dependencies [e48bd75]
-  - @oberoncms/upload-thing@0.7.1
+  - @oberoncms/plugin-uploadthing@0.7.1
 
 ## 0.7.0
 
@@ -19,8 +19,8 @@
 - Updated dependencies [26d9c91]
 - Updated dependencies [26d9c91]
 - Updated dependencies [26d9c91]
-  - @oberoncms/adapter-turso@0.8.0
-  - @oberoncms/upload-thing@0.7.0
+  - @oberoncms/plugin-turso@0.8.0
+  - @oberoncms/plugin-uploadthing@0.7.0
   - @oberoncms/core@0.7.0
 
 ## 0.6.0
@@ -46,8 +46,8 @@
 - Updated dependencies [4e6430b]
 - Updated dependencies [a5e6827]
 - Updated dependencies [25bb5bf]
-  - @oberoncms/adapter-turso@0.7.0
-  - @oberoncms/upload-thing@0.6.0
+  - @oberoncms/plugin-turso@0.7.0
+  - @oberoncms/plugin-uploadthing@0.6.0
   - @oberoncms/core@0.6.0
   - @tohuhono/puck-rich-text@0.5.0
 
@@ -61,9 +61,9 @@
 
 - Updated dependencies [77f07d0]
 - Updated dependencies [fcff95c]
-  - @oberoncms/adapter-turso@0.6.0
+  - @oberoncms/plugin-turso@0.6.0
   - @oberoncms/core@0.5.1
-  - @oberoncms/upload-thing@0.5.1
+  - @oberoncms/plugin-uploadthing@0.5.1
   - @tohuhono/puck-rich-text@0.4.0
 
 ## 0.4.0
@@ -77,8 +77,8 @@
 - d251149: Removed components package
 - Updated dependencies [eec8abb]
 - Updated dependencies [d251149]
-  - @oberoncms/adapter-turso@0.5.0
-  - @oberoncms/upload-thing@0.5.0
+  - @oberoncms/plugin-turso@0.5.0
+  - @oberoncms/plugin-uploadthing@0.5.0
   - @oberoncms/core@0.5.0
   - @tohuhono/puck-rich-text@0.4.0
 
@@ -95,8 +95,8 @@
 
 - 7e7aa38: Fix dependencies and server loading of rich-text
 - Updated dependencies [7e7aa38]
-  - @oberoncms/adapter-turso@0.4.1
-  - @oberoncms/upload-thing@0.4.1
+  - @oberoncms/plugin-turso@0.4.1
+  - @oberoncms/plugin-uploadthing@0.4.1
   - @oberoncms/components@0.3.1
   - @oberoncms/auth@0.4.1
   - @oberoncms/core@0.4.1
@@ -107,8 +107,8 @@
 ### Patch Changes
 
 - Updated dependencies [d4f6a5b]
-  - @oberoncms/adapter-turso@0.4.0
-  - @oberoncms/upload-thing@0.4.0
+  - @oberoncms/plugin-turso@0.4.0
+  - @oberoncms/plugin-uploadthing@0.4.0
   - @oberoncms/components@0.3.0
   - @oberoncms/auth@0.4.0
   - @oberoncms/core@0.4.0
@@ -130,9 +130,9 @@
 - Updated dependencies [39b03d3]
 - Updated dependencies [5a0a961]
 - Updated dependencies [e10807b]
-  - @oberoncms/adapter-turso@0.3.0
+  - @oberoncms/plugin-turso@0.3.0
   - @oberoncms/core@0.3.0
-  - @oberoncms/upload-thing@0.3.0
+  - @oberoncms/plugin-uploadthing@0.3.0
   - @oberoncms/auth@0.3.0
   - @oberoncms/components@0.2.1
 
@@ -149,8 +149,8 @@
 ### Patch Changes
 
 - Updated dependencies [63a21a9]
-  - @oberoncms/adapter-turso@0.2.0
-  - @oberoncms/upload-thing@0.2.0
+  - @oberoncms/plugin-turso@0.2.0
+  - @oberoncms/plugin-uploadthing@0.2.0
   - @oberoncms/components@0.2.0
   - @oberoncms/auth@0.2.0
   - @oberoncms/core@0.2.0

@@ -1,6 +1,6 @@
 ---
-"@oberoncms/adapter-turso": minor
-"@oberoncms/upload-thing": minor
+"@oberoncms/plugin-turso": minor
+"@oberoncms/plugin-uploadthing": minor
 "@oberon/playground": minor
 "@oberoncms/core": minor
 "@oberon/nextjs-recipe": minor

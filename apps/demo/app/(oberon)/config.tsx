@@ -1,6 +1,6 @@
 import { PuckRichText } from "@tohuhono/puck-rich-text"
 import { type OberonConfig } from "@oberoncms/core"
-import { Dashboard } from "../../components/dashboard"
+import { Dashboard } from "@/components/dashboard"
 
 export const config: OberonConfig = {
   version: 1,

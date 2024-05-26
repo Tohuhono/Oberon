@@ -1,9 +1,9 @@
 {
-  "name": "@oberoncms/adapter-turso",
-  "version": "0.8.0",
+  "name": "@oberoncms/plugin-pgsql",
+  "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "A Turso libsql database adapter for OberonCMS",
+  "description": "A PostgreSQL database plugin for OberonCMS",
   "keywords": [
     "oberon",
     "oberoncms",
@@ -11,12 +11,13 @@
     "nextjs",
     "react",
     "adapter",
+    "plugin",
     "turso"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "oberoncms/adapter-turso"
+    "directory": "oberoncms/adapter-pgsql"
   },
   "type": "module",
   "exports": {
@@ -29,7 +30,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "node ../../scripts/clean-package.mjs",
-    "generate:migrations": "drizzle-kit generate:sqlite",
+    "generate:migrations": "drizzle-kit generate:pg",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "tsc": "tsc --pretty",
@@ -37,10 +38,10 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@libsql/client": "^0.5.6",
-    "@libsql/core": "^0.5.6",
+    "pg": "^8.11.5",
     "@oberoncms/core": "workspace:*",
     "drizzle-orm": "^0.30.10",
+    "next": "^14.2.3",
     "server-only": "^0.0.1"
   },
   "peerDependencies": {
@@ -52,6 +53,7 @@
     "@measured/puck": "^0.14.2",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",
+    "@types/pg": "^8.11.6",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
     "drizzle-kit": "^0.20.18",

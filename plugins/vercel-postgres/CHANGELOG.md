@@ -1,4 +1,4 @@
-# @oberoncms/adapter-vercel-postgres
+# @oberoncms/plugin-vercel-postgres
 
 ## 0.4.0
 

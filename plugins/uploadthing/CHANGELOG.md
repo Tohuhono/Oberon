@@ -1,12 +1,17 @@
-# @oberoncms/adapter-turso
+# @oberoncms/plugin-upload-thing
 
-## 0.8.0
+## 0.7.1
+
+### Patch Changes
+
+- e48bd75: Update dependencies
+
+## 0.7.0
 
 ### Minor Changes
 
 - 26d9c91: Updated adapter-vercel-postgres for site config and version support
 - 26d9c91: Added site manager page and page data migration functionality
-- 26d9c91: BREAKING CHANGE changed sqlite columns storing json data to use new mode
 
 ### Patch Changes
 
@@ -15,7 +20,7 @@
 - Updated dependencies [26d9c91]
   - @oberoncms/core@0.7.0
 
-## 0.7.0
+## 0.6.0
 
 ### Minor Changes
 
@@ -24,10 +29,6 @@
   Add cleanup for uploadthing image removal
 - 2deb902: Added updatedAt and updatedBy to images
   Resolved uploadingthing type declaration error
-- eae691f: CAUTION BREAKING CHANGE
-  databases created before this patch will need to be manually updated
-  added updatedAt and updatedBy cloumns
-  reset the drizzle database migrations
 - 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
 
 ### Patch Changes
@@ -43,15 +44,10 @@
 - Updated dependencies [25bb5bf]
   - @oberoncms/core@0.6.0
 
-## 0.6.0
-
-### Minor Changes
-
-- 77f07d0: Added Vercel Postgres adapter
+## 0.5.1
 
 ### Patch Changes
 
-- fcff95c: Bump nextauth version
 - Updated dependencies [fcff95c]
   - @oberoncms/core@0.5.1
 
@@ -73,7 +69,6 @@
 
 - 7e7aa38: Fix dependencies and server loading of rich-text
 - Updated dependencies [7e7aa38]
-  - @oberoncms/auth@0.4.1
   - @oberoncms/core@0.4.1
 
 ## 0.4.0
@@ -85,20 +80,12 @@
 ### Patch Changes
 
 - Updated dependencies [d4f6a5b]
-  - @oberoncms/auth@0.4.0
   - @oberoncms/core@0.4.0
 
 ## 0.3.0
 
 ### Minor Changes
 
-- dd9dc69: Implement optimistic pages
-- 39b03d3: Optimistically update the ui for oberon users
-- 5a0a961: Update theme
-  Propogate theme to preview iframe
-  Correctly invalidate server side cache on page mutate
-  Add createPage oberon action
-  Add example dashboard to recipe (maybe remvoe later?)
 - e10807b: Impliment role based authorization
 
 ### Patch Changes
@@ -108,7 +95,6 @@
 - Updated dependencies [5a0a961]
 - Updated dependencies [e10807b]
   - @oberoncms/core@0.3.0
-  - @oberoncms/auth@0.3.0
 
 ## 0.2.0
 

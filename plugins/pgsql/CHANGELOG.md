@@ -1,4 +1,4 @@
-# @oberoncms/adapter-pgsql
+# @oberoncms/plugin-pgsql
 
 ## 0.1.0
 
