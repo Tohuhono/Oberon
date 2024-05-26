@@ -1,4 +1,4 @@
-name: Deploy workflow
+name: Deploy
 
 on:
   workflow_call:
@@ -7,6 +7,12 @@ on:
         required: true
         type: string
       project:
+        required: true
+        type: string
+      repository:
+        required: true
+        type: string
+      ref:
         required: true
         type: string
     outputs:
@@ -25,9 +31,11 @@ on:
       TURSO_TOKEN:
         required: false
 
+run-name: ${{ format('Deploy {0}', inputs.project ) }}
+
 jobs:
   deploy:
-    name: Deploy
+    name: ${{ format('{0} {1}', inputs.environment, inputs.project) }}
     environment:
       name: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
       url: ${{ steps.deploy.outputs.url }}
@@ -46,13 +54,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
-      - name: Reset PR message
-        if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          message: |
-            "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}"
       - name: Use pNpm
         uses: pnpm/action-setup@v3
         with:

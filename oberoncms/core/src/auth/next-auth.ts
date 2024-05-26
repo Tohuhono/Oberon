@@ -1,11 +1,11 @@
 import { randomBytes } from "crypto"
 import { type AuthConfig } from "@auth/core"
-import NextAuth, { type NextAuthResult } from "next-auth"
+import NextAuth from "next-auth"
 
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
-import type { Adapter } from "@auth/core/adapters"
-import type { OberonUser } from ".."
+import { name, version } from "../../package.json" with { type: "json" }
+import type { OberonPlugin, OberonUser } from ".."
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
@@ -27,17 +27,7 @@ const SEND_VERIFICATION_REQUEST =
   process.env.EMAIL_SEND === "true" ||
   (process.env.NODE_ENV === "production" && process.env.EMAIL_SEND !== "false")
 
-export function initAuth({
-  databaseAdapter: db,
-  sendVerificationRequest,
-}: {
-  databaseAdapter: Adapter
-  sendVerificationRequest?: (props: {
-    email: string
-    token: string
-    url: string
-  }) => Promise<void>
-}): NextAuthResult {
+export const oberonAuthPlugin: OberonPlugin = (adapter) => {
   const config = {
     pages: {
       verifyRequest: "/api/auth/verify",
@@ -71,7 +61,7 @@ export function initAuth({
             return
           }
 
-          await sendVerificationRequest?.({
+          await adapter.sendVerificationRequest({
             email,
             url,
             token,
@@ -82,7 +72,7 @@ export function initAuth({
     session: {
       strategy: "jwt",
     },
-    adapter: db,
+    adapter,
     callbacks: {
       async signIn({ user, profile }) {
         // Master user override
@@ -100,7 +90,7 @@ export function initAuth({
         if (
           profile?.email_verified &&
           profile.email &&
-          (await db.getUserByEmail?.(profile.email))
+          (await adapter.getUserByEmail?.(profile.email))
         ) {
           return true
         }
@@ -144,10 +134,15 @@ export function initAuth({
   }
 
   return {
-    ...nextAuth,
-    handlers: {
-      ...nextAuth.handlers,
-      GET,
+    name: `${name} (auth)`,
+    version,
+    handlers: { auth: { ...nextAuth.handlers, GET } },
+    adapter: {
+      getCurrentUser: async () => {
+        const session = await nextAuth.auth()
+
+        return (session?.user as OberonUser) || null
+      },
     },
   }
 }

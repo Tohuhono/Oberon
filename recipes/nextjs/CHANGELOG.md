@@ -1,5 +1,12 @@
 # oberon-cms-example
 
+## 0.7.1
+
+### Patch Changes
+
+- Updated dependencies [e48bd75]
+  - @oberoncms/upload-thing@0.7.1
+
 ## 0.7.0
 
 ### Minor Changes

@@ -2,10 +2,17 @@ name: Jest tests
 
 on:
   workflow_call:
+    inputs:
+      repository:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
 
 jobs:
   jest:
-    name: Jest Test
+    name: Jest
     env:
       # Must be the length of the shardIndex array
       SHARD_INDEX_LENGTH: 2
@@ -19,6 +26,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
       - name: Cache turbo build setup
         uses: actions/cache@v4

@@ -1,15 +1,15 @@
 import { randomUUID } from "crypto"
 import { eq, and } from "drizzle-orm"
-import type { Adapter } from "@auth/core/adapters"
-import { db } from "../db/client"
+import type { OberonAuthAdapter } from "@oberoncms/core"
+import { db } from "./client"
 import {
   users,
   accounts,
   sessions,
   verificationTokens,
-} from "../db/schema/next-auth-schema"
+} from "./schema/next-auth-schema"
 
-function LibsqlDrizzleAdapter(client: typeof db) {
+function LibsqlDrizzleAdapter(client: typeof db): OberonAuthAdapter {
   return {
     async createUser(data) {
       return client
@@ -137,7 +137,7 @@ function LibsqlDrizzleAdapter(client: typeof db) {
       }
     },
     async deleteUser(id) {
-      return client.delete(users).where(eq(users.id, id)).returning().get()
+      await client.delete(users).where(eq(users.id, id)).returning().get()
     },
     async unlinkAccount(account) {
       await client
@@ -152,7 +152,7 @@ function LibsqlDrizzleAdapter(client: typeof db) {
 
       return undefined
     },
-  } satisfies Adapter
+  }
 }
 
-export const authAdapter = LibsqlDrizzleAdapter(db)
+export const authAdapter: OberonAuthAdapter = LibsqlDrizzleAdapter(db)

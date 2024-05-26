@@ -41,7 +41,6 @@
     "@libsql/core": "^0.5.6",
     "@oberoncms/core": "workspace:*",
     "drizzle-orm": "^0.30.10",
-    "next": "^14.2.3",
     "server-only": "^0.0.1"
   },
   "peerDependencies": {
