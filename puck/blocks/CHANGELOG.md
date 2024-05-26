@@ -1,5 +1,16 @@
 # @tohuhono/puck-blocks
 
+## 0.6.0
+
+### Minor Changes
+
+- 4767eb7: Moved plugins and renamed packages
+
+### Patch Changes
+
+- Updated dependencies [4767eb7]
+  - @tohuhono/ui@0.7.0
+
 ## 0.5.1
 
 ### Patch Changes

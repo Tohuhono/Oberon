@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.7.0
+
+### Minor Changes
+
+- 4767eb7: Moved plugins and renamed packages
+
 ## 0.6.0
 
 ### Minor Changes
