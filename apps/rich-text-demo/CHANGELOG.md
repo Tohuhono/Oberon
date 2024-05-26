@@ -1,5 +1,16 @@
 # @oberon/rich-text-demo
 
+## 1.4.0
+
+### Minor Changes
+
+- 4767eb7: Moved plugins and renamed packages
+
+### Patch Changes
+
+- Updated dependencies [4767eb7]
+  - @tohuhono/puck-rich-text@0.6.0
+
 ## 1.3.1
 
 ### Patch Changes

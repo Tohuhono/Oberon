@@ -1,5 +1,11 @@
 # @oberon/tohuhono
 
+## 0.5.0
+
+### Minor Changes
+
+- 4767eb7: Moved plugins and renamed packages
+
 ## 0.4.0
 
 ### Minor Changes

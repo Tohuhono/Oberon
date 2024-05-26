@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.6.0
+
+### Minor Changes
+
+- 4767eb7: Moved plugins and renamed packages
+
 ## 0.5.0
 
 ### Minor Changes

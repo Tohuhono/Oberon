@@ -1,5 +1,12 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.5.0
+
+### Minor Changes
+
+- 4767eb7: Moved plugins and renamed packages
+- d13cecf: Change all adapters to be plugins
+
 ## 0.4.0
 
 ### Minor Changes
