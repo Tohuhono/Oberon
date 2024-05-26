@@ -515,6 +515,8 @@ importers:
 
   oberoncms/create-oberon-app: {}
 
+  oberoncms/create-oberon-app-inquire: {}
+
   oberoncms/upload-thing:
     dependencies:
       '@oberoncms/core':
