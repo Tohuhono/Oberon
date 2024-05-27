@@ -1,17 +1,6 @@
 import "server-only"
 
-import {
-  authAdapterPlugin,
-  databaseAdapterPlugin,
-} from "@oberoncms/plugin-turso"
-import { oberonAuthPlugin } from "@oberoncms/core/auth"
+import { initAdapter, mockPlugin } from "@oberoncms/core/adapter"
+import { authPlugin } from "@oberoncms/core/auth"
 
-import { initAdapter } from "@oberoncms/core/adapter"
-import { sendAdapterPlugin } from "./send"
-
-export const adapter = initAdapter([
-  databaseAdapterPlugin,
-  authAdapterPlugin,
-  sendAdapterPlugin,
-  oberonAuthPlugin,
-])
+export const adapter = initAdapter([mockPlugin, authPlugin])
