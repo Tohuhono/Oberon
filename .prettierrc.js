@@ -5,5 +5,5 @@ module.exports = {
   trailingComma: "all",
   semi: false,
   tailwindFunctions: ["clsx", "cx", "cva", "cn"],
-  plugins: ["prettier-plugin-tailwindcss"],
+  plugins: ["prettier-plugin-tailwindcss", "prettier-plugin-brace-style"],
 }

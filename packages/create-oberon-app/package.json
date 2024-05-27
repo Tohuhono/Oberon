@@ -1,0 +1,47 @@
+{
+  "name": "create-oberon-app",
+  "version": "0.1.0",
+  "author": "Tohuhono ltd",
+  "private": true,
+  "repository": "tohuhono/oberon",
+  "bugs": "https://github.com/tohuhono/oberon",
+  "homepage": "https://tohuhono.com/oberon",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-oberon-app": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "plugins"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "clean": "node ../../scripts/clean-package.mjs",
+    "dev": "vite build --watch",
+    "wait": "wait-on ./dist/version && echo done",
+    "wait:clean": "rimraf ./dist/version",
+    "lint": "eslint .",
+    "tsc": "tsc --pretty",
+    "generate": "node scripts/generate.mjs",
+    "prepublishOnly": "pnpm generate",
+    "removeGitignore": "mv templates/.gitignore templates/gitignore",
+    "restoreGitignore": "mv templates/gitignore templates/.gitignore"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "glob": "^10.4.1",
+    "handlebars": "^4.7.8",
+    "inquirer": "^9.2.22"
+  },
+  "devDependencies": {
+    "@tohuhono/dev": "workspace:*",
+    "@types/ignore-walk": "^4.0.3",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.11.27",
+    "ignore-walk": "^6.0.5",
+    "typescript": "5.4.2",
+    "vite": "^5.1.6"
+  }
+}
