@@ -1,17 +1,66 @@
 #!/usr/bin/env node
 
-import { readFile, mkdir, writeFile } from "fs/promises"
+import { readFile, mkdir, writeFile, copyFile } from "fs/promises"
 import { existsSync } from "fs"
 import path from "path"
 import { execSync } from "child_process"
-import { program } from "commander"
-import inquirer from "inquirer"
-import Handlebars from "handlebars"
+import { exit } from "process"
+import crypto from "crypto"
+import prompts from "prompts"
+import handlebars from "handlebars"
 import { glob } from "glob"
+import { z } from "zod"
+import validateName from "validate-npm-package-name"
 
-/*const packageJson = JSON.parse(
-  await readFile(path.join(import.meta.dirname, "./package.json")),
-)*/
+import {
+  program,
+  Option,
+  InvalidArgumentError,
+} from "@commander-js/extra-typings"
+
+const recipes = ["nextjs"] as const
+const recipeChoices = [{ title: "Next js", value: "nextjs" }]
+
+const databases = ["vercel-postgres", "pgsql", "turso", "none"] as const
+const databasePlugins: Record<
+  (typeof databases)[number],
+  { label: string; package: string }
+> = {
+  "vercel-postgres": {
+    label: "Vercel Postgres",
+    package: "@oberoncms/plugin-vercel-postgres",
+  },
+  turso: {
+    label: "Turso",
+    package: "@oberoncms/plugin-turso",
+  },
+  pgsql: {
+    label: "PostgreSQL",
+    package: "@oberoncms/plugin-pgsql",
+  },
+  none: {
+    label: "None",
+    package: "",
+  },
+}
+const databaseChoices = databases.map((key) => ({
+  title: databasePlugins[key].label,
+  value: key,
+}))
+
+const sendPlugins = ["resend", "sendgrid", "custom"] as const
+const sendChoices = [
+  { title: "Resend", value: "resend" },
+  { title: "Sendgrid", value: "sendgrid" },
+  { title: "Custom", value: "custom" },
+]
+
+const packageManagers = ["npm", "pnpm", "yarn"] as const
+const packageManagerChoices = [
+  { title: "npm", value: "npm" },
+  { title: "pnpm", value: "pnpm" },
+  { title: "yarn", value: "yarn" },
+]
 
 // Lifted from https://github.com/vercel/next.js/blob/c2d7bbd1b82c71808b99e9a7944fb16717a581db/packages/create-next-app/helpers/get-pkg-manager.ts
 function getPkgManager() {
@@ -25,69 +74,125 @@ function getPkgManager() {
     return "pnpm"
   }
 
-  return "npm"
+  if (userAgent.startsWith("npm")) {
+    return "npm"
+  }
+
+  return undefined
+}
+
+function existsGit(cwd: string) {
+  try {
+    return execSync("git status", { cwd }).toString().indexOf("fatal:") !== 0
+  } catch {
+    return false
+  }
+}
+
+function onCancel() {
+  exit(0)
 }
 
 program
-  .command("create [app-name]")
-  .option(
-    "--use-npm",
-    `
-
-    Explicitly tell the CLI to bootstrap the application using npm
-  `,
+  .command("create")
+  .argument("[app-name]", "project name", (value, _): string => {
+    const { errors } = validateName(value)
+    if (errors) {
+      throw new InvalidArgumentError("\n" + errors.join("\n"))
+    }
+    return value
+  })
+  .addOption(
+    new Option(
+      "--use <package manager>",
+      "Explicitly tell the CLI to bootstrap the application using <package manager>",
+    ).choices(packageManagers),
   )
-  .option(
-    "--use-pnpm",
-    `
-
-    Explicitly tell the CLI to bootstrap the application using pnpm
-  `,
+  .option("--email <email>", "Master email (initial admin user)")
+  .addOption(
+    new Option("--recipe <recipe>", "Base recipe to use").choices(recipes),
   )
-  .option(
-    "--use-yarn",
-    `
-
-    Explicitly tell the CLI to bootstrap the application using Yarn
-  `,
+  .addOption(
+    new Option("--database <database>", "Database plugin").choices(databases),
   )
+  .addOption(new Option("--send <send>", "Send plugin").choices(sendPlugins))
   .action(async (_appName, options) => {
-    const beforeQuestions = []
+    prompts.override({
+      appName: _appName,
+      packageManager: options.use || getPkgManager(),
+      ...options,
+    })
 
-    if (!_appName) {
-      beforeQuestions.push({
-        type: "input",
-        name: "appName",
-        message: "What is the name of your app?",
-        required: true,
-      })
-    }
+    const {
+      appName,
+      recipe,
+      database,
+      email,
+      send,
+      packageManager,
+    }: {
+      appName: string
+      recipe: string
+      database: (typeof databases)[number]
+      email: string
+      send: string
+      packageManager: string
+    } = await prompts(
+      [
+        {
+          type: "text" as const,
+          name: "appName",
+          message: "What is the name of your app?",
+          initial: "oberon",
+          validate: (value: string) => {
+            const { validForNewPackages, errors } = validateName(value)
+            return validForNewPackages || errors?.join(", ") || false
+          },
+        },
+        {
+          type: "text" as const,
+          name: "email",
+          message:
+            "Master email - this user has superadmin priviledges for the cms",
+          initial: options.email,
+          validate: (value: string) => {
+            const { success, error } = z.string().email().safeParse(value)
+            return success || error.format()._errors.join(", ")
+          },
+        },
+        {
+          type: "select" as const,
+          name: "packageManager",
+          message: "Package Manager",
+          choices: packageManagerChoices,
+        },
+        {
+          type: "select" as const,
+          name: "recipe",
+          message: "Which recipe would you like to use?",
+          choices: recipeChoices,
+        },
+        {
+          type: "select" as const,
+          name: "database",
+          message: "Which database would you like to use?",
+          choices: databaseChoices,
+        },
+        {
+          type: "select" as const,
+          name: "send",
+          message: "Which send plugin would you like to use?",
+          choices: sendChoices,
+        },
+      ],
+      { onCancel },
+    )
 
-    const questions = [
-      ...beforeQuestions,
-      {
-        type: "input",
-        name: "recipe",
-        message: "Which recipe would you like to use?",
-        required: true,
-        default: "next",
-      },
-    ]
-    const answers = await inquirer.prompt(questions)
-    const appName = answers.appName || _appName
-    const recipe = answers.recipe
-    const templatePath = path.join(__dirname, "./templates", recipe)
+    const databasePluginPackage = databasePlugins[database].package
+
+    const templatePath = path.join(import.meta.dirname, "templates", recipe)
+    const sendPath = path.join(import.meta.dirname, "plugins", "send")
     const appPath = path.join(process.cwd(), appName)
-
-    if (!recipe) {
-      console.error(`Please specify a recipe.`)
-      return
-    }
-
-    if (!existsSync(templatePath)) {
-      console.error(`No recipe named ${recipe} exists.`)
-      return
-    }
 
     if (existsSync(appPath)) {
       console.error(
@@ -96,18 +201,14 @@ program
       return
     }
 
-    await mkdir(appName)
+    /*
+     * Copy and apply template files into new directory
+     */
 
-    const packageManager = options.useNpm
-      ? "npm"
-      : options.usePnpm
-        ? "pnpm"
-        : options.useYarn
-          ? "yarn"
-          : getPkgManager()
+    await mkdir(appName, { recursive: true })
 
     // Compile handlebars templates
-    const templateFiles = glob.sync(`**/*`, {
+    const templateFiles = await glob(`**/*`, {
       cwd: templatePath,
       nodir: true,
       dot: true,
@@ -120,46 +221,113 @@ program
         .replace(".hbs", "")
         .replace("gitignore", ".gitignore") // Rename gitignore back to .gitignore (.gitignore) gets ignored by npm during publish
 
-      let data
+      await mkdir(path.dirname(targetPath), { recursive: true })
 
       if (path.extname(filePath) === ".hbs") {
         const templateString = await readFile(filePath, "utf-8")
 
-        const template = Handlebars.compile(templateString)
-        data = template({
-          ...answers,
-          appName,
+        const template = handlebars.compile(templateString)
+        const data = template({
+          databasePluginPackage,
         })
-      } else {
-        data = await readFile(filePath, "utf-8")
+
+        await writeFile(targetPath, data)
+
+        continue
       }
 
-      const dir = path.dirname(targetPath)
-
-      await mkdir(dir, { recursive: true })
-
-      await writeFile(targetPath, data)
+      await copyFile(filePath, targetPath)
     }
 
-    if (packageManager === "yarn") {
-      execSync("yarn install", { cwd: appPath, stdio: "inherit" })
-    } else {
-      execSync(`${packageManager} i`, { cwd: appPath, stdio: "inherit" })
+    /*
+     * Send plugin
+     */
+
+    await copyFile(
+      path.join(sendPath, `${send}.ts`),
+      path.join(appPath, "app", "(oberon)", `send.ts`),
+    )
+
+    /*
+     * Adjust package.json
+     */
+
+    const packageFilePath = path.join(appPath, "./package.json")
+
+    const packageJson = JSON.parse(
+      await readFile(packageFilePath, "utf-8"),
+    ) as {
+      name?: string
+      dependencies?: Record<string, string>
+      devDependencies?: Record<string, string>
     }
 
-    let inGitRepo = false
+    const dependencies =
+      packageJson.dependencies || ({} as Record<string, string>)
+    const devDependencies =
+      packageJson.devDependencies || ({} as Record<string, string>)
 
-    try {
-      inGitRepo =
-        execSync("git status", { cwd: appPath })
-          .toString()
-          .indexOf("fatal:") !== 0
-    } catch {
-      // swallow error
+    const dynamicDependencies = [] as string[]
+
+    for (const dependancy in dependencies) {
+      if (dependencies[dependancy]?.startsWith("workspace")) {
+        dynamicDependencies.push(dependancy)
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete dependencies[dependancy]
+      }
     }
+
+    const dynamicDevDependencies = [] as string[]
+
+    for (const dependancy in devDependencies) {
+      if (devDependencies[dependancy]?.startsWith("workspace")) {
+        dynamicDevDependencies.push(dependancy)
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete devDependencies[dependancy]
+      }
+    }
+
+    dynamicDependencies.push(databasePluginPackage)
+
+    await writeFile(
+      packageFilePath,
+      JSON.stringify({
+        ...packageJson,
+        name: appName,
+        dependencies,
+        devDependencies,
+      }),
+    )
+
+    /*
+     * Create .env.local
+     * TODO: vercel secrets
+     */
+
+    await writeFile(
+      path.join(appPath, "./.env.local"),
+      `
+MASTER_EMAIL=${email}
+EMAIL_FROM=${email}
+
+AUTH_SECRET=${crypto.randomBytes(64).toString("hex")}
+
+# Development builds
+RESEND_USE_REMOTE=false
+AUTH_TRUST_HOST=true
+ANALYZE=false
+      `,
+    )
+
+    console.log(`${packageManager} install`)
+
+    execSync(`${packageManager} install ${dynamicDependencies.join(" ")}`, {
+      cwd: appPath,
+      stdio: "inherit",
+    })
 
     // Only commit if this is a new repo
-    if (!inGitRepo) {
+    if (!existsGit(appPath)) {
       try {
         execSync("git init", { cwd: appPath, stdio: "inherit" })
 
@@ -169,7 +337,7 @@ program
           stdio: "inherit",
         })
       } catch (error) {
-        console.log("Failed to commit git changes")
+        console.error("Failed to commit git changes", error)
       }
     }
   })

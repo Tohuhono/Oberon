@@ -4,6 +4,7 @@ import { Resend } from "resend"
 import type { OberonPlugin } from "@oberoncms/core"
 
 const emailFrom = process.env.EMAIL_FROM
+const RESEND_SECRET = process.env.RESEND_SECRET || process.env.SEND_SECRET
 
 export const sendPlugin: OberonPlugin = () => ({
   name: "Resend",
@@ -17,7 +18,7 @@ export const sendPlugin: OberonPlugin = () => ({
       token: string
       url: string
     }) => {
-      if (!process.env.RESEND_SECRET) {
+      if (!RESEND_SECRET) {
         throw new Error("No RESEND_SECRET configured")
       }
 
@@ -28,7 +29,7 @@ export const sendPlugin: OberonPlugin = () => ({
         text: `Sign in with code\n\n${token}\n\n ${url} \n\n`,
       }
 
-      const resend = new Resend(process.env.RESEND_SECRET)
+      const resend = new Resend(RESEND_SECRET)
 
       try {
         const response = await resend.emails.send(msg)
