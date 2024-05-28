@@ -4,6 +4,7 @@ import sgMail from "@sendgrid/mail"
 import type { OberonPlugin } from "@oberoncms/core"
 
 const emailFrom = process.env.EMAIL_FROM
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || process.env.SEND_SECRET
 
 export const sendPlugin: OberonPlugin = () => ({
   name: "Sendgrid",
@@ -17,7 +18,7 @@ export const sendPlugin: OberonPlugin = () => ({
       token: string
       url: string
     }) => {
-      if (!process.env.SENDGRID_API_KEY) {
+      if (!SENDGRID_API_KEY) {
         throw new Error("No SENDGRID_API_KEY configured")
       }
 
@@ -28,7 +29,7 @@ export const sendPlugin: OberonPlugin = () => ({
         text: `Sign in with code\n\n${token}\n\n ${url} \n\n`,
       }
 
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+      sgMail.setApiKey(SENDGRID_API_KEY)
 
       try {
         await sgMail.send(msg)
