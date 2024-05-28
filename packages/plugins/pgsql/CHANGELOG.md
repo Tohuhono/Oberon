@@ -1,5 +1,16 @@
 # @oberoncms/plugin-pgsql
 
+## 0.3.0
+
+### Minor Changes
+
+- 693824e: Moved packages and added create-oberon-app
+
+### Patch Changes
+
+- Updated dependencies [693824e]
+  - @oberoncms/core@0.9.0
+
 ## 0.2.0
 
 ### Minor Changes

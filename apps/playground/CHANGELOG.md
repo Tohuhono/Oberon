@@ -1,5 +1,19 @@
 # @oberon/playground
 
+## 0.3.0
+
+### Minor Changes
+
+- 693824e: Moved packages and added create-oberon-app
+
+### Patch Changes
+
+- Updated dependencies [693824e]
+  - @tohuhono/puck-rich-text@0.7.0
+  - @oberoncms/plugin-uploadthing@0.9.0
+  - @oberoncms/core@0.9.0
+  - @oberoncms/plugin-turso@0.10.0
+
 ## 0.2.0
 
 ### Minor Changes

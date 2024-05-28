@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.7.0
+
+### Minor Changes
+
+- 693824e: Moved packages and added create-oberon-app
+
 ## 0.6.0
 
 ### Minor Changes
