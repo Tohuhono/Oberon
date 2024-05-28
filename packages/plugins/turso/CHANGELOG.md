@@ -1,5 +1,16 @@
 # @oberoncms/plugin-turso
 
+## 0.10.0
+
+### Minor Changes
+
+- 693824e: Moved packages and added create-oberon-app
+
+### Patch Changes
+
+- Updated dependencies [693824e]
+  - @oberoncms/core@0.9.0
+
 ## 0.9.0
 
 ### Minor Changes

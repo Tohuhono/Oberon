@@ -1,5 +1,11 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.6.0
+
+### Minor Changes
+
+- 693824e: Moved packages and added create-oberon-app
+
 ## 0.5.0
 
 ### Minor Changes
