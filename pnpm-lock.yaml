@@ -342,67 +342,6 @@ importers:
         specifier: ^5.1.6
         version: 5.2.8(@types/node@20.11.30)
 
-  packages/create-oberon-app/brian:
-    dependencies:
-      '@oberoncms/core':
-        specifier: workspace:^
-        version: link:../../oberoncms/core
-      '@oberoncms/plugin-turso':
-        specifier: workspace:^
-        version: link:../../plugins/turso
-      '@tohuhono/utils':
-        specifier: workspace:^
-        version: link:../../tohuhono/utils
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      server-only:
-        specifier: ^0.0.1
-        version: 0.0.1
-    devDependencies:
-      '@tailwindcss/typography':
-        specifier: ^0.5.10
-        version: 0.5.12(tailwindcss@3.4.3)
-      '@types/node':
-        specifier: ^20
-        version: 20.11.30
-      '@types/react':
-        specifier: ^18
-        version: 18.2.66
-      '@types/react-dom':
-        specifier: ^18
-        version: 18.2.22
-      autoprefixer:
-        specifier: ^10.0.1
-        version: 10.4.19(postcss@8.4.38)
-      eslint:
-        specifier: ^8
-        version: 8.57.0
-      eslint-config-next:
-        specifier: 14.1.4
-        version: 14.1.4(eslint@8.57.0)(typescript@5.4.2)
-      postcss:
-        specifier: ^8
-        version: 8.4.38
-      prettier-plugin-tailwindcss:
-        specifier: ^0.5.12
-        version: 0.5.13(prettier@3.2.5)
-      tailwindcss:
-        specifier: ^3.3.0
-        version: 3.4.3
-      tailwindcss-animate:
-        specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@3.4.3)
-      typescript:
-        specifier: ^5
-        version: 5.4.2
-
   packages/oberoncms/core:
     dependencies:
       '@auth/core':
