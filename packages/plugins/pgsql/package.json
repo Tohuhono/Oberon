@@ -20,6 +20,14 @@
     "directory": "oberoncms/adapter-pgsql"
   },
   "type": "module",
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "exports": {
     ".": "./dist/index.js"
   },

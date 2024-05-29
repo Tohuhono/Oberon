@@ -9,14 +9,6 @@
     "url": "https://github.com/Tohuhono/Oberon.git",
     "directory": "packages/dev"
   },
-  "type": "module",
-  "exports": {
-    "./eslint.config": "./eslint.config.mjs",
-    "./eslint-react.config": "./eslint-react.config.mjs",
-    "./eslint-next.config": "./eslint-next.config.mjs",
-    "./tailwind": "./tailwind.config.ts",
-    "./vite": "./dist/vite.config.js"
-  },
   "scripts": {
     "build": "vite build",
     "clean": "node ./scripts/clean-package.mjs",
@@ -25,6 +17,24 @@
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
+  },
+  "type": "module",
+  "files": [
+    "eslint*",
+    "tailwind*",
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
+  "exports": {
+    "./eslint.config": "./eslint.config.mjs",
+    "./eslint-react.config": "./eslint-react.config.mjs",
+    "./eslint-next.config": "./eslint-next.config.mjs",
+    "./tailwind": "./tailwind.config.ts",
+    "./vite": "./dist/vite.config.js"
   },
   "dependencies": {
     "@next/eslint-plugin-next": "^14.1.3",

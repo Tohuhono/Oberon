@@ -18,6 +18,14 @@
     "directory": "oberoncms/core"
   },
   "type": "module",
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "exports": {
     ".": "./dist/index.js",
     "./auth": "./dist/auth.js",
