@@ -1,5 +1,17 @@
 # oberon-cms-example
 
+## 0.9.3
+
+### Patch Changes
+
+- d2ece32: fix turbo build filter
+- d2ece32: Fix build command
+- Updated dependencies [d2ece32]
+- Updated dependencies [d2ece32]
+- Updated dependencies [d2ece32]
+  - @oberoncms/core@0.9.3
+  - @tohuhono/utils@0.7.3
+
 ## 0.9.2
 
 ### Patch Changes

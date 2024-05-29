@@ -1,5 +1,19 @@
 # @oberon/playground
 
+## 0.3.3
+
+### Patch Changes
+
+- d2ece32: fix turbo build filter
+- d2ece32: Fix build command
+- Updated dependencies [d2ece32]
+- Updated dependencies [d2ece32]
+- Updated dependencies [d2ece32]
+  - @tohuhono/puck-rich-text@0.7.2
+  - @oberoncms/plugin-uploadthing@0.9.3
+  - @oberoncms/core@0.9.3
+  - @oberoncms/plugin-turso@0.10.3
+
 ## 0.3.2
 
 ### Patch Changes

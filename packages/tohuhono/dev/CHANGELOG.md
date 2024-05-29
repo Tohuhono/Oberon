@@ -1,5 +1,13 @@
 # @oberon/dev
 
+## 0.8.3
+
+### Patch Changes
+
+- d2ece32: fix turbo build filter
+- d2ece32: Fix build command
+- d2ece32: Fix dist not included in published packages
+
 ## 0.8.2
 
 ### Patch Changes
