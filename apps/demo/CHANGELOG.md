@@ -1,5 +1,13 @@
 # @oberon/demo
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [d6e52e0]
+  - @oberoncms/core@0.9.1
+  - @tohuhono/puck-rich-text@0.7.0
+
 ## 0.3.0
 
 ### Minor Changes
