@@ -4,7 +4,7 @@
   "scripts": {
     "deploy": "bash ./scripts/deploy.sh",
     "build": "turbo build ",
-    "build:packages": "turbo build --filter={./oberoncms/*}... --filter={./puck/*}...",
+    "build:packages": "turbo build --filter={./packages/*}...",
     "build:demo": "turbo build --filter=demo...",
     "build:oberon": "turbo build --filter=playground...",
     "build:nextjs": "turbo build --filter=nextjs-recipe...",

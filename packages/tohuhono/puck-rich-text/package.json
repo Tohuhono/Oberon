@@ -25,6 +25,14 @@
   },
   "type": "module",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -33,9 +41,6 @@
     },
     "./legacy": "./dist/index.js"
   },
-  "files": [
-    "./dist"
-  ],
   "scripts": {
     "build": "vite build",
     "clean": "node ../../scripts/clean-package.mjs",
