@@ -1,5 +1,15 @@
 # @oberoncms/plugin-turso
 
+## 0.10.2
+
+### Patch Changes
+
+- f218952: Fix build command
+- f218952: Fix dist not included in published packages
+- Updated dependencies [f218952]
+- Updated dependencies [f218952]
+  - @oberoncms/core@0.9.2
+
 ## 0.10.1
 
 ### Patch Changes
