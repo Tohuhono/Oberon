@@ -21,6 +21,14 @@
     "directory": "oberoncms/upload-thing"
   },
   "type": "module",
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -30,9 +38,6 @@
     },
     "./plugin": "./dist/plugin.js"
   },
-  "files": [
-    "./dist"
-  ],
   "scripts": {
     "build": "vite build",
     "clean": "node ../../scripts/clean-package.mjs",

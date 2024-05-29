@@ -20,6 +20,14 @@
     "directory": "puck/blocks"
   },
   "type": "module",
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "exports": {
     "./div": "./dist/div.js",
     "./prose": "./dist/prose.js"

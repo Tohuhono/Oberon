@@ -188,6 +188,9 @@ program
       { onCancel },
     )
 
+    const dynamicDependencies = [] as string[]
+    const dynamicDevDependencies = [] as string[]
+
     const databasePluginPackage = databasePlugins[database].package
 
     const templatePath = path.join(import.meta.dirname, "templates", recipe)
@@ -249,6 +252,26 @@ program
     )
 
     /*
+     * Create .env.local
+     * TODO: vercel secrets
+     */
+
+    await writeFile(
+      path.join(appPath, "./.env.local"),
+      `
+MASTER_EMAIL=${email}
+EMAIL_FROM=${email}
+
+AUTH_SECRET=${crypto.randomBytes(64).toString("hex")}
+
+# Development builds
+RESEND_USE_REMOTE=false
+AUTH_TRUST_HOST=true
+ANALYZE=false
+      `,
+    )
+
+    /*
      * Adjust package.json
      */
 
@@ -267,8 +290,6 @@ program
     const devDependencies =
       packageJson.devDependencies || ({} as Record<string, string>)
 
-    const dynamicDependencies = [] as string[]
-
     for (const dependancy in dependencies) {
       if (dependencies[dependancy]?.startsWith("workspace")) {
         dynamicDependencies.push(dependancy)
@@ -276,8 +297,6 @@ program
         delete dependencies[dependancy]
       }
     }
-
-    const dynamicDevDependencies = [] as string[]
 
     for (const dependancy in devDependencies) {
       if (devDependencies[dependancy]?.startsWith("workspace")) {
@@ -297,26 +316,6 @@ program
         dependencies,
         devDependencies,
       }),
-    )
-
-    /*
-     * Create .env.local
-     * TODO: vercel secrets
-     */
-
-    await writeFile(
-      path.join(appPath, "./.env.local"),
-      `
-MASTER_EMAIL=${email}
-EMAIL_FROM=${email}
-
-AUTH_SECRET=${crypto.randomBytes(64).toString("hex")}
-
-# Development builds
-RESEND_USE_REMOTE=false
-AUTH_TRUST_HOST=true
-ANALYZE=false
-      `,
     )
 
     console.log(`${packageManager} install`)

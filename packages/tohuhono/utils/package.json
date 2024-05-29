@@ -21,6 +21,14 @@
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "dependencies": {
     "tailwind-merge": "^2.2.1"
   },

@@ -11,7 +11,12 @@
     "create-oberon-app": "./dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "scripts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
   ],
   "scripts": {
     "build": "vite build",
