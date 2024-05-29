@@ -1,5 +1,12 @@
 # @tohuhono/puck-rich-text
 
+## 0.7.2
+
+### Patch Changes
+
+- d2ece32: fix turbo build filter
+- d2ece32: Fix build command
+
 ## 0.7.1
 
 ### Patch Changes
