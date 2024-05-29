@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.8.1
+
+### Patch Changes
+
+- d6e52e0: Fix dist not included in published packages
+
 ## 0.8.0
 
 ### Minor Changes

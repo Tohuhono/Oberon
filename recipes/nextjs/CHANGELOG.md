@@ -1,5 +1,13 @@
 # oberon-cms-example
 
+## 0.9.1
+
+### Patch Changes
+
+- Updated dependencies [d6e52e0]
+  - @oberoncms/core@0.9.1
+  - @tohuhono/utils@0.7.1
+
 ## 0.9.0
 
 ### Minor Changes

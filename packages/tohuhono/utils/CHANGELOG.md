@@ -1,5 +1,11 @@
 # @oberon/utils
 
+## 0.7.1
+
+### Patch Changes
+
+- d6e52e0: Fix dist not included in published packages
+
 ## 0.7.0
 
 ### Minor Changes
