@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.7.1
+
+### Patch Changes
+
+- f218952: Fix build command
+
 ## 0.7.0
 
 ### Minor Changes

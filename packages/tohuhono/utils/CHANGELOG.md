@@ -1,5 +1,12 @@
 # @oberon/utils
 
+## 0.7.2
+
+### Patch Changes
+
+- f218952: Fix build command
+- f218952: Fix dist not included in published packages
+
 ## 0.7.1
 
 ### Patch Changes

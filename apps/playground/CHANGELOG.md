@@ -1,5 +1,17 @@
 # @oberon/playground
 
+## 0.3.2
+
+### Patch Changes
+
+- f218952: Fix build command
+- Updated dependencies [f218952]
+- Updated dependencies [f218952]
+  - @tohuhono/puck-rich-text@0.7.1
+  - @oberoncms/plugin-uploadthing@0.9.2
+  - @oberoncms/core@0.9.2
+  - @oberoncms/plugin-turso@0.10.2
+
 ## 0.3.1
 
 ### Patch Changes
