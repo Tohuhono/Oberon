@@ -1,5 +1,13 @@
 # @oberoncms/plugin-pgsql
 
+## 0.3.1
+
+### Patch Changes
+
+- d6e52e0: Fix dist not included in published packages
+- Updated dependencies [d6e52e0]
+  - @oberoncms/core@0.9.1
+
 ## 0.3.0
 
 ### Minor Changes

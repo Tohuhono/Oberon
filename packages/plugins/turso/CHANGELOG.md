@@ -1,5 +1,13 @@
 # @oberoncms/plugin-turso
 
+## 0.10.1
+
+### Patch Changes
+
+- d6e52e0: Fix dist not included in published packages
+- Updated dependencies [d6e52e0]
+  - @oberoncms/core@0.9.1
+
 ## 0.10.0
 
 ### Minor Changes
