@@ -1,5 +1,15 @@
 # oberon-cms-example
 
+## 0.9.2
+
+### Patch Changes
+
+- f218952: Fix build command
+- Updated dependencies [f218952]
+- Updated dependencies [f218952]
+  - @oberoncms/core@0.9.2
+  - @tohuhono/utils@0.7.2
+
 ## 0.9.1
 
 ### Patch Changes
