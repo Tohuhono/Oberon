@@ -1,5 +1,23 @@
 # @oberoncms/core
 
+## 0.10.0
+
+### Minor Changes
+
+- 982a202: Moved initialisation for plugins into adapter prebuild function
+
+### Patch Changes
+
+- 982a202: fix turbo build filter
+- 982a202: Fix build command
+- 982a202: Fix dist not included in published packages
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+  - @tohuhono/utils@0.8.0
+  - @tohuhono/ui@0.9.0
+
 ## 0.9.3
 
 ### Patch Changes

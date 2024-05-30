@@ -1,5 +1,22 @@
 # @oberoncms/plugin-turso
 
+## 0.11.0
+
+### Minor Changes
+
+- 982a202: Moved initialisation for plugins into adapter prebuild function
+
+### Patch Changes
+
+- 982a202: fix turbo build filter
+- 982a202: Fix build command
+- 982a202: Fix dist not included in published packages
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+  - @oberoncms/core@0.10.0
+
 ## 0.10.3
 
 ### Patch Changes

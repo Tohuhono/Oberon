@@ -1,5 +1,22 @@
 # oberon-cms-example
 
+## 0.10.0
+
+### Minor Changes
+
+- 982a202: Moved initialisation for plugins into adapter prebuild function
+
+### Patch Changes
+
+- 982a202: fix turbo build filter
+- 982a202: Fix build command
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+  - @oberoncms/core@0.10.0
+  - @tohuhono/utils@0.8.0
+
 ## 0.9.3
 
 ### Patch Changes
