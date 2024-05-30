@@ -1,5 +1,17 @@
 # create-oberon-app
 
+## 0.3.0
+
+### Minor Changes
+
+- 982a202: Moved initialisation for plugins into adapter prebuild function
+
+### Patch Changes
+
+- 982a202: fix turbo build filter
+- 982a202: Fix build command
+- 982a202: Fix dist not included in published packages
+
 ## 0.2.3
 
 ### Patch Changes

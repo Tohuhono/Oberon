@@ -1,5 +1,24 @@
 # @oberon/playground
 
+## 0.4.0
+
+### Minor Changes
+
+- 982a202: Moved initialisation for plugins into adapter prebuild function
+
+### Patch Changes
+
+- 982a202: fix turbo build filter
+- 982a202: Fix build command
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+  - @tohuhono/puck-rich-text@0.8.0
+  - @oberoncms/plugin-uploadthing@0.10.0
+  - @oberoncms/core@0.10.0
+  - @oberoncms/plugin-turso@0.11.0
+
 ## 0.3.3
 
 ### Patch Changes

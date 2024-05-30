@@ -1,5 +1,19 @@
 # @oberon/rich-text-demo
 
+## 1.6.0
+
+### Minor Changes
+
+- 982a202: Moved initialisation for plugins into adapter prebuild function
+
+### Patch Changes
+
+- 982a202: fix turbo build filter
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+- Updated dependencies [982a202]
+  - @tohuhono/puck-rich-text@0.8.0
+
 ## 1.5.2
 
 ### Patch Changes
