@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.3.1
+
+### Patch Changes
+
+- 638cb69: Fix adapter template location
+
 ## 0.3.0
 
 ### Minor Changes
