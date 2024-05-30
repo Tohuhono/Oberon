@@ -5,9 +5,8 @@ import { FSDriver } from "flydrive/drivers/fs"
 import { GCSDriver } from "flydrive/drivers/gcs"
 import { S3Driver } from "flydrive/drivers/s3"
 
-import { initRouteHandler } from "./disk-handlers"
-
 import { name, version } from "../../package.json" with { type: "json" }
+import { initRouteHandler } from "./disk-handlers"
 
 type CloudFlyDriver = S3Driver | GCSDriver | FSDriver
 const getDriverActions = (driver: CloudFlyDriver) => {
@@ -35,7 +34,7 @@ interface plugin {
   initFlyDriveRouter: () => ReturnType<typeof initRouteHandler>
 }
 
-export const getCloudFlyDrivePlugin = (driver: any): plugin => {
+export const getCloudFlyDrivePlugin = (driver: CloudFlyDriver): plugin => {
   const driverActions = getDriverActions(driver)
 
   return {
