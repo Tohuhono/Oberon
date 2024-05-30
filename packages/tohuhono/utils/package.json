@@ -10,8 +10,6 @@
     "directory": "packages/utils"
   },
   "type": "module",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build",
     "clean": "node ../../scripts/clean-package.mjs",
@@ -20,6 +18,10 @@
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./promise-queue": "./dist/promise-queue.js"
   },
   "files": [
     "dist",

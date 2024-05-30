@@ -1,4 +1,4 @@
-import "server-only"
+import "server-cli-only"
 
 import { UTApi } from "uploadthing/server"
 

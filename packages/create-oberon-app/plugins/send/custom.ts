@@ -1,4 +1,4 @@
-import "server-only"
+import "server-cli-only"
 
 import { notImplemented } from "@tohuhono/utils"
 import type { OberonPlugin } from "@oberoncms/core"

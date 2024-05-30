@@ -1,4 +1,5 @@
 export * from "./app/schema"
 export * from "./app/utils"
 export * from "./app/get-metadata"
+export { exportTailwindClasses } from "./app/export-tailwind-clases"
 export { cn } from "@tohuhono/utils"

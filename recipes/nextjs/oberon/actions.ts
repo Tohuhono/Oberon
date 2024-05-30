@@ -1,4 +1,4 @@
-import "server-only"
+import "server-cli-only"
 
 import type { AdapterPermission, OberonActions } from "@oberoncms/core"
 import { initActions } from "@oberoncms/core/adapter"

@@ -31,10 +31,6 @@
   "exports": {
     ".": "./dist/index.js"
   },
-  "bin": {
-    "odt-init": "./scripts/initialise.mjs",
-    "odt-prepare": "./scripts/prepare.mjs"
-  },
   "scripts": {
     "build": "vite build",
     "clean": "node ../../scripts/clean-package.mjs",
@@ -50,7 +46,7 @@
     "@libsql/core": "^0.5.6",
     "@oberoncms/core": "workspace:*",
     "drizzle-orm": "^0.30.10",
-    "server-only": "^0.0.1"
+    "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {
     "react": "^18.2.0",

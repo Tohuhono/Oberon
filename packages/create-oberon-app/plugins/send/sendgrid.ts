@@ -1,4 +1,4 @@
-import "server-only"
+import "server-cli-only"
 
 import sgMail from "@sendgrid/mail"
 import type { OberonPlugin } from "@oberoncms/core"
