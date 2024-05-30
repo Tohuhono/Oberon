@@ -1,9 +1,9 @@
 {
-  "name": "@oberoncms/plugin-s3",
+  "name": "@oberoncms/plugin-flydrive",
   "version": "0.0.1",
   "author": "Ahmed Rowaihi @sudorw",
   "license": "MIT",
-  "description": "An puck component for embeding s3 assets made for OberonCMS",
+  "description": "a fullstack image component for puck editor OberonCMS, flydrive based to store manage in the cloud, aws, gcp, cloudfare, s3, filesystem, etc.",
   "keywords": [
     "oberon",
     "oberoncms",
@@ -13,12 +13,18 @@
     "component",
     "nextjs",
     "react",
-    "s3"
+    "flydrive",
+    "aws",
+    "cloudfare",
+    "gcp",
+    "s3",
+    "filesystem",
+    "storage"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "oberoncms/s3"
+    "directory": "oberoncms/flydrive"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -28,19 +34,14 @@
       "browser": "./dist/index.js",
       "node": "./dist/server.js"
     },
-    "./plugin": "./dist/plugin.js",
-    "./helper": "./dist/s3/helper.js"
-  },
-  "bin": {
-    "odt-init": "./scripts/initialise.mjs",
-    "ost-prepare": "./scripts/prepare.mjs"
+    "./plugin": "./dist/plugin.js"
   },
   "files": [
     "./dist"
   ],
   "scripts": {
     "build": "vite build",
-    "clean": "node ../../scripts/clean-package.mjs",
+    "clean": "node ../../../scripts/clean-package.mjs",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
@@ -48,11 +49,9 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.577.0",
-    "@aws-sdk/lib-storage": "^3.578.0",
-    "@aws-sdk/s3-request-presigner": "^3.577.0",
     "@oberoncms/core": "workspace:*",
     "@radix-ui/react-icons": "^1.3.0",
+    "flydrive": "^1.0.2",
     "image-size": "1.1.1",
     "next": "^14.2.3",
     "react-dropzone": "^14.2.3",

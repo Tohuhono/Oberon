@@ -1,10 +1,10 @@
 import path from "path"
 import { NextRequest } from "next/server"
-import { S3DriverFactory } from "../s3"
+import { randomUUID } from "crypto"
 import { getImageSize } from "./get-image-size"
-export type OurFileRouter = ReturnType<typeof initRouteHandler>
+import { DriverActions } from "./plugin"
 
-export function initRouteHandler(client: S3DriverFactory): {
+export function initRouteHandler(driverActions: DriverActions): {
   POST: (req: NextRequest) => Promise<Response>
   GET: (req: NextRequest) => Response
 } {
@@ -12,17 +12,16 @@ export function initRouteHandler(client: S3DriverFactory): {
     const image = (await req.formData()).get("image") as File | null
     if (!image) return new Response("No image provided", { status: 400 })
 
-    const buffer = Buffer.from(await image.arrayBuffer())
-    const size = await getImageSize(buffer)
-    const key = await client.uploadFile(buffer, image.type, {
-      extension: path.extname(image.name).slice(1),
-      width: size.width.toString(),
-      height: size.height.toString(),
-    })
-    const url = process.env.AWS_ENDPOINT
-      ? `${process.env.AWS_ENDPOINT}/${process.env.AWS_BUCKET}/${key}`
-      : `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${key}`
+    const toBuffer = await image.arrayBuffer()
+    const buffer = Buffer.from(toBuffer)
 
+    const size = await getImageSize(buffer)
+
+    const key = `${randomUUID()}.${path.extname(image.name).slice(1)}`
+
+    await driverActions.put(key, buffer)
+
+    const url = await driverActions.getUrl(key)
     const response = {
       key: key,
       alt: key,
