@@ -1,5 +1,14 @@
 # @oberon/rich-text-demo
 
+## 1.5.2
+
+### Patch Changes
+
+- d2ece32: fix turbo build filter
+- Updated dependencies [d2ece32]
+- Updated dependencies [d2ece32]
+  - @tohuhono/puck-rich-text@0.7.2
+
 ## 1.5.1
 
 ### Patch Changes
