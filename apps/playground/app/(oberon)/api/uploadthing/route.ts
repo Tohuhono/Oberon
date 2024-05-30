@@ -1,4 +1,4 @@
 import { initRouteHandler } from "@oberoncms/plugin-uploadthing/plugin"
-import { actions } from "@/app/(oberon)/actions"
+import { actions } from "@/oberon/actions"
 
 export const { GET, POST } = initRouteHandler(actions)

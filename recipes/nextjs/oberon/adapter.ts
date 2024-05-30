@@ -1,4 +1,4 @@
-import "server-only"
+import "server-cli-only"
 
 import { initAdapter, mockPlugin } from "@oberoncms/core/adapter"
 import { authPlugin } from "@oberoncms/core/auth"

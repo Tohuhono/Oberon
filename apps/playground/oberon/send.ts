@@ -1,4 +1,4 @@
-import "server-only"
+import "server-cli-only"
 
 import { Resend } from "resend"
 import type { OberonPlugin } from "@oberoncms/core"

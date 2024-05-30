@@ -1,8 +1,8 @@
 import { Render } from "@oberoncms/core/render"
 import { getMetaData } from "@oberoncms/core"
 
-import { actions } from "@/app/(oberon)/actions"
-import { config } from "@/app/(oberon)/config"
+import { actions } from "@/oberon/actions"
+import { config } from "@/oberon/config"
 
 export async function generateStaticParams() {
   return await actions.getAllPaths()

@@ -26,6 +26,7 @@ export const baseAdapter: OberonAdapter = {
       permissions[role][action] === "write"
     )
   },
+  prebuild: async () => {},
   // OberonSendAdapter
   sendVerificationRequest: notImplemented("sendVerificationRequest"),
   // OberonDatabaseAdapter

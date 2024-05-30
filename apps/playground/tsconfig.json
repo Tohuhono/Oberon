@@ -20,5 +20,5 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["app", ".next/types/**/*.ts", "components"]
+  "include": ["app", "components", "oberon", ".next/types/**/*.ts"]
 }

@@ -1,4 +1,4 @@
-import "server-only"
+import "server-cli-only"
 
 import { databasePlugin } from "@oberoncms/plugin-turso"
 import { authPlugin } from "@oberoncms/core/auth"

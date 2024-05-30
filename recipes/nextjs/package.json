@@ -2,12 +2,12 @@
   "name": "@oberon/nextjs-recipe",
   "version": "0.9.3",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "postinstall": "",
-    "prebuild": "",
+    "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"
   },
   "dependencies": {
@@ -16,7 +16,7 @@
     "next": "^14.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "server-only": "^0.0.1"
+    "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
@@ -30,6 +30,7 @@
     "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.11.0",
     "typescript": "^5"
   }
 }

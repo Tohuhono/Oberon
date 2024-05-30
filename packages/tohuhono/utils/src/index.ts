@@ -1,6 +1,8 @@
 import type { PropsWithChildren } from "react"
 import { ClassNameValue, twMerge } from "tailwind-merge"
 
+export * as promiseQueue from "./promise-queue"
+
 export type CNProps<T = unknown> = PropsWithChildren<T & { className?: string }>
 export function cn(...inputs: ClassNameValue[]) {
   return twMerge(inputs)
@@ -14,7 +16,7 @@ export function cn(...inputs: ClassNameValue[]) {
  */
 export function getRandomInt(start: number, end: number) {
   const range = end > start ? end - start : 0
-  return Math.floor(Math.random() * range + start)
+  return Math.floor(Math.random() * (range + 1) + start)
 }
 
 export function notImplemented(action: string) {
@@ -28,9 +30,6 @@ export function notImplemented(action: string) {
 /**
  * Returns a promise that resolves after
  * @param ms time in ms
- */
-export function wait(ms: number): Promise<void>
-/**
  * Returns a promise that resolves after a random time between
  * @param lower time in ms
  * @param upper time in ms
