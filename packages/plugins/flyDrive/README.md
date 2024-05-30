@@ -53,12 +53,7 @@ const s3Driver = new S3Driver({
 })
 
 // export router
-export const generatedFlyDrivePlugin = getCloudFlyDrivePlugin(s3Driver)
-{ flyDrivePlugin, initFlyDriveRouter } =
-  getCloudFlyDrivePlugin(s3Driver)
-// init router
-export initFlyAPI = generatedFlyDrivePlugin.initFlyDriveRouter
-
+export const { flyDrivePlugin, initFlyDriveRouter } = getCloudFlyDrivePlugin(s3Driver)
 
 // add the plugin to the oberon adapter
 export const adapter = initAdapter([
@@ -71,9 +66,9 @@ export const adapter = initAdapter([
 
 ```typescript
 // api/flydrive/route.ts
-import { initFlyAPI } from "./adapter"
+import { initFlyDriveRouter } from "./adapter" // <where you placed your adapter.ts>
 
-export const { GET, POST } = initFlyAPI()
+export const { GET, POST } = initFlyDriveRouter()
 ```
 
 ## Editor configuration
