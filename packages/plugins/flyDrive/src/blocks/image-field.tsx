@@ -39,46 +39,49 @@ export const ImageField = ({
 }) => {
   const { images, loading, setImageKey, addImage } = useImages(value, onChange)
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    if (acceptedFiles.length === 0 || !acceptedFiles[0]) return
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 0 || !acceptedFiles[0]) return
 
-    const file = acceptedFiles[0]
+      const file = acceptedFiles[0]
 
-    const formData = new FormData()
-    formData.append("image", file)
+      const formData = new FormData()
+      formData.append("image", file)
 
-    try {
-      const response = await fetch("/api/flydrive", {
-        method: "POST",
-        body: formData,
-      })
-
-      if (response.ok) {
-        const { key, alt, size, url, width, height } = await response.json()
-
-        addImage({
-          key,
-          url,
-          alt,
-          size,
-          width,
-          height,
-          updatedAt: new Date(),
-          updatedBy: "unknown",
+      try {
+        const response = await fetch("/api/flydrive", {
+          method: "POST",
+          body: formData,
         })
 
-        setImageKey(key)
-      } else {
-        throw new Error("Failed to upload image")
+        if (response.ok) {
+          const { key, alt, size, url, width, height } = await response.json()
+
+          addImage({
+            key,
+            url,
+            alt,
+            size,
+            width,
+            height,
+            updatedAt: new Date(),
+            updatedBy: "unknown",
+          })
+
+          setImageKey(key)
+        } else {
+          throw new Error("Failed to upload image")
+        }
+      } catch (error) {
+        if (error instanceof Error) alert(`ERROR! ${error.message}`)
+        else {
+          alert("An unknown error occurred")
+          console.error(error)
+        }
       }
-    } catch (error) {
-      if (error instanceof Error) alert(`ERROR! ${error.message}`)
-      else {
-        alert("An unknown error occurred")
-        console.error(error)
-      }
-    }
-  }, [])
+    },
+    [setImageKey, addImage],
+  )
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {

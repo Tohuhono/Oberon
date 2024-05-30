@@ -1,6 +1,6 @@
-import path from "path"
-import { NextRequest } from "next/server"
 import { randomUUID } from "crypto"
+import { NextRequest } from "next/server"
+import path from "path"
 import { getImageSize } from "./get-image-size"
 import { DriverActions } from "./plugin"
 
@@ -10,7 +10,9 @@ export function initRouteHandler(driverActions: DriverActions): {
 } {
   const POST: (req: NextRequest) => Promise<Response> = async (req) => {
     const image = (await req.formData()).get("image") as File | null
-    if (!image) return new Response("No image provided", { status: 400 })
+    if (!image) {
+      return new Response("No image provided", { status: 400 })
+    }
 
     const toBuffer = await image.arrayBuffer()
     const buffer = Buffer.from(toBuffer)
