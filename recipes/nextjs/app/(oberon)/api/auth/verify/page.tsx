@@ -1,3 +1,3 @@
-import { VerifyPage } from "@oberoncms/core/auth"
+import { VerifyPage } from "@oberoncms/core/auth";
 
-export default VerifyPage
+export default VerifyPage;

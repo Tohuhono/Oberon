@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { OberonClient } from "@oberoncms/core/editor"
+import { OberonClient } from "@oberoncms/core/editor";
 
-import { config } from "@/oberon/config"
+import { config } from "@/oberon/config";
 
 export function Client() {
-  return <OberonClient config={config} />
+  return <OberonClient config={config} />;
 }

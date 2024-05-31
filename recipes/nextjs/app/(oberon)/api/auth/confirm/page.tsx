@@ -1,3 +1,3 @@
-import { ConfirmPage } from "@oberoncms/core/auth"
+import { ConfirmPage } from "@oberoncms/core/auth";
 
-export default ConfirmPage
+export default ConfirmPage;

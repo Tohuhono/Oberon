@@ -1,4 +1,4 @@
-import type { OberonComponent } from "@oberoncms/core"
+import type { OberonComponent } from "@oberoncms/core";
 
 export const Box = {
   fields: {
@@ -7,6 +7,6 @@ export const Box = {
     },
   },
   render: ({ className, puck: { renderDropZone: DropZone } }) => {
-    return <div className={className}>{<DropZone zone="box" />}</div>
+    return <div className={className}>{<DropZone zone="box" />}</div>;
   },
-} satisfies OberonComponent
+} satisfies OberonComponent;
