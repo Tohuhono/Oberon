@@ -1,3 +1,5 @@
+import nextra from "nextra"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -15,4 +17,10 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+const withNextra = nextra({
+  theme: "nextra-theme-docs",
+  themeConfig: "./theme.config.jsx",
+  // ... your Nextra config
+})
+
+export default withNextra(nextConfig)
