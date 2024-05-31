@@ -1,5 +1,12 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.7.1
+
+### Patch Changes
+
+- 9ce4e84: Improve plugin initialisation
+- 9ce4e84: Improve developer tooling
+
 ## 0.7.0
 
 ### Minor Changes

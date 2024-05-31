@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.9.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+
 ## 0.9.0
 
 ### Minor Changes

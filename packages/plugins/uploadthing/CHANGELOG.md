@@ -1,5 +1,13 @@
 # @oberoncms/plugin-upload-thing
 
+## 0.10.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+- Updated dependencies [9ce4e84]
+  - @oberoncms/core@0.10.1
+
 ## 0.10.0
 
 ### Minor Changes

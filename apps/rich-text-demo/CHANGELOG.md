@@ -1,5 +1,13 @@
 # @oberon/rich-text-demo
 
+## 1.6.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+- Updated dependencies [9ce4e84]
+  - @tohuhono/puck-rich-text@0.8.1
+
 ## 1.6.0
 
 ### Minor Changes

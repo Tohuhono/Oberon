@@ -1,5 +1,13 @@
 # @oberon/ui
 
+## 0.9.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+- Updated dependencies [9ce4e84]
+  - @tohuhono/utils@0.8.1
+
 ## 0.9.0
 
 ### Minor Changes

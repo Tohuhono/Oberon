@@ -1,5 +1,12 @@
 # create-oberon-app
 
+## 0.3.2
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+- 9ce4e84: Fix missing dependencies
+
 ## 0.3.1
 
 ### Patch Changes

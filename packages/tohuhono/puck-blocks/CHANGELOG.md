@@ -1,5 +1,13 @@
 # @tohuhono/puck-blocks
 
+## 0.8.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+- Updated dependencies [9ce4e84]
+  - @tohuhono/ui@0.9.1
+
 ## 0.8.0
 
 ### Minor Changes
