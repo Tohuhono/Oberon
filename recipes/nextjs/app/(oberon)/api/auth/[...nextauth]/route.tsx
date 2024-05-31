@@ -1,3 +1,3 @@
-import { adapter } from "@/oberon/adapter"
+import { adapter } from "@/oberon/adapter";
 
-export const { GET, POST } = adapter.handlers.auth || {}
+export const { GET, POST } = adapter.handlers.auth || {};

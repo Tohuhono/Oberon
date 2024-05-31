@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint"
 import hooksPlugin from "eslint-plugin-react-hooks"
 import reactRecommended from "eslint-plugin-react/configs/recommended.js"
 import globals from "globals"
-import baseConfig from "./eslint.config.mjs"
+import baseConfig from "./config.mjs"
 
 export default tseslint.config(
   ...baseConfig,

@@ -253,7 +253,7 @@ export type OberonAdapter = OberonDatabaseAdapter &
       action: AdapterActionGroup
       permission: AdapterPermission
     }) => boolean
-    prebuild: () => Promise<void>
+    init: () => Promise<void>
   }
 
 export type OberonPlugin = (adapter: OberonAdapter) => {

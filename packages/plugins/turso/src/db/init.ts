@@ -1,19 +1,17 @@
 import { migrate } from "drizzle-orm/libsql/migrator"
 import { initialise, db } from "./client"
 
-export async function prebuild() {
-  console.log(`Initialising database`)
+export async function init() {
+  console.log(`Migrating database`)
 
   await initialise()
 
-  console.log(`Migrating database`)
-
-  if (!db) {
+  if (!db()) {
     console.log("Prepare: No Database Connection Configured")
     return
   }
 
-  await migrate(db, {
+  await migrate(db(), {
     migrationsFolder: "node_modules/@oberoncms/plugin-turso/src/db/migrations",
   })
 

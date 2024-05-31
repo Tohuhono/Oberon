@@ -19,11 +19,11 @@ export const IS_LOCAL_CLIENT =
   (process.env.TURSO_USE_REMOTE !== "true" &&
     process.env.NODE_ENV !== "production")
 
-function getClient() {
+function createClient() {
   if (IS_LOCAL_CLIENT) {
-    return createLocalClient({
-      url: process.env.TURSO_FILE || "file:.oberon/oberon.db",
-    })
+    const url = process.env.TURSO_FILE || "file:.oberon/oberon.db"
+
+    return createLocalClient({ url })
   }
 
   if (!process.env.TURSO_URL || !process.env.TURSO_TOKEN) {
@@ -39,17 +39,18 @@ function getClient() {
 }
 
 // ensure there is only one database client
-const client: Client =
-  globalThis.oberonDb || (globalThis.oberonDb = getClient())
+const getClient: () => Client = () =>
+  globalThis.oberonDb || (globalThis.oberonDb = createClient())
 
-export const db = drizzle(client, {
-  schema,
-})
+export const db = () =>
+  drizzle(getClient(), {
+    schema,
+  })
 
 export async function initialise() {
   if (!IS_LOCAL_CLIENT) {
     return
   }
   await mkdir(".oberon", { recursive: true })
-  await db.run(sql`PRAGMA journal_mode=WAL;`)
+  await db().run(sql`PRAGMA journal_mode=WAL;`)
 }

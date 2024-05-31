@@ -673,6 +673,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
+      tsx:
+        specifier: ^4.11.0
+        version: 4.11.0
       typescript:
         specifier: 5.4.2
         version: 5.4.2
@@ -942,9 +945,12 @@ importers:
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
-      '@tohuhono/utils':
+      '@oberoncms/plugin-turso':
         specifier: workspace:*
-        version: link:../../packages/tohuhono/utils
+        version: link:../../packages/plugins/turso
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       next:
         specifier: ^14.2.3
         version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
@@ -9965,7 +9971,6 @@ packages:
       get-tsconfig: 4.7.5
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /tty-table@4.2.3:
     resolution: {integrity: sha512-Fs15mu0vGzCrj8fmJNP7Ynxt5J7praPXqFN0leZeZBXJwkMxv9cb2D454k1ltrtUSJbZ4yH4e0CynsHLxmUfFA==}

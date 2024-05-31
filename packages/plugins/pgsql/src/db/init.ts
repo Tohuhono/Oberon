@@ -1,7 +1,7 @@
 import { migrate } from "drizzle-orm/node-postgres/migrator"
 import { db } from "./client"
 
-export async function prebuild() {
+export async function init() {
   console.log(`Migrating database`)
 
   if (!db) {

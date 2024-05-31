@@ -12,7 +12,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "clean": "node ../../scripts/clean-package.mjs",
+    "clean": "odt clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
