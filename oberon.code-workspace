@@ -31,5 +31,6 @@
     "tailwindCSS.includeLanguages": {
       "typescriptreact": "html",
     },
+    "editor.detectIndentation": false,
   },
 }

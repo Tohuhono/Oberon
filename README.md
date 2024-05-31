@@ -1,8 +1,8 @@
 <img src="https://img.shields.io/badge/Current Status:%20-000.svg"><img src="https://img.shields.io/badge/Move%20fast%20and%20break%20things-red.svg">
 
-# Tohuhono Monorepo
+# OberonCMS
 
-All things Tohuhono.
+A monorepo for OberonCMS and the related packages and tooling.
 
 ## Quick start
 
@@ -24,8 +24,9 @@ This Turborepo includes the following packages/apps:
 
 ### Apps
 
-- `apps/tohuhono`
+- `apps/documentation`
 
+  A Next.js app for the OberonCMS website.
   https://tohuhono.com
 
 - `apps/rich-text-demo`
@@ -56,13 +57,6 @@ Under heavy development.
             <img src=https://avatars.githubusercontent.com/u/2586037?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Jon Vivian/>
             <br />
             <sub style="font-size:14px"><b>Jon Vivian</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/turbobot-temp>
-            <img src=https://avatars.githubusercontent.com/u/145653950?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=turbobot-temp/>
-            <br />
-            <sub style="font-size:14px"><b>turbobot-temp</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
