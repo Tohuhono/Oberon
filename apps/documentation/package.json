@@ -1,7 +1,8 @@
 {
-  "name": "@oberon/tohuhono",
-  "version": "0.6.1",
+  "name": "@oberon/docs",
+  "version": "0.6.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "clean": "odt clean",
@@ -11,14 +12,14 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "next": "14.2.1",
+    "next": "14.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@tohuhono/dev": "workspace:*",
     "@tohuhono/utils": "workspace:*",
-    "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",

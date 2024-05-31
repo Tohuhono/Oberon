@@ -1,4 +1,4 @@
-import "src/app/globals.css"
+import "@/app/globals.css"
 import { Montserrat } from "next/font/google"
 
 import { cn } from "@tohuhono/utils"
