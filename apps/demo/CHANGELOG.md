@@ -1,5 +1,14 @@
 # @oberon/demo
 
+## 0.4.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+- Updated dependencies [9ce4e84]
+  - @tohuhono/puck-rich-text@0.8.1
+  - @oberoncms/core@0.10.1
+
 ## 0.4.0
 
 ### Minor Changes

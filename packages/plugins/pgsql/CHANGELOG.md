@@ -1,5 +1,14 @@
 # @oberoncms/plugin-pgsql
 
+## 0.4.1
+
+### Patch Changes
+
+- 9ce4e84: Improve plugin initialisation
+- 9ce4e84: Improve developer tooling
+- Updated dependencies [9ce4e84]
+  - @oberoncms/core@0.10.1
+
 ## 0.4.0
 
 ### Minor Changes

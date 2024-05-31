@@ -1,5 +1,11 @@
 # @oberon/tohuhono
 
+## 0.6.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+
 ## 0.6.0
 
 ### Minor Changes

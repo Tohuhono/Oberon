@@ -1,5 +1,15 @@
 # oberon-cms-example
 
+## 0.10.1
+
+### Patch Changes
+
+- 9ce4e84: Improve developer tooling
+- Updated dependencies [9ce4e84]
+- Updated dependencies [9ce4e84]
+  - @oberoncms/plugin-turso@0.11.1
+  - @oberoncms/core@0.10.1
+
 ## 0.10.0
 
 ### Minor Changes

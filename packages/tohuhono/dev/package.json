@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/dev",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "Developer and build tools used by @tohuhono and @oberoncms packages",
