@@ -6,7 +6,7 @@ import { name, version } from "../package.json" with { type: "json" }
 
 import { databaseAdapter } from "./db/database-adapter"
 import { authAdapter } from "./db/auth-adapter"
-import { prebuild } from "./db/prebuild"
+import { init } from "./db/init"
 
 export const databasePlugin: OberonPlugin = (adapter) => ({
   name,
@@ -14,9 +14,9 @@ export const databasePlugin: OberonPlugin = (adapter) => ({
   adapter: {
     ...databaseAdapter,
     ...authAdapter,
-    prebuild: async () => {
-      await adapter.prebuild()
-      await prebuild()
+    init: async () => {
+      await adapter.init()
+      await init()
     },
   },
 })

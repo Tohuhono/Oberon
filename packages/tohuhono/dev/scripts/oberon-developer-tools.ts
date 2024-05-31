@@ -1,9 +1,16 @@
-#!/usr/bin/env node
-import path from "path"
+#!/usr/bin/env tsx
+
+import { resolve } from "path"
 import { rimraf } from "rimraf"
 
-const filter = globalThis.process.argv[2]
-const value = globalThis.process.argv[3]
+const action = globalThis.process.argv[2]
+const filter = globalThis.process.argv[3]
+const value = globalThis.process.argv[4]
+
+if (action !== "clean") {
+  console.log("Unknown action")
+}
+
 const WITH = filter === "--with" && value
 const ONLY = filter === "--only" && value
 
@@ -20,6 +27,6 @@ const dirs = ONLY
       ...(WITH ? [WITH] : []),
     ]
 
-globalThis.console.warn(`rm [${dirs}] in ${path.resolve()}`)
+globalThis.console.warn(`rm [${dirs}] in ${resolve()}`)
 
 rimraf(dirs)

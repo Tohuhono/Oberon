@@ -196,6 +196,7 @@ program
     const templatePath = path.join(import.meta.dirname, "templates", recipe)
     const sendPath = path.join(import.meta.dirname, "plugins", "send")
     const appPath = path.join(process.cwd(), appName)
+    const oberonPath = path.join(appPath, "oberon")
 
     if (existsSync(appPath)) {
       console.error(
@@ -248,7 +249,7 @@ program
 
     await copyFile(
       path.join(sendPath, `${send}.ts`),
-      path.join(appPath, "app", "(oberon)", `send.ts`),
+      path.join(oberonPath, `send.ts`),
     )
 
     /*
@@ -318,9 +319,12 @@ ANALYZE=false
       }),
     )
 
-    console.log(`${packageManager} install`)
-
     execSync(`${packageManager} install ${dynamicDependencies.join(" ")}`, {
+      cwd: appPath,
+      stdio: "inherit",
+    })
+
+    execSync(`${packageManager} run prebuild`, {
       cwd: appPath,
       stdio: "inherit",
     })

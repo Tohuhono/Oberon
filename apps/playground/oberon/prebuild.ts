@@ -7,5 +7,5 @@ import { exportTailwindClasses } from "@oberoncms/core"
 import { adapter } from "./adapter"
 
 // Script runs before a build
-await adapter.prebuild()
+await adapter.init()
 await exportTailwindClasses(adapter)

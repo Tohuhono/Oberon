@@ -12,7 +12,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "clean": "node ../../scripts/clean-package.mjs",
+    "clean": "odt clean",
     "dev": "vite build --watch",
     "generate": "pnpx shadcn-ui@latest add --",
     "wait": "wait-on ./dist/version && echo done",

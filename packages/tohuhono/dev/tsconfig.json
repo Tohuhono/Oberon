@@ -4,6 +4,6 @@
     "rootDir": "./src",
     "outDir": "./dist"
   },
-  "include": ["src"],
+  "include": ["src", "eslint"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.spec.tsx"]
 }

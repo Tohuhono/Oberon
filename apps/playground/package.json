@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "clean": "node ../../scripts/clean-package.mjs",
+    "clean": "odt clean",
     "dev": "next dev",
     "lint": "next lint",
     "tsc": "tsc --pretty",

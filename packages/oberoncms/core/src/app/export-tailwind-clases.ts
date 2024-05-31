@@ -51,6 +51,11 @@ export async function exportTailwindClasses({
     }
   }
 
+  if (!results.length) {
+    console.log("No pages in database")
+    return
+  }
+
   console.log(
     `Successfully exported tailwind classes from ${matchedFields} fields in ${results.length} pages`,
   )

@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "clean": "node ../../scripts/clean-package.mjs",
+    "clean": "odt clean",
     "dev": "vite build --watch",
     "wait": "wait-on dist/version",
     "wait:clean": "rimraf ./dist/version",

@@ -1,6 +1,7 @@
-import "server-cli-only"
+import "server-cli-only";
 
-import { initAdapter, mockPlugin } from "@oberoncms/core/adapter"
-import { authPlugin } from "@oberoncms/core/auth"
+import { initAdapter } from "@oberoncms/core/adapter";
+import { databasePlugin } from "@oberoncms/plugin-turso";
+import { authPlugin } from "@oberoncms/core/auth";
 
-export const adapter = initAdapter([mockPlugin, authPlugin])
+export const adapter = initAdapter([databasePlugin, authPlugin]);

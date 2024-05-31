@@ -3,7 +3,7 @@
 import tseslint from "typescript-eslint"
 import nextPlugin from "@next/eslint-plugin-next"
 import globals from "globals"
-import reactConfig from "./eslint-react.config.mjs"
+import reactConfig from "./react.config.mjs"
 
 export default tseslint.config(
   ...reactConfig,
