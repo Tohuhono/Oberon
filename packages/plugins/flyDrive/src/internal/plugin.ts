@@ -34,7 +34,7 @@ interface plugin {
   initFlyDriveRouter: () => ReturnType<typeof initRouteHandler>
 }
 
-export const getCloudFlyDrivePlugin = (driver: CloudFlyDriver): plugin => {
+export const getFlyDrivePlugin = (driver: CloudFlyDriver): plugin => {
   const driverActions = getDriverActions(driver)
 
   return {

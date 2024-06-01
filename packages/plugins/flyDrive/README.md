@@ -37,7 +37,7 @@ import { initAdapter } from "@oberoncms/core/adapter"
 
 import { S3Driver } from "flydrive/drivers/s3"
 
-import { getCloudFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin"
+import { getFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin"
 
 const s3Driver = new S3Driver({
   credentials: {
@@ -53,7 +53,7 @@ const s3Driver = new S3Driver({
 })
 
 // export router
-export const { flyDrivePlugin, initFlyDriveRouter } = getCloudFlyDrivePlugin(s3Driver)
+export const { flyDrivePlugin, initFlyDriveRouter } = getFlyDrivePlugin(s3Driver)
 
 // add the plugin to the oberon adapter
 export const adapter = initAdapter([
