@@ -140,9 +140,6 @@ importers:
       '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../packages/tohuhono/dev
-      '@tohuhono/utils':
-        specifier: workspace:*
-        version: link:../../packages/tohuhono/utils
       '@types/node':
         specifier: ^20
         version: 20.11.30

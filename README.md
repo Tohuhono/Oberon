@@ -6,28 +6,48 @@ A monorepo for OberonCMS and the related packages and tooling.
 
 ## Quick start
 
-This monorepo uses [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm or yarn ymmv.
+We use [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm or yarn ymmv.
 
-```
+```sh
 pnpm install
 
-pnpm build
+pnpm dev:oberon # Develop OberonCMS and all dependencies using the playground.
 
-pnpm dev:oberon
+pnpm dev:demo # Develop the demo app and all dependencies.
 
-pnpm lint
+pnpm dev:docs # Develop the documentation.
+
+pnpm dev:rich-text-demo # Develop the rich text demo app and all dependencies.
+
+pnpm tsc # Typecheck
+
+pnpm lint:fix # Run eslint, fixing any issues
+
+pnpm prettier:fix # Run prettier, fixing any issues
+
+pnpm build # Build all packages
+
+pnpm change # Add a changset entry
 ```
 
 ## What's inside?
 
-This Turborepo includes the following packages/apps:
+This [Turborepo](https://turbo.build/repo/) that includes the following packages and apps:
 
 ### Apps
 
+- `apps/demo`
+
+  A demo app showcasing OberonCMS.
+
 - `apps/documentation`
 
-  A Next.js app for the OberonCMS website.
-  https://tohuhono.com
+  Landing page and documentation for OberonCMS.
+  https://oberoncms.com
+
+- `apps/playground`
+
+  A playground for developers to test OberonCMS. Mostly used for local development, there is also a [vercel deployment](https://playground.tohuhono.com) with access limited to core contributors.
 
 - `apps/rich-text-demo`
 
@@ -35,18 +55,67 @@ This Turborepo includes the following packages/apps:
 
   https://puck-rich-text.tohuhono.com
 
-### Utilities and Config
+### Packages
 
-- `packages/dev`
+#### OberonCMS
+
+- `packages/create-oberon-app`
+
+  A command line tool for creating new projects with OberonCMS.
+
+- `packages/oberoncms/core`
+
+  The core package for OberonCMS.
+
+#### Plugins
+
+- `packages/plugins/pgsql`
+
+  A PostgreSQL database plugin for OberonCMS.
+
+- `packages/plugins/turso`
+
+  A Turso libsql database plugin for OberonCMS.
+
+- `packages/plugins/uploadthing`
+
+  An Puck component and OberonCMS plugin for embeding uploadthing images.
+
+- `packages/plugins/vercel-postgres`
+
+  A Vercel PostgreSQL database plugin for OberonCMS.
+
+#### Utilities and Config
+
+- `packages/tohuhono/dev`
+
   - [TypeScript](https://www.typescriptlang.org/) for static type checking
   - [ESLint](https://eslint.org/) for code linting
   - [Prettier](https://prettier.io) for code formatting
-- `packages/utils`
-  - `cn` - tailwind classname merge function
+
+  Base config and scripts for building packages and apps.
+
+- `packages/tohuhono/utils`
+
+  A collection of utility functions shared across the monorepo. Particularly useful for testing.
+
+- `packages/tohuhono/ui`
+
+  Shared UI components and utilities including a [tailwindcss](https://tailwindcss.com/) theme and components for dynamicly loading and adjusting it.
+
+#### Puck components
+
+- `packages/tohuhono/puck-rich-text`
+
+  A puck component for rich text editing made for OberonCMS.
+
+- `packages/tohuhono/puck-blocks`
+
+  A collection of puck components for building pages in OberonCMS. _Not currently used or maintained_
 
 ## What next?
 
-Under heavy development.
+[Under heavy development.](https://github.com/orgs/Tohuhono/projects/1/views/1)
 
 ## Contributors
 
