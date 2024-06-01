@@ -11,6 +11,7 @@ const config: Config = {
     "./node_modules/@tohuhono/dev/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@tohuhono/puck-blocks/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./theme.config.jsx",
     "./tailwind.classes.txt",
   ],
   theme: {
@@ -26,6 +27,7 @@ const config: Config = {
         },
       },
       colors: {
+        logo: "hsl(var(--logo))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

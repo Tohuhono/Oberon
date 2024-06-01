@@ -1,6 +1,11 @@
 export default {
   index: {
-    title: "Home",
+    title: "OberonCMS",
+    type: "page",
+    display: "hidden",
+  },
+  developers: {
+    title: "Developers",
     type: "page",
   },
 }
