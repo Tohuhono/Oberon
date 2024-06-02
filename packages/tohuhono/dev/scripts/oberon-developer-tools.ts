@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+// @ts-check
 
 import { resolve } from "path"
 import { rimraf } from "rimraf"

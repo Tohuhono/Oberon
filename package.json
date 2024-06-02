@@ -22,8 +22,9 @@
     "dev:nextjs": "turbo dev --filter={./packages/**/*}... --filter=./oberoncms/* --filter=nextjs-recipe --concurrency 20",
     "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "prettier:fix": "prettier -l --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint -- --fix",
+    "lint": "turbo lint && eslint .",
+    "lint:fs": "fs-lint",
+    "lint:fix": "turbo lint -- --fix && eslint . --fix",
     "release": "pnpm build:packages && changeset publish",
     "jest": "turbo jest",
     "prepare": "husky"
@@ -31,14 +32,12 @@
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier -l --write"
   },
-  "dependencies": {
-    "dotenv": "^16.4.5"
-  },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@tohuhono/dev": "workspace:*",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "eslint": "8.57.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
@@ -48,6 +47,7 @@
     "rimraf": "^5.0.5",
     "turbo": "^1.13.2",
     "typescript": "5.4.2",
+    "typescript-eslint": "^7.6.0",
     "wait-on": "^7.2.0"
   },
   "packageManager": "pnpm@8.15.5",

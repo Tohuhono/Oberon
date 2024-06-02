@@ -19,11 +19,12 @@ const compat = new FlatCompat({
 export default tseslint.config(
   {
     ignores: [
-      ".next/**/*",
-      ".vercel/**/*",
-      "node_modules/**/*",
-      "dist/**/*",
-      ".rollup.cache/**/*",
+      ".next/",
+      ".turbo/",
+      ".vercel/",
+      "node_modules/",
+      "dist/",
+      ".rollup.cache/",
     ],
   },
   {
@@ -33,13 +34,31 @@ export default tseslint.config(
       },
     },
   },
-  eslint.configs.recommended,
-  ...tseslint.configs.strict,
-  ...compat.plugins("import"),
-  prettierConfig,
   {
+    files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+    ...eslint.configs.recommended,
+  },
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    extends: [...tseslint.configs.strict],
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
+      // conflicts with the the smarter tsc version
+      "@typescript-eslint/no-unused-vars": "off",
+      // prevent enums
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "TSEnumDeclaration",
+          message: "Don't declare enums",
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+    extends: [...compat.plugins("import")],
+    rules: {
       // ensure consistant imports
       "import/order": [
         "error",
@@ -53,18 +72,7 @@ export default tseslint.config(
           ],
           pathGroupsExcludedImportTypes: ["dotenv"],
         },
-      ], //"dotenv"
-      // conflicts with the the smarter tsc version
-      "@typescript-eslint/no-unused-vars": "off",
-      // prevent enums
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector: "TSEnumDeclaration",
-          message: "Don't declare enums",
-        },
       ],
-      curly: "error",
     },
   },
   {
@@ -74,4 +82,5 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
+  prettierConfig,
 )
