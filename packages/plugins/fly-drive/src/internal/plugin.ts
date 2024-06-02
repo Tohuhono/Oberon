@@ -15,11 +15,13 @@ const getDriverActions = (driver: CloudFlyDriver) => {
     return Object.assign(disk, {
       type: "disk",
     })
-  } else if (driver instanceof S3Driver) {
+  }
+  if (driver instanceof S3Driver) {
     return Object.assign(disk, {
       type: "s3",
     })
-  } else if (driver instanceof GCSDriver) {
+  }
+  if (driver instanceof GCSDriver) {
     return Object.assign(disk, {
       type: "gcs",
     })
