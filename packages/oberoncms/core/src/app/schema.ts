@@ -190,6 +190,28 @@ export type OberonClientContext = DescriminatedContext & {
 /*
  * Adapter
  */
+
+// Currently the only handles exported are NextAuth Handlers
+type OberonRouteHandler = NextAuthResult["handlers"]
+
+export type OberonAdapterMeta = {
+  plugins: { [name: string]: string }
+  handlers: Record<string, OberonRouteHandler>
+}
+
+export type OberonInitAdapter = {
+  init: () => Promise<void>
+}
+
+export type OberonCanAdapter = {
+  getCurrentUser: () => Promise<OberonUser | null>
+  hasPermission: (props: {
+    user?: OberonUser | null
+    action: AdapterActionGroup
+    permission: AdapterPermission
+  }) => boolean
+}
+
 export type OberonAuthAdapter = Required<
   Pick<
     AuthAdapter,
@@ -240,21 +262,12 @@ export type OberonSendAdapter = {
   }) => Promise<void>
 }
 
-type OberonRouteHandler = NextAuthResult["handlers"]
-
-export type OberonAdapter = OberonDatabaseAdapter &
+export type OberonAdapter = OberonAdapterMeta &
+  OberonInitAdapter &
+  OberonCanAdapter &
+  OberonDatabaseAdapter &
   OberonAuthAdapter &
-  OberonSendAdapter & {
-    plugins: { [name: string]: string }
-    handlers: Record<string, OberonRouteHandler>
-    getCurrentUser: () => Promise<OberonUser | null>
-    hasPermission: (props: {
-      user?: OberonUser | null
-      action: AdapterActionGroup
-      permission: AdapterPermission
-    }) => boolean
-    init: () => Promise<void>
-  }
+  OberonSendAdapter
 
 export type OberonPlugin = (adapter: OberonAdapter) => {
   name?: string

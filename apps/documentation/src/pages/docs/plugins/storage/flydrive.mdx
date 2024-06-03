@@ -1,38 +1,18 @@
 import { Tabs } from 'nextra/components'
 import { Callout } from 'nextra/components'
 
-# @oberoncms/plugin-flydrive
+# plugin-flydrive
 
-A plugin that provides an Image component for [OberonCMS](https://github.com/Tohuhono/Oberon) it's pre-configured to using [flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction layer that allows you to easily interact with files systems of different cloud storage providers.
+A plugin that provides an Image storage and a component, pre-configured using [flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction layer that allows you to easily interact with files systems of different cloud storage providers.
 
-## Table of Contents
+## Installation
 
-- [@oberoncms/plugin-flydrive](#oberoncmsplugin-flydrive)
-  - [Table of Contents](#table-of-contents)
-  - [Setup](#setup)
-  - [prepare API](#prepare-api)
-  - [Editor configuration](#editor-configuration)
-<Tabs items={['npm', 'yarn', 'pnpm']} defaultIndex={0}>
-  <Tabs.Tab>
-  ```bash
-     npm install @oberoncms/plugin-flydrive flydrive
-  ```
-  </Tabs.Tab>
-
-  <Tabs.Tab>
-  ```bash
-     yarn add @oberoncms/plugin-flydrive flydrive
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ```bash
-     pnpm add @oberoncms/plugin-flydrive flydrive
-  ```
-  </Tabs.Tab>
-</Tabs>
+```sh npm2yarn
+npm install @oberoncms/plugin-flydrive flydrive
+```
 
 ## Setup
-using ```getFlyDrivePlugin``` function to generate the plugin, it takes a driver as an argument, the driver should be an instance of the flydrive any flydrive driver
+Use ```getFlyDrivePlugin``` function to generate the plugin, it takes a driver as an argument, the driver should be an instance of the flydrive any flydrive driver
 <Callout type="info" emoji="ℹ️">
   Make sure to follow the [flydrive documentation](https://flydrive.dev/docs/introduction) instructions.
 </Callout>
@@ -42,24 +22,9 @@ export const { flyDrivePlugin, initFlyDriveRouter } = getFlyDrivePlugin(driver)
 
 ## Example using S3 driver
 Install the required packages for the S3 driver
-<Tabs items={['npm', 'yarn', 'pnpm']} defaultIndex={0}>
-  <Tabs.Tab>
-  ```bash
-  npm i @aws-sdk/s3-request-presigner @aws-sdk/client-s3
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ```bash
-  yarn add @aws-sdk/s3-request-presigner @aws-sdk/client-s3
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ```bash
-  pnpm add @aws-sdk/s3-request-presigner @aws-sdk/client-s3
-  ```
-  </Tabs.Tab>
-</Tabs>
-
+```sh npm2yarn
+npm install @aws-sdk/s3-request-presigner @aws-sdk/client-s3
+```
 
 create a flydrive adapter, and generate your plugin!
 ```typescript
@@ -96,7 +61,7 @@ export const adapter = initAdapter([
 ])
 ```
 
-## prepare API
+## Prepare API
 
 ```typescript
 // api/flydrive/route.ts
