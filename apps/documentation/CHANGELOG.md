@@ -1,5 +1,11 @@
 # @oberon/docs
 
+## 0.6.1
+
+### Patch Changes
+
+- b8ed573: Reorder type definitions for readability
+
 ## 0.6.0
 
 ### Minor Changes
