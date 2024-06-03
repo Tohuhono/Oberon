@@ -1,5 +1,11 @@
 # @oberoncms/core
 
+## 0.10.2
+
+### Patch Changes
+
+- b8ed573: Reorder type definitions for readability
+
 ## 0.10.1
 
 ### Patch Changes
