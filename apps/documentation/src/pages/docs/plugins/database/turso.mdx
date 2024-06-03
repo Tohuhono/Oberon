@@ -1,0 +1,44 @@
+import { Callout } from 'nextra/components'
+
+# Turso (sqlite)
+
+A plugin providing a database adapter using [Turso](https://https://turso.tech/) for deployments and falling back to local sqlite in development.
+
+If you are self hosting, you can alternatively use this plugin without a Turso account to use a local sqlite database.
+
+## Installation
+
+```sh npm2yarn
+npm install @oberoncms/plugin-turso
+```
+
+```tsx filename="oberon/adapter.ts"
+import { databasePlugin } from "{{databasePluginPackage}}"
+
+export const adapter = initAdapter([databasePlugin, /* ...other plugins */])
+```
+
+## Configuration
+
+<Callout type="info">
+By default the Turso plugin will automatically use Turso for production builds and fall back to a local sqlite database in development.
+</Callout>
+
+### Turso
+
+To use Turso, you need to create a [Turso](https://https://turso.tech/) account and set your URL and API environment variables:
+
+```sh
+TURSO_URL=<libsql://your-database-name.turso.io>
+TURSO_TOKEN=<your-api-key>
+```
+
+### Local
+
+If you are self hosting, you can use a local sqlite database:
+
+```sh
+TURSO_USE_REMOTE=false
+TURSO_FILE=<"file:filename.db"> # optional, defaults to "file:.oberon/oberon.db"
+```
+

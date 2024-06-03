@@ -1,0 +1,51 @@
+## Custom Database Adapter
+
+A database adater must implement the following interface:
+
+```tsx
+export type OberonDatabaseAdapter = {
+  addPage: (page: OberonPage) => Promise<void>
+  addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
+  deletePage: (key: OberonPageMeta["key"]) => Promise<void>
+  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
+  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
+  getAllImages: () => Promise<OberonImage[]>
+  getAllPages: () => Promise<OberonPageMeta[]>
+  getAllUsers: () => Promise<OberonUser[]>
+  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
+  getSite: () => Promise<OberonSite | undefined>
+  updatePageData: (data: OberonPage) => Promise<void>
+  updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
+}
+```
+Additionally, if you are using the recommended Auth.js implemenation you should implement the following. See [Auth.js adapters](https://authjs.dev/reference/core/adapters) for more details.
+
+```tsx
+export type OberonAuthAdapter = Required<
+  Pick<
+    AuthAdapter,
+    | "createSession"
+    | "createUser"
+    | "createVerificationToken"
+    | "deleteSession"
+    | "deleteUser"
+    | "getSessionAndUser"
+    | "getUser"
+    | "getUserByAccount"
+    | "getUserByEmail"
+    | "linkAccount"
+    | "unlinkAccount"
+    | "updateSession"
+    | "updateUser"
+    | "useVerificationToken"
+  >
+> & {
+  createUser(
+    user: Omit<AdapterUser & { role: OberonRole }, "id">,
+  ): Awaitable<AdapterUser & { role: OberonRole }>
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
+}
+```
+

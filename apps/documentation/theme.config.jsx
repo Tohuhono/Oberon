@@ -20,6 +20,8 @@ export default {
       titleTemplate: "%s - OberonCMS",
     }
   },
+  primaryHue: 182.5,
+  primarySaturation: 100,
   head: () => {
     const { asPath, defaultLocale, locale } = useRouter()
     const { frontMatter, title } = useConfig()

@@ -4,7 +4,7 @@ export default {
     type: "page",
     display: "hidden",
   },
-  developers: {
+  docs: {
     title: "Developers",
     type: "page",
   },
