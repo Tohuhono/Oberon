@@ -118,9 +118,6 @@ importers:
 
   apps/documentation:
     dependencies:
-      create-oberon-app:
-        specifier: workspace:*
-        version: link:../../packages/create-oberon-app
       next:
         specifier: 14.2.3
         version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
