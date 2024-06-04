@@ -96,7 +96,7 @@ program
       ],
     )
 
-    installPackages({
+    await installPackages({
       packageManager,
       appPath,
       dependencies: [...workspaceDeps, ...pluginDependencies],
