@@ -1,5 +1,14 @@
 # @oberon/playground
 
+## 0.4.3
+
+### Patch Changes
+
+- eae0eab: Fix create-oberon-app not installing plugin dependencies
+- Updated dependencies [eae0eab]
+  - @oberoncms/plugin-uploadthing@0.10.3
+  - @oberoncms/plugin-turso@0.11.3
+
 ## 0.4.2
 
 ### Patch Changes

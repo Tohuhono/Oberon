@@ -1,5 +1,11 @@
 # @oberoncms/plugin-pgsql
 
+## 0.4.3
+
+### Patch Changes
+
+- eae0eab: Fix create-oberon-app not installing plugin dependencies
+
 ## 0.4.2
 
 ### Patch Changes

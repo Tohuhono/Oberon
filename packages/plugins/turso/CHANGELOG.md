@@ -1,5 +1,11 @@
 # @oberoncms/plugin-turso
 
+## 0.11.3
+
+### Patch Changes
+
+- eae0eab: Fix create-oberon-app not installing plugin dependencies
+
 ## 0.11.2
 
 ### Patch Changes

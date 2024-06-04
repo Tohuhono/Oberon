@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.3.3
+
+### Patch Changes
+
+- eae0eab: Fix create-oberon-app not installing plugin dependencies
+
 ## 0.3.2
 
 ### Patch Changes
