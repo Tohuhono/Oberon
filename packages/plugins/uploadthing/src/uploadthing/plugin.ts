@@ -2,7 +2,7 @@ import type { OberonPlugin } from "@oberoncms/core"
 import { name, version } from "../../package.json" with { type: "json" }
 import { deleteImage } from "./api"
 
-export const uploadthingPlugin: OberonPlugin = (adapter) => ({
+export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,
   adapter: {

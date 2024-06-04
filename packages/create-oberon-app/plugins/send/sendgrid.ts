@@ -1,12 +1,12 @@
 import "server-cli-only"
 
 import sgMail from "@sendgrid/mail"
-import type { OberonPlugin } from "@oberoncms/core"
+import type { OberonPlugin, OberonSendAdapter } from "@oberoncms/core"
 
-const emailFrom = process.env.EMAIL_FROM
+const EMAIL_FROM = process.env.EMAIL_FROM
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || process.env.SEND_SECRET
 
-export const sendPlugin: OberonPlugin = () => ({
+export const plugin: OberonPlugin = () => ({
   name: "Sendgrid",
   adapter: {
     sendVerificationRequest: async ({
@@ -22,9 +22,13 @@ export const sendPlugin: OberonPlugin = () => ({
         throw new Error("No SENDGRID_API_KEY configured")
       }
 
+      if (!EMAIL_FROM) {
+        throw new Error("No EMAIL_FROM configured")
+      }
+
       const msg = {
         to: email,
-        from: emailFrom,
+        from: EMAIL_FROM,
         subject: "One time login to Oberon CMS",
         text: `Sign in with code\n\n${token}\n\n ${url} \n\n`,
       }
@@ -41,5 +45,5 @@ export const sendPlugin: OberonPlugin = () => ({
         }
       }
     },
-  },
+  } satisfies OberonSendAdapter,
 })

@@ -1,8 +1,0 @@
-import "server-cli-only"
-
-import { initAdapter } from "@oberoncms/core/adapter"
-import { databasePlugin } from "{{databasePluginPackage}}"
-import { authPlugin } from "@oberoncms/core/auth"
-import { sendPlugin } from "./send"
-
-export const adapter = initAdapter([databasePlugin, sendPlugin, authPlugin])

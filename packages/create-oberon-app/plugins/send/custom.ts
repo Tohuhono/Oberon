@@ -1,13 +1,13 @@
 import "server-cli-only"
 
 import { notImplemented } from "@tohuhono/utils"
-import type { OberonPlugin } from "@oberoncms/core"
+import type { OberonPlugin, OberonSendAdapter } from "@oberoncms/core"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
 const SEND_SECRET = process.env.SEND_SECRET
 
-export const sendPlugin: OberonPlugin = () => ({
-  name: "Custom Send",
+export const plugin: OberonPlugin = () => ({
+  name: "Custom Send Plugin",
   adapter: {
     sendVerificationRequest: async ({
       email,
@@ -31,5 +31,5 @@ export const sendPlugin: OberonPlugin = () => ({
         throw new Error("No SEND_SECRET configured")
       }
     },
-  },
+  } satisfies OberonSendAdapter,
 })
