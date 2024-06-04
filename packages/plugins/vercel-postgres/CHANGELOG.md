@@ -1,5 +1,11 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.7.2
+
+### Patch Changes
+
+- eae0eab: Fix create-oberon-app not installing plugin dependencies
+
 ## 0.7.1
 
 ### Patch Changes
