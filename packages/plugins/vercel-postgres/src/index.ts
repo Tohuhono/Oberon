@@ -8,7 +8,7 @@ import { databaseAdapter } from "./db/database-adapter"
 import { authAdapter } from "./db/auth-adapter"
 import { init } from "./db/init"
 
-export const databasePlugin: OberonPlugin = (adapter) => ({
+export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,
   adapter: {

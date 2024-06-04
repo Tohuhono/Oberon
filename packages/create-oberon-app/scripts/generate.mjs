@@ -5,7 +5,7 @@ import { mkdir, copyFile } from "fs/promises"
 import { existsSync } from "fs"
 import path from "path"
 import walk from "ignore-walk"
-import { glob } from "glob"
+import fg from "fast-glob"
 
 //
 ;(async () => {
@@ -35,6 +35,8 @@ import { glob } from "glob"
     "dist",
     "templates",
   )
+  await mkdir(templatePath, { recursive: true })
+
   if (!existsSync(templatePath)) {
     console.error(
       `No template directory could be found at ${templateTargetPath}.`,
@@ -42,19 +44,7 @@ import { glob } from "glob"
     return
   }
 
-  const handlebarsFiles = await glob("**/*.hbs", { cwd: templatePath })
-
-  for (const handlebarsFile of handlebarsFiles) {
-    const filePath = path.join(templatePath, handlebarsFile)
-
-    const targetPath = filePath.replace(templatePath, templateTargetPath)
-
-    await mkdir(path.dirname(targetPath), { recursive: true })
-
-    await copyFile(filePath, targetPath)
-  }
-
-  const pluginsFiles = await glob("**/*", { cwd: pluginsPath, nodir: true })
+  const pluginsFiles = await fg("**/*", { cwd: pluginsPath, onlyFiles: true })
 
   for (const pluginsFile of pluginsFiles) {
     const filePath = path.join(pluginsPath, pluginsFile)
@@ -78,12 +68,6 @@ import { glob } from "glob"
     const filePath = path.join(recipePath, recipeFile)
 
     const targetPath = filePath.replace(recipePath, templateTargetPath)
-
-    // Don't copy file if it's templated by handlebars
-    if (existsSync(`${targetPath}.hbs`)) {
-      console.warn(`Templated ${recipeFile}`)
-      continue
-    }
 
     await mkdir(path.dirname(targetPath), { recursive: true })
 
