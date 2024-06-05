@@ -1,32 +1,25 @@
-import { PuckRichText } from "@tohuhono/puck-rich-text"
-import { Image } from "@oberoncms/plugin-uploadthing"
 import { type OberonConfig } from "@oberoncms/core"
-import { Dashboard } from "../components/dashboard"
+import { Dashboard } from "@/oberon/components/dashboard"
+import { Welcome } from "@/oberon/components/welcome"
+import { Container } from "@/oberon/components/container"
 
 export const config: OberonConfig = {
   version: 1,
   components: {
-    Box: {
+    Welcome,
+    Container,
+    Dashboard: {
+      render: () => <Dashboard />,
+    },
+    Text: {
       fields: {
-        className: {
+        text: {
           type: "text",
         },
       },
-      render: ({ className, puck: { renderDropZone: DropZone } }) => {
-        return <div className={className}>{<DropZone zone="box" />}</div>
-      },
-    },
-    Image,
-    Text: {
-      ...PuckRichText,
-      render: (props) => (
-        <div className="prose dark:prose-invert lg:prose-lg">
-          {PuckRichText.render(props)}
-        </div>
+      render: ({ text }) => (
+        <div className="prose dark:prose-invert lg:prose-lg">{text}</div>
       ),
-    },
-    Dashboard: {
-      render: () => <Dashboard />,
     },
   },
 }
