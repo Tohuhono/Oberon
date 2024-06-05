@@ -1,5 +1,13 @@
 # oberon-cms-example
 
+## 0.10.5
+
+### Patch Changes
+
+- 2aebcf6: Add welcome page during database initialisation
+- Updated dependencies [2aebcf6]
+  - @oberoncms/core@0.10.3
+
 ## 0.10.4
 
 ### Patch Changes

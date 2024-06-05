@@ -1,5 +1,12 @@
 # @oberoncms/plugin-turso
 
+## 0.11.4
+
+### Patch Changes
+
+- Updated dependencies [2aebcf6]
+  - @oberoncms/core@0.10.3
+
 ## 0.11.3
 
 ### Patch Changes

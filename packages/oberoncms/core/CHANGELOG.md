@@ -1,5 +1,11 @@
 # @oberoncms/core
 
+## 0.10.3
+
+### Patch Changes
+
+- 2aebcf6: Add welcome page during database initialisation
+
 ## 0.10.2
 
 ### Patch Changes
