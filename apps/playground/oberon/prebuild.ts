@@ -3,7 +3,7 @@
 import dotenv from "dotenv"
 dotenv.config({ path: ".env.local" })
 
-import { exportTailwindClasses } from "@oberoncms/core"
+import { exportTailwindClasses } from "@oberoncms/core/adapter"
 import { adapter } from "./adapter"
 
 // Script runs before a build

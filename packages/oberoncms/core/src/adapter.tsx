@@ -33,11 +33,14 @@ import {
   getTransforms,
 } from "./app/transforms"
 import { baseAdapter } from "./app/base-adapter"
+import { getInitialData } from "./app/get-initial-data"
 
 export { mockPlugin } from "./app/mock-plugin"
 
+export { exportTailwindClasses } from "./app/export-tailwind-clases"
+
 export function initAdapter(plugins: OberonPlugin[] = []) {
-  return plugins.reduce<OberonAdapter>((accumulator, plugin) => {
+  const adapter = plugins.reduce<OberonAdapter>((accumulator, plugin) => {
     const { name, version, adapter, handlers = {} } = plugin(accumulator)
     return {
       ...accumulator,
@@ -52,6 +55,18 @@ export function initAdapter(plugins: OberonPlugin[] = []) {
       ...adapter,
     }
   }, baseAdapter)
+
+  return {
+    ...adapter,
+    init: async () => {
+      await adapter.init()
+      const allPages = await adapter.getAllPages()
+      if (!allPages.length) {
+        console.log("Updating welcome page")
+        await adapter.updatePageData(getInitialData())
+      }
+    },
+  } satisfies OberonAdapter
 }
 
 export function initActions({
