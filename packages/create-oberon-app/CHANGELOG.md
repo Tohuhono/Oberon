@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.3.6
+
+### Patch Changes
+
+- 2aebcf6: Add welcome page during database initialisation
+
 ## 0.3.5
 
 ### Patch Changes

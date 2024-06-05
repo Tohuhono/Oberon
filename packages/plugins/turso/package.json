@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-turso",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A Turso libsql database plugin for OberonCMS",

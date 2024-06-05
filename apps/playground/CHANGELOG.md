@@ -1,5 +1,15 @@
 # @oberon/playground
 
+## 0.4.5
+
+### Patch Changes
+
+- 2aebcf6: Add welcome page during database initialisation
+- Updated dependencies [2aebcf6]
+  - @oberoncms/core@0.10.3
+  - @oberoncms/plugin-turso@0.11.4
+  - @oberoncms/plugin-uploadthing@0.10.4
+
 ## 0.4.4
 
 ### Patch Changes

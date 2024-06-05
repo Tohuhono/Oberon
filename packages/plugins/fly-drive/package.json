@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-flydrive",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Ahmed Rowaihi @sudorw",
   "license": "MIT",
   "description": "a fullstack image component for puck editor OberonCMS, flydrive based to store manage in the cloud, aws, gcp, cloudfare, s3, filesystem, etc.",

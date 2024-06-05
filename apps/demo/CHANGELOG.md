@@ -1,5 +1,12 @@
 # @oberon/demo
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies [2aebcf6]
+  - @oberoncms/core@0.10.3
+
 ## 0.4.2
 
 ### Patch Changes
