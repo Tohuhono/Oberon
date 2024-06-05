@@ -17,10 +17,6 @@ on:
       changed_packages:
         description: "Stringified JSON array of changed packages in this changeset"
         value: ${{ jobs.dry-run.outputs.changed_packages }}
-      # AS A CONVENIENCE: These two outputs are shorthand so consumer can just check boolean output for these specific packages
-#      api_changed:
-#        description: "Indicates if the api or its dependencies have changed"
-#        value: ${{ jobs.dry-run.outputs.api_changed }}
 
 jobs:
   dry-run:
@@ -67,12 +63,3 @@ jobs:
           echo 'changed_packages<<CHANGED_PACKAGES_DELIMITER' >> $GITHUB_OUTPUT
           echo "${{ github.head_ref == 'changeset-release/main' && '[]' || toJSON(fromJSON(steps.changeset.outputs.result).packages) }}" >> $GITHUB_OUTPUT
           echo 'CHANGED_PACKAGES_DELIMITER' >> $GITHUB_OUTPUT
-
-#      Boolean check for specific package sets
-#      - name: Did the API or its dependencies change?
-#        id: api-changed
-# 1. Using the 'output' of the 'changeset' step inside the `if` to check if the specific app has changed
-# 2. When `true`, we store it in the 'output' of the current step.
-# NOTE: `api` is the name of my server package
-#        if: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, 'api') }}
-#        run: echo "result=true" >> $GITHUB_OUTPUT
