@@ -14,9 +14,9 @@ export const plugin: OberonPlugin = (adapter) => ({
   adapter: {
     ...databaseAdapter,
     ...authAdapter,
-  },
-  init: async () => {
-    await adapter.init()
-    await init()
+    init: async () => {
+      await adapter.init()
+      await init()
+    },
   },
 })

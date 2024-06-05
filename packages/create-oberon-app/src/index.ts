@@ -48,6 +48,12 @@ program
   .addOption(
     new Option("--database <database>", "Database plugin").choices(databaseIds),
   )
+  .addOption(
+    new Option(
+      "--dir <directory>",
+      "Target directory (defaults to project name)",
+    ),
+  )
   .addOption(new Option("--send <send>", "Send plugin").choices(sendIds))
   .action(async (_appName, options) => {
     // Ask for options
@@ -56,7 +62,7 @@ program
 
     const templatePath = path.join(import.meta.dirname, "templates", recipe)
     const pluginPath = path.join(import.meta.dirname, "plugins")
-    const appPath = path.join(process.cwd(), appName)
+    const appPath = options.dir || path.join(process.cwd(), appName)
     const oberonPath = path.join(appPath, "oberon")
 
     const plugins: Plugin[] = [
@@ -101,6 +107,11 @@ program
       appPath,
       dependencies: [...workspaceDeps, ...pluginDependencies],
       devDependencies: workspaceDevDeps,
+    })
+
+    execSync(`${packageManager} run prettier:fix`, {
+      cwd: appPath,
+      stdio: "inherit",
     })
 
     execSync(`${packageManager} run prebuild`, {

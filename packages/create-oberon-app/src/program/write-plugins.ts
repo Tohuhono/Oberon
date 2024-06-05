@@ -3,10 +3,10 @@ import path from "path"
 import type { Plugin } from "./config"
 
 const adapter = (plugins: Plugin[]) => {
-  const aliasedPlugins = plugins.map(({ id, packageName, type }) => ({
+  const aliasedPlugins = plugins.map(({ packageName, type }) => ({
     packageName,
     type,
-    alias: id === "custom" ? `${type}Plugin` : id,
+    alias: `${type}Plugin`,
   }))
 
   const pluginImports = aliasedPlugins

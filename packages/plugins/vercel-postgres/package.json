@@ -32,10 +32,6 @@
   "exports": {
     ".": "./dist/index.js"
   },
-  "bin": {
-    "odt-init": "./scripts/initialise.mjs",
-    "odt-prepare": "./scripts/prepare.mjs"
-  },
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",

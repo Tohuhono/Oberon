@@ -21,8 +21,6 @@ export const sendAdapterPlugin: OberonPlugin = () => ({
         throw new Error("No RESEND_SECRET configured")
       }
 
-      console.log("!!!!")
-
       const resend = new Resend(process.env.RESEND_SECRET)
 
       try {

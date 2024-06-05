@@ -10,24 +10,24 @@ export type Plugin = {
 }
 
 export const databaseIds = [
-  "vercel-postgres",
-  "pgsql",
   "turso",
+  "pgsql",
+  "vercel-postgres",
   "custom",
 ] as const
 export type DatabasePlugin = (typeof databaseIds)[number]
 export const databasePlugins = {
-  "vercel-postgres": {
-    label: "Vercel Postgres",
-    packageName: "@oberoncms/plugin-vercel-postgres",
-  },
   turso: {
-    label: "Turso",
+    label: "Turso (Recommended)",
     packageName: "@oberoncms/plugin-turso",
   },
   pgsql: {
     label: "PostgreSQL",
     packageName: "@oberoncms/plugin-pgsql",
+  },
+  "vercel-postgres": {
+    label: "Vercel Postgres",
+    packageName: "@oberoncms/plugin-vercel-postgres",
   },
   custom: {
     label: "Custom",
@@ -38,7 +38,7 @@ export const databasePlugins = {
 export const sendIds = ["resend", "sendgrid", "custom"] as const
 export type SendPlugin = (typeof sendIds)[number]
 export const sendPlugins = {
-  resend: { label: "Resend", dependencies: ["resend"] },
+  resend: { label: "Resend (Recommended)", dependencies: ["resend"] },
   sendgrid: { label: "Sendgrid", dependencies: ["@sendgrid/mail"] },
   custom: { label: "Custom", dependencies: ["@tohuhono/utils"] },
 }
