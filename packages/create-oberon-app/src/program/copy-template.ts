@@ -1,6 +1,7 @@
 import { existsSync } from "fs"
 import { copyFile, mkdir } from "fs/promises"
 import path from "path"
+import { exit } from "process"
 import fg from "fast-glob"
 
 export async function copyTemplate(
@@ -12,10 +13,10 @@ export async function copyTemplate(
     console.error(
       `A directory called ${appName} already exists. Please use a different name or delete this directory.`,
     )
-    return
+    exit(0)
   }
 
-  await mkdir(appName, { recursive: true })
+  await mkdir(appPath, { recursive: true })
 
   const templateFiles = await fg(`**/*`, {
     cwd: templatePath,
