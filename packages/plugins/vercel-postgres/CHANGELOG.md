@@ -1,5 +1,11 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.7.3
+
+### Patch Changes
+
+- 753fcc2: Fix vercel postgre installer
+
 ## 0.7.2
 
 ### Patch Changes
