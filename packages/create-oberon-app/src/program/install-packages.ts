@@ -1,7 +1,9 @@
 import { execSync } from "child_process"
+import { writeFile } from "fs/promises"
+import path from "path"
 import type { PackageManager } from "./config"
 
-export function installPackages({
+export async function installPackages({
   packageManager,
   appPath,
   dependencies,
@@ -12,6 +14,17 @@ export function installPackages({
   dependencies: string[]
   devDependencies: string[]
 }) {
+  // https://github.com/tursodatabase/libsql-client-ts/issues/74
+  if (packageManager === "pnpm") {
+    await writeFile(
+      path.join(appPath, "./.npmrc"),
+      `
+# https://github.com/tursodatabase/libsql-client-ts/issues/74
+shamefully-hoist=true
+`,
+    )
+  }
+
   execSync(`${packageManager} install`, {
     cwd: appPath,
     stdio: "inherit",

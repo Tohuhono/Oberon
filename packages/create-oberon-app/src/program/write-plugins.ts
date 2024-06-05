@@ -11,9 +11,6 @@ const adapter = (plugins: Plugin[]) => {
 
   const pluginImports = aliasedPlugins
     .map(({ packageName, type, alias }) => {
-      if (alias === "turso") {
-        return `import { databasePlugin as ${alias} } from "${packageName}"`
-      }
       if (packageName) {
         return `import { plugin as ${alias} } from "${packageName}"`
       }
