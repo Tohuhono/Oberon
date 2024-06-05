@@ -8,16 +8,18 @@ export const config: OberonConfig = {
   components: {
     Welcome,
     Container,
-    Text: {
-      ...PuckRichText,
-      render: (props) => (
-        <div className="prose dark:prose-invert lg:prose-lg">
-          {PuckRichText.render(props)}
-        </div>
-      ),
-    },
     Dashboard: {
       render: () => <Dashboard />,
+    },
+    Text: {
+      fields: {
+        text: {
+          type: "text",
+        },
+      },
+      render: ({ text }) => (
+        <div className="prose dark:prose-invert lg:prose-lg">{text}</div>
+      ),
     },
   },
 };
