@@ -1,5 +1,11 @@
 # oberon-cms-example
 
+## 0.10.4
+
+### Patch Changes
+
+- 753fcc2: Fix vercel postgre installer
+
 ## 0.10.3
 
 ### Patch Changes

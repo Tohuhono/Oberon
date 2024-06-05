@@ -1,5 +1,11 @@
 # @oberon/playground
 
+## 0.4.4
+
+### Patch Changes
+
+- 753fcc2: Fix vercel postgre installer
+
 ## 0.4.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.3.5
+
+### Patch Changes
+
+- 753fcc2: Fix vercel postgre installer
+
 ## 0.3.4
 
 ### Patch Changes
