@@ -1,1 +1,13 @@
-export { default, generateMetadata } from "./[...puckPath]/page"
+import { Render } from "@measured/puck/rsc"
+import { config, initialData } from "@/puck.config"
+
+export async function generateMetadata() {
+  return {
+    title: "Puck Rich Text Editor",
+  }
+}
+
+export default function Page() {
+  const data = initialData["/"]
+  return data && <Render config={config} data={data} />
+}
