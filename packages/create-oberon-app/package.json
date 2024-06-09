@@ -38,6 +38,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@oberon/recipe-nextjs": "workspace:*",
     "@oberoncms/plugin-flydrive": "workspace:*",
     "@oberoncms/plugin-pgsql": "workspace:*",
     "@oberoncms/plugin-sqlite": "workspace:*",

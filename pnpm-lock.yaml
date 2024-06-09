@@ -316,6 +316,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@oberon/recipe-nextjs':
+        specifier: workspace:*
+        version: link:../../recipes/nextjs
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../oberoncms/core
