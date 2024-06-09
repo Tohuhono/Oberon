@@ -1,5 +1,11 @@
 # oberon-cms-example
 
+## 0.10.8
+
+### Patch Changes
+
+- e803dd5: Fix create oberon app missing dev dependency
+
 ## 0.10.7
 
 ### Patch Changes

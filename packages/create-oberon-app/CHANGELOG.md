@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.3.8
+
+### Patch Changes
+
+- e803dd5: Fix create oberon app missing dev dependency
+
 ## 0.3.7
 
 ### Patch Changes
