@@ -1,5 +1,5 @@
 import useSWR from "swr"
-import { OberonImage } from "../app/schema"
+import { OberonImage } from "../lib/dtd"
 import { useOberonActions } from "./use-oberon"
 
 export const useOberonImages = () => {

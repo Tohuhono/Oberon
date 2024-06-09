@@ -2,11 +2,13 @@ import { eq } from "drizzle-orm"
 
 import { type OberonDatabaseAdapter } from "@oberoncms/core"
 
-import { db } from "./client"
+import { type DatabaseClient } from "./client"
 import { images, pages, users, site } from "./schema"
-import { authAdapter } from "./auth-adapter"
+import { getAuthAdapter } from "./auth-adapter"
 
-export const databaseAdapter: OberonDatabaseAdapter = {
+export const getDatabaseAdapter: (
+  db: DatabaseClient,
+) => OberonDatabaseAdapter = (db) => ({
   getSite: async () => {
     const result = await db
       .select({
@@ -37,14 +39,14 @@ export const databaseAdapter: OberonDatabaseAdapter = {
       .execute()
   },
   addUser: async ({ email, role }) => {
-    return await authAdapter.createUser({
+    return await getAuthAdapter(db).createUser({
       email,
       role,
       emailVerified: null,
     })
   },
   deleteUser: async (id) => {
-    await authAdapter.deleteUser?.(id)
+    await getAuthAdapter(db).deleteUser?.(id)
   },
   changeRole: async ({ role, id }) => {
     await db.update(users).set({ role }).where(eq(users.id, id)).execute()
@@ -107,4 +109,4 @@ export const databaseAdapter: OberonDatabaseAdapter = {
       .from(pages)
       .execute()
   },
-}
+})

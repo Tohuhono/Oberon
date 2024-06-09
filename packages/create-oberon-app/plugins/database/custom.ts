@@ -1,11 +1,11 @@
-import type {
-  OberonAuthAdapter,
-  OberonDatabaseAdapter,
-  OberonPlugin,
+import {
+  type OberonAuthAdapter,
+  type OberonDatabaseAdapter,
+  type OberonPlugin,
 } from "@oberoncms/core"
 import { notImplemented } from "@tohuhono/utils"
 
-export const plugin: OberonPlugin = () => ({
+export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
   adapter: {
     // OberonDatabaseAdapter

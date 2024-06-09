@@ -1,13 +1,13 @@
-import { resolve } from "path"
-import { defineConfig, devices } from "@playwright/experimental-ct-react"
-import react from "@vitejs/plugin-react"
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
 import dotenv from "dotenv"
 dotenv.config({ path: ".env.local" })
+
+import { resolve } from "path"
+import { defineConfig, devices } from "@playwright/experimental-ct-react"
+import react from "@vitejs/plugin-react"
 
 /**
  * See https://playwright.dev/docs/test-configuration.

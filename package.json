@@ -34,14 +34,12 @@
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier -l --write"
   },
-  "dependencies": {
-    "dotenv": "^16.4.5"
-  },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@tohuhono/dev": "workspace:*",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "eslint": "8.57.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",

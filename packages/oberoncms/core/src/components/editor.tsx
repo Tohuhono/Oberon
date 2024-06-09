@@ -6,7 +6,7 @@ import { Config, Data, Puck, usePuck } from "@measured/puck"
 import { Button } from "@tohuhono/ui/button"
 import { useState } from "react"
 import { useLocalData } from "../hooks/use-local-data"
-import { INITIAL_DATA } from "../app/schema"
+import { INITIAL_DATA } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
 import { Menu } from "./menu"
 

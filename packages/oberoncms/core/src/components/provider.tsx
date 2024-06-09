@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, type PropsWithChildren } from "react"
-import type { OberonActions, OberonClientContext } from "../app/schema"
+import type { OberonActions, OberonClientContext } from "../lib/dtd"
 
 export const ClientContext = createContext<OberonClientContext | null>(null)
 

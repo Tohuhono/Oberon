@@ -9,22 +9,20 @@ import {
   Option,
   InvalidArgumentError,
 } from "@commander-js/extra-typings"
-import { initGit } from "./program/init-git"
-import { installPackages } from "./program/install-packages"
+import { initGit } from "./installer/init-git"
+import { installPackages, packageManagers } from "./installer/install-packages"
+
+import { promptOptions, recipes } from "./installer/prompt-options"
+import { installTemplate } from "./installer/install-template"
+import { installEnv } from "./installer/install-env"
 import {
   databaseIds,
   databasePlugins,
-  packageManagers,
-  Plugin,
-  recipes,
+  installAdapter,
   sendIds,
   sendPlugins,
-} from "./program/config"
-import { promptOptions } from "./program/prompt-options"
-import { copyTemplate } from "./program/copy-template"
-import { writeEnv } from "./program/write-env"
-import { updatePackageJson } from "./program/update-package"
-import { writePlugins } from "./program/write-plugins"
+  Plugin,
+} from "./installer/install-adapter"
 
 program
   .command("create")
@@ -78,35 +76,17 @@ program
       },
     ]
 
-    /*
-     * Copy and apply template files into new directory
-     */
-    await copyTemplate(appName, appPath, templatePath)
+    await installTemplate(appName, appPath, templatePath)
 
-    await writePlugins(oberonPath, pluginPath, plugins)
+    await installAdapter(oberonPath, pluginPath, plugins)
 
-    /*
-     * Adjust package.json
-     */
-    const { workspaceDeps, workspaceDevDeps } = await updatePackageJson(
-      appName,
-      appPath,
-    )
-
-    await writeEnv(appPath, email)
-
-    const pluginDependencies = plugins.flatMap(
-      ({ packageName, dependencies = [] }) => [
-        ...dependencies,
-        ...(packageName ? [packageName] : []),
-      ],
-    )
+    await installEnv(appPath, email)
 
     await installPackages({
-      packageManager,
+      appName,
       appPath,
-      dependencies: [...workspaceDeps, ...pluginDependencies],
-      devDependencies: workspaceDevDeps,
+      packageManager,
+      plugins,
     })
 
     execSync(`${packageManager} run prettier:fix`, {

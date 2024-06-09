@@ -12,7 +12,7 @@ import {
   type MigrationResult,
   type OberonSiteConfig,
   type TransformResult,
-} from "../app/schema"
+} from "../lib/dtd"
 
 function useMigration() {
   const { migrateData } = useOberonActions()

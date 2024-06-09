@@ -12,7 +12,7 @@ import Image from "next/image"
 import { Table, ColumnHeading } from "@tohuhono/ui/table"
 
 import { useOberonActions } from "../hooks/use-oberon"
-import type { OberonImage } from "../app/schema"
+import type { OberonImage } from "../lib/dtd"
 
 const useOberonImages = (images: OberonImage[]) => {
   const { deleteImage } = useOberonActions()

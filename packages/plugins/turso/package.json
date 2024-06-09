@@ -43,8 +43,8 @@
   },
   "dependencies": {
     "@libsql/client": "^0.5.6",
-    "@libsql/core": "^0.5.6",
     "@oberoncms/core": "workspace:*",
+    "@oberoncms/plugin-sqlite": "workspace:*",
     "drizzle-orm": "^0.30.10",
     "server-cli-only": "^0.3.2"
   },
