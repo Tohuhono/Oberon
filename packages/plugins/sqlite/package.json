@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-sqlite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A Sqlite libsql database plugin for OberonCMS",

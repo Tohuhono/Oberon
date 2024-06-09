@@ -1,5 +1,13 @@
 # @oberoncms/core
 
+## 0.10.4
+
+### Patch Changes
+
+- e28293f: Fix create-oberon-app with development fallbacks
+- 01fde22: Move development fallback to wrappers
+  Move local sqlite to separate plugin
+
 ## 0.10.3
 
 ### Patch Changes

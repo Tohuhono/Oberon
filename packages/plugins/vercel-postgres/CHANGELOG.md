@@ -1,5 +1,18 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.7.4
+
+### Patch Changes
+
+- e28293f: Fix create-oberon-app with development fallbacks
+- 01fde22: Move development fallback to wrappers
+  Move local sqlite to separate plugin
+- e8c2c24: Fix dynamically load client after initialisation
+- Updated dependencies [e28293f]
+- Updated dependencies [01fde22]
+- Updated dependencies [e8c2c24]
+  - @oberoncms/plugin-pgsql@0.4.5
+
 ## 0.7.3
 
 ### Patch Changes
