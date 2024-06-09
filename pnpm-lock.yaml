@@ -444,49 +444,6 @@ importers:
         specifier: ^5.1.6
         version: 5.2.8(@types/node@20.11.26)
 
-  packages/plugins/development:
-    dependencies:
-      '@oberoncms/core':
-        specifier: workspace:*
-        version: link:../../oberoncms/core
-      '@oberoncms/plugin-sqlite':
-        specifier: workspace:*
-        version: link:../sqlite
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-    devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@tohuhono/dev':
-        specifier: workspace:*
-        version: link:../../tohuhono/dev
-      '@types/node':
-        specifier: 20.11.26
-        version: 20.11.26
-      '@types/react':
-        specifier: 18.2.66
-        version: 18.2.66
-      '@types/react-dom':
-        specifier: 18.2.22
-        version: 18.2.22
-      drizzle-kit:
-        specifier: ^0.20.18
-        version: 0.20.18
-      typescript:
-        specifier: 5.4.2
-        version: 5.4.2
-      vite:
-        specifier: ^5.1.6
-        version: 5.2.8(@types/node@20.11.26)
-
   packages/plugins/flydrive:
     dependencies:
       '@oberoncms/core':
@@ -1133,6 +1090,9 @@ importers:
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
+      '@oberoncms/plugin-sqlite':
+        specifier: workspace:*
+        version: link:../../packages/plugins/sqlite
       next:
         specifier: ^14.2.3
         version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
@@ -4338,6 +4298,7 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-android-arm64@4.17.2:
@@ -4352,6 +4313,7 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-darwin-arm64@4.17.2:
@@ -4366,6 +4328,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-darwin-x64@4.17.2:
@@ -4380,6 +4343,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-arm-gnueabihf@4.17.2:
@@ -4394,6 +4358,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-arm-musleabihf@4.17.2:
@@ -4408,6 +4373,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-arm64-gnu@4.17.2:
@@ -4422,6 +4388,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-arm64-musl@4.17.2:
@@ -4436,6 +4403,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-powerpc64le-gnu@4.17.2:
@@ -4450,6 +4418,7 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-riscv64-gnu@4.17.2:
@@ -4464,6 +4433,7 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-s390x-gnu@4.17.2:
@@ -4478,6 +4448,7 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-x64-gnu@4.17.2:
@@ -4492,6 +4463,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-linux-x64-musl@4.17.2:
@@ -4506,6 +4478,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-win32-arm64-msvc@4.17.2:
@@ -4520,6 +4493,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-win32-ia32-msvc@4.17.2:
@@ -4534,6 +4508,7 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rollup/rollup-win32-x64-msvc@4.17.2:
@@ -4548,6 +4523,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@rushstack/eslint-patch@1.10.2:
@@ -11600,6 +11576,7 @@ packages:
       '@rollup/rollup-win32-ia32-msvc': 4.18.0
       '@rollup/rollup-win32-x64-msvc': 4.18.0
       fsevents: 2.3.3
+    dev: false
 
   /rrweb-cssom@0.6.0:
     resolution: {integrity: sha512-APM0Gt1KoXBz0iIkkdB/kfvGOwC4UuJFeG/c+yV7wSc7q96cG/kJ0HiYCnzivD9SB53cLV1MlHFNfOuPaadYSw==}
@@ -13007,7 +12984,7 @@ packages:
       '@types/node': 20.11.26
       esbuild: 0.20.2
       postcss: 8.4.38
-      rollup: 4.18.0
+      rollup: 4.17.2
     optionalDependencies:
       fsevents: 2.3.3
     dev: true

@@ -11,7 +11,7 @@ const devSendPlugin: OberonPlugin = () => ({
   } satisfies OberonSendAdapter,
 })
 
-export const withDevelopmentSend = (sendPlugin: OberonPlugin) => {
+export const withDevelopmentSend = (sendPlugin: OberonPlugin = () => ({})) => {
   if (process.env.USE_DEVELOPMENT_SEND === "true") {
     return devSendPlugin
   }
