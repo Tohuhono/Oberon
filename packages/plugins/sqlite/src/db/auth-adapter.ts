@@ -9,9 +9,11 @@ import {
   verificationTokens,
 } from "./schema/next-auth-schema"
 
-export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
+export const getAuthAdapter = (
+  db: () => DatabaseClient,
+): OberonAuthAdapter => ({
   async createUser(data) {
-    return db
+    return db()
       .insert(users)
       .values({ ...data, id: randomUUID() })
       .returning()
@@ -19,20 +21,21 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
   },
   async getUser(data) {
     return (
-      (await db.select().from(users).where(eq(users.id, data)).get()) ?? null
+      (await db().select().from(users).where(eq(users.id, data)).get()) ?? null
     )
   },
   async getUserByEmail(data) {
     return (
-      (await db.select().from(users).where(eq(users.email, data)).get()) ?? null
+      (await db().select().from(users).where(eq(users.email, data)).get()) ??
+      null
     )
   },
   async createSession(data) {
-    return db.insert(sessions).values(data).returning().get()
+    return db().insert(sessions).values(data).returning().get()
   },
   async getSessionAndUser(data) {
     return (
-      (await db
+      (await db()
         .select({
           session: sessions,
           user: users,
@@ -48,7 +51,7 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
       throw new Error("No user id.")
     }
 
-    return db
+    return db()
       .update(users)
       .set(data)
       .where(eq(users.id, data.id))
@@ -56,7 +59,7 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
       .get()
   },
   async updateSession(data) {
-    return db
+    return db()
       .update(sessions)
       .set(data)
       .where(eq(sessions.sessionToken, data.sessionToken))
@@ -64,7 +67,7 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
       .get()
   },
   async linkAccount(rawAccount) {
-    const updatedAccount = await db
+    const updatedAccount = await db()
       .insert(accounts)
       .values(rawAccount)
       .returning()
@@ -85,7 +88,7 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
     return account
   },
   async getUserByAccount(account) {
-    const results = await db
+    const results = await db()
       .select()
       .from(accounts)
       .leftJoin(users, eq(users.id, accounts.userId))
@@ -101,7 +104,7 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
   },
   async deleteSession(sessionToken) {
     return (
-      (await db
+      (await db()
         .delete(sessions)
         .where(eq(sessions.sessionToken, sessionToken))
         .returning()
@@ -109,12 +112,12 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
     )
   },
   async createVerificationToken(token) {
-    return db.insert(verificationTokens).values(token).returning().get()
+    return db().insert(verificationTokens).values(token).returning().get()
   },
   async useVerificationToken(token) {
     try {
       return (
-        (await db
+        (await db()
           .delete(verificationTokens)
           .where(
             and(
@@ -130,10 +133,10 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
     }
   },
   async deleteUser(id) {
-    await db.delete(users).where(eq(users.id, id)).returning().get()
+    await db().delete(users).where(eq(users.id, id)).returning().get()
   },
   async unlinkAccount(account) {
-    await db
+    await db()
       .delete(accounts)
       .where(
         and(

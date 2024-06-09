@@ -13,8 +13,8 @@ export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,
   adapter: {
-    ...getDatabaseAdapter(getClient()),
-    ...getAuthAdapter(getClient()),
+    ...getDatabaseAdapter(getClient),
+    ...getAuthAdapter(getClient),
     init: async () => {
       await adapter.init()
 
