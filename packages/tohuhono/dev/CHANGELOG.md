@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.9.2
+
+### Patch Changes
+
+- 3d8e16b: Fix tsx regression for unqualified imports in sub modules
+
 ## 0.9.1
 
 ### Patch Changes
