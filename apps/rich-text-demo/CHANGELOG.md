@@ -1,5 +1,11 @@
 # @oberon/rich-text-demo
 
+## 1.6.2
+
+### Patch Changes
+
+- e28293f: Fix create-oberon-app with development fallbacks
+
 ## 1.6.1
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # create-oberon-app
 
+## 0.3.7
+
+### Patch Changes
+
+- e28293f: Fix create-oberon-app with development fallbacks
+- 01fde22: Move development fallback to wrappers
+  Move local sqlite to separate plugin
+- e8c2c24: Fix dynamically load client after initialisation
+
 ## 0.3.6
 
 ### Patch Changes

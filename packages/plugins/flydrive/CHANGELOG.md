@@ -1,5 +1,16 @@
 # @oberoncms/plugin-flydrive
 
+## 0.1.2
+
+### Patch Changes
+
+- e28293f: Fix create-oberon-app with development fallbacks
+- 01fde22: Move development fallback to wrappers
+  Move local sqlite to separate plugin
+- Updated dependencies [e28293f]
+- Updated dependencies [01fde22]
+  - @oberoncms/core@0.10.4
+
 ## 0.1.1
 
 ### Patch Changes
