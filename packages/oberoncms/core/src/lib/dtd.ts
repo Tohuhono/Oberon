@@ -273,7 +273,7 @@ export type OberonPlugin = (adapter: OberonAdapter) => {
   name?: string
   version?: string
   handlers?: Record<string, OberonRouteHandler>
-  adapter: Partial<OberonAdapter>
+  adapter?: Partial<OberonAdapter>
 }
 
 export type OberonActions = {

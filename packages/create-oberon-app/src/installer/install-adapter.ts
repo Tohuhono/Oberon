@@ -56,8 +56,15 @@ const createAdapter = (plugins: Plugin[]) => {
     .join("\n")
 
   const adapterPlugins = [
-    "databasePlugin",
-    ...aliasedPlugins.map(({ alias }) => alias),
+    ...aliasedPlugins.map(({ alias, type }) => {
+      if (type === "database") {
+        return `withDevelopmentDatabase(${alias})`
+      }
+      if (type === "send") {
+        return `withDevelopmentSend(${alias})`
+      }
+      return alias
+    }),
     // Auth plugin should be last
     "authPlugin",
   ]
@@ -65,15 +72,11 @@ const createAdapter = (plugins: Plugin[]) => {
   return `
 import "server-cli-only"
 
-import { USE_DEVELOPMENT_DATABASE } from "@oberoncms/core"
 import { initAdapter } from "@oberoncms/core/adapter"
-import { authPlugin } from "@oberoncms/core/auth"
-
-import { plugin as sqlitePlugin } from "@oberoncms/plugin-sqlite"
+import { authPlugin, withDevelopmentSend } from "@oberoncms/core/auth"
+import { withDevelopmentDatabase } from "@oberoncms/plugin-sqlite"
 
 ${pluginImports}
-
-const databasePlugin = USE_DEVELOPMENT_DATABASE ? sqlitePlugin : databasePlugin
 
 export const adapter = initAdapter([${adapterPlugins.join(", ")}])
 `

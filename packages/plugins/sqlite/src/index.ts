@@ -39,7 +39,9 @@ export const plugin: OberonPlugin = (adapter) => ({
   },
 })
 
-export const withDevelopmentDatabase = (databasePlugin: OberonPlugin) => {
+export const withDevelopmentDatabase = (
+  databasePlugin: OberonPlugin = () => ({}),
+): OberonPlugin => {
   if (process.env.USE_DEVELOPMENT_DATABASE === "true") {
     return plugin
   }
