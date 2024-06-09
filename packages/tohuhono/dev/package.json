@@ -54,13 +54,13 @@
     "rollup-preserve-directives": "^1.1.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.13.3",
     "typescript": "5.4.2",
     "typescript-eslint": "^7.2.0",
     "uploadthing": "^6.10.1",
     "vite": "^5.1.6",
     "vite-plugin-dts": "^3.7.3",
-    "vite-plugin-externalize-deps": "^0.8.0",
-    "tsx": "^4.11.0"
+    "vite-plugin-externalize-deps": "^0.8.0"
   },
   "devDependencies": {
     "@types/eslint-config-prettier": "^6.11.3",
