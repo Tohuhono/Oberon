@@ -1,5 +1,13 @@
 # oberon-cms-example
 
+## 0.10.7
+
+### Patch Changes
+
+- 3d8e16b: Fix tsx regression for unqualified imports in sub modules
+  - @oberoncms/core@0.10.4
+  - @oberoncms/plugin-sqlite@0.1.1
+
 ## 0.10.6
 
 ### Patch Changes
