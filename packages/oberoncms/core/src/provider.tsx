@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from "react"
 
 import { OberonClientProvider } from "./components/provider"
-import type { ClientAction, OberonActions } from "./app/schema"
-import { parseClientAction, resolveSlug } from "./app/utils"
+import type { ClientAction, OberonActions } from "./lib/dtd"
+import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
   {

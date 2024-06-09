@@ -29,7 +29,9 @@
     "LICENSE*"
   ],
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./adapter": "./dist/adapter.js",
+    "./schema": "./dist/schema.js"
   },
   "scripts": {
     "build": "vite build",
@@ -42,10 +44,11 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "pg": "^8.11.5",
+    "@auth/drizzle-adapter": "^1.2.0",
     "@oberoncms/core": "workspace:*",
     "drizzle-orm": "^0.30.10",
     "next": "^14.2.3",
+    "pg": "^8.11.5",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {

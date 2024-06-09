@@ -23,7 +23,7 @@ import {
 } from "@tohuhono/ui/form"
 
 import { ColumnHeading, Table } from "@tohuhono/ui/table"
-import { AddUserSchema, OberonUser, roles } from "../app/schema"
+import { AddUserSchema, OberonUser, roles } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
 
 type OptimisticUser = OberonUser & { pending?: boolean }

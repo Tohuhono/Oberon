@@ -1,22 +1,36 @@
 import "server-cli-only"
 
-import { type OberonPlugin } from "@oberoncms/core"
+import type { OberonPlugin } from "@oberoncms/core"
 
+import { migrate } from "drizzle-orm/vercel-postgres/migrator"
+import {
+  getDatabaseAdapter,
+  getAuthAdapter,
+} from "@oberoncms/plugin-pgsql/adapter"
 import { name, version } from "../package.json" with { type: "json" }
-
-import { databaseAdapter } from "./db/database-adapter"
-import { authAdapter } from "./db/auth-adapter"
-import { init } from "./db/init"
+import { db } from "./db/client"
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,
   adapter: {
-    ...databaseAdapter,
-    ...authAdapter,
+    ...getDatabaseAdapter(db),
+    ...getAuthAdapter(db),
     init: async () => {
       await adapter.init()
-      await init()
+      console.log(`Migrating database`)
+
+      if (!db) {
+        console.log("Prepare: No Database Connection Configured")
+        return
+      }
+
+      await migrate(db, {
+        migrationsFolder:
+          "node_modules/@oberoncms/plugin-vercel-postgres/src/db/migrations",
+      })
+
+      console.log(`Database migration complete`)
     },
   },
 })

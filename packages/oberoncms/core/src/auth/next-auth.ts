@@ -5,7 +5,7 @@ import NextAuth from "next-auth"
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
 import { name, version } from "../../package.json" with { type: "json" }
-import type { OberonPlugin, OberonUser } from ".."
+import { type OberonPlugin, type OberonUser } from "../lib/dtd"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
@@ -22,10 +22,6 @@ const withCallback = (url: string) => {
 
   return withCallback.toString()
 }
-
-const SEND_VERIFICATION_REQUEST =
-  process.env.EMAIL_SEND === "true" ||
-  (process.env.NODE_ENV === "production" && process.env.EMAIL_SEND !== "false")
 
 export const authPlugin: OberonPlugin = (adapter) => {
   const config = {
@@ -52,14 +48,6 @@ export const authPlugin: OberonPlugin = (adapter) => {
           token,
         }) => {
           const url = withCallback(baseUrl)
-
-          if (!SEND_VERIFICATION_REQUEST) {
-            console.log(`sendVerificationRequest email not sent`, {
-              email,
-              url,
-            })
-            return
-          }
 
           await adapter.sendVerificationRequest({
             email,

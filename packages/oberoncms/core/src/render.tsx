@@ -1,8 +1,8 @@
 import { Render as PuckRender } from "@measured/puck/rsc"
 import { notFound } from "next/navigation"
 import type { Config } from "@measured/puck"
-import { OberonActions, type OberonConfig } from "./app/schema"
-import { resolveSlug } from "./app/utils"
+import { OberonActions, type OberonConfig } from "./lib/dtd"
+import { resolveSlug } from "./lib/utils"
 
 export async function Render({
   path = [],

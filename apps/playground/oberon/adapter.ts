@@ -1,15 +1,17 @@
 import "server-cli-only"
 
-import { plugin as databasePlugin } from "@oberoncms/plugin-turso"
-import { authPlugin } from "@oberoncms/core/auth"
-
 import { initAdapter } from "@oberoncms/core/adapter"
+import { authPlugin, withDevelopmentSend } from "@oberoncms/core/auth"
+import { withDevelopmentDatabase } from "@oberoncms/plugin-sqlite"
+
+import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
 import { plugin as uploadthingPlugin } from "@oberoncms/plugin-uploadthing/plugin"
+
 import { sendAdapterPlugin } from "./send"
 
 export const adapter = initAdapter([
-  databasePlugin,
+  withDevelopmentDatabase(tursoPlugin),
+  withDevelopmentSend(sendAdapterPlugin),
   authPlugin,
-  sendAdapterPlugin,
   uploadthingPlugin,
 ])

@@ -17,7 +17,7 @@ import { z } from "zod"
 import { ColumnHeading, Table } from "@tohuhono/ui/table"
 import { LocalDate } from "@tohuhono/ui/date"
 import { useOberonActions } from "../hooks/use-oberon"
-import { AddPageSchema, type OberonPageMeta } from "../app/schema"
+import { AddPageSchema, type OberonPageMeta } from "../lib/dtd"
 
 function copyKey(
   optimisticPages: OberonPageMeta[],

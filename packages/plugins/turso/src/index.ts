@@ -1,22 +1,38 @@
 import "server-cli-only"
 
-import { type OberonPlugin } from "@oberoncms/core"
-
+import {
+  getAuthAdapter,
+  getDatabaseAdapter,
+  migrate,
+} from "@oberoncms/plugin-sqlite/adapter"
+import type { OberonPlugin } from "@oberoncms/core"
 import { name, version } from "../package.json" with { type: "json" }
-
-import { databaseAdapter } from "./db/database-adapter"
-import { authAdapter } from "./db/auth-adapter"
-import { init } from "./db/init"
+import { getClient } from "./db/client"
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,
   adapter: {
-    ...databaseAdapter,
-    ...authAdapter,
+    ...getDatabaseAdapter(getClient()),
+    ...getAuthAdapter(getClient()),
     init: async () => {
       await adapter.init()
-      await init()
+
+      console.log(`Migrating database`)
+
+      const db = getClient()
+
+      if (!db) {
+        console.log("Prepare: No Database Connection Configured")
+        return
+      }
+
+      await migrate(db, {
+        migrationsFolder:
+          "node_modules/@oberoncms/plugin-turso/src/db/migrations",
+      })
+
+      console.log(`Database migration complete`)
     },
   },
 })
