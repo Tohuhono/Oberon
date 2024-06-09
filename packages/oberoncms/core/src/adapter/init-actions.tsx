@@ -30,7 +30,7 @@ import {
   applyTransforms,
   getComponentTransformVersions,
   getTransforms,
-} from "../lib/transforms"
+} from "./transforms"
 
 export function initActions({
   config,

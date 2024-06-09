@@ -1,4 +1,4 @@
-import type { OberonPage } from "./dtd"
+import type { OberonPage } from "../lib/dtd"
 
 export function getInitialData(): OberonPage {
   return {

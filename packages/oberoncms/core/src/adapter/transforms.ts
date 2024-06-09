@@ -69,7 +69,7 @@ import type {
   OberonPageMeta,
   TransformResult,
   TransformVersions,
-} from "./dtd"
+} from "../lib/dtd"
 
 async function applyTransform(
   key: string,

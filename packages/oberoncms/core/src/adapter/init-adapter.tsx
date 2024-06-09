@@ -1,6 +1,6 @@
 import { type OberonPlugin, type OberonAdapter } from "../lib/dtd"
+import { getInitialData } from "./get-initial-data"
 import { baseAdapter } from "./base-adapter"
-import { getInitialData } from "../lib/get-initial-data"
 
 export function initAdapter(plugins: OberonPlugin[] = []) {
   const adapter = plugins.reduce<OberonAdapter>((accumulator, plugin) => {
