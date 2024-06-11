@@ -13,7 +13,7 @@
         "name": "next"
       }
     ],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "noEmit": true,
     "emitDeclarationOnly": false,

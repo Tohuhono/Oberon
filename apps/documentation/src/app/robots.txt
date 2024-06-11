@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow: /v/*
+Disallow: /cms/*
+Disallow: /demo/*

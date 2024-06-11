@@ -4,6 +4,11 @@ export default {
     type: "page",
     display: "hidden",
   },
+  cms: {
+    title: "Demo",
+    type: "page",
+    href: "/cms/edit",
+  },
   docs: {
     title: "Developers",
     type: "page",
