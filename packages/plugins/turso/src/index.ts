@@ -1,22 +1,21 @@
 import "server-cli-only"
 
+import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 import {
-  getAuthAdapter,
-  getDatabaseAdapter,
-  migrate,
-} from "@oberoncms/plugin-sqlite/adapter"
-import type { OberonPlugin } from "@oberoncms/core"
+  USE_DEVELOPMENT_DATABASE_PLUGIN,
+  type OberonPlugin,
+} from "@oberoncms/core"
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,
+  disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
   adapter: {
-    ...getDatabaseAdapter(getClient),
-    ...getAuthAdapter(getClient),
+    ...getAdapter(getClient),
     init: async () => {
-      await adapter.init()
+      await adapter.prebuild()
 
       console.log(`Migrating database`)
 

@@ -122,7 +122,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
   }
 
   return {
-    name: `${name} (auth)`,
+    name: `${name}/auth`,
     version,
     handlers: { auth: { ...nextAuth.handlers, GET } },
     adapter: {

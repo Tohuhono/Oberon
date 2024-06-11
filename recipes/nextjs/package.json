@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
-    "@oberoncms/plugin-sqlite": "workspace:*",
+    "@oberoncms/plugin-development": "workspace:*",
     "@datacom-digital/ui-sample-components": "^0.3.2",
     "next": "^14.2.3",
     "react": "^18.2.0",

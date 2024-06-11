@@ -1,14 +1,15 @@
 {
-  "name": "@oberoncms/plugin-sqlite",
+  "name": "@oberoncms/sqlite",
   "version": "0.1.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "A Sqlite libsql database plugin for OberonCMS",
+  "description": "A Sqlite libsql drizzle database adapter for OberonCMS",
   "keywords": [
     "oberon",
     "oberoncms",
     "cms",
     "nextjs",
+    "drizzle",
     "react",
     "adapter",
     "plugin"
@@ -16,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "oberoncms/adapter-turso"
+    "directory": "oberoncms/sqlite"
   },
   "type": "module",
   "files": [
@@ -28,7 +29,6 @@
     "LICENSE*"
   ],
   "exports": {
-    ".": "./dist/index.js",
     "./adapter": "./dist/adapter.js",
     "./schema": "./dist/schema.js"
   },

@@ -35,3 +35,22 @@ export const parseClientAction = (action: unknown): ClientAction => {
 }
 
 export const resolveSlug = (path: string[] = []) => `/${path.join("/")}`
+
+const resolveDevEnv = (value?: string) => {
+  switch (value) {
+    case "true":
+      return true
+    case "false":
+      return false
+    default:
+      return process.env.NODE_ENV === "development" && !process.env.CI
+  }
+}
+
+export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(
+  process.env.USE_DEVELOPMENT_DATABASE,
+)
+
+export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(
+  process.env.USE_DEVELOPMENT_SEND,
+)

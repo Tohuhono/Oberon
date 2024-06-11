@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { mkdir } from "fs/promises"
-import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql"
+import { drizzle } from "drizzle-orm/libsql"
 import { createClient } from "@libsql/client"
 // import type from here as
 import type { Client } from "@libsql/core/api"
@@ -23,8 +23,6 @@ export const getClient = () =>
   drizzle(getGlobalClient(), {
     schema,
   })
-
-export type DatabaseClient = LibSQLDatabase<typeof schema>
 
 export async function initialise() {
   await mkdir(".oberon", { recursive: true })

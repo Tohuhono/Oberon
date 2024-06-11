@@ -62,42 +62,6 @@ export type MaybeOptimistic<T> = T & {
 }
 
 /*
- * Site
- */
-type TransformStatus = "error" | "success"
-
-export type TransformResult = {
-  type: "transform"
-  key: string
-  status: "success" | "error"
-}
-
-export type MigrationResult = {
-  type: "summary"
-  total: number
-} & {
-  [key in TransformStatus]: string[]
-}
-
-export type TransformVersions = Record<string, number>
-
-export type OberonSiteConfig = MaybeOptimistic<{
-  version: string
-  plugins: Record<string, string>
-  components: TransformVersions
-  pendingMigrations: string[] | false
-}>
-
-export const SiteSchema = z.object({
-  version: z.number(),
-  components: z.record(z.string(), z.number()),
-  updatedAt: z.date(),
-  updatedBy: z.string(),
-})
-
-export type OberonSite = z.infer<typeof SiteSchema>
-
-/*
  * Pages
  */
 export const PageSchema = z.object({
@@ -188,6 +152,44 @@ export type OberonClientContext = DescriminatedContext & {
 }
 
 /*
+ * Site
+ */
+type TransformStatus = "error" | "success"
+
+export type TransformResult = {
+  type: "transform"
+  key: string
+  status: "success" | "error"
+}
+
+export type MigrationResult = {
+  type: "summary"
+  total: number
+} & {
+  [key in TransformStatus]: string[]
+}
+
+export type TransformVersions = Record<string, number>
+
+export type OberonSiteConfig = MaybeOptimistic<{
+  version: string
+  plugins: Array<
+    Pick<ReturnType<OberonPlugin>, "name" | "version" | "disabled">
+  >
+  components: TransformVersions
+  pendingMigrations: string[] | false
+}>
+
+export const SiteSchema = z.object({
+  version: z.number(),
+  components: z.record(z.string(), z.number()),
+  updatedAt: z.date(),
+  updatedBy: z.string(),
+})
+
+export type OberonSite = z.infer<typeof SiteSchema>
+
+/*
  * Adapter
  */
 
@@ -195,12 +197,12 @@ export type OberonClientContext = DescriminatedContext & {
 type OberonRouteHandler = NextAuthResult["handlers"]
 
 export type OberonAdapterMeta = {
-  plugins: { [name: string]: string }
+  plugins: Array<{ name: string; version: string; disabled?: boolean }>
   handlers: Record<string, OberonRouteHandler>
 }
 
 export type OberonInitAdapter = {
-  init: () => Promise<void>
+  prebuild: () => Promise<void>
 }
 
 export type OberonCanAdapter = {
@@ -262,18 +264,20 @@ export type OberonSendAdapter = {
   }) => Promise<void>
 }
 
-export type OberonAdapter = OberonAdapterMeta &
-  OberonInitAdapter &
+export type OberonPluginAdapter = OberonInitAdapter &
   OberonCanAdapter &
   OberonDatabaseAdapter &
   OberonAuthAdapter &
   OberonSendAdapter
 
+export type OberonAdapter = OberonAdapterMeta & OberonPluginAdapter
+
 export type OberonPlugin = (adapter: OberonAdapter) => {
-  name?: string
+  name: string
   version?: string
+  disabled?: boolean
   handlers?: Record<string, OberonRouteHandler>
-  adapter?: Partial<OberonAdapter>
+  adapter?: Partial<OberonPluginAdapter>
 }
 
 export type OberonActions = {

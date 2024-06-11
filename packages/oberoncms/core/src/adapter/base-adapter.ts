@@ -2,7 +2,7 @@ import { notImplemented } from "@tohuhono/utils"
 import type { OberonPermissions, OberonAdapter } from "../lib/dtd"
 
 export const baseAdapter: OberonAdapter = {
-  plugins: {},
+  plugins: [],
   handlers: {},
   getCurrentUser: notImplemented("getCurrentUser"),
   hasPermission: ({ user, action, permission }) => {
@@ -26,7 +26,7 @@ export const baseAdapter: OberonAdapter = {
       permissions[role][action] === "write"
     )
   },
-  init: async () => {},
+  prebuild: async () => {},
   // OberonSendAdapter
   sendVerificationRequest: notImplemented("sendVerificationRequest"),
   // OberonDatabaseAdapter

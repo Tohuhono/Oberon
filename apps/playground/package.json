@@ -15,7 +15,7 @@
   "dependencies": {
     "@datacom-digital/ui-sample-components": "^0.3.2",
     "@oberoncms/core": "workspace:*",
-    "@oberoncms/plugin-sqlite": "workspace:*",
+    "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-turso": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "next": "^14.2.3",
