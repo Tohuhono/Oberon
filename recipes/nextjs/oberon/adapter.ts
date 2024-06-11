@@ -1,12 +1,7 @@
 import "server-cli-only";
 
 import { initAdapter, mockPlugin } from "@oberoncms/core/adapter";
-import { authPlugin, withDevelopmentSend } from "@oberoncms/core/auth";
-import { withDevelopmentDatabase } from "@oberoncms/plugin-sqlite";
+import { authPlugin } from "@oberoncms/core/auth";
+import { plugin as developmentPlugin } from "@oberoncms/plugin-development";
 
-export const adapter = initAdapter([
-  mockPlugin,
-  withDevelopmentDatabase(),
-  withDevelopmentSend(),
-  authPlugin,
-]);
+export const adapter = initAdapter([mockPlugin, developmentPlugin, authPlugin]);

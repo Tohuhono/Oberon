@@ -5,7 +5,7 @@ import type { OberonPlugin } from "@oberoncms/core"
 
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
 
-export const sendAdapterPlugin: OberonPlugin = () => ({
+export const plugin: OberonPlugin = () => ({
   name: "Resend",
   adapter: {
     sendVerificationRequest: async ({

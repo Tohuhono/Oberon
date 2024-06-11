@@ -1,9 +1,9 @@
 {
-  "name": "@oberoncms/plugin-pgsql",
-  "version": "0.4.5",
+  "name": "@oberoncms/plugin-development",
+  "version": "0.1.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "A PostgreSQL database plugin for OberonCMS",
+  "description": "A development plugin for OberonCMS",
   "keywords": [
     "oberon",
     "oberoncms",
@@ -11,13 +11,12 @@
     "nextjs",
     "react",
     "adapter",
-    "plugin",
-    "turso"
+    "plugin"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "plugins/pgsql"
+    "directory": "plugins/development"
   },
   "type": "module",
   "files": [
@@ -29,14 +28,12 @@
     "LICENSE*"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./adapter": "./dist/adapter.js",
-    "./schema": "./dist/schema.js"
+    ".": "./dist/index.js"
   },
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
-    "generate:migrations": "drizzle-kit generate:pg",
+    "generate:migrations": "drizzle-kit generate:sqlite",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "tsc": "tsc --pretty",
@@ -44,11 +41,11 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.2.0",
+    "@libsql/client": "^0.5.6",
+    "@libsql/core": "^0.5.6",
     "@oberoncms/core": "workspace:*",
+    "@oberoncms/sqlite": "workspace:*",
     "drizzle-orm": "^0.30.10",
-    "next": "^14.2.3",
-    "pg": "^8.11.5",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {
@@ -60,7 +57,6 @@
     "@measured/puck": "^0.14.2",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",
-    "@types/pg": "^8.11.6",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",
     "drizzle-kit": "^0.20.18",

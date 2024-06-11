@@ -20,7 +20,7 @@
     "dev": "turbo dev --concurrency 50",
     "dev:packages": "turbo dev --concurrency 50 --filter={./packages/**/*}...",
     "dev:demo": "turbo dev --concurrency 50 --filter={./packages/**/*}... --filter=demo",
-    "dev:oberon": "turbo dev --concurrency 50 --filter={./packages/**/*}... --filter=playground",
+    "dev:oberon": "turbo dev --concurrency 50 --continue --filter={./packages/**/*}... --filter=playground",
     "dev:docs": "turbo dev --concurrency 50 --filter=docs...",
     "dev:nextjs": "turbo dev --concurrency 50 --filter={./packages/**/*}... --filter=./oberoncms/* --filter=nextjs-recipe",
     "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,css,md,json}\"",

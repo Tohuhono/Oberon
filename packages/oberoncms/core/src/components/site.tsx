@@ -114,17 +114,16 @@ export function Site({
 
         <div>@oberoncms/core</div>
         <div>{coreVersion}</div>
-        <ColumnHeading>Plugins</ColumnHeading>
-        <ColumnHeading></ColumnHeading>
-        {Object.keys(plugins).map((key) => {
-          const version = plugins[key]
-          return (
-            <Fragment key={key}>
-              <div>{key}</div>
-              <div>{version}</div>
-            </Fragment>
-          )
-        })}
+        <ColumnHeading className="col-span-2">Plugins</ColumnHeading>
+
+        {plugins.map(({ name, disabled, version }) => (
+          <Fragment key={name}>
+            <div className={disabled ? "font-light" : ""}>
+              {name} {disabled && " (disabled)"}
+            </div>
+            <div>{version}</div>
+          </Fragment>
+        ))}
       </Table>
     </>
   )

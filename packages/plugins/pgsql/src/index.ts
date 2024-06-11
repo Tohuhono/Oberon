@@ -1,6 +1,9 @@
 import "server-cli-only"
 
-import type { OberonPlugin } from "@oberoncms/core"
+import {
+  USE_DEVELOPMENT_DATABASE_PLUGIN,
+  type OberonPlugin,
+} from "@oberoncms/core"
 
 import { migrate } from "drizzle-orm/node-postgres/migrator"
 import { name, version } from "../package.json" with { type: "json" }
@@ -13,11 +16,12 @@ import { db } from "./db/client"
 export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,
+  disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
   adapter: {
     ...getDatabaseAdapter(db),
     ...getAuthAdapter(db),
     init: async () => {
-      await adapter.init()
+      await adapter.prebuild()
 
       console.log(`Migrating database`)
 

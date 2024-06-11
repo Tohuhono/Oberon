@@ -55,16 +55,10 @@ const createAdapter = (plugins: Plugin[]) => {
     })
     .join("\n")
 
-  const adapterPlugins = [
-    ...aliasedPlugins.map(({ alias, type }) => {
-      if (type === "database") {
-        return `withDevelopmentDatabase(${alias})`
-      }
-      if (type === "send") {
-        return `withDevelopmentSend(${alias})`
-      }
-      return alias
-    }),
+  const pluginAliasNames = [
+    // Development plugin should be first
+    "developmentPlugin",
+    ...aliasedPlugins.map(({ alias }) => alias),
     // Auth plugin should be last
     "authPlugin",
   ]
@@ -73,12 +67,14 @@ const createAdapter = (plugins: Plugin[]) => {
 import "server-cli-only"
 
 import { initAdapter } from "@oberoncms/core/adapter"
-import { authPlugin, withDevelopmentSend } from "@oberoncms/core/auth"
-import { withDevelopmentDatabase } from "@oberoncms/plugin-sqlite"
+import { authPlugin } from "@oberoncms/core/auth"
+import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 
 ${pluginImports}
 
-export const adapter = initAdapter([${adapterPlugins.join(", ")}])
+export const adapter = initAdapter([
+  ${pluginAliasNames.join(", ")}
+])
 `
 }
 

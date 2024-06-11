@@ -3,26 +3,46 @@ import { getInitialData } from "./get-initial-data"
 import { baseAdapter } from "./base-adapter"
 
 export function initAdapter(plugins: OberonPlugin[] = []) {
-  const adapter = plugins.reduce<OberonAdapter>((accumulator, plugin) => {
-    const { name, version, adapter, handlers = {} } = plugin(accumulator)
-    return {
-      ...accumulator,
-      plugins: {
-        ...accumulator.plugins,
-        ...(name && { [name]: version || "" }),
-      },
-      handlers: {
-        ...accumulator.handlers,
-        ...handlers,
-      },
-      ...adapter,
-    }
-  }, baseAdapter)
+  const adapter: OberonAdapter = plugins.reduce<OberonAdapter>(
+    (accumulator, plugin) => {
+      const {
+        name,
+        version,
+        disabled,
+        adapter,
+        handlers = {},
+      } = plugin(accumulator)
+
+      if (disabled) {
+        return {
+          ...accumulator,
+          plugins: [
+            ...accumulator.plugins,
+            { name, disabled, version: version || "" },
+          ],
+        }
+      }
+
+      return {
+        ...accumulator,
+        plugins: [
+          ...accumulator.plugins,
+          { name, disabled, version: version || "" },
+        ],
+        handlers: {
+          ...accumulator.handlers,
+          ...handlers,
+        },
+        ...adapter,
+      }
+    },
+    baseAdapter,
+  )
 
   return {
     ...adapter,
-    init: async () => {
-      await adapter.init()
+    prebuild: async () => {
+      await adapter.prebuild()
       const allPages = await adapter.getAllPages()
       if (!allPages.length) {
         console.log("Initialising welcome page")
