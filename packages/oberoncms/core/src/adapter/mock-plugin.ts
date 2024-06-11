@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import type {
   OberonCanAdapter,
   OberonDatabaseAdapter,
@@ -47,5 +48,8 @@ export const mockPlugin: OberonPlugin = () => ({
     hasPermission: () => true,
     updatePageData: async () => {},
     updateSite: async () => {},
+    signOut: async () => {
+      redirect("/")
+    },
   } satisfies OberonDatabaseAdapter & OberonCanAdapter,
 })

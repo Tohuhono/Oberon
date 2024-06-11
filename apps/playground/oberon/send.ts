@@ -1,12 +1,13 @@
 import "server-cli-only"
 
 import { Resend } from "resend"
-import type { OberonPlugin } from "@oberoncms/core"
+import { USE_DEVELOPMENT_SEND_PLUGIN, type OberonPlugin } from "@oberoncms/core"
 
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
 
 export const plugin: OberonPlugin = () => ({
   name: "Resend",
+  disabled: USE_DEVELOPMENT_SEND_PLUGIN,
   adapter: {
     sendVerificationRequest: async ({
       email,

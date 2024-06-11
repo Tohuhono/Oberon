@@ -28,7 +28,6 @@ export const plugin: OberonPlugin = (adapter) => ({
             email,
             url,
           })
-          await adapter.sendVerificationRequest(props)
         },
       } satisfies OberonSendAdapter)),
     ...(USE_DEVELOPMENT_DATABASE_PLUGIN &&

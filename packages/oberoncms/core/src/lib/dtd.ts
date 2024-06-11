@@ -218,6 +218,7 @@ export type OberonCanAdapter = {
     action: AdapterActionGroup
     permission: AdapterPermission
   }) => boolean
+  signOut: () => Promise<void>
 }
 
 export type OberonAuthAdapter = Required<
@@ -312,4 +313,5 @@ export type OberonActions = {
     StreamResponseChunk<TransformResult | MigrationResult>
   >
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
+  signOut: () => Promise<void>
 }

@@ -228,6 +228,9 @@ export function initActions({
      * Auth
      */
     can,
+    signOut: async () => {
+      return adapter.signOut()
+    },
     /*
      * Site actions
      */

@@ -16,6 +16,7 @@
     "generate:migrations": "turbo generate:migrations",
     "generate:recipes": "turbo generate:recipes",
     "start:oberon": "turbo start --filter=playground",
+    "start:docs": "turbo start --filter=docs",
     "tsc": "turbo tsc --concurrency 50 --continue",
     "dev": "turbo dev --concurrency 50",
     "dev:packages": "turbo dev --concurrency 50 --filter={./packages/**/*}...",
