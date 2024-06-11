@@ -96,7 +96,7 @@ export function initActions({
     async () => {
       const result = await adapter.getAllPages()
       const data = result.map((row) => ({
-        puckPath: row["key"].split("/").slice(1),
+        path: row["key"].split("/").slice(1),
       }))
       return data
     },

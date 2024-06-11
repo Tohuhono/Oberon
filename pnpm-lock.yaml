@@ -614,9 +614,6 @@ importers:
       drizzle-orm:
         specifier: ^0.30.10
         version: 0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5)(react@18.2.0)
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
       pg:
         specifier: ^8.11.5
         version: 8.11.5
@@ -630,12 +627,6 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
     devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../tohuhono/dev
@@ -782,9 +773,6 @@ importers:
       drizzle-orm:
         specifier: ^0.30.10
         version: 0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0)(react@18.2.0)
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -795,12 +783,6 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
     devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../oberoncms/core

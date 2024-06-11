@@ -3,7 +3,7 @@
   "version": "0.4.4",
   "private": true,
   "scripts": {
-    "build": "echo 'next build'",
+    "build": "next build",
     "clean": "odt clean",
     "dev": "next dev",
     "lint": "next lint",

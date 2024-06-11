@@ -20,5 +20,11 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["app", ".next/types/**/*.ts", "components"]
+  "include": [
+    "app",
+    ".next/types/**/*.ts",
+    "components",
+    "oberon/adapter.ts",
+    "oberon"
+  ]
 }

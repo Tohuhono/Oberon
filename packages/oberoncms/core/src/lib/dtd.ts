@@ -36,13 +36,19 @@ export type OberonComponent<
   transforms?: Transforms
 }
 
-export type ClientAction =
-  | "edit"
-  | "preview"
-  | "users"
-  | "images"
-  | "pages"
-  | "site"
+export const clientActions = [
+  "edit",
+  "preview",
+  "users",
+  "images",
+  "pages",
+  "site",
+] as const
+export const actionPaths = clientActions.map((action) => ({
+  path: [action],
+}))
+export type ClientAction = (typeof clientActions)[number]
+
 export type AdapterActionGroup = "all" | "users" | "images" | "pages" | "site"
 export type AdapterPermission = "unauthenticated" | "read" | "write"
 export type OberonRole = "user" | "admin"
@@ -298,7 +304,7 @@ export type OberonActions = {
   ) => Promise<Pick<OberonUser, "role" | "id"> | null>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
-  getAllPaths: () => Promise<Array<{ puckPath: string[] }>>
+  getAllPaths: () => Promise<Array<{ path: string[] }>>
   getAllUsers: () => Promise<OberonUser[]>
   getConfig: () => Promise<OberonSiteConfig>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
