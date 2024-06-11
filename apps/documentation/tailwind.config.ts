@@ -6,13 +6,15 @@ const config: Config = {
     hoverOnlyWhenSupported: true,
   },
   content: [
-    "./node_modules/@tohuhono/ui/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberoncms/core/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@tohuhono/dev/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@tohuhono/puck-blocks/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@datacom-digital/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./.oberon/tailwind.classes",
     "./theme.config.jsx",
-    "./tailwind.classes.txt",
   ],
   theme: {
     extend: {

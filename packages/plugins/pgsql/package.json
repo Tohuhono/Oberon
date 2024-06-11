@@ -47,7 +47,6 @@
     "@auth/drizzle-adapter": "^1.2.0",
     "@oberoncms/core": "workspace:*",
     "drizzle-orm": "^0.30.10",
-    "next": "^14.2.3",
     "pg": "^8.11.5",
     "server-cli-only": "^0.3.2"
   },
@@ -56,8 +55,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@auth/core": "^0.30.0",
-    "@measured/puck": "^0.14.2",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",
     "@types/pg": "^8.11.6",

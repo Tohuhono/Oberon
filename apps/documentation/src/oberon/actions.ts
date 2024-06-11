@@ -22,6 +22,7 @@ const {
   migrateData,
   publishPageData,
   can,
+  signOut,
 } = initActions({
   config,
   adapter,
@@ -97,5 +98,10 @@ export const actions = {
   publishPageData: async (data) => {
     "use server"
     return publishPageData(data)
+  },
+
+  signOut: async () => {
+    "use server"
+    return signOut()
   },
 } satisfies OberonActions

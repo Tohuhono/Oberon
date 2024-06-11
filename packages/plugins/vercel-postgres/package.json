@@ -47,7 +47,6 @@
     "@oberoncms/plugin-pgsql": "workspace:*",
     "@vercel/postgres": "0.8.0",
     "drizzle-orm": "^0.30.10",
-    "next": "^14.2.3",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {
@@ -55,8 +54,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@auth/core": "^0.30.0",
-    "@measured/puck": "^0.14.2",
     "@oberoncms/core": "workspace:*",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",

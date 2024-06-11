@@ -131,6 +131,10 @@ export const authPlugin: OberonPlugin = (adapter) => {
 
         return (session?.user as OberonUser) || null
       },
+      signOut: async () => {
+        await nextAuth.signOut({ redirect: false })
+        return nextAuth.signIn()
+      },
     },
   }
 }

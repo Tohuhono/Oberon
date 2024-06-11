@@ -54,7 +54,7 @@ importers:
         specifier: ^7.2.0
         version: 7.2.0
 
-  apps/demo:
+  apps/documentation:
     dependencies:
       '@datacom-digital/ui-sample-components':
         specifier: ^0.3.2
@@ -65,58 +65,6 @@ importers:
       '@tohuhono/puck-rich-text':
         specifier: workspace:*
         version: link:../../packages/tohuhono/puck-rich-text
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      server-cli-only:
-        specifier: ^0.3.2
-        version: 0.3.2
-    devDependencies:
-      '@tailwindcss/typography':
-        specifier: ^0.5.10
-        version: 0.5.12(tailwindcss@3.4.3)
-      '@types/node':
-        specifier: ^20
-        version: 20.11.30
-      '@types/react':
-        specifier: ^18
-        version: 18.2.66
-      '@types/react-dom':
-        specifier: ^18
-        version: 18.2.22
-      autoprefixer:
-        specifier: ^10.0.1
-        version: 10.4.19(postcss@8.4.38)
-      eslint:
-        specifier: ^8
-        version: 8.57.0
-      eslint-config-next:
-        specifier: 14.1.4
-        version: 14.1.4(eslint@8.57.0)(typescript@5.4.2)
-      postcss:
-        specifier: ^8
-        version: 8.4.38
-      prettier-plugin-tailwindcss:
-        specifier: ^0.5.12
-        version: 0.5.13(prettier@3.3.1)
-      tailwindcss:
-        specifier: ^3.3.0
-        version: 3.4.3
-      tailwindcss-animate:
-        specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@3.4.3)
-      typescript:
-        specifier: ^5
-        version: 5.4.2
-
-  apps/documentation:
-    dependencies:
       next:
         specifier: 14.2.3
         version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
@@ -614,9 +562,6 @@ importers:
       drizzle-orm:
         specifier: ^0.30.10
         version: 0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5)(react@18.2.0)
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
       pg:
         specifier: ^8.11.5
         version: 8.11.5
@@ -630,12 +575,6 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
     devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@tohuhono/dev':
         specifier: workspace:*
         version: link:../../tohuhono/dev
@@ -782,9 +721,6 @@ importers:
       drizzle-orm:
         specifier: ^0.30.10
         version: 0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0)(react@18.2.0)
-      next:
-        specifier: ^14.2.3
-        version: 14.2.3(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -795,12 +731,6 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
     devDependencies:
-      '@auth/core':
-        specifier: ^0.30.0
-        version: 0.30.0
-      '@measured/puck':
-        specifier: ^0.14.2
-        version: 0.14.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../oberoncms/core
