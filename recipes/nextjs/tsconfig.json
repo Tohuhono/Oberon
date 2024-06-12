@@ -9,6 +9,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "target": "ES2022",
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,

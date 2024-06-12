@@ -1,107 +1,91 @@
-import "server-cli-only";
-
-import type { AdapterPermission, OberonActions } from "@oberoncms/core";
+import {
+  wrap,
+  type AdapterPermission,
+  type OberonServerActions,
+} from "@oberoncms/core";
 import { initActions } from "@oberoncms/core/adapter";
 import { config } from "./config";
 import { adapter } from "./adapter";
 
-const {
-  addImage,
-  addPage,
-  addUser,
-  changeRole,
-  deleteImage,
-  deletePage,
-  deleteUser,
-  getAllImages,
-  getAllPages,
-  getAllPaths,
-  getAllUsers,
-  getConfig,
-  getPageData,
-  migrateData,
-  publishPageData,
-  can,
-  signOut,
-} = initActions({
+export const actions = initActions({
   config,
   adapter,
 });
 
-export const actions = {
+export const serverActions = {
   addImage: async (data) => {
     "use server";
-    return addImage(data);
+    return wrap(actions.addImage(data));
   },
   addPage: async (data) => {
     "use server";
-    return addPage(data);
+    return wrap(actions.addPage(data));
   },
 
   addUser: async (data) => {
     "use server";
-    return addUser(data);
+    return wrap(actions.addUser(data));
   },
 
   can: async (action, permission?: AdapterPermission) => {
     "use server";
-    return can(action, permission);
+    return wrap(actions.can(action, permission));
   },
   changeRole: async (data) => {
     "use server";
-    return changeRole(data);
+    return wrap(actions.changeRole(data));
   },
   deleteImage: async (key) => {
     "use server";
-    return deleteImage(key);
+    return wrap(actions.deleteImage(key));
   },
   deletePage: async (data) => {
     "use server";
-    return deletePage(data);
+    return wrap(actions.deletePage(data));
   },
   deleteUser: async (data) => {
     "use server";
-    return deleteUser(data);
+    return wrap(actions.deleteUser(data));
   },
   getAllImages: async () => {
     "use server";
-    return getAllImages();
+    return wrap(actions.getAllImages());
   },
 
   getAllPages: async () => {
     "use server";
-    return getAllPages();
+    return wrap(actions.getAllPages());
   },
   getAllPaths: async () => {
     "use server";
-    return getAllPaths();
+    return wrap(actions.getAllPaths());
   },
 
   getAllUsers: async () => {
     "use server";
-    return getAllUsers();
+    return wrap(actions.getAllUsers());
   },
   getConfig: async () => {
     "use server";
-    return getConfig();
+    return wrap(actions.getConfig());
   },
 
   getPageData: async (key) => {
     "use server";
-    return getPageData(key);
+    return wrap(actions.getPageData(key));
   },
   migrateData: async () => {
     "use server";
-    return migrateData();
+    return wrap(actions.migrateData());
   },
 
   publishPageData: async (data) => {
     "use server";
-    return publishPageData(data);
+    return wrap(actions.publishPageData(data));
   },
 
   signOut: async () => {
     "use server";
-    return signOut();
+    return wrap(actions.signOut());
   },
-} satisfies OberonActions;
+} satisfies OberonServerActions;

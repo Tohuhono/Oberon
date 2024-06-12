@@ -19,14 +19,6 @@ export function getRandomInt(start: number, end: number) {
   return Math.floor(Math.random() * (range + 1) + start)
 }
 
-export function notImplemented(action: string) {
-  return (): never => {
-    throw new Error(
-      `No oberon plugin provided for ${action} action, please check your oberon adapter configuration.`,
-    )
-  }
-}
-
 /**
  * Returns a promise that resolves after
  * @param ms time in ms

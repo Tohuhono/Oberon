@@ -1,13 +1,16 @@
 import {
+  notImplemented,
   type OberonAuthAdapter,
   type OberonDatabaseAdapter,
+  type OberonInitAdapter,
   type OberonPlugin,
 } from "@oberoncms/core"
-import { notImplemented } from "@tohuhono/utils"
 
 export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
   adapter: {
+    // Prebuild hook
+    prebuild: notImplemented("prebuild"),
     // OberonDatabaseAdapter
     addImage: notImplemented("addImage"),
     addPage: notImplemented("addPage"),
@@ -38,5 +41,5 @@ export const databasePlugin: OberonPlugin = () => ({
     useVerificationToken: notImplemented("useVerificationToken"),
     updateSession: notImplemented("updateSession"),
     updateUser: notImplemented("updateUser"),
-  } satisfies OberonDatabaseAdapter & OberonAuthAdapter,
+  } satisfies OberonDatabaseAdapter & OberonAuthAdapter & OberonInitAdapter,
 })

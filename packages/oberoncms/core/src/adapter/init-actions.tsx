@@ -15,6 +15,7 @@ import {
   INITIAL_DATA,
   AddPageSchema,
   PublishPageSchema,
+  ResponseError,
   type AdapterActionGroup,
   type AdapterPermission,
   type OberonActions,
@@ -57,7 +58,7 @@ export function initActions({
     if (await can(action, permission)) {
       return
     }
-    throw new Error("Unauthorized")
+    throw new ResponseError("You do not have permission to perform this action")
   }
 
   const whoWill = async (
@@ -69,7 +70,7 @@ export function initActions({
     if (user && adapter.hasPermission({ user, action, permission })) {
       return user
     }
-    throw new Error("Unauthorized")
+    throw new ResponseError("You do not have permission to perform this action")
   }
 
   const getAllPagesCached = cache(
@@ -322,42 +323,26 @@ export function initActions({
     addUser: async function (data: unknown) {
       await will("users", "write")
       const { email, role } = AddUserSchema.parse(data)
-
-      try {
-        const { id } = await adapter.addUser({
-          email,
-          role,
-        })
-        revalidateTag("oberon-users")
-        return { id, email, role }
-      } catch (_error) {
-        console.error("Create user failed")
-        return null
-      }
+      const { id } = await adapter.addUser({
+        email,
+        role,
+      })
+      revalidateTag("oberon-users")
+      return { id, email, role }
     },
     deleteUser: async function (data: unknown) {
       await will("users", "write")
       const { id } = DeleteUserSchema.parse(data)
-      try {
-        await adapter.deleteUser(id)
-        revalidateTag("oberon-users")
-        return { id }
-      } catch (_error) {
-        console.error("Delete user failed")
-        return null
-      }
+      await adapter.deleteUser(id)
+      revalidateTag("oberon-users")
+      return { id }
     },
     changeRole: async function (data: unknown) {
       await will("users", "write")
       const { role, id } = ChangeRoleSchema.parse(data)
-      try {
-        await adapter.changeRole({ role, id })
-        revalidateTag("oberon-users")
-        return { role, id }
-      } catch (_error) {
-        console.error("Change role failed")
-        return null
-      }
+      await adapter.changeRole({ role, id })
+      revalidateTag("oberon-users")
+      return { role, id }
     },
   }
 }

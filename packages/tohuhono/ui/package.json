@@ -40,6 +40,7 @@
     "./scroll-area": "./dist/scroll-area.js",
     "./table": "./dist/table.js",
     "./theme": "./dist/theme.js",
+    "./toast": "./dist/toast.js",
     "./navigation-menu": "./dist/navigation-menu.js",
     "./dropdown-menu.ts": "./dist/dropdown-menu.js"
   },
@@ -51,6 +52,7 @@
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-toast": "^1.1.5",
     "@tailwindcss/typography": "^0.5.10",
     "@tohuhono/utils": "workspace:*",
     "class-variance-authority": "^0.7.0",

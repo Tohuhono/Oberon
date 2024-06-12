@@ -1,7 +1,10 @@
 import "server-cli-only"
 
-import { notImplemented } from "@tohuhono/utils"
-import type { OberonPlugin, OberonSendAdapter } from "@oberoncms/core"
+import {
+  notImplemented,
+  type OberonPlugin,
+  type OberonSendAdapter,
+} from "@oberoncms/core"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
 const SEND_SECRET = process.env.SEND_SECRET

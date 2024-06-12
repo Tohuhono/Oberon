@@ -3,6 +3,7 @@ import type {
   OberonCanAdapter,
   OberonDatabaseAdapter,
   OberonPlugin,
+  ResponseError,
 } from "../lib/dtd"
 import { getInitialData } from "./get-initial-data"
 
@@ -29,16 +30,20 @@ const mockAllPages = [
   },
 ]
 
+function notAvailable(): never {
+  throw new ResponseError("This action is not available in the demo")
+}
+
 export const mockPlugin: OberonPlugin = () => ({
   name: "mock-plugin",
   adapter: {
-    addImage: async () => {},
-    addPage: async () => {},
+    addImage: notAvailable,
+    addPage: notAvailable,
     addUser: async () => mockUser,
-    changeRole: async () => {},
-    deleteImage: async () => {},
-    deletePage: async () => {},
-    deleteUser: async () => undefined,
+    changeRole: notAvailable,
+    deleteImage: notAvailable,
+    deletePage: notAvailable,
+    deleteUser: notAvailable,
     getAllImages: async () => [],
     getAllPages: async () => mockAllPages,
     getAllUsers: async () => [mockUser],
@@ -46,8 +51,8 @@ export const mockPlugin: OberonPlugin = () => ({
     getPageData: async (key) => (key === "/" ? mockPage.data : null),
     getSite: async () => mockSite,
     hasPermission: () => true,
-    updatePageData: async () => {},
-    updateSite: async () => {},
+    updatePageData: notAvailable,
+    updateSite: notAvailable,
     signOut: async () => {
       redirect("/")
     },
