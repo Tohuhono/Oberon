@@ -1,5 +1,5 @@
-import { notImplemented } from "@tohuhono/utils"
-import type { OberonPermissions, OberonAdapter } from "../lib/dtd"
+import { type OberonPermissions, type OberonAdapter } from "../lib/dtd"
+import { notImplemented } from "../lib/utils"
 
 export const baseAdapter: OberonAdapter = {
   plugins: [],

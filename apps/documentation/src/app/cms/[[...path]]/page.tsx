@@ -2,7 +2,7 @@ import { getMetaData, actionPaths } from "@oberoncms/core"
 import { OberonProvider } from "@oberoncms/core/provider"
 
 import { Client } from "./client"
-import { actions } from "@/oberon/actions"
+import { actions, serverActions } from "@/oberon/actions"
 
 export function generateStaticParams() {
   return actionPaths
@@ -22,7 +22,7 @@ export default async function Oberon({
   params: { path?: string[] }
 }) {
   return (
-    <OberonProvider actions={actions} path={path}>
+    <OberonProvider actions={serverActions} path={path}>
       <Client />
     </OberonProvider>
   )

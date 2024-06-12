@@ -11,6 +11,10 @@ import type { StreamResponseChunk } from "@tohuhono/utils"
 import type { NextAuthResult } from "next-auth"
 import type { Awaitable } from "@auth/core/types"
 
+export class OberonError extends Error {}
+
+export class ResponseError extends Error {}
+
 // TODO fix types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Transforms = Array<(props: any) => any>
@@ -314,4 +318,48 @@ export type OberonActions = {
   >
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
   signOut: () => Promise<void>
+}
+
+export type OberonResponse<T = unknown> = Promise<
+  | {
+      status: "success"
+      result: T
+      message?: string
+    }
+  | {
+      status: "error"
+      result?: T
+      message?: string
+    }
+>
+
+export type OberonServerActions = {
+  addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
+  addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
+  addUser: (
+    data: z.infer<typeof AddUserSchema>,
+  ) => OberonResponse<OberonUser | null>
+  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse
+  deleteImage: (key: OberonImage["key"]) => OberonResponse
+  deleteUser: (
+    data: z.infer<typeof DeleteUserSchema>,
+  ) => OberonResponse<Pick<OberonUser, "id"> | null>
+  can: (
+    action: AdapterActionGroup,
+    permission?: AdapterPermission,
+  ) => OberonResponse<boolean>
+  changeRole: (
+    data: z.infer<typeof ChangeRoleSchema>,
+  ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
+  getAllImages: () => OberonResponse<OberonImage[]>
+  getAllPages: () => OberonResponse<OberonPageMeta[]>
+  getAllPaths: () => OberonResponse<Array<{ path: string[] }>>
+  getAllUsers: () => OberonResponse<OberonUser[]>
+  getConfig: () => OberonResponse<OberonSiteConfig>
+  getPageData: (key: OberonPageMeta["key"]) => OberonResponse<Data | null>
+  migrateData: () => OberonResponse<
+    StreamResponseChunk<TransformResult | MigrationResult>
+  >
+  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse
+  signOut: () => OberonResponse
 }

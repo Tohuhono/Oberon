@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import type { ClientAction } from "./dtd"
+import { ResponseError, type ClientAction, type OberonResponse } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
   switch (action) {
@@ -54,3 +54,44 @@ export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(
 export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(
   process.env.USE_DEVELOPMENT_SEND,
 )
+
+export function notImplemented(action: string) {
+  return (): never => {
+    throw new ResponseError(
+      `No oberon plugin provided for ${action} action, please check your oberon adapter configuration.`,
+    )
+  }
+}
+
+export async function wrap<T = unknown>(
+  promise: Promise<T>,
+): OberonResponse<T> {
+  try {
+    return {
+      status: "success",
+      result: await promise,
+    }
+  } catch (error) {
+    if (error instanceof ResponseError) {
+      return {
+        status: "error",
+        message: error.message,
+      }
+    }
+    console.error(error)
+    return {
+      status: "error",
+      message: "An unknown error occurred",
+    }
+  }
+}
+
+export async function unwrap<T = unknown>(
+  response: OberonResponse<T>,
+): Promise<T> {
+  const { status, result, message } = await response
+  if (status === "success") {
+    return result as T
+  }
+  throw new Error(message)
+}

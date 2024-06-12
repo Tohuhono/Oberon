@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@next/env": "^14.2.3",
+    "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-pgsql": "workspace:*",
     "@vercel/postgres": "0.8.0",
     "drizzle-orm": "^0.30.10",
@@ -54,7 +55,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@oberoncms/core": "workspace:*",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.11.26",
     "@types/react": "18.2.66",
