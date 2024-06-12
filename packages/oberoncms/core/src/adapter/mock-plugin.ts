@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation"
-import type {
-  OberonCanAdapter,
-  OberonDatabaseAdapter,
-  OberonPlugin,
+import {
   ResponseError,
+  type OberonCanAdapter,
+  type OberonDatabaseAdapter,
+  type OberonPlugin,
 } from "../lib/dtd"
 import { getInitialData } from "./get-initial-data"
 

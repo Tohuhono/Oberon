@@ -1,5 +1,4 @@
 export * from "./lib/dtd"
 export * from "./lib/utils"
 export * from "./lib/get-metadata"
-export * from "./lib/error"
 export { cn } from "@tohuhono/utils"
