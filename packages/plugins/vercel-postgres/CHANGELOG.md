@@ -4,8 +4,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production
-  Add Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add
+  Toaster component to surface action errors
 - 19e0f04: Move signOut to adapter
 - 85f2f55: Create a development plugin
 
@@ -25,8 +25,8 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers
-  Move local sqlite to separate plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate
+  plugin
 - e8c2c24: Fix dynamically load client after initialisation
 - Updated dependencies [e28293f]
 - Updated dependencies [01fde22]
@@ -109,16 +109,15 @@
 
 ### Minor Changes
 
-- c6960f3: Implement Adapter Plugins
-  Refactor OberonProvider
-  Add cleanup for uploadthing image removal
-- 2deb902: Added updatedAt and updatedBy to images
-  Resolved uploadingthing type declaration error
-- eae691f: CAUTION BREAKING CHANGE
-  databases created before this patch will need to be manually updated
-  added updatedAt and updatedBy cloumns
-  reset the drizzle database migrations
-- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for
+  uploadthing image removal
+- 2deb902: Added updatedAt and updatedBy to images Resolved uploadingthing type
+  declaration error
+- eae691f: CAUTION BREAKING CHANGE databases created before this patch will need
+  to be manually updated added updatedAt and updatedBy cloumns reset the drizzle
+  database migrations
+- 4e6430b: Reverted to relative imports because typescript team refuses to
+  transpile declaration files
 
 ### Patch Changes
 

@@ -1,9 +1,12 @@
-import { Tabs } from 'nextra/components'
-import { Callout } from 'nextra/components'
+import { Tabs } from "nextra/components"
+import { Callout } from "nextra/components"
 
 # plugin-flydrive
 
-A plugin that provides an Image storage and a component, pre-configured using [flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction layer that allows you to easily interact with files systems of different cloud storage providers.
+A plugin that provides an Image storage and a component, pre-configured using
+[flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction
+layer that allows you to easily interact with files systems of different cloud
+storage providers.
 
 ## Installation
 
@@ -12,21 +15,27 @@ npm install @oberoncms/plugin-flydrive flydrive
 ```
 
 ## Setup
-Use ```getFlyDrivePlugin``` function to generate the plugin, it takes a driver as an argument, the driver should be an instance of the flydrive any flydrive driver
+
+Use `getFlyDrivePlugin` function to generate the plugin, it takes a driver as an
+argument, the driver should be an instance of the flydrive any flydrive driver
+
 <Callout type="info" emoji="ℹ️">
-  Make sure to follow the [flydrive documentation](https://flydrive.dev/docs/introduction) instructions.
+  Make sure to follow the [flydrive
+  documentation](https://flydrive.dev/docs/introduction) instructions.
 </Callout>
-```typescript 
-export const { flyDrivePlugin, initFlyDriveRouter } = getFlyDrivePlugin(driver)
+```typescript export const {(flyDrivePlugin, initFlyDriveRouter)} = getFlyDrivePlugin(driver)
 ```
 
 ## Example using S3 driver
+
 Install the required packages for the S3 driver
+
 ```sh npm2yarn
 npm install @aws-sdk/s3-request-presigner @aws-sdk/client-s3
 ```
 
 create a flydrive adapter, and generate your plugin!
+
 ```typescript
 // adapter.ts
 import "server-only"

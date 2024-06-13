@@ -1,6 +1,7 @@
 # Send Adapter
 
-The send adapter is used to send verification requests to users, usually by email. 
+The send adapter is used to send verification requests to users, usually by
+email.
 
 ```tsx
 export type OberonSendAdapter = {
@@ -10,45 +11,4 @@ export type OberonSendAdapter = {
     url: string
   }) => Promise<void>
 }
-```
-
-Below is an example implementation:
-
-```tsx
-import "server-cli-only"
-
-import { notImplemented, type OberonPlugin } from "@oberoncms/core"
-
-const EMAIL_FROM = process.env.EMAIL_FROM
-const SEND_SECRET = process.env.SEND_SECRET
-
-export const sendPlugin: OberonPlugin = () => ({
-  name: "Custom Send",
-  adapter: {
-    sendVerificationRequest: async ({
-      email,
-      token,
-      url,
-    }: {
-      email: string
-      token: string
-      url: string
-    }) => {
-      const msg = {
-        from: EMAIL_FROM,
-        to: email,
-        subject: "One time login to Oberon CMS",
-        text: `Sign in with code\n\n${token}\n\n ${url} \n\n`,
-      }
-      
-      if (!SEND_SECRET) {
-        throw new Error("No SEND_SECRET configured")
-      }
-
-      // Replace this with your own send function
-      await sendEmail(msg, SEND_SECRET)
-    },
-  },
-})
-
 ```

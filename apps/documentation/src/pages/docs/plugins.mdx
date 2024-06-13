@@ -1,18 +1,34 @@
+# Plugins
 
-  OberonAdapterMeta
-  OberonInitAdapter
-  OberonCanAdapter
-  OberonDatabaseAdapter
-  OberonCanAdapter
-  OberonSendAdapter
+OberonCMS uses plugins to provide the core functionality of the CMS. You can use
+one of our plugins, or create your own. While a plugin can provide any
+combination of OberonActions, we have grouped the following based on their
+functionality.
 
 ### Database Adapters
 
-These plugins provide Oberon core database and [Auth.js](https://authjs.dev/) adapters.
+These plugins provide Oberon core database and [Auth.js](https://authjs.dev/)
+adapters.
 
-- [Turso](./turso.mdx)
-- [PostgreSQL](./postgresql.mdx)
-- [Vercel Postgres](./vercel-postgres.mdx)
+- [Turso](/docs/plugins/database/turso)
+- [PostgreSQL](/docs/plugins/database/postgresql)
+- [Vercel Postgres](/docs/plugins/database/vercel-postgres)
+- [Custom](/docs/plugins/database/custom)
+
+### Send Adapters
+
+These plugins provide Oberon core send functionality. Currently only used for
+sending verfication and OTP emails.
+
+- [Custom](/docs/plugins/send/custom)
+
+### Storage Adapters
+
+These plugins provide Oberon core storage functionality. Currently only used for
+storing images.
+
+- [Uploadthing](/docs/plugins/storage/uploadthing)
+- [Flydrive](/docs/plugins/storage/flydrive)
 
 ### Authorization Adapter
 

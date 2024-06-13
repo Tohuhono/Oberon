@@ -61,10 +61,10 @@
 
 ### Minor Changes
 
-- c6960f3: Implement Adapter Plugins
-  Refactor OberonProvider
-  Add cleanup for uploadthing image removal
-- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for
+  uploadthing image removal
+- 4e6430b: Reverted to relative imports because typescript team refuses to
+  transpile declaration files
 
 ### Patch Changes
 
@@ -109,8 +109,7 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component.
-  Next -> 14.2.
-  Fixed turbo dev to correctly build dependencies.
-  Changed from assets to images - this is a breaking change for oberon adapaters.
-  Fixed dynamic tailwind to target preview iframe.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo
+  dev to correctly build dependencies. Changed from assets to images - this is a
+  breaking change for oberon adapaters. Fixed dynamic tailwind to target preview
+  iframe.

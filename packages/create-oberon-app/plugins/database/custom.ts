@@ -1,4 +1,5 @@
 import {
+  USE_DEVELOPMENT_DATABASE_PLUGIN,
   notImplemented,
   type OberonAuthAdapter,
   type OberonDatabaseAdapter,
@@ -8,6 +9,7 @@ import {
 
 export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
+  disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
   adapter: {
     // Prebuild hook
     prebuild: notImplemented("prebuild"),

@@ -6,7 +6,8 @@ A monorepo for OberonCMS and the related packages and tooling.
 
 ## Quick start
 
-We use [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm or yarn ymmv.
+We use [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm
+or yarn ymmv.
 
 ```sh
 pnpm install
@@ -32,90 +33,149 @@ pnpm change # Add a changset entry
 
 ## What's inside?
 
-This [Turborepo](https://turbo.build/repo/) that includes the following packages and apps:
+This [Turborepo](https://turbo.build/repo/) that includes the following packages
+and apps:
 
 ### Apps
 
-- `apps/demo`
-
-  A demo app showcasing OberonCMS.
-
-- `apps/documentation`
+- `apps/documentation` - https://oberoncms.com
 
   Landing page and documentation for OberonCMS.
-  https://oberoncms.com
+
+  Includes a [demo app](https://oberoncms.com/demo).
 
 - `apps/playground`
 
-  A playground for developers to test OberonCMS. Mostly used for local development, there is also a [vercel deployment](https://playground.tohuhono.com) with access limited to core contributors.
+  A playground for developers to test OberonCMS.
 
-- `apps/rich-text-demo`
+  Mostly used for local development, there is also a
+  [deployment](https://playground.tohuhono.com) with access limited to core
+  contributors.
 
-  an app demoing [puck-rich-text](https://www.npmjs.com/package/@tohuhono/puck-rich-text)
+- `apps/rich-text-demo` - https://puck-rich-text.tohuhono.com
 
-  https://puck-rich-text.tohuhono.com
+  an app demoing
+  [puck-rich-text](https://www.npmjs.com/package/@tohuhono/puck-rich-text)
 
 ### Packages
 
 #### OberonCMS
 
-- `packages/create-oberon-app`
+- `packages/create-oberon-app` -
+  [create-oberon-app](https://www.npmjs.com/package/create-oberon-app)
 
   A command line tool for creating new projects with OberonCMS.
 
-- `packages/oberoncms/core`
+- `packages/oberoncms/core` -
+  [@oberoncms/core](https://www.npmjs.com/package/@oberoncms/core)
 
   The core package for OberonCMS.
 
+- `packages/oberoncms/sqlite` -
+  [@oberoncms/sqlite](https://www.npmjs.com/package/@oberoncms/sqlite)
+
+  Sqlite adapter for OberonCMS.
+
 #### Plugins
 
-- `packages/plugins/pgsql`
+- `packages/plugins/developement` -
+  [@oberoncms/plugin-development](https://www.npmjs.com/package/@oberoncms/plugin-development)
 
-  A PostgreSQL database plugin for OberonCMS.
+  Provides local only adapters for development.
 
-- `packages/plugins/turso`
+- `packages/plugins/turso` -
+  [@oberoncms/plugin-turso](https://www.npmjs.com/package/@oberoncms/plugin-turso)
 
   A Turso libsql database plugin for OberonCMS.
 
-- `packages/plugins/uploadthing`
+- `packages/plugins/pgsql` -
+  [@oberoncms/plugin-pgsql](https://www.npmjs.com/package/@oberoncms/plugin-pgsql)
 
-  An Puck component and OberonCMS plugin for embeding uploadthing images.
+  A PostgreSQL database plugin for OberonCMS.
 
-- `packages/plugins/vercel-postgres`
+- `packages/plugins/vercel-postgres` -
+  [@oberoncms/plugin-vercel-postgres](https://www.npmjs.com/package/@oberoncms/plugin-vercel-postgres)
 
   A Vercel PostgreSQL database plugin for OberonCMS.
 
+- `packages/plugins/uploadthing` -
+  [@oberoncms/plugin-uploadthing](https://www.npmjs.com/package/@oberoncms/plugin-uploadthing)
+
+  An Puck component and OberonCMS plugin for embeding uploadthing images.
+
+- `packages/plugins/flydrive` -
+  [@oberoncms/plugin-flydrive](https://www.npmjs.com/package/@oberoncms/plugin-flydrive)
+
+  A plugin that provides an Image component and storage using
+  [flydrive](https://flydrive.dev/docs/introduction).
+
 #### Utilities and Config
 
-- `packages/tohuhono/dev`
+- `packages/tohuhono/dev` -
+  [@tohuhono/dev](https://www.npmjs.com/package/@tohuhono/dev)
+
+  Base config and scripts for building packages and apps.
 
   - [TypeScript](https://www.typescriptlang.org/) for static type checking
   - [ESLint](https://eslint.org/) for code linting
   - [Prettier](https://prettier.io) for code formatting
+  - [Vite](https://vitejs.dev/) for bundling
 
-  Base config and scripts for building packages and apps.
+- `packages/tohuhono/utils` -
+  [@tohuhono/utils](https://www.npmjs.com/package/@tohuhono/utils)
 
-- `packages/tohuhono/utils`
+  A collection of utility functions shared across the monorepo. Particularly
+  useful for testing.
 
-  A collection of utility functions shared across the monorepo. Particularly useful for testing.
+- `packages/tohuhono/ui` -
+  [@tohuhono/ui](https://www.npmjs.com/package/@tohuhono/ui)
 
-- `packages/tohuhono/ui`
-
-  Shared UI components and utilities including a [tailwindcss](https://tailwindcss.com/) theme and components for dynamicly loading and adjusting it.
+  Shared UI components using [Shadcn/ui](https://ui.shadcn.com/) and utilities
+  including a [tailwindcss](https://tailwindcss.com/) theme and components for
+  dynamicaly loading and adjusting it.
 
 #### Puck components
 
-- `packages/tohuhono/puck-rich-text`
+- `packages/tohuhono/puck-rich-text` -
+  [@tohuhono/puck-rich-text](https://www.npmjs.com/package/@tohuhono/puck-rich-text)
 
   A puck component for rich text editing made for OberonCMS.
 
-- `packages/tohuhono/puck-blocks`
+- `packages/tohuhono/puck-blocks` -
+  [@tohuhono/puck-blocks](https://www.npmjs.com/package/@tohuhono/puck-blocks)
 
-  A collection of puck components for building pages in OberonCMS. _Not currently used or maintained_
+  A collection of puck components for building pages in OberonCMS. _Deprecated_
+
+### Recipes
+
+Used by the [create-oberon-app](https://www.npmjs.com/package/create-oberon-app)
+command. If you would like to support other frameworks, please get in touch as
+we would love to help.
+
+- `recipes/nextjs`
+
+  A Next.js starter app.
+
+## Contributing
+
+OberonCMS is an open source project and we welcome contributions from the
+community. You can
+[raise an issue](https://github.com/Tohuhono/Oberon/issues/new) or submit a pull
+request to help us improve.
+
+1. Fork and clone the repository
+2. Ensure you have the LTS version of Node.js installed, as well as the latest
+   version of [pnpm](https://pnpm.io).
+3. Install the project dependencies by running `pnpm install`.
+4. Implement your changes, as well as any documentation or tests that are
+   required.
+5. Create a changeset for your changes by running `pnpm changeset`.
+6. Open a pull request with your changes and changeset.
 
 ## What next?
 
-[Under heavy development.](https://github.com/orgs/Tohuhono/projects/1/views/1)
+We are under heavy development, building out the core capabilities.
+[Check out our todo list for upcoming features.](https://github.com/orgs/Tohuhono/projects/1/views/1)
 
 ## Contributors
 

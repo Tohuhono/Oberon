@@ -1,6 +1,10 @@
 # @oberoncms/plugin-flydrive
 
-A plugin that provides an Image component for [OberonCMS](https://github.com/Tohuhono/Oberon) it's pre-configured to using [flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction layer that allows you to easily interact with files systems of different cloud storage providers.
+A plugin that provides an Image component for
+[OberonCMS](https://github.com/Tohuhono/Oberon) it's pre-configured to using
+[flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction
+layer that allows you to easily interact with files systems of different cloud
+storage providers.
 
 ## Table of Contents
 
@@ -17,8 +21,8 @@ pnpm add @oberoncms/plugin-flydrive flydrive
 
 ## Setup
 
-- install your favoriate flydrive drivers's requriments,
-  according to the [flydrive documentation](https://flydrive.dev/docs/introduction)
+- install your favoriate flydrive drivers's requriments, according to the
+  [flydrive documentation](https://flydrive.dev/docs/introduction)
 
 for example using S3 driver:
 

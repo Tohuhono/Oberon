@@ -4,8 +4,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production
-  Add Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add
+  Toaster component to surface action errors
 - 19e0f04: Move signOut to adapter
 - 85f2f55: Create a development plugin
 
@@ -22,8 +22,8 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers
-  Move local sqlite to separate plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate
+  plugin
 
 ## 0.10.3
 
@@ -132,7 +132,8 @@
 
 - 26d9c91: Updated adapter-vercel-postgres for site config and version support
 - 26d9c91: Added site manager page and page data migration functionality
-- 26d9c91: BREAKING CHANGE changed sqlite columns storing json data to use new mode
+- 26d9c91: BREAKING CHANGE changed sqlite columns storing json data to use new
+  mode
 
 ### Patch Changes
 
@@ -145,16 +146,15 @@
 
 ### Minor Changes
 
-- c6960f3: Implement Adapter Plugins
-  Refactor OberonProvider
-  Add cleanup for uploadthing image removal
-- 2deb902: Added updatedAt and updatedBy to images
-  Resolved uploadingthing type declaration error
-- eae691f: CAUTION BREAKING CHANGE
-  databases created before this patch will need to be manually updated
-  added updatedAt and updatedBy cloumns
-  reset the drizzle database migrations
-- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for
+  uploadthing image removal
+- 2deb902: Added updatedAt and updatedBy to images Resolved uploadingthing type
+  declaration error
+- eae691f: CAUTION BREAKING CHANGE databases created before this patch will need
+  to be manually updated added updatedAt and updatedBy cloumns reset the drizzle
+  database migrations
+- 4e6430b: Reverted to relative imports because typescript team refuses to
+  transpile declaration files
 
 ### Patch Changes
 
@@ -217,11 +217,9 @@
 
 - dd9dc69: Implement optimistic pages
 - 39b03d3: Optimistically update the ui for oberon users
-- 5a0a961: Update theme
-  Propogate theme to preview iframe
-  Correctly invalidate server side cache on page mutate
-  Add createPage oberon action
-  Add example dashboard to recipe (maybe remvoe later?)
+- 5a0a961: Update theme Propogate theme to preview iframe Correctly invalidate
+  server side cache on page mutate Add createPage oberon action Add example
+  dashboard to recipe (maybe remvoe later?)
 - e10807b: Impliment role based authorization
 
 ### Patch Changes
@@ -235,11 +233,10 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component.
-  Next -> 14.2.
-  Fixed turbo dev to correctly build dependencies.
-  Changed from assets to images - this is a breaking change for oberon adapaters.
-  Fixed dynamic tailwind to target preview iframe.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo
+  dev to correctly build dependencies. Changed from assets to images - this is a
+  breaking change for oberon adapaters. Fixed dynamic tailwind to target preview
+  iframe.
 
 ### Patch Changes
 
