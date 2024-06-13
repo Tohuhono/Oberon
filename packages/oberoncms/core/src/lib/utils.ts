@@ -78,20 +78,16 @@ export async function wrap<T = unknown>(
         message: error.message,
       }
     }
-    console.error(error)
-    return {
-      status: "error",
-      message: "An unknown error occurred",
-    }
+    throw error
   }
 }
 
 export async function unwrap<T = unknown>(
-  response: OberonResponse<T>,
+  promise: OberonResponse<T>,
 ): Promise<T> {
-  const { status, result, message } = await response
-  if (status === "success") {
-    return result as T
+  const response = await promise
+  if (response?.status === "success") {
+    return response.result
   }
-  throw new Error(message)
+  throw new Error(response?.message)
 }

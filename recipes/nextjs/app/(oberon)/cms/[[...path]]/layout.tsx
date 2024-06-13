@@ -8,5 +8,5 @@ export default async function PuckLayout({ children }: PropsWithChildren) {
     return children;
   }
 
-  return redirect("/api/auth/signin");
+  redirect("/api/auth/signin");
 }

@@ -39,5 +39,5 @@ export function ConfirmPage({
     )
   }
 
-  return redirect("/cms")
+  redirect("/cms")
 }

@@ -331,6 +331,7 @@ export type OberonResponse<T = unknown> = Promise<
       result?: T
       message?: string
     }
+  | undefined
 >
 
 export type OberonServerActions = {

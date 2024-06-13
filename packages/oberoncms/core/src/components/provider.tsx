@@ -5,12 +5,17 @@ import { Toaster, useToast } from "@tohuhono/ui/toast"
 import type {
   OberonActions,
   OberonClientContext,
+  OberonResponse,
   OberonServerActions,
 } from "../lib/dtd"
 
 export const ClientContext = createContext<OberonClientContext | null>(null)
 
 export const ActionsContext = createContext<OberonActions | null>(null)
+
+type UnwrapServerAction = <TProps = unknown, TResult = unknown>(
+  action: (...props: TProps[]) => OberonResponse<TResult>,
+) => (...props: TProps[]) => Promise<TResult>
 
 export const OberonClientProvider = ({
   children,
@@ -23,26 +28,31 @@ export const OberonClientProvider = ({
   const { toast } = useToast()
 
   const actions = useMemo(() => {
-    const actions = {} as OberonActions
+    const unwrap: UnwrapServerAction =
+      (action) =>
+      async (...props) => {
+        const response = await action(...props)
 
-    for (const key in serverActions) {
-      // @ts-expect-error TODO fix this; it's too hard
-      actions[key] = async (...props) => {
-        // @ts-expect-error TODO fix this; it's too hard
-        const { status, result, message } = await serverActions[key](...props)
-
-        if (message) {
+        if (response?.message) {
           toast({
-            variant: status === "error" ? "destructive" : "default",
-            title: message,
+            variant: response.status === "error" ? "destructive" : "default",
+            title: response.message,
           })
         }
 
-        return result
-      }
-    }
+        if (response?.status === "success") {
+          return response.result
+        }
 
-    return actions
+        throw new Error(response?.message)
+      }
+
+    return Object.fromEntries(
+      Object.entries(serverActions).map(([key, action]) => [
+        key,
+        unwrap(action),
+      ]),
+    ) as OberonActions
   }, [serverActions, toast])
 
   return (
