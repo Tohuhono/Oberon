@@ -1,5 +1,17 @@
 # @oberon/ui
 
+## 0.10.0
+
+### Minor Changes
+
+- d233d9a: Wrap server actions to retain error messages in production
+  Add Toaster component to surface action errors
+
+### Patch Changes
+
+- Updated dependencies [d233d9a]
+  - @tohuhono/utils@0.9.0
+
 ## 0.9.1
 
 ### Patch Changes

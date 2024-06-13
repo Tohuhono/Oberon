@@ -1,5 +1,13 @@
 # create-oberon-app
 
+## 0.4.0
+
+### Minor Changes
+
+- d233d9a: Wrap server actions to retain error messages in production
+  Add Toaster component to surface action errors
+- 85f2f55: Create a development plugin
+
 ## 0.3.8
 
 ### Patch Changes
