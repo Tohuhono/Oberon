@@ -1,5 +1,27 @@
 # @oberon/playground
 
+## 0.5.0
+
+### Minor Changes
+
+- d233d9a: Wrap server actions to retain error messages in production
+  Add Toaster component to surface action errors
+- 19e0f04: Move signOut to adapter
+- 85f2f55: Create a development plugin
+
+### Patch Changes
+
+- 634cc82: Improve error handling to support redirects
+- Updated dependencies [d233d9a]
+- Updated dependencies [19e0f04]
+- Updated dependencies [19e0f04]
+- Updated dependencies [85f2f55]
+- Updated dependencies [634cc82]
+  - @oberoncms/core@0.11.0
+  - @oberoncms/plugin-development@0.2.0
+  - @oberoncms/plugin-turso@0.12.0
+  - @oberoncms/plugin-uploadthing@0.10.6
+
 ## 0.4.7
 
 ### Patch Changes

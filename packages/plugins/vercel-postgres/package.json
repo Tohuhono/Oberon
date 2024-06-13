@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-vercel-postgres",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A Vercel PostgreSQL database plugin for OberonCMS",

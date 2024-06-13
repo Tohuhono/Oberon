@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/utils",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A collection of utility functions used by @tohuhono and @oberoncms packages",

@@ -1,5 +1,25 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.8.0
+
+### Minor Changes
+
+- d233d9a: Wrap server actions to retain error messages in production
+  Add Toaster component to surface action errors
+- 19e0f04: Move signOut to adapter
+- 85f2f55: Create a development plugin
+
+### Patch Changes
+
+- 19e0f04: Move demo into documentation
+- Updated dependencies [d233d9a]
+- Updated dependencies [19e0f04]
+- Updated dependencies [19e0f04]
+- Updated dependencies [85f2f55]
+- Updated dependencies [634cc82]
+  - @oberoncms/core@0.11.0
+  - @oberoncms/plugin-pgsql@0.5.0
+
 ## 0.7.4
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @oberoncms/plugin-upload-thing
 
+## 0.10.6
+
+### Patch Changes
+
+- Updated dependencies [d233d9a]
+- Updated dependencies [19e0f04]
+- Updated dependencies [19e0f04]
+- Updated dependencies [85f2f55]
+- Updated dependencies [634cc82]
+  - @oberoncms/core@0.11.0
+
 ## 0.10.5
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/sqlite",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A Sqlite libsql drizzle database adapter for OberonCMS",
