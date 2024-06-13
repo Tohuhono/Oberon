@@ -1,5 +1,5 @@
 export default {
-  about: "Getting Started",
+  index: "About",
   installation: "Installation",
   auth: "Auth",
   plugins: "Plugins",

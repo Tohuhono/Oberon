@@ -4,8 +4,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production
-  Add Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add
+  Toaster component to surface action errors
 - 19e0f04: Move signOut to adapter
 - 85f2f55: Create a development plugin
 
@@ -37,8 +37,8 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers
-  Move local sqlite to separate plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate
+  plugin
 - Updated dependencies [e28293f]
 - Updated dependencies [01fde22]
 - Updated dependencies [e8c2c24]

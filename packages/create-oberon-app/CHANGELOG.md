@@ -4,8 +4,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production
-  Add Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add
+  Toaster component to surface action errors
 - 85f2f55: Create a development plugin
 
 ## 0.3.8
@@ -19,8 +19,8 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers
-  Move local sqlite to separate plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate
+  plugin
 - e8c2c24: Fix dynamically load client after initialisation
 
 ## 0.3.6

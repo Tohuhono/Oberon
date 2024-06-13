@@ -4,8 +4,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production
-  Add Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add
+  Toaster component to surface action errors
 
 ## 0.8.1
 
@@ -70,9 +70,10 @@
 
 ### Minor Changes
 
-- 2deb902: Added updatedAt and updatedBy to images
-  Resolved uploadingthing type declaration error
-- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration files
+- 2deb902: Added updatedAt and updatedBy to images Resolved uploadingthing type
+  declaration error
+- 4e6430b: Reverted to relative imports because typescript team refuses to
+  transpile declaration files
 
 ## 0.3.0
 
@@ -96,8 +97,7 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component.
-  Next -> 14.2.
-  Fixed turbo dev to correctly build dependencies.
-  Changed from assets to images - this is a breaking change for oberon adapaters.
-  Fixed dynamic tailwind to target preview iframe.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo
+  dev to correctly build dependencies. Changed from assets to images - this is a
+  breaking change for oberon adapaters. Fixed dynamic tailwind to target preview
+  iframe.

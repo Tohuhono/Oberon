@@ -4,8 +4,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production
-  Add Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add
+  Toaster component to surface action errors
 - 19e0f04: Move signOut to adapter
 
 ### Patch Changes
@@ -23,8 +23,8 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers
-  Move local sqlite to separate plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate
+  plugin
 
 ## 0.6.1
 
@@ -66,8 +66,7 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component.
-  Next -> 14.2.
-  Fixed turbo dev to correctly build dependencies.
-  Changed from assets to images - this is a breaking change for oberon adapaters.
-  Fixed dynamic tailwind to target preview iframe.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo
+  dev to correctly build dependencies. Changed from assets to images - this is a
+  breaking change for oberon adapaters. Fixed dynamic tailwind to target preview
+  iframe.

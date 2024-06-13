@@ -1,0 +1,35 @@
+import { Callout } from "nextra/components"
+
+# PostgreSQL (pgsql)
+
+A plugin providing a database adapter using.
+
+## Installation
+
+```sh npm2yarn
+npm install @oberoncms/plugin-pgsql
+```
+
+```tsx filename="oberon/adapter.ts"
+import { plugin as databasePlugin } from "@oberoncms/plugin-pgsql"
+
+export const adapter = initAdapter([
+  developmentPlugin,
+  databasePlugin,
+  /* ...other plugins */
+])
+```
+
+## Configuration
+
+<Callout type="info">
+  By default the PostgreSQL plugin will automatically use your PostgreSQL
+  database for production builds and fall back to the developmentPlugin in
+  development.
+</Callout>
+
+### Environment Variables
+
+```sh
+DATABASE_URL=<postgres://user:password@host:port/database>
+```

@@ -1,6 +1,7 @@
 # Puck Rich Text Component
 
-A rich text component with inline editor for use with [Puck](https://puckeditor.com)
+A rich text component with inline editor for use with
+[Puck](https://puckeditor.com)
 
 <p align="left">
   <a aria-label="Tohuhono" href="https://tohuhono.com">
@@ -48,7 +49,8 @@ export const config: Config<{
 
 ### Next.js 13
 
-To avoid nextjs import the incorrect render library you need to use the legacy import
+To avoid nextjs import the incorrect render library you need to use the legacy
+import
 
 ```jsx
 // Puck.config.tsx
