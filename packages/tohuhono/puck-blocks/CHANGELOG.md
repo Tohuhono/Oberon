@@ -1,5 +1,13 @@
 # @tohuhono/puck-blocks
 
+## 0.8.3
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+- Updated dependencies [a2d1a58]
+  - @tohuhono/ui@0.10.1
+
 ## 0.8.2
 
 ### Patch Changes

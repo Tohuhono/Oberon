@@ -1,5 +1,11 @@
 # @oberon/utils
 
+## 0.9.1
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+
 ## 0.9.0
 
 ### Minor Changes

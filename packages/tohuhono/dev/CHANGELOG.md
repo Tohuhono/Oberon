@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.9.3
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+
 ## 0.9.2
 
 ### Patch Changes
