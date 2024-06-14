@@ -1,5 +1,13 @@
 # @oberoncms/plugin-development
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [a2d1a58]
+  - @oberoncms/core@0.11.1
+  - @oberoncms/sqlite@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

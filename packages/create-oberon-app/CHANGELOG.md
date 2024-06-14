@@ -1,5 +1,12 @@
 # create-oberon-app
 
+## 0.4.1
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+- ecdcc22: Fix default disable custom plugins in development
+
 ## 0.4.0
 
 ### Minor Changes

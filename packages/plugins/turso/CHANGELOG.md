@@ -1,5 +1,14 @@
 # @oberoncms/plugin-turso
 
+## 0.12.1
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+- Updated dependencies [a2d1a58]
+  - @oberoncms/core@0.11.1
+  - @oberoncms/sqlite@0.2.1
+
 ## 0.12.0
 
 ### Minor Changes

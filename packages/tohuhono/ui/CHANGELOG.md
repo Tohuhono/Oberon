@@ -1,5 +1,13 @@
 # @oberon/ui
 
+## 0.10.1
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+- Updated dependencies [a2d1a58]
+  - @tohuhono/utils@0.9.1
+
 ## 0.10.0
 
 ### Minor Changes

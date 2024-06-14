@@ -1,5 +1,17 @@
 # @oberoncms/plugin-flydrive
 
+## 0.2.0
+
+### Minor Changes
+
+- d89bb71: fix export nested field
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+- Updated dependencies [a2d1a58]
+  - @oberoncms/core@0.11.1
+
 ## 0.1.3
 
 ### Patch Changes

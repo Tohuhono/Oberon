@@ -1,5 +1,18 @@
 # @oberon/docs
 
+## 0.8.0
+
+### Minor Changes
+
+- d89bb71: fix export nested field
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+- Updated dependencies [a2d1a58]
+  - @tohuhono/puck-rich-text@0.8.2
+  - @oberoncms/core@0.11.1
+
 ## 0.7.0
 
 ### Minor Changes

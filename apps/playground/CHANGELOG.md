@@ -1,5 +1,16 @@
 # @oberon/playground
 
+## 0.5.1
+
+### Patch Changes
+
+- a2d1a58: Update documentation
+- Updated dependencies [a2d1a58]
+  - @oberoncms/plugin-uploadthing@0.10.7
+  - @oberoncms/core@0.11.1
+  - @oberoncms/plugin-turso@0.12.1
+  - @oberoncms/plugin-development@0.2.1
+
 ## 0.5.0
 
 ### Minor Changes
