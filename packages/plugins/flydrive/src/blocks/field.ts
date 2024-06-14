@@ -1,3 +1,3 @@
-import { Image } from "./client"
+import * as client from "./client"
 
-export const ImageNestedField = Image.fields.image
+export default client.Image.fields.image

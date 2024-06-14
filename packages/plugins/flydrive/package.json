@@ -34,6 +34,7 @@
       "browser": "./dist/index.js",
       "node": "./dist/server.js"
     },
+    "./field": "./dist/blocks/field.js",
     "./plugin": "./dist/plugin.js"
   },
   "files": [
