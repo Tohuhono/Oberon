@@ -83,7 +83,8 @@ export const { GET, POST } = initFlyDriveRouter()
 
 ```typescript
 // config.ts
-import { Image } from "@oberoncms/plugin-flydrive"
+import { Image } from "@oberoncms/plugin-flydrive" // <- import the Image component
+import ImageNestedField  from "@oberoncms/plugin-flydrive/field" // <- import the nested field
 
 export const editorConfig = {
   // other configurations
