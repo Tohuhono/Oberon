@@ -1,13 +1,18 @@
 import "server-cli-only"
 
 import sgMail from "@sendgrid/mail"
-import type { OberonPlugin, OberonSendAdapter } from "@oberoncms/core"
+import {
+  USE_DEVELOPMENT_SEND_PLUGIN,
+  type OberonPlugin,
+  type OberonSendAdapter,
+} from "@oberoncms/core"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || process.env.SEND_SECRET
 
 export const plugin: OberonPlugin = () => ({
   name: "Sendgrid",
+  disabled: USE_DEVELOPMENT_SEND_PLUGIN,
   adapter: {
     sendVerificationRequest: async ({
       email,

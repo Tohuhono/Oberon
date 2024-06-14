@@ -1,6 +1,7 @@
 import "server-cli-only"
 
 import {
+  USE_DEVELOPMENT_SEND_PLUGIN,
   notImplemented,
   type OberonPlugin,
   type OberonSendAdapter,
@@ -11,6 +12,7 @@ const SEND_SECRET = process.env.SEND_SECRET
 
 export const plugin: OberonPlugin = () => ({
   name: "Custom Send Plugin",
+  disabled: USE_DEVELOPMENT_SEND_PLUGIN,
   adapter: {
     sendVerificationRequest: async ({
       email,
