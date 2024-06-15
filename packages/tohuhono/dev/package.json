@@ -30,6 +30,7 @@
     "LICENSE*"
   ],
   "exports": {
+    "./base.ts.config.json": "./base.ts.config.json",
     "./eslint.config": "./eslint/config.mjs",
     "./eslint-react.config": "./eslint/react.config.mjs",
     "./eslint-next.config": "./eslint/next.config.mjs",
