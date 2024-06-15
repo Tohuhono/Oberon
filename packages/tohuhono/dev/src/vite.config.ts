@@ -2,7 +2,12 @@
 // vite.config.js
 import { writeFile, mkdir } from "fs/promises"
 import { exec } from "child_process"
-import { createLogger, defineConfig, type Plugin as VitePlugin } from "vite"
+import {
+  type ResolveOptions,
+  createLogger,
+  defineConfig,
+  type Plugin as VitePlugin,
+} from "vite"
 import preserveDirectives from "rollup-preserve-directives"
 import fg from "fast-glob"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
@@ -69,7 +74,10 @@ function parseEntryPoints(entryPoints: string[] = ["src/*.ts"]) {
   return Object.fromEntries(entities)
 }
 
-export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
+export function initConfig(
+  entryPoints: string[] = ["src/*.ts", "src/*.tsx"],
+  resolve?: ResolveOptions,
+) {
   const logger = createLogger()
 
   return defineConfig({
@@ -84,6 +92,7 @@ export function initConfig(entryPoints: string[] = ["src/*.ts", "src/*.tsx"]) {
         logger.info(msg, options)
       },
     },
+    resolve,
     plugins: [
       externalizeDeps(),
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
