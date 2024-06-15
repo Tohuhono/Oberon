@@ -83,7 +83,10 @@ export const serverActions = {
     "use server";
     return wrap(actions.publishPageData(data));
   },
-
+  signIn: async (data) => {
+    "use server";
+    return wrap(actions.signIn(data));
+  },
   signOut: async () => {
     "use server";
     return wrap(actions.signOut());

@@ -1,7 +1,8 @@
 import { getMetaData } from "@oberoncms/core"
 import { OberonProvider } from "@oberoncms/core/provider"
 import { Client } from "./client"
-import { actions, serverActions } from "@/oberon/actions"
+import { serverActions } from "@/oberon/actions"
+import { actions } from "@/oberon/adapter"
 
 export async function generateMetadata({
   params: { path = [] },
@@ -13,11 +14,17 @@ export async function generateMetadata({
 
 export default async function Oberon({
   params: { path = [] },
+  searchParams,
 }: {
   params: { path?: string[] }
+  searchParams: { [key: string]: string | string[] | undefined }
 }) {
   return (
-    <OberonProvider actions={serverActions} path={path}>
+    <OberonProvider
+      actions={serverActions}
+      path={path}
+      searchParams={searchParams}
+    >
       <Client />
     </OberonProvider>
   )

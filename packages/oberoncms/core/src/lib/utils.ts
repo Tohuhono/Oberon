@@ -1,4 +1,5 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
+
 import { ResponseError, type ClientAction, type OberonResponse } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
@@ -21,14 +22,16 @@ export function getTitle(action: ClientAction, slug?: string) {
 
 export const parseClientAction = (action: unknown): ClientAction => {
   switch (action) {
-    case undefined:
-      return "site"
     case "edit":
-    case "preview":
-    case "users":
     case "images":
+    case "login":
     case "pages":
+    case "preview":
+    case "site":
+    case "users":
       return action
+    case undefined:
+      return redirect("/cms/pages")
     default:
       return notFound()
   }
@@ -63,9 +66,7 @@ export function notImplemented(action: string) {
   }
 }
 
-export async function wrap<T = unknown>(
-  promise: Promise<T>,
-): OberonResponse<T> {
+export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
   try {
     return {
       status: "success",
@@ -82,9 +83,7 @@ export async function wrap<T = unknown>(
   }
 }
 
-export async function unwrap<T = unknown>(
-  promise: OberonResponse<T>,
-): Promise<T> {
+export async function unwrap<T>(promise: OberonResponse<T>): Promise<T> {
   const response = await promise
   if (response?.status === "success") {
     return response.result

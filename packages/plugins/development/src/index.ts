@@ -23,10 +23,11 @@ export const plugin: OberonPlugin = (adapter) => ({
     ...(USE_DEVELOPMENT_SEND_PLUGIN &&
       ({
         sendVerificationRequest: async (props) => {
-          const { email, url } = props
-          console.log(`Logging sendVerificationRequest`, {
+          const { email, url, token } = props
+          console.log(`sendVerificationRequest not sent in development`, {
             email,
             url,
+            token,
           })
         },
       } satisfies OberonSendAdapter)),

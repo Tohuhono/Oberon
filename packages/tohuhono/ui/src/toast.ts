@@ -1,2 +1,2 @@
-export { useToast } from "./components/use-toast"
-export { Toaster } from "./components/toaster"
+export * from "./components/use-toast"
+export * from "./components/toaster"

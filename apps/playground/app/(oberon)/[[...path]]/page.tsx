@@ -2,7 +2,7 @@ import { Render } from "@oberoncms/core/render"
 
 import { getMetaData } from "@oberoncms/core"
 
-import { actions } from "@/oberon/actions"
+import { actions } from "@/oberon/adapter"
 import { config } from "@/oberon/config"
 
 export async function generateStaticParams() {

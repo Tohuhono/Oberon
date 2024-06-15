@@ -1,7 +1,7 @@
 import { type OberonPermissions, type OberonAdapter } from "../lib/dtd"
 import { notImplemented } from "../lib/utils"
 
-export const baseAdapter: OberonAdapter = {
+export const baseAdapter = {
   plugins: [],
   handlers: {},
   getCurrentUser: notImplemented("getCurrentUser"),
@@ -26,6 +26,7 @@ export const baseAdapter: OberonAdapter = {
       permissions[role][action] === "write"
     )
   },
+  signIn: notImplemented("signIn"),
   signOut: notImplemented("signOut"),
   prebuild: async () => {},
   // OberonSendAdapter
@@ -60,4 +61,4 @@ export const baseAdapter: OberonAdapter = {
   useVerificationToken: notImplemented("useVerificationToken"),
   updateSession: notImplemented("updateSession"),
   updateUser: notImplemented("updateUser"),
-}
+} satisfies OberonAdapter

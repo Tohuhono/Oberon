@@ -53,6 +53,7 @@ export const mockPlugin: OberonPlugin = () => ({
     hasPermission: () => true,
     updatePageData: notAvailable,
     updateSite: notAvailable,
+    signIn: notAvailable,
     signOut: async () => redirect("/"),
   } satisfies OberonDatabaseAdapter & OberonCanAdapter,
 })

@@ -3,14 +3,7 @@ import {
   type AdapterPermission,
   type OberonServerActions,
 } from "@oberoncms/core"
-import { initActions } from "@oberoncms/core/adapter"
-import { config } from "./config"
-import { adapter } from "./adapter"
-
-export const actions = initActions({
-  config,
-  adapter,
-})
+import { actions } from "./adapter"
 
 export const serverActions = {
   addImage: async (data) => {
@@ -82,6 +75,11 @@ export const serverActions = {
   publishPageData: async (data) => {
     "use server"
     return wrap(actions.publishPageData(data))
+  },
+
+  signIn: async (...props) => {
+    "use server"
+    return wrap(actions.signIn(...props))
   },
 
   signOut: async () => {

@@ -45,6 +45,7 @@
     "@libsql/core": "^0.5.6",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
+    "next": "^14.2.3",
     "drizzle-orm": "^0.30.10",
     "server-cli-only": "^0.3.2"
   },

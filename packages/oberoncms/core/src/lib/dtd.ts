@@ -47,6 +47,7 @@ export const clientActions = [
   "images",
   "pages",
   "site",
+  "login",
 ] as const
 export const actionPaths = clientActions.map((action) => ({
   path: [action],
@@ -156,6 +157,10 @@ type DescriminatedContext =
   | { action: "images"; data: OberonImage[] }
   | { action: "pages"; data: OberonPageMeta[] }
   | { action: "site"; data: OberonSiteConfig }
+  | {
+      action: "login"
+      data: { callbackUrl: string; email: string; token: string }
+    }
 
 export type OberonClientContext = DescriminatedContext & {
   slug: string
@@ -222,6 +227,7 @@ export type OberonCanAdapter = {
     action: AdapterActionGroup
     permission: AdapterPermission
   }) => boolean
+  signIn: (data: { email: string }) => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -318,6 +324,7 @@ export type OberonActions = {
   >
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
   signOut: () => Promise<void>
+  signIn: (data: { email: string }) => Promise<void>
 }
 
 export type OberonResponse<T = unknown> = Promise<
@@ -331,7 +338,6 @@ export type OberonResponse<T = unknown> = Promise<
       result?: T
       message?: string
     }
-  | undefined
 >
 
 export type OberonServerActions = {
@@ -362,5 +368,6 @@ export type OberonServerActions = {
     StreamResponseChunk<TransformResult | MigrationResult>
   >
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse
+  signIn: (data: { email: string }) => OberonResponse
   signOut: () => OberonResponse
 }

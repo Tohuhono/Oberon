@@ -13,11 +13,17 @@ export async function generateMetadata({
 
 export default async function Oberon({
   params: { path = [] },
+  searchParams,
 }: {
   params: { path?: string[] };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
   return (
-    <OberonProvider actions={serverActions} path={path}>
+    <OberonProvider
+      actions={serverActions}
+      path={path}
+      searchParams={searchParams}
+    >
       <Client />
     </OberonProvider>
   );
