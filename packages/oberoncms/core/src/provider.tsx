@@ -4,10 +4,11 @@ import { redirect } from "next/navigation"
 import { OberonClientProvider } from "./components/provider"
 import type {
   ClientAction,
+  OberonAdapter,
   OberonClientContext,
   OberonServerActions,
 } from "./lib/dtd"
-import { parseClientAction, resolveSlug, unwrap } from "./lib/utils"
+import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
   {
@@ -16,7 +17,7 @@ async function getContext(
     getAllPages,
     getAllUsers,
     getConfig,
-  }: OberonServerActions,
+  }: OberonAdapter,
   action: ClientAction,
   slug: string,
   searchParams: { [key: string]: string | string[] | undefined },
@@ -42,41 +43,43 @@ async function getContext(
       return {
         action,
         slug,
-        data: await unwrap(getPageData(slug)),
+        data: await getPageData(slug),
       }
     case "users":
       return {
         action,
         slug,
-        data: await unwrap(getAllUsers()),
+        data: await getAllUsers(),
       }
     case "images":
       return {
         action,
         slug,
-        data: await unwrap(getAllImages()),
+        data: await getAllImages(),
       }
     case "site":
       return {
         action,
         slug,
-        data: await unwrap(getConfig()),
+        data: await getConfig(),
       }
     case "pages":
       return {
         action,
         slug,
-        data: await unwrap(getAllPages()),
+        data: await getAllPages(),
       }
   }
 }
 
 export async function OberonProvider({
   children,
+  adapter,
   actions,
   path,
   searchParams,
 }: PropsWithChildren<{
+  adapter: OberonAdapter
   actions: OberonServerActions
   path: string[]
   searchParams: { [key: string]: string | string[] | undefined }
@@ -85,13 +88,13 @@ export async function OberonProvider({
 
   const slug = resolveSlug(path.slice(1))
 
-  const loggedIn = await actions.can("site")
+  const loggedIn = await adapter.can("site")
 
   if (!loggedIn && action !== "login") {
-    redirect("/cms/login")
+    redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
   }
 
-  const context = await getContext(actions, action, slug, searchParams)
+  const context = await getContext(adapter, action, slug, searchParams)
 
   return (
     <OberonClientProvider serverActions={actions} context={context}>

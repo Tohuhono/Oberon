@@ -3,7 +3,7 @@
 import { createContext, useMemo, type PropsWithChildren } from "react"
 import { Toaster, useToast } from "@tohuhono/ui/toast"
 import type {
-  OberonActions,
+  OberonAdapter,
   OberonClientContext,
   OberonResponse,
   OberonServerActions,
@@ -11,7 +11,7 @@ import type {
 
 export const ClientContext = createContext<OberonClientContext | null>(null)
 
-export const ActionsContext = createContext<OberonActions | null>(null)
+export const ActionsContext = createContext<OberonAdapter | null>(null)
 
 type UnwrapServerAction = <TProps = unknown, TResult = unknown>(
   action: (...props: TProps[]) => OberonResponse<TResult>,
@@ -52,7 +52,7 @@ export const OberonClientProvider = ({
         key,
         unwrap(action),
       ]),
-    ) as OberonActions
+    ) as OberonAdapter
   }, [serverActions, toast])
 
   return (

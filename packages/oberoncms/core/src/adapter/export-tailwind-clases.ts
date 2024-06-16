@@ -2,12 +2,12 @@ import { once } from "events"
 import { mkdir } from "fs/promises"
 import { createWriteStream } from "fs"
 import { walkAsyncStep } from "walkjs"
-import type { OberonAdapter, OberonPageMeta } from "../lib/dtd"
+import type { OberonPageMeta, OberonPluginAdapter } from "../lib/dtd"
 
 export async function exportTailwindClasses({
   getAllPages,
   getPageData,
-}: OberonAdapter) {
+}: OberonPluginAdapter) {
   console.log("Exporting Tailwind classes")
 
   const pagesPromise = getAllPages()

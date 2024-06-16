@@ -1,13 +1,13 @@
 import { randomUUID } from "crypto"
 import { eq } from "drizzle-orm"
-import { type OberonDatabaseAdapter, type PageData } from "@oberoncms/core"
+import { type OberonBaseAdapter, type PageData } from "@oberoncms/core"
 
 import { images, pages, site, users } from "./schema"
 import type { DatabaseClient } from "./client"
 
 export const getDatabaseAdapter = (
   db: () => DatabaseClient,
-): OberonDatabaseAdapter => ({
+): OberonBaseAdapter => ({
   getAllUsers: async () => {
     return await db()
       .select({ id: users.id, email: users.email, role: users.role })

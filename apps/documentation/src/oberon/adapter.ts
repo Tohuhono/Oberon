@@ -1,5 +1,9 @@
 import "server-cli-only"
 
-import { initAdapter, mockPlugin } from "@oberoncms/core/adapter"
+import { initOberon, mockPlugin } from "@oberoncms/core/adapter"
+import { config } from "./config"
 
-export const adapter = initAdapter([mockPlugin])
+export const { adapter } = initOberon({
+  config,
+  plugins: [mockPlugin],
+})

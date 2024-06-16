@@ -186,11 +186,14 @@ export type MigrationResult = {
 
 export type TransformVersions = Record<string, number>
 
+export type PluginVersion = Pick<
+  ReturnType<OberonPlugin>,
+  "name" | "version" | "disabled"
+>
+
 export type OberonSiteConfig = MaybeOptimistic<{
   version: string
-  plugins: Array<
-    Pick<ReturnType<OberonPlugin>, "name" | "version" | "disabled">
-  >
+  plugins: PluginVersion[]
   components: TransformVersions
   pendingMigrations: string[] | false
 }>
@@ -207,18 +210,6 @@ export type OberonSite = z.infer<typeof SiteSchema>
 /*
  * Adapter
  */
-
-// Currently the only handles exported are NextAuth Handlers
-type OberonRouteHandler = NextAuthResult["handlers"]
-
-export type OberonAdapterMeta = {
-  plugins: Array<{ name: string; version: string; disabled?: boolean }>
-  handlers: Record<string, OberonRouteHandler>
-}
-
-export type OberonInitAdapter = {
-  prebuild: () => Promise<void>
-}
 
 export type OberonCanAdapter = {
   getCurrentUser: () => Promise<OberonUser | null>
@@ -256,7 +247,7 @@ export type OberonAuthAdapter = Required<
   deleteUser: (id: OberonUser["id"]) => Promise<void>
 }
 
-export type OberonDatabaseAdapter = {
+export type OberonBaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
@@ -281,23 +272,30 @@ export type OberonSendAdapter = {
   }) => Promise<void>
 }
 
+export type OberonInitAdapter = {
+  prebuild: () => Promise<void>
+}
+
+export type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
+
 export type OberonPluginAdapter = OberonInitAdapter &
-  OberonCanAdapter &
   OberonDatabaseAdapter &
-  OberonAuthAdapter &
+  OberonCanAdapter &
   OberonSendAdapter
 
-export type OberonAdapter = OberonAdapterMeta & OberonPluginAdapter
+// Currently the only handles exported are NextAuth Handlers
+export type OberonHandler = NextAuthResult["handlers"]
 
-export type OberonPlugin = (adapter: OberonAdapter) => {
+export type OberonPlugin = (adapter: OberonPluginAdapter) => {
   name: string
   version?: string
   disabled?: boolean
-  handlers?: Record<string, OberonRouteHandler>
+  handlers?: Record<string, OberonHandler>
   adapter?: Partial<OberonPluginAdapter>
 }
 
-export type OberonActions = {
+export type OberonAdapter = {
+  prebuild: () => Promise<void>
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>

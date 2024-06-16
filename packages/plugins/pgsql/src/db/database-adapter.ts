@@ -1,14 +1,14 @@
 import { eq } from "drizzle-orm"
 
-import { type OberonDatabaseAdapter } from "@oberoncms/core"
+import { type OberonBaseAdapter } from "@oberoncms/core"
 
 import { type DatabaseClient } from "./client"
 import { images, pages, users, site } from "./schema"
 import { getAuthAdapter } from "./auth-adapter"
 
-export const getDatabaseAdapter: (
-  db: DatabaseClient,
-) => OberonDatabaseAdapter = (db) => ({
+export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
+  db,
+) => ({
   getSite: async () => {
     const result = await db
       .select({

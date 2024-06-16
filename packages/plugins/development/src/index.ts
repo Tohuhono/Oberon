@@ -5,7 +5,7 @@ import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonAuthAdapter,
-  type OberonDatabaseAdapter,
+  type OberonBaseAdapter,
   type OberonInitAdapter,
   type OberonPlugin,
   type OberonSendAdapter,
@@ -55,8 +55,6 @@ export const plugin: OberonPlugin = (adapter) => ({
 
           console.log(`Database migration complete`)
         },
-      } satisfies OberonDatabaseAdapter &
-        OberonAuthAdapter &
-        OberonInitAdapter)),
+      } satisfies OberonBaseAdapter & OberonAuthAdapter & OberonInitAdapter)),
   },
 })

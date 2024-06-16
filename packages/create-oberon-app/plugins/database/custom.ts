@@ -1,7 +1,6 @@
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   notImplemented,
-  type OberonAuthAdapter,
   type OberonDatabaseAdapter,
   type OberonInitAdapter,
   type OberonPlugin,
@@ -13,7 +12,7 @@ export const databasePlugin: OberonPlugin = () => ({
   adapter: {
     // Prebuild hook
     prebuild: notImplemented("prebuild"),
-    // OberonDatabaseAdapter
+    // OberonBaseAdapter
     addImage: notImplemented("addImage"),
     addPage: notImplemented("addPage"),
     addUser: notImplemented("addUser"),
@@ -43,5 +42,5 @@ export const databasePlugin: OberonPlugin = () => ({
     useVerificationToken: notImplemented("useVerificationToken"),
     updateSession: notImplemented("updateSession"),
     updateUser: notImplemented("updateUser"),
-  } satisfies OberonDatabaseAdapter & OberonAuthAdapter & OberonInitAdapter,
+  } satisfies OberonInitAdapter & OberonDatabaseAdapter,
 })

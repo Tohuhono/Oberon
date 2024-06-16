@@ -82,11 +82,3 @@ export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
     throw error
   }
 }
-
-export async function unwrap<T>(promise: OberonResponse<T>): Promise<T> {
-  const response = await promise
-  if (response?.status === "success") {
-    return response.result
-  }
-  throw new Error(response?.message)
-}
