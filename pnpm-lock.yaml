@@ -366,6 +366,9 @@ importers:
       swr:
         specifier: ^2.2.5
         version: 2.2.5(react@18.2.0)
+      use-debounce:
+        specifier: ^10.0.1
+        version: 10.0.1(react@18.2.0)
       walkjs:
         specifier: ^6.0.1
         version: 6.0.1
@@ -12802,6 +12805,15 @@ packages:
       '@types/react': 18.2.66
       react: 18.2.0
       tslib: 2.6.2
+    dev: false
+
+  /use-debounce@10.0.1(react@18.2.0):
+    resolution: {integrity: sha512-0uUXjOfm44e6z4LZ/woZvkM8FwV1wiuoB6xnrrOmeAEjRDDzTLQNRFtYHvqUsJdrz1X37j0rVGIVp144GLHGKg==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /use-debounce@9.0.4(react@18.2.0):
