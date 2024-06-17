@@ -5,7 +5,7 @@ import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonAuthAdapter,
-  type OberonDatabaseAdapter,
+  type OberonBaseAdapter,
   type OberonInitAdapter,
   type OberonPlugin,
   type OberonSendAdapter,
@@ -23,10 +23,11 @@ export const plugin: OberonPlugin = (adapter) => ({
     ...(USE_DEVELOPMENT_SEND_PLUGIN &&
       ({
         sendVerificationRequest: async (props) => {
-          const { email, url } = props
-          console.log(`Logging sendVerificationRequest`, {
+          const { email, url, token } = props
+          console.log(`sendVerificationRequest not sent in development`, {
             email,
             url,
+            token,
           })
         },
       } satisfies OberonSendAdapter)),
@@ -54,8 +55,6 @@ export const plugin: OberonPlugin = (adapter) => ({
 
           console.log(`Database migration complete`)
         },
-      } satisfies OberonDatabaseAdapter &
-        OberonAuthAdapter &
-        OberonInitAdapter)),
+      } satisfies OberonBaseAdapter & OberonAuthAdapter & OberonInitAdapter)),
   },
 })

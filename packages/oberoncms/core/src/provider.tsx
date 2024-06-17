@@ -1,8 +1,14 @@
 import type { PropsWithChildren } from "react"
 
+import { redirect } from "next/navigation"
 import { OberonClientProvider } from "./components/provider"
-import type { ClientAction, OberonServerActions } from "./lib/dtd"
-import { parseClientAction, resolveSlug, unwrap } from "./lib/utils"
+import type {
+  ClientAction,
+  OberonAdapter,
+  OberonClientContext,
+  OberonServerActions,
+} from "./lib/dtd"
+import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
   {
@@ -11,54 +17,84 @@ async function getContext(
     getAllPages,
     getAllUsers,
     getConfig,
-  }: OberonServerActions,
+  }: OberonAdapter,
   action: ClientAction,
   slug: string,
-) {
+  searchParams: { [key: string]: string | string[] | undefined },
+): Promise<OberonClientContext> {
   switch (action) {
+    case "login":
+      return {
+        action,
+        slug,
+        data: {
+          callbackUrl:
+            typeof searchParams.callbackUrl === "string"
+              ? searchParams.callbackUrl
+              : "",
+          email:
+            typeof searchParams.email === "string" ? searchParams.email : "",
+          token:
+            typeof searchParams.token === "string" ? searchParams.token : "",
+        },
+      }
     case "edit":
     case "preview":
       return {
         action,
         slug,
-        data: await unwrap(getPageData(slug)),
+        data: await getPageData(slug),
       }
     case "users":
       return {
         action,
         slug,
-        data: await unwrap(getAllUsers()),
+        data: await getAllUsers(),
       }
     case "images":
       return {
         action,
         slug,
-        data: await unwrap(getAllImages()),
+        data: await getAllImages(),
       }
     case "site":
       return {
         action,
         slug,
-        data: await unwrap(getConfig()),
+        data: await getConfig(),
       }
     case "pages":
       return {
         action,
         slug,
-        data: await unwrap(getAllPages()),
+        data: await getAllPages(),
       }
   }
 }
 
 export async function OberonProvider({
   children,
+  adapter,
   actions,
   path,
-}: PropsWithChildren<{ actions: OberonServerActions; path: string[] }>) {
+  searchParams,
+}: PropsWithChildren<{
+  adapter: OberonAdapter
+  actions: OberonServerActions
+  path: string[]
+  searchParams: { [key: string]: string | string[] | undefined }
+}>) {
   const action = parseClientAction(path[0])
+
   const slug = resolveSlug(path.slice(1))
 
-  const context = await getContext(actions, action, slug)
+  const loggedIn = await adapter.can("site")
+
+  if (!loggedIn && action !== "login") {
+    redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
+  }
+
+  const context = await getContext(adapter, action, slug, searchParams)
 
   return (
     <OberonClientProvider serverActions={actions} context={context}>

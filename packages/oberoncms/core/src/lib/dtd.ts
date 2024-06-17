@@ -47,6 +47,7 @@ export const clientActions = [
   "images",
   "pages",
   "site",
+  "login",
 ] as const
 export const actionPaths = clientActions.map((action) => ({
   path: [action],
@@ -156,6 +157,10 @@ type DescriminatedContext =
   | { action: "images"; data: OberonImage[] }
   | { action: "pages"; data: OberonPageMeta[] }
   | { action: "site"; data: OberonSiteConfig }
+  | {
+      action: "login"
+      data: { callbackUrl: string; email: string; token: string }
+    }
 
 export type OberonClientContext = DescriminatedContext & {
   slug: string
@@ -181,11 +186,14 @@ export type MigrationResult = {
 
 export type TransformVersions = Record<string, number>
 
+export type PluginVersion = Pick<
+  ReturnType<OberonPlugin>,
+  "name" | "version" | "disabled"
+>
+
 export type OberonSiteConfig = MaybeOptimistic<{
   version: string
-  plugins: Array<
-    Pick<ReturnType<OberonPlugin>, "name" | "version" | "disabled">
-  >
+  plugins: PluginVersion[]
   components: TransformVersions
   pendingMigrations: string[] | false
 }>
@@ -203,18 +211,6 @@ export type OberonSite = z.infer<typeof SiteSchema>
  * Adapter
  */
 
-// Currently the only handles exported are NextAuth Handlers
-type OberonRouteHandler = NextAuthResult["handlers"]
-
-export type OberonAdapterMeta = {
-  plugins: Array<{ name: string; version: string; disabled?: boolean }>
-  handlers: Record<string, OberonRouteHandler>
-}
-
-export type OberonInitAdapter = {
-  prebuild: () => Promise<void>
-}
-
 export type OberonCanAdapter = {
   getCurrentUser: () => Promise<OberonUser | null>
   hasPermission: (props: {
@@ -222,6 +218,7 @@ export type OberonCanAdapter = {
     action: AdapterActionGroup
     permission: AdapterPermission
   }) => boolean
+  signIn: (data: { email: string }) => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -250,7 +247,7 @@ export type OberonAuthAdapter = Required<
   deleteUser: (id: OberonUser["id"]) => Promise<void>
 }
 
-export type OberonDatabaseAdapter = {
+export type OberonBaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
@@ -275,23 +272,30 @@ export type OberonSendAdapter = {
   }) => Promise<void>
 }
 
+export type OberonInitAdapter = {
+  prebuild: () => Promise<void>
+}
+
+export type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
+
 export type OberonPluginAdapter = OberonInitAdapter &
-  OberonCanAdapter &
   OberonDatabaseAdapter &
-  OberonAuthAdapter &
+  OberonCanAdapter &
   OberonSendAdapter
 
-export type OberonAdapter = OberonAdapterMeta & OberonPluginAdapter
+// Currently the only handles exported are NextAuth Handlers
+export type OberonHandler = NextAuthResult["handlers"]
 
-export type OberonPlugin = (adapter: OberonAdapter) => {
+export type OberonPlugin = (adapter: OberonPluginAdapter) => {
   name: string
   version?: string
   disabled?: boolean
-  handlers?: Record<string, OberonRouteHandler>
+  handlers?: Record<string, OberonHandler>
   adapter?: Partial<OberonPluginAdapter>
 }
 
-export type OberonActions = {
+export type OberonAdapter = {
+  prebuild: () => Promise<void>
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
@@ -318,6 +322,7 @@ export type OberonActions = {
   >
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
   signOut: () => Promise<void>
+  signIn: (data: { email: string }) => Promise<void>
 }
 
 export type OberonResponse<T = unknown> = Promise<
@@ -331,7 +336,6 @@ export type OberonResponse<T = unknown> = Promise<
       result?: T
       message?: string
     }
-  | undefined
 >
 
 export type OberonServerActions = {
@@ -362,5 +366,6 @@ export type OberonServerActions = {
     StreamResponseChunk<TransformResult | MigrationResult>
   >
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse
+  signIn: (data: { email: string }) => OberonResponse
   signOut: () => OberonResponse
 }

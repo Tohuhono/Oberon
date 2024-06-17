@@ -4,7 +4,7 @@ import {
   FileRouter,
 } from "uploadthing/next"
 import { UploadThingError } from "uploadthing/server"
-import type { OberonActions } from "@oberoncms/core"
+import type { OberonAdapter } from "@oberoncms/core"
 // TODO https://github.com/pingdotgg/uploadthing/issues/790
 import type {} from "@uploadthing/shared"
 import { getImageSize } from "./get-image-size"
@@ -13,7 +13,7 @@ const f = createUploadthing()
 
 // TODO dry = async
 // FileRouter for your app, can contain multiple FileRoutes
-const initFileRouter = ({ can }: OberonActions) => {
+const initFileRouter = ({ can }: OberonAdapter) => {
   const imageMiddleware = async () => {
     // If you throw, the user will not be able to upload
     if (!(await can("images", "write"))) {
@@ -49,7 +49,7 @@ const initFileRouter = ({ can }: OberonActions) => {
   } satisfies FileRouter
 }
 
-export function initRouteHandler(adapter: OberonActions) {
+export function initRouteHandler(adapter: OberonAdapter) {
   return createRouteHandler({
     router: initFileRouter(adapter),
   })

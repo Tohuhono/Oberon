@@ -33,7 +33,7 @@ export const Menu = ({
       <div className="flex justify-end gap-1">
         <Link
           className={buttonVariants({ variant: "outline", size: "sm" })}
-          href="/cms"
+          href="/cms/site"
         >
           Site
         </Link>

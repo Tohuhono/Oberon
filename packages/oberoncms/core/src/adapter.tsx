@@ -5,5 +5,4 @@ export { mockPlugin } from "./adapter/mock-plugin"
 
 export { exportTailwindClasses } from "./adapter/export-tailwind-clases"
 
-export { initAdapter } from "./adapter/init-adapter"
-export { initActions } from "./adapter/init-actions"
+export { initOberon } from "./adapter/init-oberon"

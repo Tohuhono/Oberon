@@ -2,15 +2,20 @@ import { randomBytes } from "crypto"
 import { type AuthConfig } from "@auth/core"
 import NextAuth from "next-auth"
 
-import { NextRequest } from "next/server"
-import { redirect } from "next/navigation"
+import { AccessDenied } from "@auth/core/errors"
 import { name, version } from "../../package.json" with { type: "json" }
-import { type OberonPlugin, type OberonUser } from "../lib/dtd"
+import {
+  type OberonCanAdapter,
+  type OberonPlugin,
+  type OberonUser,
+} from "../lib/dtd"
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
 const withCallback = (url: string) => {
   const withCallback = new URL(url)
+
+  withCallback.pathname = "/cms/login"
 
   const callbackUrl = new URL(
     withCallback.searchParams.get("callbackUrl") || "/cms",
@@ -26,7 +31,7 @@ const withCallback = (url: string) => {
 export const authPlugin: OberonPlugin = (adapter) => {
   const config = {
     pages: {
-      verifyRequest: "/api/auth/verify",
+      signIn: "/cms/login",
     },
     providers: [
       {
@@ -62,7 +67,9 @@ export const authPlugin: OberonPlugin = (adapter) => {
     },
     adapter,
     callbacks: {
-      async signIn({ user, profile }) {
+      async signIn(props) {
+        const { user, profile } = props
+
         // Master user override
         if (user?.email && masterEmail && user.email === masterEmail) {
           // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
@@ -82,7 +89,8 @@ export const authPlugin: OberonPlugin = (adapter) => {
         ) {
           return true
         }
-        return "/api/auth/verify?provider=email&type=email"
+
+        return false
       },
       jwt({ token, user }) {
         if (user) {
@@ -102,29 +110,10 @@ export const authPlugin: OberonPlugin = (adapter) => {
 
   const nextAuth = NextAuth(config)
 
-  const GET = async (req: NextRequest) => {
-    // safe links bot workaround https://github.com/nextauthjs/next-auth/issues/4965
-    if (
-      req.method === "GET" &&
-      req.nextUrl.pathname === "/api/auth/callback/email" &&
-      !req.nextUrl.searchParams.has("confirmed")
-    ) {
-      return new Response(
-        redirect(
-          `/api/auth/confirm?${new URLSearchParams(
-            req.nextUrl.searchParams,
-          ).toString()}`,
-        ),
-      )
-    }
-
-    return nextAuth.handlers.GET(req)
-  }
-
   return {
     name: `${name}/auth`,
     version,
-    handlers: { auth: { ...nextAuth.handlers, GET } },
+    handlers: { auth: nextAuth.handlers },
     adapter: {
       getCurrentUser: async () => {
         const session = await nextAuth.auth()
@@ -132,9 +121,18 @@ export const authPlugin: OberonPlugin = (adapter) => {
         return (session?.user as OberonUser) || null
       },
       signOut: async () => {
-        await nextAuth.signOut({ redirect: false })
-        return nextAuth.signIn()
+        await nextAuth.signOut({ redirectTo: "/cms/login" })
       },
-    },
+      signIn: async ({ email }) => {
+        try {
+          await nextAuth.signIn("email", { redirect: false, email })
+        } catch (error) {
+          if (error instanceof AccessDenied) {
+            return
+          }
+          throw error
+        }
+      },
+    } satisfies Partial<OberonCanAdapter>,
   }
 }

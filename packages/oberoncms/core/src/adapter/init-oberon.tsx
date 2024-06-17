@@ -18,29 +18,37 @@ import {
   ResponseError,
   type AdapterActionGroup,
   type AdapterPermission,
-  type OberonActions,
+  type OberonAdapter,
   type OberonUser,
   type OberonConfig,
   type MigrationResult,
   type TransformResult,
   type OberonPage,
   type PageData,
-  type OberonAdapter,
+  type OberonPlugin,
+  type OberonHandler,
 } from "../lib/dtd"
 import {
   applyTransforms,
   getComponentTransformVersions,
   getTransforms,
 } from "./transforms"
+import { exportTailwindClasses } from "./export-tailwind-clases"
+import { initPlugins } from "./init-plugins"
 
-export function initActions({
+export function initOberon({
   config,
-  adapter,
+  plugins,
 }: {
   config: OberonConfig
+  plugins: OberonPlugin[]
+}): {
+  handlers: Record<string, OberonHandler>
   adapter: OberonAdapter
-}): OberonActions {
-  const can: OberonActions["can"] = async (action, permission = "read") => {
+} {
+  const { versions, handlers, adapter } = initPlugins(plugins)
+
+  const can: OberonAdapter["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
     if (adapter.hasPermission({ action, permission })) {
       return true
@@ -157,7 +165,7 @@ export function initActions({
 
       const siteConfig = {
         version,
-        plugins: adapter.plugins,
+        plugins: versions,
         components,
         pendingMigrations: transforms && Object.keys(transforms),
       }
@@ -225,124 +233,130 @@ export function initActions({
   })
 
   return {
-    /*
-     * Auth
-     */
-    can,
-    signOut: async () => {
-      return adapter.signOut()
-    },
-    /*
-     * Site actions
-     */
-    getConfig: async () => {
-      await will("site", "read")
-      return await getConfigCached()
-    },
-    migrateData: async () => {
-      const user = await whoWill("site", "write")
-      return migrate(user)
-    },
+    handlers,
+    adapter: {
+      prebuild: async () => {
+        await adapter.prebuild()
+        await exportTailwindClasses(adapter)
+      },
+      /*
+       * Auth
+       */
+      can,
+      signIn: adapter.signIn,
+      signOut: adapter.signOut,
+      /*
+       * Site actions
+       */
+      getConfig: async () => {
+        await will("site", "read")
+        return await getConfigCached()
+      },
+      migrateData: async () => {
+        const user = await whoWill("site", "write")
+        return migrate(user)
+      },
 
-    /*
-     * Page actions
-     */
-    getAllPaths: async function () {
-      await will("pages", "read")
-      return getAllPathsCached()
-    },
-    getAllPages: async function () {
-      await will("pages", "read")
-      return getAllPagesCached()
-    },
-    getPageData: async function (key) {
-      await will("pages", "read")
-      return getPageDataCached(key)
-    },
-    // TODO return value
-    addPage: async function (data: unknown) {
-      const user = await whoWill("pages", "write")
-      const { key } = AddPageSchema.parse(data)
-      await adapter.addPage({
-        key,
-        data: INITIAL_DATA,
-        updatedAt: new Date(),
-        updatedBy: user.email,
-      })
-      revalidatePath(key)
-      revalidateTag("oberon-pages")
-    },
-    // TODO return value
-    deletePage: async function (data: unknown) {
-      await will("pages", "write")
-      const { key } = DeletePageSchema.parse(data)
-      await adapter.deletePage(key)
-      revalidatePath(key)
-      revalidateTag("oberon-pages")
-    },
-    // TODO zod ; return value
-    publishPageData: async function (data: unknown) {
-      const user = await whoWill("pages", "write")
-      const { key, data: pageData } = PublishPageSchema.parse(data)
-      await updatePageData({
-        key,
-        data: pageData as PageData,
-        updatedBy: user.email,
-      })
-    },
+      /*
+       * Page actions
+       */
+      getAllPaths: async function () {
+        await will("pages", "read")
+        return getAllPathsCached()
+      },
+      getAllPages: async function () {
+        await will("pages", "read")
+        return getAllPagesCached()
+      },
+      getPageData: async function (key) {
+        await will("pages", "read")
+        return getPageDataCached(key)
+      },
+      // TODO return value
+      addPage: async function (data: unknown) {
+        const user = await whoWill("pages", "write")
+        const { key } = AddPageSchema.parse(data)
+        await adapter.addPage({
+          key,
+          data: INITIAL_DATA,
+          updatedAt: new Date(),
+          updatedBy: user.email,
+        })
+        revalidatePath(key)
+        revalidateTag("oberon-pages")
+      },
+      // TODO return value
+      deletePage: async function (data: unknown) {
+        await will("pages", "write")
+        const { key } = DeletePageSchema.parse(data)
+        await adapter.deletePage(key)
+        revalidatePath(key)
+        revalidateTag("oberon-pages")
+      },
+      // TODO zod ; return value
+      publishPageData: async function (data: unknown) {
+        const user = await whoWill("pages", "write")
+        const { key, data: pageData } = PublishPageSchema.parse(data)
+        await updatePageData({
+          key,
+          data: pageData as PageData,
+          updatedBy: user.email,
+        })
+      },
 
-    /*
-     * Image actions
-     */
-    getAllImages: async function () {
-      await will("images", "read")
-      return getAllImagesCached()
-    },
-    addImage: async function (data: unknown) {
-      await will("images", "write")
+      /*
+       * Image actions
+       */
+      getAllImages: async function () {
+        await will("images", "read")
+        return getAllImagesCached()
+      },
+      addImage: async function (data: unknown) {
+        await will("images", "write")
 
-      const image = AddImageSchema.parse(data)
-      await adapter.addImage(image)
-      revalidateTag("oberon-images")
-      return adapter.getAllImages()
-    },
-    // TODO uploadthing
-    deleteImage: async function (data) {
-      await will("images", "write")
-      revalidateTag("oberon-images")
-      return adapter.deleteImage(data)
-    },
+        const image = AddImageSchema.parse(data)
+        await adapter.addImage(image)
+        revalidateTag("oberon-images")
+        return adapter.getAllImages()
+      },
+      // TODO uploadthing
+      deleteImage: async function (data) {
+        await will("images", "write")
+        revalidateTag("oberon-images")
+        return adapter.deleteImage(data)
+      },
 
-    /*
-     * User actions
-     */
-    getAllUsers: async function () {
-      await will("users", "read")
-      return getAllUsersCached()
-    },
-    addUser: async function (data: unknown) {
-      await will("users", "write")
-      const { email, role } = AddUserSchema.parse(data)
-      const { id } = await adapter.addUser({
-        email,
-        role,
-      })
-      revalidateTag("oberon-users")
-      return { id, email, role }
-    },
-    deleteUser: async function (data: unknown) {
-      await will("users", "write")
-      const { id } = DeleteUserSchema.parse(data)
-      await adapter.deleteUser(id)
-      revalidateTag("oberon-users")
-      return { id }
-    },
-    changeRole: async function (data: unknown) {
-      await will("users", "write")
-      const { role, id } = ChangeRoleSchema.parse(data)
-      await adapter.changeRole({ role, id })
-      revalidateTag("oberon-users")
-      return { role, id }
+      /*
+       * User actions
+       */
+      getAllUsers: async function () {
+        await will("users", "read")
+        return getAllUsersCached()
+      },
+      addUser: async function (data: unknown) {
+        await will("users", "write")
+        const { email, role } = AddUserSchema.parse(data)
+        const { id } = await adapter.addUser({
+          email,
+          role,
+        })
+        revalidateTag("oberon-users")
+        return { id, email, role }
+      },
+      deleteUser: async function (data: unknown) {
+        await will("users", "write")
+        const { id } = DeleteUserSchema.parse(data)
+        await adapter.deleteUser(id)
+        revalidateTag("oberon-users")
+        return { id }
+      },
+      changeRole: async function (data: unknown) {
+        await will("users", "write")
+        const { role, id } = ChangeRoleSchema.parse(data)
+        await adapter.changeRole({ role, id })
+        revalidateTag("oberon-users")
+        return { role, id }
+      },
     },
   }
 }
