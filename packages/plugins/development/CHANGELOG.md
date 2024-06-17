@@ -1,5 +1,21 @@
 # @oberoncms/plugin-development
 
+## 0.3.0
+
+### Minor Changes
+
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
+  now returns an object with the intitialised adapter and handlers Clarified
+  types - OberonActions is now OberonAdapter
+- a8d2554: BREAKING CHANGE move all auth including login to Oberon Client
+
+### Patch Changes
+
+- Updated dependencies [a8d2554]
+- Updated dependencies [a8d2554]
+  - @oberoncms/sqlite@0.3.0
+  - @oberoncms/core@0.12.0
+
 ## 0.2.1
 
 ### Patch Changes

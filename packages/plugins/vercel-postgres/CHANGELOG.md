@@ -1,5 +1,20 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.9.0
+
+### Minor Changes
+
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
+  now returns an object with the intitialised adapter and handlers Clarified
+  types - OberonActions is now OberonAdapter
+
+### Patch Changes
+
+- Updated dependencies [a8d2554]
+- Updated dependencies [a8d2554]
+  - @oberoncms/core@0.12.0
+  - @oberoncms/plugin-pgsql@0.6.0
+
 ## 0.8.1
 
 ### Patch Changes

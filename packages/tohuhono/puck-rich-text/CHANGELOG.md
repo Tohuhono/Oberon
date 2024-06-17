@@ -1,5 +1,13 @@
 # @tohuhono/puck-rich-text
 
+## 0.9.0
+
+### Minor Changes
+
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
+  now returns an object with the intitialised adapter and handlers Clarified
+  types - OberonActions is now OberonAdapter
+
 ## 0.8.2
 
 ### Patch Changes
