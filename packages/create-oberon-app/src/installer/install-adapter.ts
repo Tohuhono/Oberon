@@ -66,15 +66,20 @@ const createAdapter = (plugins: Plugin[]) => {
   return `
 import "server-cli-only"
 
-import { initAdapter } from "@oberoncms/core/adapter"
+import { initOberon } from "@oberoncms/core/adapter"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 
 ${pluginImports}
 
-export const adapter = initAdapter([
-  ${pluginAliasNames.join(", ")}
-])
+import { config } from "./config"
+
+export const { adapter, handlers } = initOberon({
+  config,
+  plugins: [
+    ${pluginAliasNames.join(", ")}
+  ],
+})
 `
 }
 

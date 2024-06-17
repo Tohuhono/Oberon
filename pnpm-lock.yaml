@@ -248,6 +248,9 @@ importers:
       '@commander-js/extra-typings':
         specifier: ^12.1.0
         version: 12.1.0(commander@12.1.0)
+      '@oberon/recipe-nextjs':
+        specifier: workspace:*
+        version: link:../../recipes/nextjs
       commander:
         specifier: ^12.1.0
         version: 12.1.0
