@@ -1,5 +1,22 @@
 # @oberoncms/core
 
+## 0.12.0
+
+### Minor Changes
+
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
+  now returns an object with the intitialised adapter and handlers Clarified
+  types - OberonActions is now OberonAdapter
+- a8d2554: BREAKING CHANGE move all auth including login to Oberon Client
+
+### Patch Changes
+
+- Updated dependencies [a8d2554]
+- Updated dependencies [a8d2554]
+- Updated dependencies [f7f5adb]
+  - @tohuhono/utils@0.10.0
+  - @tohuhono/ui@0.11.0
+
 ## 0.11.1
 
 ### Patch Changes
