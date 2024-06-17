@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.5.1
+
+### Patch Changes
+
+- 94cadff: Fix create-oberon-app dependencies
+
 ## 0.5.0
 
 ### Minor Changes
