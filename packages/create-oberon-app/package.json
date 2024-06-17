@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12.1.0",
-    "@oberon/recipe-nextjs": "workspace:*",
     "commander": "^12.1.0",
     "fast-glob": "3.3.2",
     "prompts": "^2.4.2",
