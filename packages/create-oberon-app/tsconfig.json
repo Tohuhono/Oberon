@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@tohuhono/dev/base.ts.config.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist"
