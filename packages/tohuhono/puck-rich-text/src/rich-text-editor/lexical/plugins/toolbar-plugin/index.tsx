@@ -263,7 +263,7 @@ export function ToolbarPlugin({
         display: "flex",
         gap: "4px",
         paddingLeft: "12px",
-        borderLeft: "1px solid var(--puck-color-grey-4)",
+        borderLeft: "1px solid var(--puck-color-grey-04)",
         marginLeft: "8px",
       }}
     >
