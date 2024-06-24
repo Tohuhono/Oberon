@@ -1,10 +1,10 @@
 import { randomUUID } from "crypto"
 import path from "path"
 import { NextRequest } from "next/server"
+import type { Disk } from "flydrive"
 import { getImageSize } from "./get-image-size"
-import { DriverActions } from "./plugin"
 
-export function initRouteHandler(driverActions: DriverActions): {
+export function initRouteHandler(disk: Disk): {
   POST: (req: NextRequest) => Promise<Response>
   GET: (req: NextRequest) => Response
 } {
@@ -21,9 +21,9 @@ export function initRouteHandler(driverActions: DriverActions): {
 
     const key = `${randomUUID()}.${path.extname(image.name).slice(1)}`
 
-    await driverActions.put(key, buffer)
+    await disk.put(key, buffer)
 
-    const url = await driverActions.getUrl(key)
+    const url = await disk.getUrl(key)
     const response = {
       key: key,
       alt: key,
