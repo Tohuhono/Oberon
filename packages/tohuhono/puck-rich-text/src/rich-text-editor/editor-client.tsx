@@ -20,7 +20,7 @@ export function Editor({
   return (
     <div
       style={{
-        cursor: isSelected ? "default" : "grab",
+        cursor: isSelected ? "auto" : "grab",
         pointerEvents: "auto",
       }}
     >
