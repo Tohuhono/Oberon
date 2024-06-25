@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.9.1
+
+### Patch Changes
+
+- 635748a: fix dropdown css variables and cursor
+
 ## 0.9.0
 
 ### Minor Changes
