@@ -1,5 +1,11 @@
 # @oberoncms/plugin-flydrive
 
+## 0.3.1
+
+### Patch Changes
+
+- eed0622: fix import trace, use contract type instead
+
 ## 0.3.0
 
 ### Minor Changes
