@@ -30,6 +30,7 @@ const withCallback = (url: string) => {
 
 export const authPlugin: OberonPlugin = (adapter) => {
   const config = {
+    basePath: "/api/auth",
     pages: {
       signIn: "/cms/login",
     },
@@ -121,7 +122,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
         return (session?.user as OberonUser) || null
       },
       signOut: async () => {
-        await nextAuth.signOut({ redirectTo: "/cms/login" })
+        await nextAuth.signOut()
       },
       signIn: async ({ email }) => {
         try {

@@ -5,7 +5,7 @@ export const Welcome = {
   render: () => {
     return (
       <div className="flex w-full items-center justify-center">
-        <div className="prose dark:prose-invert pt-10">
+        <div className="prose pt-10 dark:prose-invert">
           <h1>Welcome to OberonCMS</h1>
           <p>
             <Link href="/cms/edit">

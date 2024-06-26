@@ -8,7 +8,7 @@ export const Container = {
   },
   render: ({ className, puck: { renderDropZone: DropZone } }) => {
     return (
-      <div className={cn("flex w-full p-2 justify-center", className)}>
+      <div className={cn("flex w-full justify-center p-2", className)}>
         {<DropZone zone="box" />}
       </div>
     )

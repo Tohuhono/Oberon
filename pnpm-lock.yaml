@@ -35,9 +35,6 @@ importers:
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
-      prettier-plugin-brace-style:
-        specifier: ^0.6.2
-        version: 0.6.2(prettier@3.2.5)
       prettier-plugin-tailwindcss:
         specifier: ^0.5.13
         version: 0.5.13(prettier@3.2.5)
@@ -57,8 +54,8 @@ importers:
   apps/documentation:
     dependencies:
       '@datacom-digital/ui-sample-components':
-        specifier: ^0.3.2
-        version: 0.3.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
+        specifier: ^0.3.3
+        version: 0.3.3(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
@@ -121,8 +118,8 @@ importers:
   apps/playground:
     dependencies:
       '@datacom-digital/ui-sample-components':
-        specifier: ^0.3.2
-        version: 0.3.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
+        specifier: ^0.3.3
+        version: 0.3.3(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
@@ -157,6 +154,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/tohuhono/dev
       '@types/node':
         specifier: ^20
         version: 20.11.30
@@ -180,7 +180,7 @@ importers:
         version: 8.4.38
       prettier-plugin-tailwindcss:
         specifier: ^0.5.12
-        version: 0.5.13(prettier@3.3.1)
+        version: 0.5.13(prettier@3.3.2)
       tailwindcss:
         specifier: ^3.3.0
         version: 3.4.3
@@ -567,7 +567,7 @@ importers:
         version: link:../../oberoncms/core
       drizzle-orm:
         specifier: ^0.30.10
-        version: 0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5)(react@18.2.0)
+        version: 0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5)
       pg:
         specifier: ^8.11.5
         version: 8.11.5
@@ -729,7 +729,7 @@ importers:
         version: 0.8.0
       drizzle-orm:
         specifier: ^0.30.10
-        version: 0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0)(react@18.2.0)
+        version: 0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -897,7 +897,7 @@ importers:
         version: 0.14.2(lexical@0.14.2)
       '@lexical/react':
         specifier: 0.14.2
-        version: 0.14.2(lexical@0.14.2)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.15)
+        version: 0.14.2(lexical@0.14.2)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.18)
       '@lexical/rich-text':
         specifier: 0.14.2
         version: 0.14.2(@lexical/clipboard@0.14.2)(@lexical/selection@0.14.2)(@lexical/utils@0.14.2)(lexical@0.14.2)
@@ -995,6 +995,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../dev
       '@tohuhono/utils':
         specifier: workspace:*
         version: link:../utils
@@ -1026,9 +1029,6 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
     devDependencies:
-      '@tohuhono/dev':
-        specifier: workspace:*
-        version: link:../dev
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.30
@@ -1082,8 +1082,8 @@ importers:
   recipes/nextjs:
     dependencies:
       '@datacom-digital/ui-sample-components':
-        specifier: ^0.3.2
-        version: 0.3.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
+        specifier: ^0.3.3
+        version: 0.3.3(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3)
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
@@ -1470,8 +1470,8 @@ packages:
       commander: 12.1.0
     dev: false
 
-  /@datacom-digital/ui-sample-components@0.3.2(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3):
-    resolution: {integrity: sha512-717cOfv1RIq3i4ie8g4ZrdjhgTDOo1se3KGE8q69fjRgOyKjPeqaTwfTM+hQlXfguh+YYTcP8ifadoSn36PQ9Q==}
+  /@datacom-digital/ui-sample-components@0.3.3(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.3):
+    resolution: {integrity: sha512-88K5WLaFPwFiHbXN6zaP2D7ctVFjPxjHLa2lt5JrvkhqvZZDLjVzAXowTmq3SHPfIqkZkmBKviaY/o8O1ANJZg==}
     peerDependencies:
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
@@ -2430,7 +2430,7 @@ packages:
       lexical: 0.14.2
     dev: false
 
-  /@lexical/react@0.14.2(lexical@0.14.2)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.15):
+  /@lexical/react@0.14.2(lexical@0.14.2)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.18):
     resolution: {integrity: sha512-HCsZv5yExA/8h7Ul6y5NcqUAGctL79A7qSz7YSlrwfw8EYyUHXW5LzeoFTWSl12SKs600PM+I8jLGXu72N6kfQ==}
     peerDependencies:
       lexical: 0.14.2
@@ -2453,7 +2453,7 @@ packages:
       '@lexical/table': 0.14.2(lexical@0.14.2)
       '@lexical/text': 0.14.2(lexical@0.14.2)
       '@lexical/utils': 0.14.2(lexical@0.14.2)
-      '@lexical/yjs': 0.14.2(lexical@0.14.2)(yjs@13.6.15)
+      '@lexical/yjs': 0.14.2(lexical@0.14.2)(yjs@13.6.18)
       lexical: 0.14.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -2512,7 +2512,7 @@ packages:
       lexical: 0.14.2
     dev: false
 
-  /@lexical/yjs@0.14.2(lexical@0.14.2)(yjs@13.6.15):
+  /@lexical/yjs@0.14.2(lexical@0.14.2)(yjs@13.6.18):
     resolution: {integrity: sha512-0AKwQYRx7KvAKTdizoAXd9XZhkTO6l3LmHRvsu70YAHVZUEb9tVQBM7lp/dtBBQF0SII/7uKwrluX6Vi/apWYA==}
     peerDependencies:
       lexical: 0.14.2
@@ -2520,7 +2520,7 @@ packages:
     dependencies:
       '@lexical/offset': 0.14.2(lexical@0.14.2)
       lexical: 0.14.2
-      yjs: 13.6.15
+      yjs: 13.6.18
     dev: false
 
   /@libsql/client@0.5.6:
@@ -6759,7 +6759,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5)(react@18.2.0):
+  /drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.2.66)(pg@8.11.5):
     resolution: {integrity: sha512-IRy/QmMWw9lAQHpwbUh1b8fcn27S/a9zMIzqea1WNOxK9/4EB8gIo+FZWLiPXzl2n9ixGSv8BhsLZiOppWEwBw==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -6842,10 +6842,9 @@ packages:
       '@types/pg': 8.11.6
       '@types/react': 18.2.66
       pg: 8.11.5
-      react: 18.2.0
     dev: false
 
-  /drizzle-orm@0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0)(react@18.2.0):
+  /drizzle-orm@0.30.10(@types/react@18.2.66)(@vercel/postgres@0.8.0):
     resolution: {integrity: sha512-IRy/QmMWw9lAQHpwbUh1b8fcn27S/a9zMIzqea1WNOxK9/4EB8gIo+FZWLiPXzl2n9ixGSv8BhsLZiOppWEwBw==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -6927,7 +6926,6 @@ packages:
     dependencies:
       '@types/react': 18.2.66
       '@vercel/postgres': 0.8.0
-      react: 18.2.0
     dev: false
 
   /duplexer@0.1.2:
@@ -10835,19 +10833,6 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  /prettier-plugin-brace-style@0.6.2(prettier@3.2.5):
-    resolution: {integrity: sha512-/KVK1b0kttXBqqR/qmdecOTniDx9m6jZyuI9liZ75GLIWItUkehqbwDzFSX6yWBJHnJ/8/UbEdddNLsEnFBvbQ==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      prettier: ^2 || ^3
-      prettier-plugin-astro: '*'
-    peerDependenciesMeta:
-      prettier-plugin-astro:
-        optional: true
-    dependencies:
-      prettier: 3.2.5
-    dev: true
-
   /prettier-plugin-tailwindcss@0.5.13(prettier@3.2.5):
     resolution: {integrity: sha512-2tPWHCFNC+WRjAC4SIWQNSOdcL1NNkydXim8w7TDqlZi+/ulZYz2OouAI6qMtkggnPt7lGamboj6LcTMwcCvoQ==}
     engines: {node: '>=14.21.3'}
@@ -10958,6 +10943,61 @@ packages:
       prettier: 3.3.1
     dev: true
 
+  /prettier-plugin-tailwindcss@0.5.13(prettier@3.3.2):
+    resolution: {integrity: sha512-2tPWHCFNC+WRjAC4SIWQNSOdcL1NNkydXim8w7TDqlZi+/ulZYz2OouAI6qMtkggnPt7lGamboj6LcTMwcCvoQ==}
+    engines: {node: '>=14.21.3'}
+    peerDependencies:
+      '@ianvs/prettier-plugin-sort-imports': '*'
+      '@prettier/plugin-pug': '*'
+      '@shopify/prettier-plugin-liquid': '*'
+      '@trivago/prettier-plugin-sort-imports': '*'
+      '@zackad/prettier-plugin-twig-melody': '*'
+      prettier: ^3.0
+      prettier-plugin-astro: '*'
+      prettier-plugin-css-order: '*'
+      prettier-plugin-import-sort: '*'
+      prettier-plugin-jsdoc: '*'
+      prettier-plugin-marko: '*'
+      prettier-plugin-organize-attributes: '*'
+      prettier-plugin-organize-imports: '*'
+      prettier-plugin-sort-imports: '*'
+      prettier-plugin-style-order: '*'
+      prettier-plugin-svelte: '*'
+    peerDependenciesMeta:
+      '@ianvs/prettier-plugin-sort-imports':
+        optional: true
+      '@prettier/plugin-pug':
+        optional: true
+      '@shopify/prettier-plugin-liquid':
+        optional: true
+      '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      '@zackad/prettier-plugin-twig-melody':
+        optional: true
+      prettier-plugin-astro:
+        optional: true
+      prettier-plugin-css-order:
+        optional: true
+      prettier-plugin-import-sort:
+        optional: true
+      prettier-plugin-jsdoc:
+        optional: true
+      prettier-plugin-marko:
+        optional: true
+      prettier-plugin-organize-attributes:
+        optional: true
+      prettier-plugin-organize-imports:
+        optional: true
+      prettier-plugin-sort-imports:
+        optional: true
+      prettier-plugin-style-order:
+        optional: true
+      prettier-plugin-svelte:
+        optional: true
+    dependencies:
+      prettier: 3.3.2
+    dev: true
+
   /prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
@@ -10972,6 +11012,12 @@ packages:
 
   /prettier@3.3.1:
     resolution: {integrity: sha512-7CAwy5dRsxs8PHXT3twixW9/OEll8MLE0VRPCJyl7CkS6VHGPSlsVaWTiASPTyGyYRyApxlaWTzwUxVNrhcwDg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /prettier@3.3.2:
+    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -13439,8 +13485,8 @@ packages:
       yargs-parser: 21.1.1
     dev: true
 
-  /yjs@13.6.15:
-    resolution: {integrity: sha512-moFv4uNYhp8BFxIk3AkpoAnnjts7gwdpiG8RtyFiKbMtxKCS0zVZ5wPaaGpwC3V2N/K8TK8MwtSI3+WO9CHWjQ==}
+  /yjs@13.6.18:
+    resolution: {integrity: sha512-GBTjO4QCmv2HFKFkYIJl7U77hIB1o22vSCSQD1Ge8ZxWbIbn8AltI4gyXbtL+g5/GJep67HCMq3Y5AmNwDSyEg==}
     engines: {node: '>=16.0.0', npm: '>=8.0.0'}
     dependencies:
       lib0: 0.2.94

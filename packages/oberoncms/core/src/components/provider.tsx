@@ -13,9 +13,9 @@ export const ClientContext = createContext<OberonClientContext | null>(null)
 
 export const ActionsContext = createContext<OberonAdapter | null>(null)
 
-type UnwrapServerAction = <TProps = unknown, TResult = unknown>(
-  action: (...props: TProps[]) => OberonResponse<TResult>,
-) => (...props: TProps[]) => Promise<TResult>
+type UnwrapServerAction = <TProps = unknown, TResult = unknown, TKey = string>(
+  serverActionEntry: [TKey, (...props: TProps[]) => OberonResponse<TResult>],
+) => [TKey, (...props: TProps[]) => Promise<TResult>]
 
 export const OberonClientProvider = ({
   children,
@@ -28,8 +28,8 @@ export const OberonClientProvider = ({
   const { toast } = useToast()
 
   const actions = useMemo(() => {
-    const unwrap: UnwrapServerAction =
-      (action) =>
+    const unwrap: UnwrapServerAction = ([key, action]) => [
+      key,
       async (...props) => {
         const response = await action(...props)
 
@@ -41,17 +41,26 @@ export const OberonClientProvider = ({
         }
 
         if (response?.status === "success") {
+          if ((response.result as { message: string })?.message) {
+            toast({
+              title: (response.result as { message: string }).message,
+            })
+          }
           return response.result
         }
 
-        throw new Error(response?.message)
-      }
+        if (response?.status === "error") {
+          throw new Error(
+            response?.message || `${key}: An unknown error has occured`,
+          )
+        }
+
+        return response
+      },
+    ]
 
     return Object.fromEntries(
-      Object.entries(serverActions).map(([key, action]) => [
-        key,
-        unwrap(action),
-      ]),
+      Object.entries(serverActions).map(unwrap),
     ) as OberonAdapter
   }, [serverActions, toast])
 
