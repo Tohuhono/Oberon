@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/puck-rich-text",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A puck component for rich text editing made for OberonCMS",
