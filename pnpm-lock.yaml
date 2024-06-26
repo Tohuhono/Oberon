@@ -815,6 +815,9 @@ importers:
       typescript-eslint:
         specifier: ^7.2.0
         version: 7.6.0(eslint@8.57.0)(typescript@5.4.2)
+      uploadthing:
+        specifier: ^6.10.1
+        version: 6.10.4(tailwindcss@3.4.3)
       vite:
         specifier: ^5.1.6
         version: 5.2.8(@types/node@20.11.30)
@@ -12731,6 +12734,37 @@ packages:
       fast-check: 3.18.0
       next: 14.2.3(react-dom@18.2.0)(react@18.2.0)
       std-env: 3.7.0
+    dev: false
+
+  /uploadthing@6.10.4(tailwindcss@3.4.3):
+    resolution: {integrity: sha512-0hGO0Q7R7MnxzVkUbYHE6PkwFieYH+UUa905uo7JtA0h3Gpc89bNDFaOfK8634Z66088VRLNVuWxY2FTIqw4sg==}
+    engines: {node: '>=18.13.0'}
+    peerDependencies:
+      express: '*'
+      fastify: '*'
+      h3: '*'
+      next: '*'
+      tailwindcss: '*'
+    peerDependenciesMeta:
+      express:
+        optional: true
+      fastify:
+        optional: true
+      h3:
+        optional: true
+      next:
+        optional: true
+      tailwindcss:
+        optional: true
+    dependencies:
+      '@effect/schema': 0.66.14(effect@3.1.2)(fast-check@3.18.0)
+      '@uploadthing/mime-types': 0.2.10
+      '@uploadthing/shared': 6.7.4(@uploadthing/mime-types@0.2.10)
+      consola: 3.2.3
+      effect: 3.1.2
+      fast-check: 3.18.0
+      std-env: 3.7.0
+      tailwindcss: 3.4.3
     dev: false
 
   /uri-js@4.4.1:

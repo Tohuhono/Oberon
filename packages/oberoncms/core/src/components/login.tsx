@@ -121,13 +121,7 @@ export function Login({
                 className={cn(sent ? "visible animate-fade-in" : "hidden")}
               >
                 <FormControl>
-                  <InputOTP
-                    maxLength={6}
-                    {...field}
-                    onKeyDown={(e) => {
-                      console.log("onKeyDown", e.currentTarget)
-                    }}
-                  >
+                  <InputOTP maxLength={6} {...field}>
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />

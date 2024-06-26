@@ -34,7 +34,6 @@ export const OberonClientProvider = ({
         const response = await action(...props)
 
         if (response?.message) {
-          console.log("gotta message", response?.message)
           toast({
             variant: response.status === "error" ? "destructive" : "default",
             title: response.message,
