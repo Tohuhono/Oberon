@@ -8,8 +8,8 @@ import type {
 } from "@measured/puck"
 import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
-import type { NextAuthResult } from "next-auth"
 import type { Awaitable } from "@auth/core/types"
+import type { NextRequest } from "next/server"
 
 export class OberonError extends Error {}
 
@@ -283,8 +283,21 @@ export type OberonPluginAdapter = OberonInitAdapter &
   OberonCanAdapter &
   OberonSendAdapter
 
+export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
+
 // Currently the only handles exported are NextAuth Handlers
-export type OberonHandler = NextAuthResult["handlers"]
+export type OberonHandler<Params = undefined> = Params extends undefined
+  ? {
+      [key in OberonMethod]?: (
+        req: NextRequest,
+      ) => Promise<Response> | Promise<Response>
+    }
+  : {
+      [key in OberonMethod]: (
+        req: NextRequest,
+        context: { params: Params },
+      ) => Promise<Response>
+    }
 
 export type OberonPlugin = (adapter: OberonPluginAdapter) => {
   name: string
@@ -320,7 +333,9 @@ export type OberonAdapter = {
   migrateData: () => Promise<
     StreamResponseChunk<TransformResult | MigrationResult>
   >
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<void>
+  publishPageData: (
+    data: z.infer<typeof PublishPageSchema>,
+  ) => Promise<{ message: string }>
   signOut: () => Promise<void>
   signIn: (data: { email: string }) => Promise<void>
 }

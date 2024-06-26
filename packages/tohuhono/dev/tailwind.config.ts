@@ -1,15 +1,23 @@
 // @ts-check
 
 import type { Config } from "tailwindcss"
-import animate from "tailwindcss-animate"
-import typography from "@tailwindcss/typography"
 
-export const config: Config = {
+export const config = {
   darkMode: ["class"],
   future: {
     hoverOnlyWhenSupported: true,
   },
-  content: [],
+  content: [
+    "./node_modules/@oberoncms/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@datacom-digital/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./oberon/**/*.{js,ts,jsx,tsx,mdx}",
+    "./.oberon/tailwind.classes",
+  ],
   theme: {
     extend: {
       spacing: {
@@ -63,6 +71,10 @@ export const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -71,12 +83,25 @@ export const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "fade-in-half": {
+          from: { opacity: "0" },
+          to: { opacity: ".5" },
+        },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
       },
       animation: {
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in-half": "fade-in-half 1s ease-in",
+        "fade-in": "fade-in 1s ease-in",
       },
     },
   },
-  plugins: [animate, typography],
-}
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+} satisfies Config
+
+export default config

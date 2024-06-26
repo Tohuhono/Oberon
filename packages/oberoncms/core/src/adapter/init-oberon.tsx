@@ -293,7 +293,6 @@ export function initOberon({
         revalidatePath(key)
         revalidateTag("oberon-pages")
       },
-      // TODO zod ; return value
       publishPageData: async function (data: unknown) {
         const user = await whoWill("pages", "write")
         const { key, data: pageData } = PublishPageSchema.parse(data)
@@ -302,6 +301,7 @@ export function initOberon({
           data: pageData as PageData,
           updatedBy: user.email,
         })
+        return { message: `Successfully published ${key}` }
       },
 
       /*

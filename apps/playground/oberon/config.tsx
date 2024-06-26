@@ -1,4 +1,5 @@
 import { type OberonConfig } from "@oberoncms/core"
+import { Image } from "@oberoncms/plugin-uploadthing"
 import { Dashboard } from "@/oberon/components/dashboard"
 import { Welcome } from "@/oberon/components/welcome"
 import { Container } from "@/oberon/components/container"
@@ -21,5 +22,6 @@ export const config: OberonConfig = {
         <div className="prose dark:prose-invert lg:prose-lg">{text}</div>
       ),
     },
+    Image,
   },
 }
