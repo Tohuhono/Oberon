@@ -288,9 +288,7 @@ export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 // Currently the only handles exported are NextAuth Handlers
 export type OberonHandler<Params = undefined> = Params extends undefined
   ? {
-      [key in OberonMethod]?: (
-        req: NextRequest,
-      ) => Promise<Response> | Promise<Response>
+      [key in OberonMethod]?: (req: NextRequest) => Promise<Response> | Response
     }
   : {
       [key in OberonMethod]: (
@@ -298,14 +296,6 @@ export type OberonHandler<Params = undefined> = Params extends undefined
         context: { params: Params },
       ) => Promise<Response>
     }
-
-export type OberonPlugin = (adapter: OberonPluginAdapter) => {
-  name: string
-  version?: string
-  disabled?: boolean
-  handlers?: Record<string, OberonHandler>
-  adapter?: Partial<OberonPluginAdapter>
-}
 
 export type OberonAdapter = {
   prebuild: () => Promise<void>
@@ -338,6 +328,14 @@ export type OberonAdapter = {
   ) => Promise<{ message: string }>
   signOut: () => Promise<void>
   signIn: (data: { email: string }) => Promise<void>
+}
+
+export type OberonPlugin = (adapter: OberonPluginAdapter) => {
+  name: string
+  version?: string
+  disabled?: boolean
+  handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
+  adapter?: Partial<OberonPluginAdapter>
 }
 
 export type OberonResponse<T = unknown> = Promise<

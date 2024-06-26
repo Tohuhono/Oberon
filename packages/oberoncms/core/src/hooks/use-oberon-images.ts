@@ -9,7 +9,7 @@ export const useOberonImages = () => {
     data: images,
     mutate,
     isLoading: loading,
-  } = useSWR("/oberon/images", () => getAllImages())
+  } = useSWR("/oberon/images", getAllImages)
 
   return {
     images,

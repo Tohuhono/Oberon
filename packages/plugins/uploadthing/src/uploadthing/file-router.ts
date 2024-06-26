@@ -52,6 +52,7 @@ const initFileRouter = ({ can }: OberonAdapter) => {
 export function initRouteHandler(adapter: OberonAdapter) {
   return createRouteHandler({
     router: initFileRouter(adapter),
+    config: { callbackUrl: "/cms/api/uploadthing" },
   })
 }
 

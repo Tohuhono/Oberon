@@ -58,7 +58,6 @@
     "tsx": "^4.13.3",
     "typescript": "5.4.2",
     "typescript-eslint": "^7.2.0",
-    "uploadthing": "^6.10.1",
     "vite": "^5.1.6",
     "vite-plugin-dts": "^3.7.3",
     "vite-plugin-externalize-deps": "^0.8.0"

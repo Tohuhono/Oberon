@@ -4,13 +4,14 @@ import {
   type OberonPermissions,
   type PluginVersion,
   type OberonHandler,
+  type OberonAdapter,
 } from "../lib/dtd"
 import { notImplemented } from "../lib/utils"
 import { getInitialData } from "./get-initial-data"
 
 type InititalisedPlugins = {
   adapter: OberonPluginAdapter
-  handlers: Record<string, OberonHandler>
+  handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>
   versions: PluginVersion[]
 }
 
