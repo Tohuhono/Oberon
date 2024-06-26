@@ -25,6 +25,7 @@
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
+    "@tohuhono/dev": "workspace:*",
     "@next/bundle-analyzer": "^14.2.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",

@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useDebouncedCallback } from "use-debounce"
 import { cn } from "@tohuhono/utils"
+import { useToast } from "@tohuhono/ui/toast"
 import { useOberonActions } from "../hooks/use-oberon"
 
 const LoginSchema = z.object({
@@ -36,6 +37,8 @@ export function Login({
 
   const router = useRouter()
 
+  const { toast } = useToast()
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -45,15 +48,54 @@ export function Login({
   })
 
   const [sending, setSending] = useState(false)
-  const [sent, setSent] = useState(!!email)
+  const [submitting, setSubmitting] = useState(false)
+  const [sent, setSent] = useState(!!email && !!token)
 
   const debouncedSetSending = useDebouncedCallback(
     (loading: boolean) => setSending(loading),
     3000,
   )
 
+  const sendOnCLick = form.handleSubmit(async ({ email }) => {
+    setSending(true)
+    try {
+      await signIn({
+        email: typeof email === "string" ? email : "",
+      })
+      form.resetField("token")
+      setSent(true)
+    } catch (error) {
+      setSending(false)
+      throw error
+    }
+    toast({
+      title: `Token sent to ${email}`,
+      description: "Please check your emails",
+    })
+    debouncedSetSending(false)
+  })
+
+  const tokenOnClick = form.handleSubmit(async ({ email, token }) => {
+    setSubmitting(true)
+    const response = await fetch(
+      `/cms/api/auth/callback/email?email=${email}&token=${token}`,
+    )
+    if (response.ok) {
+      router.push(callbackUrl || "/cms/pages")
+    }
+    if (!response.ok) {
+      toast({
+        variant: "destructive",
+        title: "Authentication failed",
+        description: "Please check your credentials and try again",
+      })
+    }
+    form.resetField("token")
+    setSubmitting(false)
+  })
+
   return (
-    <div className="grid h-screen place-content-center gap-2">
+    <div className="grid  h-screen place-content-center gap-3">
       <Form {...form}>
         <form className="contents">
           <FormField
@@ -71,41 +113,21 @@ export function Login({
             )}
           />
 
-          {!token && (
-            <Button
-              disabled={sending}
-              className={"transition-colors duration-1000"}
-              variant={sent ? "secondary" : "default"}
-              onClick={form.handleSubmit(async ({ email }) => {
-                setSending(true)
-                try {
-                  await signIn({
-                    email: typeof email === "string" ? email : "",
-                  })
-                  setSent(true)
-                } catch (error) {
-                  setSending(false)
-                  throw error
-                }
-                debouncedSetSending(false)
-              })}
-            >
-              {sent ? "Resend" : "Send"} OTP Token
-            </Button>
-          )}
-
           <FormField
             control={form.control}
             name="token"
             render={({ field }) => (
               <FormItem
-                className={cn(
-                  "transition-opacity duration-1000",
-                  sent ? "visible opacity-100" : "collapse opacity-0",
-                )}
+                className={cn(sent ? "visible animate-fade-in" : "hidden")}
               >
                 <FormControl>
-                  <InputOTP maxLength={6} {...field}>
+                  <InputOTP
+                    maxLength={6}
+                    {...field}
+                    onKeyDown={(e) => {
+                      console.log("onKeyDown", e.currentTarget)
+                    }}
+                  >
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />
@@ -120,19 +142,35 @@ export function Login({
               </FormItem>
             )}
           />
+          {!sent && (
+            <Button disabled={sending} variant="default" onClick={sendOnCLick}>
+              Sign in
+            </Button>
+          )}
 
           <Button
+            disabled={submitting}
             className={cn(
-              "transition-all duration-1000 ease-in-out pt-2",
-              sent ? "visible opacity-100" : "collapse opacity-0",
+              "pt-2",
+              sent ? "visible animate-fade-in" : "collapse",
+              sending ? "transition-none" : "transition-opacity",
             )}
-            onClick={form.handleSubmit(async ({ email, token }) => {
-              router.push(
-                `/api/auth/callback/email?email=${email}&token=${token}&callbackUrl=${callbackUrl || "/cms/pages"}`,
-              )
-            })}
+            onClick={tokenOnClick}
           >
-            Sign in
+            Complete Sign in
+          </Button>
+
+          <Button
+            disabled={sending}
+            className={cn(
+              "animate-fade-in-half duration-1000",
+              sent ? "visible" : "collapse",
+              sending ? "transition-none" : "transition-opacity",
+            )}
+            variant="secondary"
+            onClick={sendOnCLick}
+          >
+            Resend OTP Token
           </Button>
         </form>
       </Form>

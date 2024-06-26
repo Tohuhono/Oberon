@@ -35,9 +35,6 @@ importers:
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
-      prettier-plugin-brace-style:
-        specifier: ^0.6.2
-        version: 0.6.2(prettier@3.2.5)
       prettier-plugin-tailwindcss:
         specifier: ^0.5.13
         version: 0.5.13(prettier@3.2.5)
@@ -157,6 +154,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../../packages/tohuhono/dev
       '@types/node':
         specifier: ^20
         version: 20.11.30
@@ -815,9 +815,6 @@ importers:
       typescript-eslint:
         specifier: ^7.2.0
         version: 7.6.0(eslint@8.57.0)(typescript@5.4.2)
-      uploadthing:
-        specifier: ^6.10.1
-        version: 6.10.4(tailwindcss@3.4.3)
       vite:
         specifier: ^5.1.6
         version: 5.2.8(@types/node@20.11.30)
@@ -995,6 +992,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.12(tailwindcss@3.4.3)
+      '@tohuhono/dev':
+        specifier: workspace:*
+        version: link:../dev
       '@tohuhono/utils':
         specifier: workspace:*
         version: link:../utils
@@ -1026,9 +1026,6 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
     devDependencies:
-      '@tohuhono/dev':
-        specifier: workspace:*
-        version: link:../dev
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.30
@@ -10835,19 +10832,6 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  /prettier-plugin-brace-style@0.6.2(prettier@3.2.5):
-    resolution: {integrity: sha512-/KVK1b0kttXBqqR/qmdecOTniDx9m6jZyuI9liZ75GLIWItUkehqbwDzFSX6yWBJHnJ/8/UbEdddNLsEnFBvbQ==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      prettier: ^2 || ^3
-      prettier-plugin-astro: '*'
-    peerDependenciesMeta:
-      prettier-plugin-astro:
-        optional: true
-    dependencies:
-      prettier: 3.2.5
-    dev: true
-
   /prettier-plugin-tailwindcss@0.5.13(prettier@3.2.5):
     resolution: {integrity: sha512-2tPWHCFNC+WRjAC4SIWQNSOdcL1NNkydXim8w7TDqlZi+/ulZYz2OouAI6qMtkggnPt7lGamboj6LcTMwcCvoQ==}
     engines: {node: '>=14.21.3'}
@@ -12747,37 +12731,6 @@ packages:
       fast-check: 3.18.0
       next: 14.2.3(react-dom@18.2.0)(react@18.2.0)
       std-env: 3.7.0
-    dev: false
-
-  /uploadthing@6.10.4(tailwindcss@3.4.3):
-    resolution: {integrity: sha512-0hGO0Q7R7MnxzVkUbYHE6PkwFieYH+UUa905uo7JtA0h3Gpc89bNDFaOfK8634Z66088VRLNVuWxY2FTIqw4sg==}
-    engines: {node: '>=18.13.0'}
-    peerDependencies:
-      express: '*'
-      fastify: '*'
-      h3: '*'
-      next: '*'
-      tailwindcss: '*'
-    peerDependenciesMeta:
-      express:
-        optional: true
-      fastify:
-        optional: true
-      h3:
-        optional: true
-      next:
-        optional: true
-      tailwindcss:
-        optional: true
-    dependencies:
-      '@effect/schema': 0.66.14(effect@3.1.2)(fast-check@3.18.0)
-      '@uploadthing/mime-types': 0.2.10
-      '@uploadthing/shared': 6.7.4(@uploadthing/mime-types@0.2.10)
-      consola: 3.2.3
-      effect: 3.1.2
-      fast-check: 3.18.0
-      std-env: 3.7.0
-      tailwindcss: 3.4.3
     dev: false
 
   /uri-js@4.4.1:

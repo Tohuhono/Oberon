@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react"
+import { type PropsWithChildren } from "react"
 
 import { redirect } from "next/navigation"
 import { OberonClientProvider } from "./components/provider"
