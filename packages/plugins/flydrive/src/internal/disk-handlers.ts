@@ -6,7 +6,7 @@ import { getImageSize } from "./get-image-size"
 
 export function initRouteHandler(disk: Disk): {
   POST: (req: NextRequest) => Promise<Response>
-  GET: (req: NextRequest) => Response
+  GET: (req: NextRequest) => Promise<Response>
 } {
   const POST: (req: NextRequest) => Promise<Response> = async (req) => {
     const image = (await req.formData()).get("image") as File | null
@@ -38,7 +38,7 @@ export function initRouteHandler(disk: Disk): {
     })
   }
 
-  const GET: (req: NextRequest) => Response = () => {
+  const GET: (req: NextRequest) => Promise<Response> = async () => {
     // could be used to get presigned URLs
     return new Response("GET request handled", { status: 200 })
   }

@@ -23,7 +23,11 @@ argument, the driver should be an instance of the flydrive any flydrive driver
   Make sure to follow the [flydrive
   documentation](https://flydrive.dev/docs/introduction) instructions.
 </Callout>
-```typescript export const {(flyDrivePlugin, initFlyDriveRouter)} = getFlyDrivePlugin(driver)
+
+```typescript
+// create the driver
+import { getFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin"
+const flyDrivePlugin = getFlyDrivePlugin(driver) // <- pass a flydrive driver instance
 ```
 
 ## Example using S3 driver
@@ -41,13 +45,10 @@ create a flydrive adapter, and generate your plugin!
 import "server-only"
 
 import { initAdapter } from "@oberoncms/core/adapter"
-
-
 import { S3Driver } from "flydrive/drivers/s3" // <- import the driver you want to use
-
 import { getFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin" // <- import the plugin
 
-const s3Driver = new S3Driver({
+const s3Driver = new S3Driver({ // <- create the s3 driver
   credentials: {
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -59,25 +60,17 @@ const s3Driver = new S3Driver({
     generateURL() // mandatory
   },
 })
-
-// generate the plugin & api, and export the router to use it in the api
-export const { flyDrivePlugin, initFlyDriveRouter } = getFlyDrivePlugin(s3Driver)
-
 // add the plugin to the oberon adapter
-export const adapter = initAdapter([
-  flyDrivePlugin, // <- add the plugin
-  // other plugins
-])
+export const { adapter, handler } = initOberon({
+  config,
+  plugins: [
+    // other plugins || order doesn't matter
+    getFlyDrivePlugin(s3Driver), // <- generate and add the plugin
+],
+})
 ```
 
 ## Prepare API
-
-```typescript
-// api/flydrive/route.ts
-import { initFlyDriveRouter } from "./adapter" // <where you placed your adapter.ts>
-
-export const { GET, POST } = initFlyDriveRouter()
-```
 
 ## Editor configuration
 
@@ -146,13 +139,13 @@ import { VercelBlobDriver } from "@oberoncms/plugin-flydrive/vercel"
 
 const vercelBlobDriver = new VercelBlobDriver() // <- create the driver, it will consume token from the environment
 
-export const { flyDrivePlugin, initFlyDriveRouter } =
-  getFlyDrivePlugin(vercelBlobDriver)
-
-export const adapter = initAdapter([
-  flyDrivePlugin,
-  // other plugins
-])
+export const { adapter, handler } = initOberon({
+  config,
+  plugins: [
+    // other plugins || order doesn't matter
+    getFlyDrivePlugin(vercelBlobDriver),
+  ],
+})
 ```
 
 for API and Editor configuration, follow the same steps as shown in the S3
