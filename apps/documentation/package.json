@@ -12,7 +12,7 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@datacom-digital/ui-sample-components": "^0.3.2",
+    "@datacom-digital/ui-sample-components": "^0.3.3",
     "@oberoncms/core": "workspace:*",
     "@tohuhono/puck-rich-text": "workspace:*",
     "next": "14.2.3",

@@ -13,7 +13,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@datacom-digital/ui-sample-components": "^0.3.2",
+    "@datacom-digital/ui-sample-components": "^0.3.3",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-turso": "workspace:*",
@@ -25,9 +25,9 @@
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
-    "@tohuhono/dev": "workspace:*",
     "@next/bundle-analyzer": "^14.2.1",
     "@tailwindcss/typography": "^0.5.10",
+    "@tohuhono/dev": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

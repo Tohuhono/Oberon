@@ -78,7 +78,7 @@ export function Login({
   const tokenOnClick = form.handleSubmit(async ({ email, token }) => {
     setSubmitting(true)
     const response = await fetch(
-      `/cms/api/auth/callback/email?email=${email}&token=${token}`,
+      `/api/auth/callback/email?email=${email}&token=${token}`,
     )
     if (response.ok) {
       router.push(callbackUrl || "/cms/pages")

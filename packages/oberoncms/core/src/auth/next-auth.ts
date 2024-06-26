@@ -30,7 +30,7 @@ const withCallback = (url: string) => {
 
 export const authPlugin: OberonPlugin = (adapter) => {
   const config = {
-    basePath: "/cms/api/auth",
+    basePath: "/api/auth",
     pages: {
       signIn: "/cms/login",
     },
