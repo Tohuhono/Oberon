@@ -48,7 +48,7 @@ export const ImageField = ({
         formData.append("image", file)
 
         try {
-          const response = await fetch("/api/flydrive", {
+          const response = await fetch("/cms/api/flydrive", {
             method: "POST",
             body: formData,
           })

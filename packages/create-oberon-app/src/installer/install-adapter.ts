@@ -74,7 +74,7 @@ ${pluginImports}
 
 import { config } from "./config"
 
-export const { adapter, handlers } = initOberon({
+export const { adapter, handler } = initOberon({
   config,
   plugins: [
     ${pluginAliasNames.join(", ")}

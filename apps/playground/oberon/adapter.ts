@@ -9,7 +9,7 @@ import { plugin as uploadthingPlugin } from "@oberoncms/plugin-uploadthing/plugi
 import { plugin as sendPlugin } from "./send"
 import { config } from "./config"
 
-export const { adapter, handlers } = initOberon({
+export const { adapter, handler } = initOberon({
   config,
   plugins: [
     developmentPlugin,
