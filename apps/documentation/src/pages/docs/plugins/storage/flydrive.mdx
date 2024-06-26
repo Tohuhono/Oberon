@@ -129,3 +129,31 @@ export const editorConfig = {
 Open the editor and start uploading images!
 
 That's it! you can now use the Image component in your editor!
+
+## Vercel Blob
+
+To use the Vercel Blob storage, you need to install the `@vercel/blob` package
+
+<Callout type="info" emoji="ℹ️">
+  Make sure to follow the [Vercel
+  Blob](https://vercel.com/docs/storage/vercel-blob#getting-started)
+  instructions.
+</Callout>
+
+```typescript
+import { getFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin"
+import { VercelBlobDriver } from "@oberoncms/plugin-flydrive/vercel"
+
+const vercelBlobDriver = new VercelBlobDriver() // <- create the driver, it will consume token from the environment
+
+export const { flyDrivePlugin, initFlyDriveRouter } =
+  getFlyDrivePlugin(vercelBlobDriver)
+
+export const adapter = initAdapter([
+  flyDrivePlugin,
+  // other plugins
+])
+```
+
+for API and Editor configuration, follow the same steps as shown in the S3
+example.
