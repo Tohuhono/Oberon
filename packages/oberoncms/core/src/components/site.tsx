@@ -2,11 +2,13 @@
 
 import { Fragment, useEffect, useRef, useState } from "react"
 
-import { ColumnHeading, Table } from "@tohuhono/ui/table"
 import { Button } from "@tohuhono/ui/button"
 import { ScrollArea } from "@tohuhono/ui/scroll-area"
 import { iterateStreamResponse } from "@tohuhono/utils"
 import { useRouter } from "next/navigation"
+
+import { Grid, GridHeading } from "@tohuhono/ui/grid"
+import { Table } from "@tohuhono/ui/table"
 import { useOberonActions } from "../hooks/use-oberon"
 import {
   type MigrationResult,
@@ -72,7 +74,7 @@ export function Site({
       <h2>Scheduled events</h2>
       <p className="text-muted-foreground">Scheduling not enabled</p>
       <h2>Pending Migrations</h2>
-      <Table className="grid-cols-[1fr_auto]">
+      <Grid className="grid-cols-[1fr_auto]">
         {pendingMigrations ? (
           <div>{`Components: ${pendingMigrations.join(", ")}`}</div>
         ) : (
@@ -82,7 +84,7 @@ export function Site({
         <Button onClick={migrateData} disabled={migrateDisabled}>
           Run migrations
         </Button>
-      </Table>
+      </Grid>
       {results && (
         <div className="pt-2">
           <ScrollArea className="h-64 rounded-md border px-5">
@@ -108,13 +110,13 @@ export function Site({
       )}
 
       <h2>Installed Packages</h2>
-      <Table className="grid-cols-[1fr_auto]">
-        <ColumnHeading>Core</ColumnHeading>
-        <ColumnHeading>Version</ColumnHeading>
+      <Grid className="grid-cols-[1fr_auto]">
+        <GridHeading>Core</GridHeading>
+        <GridHeading>Version</GridHeading>
 
         <div>@oberoncms/core</div>
         <div>{coreVersion}</div>
-        <ColumnHeading className="col-span-2">Plugins</ColumnHeading>
+        <GridHeading className="col-span-2">Plugins</GridHeading>
 
         {plugins.map(({ name, disabled, version }) => (
           <Fragment key={name}>
@@ -124,7 +126,7 @@ export function Site({
             <div>{version}</div>
           </Fragment>
         ))}
-      </Table>
+      </Grid>
     </>
   )
 }

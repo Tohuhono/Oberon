@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@tohuhono/ui/form"
 
-import { ColumnHeading, Table } from "@tohuhono/ui/table"
+import { Grid, GridHeading } from "@tohuhono/ui/grid"
 import { AddUserSchema, OberonUser, roles } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
 
@@ -79,10 +79,10 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
   })
 
   return (
-    <Table className="grid-cols-[1fr_auto_auto]">
-      <ColumnHeading>Email</ColumnHeading>
-      <ColumnHeading>Role</ColumnHeading>
-      <ColumnHeading></ColumnHeading>
+    <Grid className="grid-cols-[1fr_auto_auto]">
+      <GridHeading>Email</GridHeading>
+      <GridHeading>Role</GridHeading>
+      <GridHeading></GridHeading>
       <Form {...form}>
         <form
           className="contents"
@@ -166,6 +166,6 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
           </Fragment>
         )
       })}
-    </Table>
+    </Grid>
   )
 }

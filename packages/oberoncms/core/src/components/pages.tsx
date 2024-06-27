@@ -14,8 +14,9 @@ import {
   FormMessage,
 } from "@tohuhono/ui/form"
 import { z } from "zod"
-import { ColumnHeading, Table } from "@tohuhono/ui/table"
 import { LocalDate } from "@tohuhono/ui/date"
+
+import { Grid, GridHeading } from "@tohuhono/ui/grid"
 import { useOberonActions } from "../hooks/use-oberon"
 import { AddPageSchema, type OberonPageMeta } from "../lib/dtd"
 
@@ -96,11 +97,11 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
   })
 
   return (
-    <Table className="grid-cols-[1fr_auto_auto_auto_auto_auto]">
-      <ColumnHeading>Path</ColumnHeading>
-      <ColumnHeading>Updated</ColumnHeading>
-      <ColumnHeading>By</ColumnHeading>
-      <ColumnHeading className="col-span-3" />
+    <Grid className="grid-cols-[1fr_auto_auto_auto_auto_auto]">
+      <GridHeading>Path</GridHeading>
+      <GridHeading>Updated</GridHeading>
+      <GridHeading>By</GridHeading>
+      <GridHeading className="col-span-3" />
       <Form {...form}>
         <form
           className="contents"
@@ -181,6 +182,6 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
           </Button>
         </Fragment>
       ))}
-    </Table>
+    </Grid>
   )
 }

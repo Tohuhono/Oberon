@@ -9,8 +9,7 @@ import { Button } from "@tohuhono/ui/button"
 import { LocalDate } from "@tohuhono/ui/date"
 import Image from "next/image"
 
-import { Table, ColumnHeading } from "@tohuhono/ui/table"
-
+import { Grid, GridHeading } from "@tohuhono/ui/grid"
 import { useOberonActions } from "../hooks/use-oberon"
 import type { OberonImage } from "../lib/dtd"
 
@@ -38,13 +37,13 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
   const { images, deleteImage } = useOberonImages(initialImages)
 
   return (
-    <Table className="grid-cols-[auto_1fr_auto_auto_auto_auto]">
-      <ColumnHeading></ColumnHeading>
-      <ColumnHeading>Name</ColumnHeading>
-      <ColumnHeading>Size</ColumnHeading>
-      <ColumnHeading>Uploaded</ColumnHeading>
-      <ColumnHeading>By</ColumnHeading>
-      <ColumnHeading />
+    <Grid className="grid-cols-[auto_1fr_auto_auto_auto_auto]">
+      <GridHeading></GridHeading>
+      <GridHeading>Name</GridHeading>
+      <GridHeading>Size</GridHeading>
+      <GridHeading>Uploaded</GridHeading>
+      <GridHeading>By</GridHeading>
+      <GridHeading />
 
       {images.map(({ key, alt, size, updatedAt, updatedBy, url }) => {
         const pending = false
@@ -77,6 +76,6 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
           </Fragment>
         )
       })}
-    </Table>
+    </Grid>
   )
 }
