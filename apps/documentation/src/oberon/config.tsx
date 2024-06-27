@@ -1,5 +1,5 @@
 import { type OberonConfig } from "@oberoncms/core"
-import { Dashboard } from "@/oberon/components/dashboard"
+import exampleComponents from "@tohuhono/puck-blocks/example"
 import { Welcome } from "@/oberon/components/welcome"
 import { Container } from "@/oberon/components/container"
 
@@ -8,9 +8,6 @@ export const config: OberonConfig = {
   components: {
     Welcome,
     Container,
-    Dashboard: {
-      render: () => <Dashboard />,
-    },
     Text: {
       fields: {
         text: {
@@ -21,5 +18,6 @@ export const config: OberonConfig = {
         <div className="prose dark:prose-invert lg:prose-lg">{text}</div>
       ),
     },
+    ...exampleComponents,
   },
 }
