@@ -2,16 +2,24 @@ import { randomUUID } from "crypto"
 import path from "path"
 import { NextRequest } from "next/server"
 import type { Disk } from "flydrive"
+import { OberonAdapter, OberonError, ResponseError } from "@oberoncms/core"
 import { getImageSize } from "./get-image-size"
 
-export function initRouteHandler(disk: Disk): {
+export function initRouteHandler(
+  { can }: OberonAdapter,
+  disk: Disk,
+): {
   POST: (req: NextRequest) => Promise<Response>
   GET: (req: NextRequest) => Promise<Response>
 } {
   const POST: (req: NextRequest) => Promise<Response> = async (req) => {
+    if (!(await can("images", "write"))) {
+      throw new ResponseError("Not Allowed")
+    }
+
     const image = (await req.formData()).get("image") as File | null
     if (!image) {
-      return new Response("No image provided", { status: 400 })
+      throw new OberonError("No image provided")
     }
 
     const toBuffer = await image.arrayBuffer()
