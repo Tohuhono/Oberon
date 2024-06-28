@@ -12,7 +12,7 @@ export const getFlyDrivePlugin = (diskDriver: DriverContract): OberonPlugin => {
     name,
     version,
     handlers: {
-      flydrive: () => initRouteHandler(driver),
+      flydrive: (adapter) => initRouteHandler(adapter, driver),
     },
     adapter: {
       deleteImage: async (key) => {

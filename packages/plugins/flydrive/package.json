@@ -36,7 +36,6 @@
       "node": "./dist/server.js"
     },
     "./vercel": "./dist/extentions/vercel.js",
-    "./field": "./dist/blocks/field.js",
     "./plugin": "./dist/plugin.js"
   },
   "files": [

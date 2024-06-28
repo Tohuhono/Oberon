@@ -77,7 +77,6 @@ export const { adapter, handler } = initOberon({
 ```typescript
 // config.ts
 import { Image } from "@oberoncms/plugin-flydrive" // <- import the Image component
-import ImageNestedField  from "@oberoncms/plugin-flydrive/field" // <- import the nested field
 
 export const editorConfig = {
   // other configurations
@@ -91,7 +90,7 @@ export const editorConfig = {
         images: {
           type: "array",
           arrayFields: {
-             image: ImageNestedField,
+             image: Image.fields.image
             // another array fields
            },
         },
@@ -100,7 +99,7 @@ export const editorConfig = {
         image: {
           type: "object",
           objectFields: {
-             image: ImageNestedField ,
+             image: Image.fields.image ,
             // another object fields
           },
         },
