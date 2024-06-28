@@ -29,13 +29,22 @@
     "lint:fix": "turbo lint --concurrency 50 -- --fix",
     "release": "pnpm build:packages && changeset publish",
     "jest": "turbo jest --concurrency 50",
+    "postinstall": "pnpm manypkg:check",
+    "manypkg:check": "manypkg check",
+    "manypkg:fix": "manypkg fix",
     "prepare": "husky"
   },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier -l --write"
   },
+  "manypkg": {
+    "ignoredRules": [
+      "INTERNAL_MISMATCH"
+    ]
+  },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
+    "@manypkg/cli": "^0.19.1",
     "@tohuhono/dev": "workspace:*",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
