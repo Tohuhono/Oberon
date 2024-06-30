@@ -1,5 +1,22 @@
 # @oberon/playground
 
+## 0.7.0
+
+### Minor Changes
+
+- 9bb8cb7: Move all handlers to single api handler endpoint under cms
+
+### Patch Changes
+
+- 8b62b9d: Bump sample components to remove local image dependency
+- Updated dependencies [9bb8cb7]
+- Updated dependencies [8b62b9d]
+- Updated dependencies [b6d32fa]
+  - @oberoncms/plugin-uploadthing@0.12.0
+  - @oberoncms/core@0.13.0
+  - @oberoncms/plugin-development@0.3.1
+  - @oberoncms/plugin-turso@0.13.1
+
 ## 0.6.0
 
 ### Minor Changes

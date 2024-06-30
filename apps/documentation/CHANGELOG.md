@@ -1,5 +1,18 @@
 # @oberon/docs
 
+## 0.9.2
+
+### Patch Changes
+
+- 8b62b9d: Bump sample components to remove local image dependency
+- b6d32fa: Move sample components into monorepo
+- Updated dependencies [9bb8cb7]
+- Updated dependencies [8b62b9d]
+- Updated dependencies [b6d32fa]
+  - @oberoncms/core@0.13.0
+  - @tohuhono/puck-blocks@0.9.1
+  - @tohuhono/puck-rich-text@0.9.1
+
 ## 0.9.1
 
 ### Patch Changes

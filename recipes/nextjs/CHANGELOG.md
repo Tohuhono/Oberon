@@ -1,5 +1,20 @@
 # oberon-cms-example
 
+## 0.13.0
+
+### Minor Changes
+
+- 9bb8cb7: Move all handlers to single api handler endpoint under cms
+
+### Patch Changes
+
+- 8b62b9d: Bump sample components to remove local image dependency
+- Updated dependencies [9bb8cb7]
+- Updated dependencies [8b62b9d]
+- Updated dependencies [b6d32fa]
+  - @oberoncms/core@0.13.0
+  - @oberoncms/plugin-development@0.3.1
+
 ## 0.12.0
 
 ### Minor Changes

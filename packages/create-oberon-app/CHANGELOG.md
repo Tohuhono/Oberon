@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.6.0
+
+### Minor Changes
+
+- 9bb8cb7: Move all handlers to single api handler endpoint under cms
+
 ## 0.5.1
 
 ### Patch Changes
