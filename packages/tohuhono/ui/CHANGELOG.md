@@ -1,5 +1,16 @@
 # @oberon/ui
 
+## 0.11.1
+
+### Patch Changes
+
+- 8b62b9d: Bump sample components to remove local image dependency
+- b6d32fa: Move sample components into monorepo
+- Updated dependencies [9bb8cb7]
+- Updated dependencies [8b62b9d]
+  - @tohuhono/dev@0.11.0
+  - @tohuhono/utils@0.10.0
+
 ## 0.11.0
 
 ### Minor Changes

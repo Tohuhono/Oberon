@@ -1,5 +1,12 @@
 # @oberon/rich-text-demo
 
+## 1.6.6
+
+### Patch Changes
+
+- 8b62b9d: Bump sample components to remove local image dependency
+  - @tohuhono/puck-rich-text@0.9.1
+
 ## 1.6.5
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @tohuhono/puck-blocks
 
+## 0.9.1
+
+### Patch Changes
+
+- b6d32fa: Move sample components into monorepo
+- Updated dependencies [8b62b9d]
+- Updated dependencies [b6d32fa]
+  - @tohuhono/ui@0.11.1
+  - @tohuhono/utils@0.10.0
+
 ## 0.9.0
 
 ### Minor Changes
