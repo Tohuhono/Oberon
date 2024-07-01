@@ -1,4 +1,5 @@
-import { cn, type OberonComponent } from "@oberoncms/core"
+import { cn } from "@tohuhono/utils"
+import type { OberonComponent } from "@oberoncms/core"
 
 export const Container = {
   fields: {
