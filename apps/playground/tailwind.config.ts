@@ -1,4 +1,4 @@
 import { config } from "@tohuhono/dev/tailwind.config"
-//import { withUt } from "@oberoncms/plugin-uploadthing/plugin"
+import { withUt } from "uploadthing/tw"
 
-export default config //withUt(config)
+export default withUt(config)

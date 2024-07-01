@@ -13,12 +13,6 @@ import { useState } from "react"
 import { FocusPlugin } from "./plugins/focus-plugin"
 import { ToolbarPlugin } from "./plugins/toolbar-plugin"
 
-const PlaceHolder = () => (
-  <div style={{ pointerEvents: "none", position: "absolute", top: 0 }}>
-    Click to edit
-  </div>
-)
-
 export const InlineRichTextEditor = ({
   id,
   state,
@@ -56,7 +50,7 @@ export const InlineRichTextEditor = ({
       >
         <RichTextPlugin
           contentEditable={<ContentEditable style={{ outline: "none" }} />}
-          placeholder={<PlaceHolder />}
+          placeholder={null}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <OnChangePlugin

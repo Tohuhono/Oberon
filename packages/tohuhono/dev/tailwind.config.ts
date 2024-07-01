@@ -15,6 +15,7 @@ export const config = {
     "./node_modules/@oberoncms/**/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@oberoncms/**/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./oberon/**/*.{js,ts,jsx,tsx,mdx}",
     "./.oberon/tailwind.classes",
   ],

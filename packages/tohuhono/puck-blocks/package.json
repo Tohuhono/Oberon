@@ -43,6 +43,8 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
+    "@oberoncms/core": "workspace:*",
+    "@tohuhono/puck-rich-text": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "next": "^14.2.3",
