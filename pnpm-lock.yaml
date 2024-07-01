@@ -141,9 +141,6 @@ importers:
       '@tohuhono/puck-blocks':
         specifier: workspace:*
         version: link:../../packages/tohuhono/puck-blocks
-      '@tohuhono/puck-rich-text':
-        specifier: workspace:*
-        version: link:../../packages/tohuhono/puck-rich-text
       next:
         specifier: ^14.2.3
         version: 14.2.3(react-dom@18.2.0)(react@18.2.0)

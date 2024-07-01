@@ -144,7 +144,8 @@ and apps:
 - `packages/tohuhono/puck-blocks` -
   [@tohuhono/puck-blocks](https://www.npmjs.com/package/@tohuhono/puck-blocks)
 
-  A collection of puck components for building pages in OberonCMS. _Deprecated_
+  A collection of puck components for building pages in OberonCMS, including a
+  collection of example Puck components.
 
 ### Recipes
 
