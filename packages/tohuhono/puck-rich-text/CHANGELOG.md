@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.9.2
+
+### Patch Changes
+
+- f336edf: Move demo components to puck-components
+
 ## 0.9.1
 
 ### Patch Changes

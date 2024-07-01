@@ -1,5 +1,13 @@
 # @oberon/ui
 
+## 0.11.2
+
+### Patch Changes
+
+- Updated dependencies [f336edf]
+  - @tohuhono/dev@0.11.1
+  - @tohuhono/utils@0.10.0
+
 ## 0.11.1
 
 ### Patch Changes

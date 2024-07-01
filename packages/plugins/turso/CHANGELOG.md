@@ -1,5 +1,12 @@
 # @oberoncms/plugin-turso
 
+## 0.13.2
+
+### Patch Changes
+
+- @oberoncms/core@0.13.1
+- @oberoncms/sqlite@0.3.2
+
 ## 0.13.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @oberoncms/plugin-upload-thing
 
+## 0.12.1
+
+### Patch Changes
+
+- @oberoncms/core@0.13.1
+
 ## 0.12.0
 
 ### Minor Changes

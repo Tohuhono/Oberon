@@ -1,5 +1,16 @@
 # @tohuhono/puck-blocks
 
+## 0.9.2
+
+### Patch Changes
+
+- f336edf: Move demo components to puck-components
+- Updated dependencies [f336edf]
+  - @tohuhono/puck-rich-text@0.9.2
+  - @oberoncms/core@0.13.1
+  - @tohuhono/ui@0.11.2
+  - @tohuhono/utils@0.10.0
+
 ## 0.9.1
 
 ### Patch Changes
