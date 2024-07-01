@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.11.1
+
+### Patch Changes
+
+- f336edf: Move demo components to puck-components
+
 ## 0.11.0
 
 ### Minor Changes

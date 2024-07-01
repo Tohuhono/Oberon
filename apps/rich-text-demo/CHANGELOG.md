@@ -1,5 +1,13 @@
 # @oberon/rich-text-demo
 
+## 1.6.7
+
+### Patch Changes
+
+- f336edf: Move demo components to puck-components
+- Updated dependencies [f336edf]
+  - @tohuhono/puck-rich-text@0.9.2
+
 ## 1.6.6
 
 ### Patch Changes
