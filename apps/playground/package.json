@@ -6,7 +6,7 @@
   "scripts": {
     "build": "next build",
     "clean": "odt clean",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "lint": "next lint",
     "tsc": "tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",
