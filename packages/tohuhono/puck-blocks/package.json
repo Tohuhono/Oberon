@@ -47,7 +47,7 @@
     "@tohuhono/puck-rich-text": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
-    "next": "^14.2.3",
+    "next": "^14.2.4",
     "recharts": "^2.12.7"
   },
   "peerDependencies": {
@@ -55,13 +55,13 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@measured/puck": "^0.14.2",
+    "@measured/puck": "^0.15.0",
     "@tohuhono/dev": "workspace:*",
-    "@types/react": "18.2.66",
-    "@types/react-dom": "18.2.22",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
     "eslint": "^8.57.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "5.4.2",
     "vite": "^5.1.6"
   }
