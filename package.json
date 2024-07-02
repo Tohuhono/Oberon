@@ -18,6 +18,7 @@
     "generate:recipes": "turbo generate:recipes",
     "start:oberon": "turbo start --concurrency 50 --filter=playground",
     "start:docs": "turbo start --concurrency 50 --filter=docs",
+    "start:rich": "turbo start --concurrency 50 --filter=rich-text-demo",
     "tsc": "turbo tsc --concurrency 50 --continue",
     "dev": "turbo dev --concurrency 50",
     "dev:packages": "turbo dev --concurrency 50 --filter={./packages/**/*}...",
