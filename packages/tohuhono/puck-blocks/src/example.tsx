@@ -57,8 +57,9 @@ const cards = {
   },
 }
 
-export function withExamples(config: OberonConfig): OberonConfig {
+export function withExamples(config: Partial<OberonConfig>): OberonConfig {
   return {
+    version: 1,
     ...config,
     categories: {
       other: { title: "Examples", defaultExpanded: true },

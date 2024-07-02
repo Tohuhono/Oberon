@@ -1,7 +1,6 @@
 import { type OberonConfig } from "@oberoncms/core"
-import components from "@tohuhono/puck-blocks/example"
+import { withExamples } from "@tohuhono/puck-blocks/example"
 
-export const config: OberonConfig = {
+export const config: OberonConfig = withExamples({
   version: 1,
-  components,
-}
+})
