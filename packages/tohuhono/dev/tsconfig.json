@@ -1,8 +1,7 @@
 {
   "extends": "./base.ts.config.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist"
+    "rootDir": "./src"
   },
   "include": ["src", "eslint"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.spec.tsx"]
