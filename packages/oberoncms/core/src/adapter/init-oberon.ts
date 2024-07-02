@@ -20,8 +20,6 @@ function handle<TMethod extends OberonMethod = OberonMethod>(
   ) => {
     const action = path?.[0]
 
-    console.log("_>", method, action)
-
     if (!action) {
       return new Response("", { status: 404 })
     }

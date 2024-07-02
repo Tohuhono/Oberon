@@ -19,4 +19,4 @@ const createRemoteClient = () => {
 
 export const db = drizzle(createRemoteClient(), {
   schema,
-})
+}) satisfies DatabaseClient

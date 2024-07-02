@@ -18,9 +18,11 @@ export const plugin: OberonPlugin = (adapter) => ({
   version,
   disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
   adapter: {
+    //@ts-expect-error https://github.com/drizzle-team/drizzle-orm/issues/1558
     ...getDatabaseAdapter(db),
+    //@ts-expect-error https://github.com/drizzle-team/drizzle-orm/issues/1558
     ...getAuthAdapter(db),
-    init: async () => {
+    prebuild: async () => {
       await adapter.prebuild()
       console.log(`Migrating database`)
 
