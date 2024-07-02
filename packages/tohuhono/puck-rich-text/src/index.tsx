@@ -15,14 +15,7 @@ export const PuckRichText = {
       render: () => <></>,
     },
   },
-  render: ({
-    editMode,
-    ...props
-  }: {
-    editMode?: boolean
-    id: string
-    state: SerializedEditorState
-  }) => {
-    return editMode ? <Editor {...props} /> : <Render {...props} />
+  render: ({ puck, ...props }) => {
+    return puck.isEditing ? <Editor {...props} /> : <Render {...props} />
   },
 } satisfies ComponentConfig<PuckRichTextProps>

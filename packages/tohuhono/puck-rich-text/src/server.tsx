@@ -13,14 +13,7 @@ export const PuckRichText = {
       render: () => <></>,
     },
   },
-  render: ({
-    editMode,
-    ...props
-  }: {
-    editMode?: boolean
-    id: string
-    state: SerializedEditorState
-  }) => {
+  render: (props) => {
     return <Render {...props} />
   },
 } satisfies ComponentConfig<{
