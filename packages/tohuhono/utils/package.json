@@ -32,7 +32,7 @@
     "LICENSE*"
   ],
   "dependencies": {
-    "tailwind-merge": "^2.2.1"
+    "tailwind-merge": "^2.3.0"
   },
   "peerDependencies": {
     "react": "^18.2.0",
