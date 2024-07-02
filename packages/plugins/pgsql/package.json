@@ -46,7 +46,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.1",
     "@oberoncms/core": "workspace:*",
-    "drizzle-orm": "^0.30.10",
+    "drizzle-orm": "^0.31.2",
     "pg": "^8.11.5",
     "server-cli-only": "^0.3.2"
   },
@@ -60,7 +60,7 @@
     "@types/pg": "^8.11.6",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "drizzle-kit": "^0.20.18",
+    "drizzle-kit": "^0.22.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "5.4.5",
