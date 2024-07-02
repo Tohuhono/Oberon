@@ -5,7 +5,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "./dist",
+    "outDir": "${configDir}/dist",
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "preserve",
