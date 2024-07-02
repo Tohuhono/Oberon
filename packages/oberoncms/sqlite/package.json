@@ -54,7 +54,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@auth/core": "^0.30.0",
+    "@auth/core": "^0.34.1",
     "@measured/puck": "^0.15.0",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "20.14.9",
@@ -63,7 +63,7 @@
     "drizzle-kit": "^0.20.18",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "5.4.2",
-    "vite": "^5.1.6"
+    "typescript": "5.4.5",
+    "vite": "^5.3.2"
   }
 }
