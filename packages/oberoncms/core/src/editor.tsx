@@ -37,11 +37,7 @@ const previewConfig: Partial<Config> = {
   },
 }
 
-export function OberonClient({
-  config: { components },
-}: {
-  config: OberonConfig
-}) {
+export function OberonClient({ config }: { config: OberonConfig }) {
   const { action, data, slug } = useOberonClientContext()
 
   if (action === "login") {
@@ -50,11 +46,7 @@ export function OberonClient({
 
   if (action === "edit") {
     return (
-      <Editor
-        path={slug}
-        data={data}
-        config={{ ...editorConfig, components: components }}
-      />
+      <Editor path={slug} data={data} config={{ ...editorConfig, ...config }} />
     )
   }
 
@@ -63,7 +55,7 @@ export function OberonClient({
       <Preview
         path={slug}
         data={data}
-        config={{ ...previewConfig, components: components }}
+        config={{ ...previewConfig, ...config }}
       />
     )
   }

@@ -30,8 +30,8 @@
   ],
   "exports": {
     "./div": "./dist/div.js",
-    "./prose": "./dist/prose.js",
-    "./example": "./dist/example.js"
+    "./example": "./dist/example.js",
+    "./prose": "./dist/prose.js"
   },
   "scripts": {
     "build": "vite build",
