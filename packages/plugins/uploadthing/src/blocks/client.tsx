@@ -7,7 +7,6 @@ export const Image = {
   fields: {
     image: {
       type: "custom",
-      // @ts-expect-error TODO puck custom field types doesn't allow null
       render: (props) => <ImageField {...props} />,
     },
   },
