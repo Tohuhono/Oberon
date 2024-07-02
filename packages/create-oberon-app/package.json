@@ -50,7 +50,7 @@
     "@tohuhono/utils": "workspace:*",
     "@types/ignore-walk": "^4.0.3",
     "@types/inquirer": "^9.0.7",
-    "@types/node": "20.11.26",
+    "@types/node": "20.14.9",
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
     "ignore-walk": "^6.0.5",
