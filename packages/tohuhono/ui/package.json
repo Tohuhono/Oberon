@@ -79,6 +79,8 @@
     "@tailwindcss/typography": "^0.5.13",
     "@tohuhono/dev": "workspace:*",
     "@tohuhono/utils": "workspace:*",
+    "@uiw/react-color": "^2.3.0",
+    "@uiw/react-color-chrome": "^2.3.0",
     "class-variance-authority": "^0.7.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
