@@ -31,7 +31,7 @@
     "lint:fix": "turbo lint --concurrency 50 -- --fix",
     "release": "pnpm build:packages && changeset publish",
     "jest": "turbo jest --concurrency 50",
-    "postinstall": "pnpm manypkg:check",
+    "postinstall": "pnpm manypkg:check && patch-package",
     "manypkg:check": "manypkg check",
     "manypkg:fix": "manypkg fix",
     "prepare": "husky"
@@ -54,6 +54,7 @@
     "eslint": "^8.57.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
+    "patch-package": "^8.0.0",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "rimraf": "^5.0.7",
