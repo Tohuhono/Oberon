@@ -1,5 +1,18 @@
 # @oberon/rich-text-demo
 
+## 1.6.7
+
+### Patch Changes
+
+- f81809b: Bump dependancies
+- f336edf: Move demo components to puck-components
+- a49cf41: Bump dependancies
+- Updated dependencies [f81809b]
+- Updated dependencies [f336edf]
+- Updated dependencies [a49cf41]
+- Updated dependencies [ed43e37]
+  - @tohuhono/puck-rich-text@0.10.0
+
 ## 1.6.6
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @oberoncms/plugin-pgsql
 
+## 0.6.2
+
+### Patch Changes
+
+- f81809b: Bump dependancies
+- a49cf41: Bump dependancies
+- Updated dependencies [93ecf7f]
+- Updated dependencies [f81809b]
+- Updated dependencies [a49cf41]
+  - @oberoncms/core@0.13.1
+
 ## 0.6.1
 
 ### Patch Changes

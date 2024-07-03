@@ -1,5 +1,23 @@
 # @oberon/playground
 
+## 0.7.1
+
+### Patch Changes
+
+- 93ecf7f: More example components
+- f81809b: Bump dependancies
+- f336edf: Move demo components to puck-components
+- a49cf41: Bump dependancies
+- Updated dependencies [93ecf7f]
+- Updated dependencies [f81809b]
+- Updated dependencies [f336edf]
+- Updated dependencies [a49cf41]
+  - @tohuhono/puck-blocks@0.9.2
+  - @oberoncms/core@0.13.1
+  - @oberoncms/plugin-development@0.3.2
+  - @oberoncms/plugin-uploadthing@0.12.1
+  - @oberoncms/plugin-turso@0.13.2
+
 ## 0.7.0
 
 ### Minor Changes
