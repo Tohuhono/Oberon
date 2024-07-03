@@ -1,5 +1,12 @@
 # create-oberon-app
 
+## 0.6.1
+
+### Patch Changes
+
+- f81809b: Bump dependancies
+- a49cf41: Bump dependancies
+
 ## 0.6.0
 
 ### Minor Changes

@@ -1,5 +1,17 @@
 # @oberoncms/core
 
+## 0.13.1
+
+### Patch Changes
+
+- 93ecf7f: More example components
+- f81809b: Bump dependancies
+- a49cf41: Bump dependancies
+- Updated dependencies [f81809b]
+- Updated dependencies [a49cf41]
+  - @tohuhono/utils@0.10.1
+  - @tohuhono/ui@0.11.2
+
 ## 0.13.0
 
 ### Minor Changes

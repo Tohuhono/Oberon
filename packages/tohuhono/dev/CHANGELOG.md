@@ -1,5 +1,13 @@
 # @oberon/dev
 
+## 0.11.1
+
+### Patch Changes
+
+- f81809b: Bump dependancies
+- f336edf: Move demo components to puck-components
+- a49cf41: Bump dependancies
+
 ## 0.11.0
 
 ### Minor Changes

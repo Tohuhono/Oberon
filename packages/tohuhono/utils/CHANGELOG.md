@@ -1,5 +1,12 @@
 # @oberon/utils
 
+## 0.10.1
+
+### Patch Changes
+
+- f81809b: Bump dependancies
+- a49cf41: Bump dependancies
+
 ## 0.10.0
 
 ### Minor Changes

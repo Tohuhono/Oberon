@@ -1,5 +1,17 @@
 # @tohuhono/puck-rich-text
 
+## 0.10.0
+
+### Minor Changes
+
+- ed43e37: Update to use puck.isEditing instead of deprecated editMode
+
+### Patch Changes
+
+- f81809b: Bump dependancies
+- f336edf: Move demo components to puck-components
+- a49cf41: Bump dependancies
+
 ## 0.9.1
 
 ### Patch Changes

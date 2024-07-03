@@ -1,5 +1,17 @@
 # @oberon/ui
 
+## 0.11.2
+
+### Patch Changes
+
+- f81809b: Bump dependancies
+- a49cf41: Bump dependancies
+- Updated dependencies [f81809b]
+- Updated dependencies [f336edf]
+- Updated dependencies [a49cf41]
+  - @tohuhono/utils@0.10.1
+  - @tohuhono/dev@0.11.1
+
 ## 0.11.1
 
 ### Patch Changes

@@ -1,5 +1,23 @@
 # @tohuhono/puck-blocks
 
+## 0.9.2
+
+### Patch Changes
+
+- 93ecf7f: More example components
+- f81809b: Bump dependancies
+- f336edf: Move demo components to puck-components
+- a49cf41: Bump dependancies
+- Updated dependencies [93ecf7f]
+- Updated dependencies [f81809b]
+- Updated dependencies [f336edf]
+- Updated dependencies [a49cf41]
+- Updated dependencies [ed43e37]
+  - @oberoncms/core@0.13.1
+  - @tohuhono/puck-rich-text@0.10.0
+  - @tohuhono/utils@0.10.1
+  - @tohuhono/ui@0.11.2
+
 ## 0.9.1
 
 ### Patch Changes
