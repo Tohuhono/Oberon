@@ -1,20 +1,20 @@
 "use client"
 
 import { ClipboardCopyIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
-import { useState, ChangeEvent, Fragment } from "react"
 import { cn } from "@tohuhono/utils"
-import { Input } from "../input"
-import { Label } from "../label"
+import { hslStringToHsla, type ColorResult } from "@uiw/react-color"
+import { Fragment, useCallback, useState } from "react"
+import { Button } from "../button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../dropdown-menu"
-import { Button } from "../button"
-import { ApplyTheme, copyToClipboard } from "./theme-editor"
+import { Label } from "../label"
+import { ColorPicker } from "./color-picker"
 import { defaultTheme } from "./default-theme"
 import { getMode, setMode } from "./mode-toggle"
-
+import { ApplyTheme, copyToClipboard } from "./theme-editor"
 export const ThemeEditorMenu = ({ className }: { className?: string }) => {
   const [theme, setTheme] = useState(defaultTheme)
 
@@ -25,17 +25,22 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
     setMode(mode)
   }
 
-  const onInputChange =
-    (id: string, mode: "light" | "dark") =>
-    (event: ChangeEvent<HTMLInputElement>) =>
-      setTheme(
-        theme.map((t) => ({
-          ...t,
-          ...(t.id === id && {
-            [mode]: event.currentTarget.value,
-          }),
-        })),
+  const onInputChange = useCallback(
+    (id: string, mode: "light" | "dark") => (color: ColorResult) => {
+      setTheme((prev) =>
+        prev.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              [mode]: `${Math.round(color.hsl.h)} ${Math.round(color.hsl.s)}% ${Math.round(color.hsl.l)}%`,
+            }
+          }
+          return item
+        }),
       )
+    },
+    [],
+  )
 
   return (
     <DropdownMenu>
@@ -83,27 +88,22 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
             dark
           </Button>
 
-          {theme.map(({ id, light, dark }) => {
-            return (
-              <Fragment key={id}>
-                <Label>{id}</Label>
-                <Input
-                  className="border-0 px-2 py-0"
-                  id={`${id}-light`}
-                  size={15}
-                  value={light || ""}
-                  onChange={onInputChange(id, "light")}
-                />
-                <Input
-                  className="border-0 px-2 py-0"
-                  id={`${id}-dark`}
-                  value={dark || ""}
-                  size={15}
-                  onChange={onInputChange(id, "dark")}
-                />
-              </Fragment>
-            )
-          })}
+          {theme.map(({ id, light, dark }) => (
+            <Fragment key={id}>
+              <Label>{id}</Label>
+
+              <ColorPicker
+                disabled={selectedMode === "system"}
+                color={hslStringToHsla(light)}
+                onColorChange={onInputChange(id, "light")}
+              />
+              <ColorPicker
+                disabled={selectedMode === "system"}
+                color={hslStringToHsla(dark)}
+                onColorChange={onInputChange(id, "dark")}
+              />
+            </Fragment>
+          ))}
           <Button
             variant={"secondary"}
             className="col-span-3 justify-self-center"
