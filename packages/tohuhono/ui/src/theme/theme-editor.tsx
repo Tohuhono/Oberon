@@ -32,12 +32,12 @@ export const ApplyTheme = ({ theme }: { theme: Theme }) => (
       {`
         :root {
           ${theme
-            .map((t) => (t.light ? `  --${t.id}: ${t.light};` : ""))
+            .map(({ id, light }) => (light ? `  --${id}: ${light};` : ""))
             .join("\n")}
         }
         .dark {
           ${theme
-            .map((t) => (t.dark ? `  --${t.id}: ${t.dark};` : ""))
+            .map(({ id, dark }) => (dark ? `  --${id}: ${dark};` : ""))
             .join("\n")}
         }
       `}
@@ -59,11 +59,13 @@ export const copyToClipboard = (theme: Theme) =>
   
       /* light */
       ${theme
-        .map((t) => (t.light ? `  --${t.id}: ${t.light};` : ""))
+        .map(({ id, light }) => (light ? `  --${id}: ${light};` : ""))
         .join("\n")}
     }
     .dark {
-      ${theme.map((t) => (t.dark ? `  --${t.id}: ${t.dark};` : "")).join("\n")}
+      ${theme
+        .map(({ id, dark }) => (dark ? `  --${id}: ${dark};` : ""))
+        .join("\n")}
     }
   }
 

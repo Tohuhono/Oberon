@@ -44,18 +44,18 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@auth/core": "^0.34.1",
-    "@hookform/resolvers": "^3.6.0",
-    "@measured/puck": "^0.15.0",
+    "@auth/core": "^0.34.2",
+    "@hookform/resolvers": "^3.9.1",
+    "@measured/puck": "^0.16.2",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "dotenv": "^16.4.5",
-    "filesize": "^10.1.2",
-    "next": "^14.2.4",
+    "filesize": "^10.1.6",
+    "next": "^14.2.18",
     "next-auth": "5.0.0-beta.19",
-    "react-hook-form": "^7.52.1",
+    "react-hook-form": "^7.53.2",
     "swr": "^2.2.5",
-    "use-debounce": "^10.0.1",
+    "use-debounce": "^10.0.4",
     "walkjs": "^6.0.1",
     "zod": "^3.23.8"
   },
@@ -71,6 +71,6 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "5.5.3",
-    "vite": "^5.3.2"
+    "vite": "^5.4.11"
   }
 }

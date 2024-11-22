@@ -3,7 +3,7 @@
 import Script from "next/script"
 import { Config } from "tailwindcss"
 import { config } from "@tohuhono/dev/tailwind.config"
-import { useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 declare global {
   // eslint-disable-next-line no-var
@@ -32,7 +32,7 @@ export function DynamicTailwind() {
 export function PreviewFrameTailwind() {
   const darkModeObserver = useRef<MutationObserver>()
 
-  useState(() => {
+  useEffect(() => {
     const iframe: HTMLIFrameElement | null =
       document.querySelector("#preview-frame")
 

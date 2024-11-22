@@ -23,7 +23,7 @@ type PropTransform<
 
 export async function transformProps<
   Props extends DefaultComponentProps = DefaultComponentProps,
-  RootProps extends DefaultComponentProps = DefaultComponentProps,
+  RootProps extends DefaultRootProps = DefaultRootProps,
 >(data: Data, propTransforms: PropTransform<Props, RootProps>): Promise<Data> {
   const mapItem = async (item: any) => {
     if (propTransforms[item.type]) {
