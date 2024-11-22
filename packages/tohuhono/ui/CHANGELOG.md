@@ -1,5 +1,17 @@
 # @oberon/ui
 
+## 0.12.0
+
+### Minor Changes
+
+- 22dd6fe: Bump @measured/puck to 16.2
+
+### Patch Changes
+
+- Updated dependencies [22dd6fe]
+  - @tohuhono/utils@0.11.0
+  - @tohuhono/dev@0.12.0
+
 ## 0.11.2
 
 ### Patch Changes

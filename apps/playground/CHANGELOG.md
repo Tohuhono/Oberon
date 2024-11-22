@@ -1,5 +1,20 @@
 # @oberon/playground
 
+## 0.8.0
+
+### Minor Changes
+
+- 22dd6fe: Bump @measured/puck to 16.2
+
+### Patch Changes
+
+- Updated dependencies [22dd6fe]
+  - @tohuhono/puck-blocks@0.10.0
+  - @oberoncms/plugin-development@0.4.0
+  - @oberoncms/plugin-uploadthing@0.13.0
+  - @oberoncms/core@0.14.0
+  - @oberoncms/plugin-turso@0.14.0
+
 ## 0.7.1
 
 ### Patch Changes

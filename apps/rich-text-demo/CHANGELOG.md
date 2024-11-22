@@ -1,5 +1,16 @@
 # @oberon/rich-text-demo
 
+## 1.7.0
+
+### Minor Changes
+
+- 22dd6fe: Bump @measured/puck to 16.2
+
+### Patch Changes
+
+- Updated dependencies [22dd6fe]
+  - @tohuhono/puck-rich-text@0.11.0
+
 ## 1.6.7
 
 ### Patch Changes

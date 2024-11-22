@@ -1,5 +1,18 @@
 # @oberon/docs
 
+## 0.10.0
+
+### Minor Changes
+
+- 22dd6fe: Bump @measured/puck to 16.2
+
+### Patch Changes
+
+- Updated dependencies [22dd6fe]
+  - @tohuhono/puck-rich-text@0.11.0
+  - @tohuhono/puck-blocks@0.10.0
+  - @oberoncms/core@0.14.0
+
 ## 0.9.3
 
 ### Patch Changes
