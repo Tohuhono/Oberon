@@ -43,11 +43,11 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@next/env": "^14.2.4",
+    "@next/env": "^14.2.18",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-pgsql": "workspace:*",
     "@vercel/postgres": "0.8.0",
-    "drizzle-orm": "^0.31.2",
+    "drizzle-orm": "^0.31.4",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {
@@ -63,6 +63,6 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "5.5.3",
-    "vite": "^5.3.2"
+    "vite": "^5.4.11"
   }
 }

@@ -27,6 +27,15 @@ export class VercelBlobDriver implements DriverContract {
   }
 
   /**
+   * Return contents of an object for the given key as an Uint8Array.
+   * Should throw "E_CANNOT_READ_FILE" error when the file
+   * does not exists.
+   */
+  getBytes(_key: string): Promise<Uint8Array> {
+    throw new Error("Method not implemented.")
+  }
+
+  /**
    * Return the file contents as a Readable stream. Throw an exception
    * if the file is missing.
    */
