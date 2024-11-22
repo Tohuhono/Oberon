@@ -46,7 +46,7 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
     "drizzle-orm": "^0.31.4",
-    "next": "^14.2.18",
+    "next": "^15.0.3",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {

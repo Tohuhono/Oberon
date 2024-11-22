@@ -51,7 +51,7 @@
     "@tohuhono/utils": "workspace:*",
     "dotenv": "^16.4.5",
     "filesize": "^10.1.6",
-    "next": "^14.2.18",
+    "next": "^15.0.3",
     "next-auth": "5.0.0-beta.19",
     "react-hook-form": "^7.53.2",
     "swr": "^2.2.5",
