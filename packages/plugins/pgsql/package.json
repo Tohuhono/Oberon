@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-pgsql",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A PostgreSQL database plugin for OberonCMS",

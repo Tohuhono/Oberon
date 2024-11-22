@@ -1,5 +1,17 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.10.0
+
+### Minor Changes
+
+- 22dd6fe: Bump @measured/puck to 16.2
+
+### Patch Changes
+
+- Updated dependencies [22dd6fe]
+  - @oberoncms/core@0.14.0
+  - @oberoncms/plugin-pgsql@0.7.0
+
 ## 0.9.2
 
 ### Patch Changes

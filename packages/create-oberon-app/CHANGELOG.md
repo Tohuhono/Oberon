@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.7.0
+
+### Minor Changes
+
+- 22dd6fe: Bump @measured/puck to 16.2
+
 ## 0.6.1
 
 ### Patch Changes
