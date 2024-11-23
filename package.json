@@ -33,8 +33,8 @@
     "lint:fix": "turbo lint --concurrency 50 -- --fix",
     "release": "pnpm build:packages && changeset publish",
     "jest": "turbo jest --concurrency 50",
-    "postinstall": "pnpm manypkg:check && patch-package",
-    "manypkg:check": "manypkg check",
+    "postinstall": "pnpm manypkg && patch-package",
+    "manypkg": "manypkg check",
     "manypkg:fix": "manypkg fix",
     "prepare": "husky"
   },
@@ -46,7 +46,14 @@
       "INTERNAL_MISMATCH"
     ]
   },
-  "dependencies": {
+  "packageManager": "pnpm@8.15.5",
+  "engines": {
+    "node": ">=20.12.0",
+    "pnpm": ">=8.0.0",
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm"
+  },
+  "devDependencies": {
     "@changesets/cli": "^2.27.10",
     "@manypkg/cli": "^0.23.0",
     "@tohuhono/dev": "workspace:*",
@@ -62,20 +69,5 @@
     "turbo": "^2.3.1",
     "typescript": "5.7.2",
     "wait-on": "^8.0.1"
-  },
-  "packageManager": "pnpm@8.15.5",
-  "engines": {
-    "node": ">=20.12.0",
-    "pnpm": ">=8.0.0",
-    "npm": "please-use-pnpm",
-    "yarn": "please-use-pnpm"
-  },
-  "workspaces": [
-    "apps/*",
-    "packages/create-oberon-app",
-    "packages/oberoncms/*",
-    "packages/plugins/*",
-    "packages/tohuhono/*",
-    "recipes/*"
-  ]
+  }
 }
