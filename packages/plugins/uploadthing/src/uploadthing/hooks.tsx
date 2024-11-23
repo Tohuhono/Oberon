@@ -1,4 +1,4 @@
-import { generateReactHelpers } from "@uploadthing/react/hooks"
+import { generateReactHelpers } from "@uploadthing/react"
 
 const helpers = generateReactHelpers()
 

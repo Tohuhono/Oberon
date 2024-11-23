@@ -46,7 +46,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.4",
     "@oberoncms/core": "workspace:*",
-    "drizzle-orm": "^0.31.4",
+    "drizzle-orm": "^0.36.4",
     "pg": "^8.13.1",
     "server-cli-only": "^0.3.2"
   },
@@ -56,14 +56,14 @@
   },
   "devDependencies": {
     "@tohuhono/dev": "workspace:*",
-    "@types/node": "20.14.9",
+    "@types/node": "22.9.3",
     "@types/pg": "^8.11.10",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
-    "drizzle-kit": "^0.22.8",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "drizzle-kit": "^0.28.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "5.5.3",
+    "typescript": "5.7.2",
     "vite": "^5.4.11"
   }
 }
