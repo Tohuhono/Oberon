@@ -4,16 +4,22 @@
     "scripts/*",
     ".github/**",
     "package.json",
-    "tsconfig.json"
+    "tsconfig.json",
+    ".env",
+    ".env.local"
   ],
-  "globalDotEnv": [".env", ".env.local"],
-  "pipeline": {
+  "tasks": {
     "build": {
-      "dotEnv": [".env.local", ".env"],
       "dependsOn": ["wait:clean", "^build", "prebuild"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env"]
     },
-    "clean": { "cache": false },
+    "check": {
+      "dependsOn": ["lint", "tsc"]
+    },
+    "clean": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true,
@@ -36,7 +42,9 @@
       "persistent": true,
       "dependsOn": ["build"]
     },
-    "tsc": { "dependsOn": ["^build"] },
+    "tsc": {
+      "dependsOn": ["^build"]
+    },
     "wait": {
       "cache": false
     },

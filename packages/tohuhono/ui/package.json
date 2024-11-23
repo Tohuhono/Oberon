@@ -81,10 +81,10 @@
     "@tohuhono/utils": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "cmdk": "^1.0.4",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "input-otp": "^1.4.1",
-    "next": "^14.2.18",
-    "react-day-picker": "^8.10.1",
+    "next": "^15.0.3",
+    "react-day-picker": "^9.3.2",
     "react-hook-form": "^7.53.2",
     "styled-jsx": "^5.1.6",
     "tailwindcss": "^3.4.15",
@@ -95,13 +95,13 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "20.14.9",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
-    "eslint": "^8.57.1",
+    "@types/node": "22.9.3",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "eslint": "^9.15.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "5.5.3",
+    "typescript": "5.7.2",
     "vite": "^5.4.11"
   }
 }

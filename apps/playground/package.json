@@ -19,27 +19,27 @@
     "@oberoncms/plugin-turso": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
-    "next": "^14.2.18",
+    "next": "^15.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "resend": "^3.5.0",
+    "resend": "^4.0.1",
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^14.2.18",
+    "@next/bundle-analyzer": "^15.0.3",
     "@tailwindcss/typography": "^0.5.15",
     "@tohuhono/dev": "workspace:*",
-    "@types/node": "20.14.9",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
+    "@types/node": "22.9.3",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.4",
+    "eslint": "^9.15.0",
+    "eslint-config-next": "15.0.3",
     "postcss": "^8.4.49",
-    "prettier-plugin-tailwindcss": "^0.5.14",
+    "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.15",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.19.2",
-    "typescript": "5.5.3"
+    "typescript": "5.7.2"
   }
 }

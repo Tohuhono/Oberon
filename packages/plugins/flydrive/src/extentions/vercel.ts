@@ -122,7 +122,7 @@ export class VercelBlobDriver implements DriverContract {
    * will be a UTF-8 string or "Uint8Array".
    */
   async put(key: string, contents: string | Uint8Array): Promise<void> {
-    await put(key, contents)
+    await put(key, contents, { access: "public" })
   }
 
   /**

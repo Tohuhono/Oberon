@@ -56,6 +56,8 @@ export default tseslint.config(
       ], //"dotenv"
       // conflicts with the the smarter tsc version
       "@typescript-eslint/no-unused-vars": "off",
+      // Use this to provide a consistant interface name
+      "@typescript-eslint/no-empty-object-type": "off",
       // prevent enums
       "no-restricted-syntax": [
         "error",
