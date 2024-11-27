@@ -1,5 +1,4 @@
-import { Render } from "@measured/puck/rsc"
-import { config, initialData } from "@/puck.config"
+import ClientRender from "./client.render"
 
 export async function generateMetadata() {
   return {
@@ -8,6 +7,5 @@ export async function generateMetadata() {
 }
 
 export default function Page() {
-  const data = initialData["/"]
-  return data && <Render config={config} data={data} />
+  return <ClientRender />
 }
