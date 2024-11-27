@@ -1,5 +1,16 @@
 # @tohuhono/puck-blocks
 
+## 0.10.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+  - @tohuhono/puck-rich-text@0.11.1
+  - @oberoncms/core@0.14.1
+  - @tohuhono/utils@0.11.1
+  - @tohuhono/ui@0.12.1
+
 ## 0.10.0
 
 ### Minor Changes

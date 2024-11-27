@@ -1,5 +1,11 @@
 # @oberon/dev
 
+## 0.12.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+
 ## 0.12.0
 
 ### Minor Changes

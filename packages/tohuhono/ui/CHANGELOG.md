@@ -1,5 +1,14 @@
 # @oberon/ui
 
+## 0.12.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+  - @tohuhono/utils@0.11.1
+  - @tohuhono/dev@0.12.1
+
 ## 0.12.0
 
 ### Minor Changes
