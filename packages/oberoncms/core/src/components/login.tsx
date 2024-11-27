@@ -95,7 +95,7 @@ export function Login({
   })
 
   return (
-    <div className="grid  h-screen place-content-center gap-3">
+    <div className="grid h-screen place-content-center gap-3">
       <Form {...form}>
         <form className="contents">
           <FormField

@@ -88,7 +88,7 @@ export function Site({
       {results && (
         <div className="pt-2">
           <ScrollArea className="h-64 rounded-md border px-5">
-            <Table className="grid-cols-[1fr_auto] gap-0 ">
+            <Table className="grid-cols-[1fr_auto] gap-0">
               {results.map(({ key, status }) => (
                 <Fragment key={key}>
                   <div>{key}</div>
