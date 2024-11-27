@@ -34,7 +34,7 @@
     "commander": "^12.1.0",
     "fast-glob": "^3.3.2",
     "prompts": "^2.4.2",
-    "validate-npm-package-name": "^5.0.1",
+    "validate-npm-package-name": "^6.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -45,18 +45,18 @@
     "@oberoncms/plugin-turso": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "@oberoncms/plugin-vercel-postgres": "workspace:*",
-    "@sendgrid/mail": "8.1.3",
+    "@sendgrid/mail": "8.1.4",
     "@tohuhono/dev": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "@types/ignore-walk": "^4.0.3",
     "@types/inquirer": "^9.0.7",
-    "@types/node": "20.14.9",
+    "@types/node": "22.9.3",
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
-    "ignore-walk": "^6.0.5",
-    "resend": "^3.5.0",
+    "ignore-walk": "^7.0.0",
+    "resend": "^4.0.1",
     "server-cli-only": "^0.3.2",
-    "typescript": "5.5.3",
+    "typescript": "5.7.2",
     "vite": "^5.4.11"
   }
 }

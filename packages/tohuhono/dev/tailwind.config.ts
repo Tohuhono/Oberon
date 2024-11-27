@@ -8,12 +8,10 @@ export const config = {
     hoverOnlyWhenSupported: true,
   },
   content: [
-    "./node_modules/@oberoncms/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@datacom-digital/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberoncms/**/@tohuhono/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@oberoncms/**/@oberon/*/dist/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/*/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@tohuhono/*/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@tohuhono/*/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@oberoncms/**/@oberon/*/src/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./oberon/**/*.{js,ts,jsx,tsx,mdx}",
@@ -102,6 +100,7 @@ export const config = {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config
 

@@ -1,17 +1,14 @@
-import dynamic from "next/dynamic"
 import { Metadata } from "next"
+import { DynamicClient } from "./client.dynamic"
 import resolvePuckPath from "@/lib/resolve-puck-path"
-
-const Client = dynamic(() => import("./client"), {
-  ssr: false,
-})
 
 export async function generateMetadata({
   params,
 }: {
-  params: { framework: string; uuid: string; puckPath: string[] }
+  params: Promise<{ puckPath?: string[] }>
 }): Promise<Metadata> {
-  const { isEdit, path } = resolvePuckPath(params.puckPath)
+  const { puckPath } = await params
+  const { isEdit, path } = resolvePuckPath(puckPath)
 
   if (isEdit) {
     return {
@@ -27,9 +24,10 @@ export async function generateMetadata({
 export default async function Page({
   params,
 }: {
-  params: { framework: string; uuid: string; puckPath: string[] }
+  params: Promise<{ puckPath?: string[] }>
 }) {
-  const { isEdit, path } = resolvePuckPath(params.puckPath)
+  const { puckPath } = await params
+  const { isEdit, path } = resolvePuckPath(puckPath)
 
-  return <Client isEdit={isEdit} path={path} />
+  return <DynamicClient isEdit={isEdit} path={path} />
 }

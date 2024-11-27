@@ -1,5 +1,4 @@
 import { randomBytes } from "crypto"
-import { type AuthConfig } from "@auth/core"
 import NextAuth from "next-auth"
 
 import { AccessDenied } from "@auth/core/errors"
@@ -29,7 +28,7 @@ const withCallback = (url: string) => {
 }
 
 export const authPlugin: OberonPlugin = (adapter) => {
-  const config = {
+  const nextAuth = NextAuth({
     basePath: "/cms/api/auth",
     pages: {
       signIn: "/cms/login",
@@ -107,9 +106,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
         return session
       },
     },
-  } satisfies AuthConfig
-
-  const nextAuth = NextAuth(config)
+  })
 
   return {
     name: `${name}/auth`,

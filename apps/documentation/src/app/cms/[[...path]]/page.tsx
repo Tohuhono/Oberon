@@ -10,26 +10,28 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({
-  params: { path = [] },
+  params,
 }: {
-  params: { path?: string[] }
+  params: Promise<{ path?: string[] }>
 }) {
+  const { path = [] } = await params
   return await getMetaData(adapter, path.slice(1), path[0])
 }
 
 export default async function Oberon({
-  params: { path = [] },
+  params,
   searchParams,
 }: {
-  params: { path?: string[] }
-  searchParams: { [key: string]: string | string[] | undefined }
+  params: Promise<{ path?: string[] }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
+  const { path = [] } = await params
   return (
     <OberonProvider
       adapter={adapter}
       actions={actions}
       path={path}
-      searchParams={searchParams}
+      searchParams={await searchParams}
     >
       <Client />
     </OberonProvider>
