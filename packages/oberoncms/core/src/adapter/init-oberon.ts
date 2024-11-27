@@ -14,10 +14,8 @@ function handle<TMethod extends OberonMethod = OberonMethod>(
   handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>,
   adapter: OberonAdapter,
 ): OberonHandler<{ path: string[] }>[TMethod] {
-  return async (
-    request: NextRequest,
-    { params: { path } }: { params: { path: string[] } },
-  ) => {
+  return async (request: NextRequest, { params }) => {
+    const { path = [] } = await params
     const action = path?.[0]
 
     if (!action) {

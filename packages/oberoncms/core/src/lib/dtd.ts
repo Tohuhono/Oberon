@@ -293,7 +293,7 @@ export type OberonHandler<Params = undefined> = Params extends undefined
   : {
       [key in OberonMethod]: (
         req: NextRequest,
-        context: { params: Params },
+        context: { params: Promise<Params> },
       ) => Promise<Response>
     }
 

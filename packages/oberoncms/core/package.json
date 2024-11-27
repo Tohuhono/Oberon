@@ -52,7 +52,7 @@
     "dotenv": "^16.4.5",
     "filesize": "^10.1.6",
     "next": "^15.0.3",
-    "next-auth": "5.0.0-beta.19",
+    "next-auth": "5.0.0-beta.25",
     "react-hook-form": "^7.53.2",
     "swr": "^2.2.5",
     "use-debounce": "^10.0.4",

@@ -1,6 +1,8 @@
 import { Render } from "@oberoncms/core/render";
 import { getMetaData } from "@oberoncms/core";
 
+import { use } from "react";
+
 import { config } from "@/oberon/config";
 import { adapter } from "@/oberon/adapter";
 
@@ -9,17 +11,19 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({
-  params: { path },
+  params,
 }: {
-  params: { framework: string; uuid: string; path: string[] };
+  params: Promise<{ path?: string[] }>;
 }) {
+  const { path = [] } = await params;
   return getMetaData(adapter, path);
 }
 
-export default function OberonRender({
-  params: { path },
+export default async function OberonRender({
+  params,
 }: {
-  params: { path?: [] };
+  params: Promise<{ path?: string[] }>;
 }) {
+  const { path = [] } = await params;
   return <Render path={path} adapter={adapter} config={config} />;
 }
