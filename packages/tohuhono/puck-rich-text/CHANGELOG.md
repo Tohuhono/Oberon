@@ -1,5 +1,11 @@
 # @tohuhono/puck-rich-text
 
+## 0.11.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+
 ## 0.11.0
 
 ### Minor Changes

@@ -1,5 +1,14 @@
 # @oberoncms/plugin-turso
 
+## 0.14.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+  - @oberoncms/sqlite@0.4.1
+  - @oberoncms/core@0.14.1
+
 ## 0.14.0
 
 ### Minor Changes

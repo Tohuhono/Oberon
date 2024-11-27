@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.7.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+
 ## 0.7.0
 
 ### Minor Changes

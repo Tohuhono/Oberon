@@ -1,5 +1,13 @@
 # @oberoncms/plugin-flydrive
 
+## 0.5.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+  - @oberoncms/core@0.14.1
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # @oberon/rich-text-demo
 
+## 1.7.1
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+  - @tohuhono/puck-rich-text@0.11.1
+
 ## 1.7.0
 
 ### Minor Changes
