@@ -17,7 +17,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: "",
+    title: "puck-rich-text-editor",
   }
 }
 
