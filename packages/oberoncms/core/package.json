@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/core",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "OberonCMS is a cloud deployable CMS written in typescript based on the Puck visual editor",

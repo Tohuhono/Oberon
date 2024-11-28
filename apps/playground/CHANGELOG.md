@@ -1,5 +1,22 @@
 # @oberon/playground
 
+## 0.9.0
+
+### Minor Changes
+
+- bce6613: Bump dependencies
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+- Updated dependencies [bce6613]
+  - @tohuhono/puck-blocks@0.11.0
+  - @oberoncms/plugin-development@0.5.0
+  - @oberoncms/plugin-uploadthing@0.14.0
+  - @oberoncms/core@0.15.0
+  - @oberoncms/plugin-turso@0.15.0
+
 ## 0.8.0
 
 ### Minor Changes

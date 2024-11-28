@@ -1,5 +1,19 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.11.0
+
+### Minor Changes
+
+- bce6613: Bump dependencies
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+- Updated dependencies [bce6613]
+  - @oberoncms/core@0.15.0
+  - @oberoncms/plugin-pgsql@0.8.0
+
 ## 0.10.0
 
 ### Minor Changes

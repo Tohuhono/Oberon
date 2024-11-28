@@ -1,5 +1,19 @@
 # oberon-cms-example
 
+## 0.15.0
+
+### Minor Changes
+
+- bce6613: Bump dependencies
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [38a8da8]
+- Updated dependencies [bce6613]
+  - @oberoncms/plugin-development@0.5.0
+  - @oberoncms/core@0.15.0
+
 ## 0.14.0
 
 ### Minor Changes
