@@ -1,5 +1,15 @@
 # @oberon/utils
 
+## 0.12.0
+
+### Minor Changes
+
+- bce6613: Bump dependencies
+
+### Patch Changes
+
+- 38a8da8: Bump dependencies for all packages
+
 ## 0.11.0
 
 ### Minor Changes

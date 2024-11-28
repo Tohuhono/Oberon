@@ -1,5 +1,20 @@
 # @oberon/rich-text-demo
 
+## 1.8.0
+
+### Minor Changes
+
+- bce6613: Bump dependencies
+
+### Patch Changes
+
+- 0b5aae0: Fix race condition on server render
+- 38a8da8: Bump dependencies for all packages
+- Updated dependencies [0b5aae0]
+- Updated dependencies [38a8da8]
+- Updated dependencies [bce6613]
+  - @tohuhono/puck-rich-text@0.12.0
+
 ## 1.7.0
 
 ### Minor Changes
