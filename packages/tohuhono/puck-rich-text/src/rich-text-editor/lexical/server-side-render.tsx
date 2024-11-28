@@ -50,16 +50,15 @@ export async function ServerSideRender({
     return null
   }
 
-  const html: string = await new Promise((resolve) => {
-    editor.update(() => {
+  const __html: string = await new Promise((resolve) => {
+    editor.setEditorState(editor.parseEditorState(state))
+
+    editor.update(async () => {
       const cleanup = setupDom()
 
       try {
-        editor.setEditorState(editor.parseEditorState(state))
-
         const purify = DOMPurify(window)
-
-        const raw = $generateHtmlFromNodes(editor)
+        const raw = $generateHtmlFromNodes(editor, null)
         const html = purify.sanitize(raw)
 
         resolve(html)
@@ -69,5 +68,5 @@ export async function ServerSideRender({
     })
   })
 
-  return <div dangerouslySetInnerHTML={{ __html: html }} />
+  return <div dangerouslySetInnerHTML={{ __html }} />
 }
