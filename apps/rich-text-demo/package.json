@@ -11,7 +11,7 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@measured/puck": "^0.16.2",
+    "@measured/puck": "^0.18.0",
     "@tohuhono/puck-rich-text": "workspace:*",
     "next": "^15.0.3",
     "react": "^18.3.1",

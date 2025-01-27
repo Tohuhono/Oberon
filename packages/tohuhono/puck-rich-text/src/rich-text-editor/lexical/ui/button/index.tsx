@@ -7,13 +7,18 @@ const getClassName = getClassNameFactory("ToolbarButton", styles)
 
 export const Button = ({
   active,
+  onClick,
   ...props
 }: ComponentProps<"button"> & { active?: boolean }) => {
   return (
     <button
       className={getClassName()}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick?.(e)
+      }}
       style={{
-        ...(active && { color: "var(--puck-color-azure-07)" }),
+        ...(active && { background: "var(--puck-color-grey-02)" }),
       }}
       {...props}
     />

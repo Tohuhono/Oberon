@@ -11,10 +11,18 @@ export function DropdownMenu({ children }: PropsWithChildren) {
 
 export function DropdownTrigger({
   children,
+  onClick,
   ...props
 }: PropsWithChildren<ComponentProps<typeof Menu.Trigger>>) {
   return (
-    <Menu.Trigger className={getClassName("action")} {...props}>
+    <Menu.Trigger
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick?.(e)
+      }}
+      className={getClassName("action")}
+      {...props}
+    >
       {children}
     </Menu.Trigger>
   )
@@ -32,11 +40,16 @@ export function DropdownContent({ children }: PropsWithChildren) {
 
 export function DropdownItem({
   children,
+  onClick,
   ...props
 }: PropsWithChildren<ComponentProps<typeof Menu.Item>>) {
   return (
     <Menu.Item
       style={{ justifyContent: "left" }}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick?.(e)
+      }}
       className={getClassName("action")}
       {...props}
     >

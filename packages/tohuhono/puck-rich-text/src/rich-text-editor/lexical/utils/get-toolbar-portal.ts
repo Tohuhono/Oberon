@@ -1,8 +1,7 @@
-export const getToolbarPortal = (id: string) => {
+export const getToolbarPortal = () => {
   const base = document.querySelector("iframe")?.contentDocument || document
 
-  // Iframe selector
   return base
-    ?.querySelector(`[data-rfd-draggable-id="draggable-${id}"]`)
+    ?.querySelector(`[data-puck-overlay="true"]`)
     ?.querySelector("button")?.parentElement
 }

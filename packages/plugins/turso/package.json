@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@auth/core": "^0.37.4",
-    "@measured/puck": "^0.16.2",
+    "@measured/puck": "^0.18.0",
     "@tohuhono/dev": "workspace:*",
     "@types/node": "22.9.3",
     "@types/react": "18.3.12",

@@ -18,18 +18,11 @@ export function Editor({
   const { isSelected, onChange } = useSelected(id)
 
   return (
-    <div
-      style={{
-        cursor: isSelected ? "auto" : "grab",
-        pointerEvents: "auto",
-      }}
-    >
-      <InlineRichTextEditor
-        id={id}
-        state={state}
-        onChange={onChange}
-        enabled={isSelected}
-      />
-    </div>
+    <InlineRichTextEditor
+      id={id}
+      state={state}
+      onChange={onChange}
+      enabled={isSelected}
+    />
   )
 }
