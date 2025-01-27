@@ -1,5 +1,16 @@
 # @oberoncms/plugin-flydrive
 
+## 0.7.0
+
+### Minor Changes
+
+- a75ba57: Fixed the actionbar selector to work with the new overlay in puck@18
+
+### Patch Changes
+
+- Updated dependencies [a75ba57]
+  - @oberoncms/core@0.16.0
+
 ## 0.6.0
 
 ### Minor Changes

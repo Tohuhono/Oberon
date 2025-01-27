@@ -1,5 +1,11 @@
 # @oberoncms/core
 
+## 0.16.0
+
+### Minor Changes
+
+- a75ba57: Fixed the actionbar selector to work with the new overlay in puck@18
+
 ## 0.15.0
 
 ### Minor Changes

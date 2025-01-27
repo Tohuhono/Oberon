@@ -1,5 +1,19 @@
 # @tohuhono/puck-blocks
 
+## 0.12.0
+
+### Minor Changes
+
+- a75ba57: Fixed the actionbar selector to work with the new overlay in puck@18
+
+### Patch Changes
+
+- Updated dependencies [a75ba57]
+- Updated dependencies [de10a55]
+- Updated dependencies [314fa18]
+  - @tohuhono/puck-rich-text@0.13.0
+  - @oberoncms/core@0.16.0
+
 ## 0.11.0
 
 ### Minor Changes

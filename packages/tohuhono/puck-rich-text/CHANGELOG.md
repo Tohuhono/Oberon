@@ -1,5 +1,17 @@
 # @tohuhono/puck-rich-text
 
+## 0.13.0
+
+### Minor Changes
+
+- a75ba57: Fixed the actionbar selector to work with the new overlay in puck@18
+- de10a55: Bump puck dependency
+
+### Patch Changes
+
+- 314fa18: Bump dompurify from 3.2.1 to 3.2.3 in the npm_and_yarn group across 1
+  directory
+
 ## 0.12.0
 
 ### Minor Changes

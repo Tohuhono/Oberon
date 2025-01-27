@@ -1,5 +1,12 @@
 # @oberoncms/plugin-pgsql
 
+## 0.8.1
+
+### Patch Changes
+
+- Updated dependencies [a75ba57]
+  - @oberoncms/core@0.16.0
+
 ## 0.8.0
 
 ### Minor Changes
