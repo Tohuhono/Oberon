@@ -27,45 +27,51 @@ export const InlineRichTextEditor = ({
   const [_isLinkEditMode, setIsLinkEditMode] = useState(false)
 
   return (
-    <div style={{ position: "relative" }}>
-      <LexicalComposer
-        initialConfig={{
-          namespace: id,
-          editable: false,
-          editorState: JSON.stringify(state),
-          nodes: [
-            HeadingNode,
-            QuoteNode,
-            AutoLinkNode,
-            LinkNode,
-            ListItemNode,
-            ListNode,
-            CodeHighlightNode,
-            CodeNode,
-          ],
-          onError(error: unknown) {
-            throw error
-          },
-        }}
-      >
-        <RichTextPlugin
-          contentEditable={<ContentEditable style={{ outline: "none" }} />}
-          placeholder={null}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin
-          ignoreSelectionChange
-          onChange={(state) => onChange({ state: state.toJSON() })}
-        />
-        <FocusPlugin enabled={enabled} />
-        <HistoryPlugin />
+    <LexicalComposer
+      initialConfig={{
+        namespace: id,
+        editable: false,
+        editorState: JSON.stringify(state),
+        nodes: [
+          HeadingNode,
+          QuoteNode,
+          AutoLinkNode,
+          LinkNode,
+          ListItemNode,
+          ListNode,
+          CodeHighlightNode,
+          CodeNode,
+        ],
+        onError(error: unknown) {
+          throw error
+        },
+      }}
+    >
+      <RichTextPlugin
+        contentEditable={
+          <ContentEditable
+            style={{
+              cursor: enabled ? "auto" : "grab",
+              outline: "none",
+              pointerEvents: "auto",
+            }}
+          />
+        }
+        placeholder={null}
+        ErrorBoundary={LexicalErrorBoundary}
+      />
+      <OnChangePlugin
+        ignoreSelectionChange
+        onChange={(state) => onChange({ state: state.toJSON() })}
+      />
+      <FocusPlugin enabled={enabled} />
+      <HistoryPlugin />
 
-        <ToolbarPlugin
-          id={id}
-          showToolbar={enabled}
-          setIsLinkEditMode={setIsLinkEditMode}
-        />
-      </LexicalComposer>
-    </div>
+      <ToolbarPlugin
+        id={id}
+        showToolbar={enabled}
+        setIsLinkEditMode={setIsLinkEditMode}
+      />
+    </LexicalComposer>
   )
 }

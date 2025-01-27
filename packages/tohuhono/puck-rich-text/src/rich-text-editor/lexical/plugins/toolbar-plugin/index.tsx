@@ -36,6 +36,7 @@ import { Dispatch, useCallback, useEffect, useState } from "react"
 
 import { createPortal } from "react-dom"
 import { Bold, Italic, RemoveFormatting } from "lucide-react"
+
 import { getSelectedNode } from "../../utils/get-selected-node"
 import { sanitizeUrl } from "../../utils/url"
 import { Button } from "../../ui/button"
@@ -247,11 +248,11 @@ export function ToolbarPlugin({
   }, [editor, isLink, setIsLinkEditMode]);
   */
 
-  const portalTarget = getToolbarPortal(id)
-
   if (!showToolbar) {
     return null
   }
+
+  const portalTarget = getToolbarPortal()
 
   if (!portalTarget) {
     return null
@@ -315,5 +316,6 @@ export function ToolbarPlugin({
       </Button>
     </div>,
     portalTarget,
+    id,
   )
 }

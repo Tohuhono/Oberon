@@ -19,7 +19,6 @@
 
 @media (hover: hover) {
   .ToolbarButton:hover {
-    background: var(--puck-color-grey-02);
     color: var(--puck-color-azure-06);
     cursor: pointer;
   }
