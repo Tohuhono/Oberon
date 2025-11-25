@@ -51,7 +51,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "fast-glob": "^3.3.2",
     "globals": "^15.12.0",
-    "rimraf": "^6.0.1",
+    "rimraf": "^6.1.2",
     "rollup-preserve-directives": "^1.1.2",
     "tailwindcss": "^3.4.15",
     "tailwindcss-animate": "^1.0.7",
