@@ -49,7 +49,7 @@
     "@measured/puck": "^0.18.0",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "filesize": "^10.1.6",
     "next": "^15.0.3",
     "next-auth": "5.0.0-beta.25",
