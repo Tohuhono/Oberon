@@ -1,6 +1,7 @@
 import type { OberonPage } from "../lib/dtd"
 
 export function getInitialData(): OberonPage {
+  console.log("ddd")
   return {
     key: "/",
     data: {

@@ -48,7 +48,10 @@ const resolveDevEnv = (value?: string) => {
     case "false":
       return false
     default:
-      return process.env.NODE_ENV === "development" && !process.env.CI
+      return (
+        !process.env.CI &&
+        (!process.env.NODE_ENV || process.env.NODE_ENV === "development")
+      )
   }
 }
 
