@@ -57,6 +57,6 @@
     "resend": "^4.0.1",
     "server-cli-only": "^0.3.2",
     "typescript": "5.7.2",
-    "vite": "^5.4.11"
+    "vite": "^5.4.12"
   }
 }
