@@ -51,7 +51,7 @@ export function BlockFormatDropDown({
   blockType: keyof typeof blockFormats
   editor: LexicalEditor
   disabled?: boolean
-}): JSX.Element {
+}) {
   const formatParagraph = () => {
     editor.update(() => {
       const selection = $getSelection()

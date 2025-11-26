@@ -1,11 +1,10 @@
 // @ts-check
-
-import tseslint from "typescript-eslint"
+import { defineConfig } from "eslint/config";
 import nextPlugin from "@next/eslint-plugin-next"
 import globals from "globals"
 import reactConfig from "./react.config.mjs"
 
-export default tseslint.config(
+export default defineConfig(
   ...reactConfig,
   {
     languageOptions: {
@@ -19,7 +18,6 @@ export default tseslint.config(
     plugins: {
       "@next/next": nextPlugin,
     },
-    // @ts-expect-error next is not up with the play
     rules: {
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules,

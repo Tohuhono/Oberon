@@ -57,7 +57,16 @@ const cards = {
   },
 }
 
-export function withExamples(config: Partial<OberonConfig>): OberonConfig {
+const Text: OberonComponent<PuckRichTextProps> = {
+  ...PuckRichText,
+  render: (props) => (
+    <div className="prose p-1 dark:prose-invert lg:prose-lg">
+      {PuckRichText.render(props)}
+    </div>
+  ),
+}
+
+export function withExamples(config: Partial<OberonConfig>) {
   return {
     version: 1,
     ...config,
@@ -74,18 +83,11 @@ export function withExamples(config: Partial<OberonConfig>): OberonConfig {
       ...config.components,
       Welcome,
       Container,
-      Text: {
-        ...PuckRichText,
-        render: (...props) => (
-          <div className="prose p-1 dark:prose-invert lg:prose-lg">
-            {PuckRichText.render(...props)}
-          </div>
-        ),
-      } satisfies OberonComponent<PuckRichTextProps>,
+      Text,
       Dashboard: {
         render: () => <Dashboard />,
       },
       ...cards,
     },
-  }
+  } satisfies OberonConfig
 }

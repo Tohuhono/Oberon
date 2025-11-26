@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { mkdir } from "fs/promises"
 import { drizzle } from "drizzle-orm/libsql"
 import { createClient } from "@libsql/client"
@@ -9,7 +8,6 @@ import { sql } from "drizzle-orm/sql"
 import * as schema from "./schema"
 
 declare global {
-  // eslint-disable-next-line no-var
   var oberonDb: Client
 }
 

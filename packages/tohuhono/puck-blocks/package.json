@@ -47,22 +47,22 @@
     "@tohuhono/puck-rich-text": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
-    "next": "^15.0.3",
-    "recharts": "^2.13.3"
+    "next": "^16.0.4",
+    "recharts": "^3.5.0"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@measured/puck": "^0.18.0",
+    "@measured/puck": "^0.20.2",
     "@tohuhono/dev": "workspace:*",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
-    "eslint": "^9.15.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "typescript": "5.7.2",
-    "vite": "^5.4.12"
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "eslint": "^9.39.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "5.9.3",
+    "vite": "^7.2.4"
   }
 }

@@ -1,6 +1,6 @@
-import type { Config } from "@measured/puck"
 import { DynamicTailwind, PreviewFrameTailwind } from "@tohuhono/ui/theme"
 import { notFound } from "next/navigation"
+import type { PropsWithChildren } from "react"
 import type { OberonConfig } from "./lib/dtd"
 import { getTitle } from "./lib/utils"
 import { useOberonClientContext } from "./hooks/use-oberon"
@@ -15,9 +15,9 @@ import { Login } from "./components/login"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
 
-const editorConfig: Partial<Config> = {
+const editorConfig = {
   root: {
-    render: ({ children }) => (
+    render: ({ children }: PropsWithChildren) => (
       <>
         <PreviewFrameTailwind />
         {children}
@@ -26,9 +26,9 @@ const editorConfig: Partial<Config> = {
   },
 }
 
-const previewConfig: Partial<Config> = {
+const previewConfig = {
   root: {
-    render: ({ children }) => (
+    render: ({ children }: PropsWithChildren) => (
       <>
         <DynamicTailwind />
         {children}

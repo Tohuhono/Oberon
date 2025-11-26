@@ -18,6 +18,9 @@ export class VercelBlobDriver implements DriverContract {
     throw new Error("Method not implemented.")
   }
 
+  async getSignedUploadUrl(): Promise<string> {
+    throw new Error("Method not implemented.")
+  }
   /**
    * Return the file contents as a UTF-8 string. Throw an exception
    * if the file is missing.
@@ -121,7 +124,7 @@ export class VercelBlobDriver implements DriverContract {
    * Create a new file or update an existing file. The contents
    * will be a UTF-8 string or "Uint8Array".
    */
-  async put(key: string, contents: string | Uint8Array): Promise<void> {
+  async put(key: string, contents: string): Promise<void> {
     await put(key, contents, { access: "public" })
   }
 

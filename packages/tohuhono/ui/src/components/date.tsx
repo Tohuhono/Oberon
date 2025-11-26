@@ -1,11 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 
 export function LocalDate({ date }: { date: Date | string }) {
-  const [localDate, setLocalDate] = useState<string>()
-  useEffect(() => {
-    setLocalDate(new Date(date).toLocaleDateString(navigator.languages))
-  }, [date])
-  return localDate
+  return useMemo(
+    () => new Date(date).toLocaleDateString(navigator.languages),
+    [date],
+  )
 }

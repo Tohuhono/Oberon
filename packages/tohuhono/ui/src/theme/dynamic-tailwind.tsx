@@ -6,7 +6,6 @@ import { config } from "@tohuhono/dev/tailwind.config"
 import { useEffect, useRef } from "react"
 
 declare global {
-  // eslint-disable-next-line no-var
   var tailwind: Config
   interface Window {
     tailwind?: Config
@@ -30,7 +29,7 @@ export function DynamicTailwind() {
 
 // Make sure font, theme and mode are propgated to preview iframe
 export function PreviewFrameTailwind() {
-  const darkModeObserver = useRef<MutationObserver>()
+  const darkModeObserver = useRef<MutationObserver>(null)
 
   useEffect(() => {
     const iframe: HTMLIFrameElement | null =

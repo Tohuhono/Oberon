@@ -1,12 +1,11 @@
 // @ts-check
-
-import tseslint from "typescript-eslint"
+import { defineConfig } from "eslint/config";
 import hooksPlugin from "eslint-plugin-react-hooks"
 import reactRecommended from "eslint-plugin-react/configs/recommended.js"
 import globals from "globals"
 import baseConfig from "./config.mjs"
 
-export default tseslint.config(
+export default defineConfig(
   ...baseConfig,
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
@@ -22,12 +21,5 @@ export default tseslint.config(
       "react/jsx-uses-react": "off",
     },
   },
-  {
-    files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
-    plugins: {
-      "react-hooks": hooksPlugin,
-    },
-    // @ts-expect-error not typed correctly
-    rules: hooksPlugin.configs.recommended.rules,
-  },
+  hooksPlugin.configs.flat.recommended,
 )

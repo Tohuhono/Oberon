@@ -44,26 +44,26 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.7.4",
+    "@auth/drizzle-adapter": "^1.11.1",
     "@oberoncms/core": "workspace:*",
-    "drizzle-orm": "^0.36.4",
-    "pg": "^8.13.1",
+    "drizzle-orm": "^0.44.7",
+    "pg": "^8.16.3",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@tohuhono/dev": "workspace:*",
-    "@types/node": "22.9.3",
-    "@types/pg": "^8.11.10",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
-    "drizzle-kit": "^0.28.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "typescript": "5.7.2",
-    "vite": "^5.4.12"
+    "@types/node": "24.10.1",
+    "@types/pg": "^8.15.6",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "drizzle-kit": "^0.31.7",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "5.9.3",
+    "vite": "^7.2.4"
   }
 }
