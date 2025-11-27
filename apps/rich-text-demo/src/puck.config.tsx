@@ -1,7 +1,9 @@
 import type { Config, Data } from "@measured/puck"
 import { PuckRichText, PuckRichTextProps } from "@tohuhono/puck-rich-text"
 
-export const config = {
+export const config: Config<{
+  "Rich Text": PuckRichTextProps
+}> = {
   root: {
     render: ({ children }) => (
       <div className="flex justify-center pt-10">
@@ -12,9 +14,7 @@ export const config = {
   components: {
     "Rich Text": PuckRichText,
   },
-} satisfies Config<{
-  "Rich Text": PuckRichTextProps
-}>
+}
 
 export const initialData: Record<string, Data> = {
   "/": {

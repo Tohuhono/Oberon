@@ -5,6 +5,7 @@ import type {
   Config,
   Data,
   DefaultComponentProps,
+  DefaultComponents,
 } from "@measured/puck"
 import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
@@ -21,7 +22,9 @@ type Transforms = Array<(props: any) => any>
 
 export type PageData = Data
 
-export type OberonConfig = Config & {
+export type OberonConfig<
+  Components extends DefaultComponents = DefaultComponents,
+> = Config<{ components: Components }> & {
   version: 1
   components: Record<
     string,

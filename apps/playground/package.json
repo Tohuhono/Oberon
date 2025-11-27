@@ -7,6 +7,7 @@
     "build": "next build",
     "clean": "odt clean",
     "dev": "next dev --turbo",
+    "lint": "eslint .",
     "next": "next",
     "tsc": "tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",

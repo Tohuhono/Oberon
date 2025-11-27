@@ -3,7 +3,7 @@
 import path from "path"
 import { fileURLToPath } from "url"
 import eslint from "@eslint/js"
-import { defineConfig } from "eslint/config";
+import { defineConfig } from "eslint/config"
 import tseslint from "typescript-eslint"
 import prettierConfig from "eslint-config-prettier"
 import { FlatCompat } from "@eslint/eslintrc"
@@ -59,6 +59,9 @@ export default defineConfig(
       "@typescript-eslint/no-unused-vars": "off",
       // Use this to provide a consistant interface name
       "@typescript-eslint/no-empty-object-type": "off",
+      // Allow directives
+      "@typescript-eslint/no-unused-expressions": "off",
+      "no-unused-expressions": ["error", { ignoreDirectives: true }],
       // prevent enums
       "no-restricted-syntax": [
         "error",
@@ -67,7 +70,7 @@ export default defineConfig(
           message: "Don't declare enums",
         },
       ],
-      curly: "error",
+      curly: "off",
     },
   },
   {

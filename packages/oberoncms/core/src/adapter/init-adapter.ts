@@ -226,8 +226,11 @@ export function initAdapter({
 
   return {
     prebuild: async () => {
+      console.log("adapter prebuild")
       await adapter.prebuild()
+      console.log("tailwind prebuild")
       await exportTailwindClasses(adapter)
+      console.log("prebuild done")
     },
     /*
      * Auth

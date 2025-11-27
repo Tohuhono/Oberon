@@ -2,7 +2,9 @@ import type { OberonComponent, OberonImage } from "@oberoncms/core"
 import { Image as Base } from "./server"
 import { ImageField } from "./image-field"
 
-export const Image = {
+export const Image: OberonComponent<{
+  image: OberonImage | null
+}> = {
   ...Base,
   fields: {
     image: {
@@ -10,6 +12,4 @@ export const Image = {
       render: (props) => <ImageField {...props} />,
     },
   },
-} satisfies OberonComponent<{
-  image: OberonImage | null
-}>
+}
