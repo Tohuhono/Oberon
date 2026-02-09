@@ -3,7 +3,7 @@
 import type { Config } from "tailwindcss"
 
 export const config = {
-  darkMode: ["class"],
+  darkMode: "class",
   future: {
     hoverOnlyWhenSupported: true,
   },

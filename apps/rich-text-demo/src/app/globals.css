@@ -53,6 +53,9 @@
 
 @layer base {
   * {
-    @apply border-border;
+    /* Use the CSS variable directly to set border color instead of applying
+       the Tailwind utility `border-border`, which can fail during the
+       production build when the utility isn't generated. */
+    border-color: hsl(var(--border));
   }
 }

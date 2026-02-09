@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 
-import { isRedirectError } from "next/dist/client/components/redirect-error"
-import { PageNotFoundError } from "next/dist/shared/lib/utils"
+import { isRedirectError } from "next/dist/client/components/redirect-error.js"
+import { PageNotFoundError } from "next/dist/shared/lib/utils.js"
 import { ResponseError, type ClientAction, type OberonResponse } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {

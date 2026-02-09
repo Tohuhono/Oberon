@@ -2,7 +2,6 @@
 
 import Script from "next/script"
 import { Config } from "tailwindcss"
-import { config } from "@tohuhono/dev/tailwind.config"
 import { useEffect, useRef } from "react"
 
 declare global {
@@ -16,12 +15,9 @@ export function DynamicTailwind() {
   return (
     <>
       <Script
-        strategy="afterInteractive"
-        src="https://cdn.tailwindcss.com"
         id="dynamic-tailwind"
-        onLoad={() => {
-          window.tailwind.config = config
-        }}
+        strategy="afterInteractive"
+        src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
       />
     </>
   )
@@ -43,12 +39,10 @@ export function PreviewFrameTailwind() {
     if (!iframe.contentDocument.getElementById("preview-frame-tailwind")) {
       const tailwindCDN = iframe.contentDocument.createElement("script")
       tailwindCDN.setAttribute("id", "preview-frame-tailwind")
-      tailwindCDN.setAttribute("src", "https://cdn.tailwindcss.com")
-      tailwindCDN.addEventListener("load", () => {
-        if (iframe.contentWindow?.tailwind) {
-          iframe.contentWindow.tailwind.config = config
-        }
-      })
+      tailwindCDN.setAttribute(
+        "src",
+        "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
+      )
       iframe.contentDocument.head.appendChild(tailwindCDN)
     }
 

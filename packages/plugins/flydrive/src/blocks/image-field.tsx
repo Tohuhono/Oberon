@@ -100,7 +100,7 @@ export const ImageField = ({
     <div>
       <FieldLabel label="Image" />
       <button
-        className="inline-flex h-8 w-full items-center justify-center text-nowrap rounded-md bg-primary px-2 text-xs font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-8 w-full items-center justify-center rounded-md px-2 text-xs font-medium text-nowrap shadow transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
         onClick={() => setPickerVisible((visible) => !visible)}
         disabled={loading}
       >
@@ -109,25 +109,25 @@ export const ImageField = ({
       {!pickerVisible && (
         <div {...getRootProps({ className: "mt-2" })}>
           <input {...getInputProps({ disabled: loading })} />
-          <div className="rounded-lg border-2 border-dashed border-muted bg-primary-foreground p-8 text-center transition duration-300 ease-in-out hover:border-primary">
+          <div className="border-muted bg-primary-foreground hover:border-primary rounded-lg border-2 border-dashed p-8 text-center transition duration-300 ease-in-out">
             <span className="flex cursor-pointer flex-col items-center space-y-2">
               <svg
-                className="h-16 w-16 text-primary"
+                className="text-primary h-16 w-16"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 ></path>
               </svg>
               <span className="text-muted-foreground">
                 Drag and drop your image here
               </span>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground text-sm">
                 (or click to select)
               </span>
             </span>
