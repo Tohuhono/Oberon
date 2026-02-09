@@ -60,7 +60,7 @@ const cards = {
 const Text: OberonComponent<PuckRichTextProps> = {
   ...PuckRichText,
   render: (props) => (
-    <div className="prose p-1 dark:prose-invert lg:prose-lg">
+    <div className="prose dark:prose-invert lg:prose-lg p-1">
       {PuckRichText.render(props)}
     </div>
   ),

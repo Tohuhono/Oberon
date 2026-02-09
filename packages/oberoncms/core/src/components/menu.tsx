@@ -22,7 +22,7 @@ export const Menu = ({
   const { data: showUsers } = useSWR("/can/users", () => can("users"))
 
   return (
-    <div className="grid w-full grid-cols-3 items-center p-2 text-foreground">
+    <div className="text-foreground grid w-full grid-cols-3 items-center p-2">
       <div className="flex justify-start gap-1">{children}</div>
       <div className="flex justify-center">
         {path ? (
