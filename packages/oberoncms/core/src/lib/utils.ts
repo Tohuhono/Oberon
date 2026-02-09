@@ -1,7 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 
-import { isRedirectError } from "next/dist/client/components/redirect"
-import { isNotFoundError } from "next/dist/client/components/not-found"
+import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { ResponseError, type ClientAction, type OberonResponse } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
@@ -78,7 +77,7 @@ export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
       result: await promise,
     }
   } catch (error) {
-    if (isRedirectError(error) || isNotFoundError(error)) {
+    if (isRedirectError(error)) {
       throw error
     }
     if (error instanceof ResponseError) {
