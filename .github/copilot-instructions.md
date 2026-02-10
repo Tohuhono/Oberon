@@ -1,1 +1,1 @@
-- Read the root `AGENTS.md` first.
+Read `AGENTS.md`

@@ -32,7 +32,9 @@
       "typescriptreact": "html",
     },
     "editor.detectIndentation": false,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "chat.agent.maxRequests": 50,
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
   },
 }
