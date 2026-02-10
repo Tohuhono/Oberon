@@ -1,0 +1,1 @@
+- Read the root `AGENTS.md` first.
