@@ -78,3 +78,5 @@ jobs:
         run: |
           pnpm run deploy
           echo "url=$(tail .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
+        env:
+          ENABLE_EXPERIMENTAL_COREPACK: "1"
