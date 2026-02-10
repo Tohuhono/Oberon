@@ -33,5 +33,6 @@
     },
     "editor.detectIndentation": false,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "chat.agent.maxRequests": 50,
   },
 }
