@@ -47,9 +47,7 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
       - name: Use pNpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
+        uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "24.x"
