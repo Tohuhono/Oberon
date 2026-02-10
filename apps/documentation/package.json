@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "tsc": "tsc --pretty"
+    "typegen": "next typegen",
+    "tsc": "next typegen && tsc --pretty"
   },
   "dependencies": {
     "@datacom-digital/ui-sample-components": "^0.3.3",

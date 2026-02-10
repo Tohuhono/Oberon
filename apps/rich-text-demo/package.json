@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "tsc": "tsc --pretty"
+    "typegen": "next typegen",
+    "tsc": "next typegen && tsc --pretty"
   },
   "dependencies": {
     "@measured/puck": "^0.20.2",

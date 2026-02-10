@@ -9,7 +9,8 @@
     "dev": "next dev --turbo",
     "lint": "eslint .",
     "next": "next",
-    "tsc": "tsc --pretty",
+    "typegen": "next typegen",
+    "tsc": "next typegen && tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"
   },
