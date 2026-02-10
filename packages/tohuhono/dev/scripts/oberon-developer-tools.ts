@@ -24,6 +24,7 @@ const dirs = ONLY
       "./.rollup.cache",
       "./.vercel",
       "./tsconfig.tsbuildinfo",
+      "./next-env.d.ts",
       ...(WITH ? [WITH] : []),
     ]
 

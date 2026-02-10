@@ -118,7 +118,7 @@ export function Login({
             name="token"
             render={({ field }) => (
               <FormItem
-                className={cn(sent ? "visible animate-fade-in" : "hidden")}
+                className={cn(sent ? "animate-fade-in visible" : "hidden")}
               >
                 <FormControl>
                   <InputOTP maxLength={6} {...field}>
@@ -146,7 +146,7 @@ export function Login({
             disabled={submitting}
             className={cn(
               "pt-2",
-              sent ? "visible animate-fade-in" : "collapse",
+              sent ? "animate-fade-in visible" : "collapse",
               sending ? "transition-none" : "transition-opacity",
             )}
             onClick={tokenOnClick}

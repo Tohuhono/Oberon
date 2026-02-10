@@ -88,8 +88,8 @@ export function CardsChat() {
               <AvatarFallback>OM</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium leading-none">Sofia Davis</p>
-              <p className="text-sm text-muted-foreground">m@example.com</p>
+              <p className="text-sm leading-none font-medium">Sofia Davis</p>
+              <p className="text-muted-foreground text-sm">m@example.com</p>
             </div>
           </div>
           <TooltipProvider delayDuration={0}>
@@ -117,7 +117,7 @@ export function CardsChat() {
                 className={cn(
                   "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                   message.role === "user"
-                    ? "ml-auto bg-primary text-primary-foreground"
+                    ? "bg-primary text-primary-foreground ml-auto"
                     : "bg-muted",
                 )}
               >
@@ -160,8 +160,8 @@ export function CardsChat() {
         </CardFooter>
       </Card>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="gap-0 p-0 outline-none">
-          <DialogHeader className="px-4 pb-4 pt-5">
+        <DialogContent className="gap-0 p-0 outline-hidden">
+          <DialogHeader className="px-4 pt-5 pb-4">
             <DialogTitle>New message</DialogTitle>
             <DialogDescription>
               Invite a user to this thread. This will create a new group
@@ -197,15 +197,15 @@ export function CardsChat() {
                       <AvatarFallback>{user.name[0]}</AvatarFallback>
                     </Avatar>
                     <div className="ml-2">
-                      <p className="text-sm font-medium leading-none">
+                      <p className="text-sm leading-none font-medium">
                         {user.name}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         {user.email}
                       </p>
                     </div>
                     {selectedUsers.includes(user) ? (
-                      <CheckIcon className="ml-auto flex h-5 w-5 text-primary" />
+                      <CheckIcon className="text-primary ml-auto flex h-5 w-5" />
                     ) : null}
                   </CommandItem>
                 ))}
@@ -218,14 +218,14 @@ export function CardsChat() {
                 {selectedUsers.map((user) => (
                   <Avatar
                     key={user.email}
-                    className="inline-block border-2 border-background"
+                    className="border-background inline-block border-2"
                   >
                     <AvatarFallback>{user.name[0]}</AvatarFallback>
                   </Avatar>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Select users to add to this thread.
               </p>
             )}

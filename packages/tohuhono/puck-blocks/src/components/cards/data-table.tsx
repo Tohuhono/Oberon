@@ -6,18 +6,6 @@ import {
   ChevronDownIcon,
   DotsHorizontalIcon,
 } from "@radix-ui/react-icons"
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
 
 import { Button } from "@tohuhono/ui/button"
 import {
@@ -46,6 +34,18 @@ import {
   TableBody,
   TableCell,
 } from "@tohuhono/ui/table"
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+} from "../../hooks/use-table"
 
 const data: Payment[] = [
   {
@@ -188,7 +188,7 @@ export function CardsDataTable() {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
     onSortingChange: setSorting,
@@ -307,7 +307,7 @@ export function CardsDataTable() {
           </Table>
         </div>
         <div className="flex items-center justify-end space-x-2 pt-4">
-          <div className="flex-1 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex-1 text-sm">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>

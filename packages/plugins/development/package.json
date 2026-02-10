@@ -41,29 +41,29 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@libsql/client": "^0.14.0",
-    "@libsql/core": "^0.14.0",
+    "@libsql/client": "^0.15.15",
+    "@libsql/core": "^0.16.0",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
-    "drizzle-orm": "^0.36.4",
-    "next": "^15.0.3",
+    "drizzle-orm": "^0.44.7",
+    "next": "^16.0.4",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@auth/core": "^0.37.4",
-    "@measured/puck": "^0.18.0",
+    "@measured/puck": "^0.20.2",
     "@tohuhono/dev": "workspace:*",
-    "@types/node": "22.9.3",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
-    "drizzle-kit": "^0.28.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "typescript": "5.7.2",
-    "vite": "^5.4.12"
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "drizzle-kit": "^0.31.7",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "5.9.3",
+    "vite": "^7.2.4"
   }
 }

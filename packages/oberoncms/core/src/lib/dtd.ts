@@ -1,10 +1,11 @@
 import { z } from "zod"
-import { Data } from "@measured/puck"
 import { Route } from "next"
 import type {
   ComponentConfig,
   Config,
+  Data,
   DefaultComponentProps,
+  DefaultComponents,
 } from "@measured/puck"
 import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
@@ -21,7 +22,9 @@ type Transforms = Array<(props: any) => any>
 
 export type PageData = Data
 
-export type OberonConfig = Config & {
+export type OberonConfig<
+  Components extends DefaultComponents = DefaultComponents,
+> = Config<{ components: Components }> & {
   version: 1
   components: Record<
     string,
@@ -32,13 +35,10 @@ export type OberonConfig = Config & {
 }
 
 export type OberonComponent<
-  ComponentProps extends DefaultComponentProps = DefaultComponentProps,
-  Transforms extends Array<
-    (props: Record<string, unknown>) => Record<string, unknown>
-  > = Array<(props: Record<string, unknown>) => Record<string, unknown>>,
-> = ComponentConfig<ComponentProps> & {
-  transforms?: Transforms
-}
+  Props extends DefaultComponentProps = DefaultComponentProps,
+> = ComponentConfig<{
+  props: Props
+}>
 
 export const clientActions = [
   "edit",

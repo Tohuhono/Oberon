@@ -50,6 +50,8 @@ export function initOberon({
     pluginAdapter,
   })
 
+  console.log("....")
+
   const handler = {
     GET: handle("GET", handlers, adapter),
     PUT: handle("PUT", handlers, adapter),

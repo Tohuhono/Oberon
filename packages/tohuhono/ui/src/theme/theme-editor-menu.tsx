@@ -41,8 +41,8 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className={cn("align-middle", className)}>
-          <SunIcon className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <SunIcon className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+          <MoonIcon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

@@ -55,19 +55,25 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
-    "@manypkg/cli": "^0.23.0",
+    "@manypkg/cli": "^0.25.1",
+    "@tailwindcss/postcss": "^4.1.18",
     "@tohuhono/dev": "workspace:*",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.6.1",
-    "eslint": "^9.15.0",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.39.1",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^16.2.7",
     "patch-package": "^8.0.1",
-    "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.9",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "rimraf": "^6.1.2",
     "turbo": "^2.6.1",
-    "typescript": "5.7.2",
-    "wait-on": "^8.0.5"
+    "typescript": "5.9.3",
+    "wait-on": "^9.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "zod-validation-error": "^4.0.0"
+    }
   }
 }

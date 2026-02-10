@@ -3,6 +3,7 @@
 import path from "path"
 import { fileURLToPath } from "url"
 import eslint from "@eslint/js"
+import { defineConfig } from "eslint/config"
 import tseslint from "typescript-eslint"
 import prettierConfig from "eslint-config-prettier"
 import { FlatCompat } from "@eslint/eslintrc"
@@ -16,7 +17,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 })
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: [
       ".next/**/*",
@@ -58,6 +59,9 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
       // Use this to provide a consistant interface name
       "@typescript-eslint/no-empty-object-type": "off",
+      // Allow directives
+      "@typescript-eslint/no-unused-expressions": "off",
+      "no-unused-expressions": ["error", { ignoreDirectives: true }],
       // prevent enums
       "no-restricted-syntax": [
         "error",
@@ -66,7 +70,7 @@ export default tseslint.config(
           message: "Don't declare enums",
         },
       ],
-      curly: "error",
+      curly: "off",
     },
   },
   {

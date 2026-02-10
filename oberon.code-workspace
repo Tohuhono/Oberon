@@ -32,5 +32,6 @@
       "typescriptreact": "html",
     },
     "editor.detectIndentation": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
 }

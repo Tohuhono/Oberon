@@ -28,6 +28,7 @@ const StyledJsxRegistry = ({ children }: { children: React.ReactNode }) => {
 
 export const ApplyTheme = ({ theme }: { theme: Theme }) => (
   <StyledJsxRegistry>
+    {/* eslint-disable-next-line react/no-unknown-property */}
     <style jsx global>
       {`
         :root {
@@ -71,7 +72,7 @@ export const copyToClipboard = (theme: Theme) =>
 
   @layer base {
     * {
-      @apply border-border;
+      border-color: hsl(var(--border));
     }
   }
 `)

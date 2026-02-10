@@ -6,8 +6,9 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbo",
-    "lint": "next lint",
-    "tsc": "tsc --pretty",
+    "lint": "eslint .",
+    "typegen": "next typegen",
+    "tsc": "next typegen && tsc --pretty",
     "prettier": "prettier",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "prebuild": "tsx ./oberon/prebuild.ts",
@@ -16,25 +17,24 @@
   "dependencies": {
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
-    "next": "^15.0.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "next": "^16.0.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.15",
-    "@types/node": "22.9.3",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.15.0",
-    "eslint-config-next": "15.0.3",
-    "postcss": "^8.4.49",
-    "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.9",
-    "tailwindcss": "^3.4.15",
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "16.0.4",
+    "postcss": "^8.5.6",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "tailwindcss": "^4.1.17",
     "tailwindcss-animate": "^1.0.7",
-    "tsx": "^4.19.2",
-    "typescript": "5.7.2"
+    "tsx": "^4.20.6",
+    "typescript": "5.9.3"
   }
 }

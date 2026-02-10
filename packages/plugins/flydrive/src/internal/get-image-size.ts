@@ -6,7 +6,6 @@ export async function getImageSize(
   image: Buffer,
   defaultSize: ImageSize = { width: 100, height: 100 },
 ): Promise<ImageSize> {
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       // This throws if it cannot determine the size

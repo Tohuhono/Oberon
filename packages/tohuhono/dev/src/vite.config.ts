@@ -95,7 +95,7 @@ export function initConfig(
     resolve,
     plugins: [
       externalizeDeps(),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore sometimes fails so can't use expect error
       preserveDirectives(),
       dts(),

@@ -45,32 +45,32 @@
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
-    "@hookform/resolvers": "^3.9.1",
-    "@measured/puck": "^0.18.0",
+    "@hookform/resolvers": "^5.2.2",
+    "@measured/puck": "^0.20.2",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
-    "dotenv": "^16.6.1",
-    "filesize": "^10.1.6",
-    "next": "^15.0.3",
-    "next-auth": "5.0.0-beta.25",
-    "react-hook-form": "^7.53.2",
-    "swr": "^2.2.5",
-    "use-debounce": "^10.0.4",
+    "dotenv": "^17.2.3",
+    "filesize": "^11.0.13",
+    "next": "^16.0.4",
+    "next-auth": "5.0.0-beta.30",
+    "react-hook-form": "^7.66.1",
+    "swr": "^2.3.6",
+    "use-debounce": "^10.0.6",
     "walkjs": "^6.0.1",
-    "zod": "^3.23.8"
+    "zod": "^4.1.13"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@tohuhono/dev": "workspace:*",
-    "@types/node": "22.9.3",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "typescript": "5.7.2",
-    "vite": "^5.4.12"
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "5.9.3",
+    "vite": "^7.2.4"
   }
 }

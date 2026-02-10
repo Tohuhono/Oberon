@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useMemo } from "react"
 import { Config, Data } from "@measured/puck"
 
 const encode = (path: string, componentKey: string) =>
@@ -7,13 +7,11 @@ const encode = (path: string, componentKey: string) =>
 export const useLocalData = (path: string, config: Config) => {
   const componentKey = Object.keys(config.components).join("-")
 
-  const [data, setData] = useState<Data>()
-
-  useEffect(() => {
+  const data = useMemo(() => {
     const dataStr = localStorage.getItem(encode(path, componentKey))
 
     if (dataStr) {
-      setData(JSON.parse(dataStr))
+      return JSON.parse(dataStr)
     }
   }, [path, componentKey])
 

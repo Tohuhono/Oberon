@@ -20,6 +20,17 @@ export class VercelBlobDriver implements DriverContract {
   }
 
   /**
+   * Return the signed URL for direct uploads. Throw exception
+   * when the driver does not support generating upload URLs.
+   */
+  async getSignedUploadUrl(
+    _key: string,
+    _options?: SignedURLOptions,
+  ): Promise<string> {
+    throw new Error("Method not implemented.")
+  }
+
+  /**
    * Return the file contents as a UTF-8 string. Throw an exception
    * if the file is missing.
    */
@@ -100,17 +111,6 @@ export class VercelBlobDriver implements DriverContract {
    * when the driver does not support generating URLs.
    */
   async getSignedUrl(
-    _key: string,
-    _options?: SignedURLOptions,
-  ): Promise<string> {
-    throw new Error("Method not implemented.")
-  }
-
-  /**
-   * Return the signed URL for direct uploads. Throw exception
-   * when the driver does not support generating upload URLs.
-   */
-  async getSignedUploadUrl(
     _key: string,
     _options?: SignedURLOptions,
   ): Promise<string> {

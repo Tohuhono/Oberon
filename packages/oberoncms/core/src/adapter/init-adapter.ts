@@ -1,8 +1,4 @@
-import {
-  revalidatePath,
-  revalidateTag,
-  unstable_cache as cache,
-} from "next/cache"
+import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
 import { type Data } from "@measured/puck"
 import { streamResponse } from "@tohuhono/utils"
 import { version } from "../../package.json" with { type: "json" }
@@ -150,7 +146,7 @@ export function initAdapter({
       updatedBy,
     })
     revalidatePath(key)
-    revalidateTag("oberon-pages")
+    updateTag("oberon-pages")
   }
 
   const getConfigCached = cache(
@@ -223,15 +219,18 @@ export function initAdapter({
       updatedBy: user.email,
     })
 
-    revalidateTag("oberon-config")
+    updateTag("oberon-config")
 
     yield { ...summary, total: pages.length }
   })
 
   return {
     prebuild: async () => {
+      console.log("adapter prebuild")
       await adapter.prebuild()
+      console.log("tailwind prebuild")
       await exportTailwindClasses(adapter)
+      console.log("prebuild done")
     },
     /*
      * Auth
@@ -277,7 +276,7 @@ export function initAdapter({
         updatedBy: user.email,
       })
       revalidatePath(key)
-      revalidateTag("oberon-pages")
+      updateTag("oberon-pages")
     },
     // TODO return value
     deletePage: async function (data: unknown) {
@@ -285,7 +284,7 @@ export function initAdapter({
       const { key } = DeletePageSchema.parse(data)
       await adapter.deletePage(key)
       revalidatePath(key)
-      revalidateTag("oberon-pages")
+      updateTag("oberon-pages")
     },
     publishPageData: async function (data: unknown) {
       const user = await whoWill("pages", "write")
@@ -310,13 +309,13 @@ export function initAdapter({
 
       const image = AddImageSchema.parse(data)
       await adapter.addImage(image)
-      revalidateTag("oberon-images")
+      updateTag("oberon-images")
       return adapter.getAllImages()
     },
     // TODO uploadthing
     deleteImage: async function (data) {
       await will("images", "write")
-      revalidateTag("oberon-images")
+      updateTag("oberon-images")
       return adapter.deleteImage(data)
     },
 
@@ -334,21 +333,21 @@ export function initAdapter({
         email,
         role,
       })
-      revalidateTag("oberon-users")
+      updateTag("oberon-users")
       return { id, email, role }
     },
     deleteUser: async function (data: unknown) {
       await will("users", "write")
       const { id } = DeleteUserSchema.parse(data)
       await adapter.deleteUser(id)
-      revalidateTag("oberon-users")
+      updateTag("oberon-users")
       return { id }
     },
     changeRole: async function (data: unknown) {
       await will("users", "write")
       const { role, id } = ChangeRoleSchema.parse(data)
       await adapter.changeRole({ role, id })
-      revalidateTag("oberon-users")
+      updateTag("oberon-users")
       return { role, id }
     },
   }
