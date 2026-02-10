@@ -3,7 +3,7 @@
  * https://github.com/motdotla/dotenv
  */
 import dotenv from "dotenv"
-dotenv.config({ path: ".env.local" })
+dotenv.config({ path: ".env.local", quiet: true })
 
 import { resolve } from "path"
 import { defineConfig, devices } from "@playwright/experimental-ct-react"
