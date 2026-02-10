@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer"
 import type { Readable } from "node:stream"
 import { ListFoldedBlobResult, copy, del, head, list, put } from "@vercel/blob"
 import { DriveDirectory, DriveFile } from "flydrive"
@@ -18,9 +19,17 @@ export class VercelBlobDriver implements DriverContract {
     throw new Error("Method not implemented.")
   }
 
-  async getSignedUploadUrl(): Promise<string> {
+  /**
+   * Return the signed URL for direct uploads. Throw exception
+   * when the driver does not support generating upload URLs.
+   */
+  async getSignedUploadUrl(
+    _key: string,
+    _options?: SignedURLOptions,
+  ): Promise<string> {
     throw new Error("Method not implemented.")
   }
+
   /**
    * Return the file contents as a UTF-8 string. Throw an exception
    * if the file is missing.
@@ -124,8 +133,9 @@ export class VercelBlobDriver implements DriverContract {
    * Create a new file or update an existing file. The contents
    * will be a UTF-8 string or "Uint8Array".
    */
-  async put(key: string, contents: string): Promise<void> {
-    await put(key, contents, { access: "public" })
+  async put(key: string, contents: string | Uint8Array): Promise<void> {
+    const body = typeof contents === "string" ? contents : Buffer.from(contents)
+    await put(key, body, { access: "public" })
   }
 
   /**
