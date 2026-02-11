@@ -1,4 +1,4 @@
-import type { Config, Data } from "@measured/puck"
+import type { Config, Data } from "@puckeditor/core"
 import { PuckRichText, PuckRichTextProps } from "@tohuhono/puck-rich-text"
 
 export const config: Config<{

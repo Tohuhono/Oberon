@@ -12,7 +12,7 @@
     "tsc": "next typegen && tsc --pretty"
   },
   "dependencies": {
-    "@measured/puck": "^0.20.2",
+    "@puckeditor/core": "^0.21.1",
     "@tohuhono/puck-rich-text": "workspace:*",
     "next": "^16.1.6",
     "react": "^19.2.0",

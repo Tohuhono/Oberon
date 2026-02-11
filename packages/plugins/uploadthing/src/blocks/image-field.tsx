@@ -1,4 +1,4 @@
-import { FieldLabel } from "@measured/puck"
+import { FieldLabel } from "@puckeditor/core"
 import { useEffect, useState } from "react"
 import { useOberonImages } from "@oberoncms/core/editor"
 import type { OberonImage } from "@oberoncms/core"

@@ -1,6 +1,6 @@
 "use client"
 
-import { Puck, type Data, Button, Render } from "@measured/puck"
+import { Puck, type Data, Button, Render } from "@puckeditor/core"
 import { useDemoData } from "../../lib/use-demo-data"
 import { config } from "@/puck.config"
 

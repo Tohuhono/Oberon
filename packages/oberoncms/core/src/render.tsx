@@ -1,4 +1,4 @@
-import { Render as PuckRender } from "@measured/puck/rsc"
+import { Render as PuckRender } from "@puckeditor/core/rsc"
 import { notFound } from "next/navigation"
 import { type OberonAdapter, type OberonConfig } from "./lib/dtd"
 import { resolveSlug } from "./lib/utils"

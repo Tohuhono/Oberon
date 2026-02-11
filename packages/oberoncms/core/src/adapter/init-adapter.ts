@@ -1,5 +1,5 @@
 import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
-import { type Data } from "@measured/puck"
+import { type Data } from "@puckeditor/core"
 import { streamResponse } from "@tohuhono/utils"
 import { version } from "../../package.json" with { type: "json" }
 import {

@@ -69,12 +69,12 @@
     "next": "^16.1.6"
   },
   "peerDependencies": {
-    "@measured/puck": ">=0.18.0",
+    "@puckeditor/core": ">=0.21.0",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
-    "@measured/puck": "^0.20.2",
+    "@puckeditor/core": "^0.21.1",
     "@tohuhono/dev": "workspace:*",
     "@types/dompurify": "^3.2.0",
     "@types/jsdom": "^27.0.0",

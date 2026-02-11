@@ -46,7 +46,7 @@
   "dependencies": {
     "@auth/core": "^0.37.4",
     "@hookform/resolvers": "^5.2.2",
-    "@measured/puck": "^0.20.2",
+    "@puckeditor/core": "^0.21.1",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "dotenv": "^17.2.3",

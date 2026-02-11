@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { resolveAllData, type Data } from "@measured/puck"
+import { resolveAllData, type Data } from "@puckeditor/core"
 import { config, initialData } from "@/puck.config"
 
 const isBrowser = typeof window !== "undefined"

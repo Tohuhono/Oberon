@@ -1,8 +1,8 @@
 "use client"
 
-import "@measured/puck/dist/index.css"
+import "@puckeditor/core/puck.css"
 
-import { Config, Data, Puck, usePuck } from "@measured/puck"
+import { Config, Data, Puck, usePuck } from "@puckeditor/core"
 import { Button } from "@tohuhono/ui/button"
 import { useState } from "react"
 import { useLocalData } from "../hooks/use-local-data"

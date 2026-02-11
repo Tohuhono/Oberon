@@ -84,6 +84,14 @@ export function withExamples(config: Partial<OberonConfig>) {
       Welcome,
       Container,
       Text,
+      RichText: {
+        fields: {
+          body: {
+            type: "richtext",
+          },
+        },
+        render: ({ body }) => body,
+      },
       Dashboard: {
         render: () => <Dashboard />,
       },
