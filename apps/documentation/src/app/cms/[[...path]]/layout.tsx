@@ -32,15 +32,15 @@ const ApplyMode = () => (
   />
 )
 
-export default function RootLayout({ children }: React.PropsWithChildren) {
+export default function Layout({ children }: React.PropsWithChildren) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <>
       <head>
         <ApplyMode />
       </head>
       <body className={cn(font.className, "bg-background text-foreground")}>
         {children}
       </body>
-    </html>
+    </>
   )
 }

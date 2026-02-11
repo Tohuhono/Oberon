@@ -47,7 +47,7 @@
     "@tohuhono/puck-rich-text": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
-    "next": "^16.0.4",
+    "next": "^16.1.6",
     "recharts": "^3.5.0"
   },
   "peerDependencies": {

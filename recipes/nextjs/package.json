@@ -17,7 +17,7 @@
   "dependencies": {
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
-    "next": "^16.0.4",
+    "next": "^16.1.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "server-cli-only": "^0.3.2"

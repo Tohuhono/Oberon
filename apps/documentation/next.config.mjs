@@ -5,6 +5,7 @@ import nextra from "nextra"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  cleanDistDir: true,
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -15,7 +16,8 @@ const nextConfig = {
 }
 
 const withNextra = nextra({
-  // ... your Nextra config
+  defaultShowCopyCode: true,
+  readingTime: true,
 })
 
 export default withNextra(nextConfig)

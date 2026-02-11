@@ -1,0 +1,14 @@
+diff --git a/node_modules/nextra/dist/client/pages.js b/node_modules/nextra/dist/client/pages.js
+--- a/node_modules/nextra/dist/client/pages.js
++++ b/node_modules/nextra/dist/client/pages.js
+@@
+   const RouteToFilepath = await getRouteToFilepath(lang);
+   const pathname = pathSegments.join("/");
+   const decodedPath = decodeURIComponent(pathname);
+   const pagePath = RouteToFilepath[decodedPath];
++  if (!pagePath) {
++    notFound();
++  }
+   try {
+     return require(`private-next-content-dir/${lang && `${lang}/`}${pagePath}`);
+   } catch (error) {
