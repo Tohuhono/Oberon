@@ -1,5 +1,5 @@
 import type { SerializedEditorState } from "lexical"
-import type { ComponentConfig } from "@measured/puck"
+import type { ComponentConfig } from "@puckeditor/core"
 import { Render } from "./rich-text-editor/render-server"
 
 export type PuckRichTextProps = {

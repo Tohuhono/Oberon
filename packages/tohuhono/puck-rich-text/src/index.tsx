@@ -1,4 +1,4 @@
-import type { ComponentConfig } from "@measured/puck"
+import type { ComponentConfig } from "@puckeditor/core"
 import type { SerializedEditorState } from "lexical"
 
 import { Editor } from "./rich-text-editor/editor-client"

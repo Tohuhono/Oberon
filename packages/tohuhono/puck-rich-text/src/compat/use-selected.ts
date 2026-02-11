@@ -1,4 +1,4 @@
-import { usePuck } from "@measured/puck"
+import { usePuck } from "@puckeditor/core"
 
 export const useSelected = (componentId: string) => {
   const {

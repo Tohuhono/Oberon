@@ -1,5 +1,5 @@
 import { useRef, useSyncExternalStore } from "react"
-import { Config, Data } from "@measured/puck"
+import { Config, Data } from "@puckeditor/core"
 
 export const useLocalData = (path: string, config: Config) => {
   const componentKey = Object.keys(config.components).join("-")

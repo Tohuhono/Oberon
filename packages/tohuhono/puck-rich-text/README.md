@@ -35,7 +35,7 @@ In your Puck config:
 
 ```jsx
 // Puck.config.tsx
-import type { Config } from "@measured/puck"
+import type { Config } from "@puckeditor/core"
 import { PuckRichText, PuckRichTextProps } from "@tohuhono/puck-rich-text"
 
 export const config: Config<{
@@ -54,7 +54,7 @@ import
 
 ```jsx
 // Puck.config.tsx
-import type { Config } from "@measured/puck"
+import type { Config } from "@puckeditor/core"
 import { PuckRichText, PuckRichTextProps } from "@tohuhono/puck-rich-text/legacy"
 
 export const config: Config<{

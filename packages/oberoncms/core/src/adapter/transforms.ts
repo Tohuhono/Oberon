@@ -2,13 +2,13 @@
 // TODO raise issue to export separately to avoid client errors
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* ****************************************************
- * Start copy from @measured/puck
+ * Start copy from @puckeditor/core
  */
 import type {
   DefaultComponentProps,
   DefaultRootProps,
   Data,
-} from "@measured/puck"
+} from "@puckeditor/core"
 
 type PropTransform<
   Props extends DefaultComponentProps = DefaultComponentProps,
@@ -60,7 +60,7 @@ export async function transformProps<
   return afterPropTransforms
 }
 /* ****************************************************
- * End copy from @measured/puck
+ * End copy from @puckeditor/core
  */
 
 import type {

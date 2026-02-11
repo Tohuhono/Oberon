@@ -1,4 +1,4 @@
-import { Render } from "@measured/puck"
+import { Render } from "@puckeditor/core"
 import { config, initialData } from "@/puck.config"
 
 export async function generateMetadata() {

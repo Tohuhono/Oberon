@@ -6,7 +6,7 @@ import type {
   Data,
   DefaultComponentProps,
   DefaultComponents,
-} from "@measured/puck"
+} from "@puckeditor/core"
 import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
 import type { Awaitable } from "@auth/core/types"

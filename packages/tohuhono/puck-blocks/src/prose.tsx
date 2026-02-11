@@ -1,4 +1,4 @@
-import type { ComponentConfig } from "@measured/puck"
+import type { ComponentConfig } from "@puckeditor/core"
 import { Prose as ProseUI } from "@tohuhono/ui/prose"
 
 export const Prose = {
