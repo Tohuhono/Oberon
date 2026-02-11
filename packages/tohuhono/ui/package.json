@@ -83,7 +83,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "input-otp": "^1.4.2",
-    "next": "^16.0.4",
+    "next": "^16.1.6",
     "react-day-picker": "^9.11.2",
     "react-hook-form": "^7.66.1",
     "styled-jsx": "^5.1.7",

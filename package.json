@@ -74,6 +74,9 @@
   "pnpm": {
     "overrides": {
       "zod-validation-error": "^4.0.0"
+    },
+    "patchedDependencies": {
+      "nextra": "patches/nextra.patch"
     }
   }
 }

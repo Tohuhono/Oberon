@@ -21,7 +21,7 @@
     "@oberoncms/plugin-turso": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
-    "next": "^16.0.4",
+    "next": "^16.1.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "resend": "^6.5.2",

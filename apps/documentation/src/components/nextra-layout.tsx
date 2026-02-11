@@ -1,9 +1,12 @@
-import { Footer, Layout, Navbar } from "nextra-theme-docs"
+// Required for theme styles, previously was imported under the hood
+import "nextra-theme-docs/style.css"
+
+import { Layout, Navbar } from "nextra-theme-docs"
 import { Head } from "nextra/components"
 import { getPageMap } from "nextra/page-map"
 import Image from "next/image"
-// Required for theme styles, previously was imported under the hood
-import "nextra-theme-docs/style.css"
+
+import type { PropsWithChildren } from "react"
 export const metadata = {
   // ... your metadata API
   // https://nextjs.org/docs/app/building-your-application/optimizing/metadata
@@ -20,29 +23,15 @@ const navbar = (
     projectLink="https://github.com/tohuhono/oberon"
   />
 )
-const footer = (
-  <Footer className="flex-col items-center md:items-start">
-    MIT {new Date().getFullYear()} © Nextra.
-  </Footer>
-)
 
-export default async function RootLayout({
-  children,
-}: LayoutProps<"/[[...mdxPath]]">) {
+export async function NextraLayout({ children }: PropsWithChildren) {
   const siteUrl = "https://tohuhono.com"
 
   const defaultTitle = `OberonCMS - The NextJS Content Management System`
   const description = `A CMS for developers, designers and content creators. Get started quickly, build beautiful performant websites.`
 
   return (
-    <html
-      // Not required, but good for SEO
-      lang="en"
-      // Required to be set
-      dir="ltr"
-      // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
-      suppressHydrationWarning
-    >
+    <>
       <Head
         backgroundColor={{
           dark: "rgb(15, 23, 42)",
@@ -88,12 +77,11 @@ export default async function RootLayout({
           docsRepositoryBase="https://github.com/tohuhono/oberon/tree/main/apps/documentation"
           editLink="Edit this page on GitHub"
           sidebar={{ defaultMenuCollapseLevel: 1 }}
-          footer={footer}
           // ...Your additional theme config options
         >
           {children}
         </Layout>
       </body>
-    </html>
+    </>
   )
 }

@@ -1,0 +1,14 @@
+diff --git a/dist/client/pages.js b/dist/client/pages.js
+index bbc81607d54476412088283ffee1eed249479bab..30f1b2079d733fcb7622db1ede53cb6bb6a56730 100644
+--- a/dist/client/pages.js
++++ b/dist/client/pages.js
+@@ -7,6 +7,9 @@ async function importPage(pathSegments = [], lang = "") {
+   const pathname = pathSegments.join("/");
+   const decodedPath = decodeURIComponent(pathname);
+   const pagePath = RouteToFilepath[decodedPath];
++  if (!pagePath) {
++    notFound();
++  }
+   try {
+     return require(`private-next-content-dir/${lang && `${lang}/`}${pagePath}`);
+   } catch (error) {
