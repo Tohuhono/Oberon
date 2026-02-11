@@ -86,7 +86,6 @@
     "next": "^16.1.6",
     "react-day-picker": "^9.11.2",
     "react-hook-form": "^7.66.1",
-    "styled-jsx": "^5.1.7",
     "tailwindcss": "^4.1.17",
     "tailwindcss-animate": "^1.0.7"
   },
