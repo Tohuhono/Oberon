@@ -1,5 +1,5 @@
 // used by intellisense
 
-import { config } from "@tohuhono/dev/tailwind.config"
+import { config } from "@tohuhono/tailwind-config"
 
 export default config

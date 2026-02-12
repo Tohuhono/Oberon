@@ -1,5 +1,5 @@
 {
-  "extends": "@tohuhono/dev/base.ts.config.json",
+  "extends": "@tohuhono/typescript-config",
   "compilerOptions": {
     "rootDir": "./src",
     "jsx": "react-jsx"

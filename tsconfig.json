@@ -1,3 +1,3 @@
 {
-  "extends": "@tohuhono/dev/base.ts.config.json"
+  "extends": "@tohuhono/typescript-config"
 }

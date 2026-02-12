@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Next.js",
-  "extends": "@tohuhono/dev/base.ts.config.json",
+  "extends": "@tohuhono/typescript-config",
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
