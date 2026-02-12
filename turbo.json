@@ -4,6 +4,8 @@
   "globalDependencies": [
     "scripts/*",
     ".github/**",
+    "pnpm-workspace.yaml",
+    "pnpm-lock.yaml",
     "package.json",
     "tsconfig.json",
     ".env",
