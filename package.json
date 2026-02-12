@@ -82,7 +82,6 @@
     },
     "onlyBuiltDependencies": [
       "bufferutil",
-      "esbuild",
       "msgpackr-extract",
       "sharp",
       "unrs-resolver"
