@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "strict": true,
+    "target": "ES2022",
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["*.mjs", "*.d.ts"],
+  "exclude": ["node_modules"]
+}

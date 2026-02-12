@@ -1,4 +1,4 @@
-import { initConfig } from "@tohuhono/dev/vite.config"
+import { initConfig } from "@tohuhono/vite-config"
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js"
 
 const config = initConfig()

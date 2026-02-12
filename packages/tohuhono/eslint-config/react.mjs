@@ -3,7 +3,7 @@ import { defineConfig } from "eslint/config"
 import hooksPlugin from "eslint-plugin-react-hooks"
 import reactRecommended from "eslint-plugin-react"
 import globals from "globals"
-import baseConfig from "./config.mjs"
+import baseConfig from "./base.mjs"
 
 export default defineConfig(
   ...baseConfig,

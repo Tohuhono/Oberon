@@ -21,7 +21,10 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/typography": "^0.5.19",
-    "@tohuhono/dev": "workspace:*",
+    "@tohuhono/eslint-config": "workspace:*",
+    "@tohuhono/scripts": "workspace:*",
+    "@tohuhono/tailwind-config": "workspace:*",
+    "@tohuhono/typescript-config": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",

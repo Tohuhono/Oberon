@@ -1,3 +1,3 @@
-import { initConfig } from "@tohuhono/dev/vite.config"
+import { initConfig } from "@tohuhono/vite-config"
 
 export default initConfig(["src/*.{ts,tsx}", "src/**/*.{ts,tsx}"])

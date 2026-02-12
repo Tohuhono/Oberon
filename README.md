@@ -113,14 +113,30 @@ and apps:
 
 #### Utilities and Config
 
-- `packages/tohuhono/dev` -
-  [@tohuhono/dev](https://www.npmjs.com/package/@tohuhono/dev)
+- `packages/tohuhono/scripts` -
+  [@tohuhono/scripts](https://www.npmjs.com/package/@tohuhono/scripts)
 
-  Base config and scripts for building packages and apps.
-  - [TypeScript](https://www.typescriptlang.org/) for static type checking
-  - [ESLint](https://eslint.org/) for code linting
-  - [Prettier](https://prettier.io) for code formatting
-  - [Vite](https://vitejs.dev/) for bundling
+  Shared scripts for repository maintenance and package cleanup.
+
+- `packages/tohuhono/typescript-config` -
+  [@tohuhono/typescript-config](https://www.npmjs.com/package/@tohuhono/typescript-config)
+
+  Shared [TypeScript](https://www.typescriptlang.org/) base config.
+
+- `packages/tohuhono/eslint-config` -
+  [@tohuhono/eslint-config](https://www.npmjs.com/package/@tohuhono/eslint-config)
+
+  Shared [ESLint](https://eslint.org/) flat configs.
+
+- `packages/tohuhono/tailwind-config` -
+  [@tohuhono/tailwind-config](https://www.npmjs.com/package/@tohuhono/tailwind-config)
+
+  Shared [Tailwind CSS](https://tailwindcss.com/) config.
+
+- `packages/tohuhono/vite-config` -
+  [@tohuhono/vite-config](https://www.npmjs.com/package/@tohuhono/vite-config)
+
+  Shared [Vite](https://vitejs.dev/) library build config.
 
 - `packages/tohuhono/utils` -
   [@tohuhono/utils](https://www.npmjs.com/package/@tohuhono/utils)

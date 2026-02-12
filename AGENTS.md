@@ -11,6 +11,7 @@ This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps.
 
 - Plan mode required before edits. Keep plan ultra-concise (telegraphic style).
 - End each plan with unresolved questions list (if none, say “None”).
+- If you are unsure, ask for clarification.
 - Read `docs/CODESTYLE.md` before any edits. If uncertain, ask before changing
   code.
 - If an exception is required, document why and link to upstream issue/docs.
@@ -30,7 +31,16 @@ validated, instead perform the following tasks without further prompting:
   new changes.
 - Commit and push changes; the commit message should be concise; the changeset
   is the description.
-- Open a PR against `main` with auto-merge and squash
+- Open a PR against `main` and enable auto-merge with squash
+
+# Escalated commands
+
+Request require_escalated immediately and do not attempt sandbox execution first
+for commands that start with:
+
+- pnpm install
+- git push
+- gh
 
 # Follow-up docs
 
