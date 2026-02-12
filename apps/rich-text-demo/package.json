@@ -11,6 +11,9 @@
     "typegen": "next typegen",
     "tsc": "next typegen && tsc --pretty"
   },
+  "engines": {
+    "node": ">=24.13.0"
+  },
   "dependencies": {
     "@puckeditor/core": "^0.21.1",
     "@tohuhono/puck-rich-text": "workspace:*",
