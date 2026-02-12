@@ -79,13 +79,6 @@
     },
     "patchedDependencies": {
       "nextra": "patches/nextra.patch"
-    },
-    "onlyBuiltDependencies": [
-      "bufferutil",
-      "esbuild",
-      "msgpackr-extract",
-      "sharp",
-      "unrs-resolver"
-    ]
+    }
   }
 }

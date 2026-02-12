@@ -6,4 +6,9 @@ packages:
   - "packages/tohuhono/*"
   - "recipes/*"
 useNodeVersion: "24.13.0"
-
+allowBuilds:
+  bufferutil: true
+  esbuild@*: true
+  msgpackr-extract: true
+  sharp: true
+  unrs-resolver: true
