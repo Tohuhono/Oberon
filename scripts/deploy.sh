@@ -1,6 +1,9 @@
 #! /bin/bash
 set -e
 
+export ENABLE_EXPERIMENTAL_COREPACK="1"
+export NODE_OPTIONS="--experimental-require-module"
+
 if [[ "$OSTYPE" == "msys" ]] 
 then
 echo "vercel build requires unix shell (eg wsl2)"
