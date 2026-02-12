@@ -17,8 +17,8 @@ export function initRouteHandler(
       throw new ResponseError("Not Allowed")
     }
 
-    const image = (await req.formData()).get("image") as File | null
-    if (!image) {
+    const image = (await req.formData()).get("image")
+    if (!(image instanceof File)) {
       throw new OberonError("No image provided")
     }
 

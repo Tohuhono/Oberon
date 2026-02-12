@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "eslint/config";
+import { defineConfig } from "eslint/config"
 import nextPlugin from "@next/eslint-plugin-next"
 import globals from "globals"
 import reactConfig from "./react.config.mjs"

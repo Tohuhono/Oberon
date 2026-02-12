@@ -40,6 +40,15 @@ export function initAdapter({
   pluginAdapter: OberonPluginAdapter
   versions: PluginVersion[]
 }): OberonAdapter {
+  const isPageData = (value: unknown): value is PageData => {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      "content" in value &&
+      "root" in value
+    )
+  }
+
   const can: OberonAdapter["can"] = async (action, permission = "read") => {
     // Check unauthenticated first so we can do it outside of request context
     if (adapter.hasPermission({ action, permission })) {
@@ -289,9 +298,14 @@ export function initAdapter({
     publishPageData: async function (data: unknown) {
       const user = await whoWill("pages", "write")
       const { key, data: pageData } = PublishPageSchema.parse(data)
+
+      if (!isPageData(pageData)) {
+        throw new ResponseError("Invalid page data")
+      }
+
       await updatePageData({
         key,
-        data: pageData as PageData,
+        data: pageData,
         updatedBy: user.email,
       })
       return { message: `Successfully published ${key}` }

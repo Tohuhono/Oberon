@@ -1,6 +1,16 @@
 import { useRef, useSyncExternalStore } from "react"
 import { Config, Data } from "@puckeditor/core"
 
+function isData(value: unknown): value is Data {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "content" in value &&
+    Array.isArray(value.content) &&
+    "root" in value
+  )
+}
+
 export const useLocalData = (path: string, config: Config) => {
   const componentKey = Object.keys(config.components).join("-")
   const cachedSnapshot = useRef<{
@@ -24,7 +34,8 @@ export const useLocalData = (path: string, config: Config) => {
         return cached.data
       }
 
-      const parsed = localData ? (JSON.parse(localData) as Data) : null
+      const rawParsed = localData ? JSON.parse(localData) : null
+      const parsed = isData(rawParsed) ? rawParsed : null
       cachedSnapshot.current = { raw: localData, data: parsed }
 
       return parsed

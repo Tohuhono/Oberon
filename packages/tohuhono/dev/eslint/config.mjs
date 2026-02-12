@@ -8,6 +8,7 @@ import tseslint from "typescript-eslint"
 import prettierConfig from "eslint-config-prettier"
 import { FlatCompat } from "@eslint/eslintrc"
 import globals from "globals"
+import { tohuhonoCustomConfig } from "./custom-rules.mjs"
 
 // https://github.com/import-js/eslint-plugin-import/issues/2556
 // mimic CommonJS variables -- not needed if using CommonJS
@@ -38,6 +39,7 @@ export default defineConfig(
   ...tseslint.configs.strict,
   ...compat.plugins("import"),
   prettierConfig,
+  tohuhonoCustomConfig,
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "error",

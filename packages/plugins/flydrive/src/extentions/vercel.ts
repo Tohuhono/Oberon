@@ -1,6 +1,6 @@
 import { Buffer } from "node:buffer"
 import type { Readable } from "node:stream"
-import { ListFoldedBlobResult, copy, del, head, list, put } from "@vercel/blob"
+import { copy, del, head, list, put } from "@vercel/blob"
 import { DriveDirectory, DriveFile } from "flydrive"
 import type {
   DriverContract,
@@ -221,9 +221,10 @@ export class VercelBlobDriver implements DriverContract {
       const files = blobList.blobs.map(
         (blob) => new DriveFile(blob.pathname, this),
       )
-      const folders = (blobList as ListFoldedBlobResult).folders.map(
-        (folder) => new DriveDirectory(folder),
-      )
+      const folders =
+        "folders" in blobList
+          ? blobList.folders.map((folder) => new DriveDirectory(folder))
+          : []
       return {
         paginationToken: blobList.cursor,
         objects: [...files, ...folders],

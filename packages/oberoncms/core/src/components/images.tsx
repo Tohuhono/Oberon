@@ -3,8 +3,6 @@
 import { Fragment, startTransition, useOptimistic } from "react"
 
 import { filesize } from "filesize"
-import Link from "next/link"
-import { Route } from "next"
 import { Button } from "@tohuhono/ui/button"
 import { LocalDate } from "@tohuhono/ui/date"
 import Image from "next/image"
@@ -49,7 +47,7 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
         const pending = false
         return (
           <Fragment key={key}>
-            <Link href={url as Route} prefetch={false} target="_blank">
+            <a href={url} target="_blank" rel="noreferrer">
               <Image
                 src={url}
                 width={28}
@@ -57,7 +55,7 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
                 alt={alt}
                 className="m-0 lg:m-0"
               />
-            </Link>
+            </a>
 
             <div>{alt}</div>
             <div>{filesize(size)}</div>

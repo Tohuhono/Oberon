@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { PropsWithChildren } from "react"
-import { Route } from "next"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
 import { ThemeEditorMenu } from "@tohuhono/ui/theme"
 import useSWR from "swr"
@@ -26,9 +25,9 @@ export const Menu = ({
       <div className="flex justify-start gap-1">{children}</div>
       <div className="flex justify-center">
         {path ? (
-          <Link href={path as Route} target="_blank" prefetch={false}>
+          <a href={path} target="_blank" rel="noreferrer">
             {title || path}
-          </Link>
+          </a>
         ) : (
           title
         )}
