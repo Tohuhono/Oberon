@@ -1,31 +1,23 @@
 "use client"
 
-import * as React from "react"
-import * as SeparatorPrimitive from "@radix-ui/react-separator"
+import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
 
 import { cn } from "@tohuhono/utils"
+import type { ClassNameValue } from "tailwind-merge"
 
-const Separator = React.forwardRef<
-  React.ElementRef<typeof SeparatorPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
->(
-  (
-    { className, orientation = "horizontal", decorative = true, ...props },
-    ref,
-  ) => (
-    <SeparatorPrimitive.Root
-      ref={ref}
-      decorative={decorative}
-      orientation={orientation}
-      className={cn(
-        "bg-border shrink-0",
-        orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]",
-        className,
-      )}
-      {...props}
-    />
-  ),
+const Separator = ({
+  className,
+  orientation = "horizontal",
+  ...props
+}: SeparatorPrimitive.Props) => (
+  <SeparatorPrimitive
+    orientation={orientation}
+    className={cn(
+      "bg-border shrink-0 data-horizontal:h-[1px] data-horizontal:w-full data-vertical:h-full data-vertical:w-[1px]",
+      className as ClassNameValue,
+    )}
+    {...props}
+  />
 )
-Separator.displayName = SeparatorPrimitive.Root.displayName
 
 export { Separator }

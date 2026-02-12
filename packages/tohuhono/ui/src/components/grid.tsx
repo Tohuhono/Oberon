@@ -1,5 +1,6 @@
-import { cn } from "@tohuhono/utils"
 import type { PropsWithChildren } from "react"
+
+import { cn } from "@tohuhono/utils"
 
 export const Grid = ({
   children,

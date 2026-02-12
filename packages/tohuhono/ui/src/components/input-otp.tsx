@@ -1,14 +1,18 @@
 "use client"
 
-import * as React from "react"
-import { DashIcon } from "@radix-ui/react-icons"
+import {
+  ComponentPropsWithoutRef,
+  ElementRef,
+  forwardRef,
+  useContext,
+} from "react"
 import { OTPInput, OTPInputContext } from "input-otp"
 
 import { cn } from "@tohuhono/utils"
 
-const InputOTP = React.forwardRef<
-  React.ElementRef<typeof OTPInput>,
-  React.ComponentPropsWithoutRef<typeof OTPInput>
+const InputOTP = forwardRef<
+  ElementRef<typeof OTPInput>,
+  ComponentPropsWithoutRef<typeof OTPInput>
 >(({ className, containerClassName, ...props }, ref) => (
   <OTPInput
     ref={ref}
@@ -22,22 +26,21 @@ const InputOTP = React.forwardRef<
 ))
 InputOTP.displayName = "InputOTP"
 
-const InputOTPGroup = React.forwardRef<
-  React.ElementRef<"div">,
-  React.ComponentPropsWithoutRef<"div">
+const InputOTPGroup = forwardRef<
+  ElementRef<"div">,
+  ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("flex items-center", className)} {...props} />
 ))
 InputOTPGroup.displayName = "InputOTPGroup"
 
-const InputOTPSlot = React.forwardRef<
-  React.ElementRef<"div">,
-  React.ComponentPropsWithoutRef<"div"> & { index: number }
+const InputOTPSlot = forwardRef<
+  ElementRef<"div">,
+  ComponentPropsWithoutRef<"div"> & { index: number }
 >(({ index, className, ...props }, ref) => {
-  const inputOTPContext = React.useContext(OTPInputContext)
-  // TODO https://github.com/shadcn-ui/ui/issues/3585
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index]!
+  const inputOTPContext = useContext(OTPInputContext)
+  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {}
+
   return (
     <div
       ref={ref}
@@ -59,12 +62,20 @@ const InputOTPSlot = React.forwardRef<
 })
 InputOTPSlot.displayName = "InputOTPSlot"
 
-const InputOTPSeparator = React.forwardRef<
-  React.ElementRef<"div">,
-  React.ComponentPropsWithoutRef<"div">
+const InputOTPSeparator = forwardRef<
+  ElementRef<"div">,
+  ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
   <div ref={ref} role="separator" {...props}>
-    <DashIcon />
+    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+      <path
+        d="M6 12h12"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
   </div>
 ))
 InputOTPSeparator.displayName = "InputOTPSeparator"

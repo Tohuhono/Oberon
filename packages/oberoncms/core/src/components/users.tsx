@@ -142,7 +142,11 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
             <div className="pr-6">{email}</div>
             <Select
               disabled={pending}
-              onValueChange={(role: OberonUser["role"]) => changeRole(id, role)}
+              onValueChange={(nextRole: OberonUser["role"] | null) => {
+                if (nextRole) {
+                  return changeRole(id, nextRole)
+                }
+              }}
             >
               <SelectTrigger className="h-6 text-xs">
                 <SelectValue placeholder={role} />

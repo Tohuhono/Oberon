@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useMemo, type PropsWithChildren } from "react"
-import { Toaster, useToast } from "@tohuhono/ui/toast"
+import { Toaster, toast } from "@tohuhono/ui/toast"
 import type {
   OberonAdapter,
   OberonClientContext,
@@ -25,8 +25,6 @@ export const OberonClientProvider = ({
   serverActions: OberonServerActions
   context: OberonClientContext
 }>) => {
-  const { toast } = useToast()
-
   const actions = useMemo(() => {
     const unwrap: UnwrapServerAction = ([key, action]) => [
       key,
@@ -62,7 +60,7 @@ export const OberonClientProvider = ({
     return Object.fromEntries(
       Object.entries(serverActions).map(unwrap),
     ) as OberonAdapter
-  }, [serverActions, toast])
+  }, [serverActions])
 
   return (
     <ActionsContext.Provider value={actions}>
