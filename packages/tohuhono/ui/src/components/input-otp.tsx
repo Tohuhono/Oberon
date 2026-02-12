@@ -1,21 +1,16 @@
 "use client"
 
-import {
-  ComponentPropsWithoutRef,
-  ElementRef,
-  forwardRef,
-  useContext,
-} from "react"
+import { type ComponentPropsWithRef, useContext } from "react"
 import { OTPInput, OTPInputContext } from "input-otp"
 
 import { cn } from "@tohuhono/utils"
 
-const InputOTP = forwardRef<
-  ElementRef<typeof OTPInput>,
-  ComponentPropsWithoutRef<typeof OTPInput>
->(({ className, containerClassName, ...props }, ref) => (
+const InputOTP = ({
+  className,
+  containerClassName,
+  ...props
+}: ComponentPropsWithRef<typeof OTPInput>) => (
   <OTPInput
-    ref={ref}
     containerClassName={cn(
       "flex items-center gap-2 has-[:disabled]:opacity-50",
       containerClassName,
@@ -23,27 +18,25 @@ const InputOTP = forwardRef<
     className={cn("disabled:cursor-not-allowed", className)}
     {...props}
   />
-))
-InputOTP.displayName = "InputOTP"
+)
 
-const InputOTPGroup = forwardRef<
-  ElementRef<"div">,
-  ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex items-center", className)} {...props} />
-))
-InputOTPGroup.displayName = "InputOTPGroup"
+const InputOTPGroup = ({
+  className,
+  ...props
+}: ComponentPropsWithRef<"div">) => (
+  <div className={cn("flex items-center", className)} {...props} />
+)
 
-const InputOTPSlot = forwardRef<
-  ElementRef<"div">,
-  ComponentPropsWithoutRef<"div"> & { index: number }
->(({ index, className, ...props }, ref) => {
+const InputOTPSlot = ({
+  index,
+  className,
+  ...props
+}: ComponentPropsWithRef<"div"> & { index: number }) => {
   const inputOTPContext = useContext(OTPInputContext)
   const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {}
 
   return (
     <div
-      ref={ref}
       className={cn(
         "border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
         isActive && "ring-ring z-10 ring-1",
@@ -59,14 +52,10 @@ const InputOTPSlot = forwardRef<
       )}
     </div>
   )
-})
-InputOTPSlot.displayName = "InputOTPSlot"
+}
 
-const InputOTPSeparator = forwardRef<
-  ElementRef<"div">,
-  ComponentPropsWithoutRef<"div">
->(({ ...props }, ref) => (
-  <div ref={ref} role="separator" {...props}>
+const InputOTPSeparator = (props: ComponentPropsWithRef<"div">) => (
+  <div role="separator" {...props}>
     <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
       <path
         d="M6 12h12"
@@ -77,7 +66,6 @@ const InputOTPSeparator = forwardRef<
       />
     </svg>
   </div>
-))
-InputOTPSeparator.displayName = "InputOTPSeparator"
+)
 
 export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }

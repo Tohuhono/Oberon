@@ -4,7 +4,6 @@ import { Children, HTMLAttributes, isValidElement } from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 
 import { cn } from "@tohuhono/utils"
-import type { ClassNameValue } from "tailwind-merge"
 
 const DropdownMenu = MenuPrimitive.Root
 
@@ -44,7 +43,7 @@ const DropdownMenuSubTrigger = ({
     className={cn(
       "focus:bg-accent data-[popup-open]:bg-accent flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none",
       inset && "pl-8",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   >
@@ -77,7 +76,7 @@ const DropdownMenuSubContent = ({
   <DropdownMenuContent
     className={cn(
       "data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 min-w-[8rem]",
-      className as ClassNameValue,
+      className,
     )}
     align={align}
     alignOffset={alignOffset}
@@ -111,7 +110,7 @@ const DropdownMenuContent = ({
         className={cn(
           "bg-popover text-popover-foreground z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md",
           "data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-          className as ClassNameValue,
+          className,
         )}
         {...props}
       />
@@ -130,7 +129,7 @@ const DropdownMenuItem = ({
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
       inset && "pl-8",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
@@ -145,7 +144,7 @@ const DropdownMenuCheckboxItem = ({
   <MenuPrimitive.CheckboxItem
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
-      className as ClassNameValue,
+      className,
     )}
     checked={checked}
     {...props}
@@ -176,7 +175,7 @@ const DropdownMenuRadioItem = ({
   <MenuPrimitive.RadioItem
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   >
@@ -206,7 +205,7 @@ const DropdownMenuLabel = ({
     className={cn(
       "px-2 py-1.5 text-sm font-semibold",
       inset && "pl-8",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
@@ -217,7 +216,7 @@ const DropdownMenuSeparator = ({
   ...props
 }: MenuPrimitive.Separator.Props) => (
   <MenuPrimitive.Separator
-    className={cn("bg-muted -mx-1 my-1 h-px", className as ClassNameValue)}
+    className={cn("bg-muted -mx-1 my-1 h-px", className)}
     {...props}
   />
 )
@@ -228,10 +227,7 @@ const DropdownMenuShortcut = ({
 }: HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
-      className={cn(
-        "ml-auto text-xs tracking-widest opacity-60",
-        className as ClassNameValue,
-      )}
+      className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
       {...props}
     />
   )

@@ -1,11 +1,6 @@
 "use client"
 import {
-  type ButtonHTMLAttributes,
-  Children,
-  cloneElement,
-  type ComponentProps,
-  forwardRef,
-  isValidElement,
+  type ComponentPropsWithRef,
   type ReactElement,
   type ReactNode,
 } from "react"
@@ -44,40 +39,44 @@ const buttonVariants = cva(
   },
 )
 
-export interface ButtonProps
-  extends
-    Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-  children?: ReactNode
-}
+const Button = ({
+  className: classNameProp,
+  variant,
+  size,
+  asChild,
+  children,
+  ref,
+  ...props
+}: Omit<
+  ComponentPropsWithRef<typeof ButtonPrimitive>,
+  "children" | "className" | "render"
+> &
+  VariantProps<typeof buttonVariants> & {
+    className?: string
+  } & (
+    | { asChild: true; children: ReactElement }
+    | { asChild?: false; children?: ReactNode }
+  )) => {
+  const className = cn(
+    buttonVariants({ variant, size, className: classNameProp }),
+  )
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    const classes = cn(buttonVariants({ variant, size, className }))
-
-    if (asChild) {
-      const child = Children.only(children)
-      if (!isValidElement(child)) return null
-      const childElement = child as ReactElement<{ className?: string }>
-
-      return cloneElement(childElement, {
-        className: cn(classes, childElement.props.className),
-        ...props,
-      })
-    }
-
+  if (asChild) {
     return (
       <ButtonPrimitive
         ref={ref}
-        className={classes}
-        {...(props as ComponentProps<typeof ButtonPrimitive>)}
-      >
-        {children}
-      </ButtonPrimitive>
+        className={className}
+        render={children}
+        {...props}
+      />
     )
-  },
-)
-Button.displayName = "Button"
+  }
+
+  return (
+    <ButtonPrimitive ref={ref} className={className} {...props}>
+      {children}
+    </ButtonPrimitive>
+  )
+}
 
 export { Button, buttonVariants }

@@ -3,13 +3,12 @@
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 
 import { cn } from "@tohuhono/utils"
-import type { ClassNameValue } from "tailwind-merge"
 
 const Checkbox = ({ className, ...props }: CheckboxPrimitive.Root.Props) => (
   <CheckboxPrimitive.Root
     className={cn(
       "peer border-primary focus-visible:ring-ring data-[checked]:bg-primary data-[checked]:text-primary-foreground h-4 w-4 shrink-0 rounded-sm border shadow focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   >

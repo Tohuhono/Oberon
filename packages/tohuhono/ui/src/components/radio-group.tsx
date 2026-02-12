@@ -4,14 +4,10 @@ import { Radio as RadioPrimitive } from "@base-ui/react/radio"
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 
 import { cn } from "@tohuhono/utils"
-import type { ClassNameValue } from "tailwind-merge"
 
 const RadioGroup = ({ className, ...props }: RadioGroupPrimitive.Props) => {
   return (
-    <RadioGroupPrimitive
-      className={cn("grid gap-2", className as ClassNameValue)}
-      {...props}
-    />
+    <RadioGroupPrimitive className={cn("grid gap-2", className)} {...props} />
   )
 }
 
@@ -20,7 +16,7 @@ const RadioGroupItem = ({ className, ...props }: RadioPrimitive.Root.Props) => {
     <RadioPrimitive.Root
       className={cn(
         "border-primary text-primary focus-visible:ring-ring aspect-square h-4 w-4 rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
-        className as ClassNameValue,
+        className,
       )}
       {...props}
     >
