@@ -63,7 +63,7 @@
     "@lexical/utils": "0.38.2",
     "classnames": "^2.5.1",
     "dompurify": "^3.3.0",
-    "jsdom": "^26.1.0",
+    "jsdom": "^28.0.0",
     "lexical": "0.38.2",
     "lucide-react": "^0.554.0",
     "next": "^16.1.6"
