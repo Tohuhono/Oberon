@@ -1,6 +1,15 @@
 "use client"
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
+import {
+  type ButtonHTMLAttributes,
+  Children,
+  cloneElement,
+  type ComponentProps,
+  forwardRef,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from "react"
+import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@tohuhono/utils"
 
@@ -37,20 +46,35 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  children?: ReactNode
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+    const classes = cn(buttonVariants({ variant, size, className }))
+
+    if (asChild) {
+      const child = Children.only(children)
+      if (!isValidElement(child)) return null
+      const childElement = child as ReactElement<{ className?: string }>
+
+      return cloneElement(childElement, {
+        className: cn(classes, childElement.props.className),
+        ...props,
+      })
+    }
+
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+      <ButtonPrimitive
         ref={ref}
-        {...props}
-      />
+        className={classes}
+        {...(props as ComponentProps<typeof ButtonPrimitive>)}
+      >
+        {children}
+      </ButtonPrimitive>
     )
   },
 )

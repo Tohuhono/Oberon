@@ -8,7 +8,6 @@ import {
   HeadingTagType,
 } from "@lexical/rich-text"
 import { $setBlocksType } from "@lexical/selection"
-import { DropdownMenu } from "@radix-ui/react-dropdown-menu"
 import { $createParagraphNode, $getSelection, LexicalEditor } from "lexical"
 import {
   Pilcrow,
@@ -24,6 +23,7 @@ import {
   TextQuote,
 } from "lucide-react"
 import {
+  DropdownMenu,
   DropdownTrigger,
   DropdownContent,
   DropdownItem,

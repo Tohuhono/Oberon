@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useDebouncedCallback } from "use-debounce"
 import { cn } from "@tohuhono/utils"
-import { useToast } from "@tohuhono/ui/toast"
+import { toast } from "@tohuhono/ui/toast"
 import { useOberonActions } from "../hooks/use-oberon"
 
 const LoginSchema = z.object({
@@ -36,8 +36,6 @@ export function Login({
   const { signIn } = useOberonActions()
 
   const router = useRouter()
-
-  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),

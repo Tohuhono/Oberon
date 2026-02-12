@@ -1,4 +1,4 @@
-import * as Menu from "@radix-ui/react-dropdown-menu"
+import { Menu } from "@base-ui/react/menu"
 import { ComponentProps, PropsWithChildren } from "react"
 import { getClassNameFactory } from "../../../../compat/get-class-name-factory"
 import styles from "./styles.module.css"
@@ -31,9 +31,9 @@ export function DropdownTrigger({
 export function DropdownContent({ children }: PropsWithChildren) {
   return (
     <Menu.Portal>
-      <Menu.Content className={getClassName("content")}>
-        {children}
-      </Menu.Content>
+      <Menu.Positioner>
+        <Menu.Popup className={getClassName("content")}>{children}</Menu.Popup>
+      </Menu.Positioner>
     </Menu.Portal>
   )
 }
