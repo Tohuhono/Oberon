@@ -48,6 +48,10 @@ import { ElementFormatDropdown } from "./element-format-dropdown"
 
 const IS_APPLE = isApple()
 
+function isBlockFormat(value: string): value is keyof typeof blockFormats {
+  return Object.prototype.hasOwnProperty.call(blockFormats, value)
+}
+
 export function ToolbarPlugin({
   id,
   showToolbar,
@@ -113,15 +117,15 @@ export function ToolbarPlugin({
           const type = parentList
             ? parentList.getListType()
             : element.getListType()
-          if (type in blockFormats) {
-            setBlockType(type as keyof typeof blockFormats)
+          if (isBlockFormat(type)) {
+            setBlockType(type)
           }
         } else {
           const type = $isHeadingNode(element)
             ? element.getTag()
             : element.getType()
-          if (type in blockFormats) {
-            setBlockType(type as keyof typeof blockFormats)
+          if (isBlockFormat(type)) {
+            setBlockType(type)
           }
         }
       }

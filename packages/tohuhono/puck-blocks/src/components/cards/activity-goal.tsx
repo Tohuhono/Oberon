@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState, type CSSProperties } from "react"
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons"
 import { Bar, BarChart, ResponsiveContainer } from "recharts"
 
@@ -57,7 +57,11 @@ const data = [
 ]
 
 export function CardsActivityGoal() {
-  const [goal, setGoal] = React.useState(350)
+  const [goal, setGoal] = useState(350)
+  const barStyle: CSSProperties = {
+    fill: "hsl(var(--primary))",
+    opacity: 0.2,
+  }
 
   function onClick(adjustment: number) {
     setGoal(Math.max(200, Math.min(400, goal + adjustment)))
@@ -101,15 +105,7 @@ export function CardsActivityGoal() {
         <div className="my-3 h-[60px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
-              <Bar
-                dataKey="goal"
-                style={
-                  {
-                    fill: "hsl(var(--primary))",
-                    opacity: 0.2,
-                  } as React.CSSProperties
-                }
-              />
+              <Bar dataKey="goal" style={barStyle} />
             </BarChart>
           </ResponsiveContainer>
         </div>

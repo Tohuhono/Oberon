@@ -5,6 +5,15 @@ import { type OberonBaseAdapter, type PageData } from "@oberoncms/core"
 import { images, pages, site, users } from "./schema"
 import type { DatabaseClient } from "./client"
 
+function isPageData(value: unknown): value is PageData {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "content" in value &&
+    "root" in value
+  )
+}
+
 export const getDatabaseAdapter = (
   db: () => DatabaseClient,
 ): OberonBaseAdapter => ({
@@ -89,7 +98,9 @@ export const getDatabaseAdapter = (
       .where(eq(pages.key, key))
       .execute()
 
-    return (result[0]?.data as PageData) || null
+    const pageData = result[0]?.data
+
+    return isPageData(pageData) ? pageData : null
   },
   updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db()

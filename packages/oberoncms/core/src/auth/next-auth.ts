@@ -11,6 +11,33 @@ import {
 
 const masterEmail = process.env.MASTER_EMAIL || null
 
+function isOberonRole(value: unknown): value is OberonUser["role"] {
+  return value === "admin" || value === "user"
+}
+
+function getRoleFromUser(user: unknown): OberonUser["role"] | undefined {
+  if (typeof user !== "object" || user === null || !("role" in user)) {
+    return undefined
+  }
+
+  return isOberonRole(user.role) ? user.role : undefined
+}
+
+function isOberonUser(user: unknown): user is OberonUser {
+  if (typeof user !== "object" || user === null) {
+    return false
+  }
+
+  return (
+    "id" in user &&
+    typeof user.id === "string" &&
+    "email" in user &&
+    typeof user.email === "string" &&
+    "role" in user &&
+    isOberonRole(user.role)
+  )
+}
+
 const withCallback = (url: string) => {
   const withCallback = new URL(url)
 
@@ -95,8 +122,10 @@ export const authPlugin: OberonPlugin = (adapter) => {
       jwt({ token, user }) {
         if (user) {
           const role =
-            user.email === masterEmail ? "admin" : (user as OberonUser).role
-          token.role = role
+            user.email === masterEmail ? "admin" : getRoleFromUser(user)
+          if (role) {
+            token.role = role
+          }
         }
         return token
       },
@@ -117,8 +146,9 @@ export const authPlugin: OberonPlugin = (adapter) => {
     adapter: {
       getCurrentUser: async () => {
         const session = await nextAuth.auth()
+        const user = session?.user
 
-        return (session?.user as OberonUser) || null
+        return isOberonUser(user) ? user : null
       },
       signOut: async () => {
         await nextAuth.signOut()

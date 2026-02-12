@@ -4,27 +4,23 @@
 /* ****************************************************
  * Start copy from @puckeditor/core
  */
-import type {
-  DefaultComponentProps,
-  DefaultRootProps,
-  Data,
-} from "@puckeditor/core"
+import type { DefaultComponentProps, Data } from "@puckeditor/core"
 
 type PropTransform<
   Props extends DefaultComponentProps = DefaultComponentProps,
-  RootProps extends DefaultRootProps = DefaultRootProps,
 > = Partial<
   {
     [ComponentName in keyof Props]: (
       props: Props[ComponentName] & { [key: string]: any },
     ) => Props[ComponentName]
-  } & { root: (props: RootProps & { [key: string]: any }) => RootProps }
+  } & {
+    root: (props: Data["root"] & { [key: string]: any }) => Data["root"]
+  }
 >
 
 export async function transformProps<
   Props extends DefaultComponentProps = DefaultComponentProps,
-  RootProps extends DefaultRootProps = DefaultRootProps,
->(data: Data, propTransforms: PropTransform<Props, RootProps>): Promise<Data> {
+>(data: Data, propTransforms: PropTransform<Props>): Promise<Data> {
   const mapItem = async (item: any) => {
     if (propTransforms[item.type]) {
       return {
@@ -37,7 +33,7 @@ export async function transformProps<
   }
 
   const root = propTransforms["root"]
-    ? propTransforms["root"](data.root as RootProps)
+    ? propTransforms["root"](data.root)
     : data.root
 
   const afterPropTransforms: Data = {

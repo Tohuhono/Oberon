@@ -11,6 +11,9 @@ This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps.
 
 - Plan mode required before edits. Keep plan ultra-concise (telegraphic style).
 - End each plan with unresolved questions list (if none, say “None”).
+- Read `docs/CODESTYLE.md` before any edits. If uncertain, ask before changing
+  code.
+- If an exception is required, document why and link to upstream issue/docs.
 - Validate with `pnpm check`; iterate until warnings/errors are resolved.
 - Validate with `pnpm build`; iterate until warnings/errors are resolved.
 - Create changeset

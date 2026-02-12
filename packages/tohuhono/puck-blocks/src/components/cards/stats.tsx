@@ -1,3 +1,4 @@
+import { type CSSProperties } from "react"
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer } from "recharts"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@tohuhono/ui/card"
@@ -38,6 +39,14 @@ const data = [
 ]
 
 export function CardsStats() {
+  const revenueLineStyle: CSSProperties = {
+    stroke: "hsl(var(--primary))",
+  }
+  const subscriptionBarStyle: CSSProperties = {
+    fill: "hsl(var(--primary))",
+    opacity: 1,
+  }
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
       <Card>
@@ -68,11 +77,7 @@ export function CardsStats() {
                     r: 6,
                     style: { fill: "hsl(var(--primary))", opacity: 0.25 },
                   }}
-                  style={
-                    {
-                      stroke: "hsl(var(--primary))",
-                    } as React.CSSProperties
-                  }
+                  style={revenueLineStyle}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -91,15 +96,7 @@ export function CardsStats() {
           <div className="mt-4 h-[80px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
-                <Bar
-                  dataKey="subscription"
-                  style={
-                    {
-                      fill: "hsl(var(--primary))",
-                      opacity: 1,
-                    } as React.CSSProperties
-                  }
-                />
+                <Bar dataKey="subscription" style={subscriptionBarStyle} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -1,3 +1,4 @@
+import { type CSSProperties } from "react"
 import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts"
 
 import {
@@ -40,6 +41,14 @@ const data = [
 ]
 
 export function CardsMetric() {
+  const averageLineStyle: CSSProperties = {
+    stroke: "hsl(var(--primary))",
+    opacity: 0.25,
+  }
+  const todayLineStyle: CSSProperties = {
+    stroke: "hsl(var(--primary))",
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -98,12 +107,7 @@ export function CardsMetric() {
                   r: 6,
                   style: { fill: "hsl(var(--primary))", opacity: 0.25 },
                 }}
-                style={
-                  {
-                    stroke: "hsl(var(--primary))",
-                    opacity: 0.25,
-                  } as React.CSSProperties
-                }
+                style={averageLineStyle}
               />
               <Line
                 type="monotone"
@@ -113,11 +117,7 @@ export function CardsMetric() {
                   r: 8,
                   style: { fill: "hsl(var(--primary))" },
                 }}
-                style={
-                  {
-                    stroke: "hsl(var(--primary))",
-                  } as React.CSSProperties
-                }
+                style={todayLineStyle}
               />
             </LineChart>
           </ResponsiveContainer>

@@ -16,7 +16,7 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
-    "tsc": "tsc --pretty"
+    "tsc": "tsc --pretty && tsc -p tsconfig.configs.json --pretty"
   },
   "type": "module",
   "files": [

@@ -9,6 +9,10 @@ import {
   verificationTokens,
 } from "./schema/next-auth-schema"
 
+function isLowercaseString(value: string): value is Lowercase<string> {
+  return value.toLowerCase() === value
+}
+
 export const getAuthAdapter = (
   db: () => DatabaseClient,
 ): OberonAuthAdapter => ({
@@ -72,12 +76,17 @@ export const getAuthAdapter = (
       .values(rawAccount)
       .returning()
       .get()
+    const tokenType =
+      typeof updatedAccount.token_type === "string" &&
+      isLowercaseString(updatedAccount.token_type)
+        ? updatedAccount.token_type
+        : undefined
 
     const account = {
       ...updatedAccount,
       type: updatedAccount.type,
       access_token: updatedAccount.access_token ?? undefined,
-      token_type: (updatedAccount.token_type as Lowercase<string>) ?? undefined,
+      token_type: tokenType,
       id_token: updatedAccount.id_token ?? undefined,
       refresh_token: updatedAccount.refresh_token ?? undefined,
       scope: updatedAccount.scope ?? undefined,

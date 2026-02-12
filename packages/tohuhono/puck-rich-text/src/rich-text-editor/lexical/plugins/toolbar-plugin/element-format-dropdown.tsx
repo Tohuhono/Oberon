@@ -84,21 +84,21 @@ export function ElementFormatDropdown({
       </DropdownTrigger>
 
       <DropdownContent>
-        {Object.keys(ELEMENT_FORMAT_OPTIONS).map((key) => {
-          const { Icon, IconRTL, name, command } =
-            ELEMENT_FORMAT_OPTIONS[key as keyof typeof ELEMENT_FORMAT_OPTIONS]
-          return (
-            <DropdownItem
-              key={key}
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, command)
-              }}
-            >
-              {isRTL ? <IconRTL size={16} /> : <Icon size={16} />}
-              <span style={{ marginLeft: "4px" }}>{name}</span>
-            </DropdownItem>
-          )
-        })}
+        {Object.entries(ELEMENT_FORMAT_OPTIONS).map(
+          ([key, { Icon, IconRTL, name, command }]) => {
+            return (
+              <DropdownItem
+                key={key}
+                onClick={() => {
+                  editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, command)
+                }}
+              >
+                {isRTL ? <IconRTL size={16} /> : <Icon size={16} />}
+                <span style={{ marginLeft: "4px" }}>{name}</span>
+              </DropdownItem>
+            )
+          },
+        )}
       </DropdownContent>
     </DropdownMenu>
   )
