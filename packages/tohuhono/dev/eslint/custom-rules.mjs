@@ -53,6 +53,6 @@ export const tohuhonoCustomConfig = defineConfig({
   },
   rules: {
     "@typescript-eslint/consistent-type-assertions": "off",
-    "tohuhono/no-type-assertion-except-object-keys": ["warn"],
+    "tohuhono/no-type-assertion-except-object-keys": ["error"],
   },
 })

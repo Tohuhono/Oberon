@@ -16,9 +16,11 @@
 - Minimal typing: Prefer inference and structural typing; add explicit types
   only when they improve correctness or readability. Don’t use as (or extra type
   aliases) to silence errors; fix the source type instead.
-- When explicit types are needed, use existing exported library/parser types
-  instead of ad-hoc local type shapes.
-- Prefer implicit, inline types
+- Prefer implicit types
+- Use existing exported library/parser types instead of ad-hoc local type
+  shapes.
+- For function props, prefer inline parameter typing (including discriminated
+  unions).
 
 ## React
 

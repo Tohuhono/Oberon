@@ -3,7 +3,6 @@ import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/naviga
 import { cva } from "class-variance-authority"
 
 import { cn } from "@tohuhono/utils"
-import type { ClassNameValue } from "tailwind-merge"
 
 const NavigationMenu = ({
   className,
@@ -13,7 +12,7 @@ const NavigationMenu = ({
   <NavigationMenuPrimitive.Root
     className={cn(
       "bg-background grid w-full grid-flow-col items-center justify-between p-1",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   >
@@ -29,7 +28,7 @@ const NavigationMenuList = ({
   <NavigationMenuPrimitive.List
     className={cn(
       "group flex flex-1 list-none items-center justify-center gap-1",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
@@ -47,11 +46,7 @@ const NavigationMenuTrigger = ({
   ...props
 }: NavigationMenuPrimitive.Trigger.Props) => (
   <NavigationMenuPrimitive.Trigger
-    className={cn(
-      navigationMenuTriggerStyle(),
-      "group",
-      className as ClassNameValue,
-    )}
+    className={cn(navigationMenuTriggerStyle(), "group", className)}
     {...props}
   >
     {children}{" "}
@@ -79,7 +74,7 @@ const NavigationMenuContent = ({
   <NavigationMenuPrimitive.Content
     className={cn(
       "data-[starting-style]:animate-in data-[ending-style]:animate-out data-[starting-style]:fade-in data-[ending-style]:fade-out data-[activation-direction=right]:data-[starting-style]:slide-in-from-right-52 data-[activation-direction=left]:data-[starting-style]:slide-in-from-left-52 data-[activation-direction=right]:data-[ending-style]:slide-out-to-right-52 data-[activation-direction=left]:data-[ending-style]:slide-out-to-left-52 top-0 left-0 w-full md:absolute md:w-auto",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
@@ -95,7 +90,7 @@ const NavigationMenuViewport = ({
     <NavigationMenuPrimitive.Positioner
       className={cn(
         "absolute top-full left-0 z-50 flex justify-center",
-        className as ClassNameValue,
+        className,
       )}
       side="bottom"
       align="start"
@@ -121,7 +116,7 @@ const NavigationMenuIndicator = ({
   <NavigationMenuPrimitive.Icon
     className={cn(
       "data-[visible]:animate-in data-[hidden]:animate-out data-[hidden]:fade-out data-[visible]:fade-in top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   >

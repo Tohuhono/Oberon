@@ -1,10 +1,9 @@
 "use client"
 
-import { ElementRef, HTMLAttributes, forwardRef } from "react"
+import { type HTMLAttributes } from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 
 import { cn } from "@tohuhono/utils"
-import type { ClassNameValue } from "tailwind-merge"
 
 const Dialog = DialogPrimitive.Root
 
@@ -14,32 +13,30 @@ const DialogPortal = DialogPrimitive.Portal
 
 const DialogClose = DialogPrimitive.Close
 
-const DialogOverlay = forwardRef<
-  ElementRef<typeof DialogPrimitive.Backdrop>,
-  DialogPrimitive.Backdrop.Props
->(({ className, ...props }, ref) => (
+const DialogOverlay = ({
+  className,
+  ...props
+}: DialogPrimitive.Backdrop.Props) => (
   <DialogPrimitive.Backdrop
-    ref={ref}
     className={cn(
       "data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 fixed inset-0 z-50 bg-black/80",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
-))
-DialogOverlay.displayName = "DialogOverlay"
+)
 
-const DialogContent = forwardRef<
-  ElementRef<typeof DialogPrimitive.Popup>,
-  DialogPrimitive.Popup.Props
->(({ className, children, ...props }, ref) => (
+const DialogContent = ({
+  className,
+  children,
+  ...props
+}: DialogPrimitive.Popup.Props) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Popup
-      ref={ref}
       className={cn(
         "bg-background data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[closed]:slide-out-to-left-1/2 data-[closed]:slide-out-to-top-[48%] data-[open]:slide-in-from-left-1/2 data-[open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg duration-200 sm:rounded-lg",
-        className as ClassNameValue,
+        className,
       )}
       {...props}
     >
@@ -58,8 +55,7 @@ const DialogContent = forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Popup>
   </DialogPortal>
-))
-DialogContent.displayName = "DialogContent"
+)
 
 const DialogHeader = ({
   className,
@@ -68,12 +64,11 @@ const DialogHeader = ({
   <div
     className={cn(
       "flex flex-col space-y-1.5 text-center sm:text-left",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
 )
-DialogHeader.displayName = "DialogHeader"
 
 const DialogFooter = ({
   className,
@@ -82,39 +77,31 @@ const DialogFooter = ({
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
 )
-DialogFooter.displayName = "DialogFooter"
 
-const DialogTitle = forwardRef<
-  ElementRef<typeof DialogPrimitive.Title>,
-  DialogPrimitive.Title.Props
->(({ className, ...props }, ref) => (
+const DialogTitle = ({ className, ...props }: DialogPrimitive.Title.Props) => (
   <DialogPrimitive.Title
-    ref={ref}
     className={cn(
       "text-lg leading-none font-semibold tracking-tight",
-      className as ClassNameValue,
+      className,
     )}
     {...props}
   />
-))
-DialogTitle.displayName = "DialogTitle"
+)
 
-const DialogDescription = forwardRef<
-  ElementRef<typeof DialogPrimitive.Description>,
-  DialogPrimitive.Description.Props
->(({ className, ...props }, ref) => (
+const DialogDescription = ({
+  className,
+  ...props
+}: DialogPrimitive.Description.Props) => (
   <DialogPrimitive.Description
-    ref={ref}
-    className={cn("text-muted-foreground text-sm", className as ClassNameValue)}
+    className={cn("text-muted-foreground text-sm", className)}
     {...props}
   />
-))
-DialogDescription.displayName = "DialogDescription"
+)
 
 export {
   Dialog,

@@ -22,13 +22,26 @@ const toastVariants = cva(
   },
 )
 
+function getToastData(value: unknown): ToastData {
+  if (!value || typeof value !== "object") {
+    return {}
+  }
+
+  const variant = "variant" in value ? value.variant : undefined
+  if (variant === "default" || variant === "destructive") {
+    return { variant }
+  }
+
+  return {}
+}
+
 function ToastItems() {
   const { toasts } = ToastPrimitive.useToastManager()
 
   return (
     <>
       {toasts.map((toast) => {
-        const data = (toast.data ?? {}) as ToastData
+        const data = getToastData(toast.data)
 
         return (
           <ToastPrimitive.Root

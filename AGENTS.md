@@ -30,7 +30,7 @@ validated, instead perform the following tasks without further prompting:
   new changes.
 - Commit and push changes; the commit message should be concise; the changeset
   is the description.
-- Open a PR against `main`
+- Open a PR against `main` with auto-merge and squash
 
 # Follow-up docs
 
