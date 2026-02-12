@@ -3,6 +3,7 @@ set -e
 
 export ENABLE_EXPERIMENTAL_COREPACK="1"
 export NODE_OPTIONS="--experimental-require-module"
+export VERCEL_FORCE_NO_BUILD_CACHE="1"
 
 if [[ "$OSTYPE" == "msys" ]] 
 then
