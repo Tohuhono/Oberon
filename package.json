@@ -53,6 +53,7 @@
     "npm": "please-use-pnpm",
     "yarn": "please-use-pnpm"
   },
+  "dependencies": {},
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
     "@manypkg/cli": "^0.25.1",
