@@ -3,7 +3,6 @@ set -e
 
 export ENABLE_EXPERIMENTAL_COREPACK="1"
 export NODE_OPTIONS="--experimental-require-module"
-export VERCEL_FORCE_NO_BUILD_CACHE="1"
 
 if [[ "$OSTYPE" == "msys" ]] 
 then
@@ -39,6 +38,6 @@ else
 SCOPE_FLAG=
 fi
 
-pnpx vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
-pnpx vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
-pnpx vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
+pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
+pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
+pnpm exec vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
