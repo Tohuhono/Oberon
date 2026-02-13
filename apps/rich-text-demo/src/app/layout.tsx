@@ -1,4 +1,4 @@
-import "src/app/globals.css"
+import "@picocss/pico/css/pico.conditional.min.css"
 import "@puckeditor/core/puck.css"
 
 export default function RootLayout({

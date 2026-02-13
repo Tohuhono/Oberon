@@ -1,5 +1,0 @@
-@import "@tohuhono/tailwind-config";
-
-@source "..";
-@source "../../../../packages/tohuhono/puck-rich-text/src";
-@source "../../../../packages/tohuhono/ui/src";

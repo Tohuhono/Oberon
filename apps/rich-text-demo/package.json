@@ -12,6 +12,7 @@
     "tsc": "next typegen && tsc --pretty"
   },
   "dependencies": {
+    "@picocss/pico": "^2.1.1",
     "@puckeditor/core": "^0.21.1",
     "@tohuhono/puck-rich-text": "workspace:*",
     "next": "^16.1.6",
@@ -28,7 +29,6 @@
     "@types/node": "24.10.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
-    "postcss": "^8.5.6",
     "tailwindcss": "^4.1.17",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.9.3"

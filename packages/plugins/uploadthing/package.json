@@ -24,6 +24,7 @@
   "files": [
     "dist",
     "src",
+    "source.css",
     "scripts",
     "CHANGELOG*",
     "README*",
@@ -36,7 +37,8 @@
       "browser": "./dist/index.js",
       "node": "./dist/server.js"
     },
-    "./plugin": "./dist/plugin.js"
+    "./plugin": "./dist/plugin.js",
+    "./source.css": "./source.css"
   },
   "scripts": {
     "build": "vite build",

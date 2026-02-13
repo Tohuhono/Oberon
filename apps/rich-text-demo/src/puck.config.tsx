@@ -5,11 +5,7 @@ export const config: Config<{
   "Rich Text": PuckRichTextProps
 }> = {
   root: {
-    render: ({ children }) => (
-      <div className="flex justify-center pt-10">
-        <div className="prose">{children}</div>
-      </div>
-    ),
+    render: ({ children }) => <main className="pico">{children}</main>,
   },
   components: {
     "Rich Text": PuckRichText,

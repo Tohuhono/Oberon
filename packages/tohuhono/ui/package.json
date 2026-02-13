@@ -23,6 +23,7 @@
   "files": [
     "dist",
     "src",
+    "source.css",
     "scripts",
     "CHANGELOG*",
     "README*",
@@ -57,7 +58,8 @@
     "./textarea": "./dist/textarea.js",
     "./theme": "./dist/theme.js",
     "./toast": "./dist/toast.js",
-    "./tooltip": "./dist/tooltip.js"
+    "./tooltip": "./dist/tooltip.js",
+    "./source.css": "./source.css"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",

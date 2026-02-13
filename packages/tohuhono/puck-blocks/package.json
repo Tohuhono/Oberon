@@ -23,6 +23,7 @@
   "files": [
     "dist",
     "src",
+    "source.css",
     "scripts",
     "CHANGELOG*",
     "README*",
@@ -31,7 +32,8 @@
   "exports": {
     "./div": "./dist/div.js",
     "./example": "./dist/example.js",
-    "./prose": "./dist/prose.js"
+    "./prose": "./dist/prose.js",
+    "./source.css": "./source.css"
   },
   "scripts": {
     "build": "vite build",
