@@ -1,4 +1,3 @@
-import "@/globals.css"
 import { Noto_Sans } from "next/font/google"
 
 import { cn } from "@oberoncms/core"

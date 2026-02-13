@@ -1,6 +1,5 @@
 @import "@oberoncms/core/tailwind.css";
 
-@import "@oberoncms/plugin-uploadthing/source.css";
 @import "@tohuhono/puck-blocks/source.css";
 
 @source ".";

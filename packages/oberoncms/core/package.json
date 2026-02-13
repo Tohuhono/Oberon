@@ -21,6 +21,7 @@
   "files": [
     "dist",
     "src",
+    "tailwind.css",
     "scripts",
     "CHANGELOG*",
     "README*",
@@ -32,7 +33,8 @@
     "./adapter": "./dist/adapter.js",
     "./render": "./dist/render.js",
     "./editor": "./dist/editor.js",
-    "./provider": "./dist/provider.js"
+    "./provider": "./dist/provider.js",
+    "./tailwind.css": "./tailwind.css"
   },
   "scripts": {
     "build": "vite build",
@@ -47,6 +49,7 @@
     "@auth/core": "^0.37.4",
     "@hookform/resolvers": "^5.2.2",
     "@puckeditor/core": "^0.21.1",
+    "@tohuhono/tailwind-config": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "dotenv": "^17.2.3",
@@ -66,7 +69,6 @@
   "devDependencies": {
     "@tohuhono/eslint-config": "workspace:*",
     "@tohuhono/scripts": "workspace:*",
-    "@tohuhono/tailwind-config": "workspace:*",
     "@tohuhono/typescript-config": "workspace:*",
     "@tohuhono/vite-config": "workspace:*",
     "@types/node": "24.10.1",

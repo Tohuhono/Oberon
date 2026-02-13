@@ -9,6 +9,8 @@
 ## General
 
 - Avoid comments unless referencing an external bug or workaround
+- If lint or typescript exception is required, comment or link to upstream
+  issue/docs.
 
 ## TypeScript
 

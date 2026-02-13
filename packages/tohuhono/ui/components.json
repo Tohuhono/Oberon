@@ -4,7 +4,7 @@
   "rsc": true,
   "tsx": true,
   "tailwind": {
-    "config": "../../tailwind.config.js",
+    "config": "",
     "css": "../../recipes/nextjs/app/globals.css",
     "baseColor": "stone",
     "cssVariables": true
