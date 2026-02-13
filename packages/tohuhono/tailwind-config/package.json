@@ -11,18 +11,15 @@
   },
   "type": "module",
   "scripts": {
-    "lint": "eslint .",
-    "tsc": "tsc -p tsconfig.json --pretty"
+    "lint": "eslint ."
   },
   "exports": {
     ".": {
-      "types": "./config.d.ts",
-      "default": "./config.ts"
+      "default": "./index.css"
     }
   },
   "files": [
-    "config.ts",
-    "config.d.ts",
+    "index.css",
     "CHANGELOG*",
     "README*",
     "LICENSE*"
