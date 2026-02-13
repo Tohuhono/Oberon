@@ -14,9 +14,6 @@
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"
   },
-  "engines": {
-    "node": ">=24.13.0"
-  },
   "dependencies": {
     "@datacom-digital/ui-sample-components": "^0.3.3",
     "@oberoncms/core": "workspace:*",

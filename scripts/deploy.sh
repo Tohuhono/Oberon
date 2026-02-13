@@ -1,6 +1,9 @@
 #! /bin/bash
 set -e
 
+export ENABLE_EXPERIMENTAL_COREPACK="1"
+export NODE_OPTIONS="--experimental-require-module"
+
 if [[ "$OSTYPE" == "msys" ]] 
 then
 echo "vercel build requires unix shell (eg wsl2)"
@@ -35,6 +38,6 @@ else
 SCOPE_FLAG=
 fi
 
-pnpx vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
-pnpx vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
-pnpx vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
+pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
+pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
+pnpm exec vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
