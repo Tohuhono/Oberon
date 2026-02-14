@@ -16,8 +16,6 @@ pnpm install
 
 pnpm dev:oberon # Develop OberonCMS and all dependencies using the playground.
 
-pnpm dev:demo # Develop the demo app and all dependencies.
-
 pnpm dev:docs # Develop the documentation.
 
 pnpm tsc # Typecheck
