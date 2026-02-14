@@ -1,6 +1,6 @@
 import "server-cli-only"
 
-import sgMail from "@sendgrid/mail"
+import { setApiKey, send, ResponseError } from "@sendgrid/mail"
 import {
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonPlugin,
@@ -38,14 +38,14 @@ export const plugin: OberonPlugin = () => ({
         text: `Sign in with code\n\n${token}\n\n ${url} \n\n`,
       }
 
-      sgMail.setApiKey(SENDGRID_API_KEY)
+      setApiKey(SENDGRID_API_KEY)
 
       try {
-        await sgMail.send(msg)
+        await send(msg)
       } catch (error) {
         console.error(error)
 
-        if (error.response) {
+        if (error instanceof ResponseError) {
           console.error(error.response.body)
         }
       }

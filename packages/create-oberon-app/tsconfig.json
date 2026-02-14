@@ -1,8 +1,8 @@
 {
   "extends": "@tohuhono/typescript-config",
   "compilerOptions": {
-    "rootDir": "./src"
+    "rootDir": "."
   },
-  "include": ["src"],
+  "include": ["src", "plugins/**/*.ts"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.spec.tsx"]
 }
