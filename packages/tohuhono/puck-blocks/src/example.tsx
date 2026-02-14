@@ -1,5 +1,5 @@
-import { PuckRichText, PuckRichTextProps } from "@tohuhono/puck-rich-text"
 import type { OberonComponent, OberonConfig } from "@oberoncms/core"
+import type { ReactNode } from "react"
 import { Container } from "./blocks/container"
 import { Dashboard } from "./dynamic/dashboard"
 import { Welcome } from "./blocks/welcome"
@@ -57,12 +57,14 @@ const cards = {
   },
 }
 
-const Text: OberonComponent<PuckRichTextProps> = {
-  ...PuckRichText,
-  render: (props) => (
-    <div className="prose dark:prose-invert lg:prose-lg p-1">
-      {PuckRichText.render(props)}
-    </div>
+const Text: OberonComponent<{ body?: ReactNode }> = {
+  fields: {
+    body: {
+      type: "richtext",
+    },
+  },
+  render: ({ body }) => (
+    <div className="prose dark:prose-invert lg:prose-lg p-1">{body}</div>
   ),
 }
 

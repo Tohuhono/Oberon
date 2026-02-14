@@ -7,7 +7,6 @@
 @source "../../../packages/oberoncms/core/src";
 @source "../../../packages/tohuhono/ui/src";
 @source "../../../packages/tohuhono/puck-blocks/src";
-@source "../../../packages/tohuhono/puck-rich-text/src";
 
 @layer base {
   * {

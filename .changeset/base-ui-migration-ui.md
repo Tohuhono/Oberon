@@ -1,7 +1,6 @@
 ---
 "@tohuhono/ui": patch
 "@oberoncms/core": patch
-"@tohuhono/puck-rich-text": patch
 ---
 
 Migrate shared shadcn-based UI primitives from Radix component packages to Base

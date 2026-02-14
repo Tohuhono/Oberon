@@ -46,7 +46,6 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
-    "@tohuhono/puck-rich-text": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "next": "^16.1.6",

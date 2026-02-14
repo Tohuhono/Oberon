@@ -6,7 +6,6 @@
 "@tohuhono/vite-config": patch
 "@tohuhono/ui": patch
 "@tohuhono/utils": patch
-"@tohuhono/puck-rich-text": patch
 "@tohuhono/puck-blocks": patch
 "@oberoncms/core": patch
 "@oberoncms/sqlite": patch

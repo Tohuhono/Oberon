@@ -1,6 +1,5 @@
 ---
 "@oberoncms/plugin-vercel-postgres": patch
-"@tohuhono/puck-rich-text": patch
 "@tohuhono/puck-blocks": patch
 "@oberoncms/plugin-development": patch
 "@oberoncms/plugin-uploadthing": patch
@@ -11,7 +10,6 @@
 "@tohuhono/utils": patch
 "@oberoncms/plugin-pgsql": patch
 "@oberoncms/plugin-turso": patch
-"@tohuhono/dev": patch
 "@tohuhono/ui": patch
 "@oberon/playground": patch
 "@oberon/recipe-nextjs": patch
