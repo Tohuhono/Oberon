@@ -61,6 +61,7 @@ const Text: OberonComponent<{ body?: ReactNode }> = {
   fields: {
     body: {
       type: "richtext",
+      contentEditable: true,
     },
   },
   render: ({ body }) => (
@@ -86,14 +87,6 @@ export function withExamples(config: Partial<OberonConfig>) {
       Welcome,
       Container,
       Text,
-      RichText: {
-        fields: {
-          body: {
-            type: "richtext",
-          },
-        },
-        render: ({ body }) => body,
-      },
       Dashboard: {
         render: () => <Dashboard />,
       },
