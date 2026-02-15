@@ -1,5 +1,21 @@
 # @oberon/utils
 
+## 0.13.1
+
+### Patch Changes
+
+- 53f1409: Refresh workspace dependencies to latest available versions with pnpm
+  recursive update.
+
+  Notable upgrades requiring follow-up migration work:
+  - `flydrive` to v2
+  - `react-dropzone` to v15
+  - `@vercel/postgres` remains deprecated upstream
+
+  Stability pins retained:
+  - `eslint`/`@eslint/js` pinned to v9 for plugin compatibility
+  - `@types/node` pinned to `24.10.1` for current Node 24 usage
+
 ## 0.13.0
 
 ### Minor Changes
