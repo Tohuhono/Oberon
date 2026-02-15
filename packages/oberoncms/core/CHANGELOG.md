@@ -1,5 +1,89 @@
 # @oberoncms/core
 
+## 0.17.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+- 0c6f7a0: Implement mock adapter
+
+### Patch Changes
+
+- 8774704: Add a monorepo assertion-safety lint rule and remove type assertion
+  usage across non-UI packages.
+  - Added `@typescript-eslint/consistent-type-assertions` to shared ESLint
+    config to discourage `as`/angle-bracket assertions.
+  - Replaced non-UI assertion sites with structural typing, runtime guards, and
+    typed locals in core, sqlite, flydrive, puck-blocks, puck-rich-text, and
+    create-oberon-app.
+  - Kept behavior consistent while improving type correctness around server
+    action unwrapping, JSON parsing, and runtime value narrowing.
+
+- 10e7219: Migrate shared shadcn-based UI primitives from Radix component
+  packages to Base UI.
+  - Ported `avatar`, `button`, `checkbox`, `dialog`, `dropdown-menu`, `form`,
+    `input-otp`, `label`, `navigation-menu`, `popover`, `radio-group`,
+    `scroll-area`, `select`, `separator`, `switch`, `toast`, `tooltip`, and
+    related integrations to Base UI while preserving local styling/structure.
+  - Added compatibility shims for legacy `asChild` and `delayDuration` usage in
+    existing consumers.
+  - Updated UI package dependencies and applied a small core typing
+    compatibility update for select change handlers.
+  - Migrated the rich text toolbar dropdown menu internals from Radix to Base UI
+    while preserving the existing local styling pattern.
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
+  versions
+- 0054a4f: Cache `useLocalData` snapshots to prevent `useSyncExternalStore`
+  warnings.
+- a7653c1: Add package-level Tailwind source entrypoints and a published
+  `@oberoncms/core/tailwind.css` entrypoint for app-level composition without
+  optional package import failures.
+- 38b6272: Fix Next.js error handling helpers and align storage adapters with
+  updated driver contracts.
+- 3fc23f9: Migrate Puck dependencies and imports from `@measured/puck` to
+  `@puckeditor/core` and bump to the `0.21.x` line.
+
+  Aligned CSS and import paths with the new package namespace and validated
+  workspace check/build after migration.
+
+- 1dfe98b: Silence dotenv loading output in the core adapter and tidy the pgsql
+  init script.
+- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package
+  devDependencies. Also includes related fixes:
+  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground,
+    rich-text-demo and recipe-nextjs.
+  - Remove `autoprefixer` devDependency entries from the affected packages.
+  - ESLint flat-config fixes (avoid spreading plugin exports; add
+    `settings.react.version = "detect"`).
+  - Tailwind/PostCSS adjustments and replacement of unsupported
+    `@apply border-border` with explicit `border-color` CSS.
+
+  This is a small, non-breaking patch to clean up CSS build-time config and
+  linter config.
+
+- d51da69: Split shared repo configs into dedicated internal packages and
+  migrate all consumers:
+  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
+    those packages
+  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
+    tooling export
+  - modernize package `exports` maps with explicit `types`/`default` conditions
+  - simplify `@config/vite` to source export + typecheck-only workflow
+
+- Updated dependencies [10e7219]
+- Updated dependencies [62ead8b]
+- Updated dependencies [a7653c1]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [1daa573]
+- Updated dependencies [40a22ae]
+- Updated dependencies [8b774a8]
+- Updated dependencies [d51da69]
+- Updated dependencies [40a22ae]
+  - @tohuhono/ui@0.14.0
+  - @tohuhono/utils@0.13.0
+
 ## 0.16.0
 
 ### Minor Changes

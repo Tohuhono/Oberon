@@ -1,7 +1,7 @@
 {
   "name": "@config/eslint",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "Shared ESLint flat configs for @tohuhono and @oberoncms packages",

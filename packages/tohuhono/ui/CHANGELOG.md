@@ -1,5 +1,85 @@
 # @oberon/ui
 
+## 0.14.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+
+### Patch Changes
+
+- 10e7219: Migrate shared shadcn-based UI primitives from Radix component
+  packages to Base UI.
+  - Ported `avatar`, `button`, `checkbox`, `dialog`, `dropdown-menu`, `form`,
+    `input-otp`, `label`, `navigation-menu`, `popover`, `radio-group`,
+    `scroll-area`, `select`, `separator`, `switch`, `toast`, `tooltip`, and
+    related integrations to Base UI while preserving local styling/structure.
+  - Added compatibility shims for legacy `asChild` and `delayDuration` usage in
+    existing consumers.
+  - Updated UI package dependencies and applied a small core typing
+    compatibility update for select change handlers.
+  - Migrated the rich text toolbar dropdown menu internals from Radix to Base UI
+    while preserving the existing local styling pattern.
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
+  versions
+- a7653c1: Add package-level Tailwind source entrypoints and a published
+  `@oberoncms/core/tailwind.css` entrypoint for app-level composition without
+  optional package import failures.
+- 1daa573: Fix theme editor style injection to avoid passing non-boolean
+  `jsx`/`global` attributes to the DOM under Next.js 16 + Turbopack, and remove
+  the direct `styled-jsx` dependency from `@tohuhono/ui`.
+- 40a22ae: Adopt React 19 ref-as-prop patterns across UI components by removing
+  `forwardRef` wrappers.
+  - Replaced `forwardRef` usage in component wrappers with plain function
+    components.
+  - Updated component prop types to `ComponentPropsWithRef<...>` where refs
+    should be accepted.
+  - Kept runtime behavior and component structure intact while simplifying the
+    public API surface.
+
+- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package
+  devDependencies. Also includes related fixes:
+  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground,
+    rich-text-demo and recipe-nextjs.
+  - Remove `autoprefixer` devDependency entries from the affected packages.
+  - ESLint flat-config fixes (avoid spreading plugin exports; add
+    `settings.react.version = "detect"`).
+  - Tailwind/PostCSS adjustments and replacement of unsupported
+    `@apply border-border` with explicit `border-color` CSS.
+
+  This is a small, non-breaking patch to clean up CSS build-time config and
+  linter config.
+
+- d51da69: Split shared repo configs into dedicated internal packages and
+  migrate all consumers:
+  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
+    those packages
+  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
+    tooling export
+  - modernize package `exports` maps with explicit `types`/`default` conditions
+  - simplify `@config/vite` to source export + typecheck-only workflow
+
+- 40a22ae: Remove UI type assertions for Base UI class names and keep
+  type-safety intact.
+  - Replaced `as` assertions in `@tohuhono/ui` components with structural typing
+    and runtime guards.
+  - Updated button/form/toaster internals to avoid unsafe assertions while
+    preserving behavior.
+  - Enhanced `cn` in `@tohuhono/utils` to support state-based className
+    functions used by Base UI primitives.
+
+- Updated dependencies [62ead8b]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [d51da69]
+- Updated dependencies [40a22ae]
+  - @tohuhono/utils@0.13.0
+  - @config/scripts@0.1.1
+  - @config/eslint@0.1.1
+  - @config/typescript@0.1.1
+  - @config/vite@0.1.1
+
 ## 0.13.0
 
 ### Minor Changes

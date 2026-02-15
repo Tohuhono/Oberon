@@ -1,5 +1,52 @@
 # oberon-cms-example
 
+## 0.16.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+
+### Patch Changes
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed versions
+- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route prop
+  helpers.
+- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package devDependencies.
+  Also includes related fixes:
+  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground,
+    rich-text-demo and recipe-nextjs.
+  - Remove `autoprefixer` devDependency entries from the affected packages.
+  - ESLint flat-config fixes (avoid spreading plugin exports; add
+    `settings.react.version = "detect"`).
+  - Tailwind/PostCSS adjustments and replacement of unsupported
+    `@apply border-border` with explicit `border-color` CSS.
+
+  This is a small, non-breaking patch to clean up CSS build-time config and linter
+  config.
+
+- 1a4ce67: Remove the deprecated `@tohuhono/puck-rich-text` package and the
+  `rich-text-demo` app from the monorepo.
+
+  Also remove direct runtime/dependency references and switch `puck-blocks`
+  example text rendering to native `richtext` fields. Also remove stale CI
+  deploy/promote workflow jobs and quick-start references for the removed demo.
+
+- Updated dependencies [8774704]
+- Updated dependencies [10e7219]
+- Updated dependencies [62ead8b]
+- Updated dependencies [0054a4f]
+- Updated dependencies [1a4ce67]
+- Updated dependencies [a7653c1]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [38b6272]
+- Updated dependencies [3fc23f9]
+- Updated dependencies [1dfe98b]
+- Updated dependencies [8b774a8]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [d51da69]
+  - @oberoncms/core@0.17.0
+  - @oberoncms/plugin-development@0.7.0
+
 ## 0.15.1
 
 ### Patch Changes

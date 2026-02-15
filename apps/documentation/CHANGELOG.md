@@ -1,5 +1,39 @@
 # @oberon/docs
 
+## 0.11.2
+
+### Patch Changes
+
+- cb8481e: Add agent workflow and repository documentation notes.
+- 47984d0: Update agent workflow and repository guidance.
+- 2694e84: Handle non-MDX paths in the docs route to avoid Nextra import errors.
+- 2694e84: Avoid noisy module-not-found errors by short-circuiting Nextra page
+  imports when a route has no mapped MDX file.
+- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route
+  prop helpers.
+- 1a4ce67: Remove the deprecated `@tohuhono/puck-rich-text` package and the
+  `rich-text-demo` app from the monorepo.
+
+  Also remove direct runtime/dependency references and switch `puck-blocks`
+  example text rendering to native `richtext` fields. Also remove stale CI
+  deploy/promote workflow jobs and quick-start references for the removed demo.
+
+- Updated dependencies [8774704]
+- Updated dependencies [10e7219]
+- Updated dependencies [62ead8b]
+- Updated dependencies [0054a4f]
+- Updated dependencies [a7653c1]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [38b6272]
+- Updated dependencies [3fc23f9]
+- Updated dependencies [1dfe98b]
+- Updated dependencies [8b774a8]
+- Updated dependencies [1a4ce67]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [d51da69]
+  - @oberoncms/core@0.17.0
+  - @tohuhono/puck-blocks@0.13.0
+
 ## 0.11.1
 
 ### Patch Changes

@@ -1,5 +1,70 @@
 # @tohuhono/puck-blocks
 
+## 0.13.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+
+### Patch Changes
+
+- 8774704: Add a monorepo assertion-safety lint rule and remove type assertion
+  usage across non-UI packages.
+  - Added `@typescript-eslint/consistent-type-assertions` to shared ESLint
+    config to discourage `as`/angle-bracket assertions.
+  - Replaced non-UI assertion sites with structural typing, runtime guards, and
+    typed locals in core, sqlite, flydrive, puck-blocks, puck-rich-text, and
+    create-oberon-app.
+  - Kept behavior consistent while improving type correctness around server
+    action unwrapping, JSON parsing, and runtime value narrowing.
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
+  versions
+- a7653c1: Add package-level Tailwind source entrypoints and a published
+  `@oberoncms/core/tailwind.css` entrypoint for app-level composition without
+  optional package import failures.
+- 3fc23f9: Migrate Puck dependencies and imports from `@measured/puck` to
+  `@puckeditor/core` and bump to the `0.21.x` line.
+
+  Aligned CSS and import paths with the new package namespace and validated
+  workspace check/build after migration.
+
+- 1a4ce67: Remove the deprecated `@tohuhono/puck-rich-text` package and the
+  `rich-text-demo` app from the monorepo.
+
+  Also remove direct runtime/dependency references and switch `puck-blocks`
+  example text rendering to native `richtext` fields. Also remove stale CI
+  deploy/promote workflow jobs and quick-start references for the removed demo.
+
+- d51da69: Split shared repo configs into dedicated internal packages and
+  migrate all consumers:
+  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
+    those packages
+  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
+    tooling export
+  - modernize package `exports` maps with explicit `types`/`default` conditions
+  - simplify `@config/vite` to source export + typecheck-only workflow
+
+- Updated dependencies [8774704]
+- Updated dependencies [10e7219]
+- Updated dependencies [62ead8b]
+- Updated dependencies [0054a4f]
+- Updated dependencies [a7653c1]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [1daa573]
+- Updated dependencies [38b6272]
+- Updated dependencies [40a22ae]
+- Updated dependencies [3fc23f9]
+- Updated dependencies [1dfe98b]
+- Updated dependencies [8b774a8]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [d51da69]
+- Updated dependencies [40a22ae]
+  - @oberoncms/core@0.17.0
+  - @tohuhono/ui@0.14.0
+  - @tohuhono/utils@0.13.0
+
 ## 0.12.0
 
 ### Minor Changes

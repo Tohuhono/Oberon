@@ -1,5 +1,49 @@
 # @oberoncms/plugin-vercel-postgres
 
+## 0.12.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+
+### Patch Changes
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
+  versions
+- 1a4ce67: Include root `*.config.ts` files in package TypeScript configs so
+  config files are typechecked.
+
+  Also update drizzle config typing to the current `drizzle-kit` `dialect` field
+  to keep checks passing.
+
+- 38b6272: Fix Next.js error handling helpers and align storage adapters with
+  updated driver contracts.
+- d51da69: Split shared repo configs into dedicated internal packages and
+  migrate all consumers:
+  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
+    those packages
+  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
+    tooling export
+  - modernize package `exports` maps with explicit `types`/`default` conditions
+  - simplify `@config/vite` to source export + typecheck-only workflow
+
+- Updated dependencies [8774704]
+- Updated dependencies [10e7219]
+- Updated dependencies [62ead8b]
+- Updated dependencies [0054a4f]
+- Updated dependencies [1a4ce67]
+- Updated dependencies [a7653c1]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [38b6272]
+- Updated dependencies [3fc23f9]
+- Updated dependencies [1dfe98b]
+- Updated dependencies [8b774a8]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [d51da69]
+  - @oberoncms/core@0.17.0
+  - @oberoncms/plugin-pgsql@0.9.0
+
 ## 0.11.1
 
 ### Patch Changes

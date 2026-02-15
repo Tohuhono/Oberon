@@ -1,5 +1,41 @@
 # create-oberon-app
 
+## 0.9.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+
+### Patch Changes
+
+- 8774704: Add a monorepo assertion-safety lint rule and remove type assertion
+  usage across non-UI packages.
+  - Added `@typescript-eslint/consistent-type-assertions` to shared ESLint
+    config to discourage `as`/angle-bracket assertions.
+  - Replaced non-UI assertion sites with structural typing, runtime guards, and
+    typed locals in core, sqlite, flydrive, puck-blocks, puck-rich-text, and
+    create-oberon-app.
+  - Kept behavior consistent while improving type correctness around server
+    action unwrapping, JSON parsing, and runtime value narrowing.
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
+  versions
+- 1a4ce67: Include `plugins/**/*.ts` in `create-oberon-app` TypeScript config so
+  plugin templates are typechecked.
+
+  Also narrow unknown caught errors in the Sendgrid template to satisfy strict
+  typechecking.
+
+- d51da69: Split shared repo configs into dedicated internal packages and
+  migrate all consumers:
+  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
+    those packages
+  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
+    tooling export
+  - modernize package `exports` maps with explicit `types`/`default` conditions
+  - simplify `@config/vite` to source export + typecheck-only workflow
+
 ## 0.8.0
 
 ### Minor Changes
