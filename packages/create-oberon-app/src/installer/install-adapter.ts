@@ -18,10 +18,6 @@ export const databasePlugins = {
     label: "PostgreSQL",
     packageName: "@oberoncms/plugin-pgsql",
   },
-  "vercel-postgres": {
-    label: "Vercel Postgres",
-    packageName: "@oberoncms/plugin-vercel-postgres",
-  },
   custom: {
     label: "Custom",
     dependencies: ["@tohuhono/utils"],

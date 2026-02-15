@@ -86,11 +86,6 @@ and apps:
 
   A PostgreSQL database plugin for OberonCMS.
 
-- `packages/plugins/vercel-postgres` -
-  [@oberoncms/plugin-vercel-postgres](https://www.npmjs.com/package/@oberoncms/plugin-vercel-postgres)
-
-  A Vercel PostgreSQL database plugin for OberonCMS.
-
 - `packages/plugins/uploadthing` -
   [@oberoncms/plugin-uploadthing](https://www.npmjs.com/package/@oberoncms/plugin-uploadthing)
 

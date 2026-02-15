@@ -11,6 +11,10 @@ import type {
 } from "flydrive/types"
 
 export class VercelBlobDriver implements DriverContract {
+  bucket(_bucket: string): DriverContract {
+    return this
+  }
+
   /**
    * Return a boolean value indicating if the file exists
    * or not.

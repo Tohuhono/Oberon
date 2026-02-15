@@ -31,7 +31,7 @@
     "LICENSE*"
   ],
   "dependencies": {
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.1"
   },
   "peerDependencies": {
     "react": "^19.2.0",
@@ -43,11 +43,11 @@
     "@config/typescript": "workspace:*",
     "@config/vite": "workspace:*",
     "@types/node": "24.10.1",
-    "@types/react": "19.2.7",
+    "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "typescript": "5.9.3",
-    "vite": "^7.2.4"
+    "vite": "^7.3.1"
   }
 }
