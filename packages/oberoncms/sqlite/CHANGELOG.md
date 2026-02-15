@@ -1,5 +1,61 @@
 # @oberoncms/sqlite
 
+## 0.7.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+
+### Patch Changes
+
+- 8774704: Add a monorepo assertion-safety lint rule and remove type assertion
+  usage across non-UI packages.
+  - Added `@typescript-eslint/consistent-type-assertions` to shared ESLint
+    config to discourage `as`/angle-bracket assertions.
+  - Replaced non-UI assertion sites with structural typing, runtime guards, and
+    typed locals in core, sqlite, flydrive, puck-blocks, puck-rich-text, and
+    create-oberon-app.
+  - Kept behavior consistent while improving type correctness around server
+    action unwrapping, JSON parsing, and runtime value narrowing.
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
+  versions
+- 1a4ce67: Include root `*.config.ts` files in package TypeScript configs so
+  config files are typechecked.
+
+  Also update drizzle config typing to the current `drizzle-kit` `dialect` field
+  to keep checks passing.
+
+- 3fc23f9: Migrate Puck dependencies and imports from `@measured/puck` to
+  `@puckeditor/core` and bump to the `0.21.x` line.
+
+  Aligned CSS and import paths with the new package namespace and validated
+  workspace check/build after migration.
+
+- d51da69: Split shared repo configs into dedicated internal packages and
+  migrate all consumers:
+  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
+    those packages
+  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
+    tooling export
+  - modernize package `exports` maps with explicit `types`/`default` conditions
+  - simplify `@config/vite` to source export + typecheck-only workflow
+
+- Updated dependencies [8774704]
+- Updated dependencies [10e7219]
+- Updated dependencies [62ead8b]
+- Updated dependencies [0054a4f]
+- Updated dependencies [a7653c1]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [38b6272]
+- Updated dependencies [3fc23f9]
+- Updated dependencies [1dfe98b]
+- Updated dependencies [8b774a8]
+- Updated dependencies [0c6f7a0]
+- Updated dependencies [d51da69]
+  - @oberoncms/core@0.17.0
+
 ## 0.6.0
 
 ### Minor Changes

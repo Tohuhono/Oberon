@@ -1,5 +1,34 @@
 # @oberon/utils
 
+## 0.13.0
+
+### Minor Changes
+
+- 0c6f7a0: Bump minor package versions
+
+### Patch Changes
+
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
+  versions
+- d51da69: Split shared repo configs into dedicated internal packages and
+  migrate all consumers:
+  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
+    those packages
+  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
+    tooling export
+  - modernize package `exports` maps with explicit `types`/`default` conditions
+  - simplify `@config/vite` to source export + typecheck-only workflow
+
+- 40a22ae: Remove UI type assertions for Base UI class names and keep
+  type-safety intact.
+  - Replaced `as` assertions in `@tohuhono/ui` components with structural typing
+    and runtime guards.
+  - Updated button/form/toaster internals to avoid unsafe assertions while
+    preserving behavior.
+  - Enhanced `cn` in `@tohuhono/utils` to support state-based className
+    functions used by Base UI primitives.
+
 ## 0.12.0
 
 ### Minor Changes
