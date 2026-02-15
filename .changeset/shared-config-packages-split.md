@@ -1,12 +1,10 @@
 ---
-"@tohuhono/scripts": patch
-"@tohuhono/eslint-config": patch
-"@tohuhono/tailwind-config": patch
-"@tohuhono/typescript-config": patch
-"@tohuhono/vite-config": patch
+"@config/scripts": patch
+"@config/eslint": patch
+"@config/typescript": patch
+"@config/vite": patch
 "@tohuhono/ui": patch
 "@tohuhono/utils": patch
-"@tohuhono/puck-rich-text": patch
 "@tohuhono/puck-blocks": patch
 "@oberoncms/core": patch
 "@oberoncms/sqlite": patch
@@ -22,11 +20,10 @@
 Split shared repo configs into dedicated internal packages and migrate all
 consumers:
 
-- add `@tohuhono/eslint-config`, `@tohuhono/typescript-config`,
-  `@tohuhono/tailwind-config`, and `@tohuhono/vite-config`
+- add `@config/eslint`, `@config/typescript`, and `@config/vite`
 - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
   those packages
-- replace `@tohuhono/dev` with `@tohuhono/scripts` and keep only the `odt`
-  tooling export
+- replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt` tooling
+  export
 - modernize package `exports` maps with explicit `types`/`default` conditions
-- simplify `@tohuhono/vite-config` to source export + typecheck-only workflow
+- simplify `@config/vite` to source export + typecheck-only workflow

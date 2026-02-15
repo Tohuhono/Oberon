@@ -25,7 +25,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "oberoncms/flydrive"
+    "directory": "packages/plugins/flydrive"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -70,12 +70,11 @@
     }
   },
   "devDependencies": {
+    "@config/eslint": "workspace:*",
+    "@config/scripts": "workspace:*",
+    "@config/typescript": "workspace:*",
+    "@config/vite": "workspace:*",
     "@puckeditor/core": "^0.21.1",
-    "@tohuhono/eslint-config": "workspace:*",
-    "@tohuhono/scripts": "workspace:*",
-    "@tohuhono/tailwind-config": "workspace:*",
-    "@tohuhono/typescript-config": "workspace:*",
-    "@tohuhono/vite-config": "workspace:*",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@vercel/blob": "^2.0.0",

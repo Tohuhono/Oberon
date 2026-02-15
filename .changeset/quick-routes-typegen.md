@@ -1,7 +1,6 @@
 ---
 "@oberon/docs": patch
 "@oberon/playground": patch
-"@oberon/rich-text-demo": patch
 "@oberon/recipe-nextjs": patch
 ---
 

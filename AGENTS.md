@@ -44,6 +44,11 @@ for commands that start with:
 - git push
 - gh
 
+## Guardrails
+
+- Never use `--lockfile-only`; use plain `pnpm install` (it refreshes the
+  lockfile).
+
 # Follow-up docs
 
 - `docs/CODESTYLE.md` (coding style rules)

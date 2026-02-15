@@ -48,6 +48,7 @@
     "tsc": {
       "dependsOn": ["^build"]
     },
+    "//#tsc:root": {},
     "wait": {
       "cache": false
     },

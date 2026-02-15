@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "clean": "odt clean",
     "dev": "next dev --turbo",
     "lint": "eslint .",
     "typegen": "next typegen",

@@ -1,10 +1,8 @@
 ---
-"@tohuhono/dev": patch
 "@oberoncms/core": patch
 "@oberoncms/sqlite": patch
 "@oberoncms/plugin-flydrive": patch
 "@tohuhono/puck-blocks": patch
-"@tohuhono/puck-rich-text": patch
 "create-oberon-app": patch
 ---
 

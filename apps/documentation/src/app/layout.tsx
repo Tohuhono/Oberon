@@ -1,4 +1,4 @@
-import "@/global.css"
+import "./app.css"
 
 export default function RootLayout({ children }: React.PropsWithChildren) {
   return (

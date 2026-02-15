@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "packages/utils"
+    "directory": "packages/tohuhono/utils"
   },
   "type": "module",
   "scripts": {
@@ -26,7 +26,6 @@
   "files": [
     "dist",
     "src",
-    "scripts",
     "CHANGELOG*",
     "README*",
     "LICENSE*"
@@ -39,11 +38,10 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@tohuhono/eslint-config": "workspace:*",
-    "@tohuhono/scripts": "workspace:*",
-    "@tohuhono/tailwind-config": "workspace:*",
-    "@tohuhono/typescript-config": "workspace:*",
-    "@tohuhono/vite-config": "workspace:*",
+    "@config/eslint": "workspace:*",
+    "@config/scripts": "workspace:*",
+    "@config/typescript": "workspace:*",
+    "@config/vite": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",

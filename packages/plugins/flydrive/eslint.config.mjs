@@ -1,1 +1,1 @@
-export { default } from "@tohuhono/eslint-config/react"
+export { default } from "@config/eslint/react"

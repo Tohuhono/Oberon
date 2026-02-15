@@ -2,7 +2,6 @@
 "@tohuhono/ui": patch
 "@oberoncms/core": patch
 "@tohuhono/puck-blocks": patch
-"@tohuhono/puck-rich-text": patch
 "@oberoncms/plugin-uploadthing": patch
 ---
 

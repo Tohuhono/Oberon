@@ -5,7 +5,6 @@
 "@oberoncms/plugin-flydrive": patch
 "@oberoncms/plugin-turso": patch
 "@oberoncms/plugin-uploadthing": patch
-"@tohuhono/puck-rich-text": patch
 "@tohuhono/puck-blocks": patch
 ---
 

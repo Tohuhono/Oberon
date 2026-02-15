@@ -1,4 +1,3 @@
-@import "@tohuhono/tailwind-config";
+@import "@tohuhono/ui/tailwind.css";
 
-@import "@tohuhono/ui/source.css";
 @source "./dist";

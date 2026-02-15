@@ -1,1 +1,1 @@
-export { default } from "@tohuhono/eslint-config/next"
+export { default } from "@config/eslint/next"

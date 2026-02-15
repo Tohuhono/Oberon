@@ -16,11 +16,7 @@ pnpm install
 
 pnpm dev:oberon # Develop OberonCMS and all dependencies using the playground.
 
-pnpm dev:demo # Develop the demo app and all dependencies.
-
 pnpm dev:docs # Develop the documentation.
-
-pnpm dev:rich-text-demo # Develop the rich text demo app and all dependencies.
 
 pnpm tsc # Typecheck
 
@@ -53,11 +49,6 @@ and apps:
   Mostly used for local development, there is also a
   [deployment](https://playground.tohuhono.com) with access limited to core
   contributors.
-
-- `apps/rich-text-demo` - https://puck-rich-text.tohuhono.com
-
-  an app demoing
-  [puck-rich-text](https://www.npmjs.com/package/@tohuhono/puck-rich-text)
 
 ### Packages
 
@@ -113,28 +104,19 @@ and apps:
 
 #### Utilities and Config
 
-- `packages/tohuhono/scripts` -
-  [@tohuhono/scripts](https://www.npmjs.com/package/@tohuhono/scripts)
+- `config/scripts` - `@config/scripts` (private workspace package)
 
   Shared scripts for repository maintenance and package cleanup.
 
-- `packages/tohuhono/typescript-config` -
-  [@tohuhono/typescript-config](https://www.npmjs.com/package/@tohuhono/typescript-config)
+- `config/typescript` - `@config/typescript` (private workspace package)
 
   Shared [TypeScript](https://www.typescriptlang.org/) base config.
 
-- `packages/tohuhono/eslint-config` -
-  [@tohuhono/eslint-config](https://www.npmjs.com/package/@tohuhono/eslint-config)
+- `config/eslint` - `@config/eslint` (private workspace package)
 
   Shared [ESLint](https://eslint.org/) flat configs.
 
-- `packages/tohuhono/tailwind-config` -
-  [@tohuhono/tailwind-config](https://www.npmjs.com/package/@tohuhono/tailwind-config)
-
-  Shared [Tailwind CSS](https://tailwindcss.com/) config.
-
-- `packages/tohuhono/vite-config` -
-  [@tohuhono/vite-config](https://www.npmjs.com/package/@tohuhono/vite-config)
+- `config/vite` - `@config/vite` (private workspace package)
 
   Shared [Vite](https://vitejs.dev/) library build config.
 
@@ -152,11 +134,6 @@ and apps:
   dynamicaly loading and adjusting it.
 
 #### Puck components
-
-- `packages/tohuhono/puck-rich-text` -
-  [@tohuhono/puck-rich-text](https://www.npmjs.com/package/@tohuhono/puck-rich-text)
-
-  A puck component for rich text editing made for OberonCMS.
 
 - `packages/tohuhono/puck-blocks` -
   [@tohuhono/puck-blocks](https://www.npmjs.com/package/@tohuhono/puck-blocks)
