@@ -28,12 +28,11 @@
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
+    "@config/eslint": "workspace:*",
+    "@config/scripts": "workspace:*",
+    "@config/typescript": "workspace:*",
     "@next/bundle-analyzer": "^16.0.4",
     "@tailwindcss/typography": "^0.5.19",
-    "@tohuhono/eslint-config": "workspace:*",
-    "@tohuhono/scripts": "workspace:*",
-    "@tohuhono/tailwind-config": "workspace:*",
-    "@tohuhono/typescript-config": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",

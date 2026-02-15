@@ -1,5 +1,5 @@
 {
-  "extends": "@tohuhono/typescript-config",
+  "extends": "@config/typescript",
   "compilerOptions": {
     "rootDir": "."
   },

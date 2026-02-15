@@ -1,0 +1,5 @@
+@import "@tohuhono/ui/tailwind.css";
+
+@source ".";
+@source "../oberon";
+@source "../.oberon/tailwind.classes";

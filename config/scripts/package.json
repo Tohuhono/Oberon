@@ -1,5 +1,6 @@
 {
-  "name": "@tohuhono/scripts",
+  "name": "@config/scripts",
+  "private": true,
   "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
@@ -7,9 +8,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "packages/tohuhono/scripts"
+    "directory": "config/scripts"
   },
   "scripts": {
+    "clean": "odt clean",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
@@ -33,8 +35,8 @@
     "tsx": "^4.20.6"
   },
   "devDependencies": {
-    "@tohuhono/eslint-config": "workspace:*",
-    "@tohuhono/typescript-config": "workspace:*",
+    "@config/eslint": "workspace:*",
+    "@config/typescript": "workspace:*",
     "@types/node": "24.10.1",
     "eslint": "^9.39.1",
     "typescript": "5.9.3"

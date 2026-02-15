@@ -1,3 +1,3 @@
-import { initConfig } from "@tohuhono/vite-config"
+import { initConfig } from "@config/vite"
 
 export default initConfig()

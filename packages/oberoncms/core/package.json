@@ -15,14 +15,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "oberoncms/core"
+    "directory": "packages/oberoncms/core"
   },
   "type": "module",
   "files": [
     "dist",
     "src",
     "tailwind.css",
-    "scripts",
     "CHANGELOG*",
     "README*",
     "LICENSE*"
@@ -49,7 +48,6 @@
     "@auth/core": "^0.37.4",
     "@hookform/resolvers": "^5.2.2",
     "@puckeditor/core": "^0.21.1",
-    "@tohuhono/tailwind-config": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "dotenv": "^17.2.3",
@@ -67,10 +65,10 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@tohuhono/eslint-config": "workspace:*",
-    "@tohuhono/scripts": "workspace:*",
-    "@tohuhono/typescript-config": "workspace:*",
-    "@tohuhono/vite-config": "workspace:*",
+    "@config/eslint": "workspace:*",
+    "@config/scripts": "workspace:*",
+    "@config/typescript": "workspace:*",
+    "@config/vite": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",

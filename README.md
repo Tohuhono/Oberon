@@ -104,28 +104,19 @@ and apps:
 
 #### Utilities and Config
 
-- `packages/tohuhono/scripts` -
-  [@tohuhono/scripts](https://www.npmjs.com/package/@tohuhono/scripts)
+- `config/scripts` - `@config/scripts` (private workspace package)
 
   Shared scripts for repository maintenance and package cleanup.
 
-- `packages/tohuhono/typescript-config` -
-  [@tohuhono/typescript-config](https://www.npmjs.com/package/@tohuhono/typescript-config)
+- `config/typescript` - `@config/typescript` (private workspace package)
 
   Shared [TypeScript](https://www.typescriptlang.org/) base config.
 
-- `packages/tohuhono/eslint-config` -
-  [@tohuhono/eslint-config](https://www.npmjs.com/package/@tohuhono/eslint-config)
+- `config/eslint` - `@config/eslint` (private workspace package)
 
   Shared [ESLint](https://eslint.org/) flat configs.
 
-- `packages/tohuhono/tailwind-config` -
-  [@tohuhono/tailwind-config](https://www.npmjs.com/package/@tohuhono/tailwind-config)
-
-  Shared [Tailwind CSS](https://tailwindcss.com/) config.
-
-- `packages/tohuhono/vite-config` -
-  [@tohuhono/vite-config](https://www.npmjs.com/package/@tohuhono/vite-config)
+- `config/vite` - `@config/vite` (private workspace package)
 
   Shared [Vite](https://vitejs.dev/) library build config.
 

@@ -4,7 +4,7 @@
   "buildOnSave": false,
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDir": "${configDir}/src",
     "outDir": "${configDir}/dist",
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -26,6 +26,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["**/*.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

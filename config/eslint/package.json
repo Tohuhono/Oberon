@@ -1,5 +1,6 @@
 {
-  "name": "@tohuhono/eslint-config",
+  "name": "@config/eslint",
+  "private": true,
   "version": "0.1.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
@@ -7,10 +8,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "packages/tohuhono/eslint-config"
+    "directory": "config/eslint"
   },
   "type": "module",
   "scripts": {
+    "clean": "odt clean",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },

@@ -1,11 +1,12 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
+  "style": "base-vega",
+  "iconLibrary": "radix",
   "rsc": true,
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "../../recipes/nextjs/app/globals.css",
+    "css": "./tailwind.css",
     "baseColor": "stone",
     "cssVariables": true
   },

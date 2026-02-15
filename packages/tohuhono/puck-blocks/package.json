@@ -17,14 +17,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "puck/blocks"
+    "directory": "packages/tohuhono/puck-blocks"
   },
   "type": "module",
   "files": [
     "dist",
     "src",
     "source.css",
-    "scripts",
     "CHANGELOG*",
     "README*",
     "LICENSE*"
@@ -56,12 +55,10 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@config/eslint": "workspace:*",
+    "@config/scripts": "workspace:*",
+    "@config/vite": "workspace:*",
     "@puckeditor/core": "^0.21.1",
-    "@tohuhono/eslint-config": "workspace:*",
-    "@tohuhono/scripts": "workspace:*",
-    "@tohuhono/tailwind-config": "workspace:*",
-    "@tohuhono/typescript-config": "workspace:*",
-    "@tohuhono/vite-config": "workspace:*",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "eslint": "^9.39.1",

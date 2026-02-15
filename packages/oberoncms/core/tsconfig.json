@@ -1,9 +1,8 @@
 {
-  "extends": "@tohuhono/typescript-config",
+  "extends": "@config/typescript",
   "compilerOptions": {
-    "rootDir": "./src",
     "jsx": "react-jsx"
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.spec.tsx"]
+  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"]
 }
