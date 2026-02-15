@@ -1,8 +1,0 @@
-{
-  "extends": "@config/typescript",
-  "compilerOptions": {
-    "jsx": "react-jsx"
-  },
-  "include": ["src"],
-  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"]
-}

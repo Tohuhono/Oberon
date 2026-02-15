@@ -25,6 +25,6 @@
   ],
   "devDependencies": {
     "@config/eslint": "workspace:*",
-    "eslint": "^9.39.1"
+    "eslint": "^9.39.2"
   }
 }

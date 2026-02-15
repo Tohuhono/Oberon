@@ -48,10 +48,10 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.15",
-    "@libsql/core": "^0.16.0",
+    "@libsql/client": "^0.17.0",
+    "@libsql/core": "^0.17.0",
     "@oberoncms/core": "workspace:*",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.1",
     "server-cli-only": "^0.3.2"
   },
   "peerDependencies": {
@@ -66,12 +66,12 @@
     "@config/vite": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@types/node": "24.10.1",
-    "@types/react": "19.2.7",
+    "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "drizzle-kit": "^0.31.7",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "drizzle-kit": "^0.31.9",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "typescript": "5.9.3",
-    "vite": "^7.2.4"
+    "vite": "^7.3.1"
   }
 }

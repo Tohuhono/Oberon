@@ -48,7 +48,7 @@
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "next": "^16.1.6",
-    "recharts": "^3.5.0"
+    "recharts": "^3.7.0"
   },
   "peerDependencies": {
     "react": "^19.2.0",
@@ -59,12 +59,12 @@
     "@config/scripts": "workspace:*",
     "@config/vite": "workspace:*",
     "@puckeditor/core": "^0.21.1",
-    "@types/react": "19.2.7",
+    "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "^9.39.1",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "eslint": "^9.39.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "typescript": "5.9.3",
-    "vite": "^7.2.4"
+    "vite": "^7.3.1"
   }
 }

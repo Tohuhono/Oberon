@@ -19,23 +19,23 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "next": "^16.1.6",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "24.10.1",
-    "@types/react": "19.2.7",
+    "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "^9.39.1",
-    "eslint-config-next": "16.0.4",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.1.6",
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3"
   }
 }

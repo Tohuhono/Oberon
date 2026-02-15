@@ -9,12 +9,7 @@ export type Plugin = {
   dependencies?: string[]
 }
 
-export const databaseIds = [
-  "turso",
-  "pgsql",
-  "vercel-postgres",
-  "custom",
-] as const
+export const databaseIds = ["turso", "pgsql", "custom"] as const
 export type DatabasePlugin = (typeof databaseIds)[number]
 export const databasePlugins = {
   turso: {
@@ -24,10 +19,6 @@ export const databasePlugins = {
   pgsql: {
     label: "PostgreSQL",
     packageName: "@oberoncms/plugin-pgsql",
-  },
-  "vercel-postgres": {
-    label: "Vercel Postgres",
-    packageName: "@oberoncms/plugin-vercel-postgres",
   },
   custom: {
     label: "Custom",

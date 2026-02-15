@@ -48,6 +48,7 @@ for commands that start with:
 
 - Never use `--lockfile-only`; use plain `pnpm install` (it refreshes the
   lockfile).
+- Never use '-f' for rm; Try to remove without forcing.
 
 # Follow-up docs
 

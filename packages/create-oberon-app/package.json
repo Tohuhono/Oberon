@@ -31,11 +31,11 @@
   },
   "dependencies": {
     "@commander-js/extra-typings": "^14.0.0",
-    "commander": "^14.0.2",
+    "commander": "^14.0.3",
     "fast-glob": "^3.3.3",
     "prompts": "^2.4.2",
-    "validate-npm-package-name": "^7.0.0",
-    "zod": "^4.1.13"
+    "validate-npm-package-name": "^7.0.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@config/eslint": "workspace:*",
@@ -48,7 +48,6 @@
     "@oberoncms/plugin-pgsql": "workspace:*",
     "@oberoncms/plugin-turso": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
-    "@oberoncms/plugin-vercel-postgres": "workspace:*",
     "@sendgrid/mail": "8.1.6",
     "@tohuhono/utils": "workspace:*",
     "@types/ignore-walk": "^4.0.3",
@@ -57,9 +56,9 @@
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
     "ignore-walk": "^8.0.0",
-    "resend": "^6.5.2",
+    "resend": "^6.9.2",
     "server-cli-only": "^0.3.2",
     "typescript": "5.9.3",
-    "vite": "^7.2.4"
+    "vite": "^7.3.1"
   }
 }
