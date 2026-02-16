@@ -29,6 +29,9 @@
     "generate:recipes": "node scripts/generate.mjs",
     "prepublishOnly": "pnpm generate:recipes"
   },
+  "publishConfig": {
+    "provenance": true
+  },
   "dependencies": {
     "@commander-js/extra-typings": "^14.0.0",
     "commander": "^14.0.3",

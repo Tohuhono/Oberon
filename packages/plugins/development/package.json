@@ -39,6 +39,10 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "@libsql/client": "^0.17.0",
     "@libsql/core": "^0.17.0",

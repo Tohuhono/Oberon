@@ -48,6 +48,10 @@
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
     "@radix-ui/react-icons": "^1.3.2",
