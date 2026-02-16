@@ -1,5 +1,14 @@
 # @oberoncms/plugin-flydrive
 
+## 0.8.2
+
+### Patch Changes
+
+- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- Updated dependencies [35b86e7]
+  - @oberoncms/core@0.17.2
+
 ## 0.8.1
 
 ### Patch Changes
