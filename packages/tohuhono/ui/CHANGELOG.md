@@ -1,5 +1,14 @@
 # @oberon/ui
 
+## 0.14.2
+
+### Patch Changes
+
+- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- Updated dependencies [35b86e7]
+  - @tohuhono/utils@0.13.2
+
 ## 0.14.1
 
 ### Patch Changes
