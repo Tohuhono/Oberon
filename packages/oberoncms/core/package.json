@@ -44,6 +44,10 @@
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "@auth/core": "^0.37.4",
     "@hookform/resolvers": "^5.2.2",

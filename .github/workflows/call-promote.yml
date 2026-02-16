@@ -38,6 +38,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24.x"
+      - name: Use pnpm
+        uses: pnpm/action-setup@v4
       - name: Alias build to production
         run: |
-          npx vercel alias ${{ inputs.staging_url }} ${{ inputs.production_url }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+          pnpm dlx vercel alias ${{ inputs.staging_url }} ${{ inputs.production_url }} --token=${{ secrets.VERCEL_API_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}

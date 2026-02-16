@@ -30,6 +30,10 @@
     "README*",
     "LICENSE*"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "tailwind-merge": "^3.4.1"
   },

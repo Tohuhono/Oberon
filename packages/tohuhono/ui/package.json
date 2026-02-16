@@ -60,6 +60,10 @@
     "./tooltip": "./dist/tooltip.js",
     "./tailwind.css": "./tailwind.css"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "@config/eslint": "workspace:*",
