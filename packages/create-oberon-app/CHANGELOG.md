@@ -1,5 +1,38 @@
 # create-oberon-app
 
+## 0.10.0
+
+### Minor Changes
+
+- 53f1409: Remove the deprecated Vercel Postgres adapter from generated project
+  options.
+  - remove `@oberoncms/plugin-vercel-postgres` from scaffolder dependencies
+  - remove the `vercel-postgres` database choice from installer config
+
+### Patch Changes
+
+- 53f1409: Refresh workspace dependencies to latest available versions with pnpm
+  recursive update.
+
+  Notable upgrades requiring follow-up migration work:
+  - `flydrive` to v2
+  - `react-dropzone` to v15
+  - `@vercel/postgres` remains deprecated upstream
+
+  Stability pins retained:
+  - `eslint`/`@eslint/js` pinned to v9 for plugin compatibility
+  - `@types/node` pinned to `24.10.1` for current Node 24 usage
+
+- d78a3de: Migrate package publishing to npm trusted publishing with GitHub
+  OIDC.
+  - update release workflow permissions for OIDC token exchange
+  - remove static `NPM_TOKEN` usage from publish job
+  - enable npm provenance in CI and package publish metadata
+
+- d78a3de: Use pnpm-native command execution in repository automation.
+  - replace `npx turbo` with `pnpm exec turbo` in changed-package script
+  - replace workflow `npx vercel` usage with pnpm-based execution
+
 ## 0.9.0
 
 ### Minor Changes
