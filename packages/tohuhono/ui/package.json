@@ -6,7 +6,7 @@
   "description": "A UI library used by @tohuhono and @oberoncms packages",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Tohuhono/Oberon.git",
+    "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/tohuhono/ui"
   },
   "type": "module",

@@ -2,7 +2,11 @@
   "name": "create-oberon-app",
   "version": "0.10.0",
   "author": "Tohuhono ltd",
-  "repository": "tohuhono/oberon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon",
+    "directory": "packages/create-oberon-app"
+  },
   "bugs": "https://github.com/tohuhono/oberon",
   "homepage": "https://tohuhono.com/oberon",
   "license": "MIT",
