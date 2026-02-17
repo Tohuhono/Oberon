@@ -28,7 +28,7 @@ validated, instead perform the following tasks without further prompting:
 
 - Make sure main has all changes from remote
 - Checkout a new branch from main
-- Add all changes
+- Include all changes, not just files touched in the current task
 - Add or update [changeset](https://github.com/changesets/changesets) for any
   new changes.
 - Commit and push changes; the commit message should be concise; the changeset
