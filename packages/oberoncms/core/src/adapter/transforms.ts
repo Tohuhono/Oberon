@@ -1,63 +1,6 @@
-// TODO fix types here
-// TODO raise issue to export separately to avoid client errors
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* ****************************************************
- * Start copy from @puckeditor/core
- */
-import type { DefaultComponentProps, Data } from "@puckeditor/core"
+import { transformProps, type Data } from "@puckeditor/core"
 
-type PropTransform<
-  Props extends DefaultComponentProps = DefaultComponentProps,
-> = Partial<
-  {
-    [ComponentName in keyof Props]: (
-      props: Props[ComponentName] & { [key: string]: any },
-    ) => Props[ComponentName]
-  } & {
-    root: (props: Data["root"] & { [key: string]: any }) => Data["root"]
-  }
->
-
-export async function transformProps<
-  Props extends DefaultComponentProps = DefaultComponentProps,
->(data: Data, propTransforms: PropTransform<Props>): Promise<Data> {
-  const mapItem = async (item: any) => {
-    if (propTransforms[item.type]) {
-      return {
-        ...item,
-        props: await propTransforms[item.type]?.(item.props),
-      }
-    }
-
-    return item
-  }
-
-  const root = propTransforms["root"]
-    ? propTransforms["root"](data.root)
-    : data.root
-
-  const afterPropTransforms: Data = {
-    ...data,
-    root,
-    content: await Promise.all(data.content.map(mapItem)),
-    zones: await Object.keys(data.zones || {}).reduce(async (acc, zoneKey) => {
-      const zone = data.zones?.[zoneKey]
-      if (!zone) {
-        return acc
-      }
-
-      return {
-        ...acc,
-        [zoneKey]: await Promise.all(zone.map(mapItem)),
-      }
-    }, Promise.resolve({})),
-  }
-
-  return afterPropTransforms
-}
-/* ****************************************************
- * End copy from @puckeditor/core
- */
+type PropTransform = Parameters<typeof transformProps>[1]
 
 import type {
   OberonConfig,
@@ -86,7 +29,7 @@ async function applyTransform(
 
     await updatePageData({
       key,
-      data: await transformProps(data, transforms),
+      data: transformProps(data, transforms),
       updatedAt: new Date(),
       updatedBy: "migration",
     })
@@ -156,7 +99,7 @@ export function getTransforms(
       currentTransformVersions[componentKey] ?? latestTransform
 
     if (previousTransform < latestTransform) {
-      componentTransforms[componentKey] = (props) =>
+      componentTransforms[componentKey] = (props: Record<string, unknown>) =>
         transforms
           .slice(previousTransform)
           .reduce((accumulater, transform) => transform(accumulater), props)

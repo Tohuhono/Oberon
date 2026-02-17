@@ -7,10 +7,11 @@ Fix the next single issue; mark complete after PR merged.
 For each issue:
 
 - Follow plan mode workflow as a senior developer
+- Read architecture, codestyle, and conventions.
 - Review recent github issues, release notes and documentation for imported
   packages where relevant
-- Read and ensure alignment with architecture, codestyle, and conventions
-- Verify that the analysis is correct
+- Verify if the original analysis is correct, do a deep dive on the behaviour
+  because the original reviewer is sometimes wrong. Be critical.
 
 ---
 
@@ -33,18 +34,20 @@ For each issue:
       Per Shell-Validation pattern: validate at database read layer (2.1) rather
       than runtime checks
 
-- [ ] **1.5** Fix silent data loss in deletions -
+- [x] **1.5** Fix silent data loss in deletions -
       [Review #5](./critical-code-review.md#5-silent-data-loss-in-file-deletion)
       `packages/plugins/uploadthing/src/uploadthing/plugin.ts:14-18`
       `packages/plugins/flydrive/src/internal/plugin.ts`
 
-- [ ] **1.6** Fix DB connection pool leak -
+- [x] **1.6** ~~Fix DB connection pool leak~~ - **False positive**
       [Review #8](./critical-code-review.md#8-database-connection-pool-leak)
-      `packages/plugins/pgsql/src/db/client.ts`
+      `createRemoteClient()` is called once at module load; `db` is a singleton
+      via Node.js module caching. No leak exists.
 
-- [ ] **1.7** Fix async reduce type error -
+- [x] **1.7** Fix async reduce type error -
       [Review #6](./critical-code-review.md#6-broken-async-reduce---type-error)
-      `packages/oberoncms/core/src/adapter/transforms.ts:43-53`
+      Replaced local `transformProps` copy with upstream `@puckeditor/core`
+      export. Local copy had broken async reduce; upstream uses `walkTree`.
 
 - [ ] **1.8** Add migration concurrency limits -
       [Review #7](./critical-code-review.md#7-race-condition-on-migration-execution)
@@ -118,4 +121,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 4/25 complete (1 deferred to 2.1)
+**Progress**: 7/25 complete (1 deferred to 2.1, 1 false positive)
