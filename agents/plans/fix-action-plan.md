@@ -7,7 +7,9 @@ Fix the next single issue; mark complete after PR merged.
 For each issue:
 
 - Follow plan mode workflow as a senior developer
-- Verify analysis against recent documentation and monorepo context
+- Verify that the analysis is correct
+- Review recent github issues, release notes and documentation for imported
+  packages where relevant
 - Ensure alignment with architecture, codestyle, and conventions
 
 ---
@@ -18,7 +20,7 @@ For each issue:
       [Review #1](./critical-code-review.md#1-infinite-loop-can-hang-application)
       `packages/plugins/flydrive/src/internal/get-image-size.ts`
 
-- [ ] **1.2** Add memory limits to stream -
+- [x] **1.2** Add memory limits to stream -
       [Review #2](./critical-code-review.md#2-unbounded-memory-consumption-in-stream-processing)
       `packages/plugins/uploadthing/src/uploadthing/get-image-size.ts`
 
@@ -107,4 +109,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 1/24 complete
+**Progress**: 2/24 complete
