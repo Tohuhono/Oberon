@@ -5,5 +5,5 @@
     "rootDir": "."
   },
   "include": ["**/*.config.ts"],
-  "exclude": ["node_modules", "dist", ".next", "playwright.config.ts"]
+  "exclude": ["node_modules", "dist", ".next", "playwright.config.ts", "tests"]
 }

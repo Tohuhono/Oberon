@@ -20,6 +20,8 @@ coverage
 test/playwright/report
 test/playwright/results
 test/playwright/.cache
+tests/e2e/report
+tests/e2e/results
 test-results
 playwright-report
 playwright/.cache
