@@ -20,8 +20,7 @@
     "tsc": "tsc --pretty"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./promise-queue": "./dist/promise-queue.js"
+    ".": "./dist/index.js"
   },
   "files": [
     "dist",

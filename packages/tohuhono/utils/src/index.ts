@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react"
 import { ClassNameValue, twMerge } from "tailwind-merge"
 
-export * as promiseQueue from "./promise-queue"
+export { mapConcurrent } from "./map-concurrent"
 
 export type CNProps<T = unknown> = PropsWithChildren<T & { className?: string }>
 type ClassNameFactory<State> = (state: State) => ClassNameValue
