@@ -2,11 +2,10 @@
 
 > See [critical-code-review.md](./critical-code-review.md) for detailed analysis
 
-Fix the next single issue; mark complete after PR raised.
+Fix the next single issue; mark complete after PR merged.
 
 For each issue:
 
-- Fix one issue at a time, completing when PR is merged
 - Follow plan mode workflow as a senior developer
 - Verify analysis against recent documentation and monorepo context
 - Ensure alignment with architecture, codestyle, and conventions
@@ -107,20 +106,5 @@ For each issue:
 
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
-
----
-
-## Workflow
-
-After each fix:
-
-1. Write failing test
-2. Implement fix
-3. Verify test passes
-4. Run `pnpm check && pnpm build`
-5. Create changeset
-6. Check off item above
-
----
 
 **Progress**: 0/24 complete
