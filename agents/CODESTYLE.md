@@ -31,3 +31,13 @@
 ## Next.js
 
 - Next.js App Router conventions apply; keep server actions with `"use server"`
+
+## Validation
+
+Shell-Validation Pattern: Zod at the gates, Types in the streets.
+
+- Validate with Zod; infer types;
+- Parse, Don't Just Validate.
+- Fail Early and Loudly.
+- Avoid runtime validation checks in internal business logic to maximize
+  performance and minimize code clutter; favour improving static checking;
