@@ -3,5 +3,5 @@
 ---
 
 Fix a Node.js compatibility issue in the scaffolder by resolving template/plugin
-paths from `import.meta.url` instead of `import.meta.dirname`, preventing
-crashes on older Node 20.x versions during plugin selection.
+paths by documenting and enforcing a Node.js runtime requirement of 22+ in the
+package metadata and README.
