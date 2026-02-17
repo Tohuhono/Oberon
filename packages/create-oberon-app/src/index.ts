@@ -2,6 +2,7 @@
 
 import path from "path"
 import { execSync } from "child_process"
+import { fileURLToPath } from "url"
 import validateName from "validate-npm-package-name"
 
 import {
@@ -58,8 +59,9 @@ program
     const { appName, recipe, database, email, send, packageManager } =
       await promptOptions(_appName, options)
 
-    const templatePath = path.join(import.meta.dirname, "templates", recipe)
-    const pluginPath = path.join(import.meta.dirname, "plugins")
+    const cliDir = path.dirname(fileURLToPath(import.meta.url))
+    const templatePath = path.join(cliDir, "templates", recipe)
+    const pluginPath = path.join(cliDir, "plugins")
     const appPath = options.dir || path.join(process.cwd(), appName)
     const oberonPath = path.join(appPath, "oberon")
 
