@@ -1,7 +1,4 @@
-import path from "path"
 import { defineConfig, devices } from "@playwright/test"
-
-const root = path.resolve(__dirname, "../..")
 
 export default defineConfig({
   testDir: ".",
@@ -34,7 +31,6 @@ export default defineConfig({
   webServer: [
     {
       command: "pnpm start:oberon",
-      cwd: root,
       url: "http://localhost:3200",
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
@@ -47,7 +43,6 @@ export default defineConfig({
     },
     {
       command: "pnpm start:docs",
-      cwd: root,
       url: "http://localhost:3201",
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
