@@ -7,10 +7,10 @@ Fix the next single issue; mark complete after PR merged.
 For each issue:
 
 - Follow plan mode workflow as a senior developer
-- Verify that the analysis is correct
 - Review recent github issues, release notes and documentation for imported
   packages where relevant
-- Ensure alignment with architecture, codestyle, and conventions
+- Read and ensure alignment with architecture, codestyle, and conventions
+- Verify that the analysis is correct
 
 ---
 
@@ -24,7 +24,7 @@ For each issue:
       [Review #2](./critical-code-review.md#2-unbounded-memory-consumption-in-stream-processing)
       `packages/plugins/uploadthing/src/uploadthing/get-image-size.ts`
 
-- [ ] **1.3** Fix unsafe permission lookups -
+- [x] **1.3** Fix unsafe permission lookups -
       [Review #3](./critical-code-review.md#3-unsafe-permission-dictionary-access)
       `packages/oberoncms/core/src/adapter/init-plugins.ts:41-42`
 
@@ -57,30 +57,37 @@ For each issue:
 
 ## Phase 2: P1 - High Priority 🟠
 
-- [ ] **2.1** Validate callback URLs -
+- [ ] **2.1** Implement Zod validation for all database reads -
+      [Review #4](./critical-code-review.md#4-runtime-crash-on-invalid-user-role)
+      Validate users, pages, images, site data when reading from database.
+      Ensures data integrity at the gate per Shell-Validation pattern.
+      `packages/plugins/pgsql/src/db/database-adapter.ts`
+      `packages/oberoncms/sqlite/src/db/database-adapter.ts`
+
+- [ ] **2.2** Validate callback URLs -
       [Review #10](./critical-code-review.md#10-open-redirect-vulnerability)
       `packages/oberoncms/core/src/auth/next-auth.ts:46-48`
 
-- [ ] **2.2** Add DB error handling -
+- [ ] **2.3** Add DB error handling -
       [Review #11](./critical-code-review.md#11-no-input-validation-on-database-operations)
       `packages/oberoncms/sqlite/src/db/database-adapter.ts`
 
-- [ ] **2.3** Fix path traversal risk -
+- [ ] **2.4** Fix path traversal risk -
       [Review #12](./critical-code-review.md#12-path-traversal-risk-in-page-keys)
       `packages/oberoncms/core/src/lib/dtd.ts:78-82`
 
-- [ ] **2.4** Fix site config race condition -
+- [ ] **2.5** Fix site config race condition -
       [Review #13](./critical-code-review.md#13-race-condition-on-site-config-creation)
       `packages/oberoncms/core/src/adapter/init-adapter.ts:173-181`
 
-- [ ] **2.5** Improve batch error reporting -
+- [ ] **2.6** Improve batch error reporting -
       [Review #14](./critical-code-review.md#14-silent-error-suppression)
       `packages/oberoncms/core/src/adapter/export-tailwind-clases.ts:48-51`
 
-- [ ] **2.6** Add React error boundaries -
+- [ ] **2.7** Add React error boundaries -
       [Review #19](./critical-code-review.md#19-no-error-boundaries-in-react-components)
 
-- [ ] **2.7** Implement resilience patterns -
+- [ ] **2.8** Implement resilience patterns -
       [Review #20](./critical-code-review.md#20-missing-resilience-patterns)
 
 ---
@@ -109,4 +116,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 2/24 complete
+**Progress**: 3/25 complete
