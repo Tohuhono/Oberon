@@ -11,6 +11,8 @@
     "resolveJsonModule": true,
     "target": "ES2022",
     "isolatedModules": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [

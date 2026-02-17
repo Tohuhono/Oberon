@@ -49,13 +49,14 @@ For each issue:
       Replaced local `transformProps` copy with upstream `@puckeditor/core`
       export. Local copy had broken async reduce; upstream uses `walkTree`.
 
-- [ ] **1.8** Add migration concurrency limits -
+- [x] **1.8** Add migration concurrency limits -
       [Review #7](./critical-code-review.md#7-race-condition-on-migration-execution)
-      `packages/oberoncms/core/src/adapter/transforms.ts:109-130`
+      Fixed in `25706d7` — `mapConcurrent` with `MAX_CONCURRENCY = 10`
 
-- [ ] **1.9** Fix stack overflow in queue -
+- [x] **1.9** ~~Fix stack overflow in queue~~ - **False positive**
       [Review #9](./critical-code-review.md#9-stack-overflow-in-queue-wait)
-      `packages/tohuhono/utils/src/promise-queue.ts:51-55`
+      Source file already removed; not exported or imported anywhere. Stale dist
+      artifacts cleaned.
 
 ---
 
@@ -121,4 +122,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 7/25 complete (1 deferred to 2.1, 1 false positive)
+**Progress**: 9/25 complete (1 deferred to 2.1, 2 false positives)

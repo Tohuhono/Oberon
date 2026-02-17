@@ -1,8 +1,6 @@
 import { Render } from "@oberoncms/core/render";
 import { getMetaData } from "@oberoncms/core";
 
-import { use } from "react";
-
 import { config } from "@/oberon/config";
 import { adapter } from "@/oberon/adapter";
 
