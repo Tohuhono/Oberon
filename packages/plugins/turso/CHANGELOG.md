@@ -1,5 +1,15 @@
 # @oberoncms/plugin-turso
 
+## 0.17.2
+
+### Patch Changes
+
+- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- Updated dependencies [35b86e7]
+  - @oberoncms/core@0.17.2
+  - @oberoncms/sqlite@0.7.2
+
 ## 0.17.1
 
 ### Patch Changes

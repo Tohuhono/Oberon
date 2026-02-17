@@ -1,5 +1,12 @@
 # create-oberon-app
 
+## 0.10.1
+
+### Patch Changes
+
+- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+
 ## 0.10.0
 
 ### Minor Changes
