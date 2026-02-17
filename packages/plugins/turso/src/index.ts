@@ -3,6 +3,7 @@ import "server-cli-only"
 import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
+  type OberonDatabaseAdapter,
   type OberonPlugin,
 } from "@oberoncms/core"
 import { name, version } from "../package.json" with { type: "json" }
@@ -14,7 +15,7 @@ export const plugin: OberonPlugin = (adapter) => ({
   disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
   adapter: {
     ...getAdapter(getClient),
-    init: async () => {
+    prebuild: async () => {
       await adapter.prebuild()
 
       console.log(`Migrating database`)
@@ -33,5 +34,5 @@ export const plugin: OberonPlugin = (adapter) => ({
 
       console.log(`Database migration complete`)
     },
-  },
+  } satisfies OberonDatabaseAdapter,
 })

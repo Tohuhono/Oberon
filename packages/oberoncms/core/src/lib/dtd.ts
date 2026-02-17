@@ -276,7 +276,9 @@ export type OberonInitAdapter = {
   prebuild: () => Promise<void>
 }
 
-export type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
+export type OberonDatabaseAdapter = Partial<OberonInitAdapter> &
+  OberonBaseAdapter &
+  OberonAuthAdapter
 
 export type OberonPluginAdapter = OberonInitAdapter &
   OberonDatabaseAdapter &

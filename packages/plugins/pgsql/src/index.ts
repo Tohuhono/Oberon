@@ -2,6 +2,7 @@ import "server-cli-only"
 
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
+  type OberonDatabaseAdapter,
   type OberonPlugin,
 } from "@oberoncms/core"
 
@@ -20,7 +21,7 @@ export const plugin: OberonPlugin = (adapter) => ({
   adapter: {
     ...getDatabaseAdapter(db),
     ...getAuthAdapter(db),
-    init: async () => {
+    prebuild: async () => {
       await adapter.prebuild()
 
       console.log(`Migrating database`)
@@ -37,5 +38,5 @@ export const plugin: OberonPlugin = (adapter) => ({
 
       console.log(`Database migration complete`)
     },
-  },
+  } satisfies OberonDatabaseAdapter,
 })
