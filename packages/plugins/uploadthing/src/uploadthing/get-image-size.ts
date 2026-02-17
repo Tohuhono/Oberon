@@ -7,6 +7,8 @@ export async function getImageSize(
   url: string,
   defaultSize: ImageSize = { width: 100, height: 100 },
 ): Promise<ImageSize> {
+  const MAX_HEADER_BYTES = 128 * 1024 // 128KB
+  let totalBytes = 0
   const chunks: Uint8Array[] = []
   const response = await fetch(url)
   if (!response.body) {
@@ -18,6 +20,11 @@ export async function getImageSize(
     if (done) {
       return defaultSize
     }
+    if (totalBytes + value.length > MAX_HEADER_BYTES) {
+      reader.cancel()
+      return defaultSize
+    }
+    totalBytes += value.length
     chunks.push(value)
     try {
       // This throws if it cannot determine the size
