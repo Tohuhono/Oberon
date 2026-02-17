@@ -39,6 +39,6 @@ export const sendPlugin: OberonPlugin = () => ({
       // Replace this with your own send function
       await sendEmail(msg, SEND_SECRET)
     },
-  },
+  } satisfies Partial<OberonPluginAdapter>,
 })
 ```
