@@ -5,6 +5,8 @@ the monorepo README.
 
 ## Usage
 
+Requires Node.js 22 or newer.
+
 npx
 
 ```sh
