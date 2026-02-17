@@ -18,7 +18,7 @@ Shell-Validation Pattern: Zod at the gates, Types in the streets.
 - Parse, Don't Just Validate.
 - Fail Early and Loudly.
 - Avoid runtime validation checks in internal business logic to maximize
-  performance and minimize code clutter.
+  performance and minimize code clutter; favour improving static checking;
 
 ## Integrations
 

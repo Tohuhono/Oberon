@@ -37,9 +37,10 @@ export const baseAccumulator: InititalisedPlugins = {
       if (role === "admin") {
         return true
       }
-      return (
-        permissions[role][action] === permission ||
-        permissions[role][action] === "write"
+      return !!(
+        permissions[role][action] &&
+        (permissions[role][action] === permission ||
+          permissions[role][action] === "write")
       )
     },
     signIn: notImplemented("signIn"),
