@@ -135,6 +135,13 @@ jobs:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
 
+  e2e-test:
+    name: E2E Test
+    uses: ./.github/workflows/call-playwright-e2e.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+
   #  component-test:
   #    name: Component Test
   #    uses: ./.github/workflows/call-playwright.yml
@@ -145,7 +152,7 @@ jobs:
   test-status:
     name: Test Status
     #    needs: [smoke-test, lint, unit-test, component-test]
-    needs: [deploy-status, lint, unit-test]
+    needs: [deploy-status, lint, unit-test, e2e-test]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
