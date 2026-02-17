@@ -33,23 +33,28 @@ export default defineConfig({
 
   webServer: [
     {
-      command: "next start -p 3200",
-      cwd: path.resolve(root, "apps/playground"),
+      command: "pnpm start:oberon",
+      cwd: root,
       url: "http://localhost:3200",
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
       env: {
         ...process.env,
+        PORT: "3200",
         USE_DEVELOPMENT_DATABASE: "true",
         SQLITE_FILE: "file:.oberon/e2e-test.db",
       },
     },
     {
-      command: "next start -p 3201",
-      cwd: path.resolve(root, "apps/documentation"),
+      command: "pnpm start:docs",
+      cwd: root,
       url: "http://localhost:3201",
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
+      env: {
+        ...process.env,
+        PORT: "3201",
+      },
     },
   ],
 })
