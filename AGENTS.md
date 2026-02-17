@@ -35,15 +35,6 @@ validated, instead perform the following tasks without further prompting:
   is the description.
 - Open a PR against `main` and enable auto-merge with squash
 
-# Escalated commands
-
-Request require_escalated immediately and do not attempt sandbox execution first
-for commands that start with:
-
-- pnpm install
-- git push
-- gh
-
 ## Guardrails
 
 - Never use `--lockfile-only`; use plain `pnpm install` (it refreshes the
@@ -52,6 +43,6 @@ for commands that start with:
 
 # Follow-up docs
 
-- `docs/CODESTYLE.md` (coding style rules)
-- `docs/ARCHITECTURE.md` (adapter/plugin system + data flow)
-- `docs/CONVENTIONS.md` (Next.js + Oberon wiring patterns)
+- `agents/CODESTYLE.md` (coding style rules)
+- `agents/ARCHITECTURE.md` (adapter/plugin system + data flow)
+- `agents/CONVENTIONS.md` (Next.js + Oberon wiring patterns)
