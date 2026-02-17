@@ -28,9 +28,10 @@ For each issue:
       [Review #3](./critical-code-review.md#3-unsafe-permission-dictionary-access)
       `packages/oberoncms/core/src/adapter/init-plugins.ts:41-42`
 
-- [ ] **1.4** Validate user role at runtime -
+- [x] **1.4** ~~Validate user role at runtime~~ - **Deferred to 2.1**
       [Review #4](./critical-code-review.md#4-runtime-crash-on-invalid-user-role)
-      `packages/oberoncms/core/src/adapter/init-plugins.ts:35-43`
+      Per Shell-Validation pattern: validate at database read layer (2.1) rather
+      than runtime checks
 
 - [ ] **1.5** Fix silent data loss in deletions -
       [Review #5](./critical-code-review.md#5-silent-data-loss-in-file-deletion)
@@ -61,6 +62,7 @@ For each issue:
       [Review #4](./critical-code-review.md#4-runtime-crash-on-invalid-user-role)
       Validate users, pages, images, site data when reading from database.
       Ensures data integrity at the gate per Shell-Validation pattern.
+      **Includes deferred issue 1.4** (user role validation).
       `packages/plugins/pgsql/src/db/database-adapter.ts`
       `packages/oberoncms/sqlite/src/db/database-adapter.ts`
 
@@ -116,4 +118,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 3/25 complete
+**Progress**: 4/25 complete (1 deferred to 2.1)
