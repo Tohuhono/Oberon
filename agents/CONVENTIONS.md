@@ -10,6 +10,16 @@
   `Image` from `@oberoncms/plugin-uploadthing`).
 - Core adapter conventions live in `packages/oberoncms/core/AGENTS.md`.
 
+## Validation
+
+Shell-Validation Pattern: Zod at the gates, Types in the streets.
+
+- Validate with Zod; infer types;
+- Parse, Don't Just Validate.
+- Fail Early and Loudly.
+- Avoid runtime validation checks in internal business logic to maximize
+  performance and minimize code clutter.
+
 ## Integrations
 
 - Email sending: `apps/playground/oberon/send.ts` uses Resend (`RESEND_SECRET`,
