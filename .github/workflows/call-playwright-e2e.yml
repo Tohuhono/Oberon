@@ -20,7 +20,6 @@ jobs:
         with:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
-          fetch-depth: 0
       - name: Cache turbo build setup
         uses: actions/cache@v4
         with:
@@ -36,10 +35,8 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm i
-      - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
-      - name: Build apps
-        run: pnpm build
+      - name: Build apps and install Playwright browsers
+        run: pnpm build & pnpx playwright install --with-deps chromium & wait
         env:
           USE_DEVELOPMENT_DATABASE: "true"
           SQLITE_FILE: "file:.oberon/e2e-test.db"
