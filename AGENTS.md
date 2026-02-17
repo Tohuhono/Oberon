@@ -39,6 +39,8 @@ validated, instead perform the following tasks without further prompting:
 
 - Never use `--lockfile-only`; use plain `pnpm install` (it refreshes the
   lockfile).
+- Never use `pnpm --filter`; use turborepo commands (`pnpm check`, `pnpm build`)
+  which handle dependency ordering automatically.
 - Never use '-f' for rm; Try to remove without forcing.
 
 # Follow-up docs

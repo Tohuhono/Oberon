@@ -1,4 +1,5 @@
 import { transformProps, type Data } from "@puckeditor/core"
+import { mapConcurrent } from "@tohuhono/utils"
 
 type PropTransform = Parameters<typeof transformProps>[1]
 
@@ -49,6 +50,8 @@ async function applyTransform(
   }
 }
 
+const MAX_CONCURRENCY = 10
+
 export async function* applyTransforms({
   transforms,
   pages,
@@ -60,16 +63,11 @@ export async function* applyTransforms({
   getPageData: (key: string) => Promise<Data | null>
   updatePageData: (data: OberonPage) => Promise<void>
 }): AsyncGenerator<TransformResult, void, void> {
-  const migrations: Array<Promise<TransformResult>> = []
-
-  for (const { key } of pages) {
-    const result = applyTransform(key, transforms, getPageData, updatePageData)
-    migrations.push(result)
-  }
-
-  for await (const result of migrations) {
-    yield result
-  }
+  yield* mapConcurrent(
+    pages,
+    ({ key }) => applyTransform(key, transforms, getPageData, updatePageData),
+    MAX_CONCURRENCY,
+  )
 }
 
 export function getComponentTransformVersions({ components }: OberonConfig) {
