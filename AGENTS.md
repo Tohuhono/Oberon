@@ -31,10 +31,10 @@ validated, instead perform the following tasks without further prompting:
 - Checkout a new branch from main
 - Include all changes, not just files touched in the current task
 - Add or update [changeset](https://github.com/changesets/changesets) for any
-  new changes.
+  new changes
 - Commit and push changes; the commit message should be concise; the changeset
-  is the description.
-- Open a PR against `main` and enable auto-merge with squash
+  is the description
+- Open a PR against `main`
 
 ## Guardrails
 
