@@ -38,6 +38,11 @@ jobs:
         run: pnpm i
       - name: Install Playwright browsers
         run: pnpx playwright install --with-deps chromium
+      - name: Build apps
+        run: pnpm build
+        env:
+          USE_DEVELOPMENT_DATABASE: "true"
+          SQLITE_FILE: "file:.oberon/e2e-test.db"
       - name: Run E2E tests
         run: pnpm e2e
       - uses: actions/upload-artifact@v4

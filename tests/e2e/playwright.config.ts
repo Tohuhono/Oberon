@@ -13,8 +13,6 @@ export default defineConfig({
   reporter: [["html", { outputFolder: "./report" }]],
   outputDir: "./results",
 
-  globalSetup: "./global-setup.ts",
-
   use: {
     ...devices["Desktop Chrome"],
     trace: "on-first-retry",
@@ -41,6 +39,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
       env: {
+        ...process.env,
         USE_DEVELOPMENT_DATABASE: "true",
         SQLITE_FILE: "file:.oberon/e2e-test.db",
       },
