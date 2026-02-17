@@ -11,11 +11,18 @@ export const plugin: OberonPlugin = (adapter) => ({
   },
   adapter: {
     deleteImage: async (key) => {
-      await Promise.allSettled([
-        //
-        deleteImage(key),
+      const results = await Promise.allSettled([
         adapter.deleteImage(key),
+        deleteImage(key),
       ])
+
+      const errors = results
+        .filter((r) => r.status === "rejected")
+        .map((r) => r.reason)
+
+      if (errors.length > 0) {
+        throw new AggregateError(errors, "Image deletion failed")
+      }
     },
   } satisfies Partial<OberonBaseAdapter>,
 })
