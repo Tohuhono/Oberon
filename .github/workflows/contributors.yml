@@ -15,14 +15,10 @@ jobs:
           app-id: ${{ vars.CHANGESET_APP_ID }}
           private-key: ${{ secrets.CHANGESET_APP_SECRET }}
       - uses: actions/checkout@v2
-      - uses: BobAnkh/add-contributors@master
-        with:
-          CONTRIBUTOR: "## Contributors"
-          COLUMN_PER_ROW: "6"
-          ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
-          IMG_WIDTH: "100"
-          FONT_SIZE: "14"
-          BRANCH: "changeset-release/main"
-          PATH: "/README.md"
-          COMMIT_MESSAGE: "docs(README): update contributors"
-          AVATAR_SHAPE: "round"
+      - name: Update contributors
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          CONTRIBUTORS_REPO: Tohuhono/Oberon
+          CONTRIBUTORS_HEADING: "## Contributors"
+          CONTRIBUTORS_README: ./README.md
+        run: npx tsx config/scripts/scripts/update-contributors.ts
