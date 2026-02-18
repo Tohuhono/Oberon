@@ -104,7 +104,6 @@ jobs:
         with:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
-          fetch-depth: 0
       - name: Cache turbo build setup
         uses: actions/cache@v4
         with:
