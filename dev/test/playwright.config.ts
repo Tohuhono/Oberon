@@ -3,6 +3,11 @@ import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..")
+const isDeployedTarget = process.env.PLAYWRIGHT_TARGET === "deployed"
+const playgroundBaseURL =
+  process.env.PLAYWRIGHT_PLAYGROUND_BASE_URL ?? "http://localhost:3200"
+const docsBaseURL =
+  process.env.PLAYWRIGHT_DOCS_BASE_URL ?? "http://localhost:3201"
 
 export default defineConfig({
   testDir: "./e2e",
@@ -23,39 +28,41 @@ export default defineConfig({
     {
       name: "playground",
       testMatch: "playground/**/*.spec.ts",
-      use: { baseURL: "http://localhost:3200" },
+      use: { baseURL: playgroundBaseURL },
     },
     {
       name: "docs",
       testMatch: "docs/**/*.spec.ts",
-      use: { baseURL: "http://localhost:3201" },
+      use: { baseURL: docsBaseURL },
     },
   ],
 
-  webServer: [
-    {
-      command: "pnpm start:oberon",
-      cwd: repoRoot,
-      url: "http://localhost:3200",
-      reuseExistingServer: !process.env.CI,
-      timeout: 30_000,
-      env: {
-        ...process.env,
-        PORT: "3200",
-        USE_DEVELOPMENT_DATABASE: "true",
-        SQLITE_FILE: "file:.oberon/e2e-test.db",
-      },
-    },
-    {
-      command: "pnpm start:docs",
-      cwd: repoRoot,
-      url: "http://localhost:3201",
-      reuseExistingServer: !process.env.CI,
-      timeout: 30_000,
-      env: {
-        ...process.env,
-        PORT: "3201",
-      },
-    },
-  ],
+  webServer: isDeployedTarget
+    ? undefined
+    : [
+        {
+          command: "pnpm start:oberon",
+          cwd: repoRoot,
+          url: "http://localhost:3200",
+          reuseExistingServer: !process.env.CI,
+          timeout: 30_000,
+          env: {
+            ...process.env,
+            PORT: "3200",
+            USE_DEVELOPMENT_DATABASE: "true",
+            SQLITE_FILE: "file:.oberon/e2e-test.db",
+          },
+        },
+        {
+          command: "pnpm start:docs",
+          cwd: repoRoot,
+          url: "http://localhost:3201",
+          reuseExistingServer: !process.env.CI,
+          timeout: 30_000,
+          env: {
+            ...process.env,
+            PORT: "3201",
+          },
+        },
+      ],
 })

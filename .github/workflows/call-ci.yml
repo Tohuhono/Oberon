@@ -126,16 +126,62 @@ jobs:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
 
-  e2e-test:
-    name: E2E Test
+  e2e-docs:
+    name: E2E Smoke Docs
+    needs: [changed-packages, deploy_docs]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.deploy_docs.result == 'success'
     uses: ./.github/workflows/call-e2e.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
+      target: deployed
+      project: docs
+      base_url: ${{ needs.deploy_docs.outputs.url }}
+
+  e2e-playground:
+    name: E2E Smoke Playground
+    needs: [changed-packages, deploy_playground]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.deploy_playground.result == 'success'
+    uses: ./.github/workflows/call-e2e.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      target: deployed
+      project: playground
+      base_url: ${{ needs.deploy_playground.outputs.url }}
+
+  e2e-status:
+    name: E2E Status
+    needs: [changed-packages, e2e-docs, e2e-playground]
+    if: always() && !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    env:
+      DOCS_CHANGED: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/docs') }}
+      PLAYGROUND_CHANGED: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/playground') }}
+      DOCS_E2E_RESULT: ${{ needs.e2e-docs.result }}
+      PLAYGROUND_E2E_RESULT: ${{ needs.e2e-playground.result }}
+    steps:
+      - name: Validate post-deploy e2e status
+        run: |
+          if [[ "${DOCS_CHANGED}" == "true" && "${DOCS_E2E_RESULT}" != "success" ]]; then
+            echo "Docs e2e status: ${DOCS_E2E_RESULT}"
+            exit 1
+          fi
+
+          if [[ "${PLAYGROUND_CHANGED}" == "true" && "${PLAYGROUND_E2E_RESULT}" != "success" ]]; then
+            echo "Playground e2e status: ${PLAYGROUND_E2E_RESULT}"
+            exit 1
+          fi
 
   test-status:
     name: Test Status
-    needs: [deploy-status, lint, unit-test, e2e-test]
+    needs: [deploy-status, lint, unit-test, e2e-status]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:

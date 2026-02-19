@@ -35,6 +35,14 @@ pnpm e2e:smoke # Run e2e smoke tests (CI subset)
 pnpm change # Add a changset entry
 ```
 
+## CI testing pipeline
+
+- `pnpm test:e2e` runs local full e2e coverage in CI using built apps.
+- Smoke e2e tests (`@smoke`) also run after each deploy against deployed URLs
+  for docs and playground.
+- Post-deploy smoke results gate downstream CI stages (including promotion), so
+  failed deployed smoke tests block progression.
+
 ## What's inside?
 
 This [Turborepo](https://turbo.build/repo/) that includes the following packages
