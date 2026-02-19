@@ -1,8 +1,7 @@
 {
   "extends": "@config/typescript",
   "compilerOptions": {
-    "noEmit": true,
     "rootDir": "."
   },
-  "include": []
+  "include": ["vitest.config.ts"]
 }
