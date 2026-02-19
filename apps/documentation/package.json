@@ -10,7 +10,8 @@
     "prebuild": "tsx ./src/oberon/prebuild.ts",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
     "typegen": "next typegen",
     "tsc": "next typegen && tsc --pretty"
   },

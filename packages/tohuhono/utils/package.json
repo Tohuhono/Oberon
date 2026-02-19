@@ -17,7 +17,8 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
     "tsc": "tsc --pretty"
   },
   "exports": {

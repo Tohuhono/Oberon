@@ -12,7 +12,7 @@ on:
 
 jobs:
   e2e:
-    name: E2E Smoke Tests
+    name: Full E2E
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -36,12 +36,12 @@ jobs:
       - name: Install dependencies
         run: pnpm i
       - name: Build apps and install Playwright browsers
-        run: pnpm build & pnpx playwright install --with-deps chromium & wait
+        run: pnpx playwright install --with-deps chromium & wait
+      - name: Run E2E
+        run: pnpm test:e2e
         env:
           USE_DEVELOPMENT_DATABASE: "true"
           SQLITE_FILE: "file:.oberon/e2e-test.db"
-      - name: Run E2E smoke tests
-        run: pnpm e2e:smoke
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
