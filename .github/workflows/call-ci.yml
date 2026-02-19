@@ -87,14 +87,6 @@ jobs:
         if: ${{ env.STATUS == 'failed' }}
         run: exit 1
 
-  # smoke-test:
-  #   name: Smoke Test
-  #   needs: [deploy]
-  #   uses: ./.github/workflows/call-playwright.yml
-  #   with:
-  #     url: ${{ needs.deploy.outputs.url }}
-  #     tag: "@smoke"
-
   lint:
     name: Lint and Type Check
     runs-on: ubuntu-latest
@@ -129,7 +121,7 @@ jobs:
 
   unit-test:
     name: Unit Test
-    uses: ./.github/workflows/call-jest.yml
+    uses: ./.github/workflows/call-unit-tests.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
@@ -141,16 +133,8 @@ jobs:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
 
-  #  component-test:
-  #    name: Component Test
-  #    uses: ./.github/workflows/call-playwright.yml
-  #    with:
-  #      url: ""
-  #      tag: "@component"
-
   test-status:
     name: Test Status
-    #    needs: [smoke-test, lint, unit-test, component-test]
     needs: [deploy-status, lint, unit-test, e2e-test]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest

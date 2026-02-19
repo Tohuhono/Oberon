@@ -1,9 +1,8 @@
 {
-  "extends": "@config/typescript",
+  "extends": "@dev/typescript",
   "compilerOptions": {
     "noEmit": true,
     "rootDir": "."
   },
-  "include": ["**/*.config.ts"],
-  "exclude": ["node_modules", "dist", ".next", "playwright.config.ts", "tests"]
+  "include": []
 }

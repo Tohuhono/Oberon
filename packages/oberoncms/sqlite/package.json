@@ -43,6 +43,7 @@
     "generate:migrations": "drizzle-kit generate:sqlite",
     "dev": "vite build --watch",
     "lint": "eslint .",
+    "test": "vitest run",
     "tsc": "tsc --pretty",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"
@@ -64,10 +65,11 @@
   },
   "devDependencies": {
     "@auth/core": "^0.37.4",
-    "@config/eslint": "workspace:*",
-    "@config/scripts": "workspace:*",
-    "@config/typescript": "workspace:*",
-    "@config/vite": "workspace:*",
+    "@dev/eslint": "workspace:*",
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
+    "@dev/vite": "workspace:*",
+    "@dev/vitest": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",

@@ -2,7 +2,6 @@
   "$schema": "https://turbo.build/schema.json",
   "envMode": "loose",
   "globalDependencies": [
-    "scripts/*",
     ".github/**",
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
@@ -38,8 +37,18 @@
       "cache": false,
       "dependsOn": ["^wait"]
     },
-    "jest": {},
-    "lint": {},
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "outputs": []
+    },
     "start": {
       "cache": false,
       "persistent": true,

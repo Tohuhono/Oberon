@@ -1,0 +1,86 @@
+// @ts-check
+
+import path from "path"
+import { fileURLToPath } from "url"
+import eslint from "@eslint/js"
+import { defineConfig } from "eslint/config"
+import tseslint from "typescript-eslint"
+import prettierConfig from "eslint-config-prettier"
+import { FlatCompat } from "@eslint/eslintrc"
+import globals from "globals"
+import { tohuhonoCustomConfig } from "./custom-rules.mjs"
+
+// https://github.com/import-js/eslint-plugin-import/issues/2556
+// mimic CommonJS variables -- not needed if using CommonJS
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+})
+
+export default defineConfig(
+  {
+    ignores: [
+      ".next/**/*",
+      ".vercel/**/*",
+      "node_modules/**/*",
+      "dist/**/*",
+      ".rollup.cache/**/*",
+    ],
+  },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.strict,
+  ...compat.plugins("import"),
+  prettierConfig,
+  tohuhonoCustomConfig,
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "error",
+      // ensure consistant imports
+      "import/order": [
+        "error",
+        {
+          pathGroups: [
+            {
+              pattern: "dotenv",
+              group: "builtin",
+              position: "before",
+            },
+          ],
+          pathGroupsExcludedImportTypes: ["dotenv"],
+        },
+      ], //"dotenv"
+      // conflicts with the the smarter tsc version
+      "@typescript-eslint/no-unused-vars": "off",
+      // Use this to provide a consistant interface name
+      "@typescript-eslint/no-empty-object-type": "off",
+      // Allow directives
+      "@typescript-eslint/no-unused-expressions": "off",
+      "no-unused-expressions": ["error", { ignoreDirectives: true }],
+      // prevent enums
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "TSEnumDeclaration",
+          message: "Don't declare enums",
+        },
+      ],
+      curly: "off",
+    },
+  },
+  {
+    files: ["**/*.test.ts", "**/*.spec.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "tohuhono/no-type-assertion-except-object-keys": "off",
+    },
+  },
+)

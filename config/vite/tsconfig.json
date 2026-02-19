@@ -1,8 +1,0 @@
-{
-  "extends": "@config/typescript",
-  "compilerOptions": {
-    "rootDir": "."
-  },
-  "include": ["vite.config.ts"],
-  "exclude": ["node_modules"]
-}

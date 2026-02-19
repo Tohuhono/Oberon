@@ -21,4 +21,4 @@ jobs:
           CONTRIBUTORS_REPO: Tohuhono/Oberon
           CONTRIBUTORS_HEADING: "## Contributors"
           CONTRIBUTORS_README: ./README.md
-        run: npx tsx config/scripts/scripts/update-contributors.ts
+        run: npx tsx dev/scripts/scripts/update-contributors.ts

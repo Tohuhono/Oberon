@@ -40,11 +40,11 @@ jobs:
         env:
           USE_DEVELOPMENT_DATABASE: "true"
           SQLITE_FILE: "file:.oberon/e2e-test.db"
-      - name: Run E2E tests
-        run: pnpm e2e
+      - name: Run E2E smoke tests
+        run: pnpm e2e:smoke
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-e2e-report
-          path: tests/e2e/report
+          path: dev/test/report
           retention-days: 10

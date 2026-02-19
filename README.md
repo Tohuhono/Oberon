@@ -26,6 +26,12 @@ pnpm prettier:fix # Run prettier, fixing any issues
 
 pnpm build # Build all packages
 
+pnpm test # Run unit tests
+
+pnpm e2e # Run e2e tests
+
+pnpm e2e:smoke # Run e2e smoke tests (CI subset)
+
 pnpm change # Add a changset entry
 ```
 
@@ -99,19 +105,19 @@ and apps:
 
 #### Utilities and Config
 
-- `config/scripts` - `@config/scripts` (private workspace package)
+- `dev/scripts` - `@dev/scripts` (private workspace package)
 
   Shared scripts for repository maintenance and package cleanup.
 
-- `config/typescript` - `@config/typescript` (private workspace package)
+- `dev/typescript` - `@dev/typescript` (private workspace package)
 
   Shared [TypeScript](https://www.typescriptlang.org/) base config.
 
-- `config/eslint` - `@config/eslint` (private workspace package)
+- `dev/eslint` - `@dev/eslint` (private workspace package)
 
   Shared [ESLint](https://eslint.org/) flat configs.
 
-- `config/vite` - `@config/vite` (private workspace package)
+- `dev/vite` - `@dev/vite` (private workspace package)
 
   Shared [Vite](https://vitejs.dev/) library build config.
 

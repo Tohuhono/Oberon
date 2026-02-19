@@ -16,8 +16,7 @@ The repository is a pnpm workspace + turborepo with these layers:
   `packages/plugins/flydrive`
 - Shared UI/utilities: `packages/tohuhono/ui`, `packages/tohuhono/puck-blocks`,
   `packages/tohuhono/utils`
-- Tooling/config: `config/eslint`, `config/typescript`, `config/vite`,
-  `config/scripts`
+- Tooling/config: `dev/eslint`, `dev/typescript`, `dev/vite`, `dev/scripts`
 - Scaffolding: `packages/create-oberon-app`
 
 ## Core runtime model (`@oberoncms/core`)

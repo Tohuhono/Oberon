@@ -1,8 +1,8 @@
 {
-  "extends": "@config/typescript",
+  "extends": "@dev/typescript",
   "compilerOptions": {
     "rootDir": "."
   },
   "include": ["src", "plugins/**/*.ts"],
-  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"]
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
 }

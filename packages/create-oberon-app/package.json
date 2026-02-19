@@ -29,6 +29,7 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
+    "test": "vitest run",
     "tsc": "tsc --pretty",
     "generate:recipes": "node scripts/generate.mjs",
     "prepublishOnly": "pnpm generate:recipes"
@@ -48,10 +49,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@config/eslint": "workspace:*",
-    "@config/scripts": "workspace:*",
-    "@config/typescript": "workspace:*",
-    "@config/vite": "workspace:*",
+    "@dev/eslint": "workspace:*",
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
+    "@dev/vite": "workspace:*",
+    "@dev/vitest": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-flydrive": "workspace:*",

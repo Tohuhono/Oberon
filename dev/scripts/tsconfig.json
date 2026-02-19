@@ -1,0 +1,8 @@
+{
+  "extends": "@dev/typescript",
+  "compilerOptions": {
+    "rootDir": "."
+  },
+  "include": ["scripts/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

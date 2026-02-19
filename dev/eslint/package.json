@@ -1,0 +1,57 @@
+{
+  "name": "@dev/eslint",
+  "private": true,
+  "version": "0.1.1",
+  "author": "Tohuhono ltd",
+  "license": "MIT",
+  "description": "Shared ESLint flat configs for @tohuhono and @oberoncms packages",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "dev/eslint"
+  },
+  "type": "module",
+  "scripts": {
+    "clean": "odt clean",
+    "lint": "eslint .",
+    "tsc": "tsc --pretty"
+  },
+  "exports": {
+    "./base": {
+      "types": "./base.d.ts",
+      "default": "./base.mjs"
+    },
+    "./react": {
+      "types": "./react.d.ts",
+      "default": "./react.mjs"
+    },
+    "./next": {
+      "types": "./next.d.ts",
+      "default": "./next.mjs"
+    }
+  },
+  "files": [
+    "*.mjs",
+    "*.d.ts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
+  "dependencies": {
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
+    "@next/eslint-plugin-next": "^16.1.6",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^17.3.0",
+    "typescript-eslint": "^8.55.0"
+  },
+  "devDependencies": {
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  }
+}

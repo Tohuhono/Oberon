@@ -1,6 +1,6 @@
 packages:
   - "apps/*"
-  - "config/*"
+  - "dev/*"
   - "packages/create-oberon-app"
   - "packages/oberoncms/*"
   - "packages/plugins/*"
