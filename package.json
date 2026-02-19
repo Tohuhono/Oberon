@@ -30,6 +30,7 @@
     "lint:fix": "turbo lint --concurrency 50 -- --fix",
     "release": "pnpm build:packages && changeset publish",
     "test": "turbo test --concurrency 50",
+    "test:unit": "turbo test:unit --concurrency 50",
     "test:smoke": "turbo test:smoke --concurrency 50",
     "test:ui": "turbo test:ui --concurrency 50",
     "postinstall": "pnpm manypkg",

@@ -17,4 +17,6 @@ Standardize unit test scripts by introducing `test:unit` and making `test` call
 
 - rename direct unit test command from `test` to `test:unit`
 - keep `test` as the entrypoint by delegating to `pnpm test:unit`
+- add root `test:unit` orchestration for consistent workspace-level unit-test
+  invocation
 - preserve existing e2e-oriented test scripts
