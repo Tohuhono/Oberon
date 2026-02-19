@@ -18,7 +18,7 @@
     "generate:recipes": "turbo generate:recipes",
     "start:oberon": "turbo start --concurrency 50 --filter=@oberon/playground",
     "start:docs": "turbo start --concurrency 50 --filter=@oberon/docs",
-    "tsc": "turbo run tsc tsc:root tsc:test --concurrency 50 --continue",
+    "tsc": "turbo run tsc tsc:root --concurrency 50 --continue && pnpm tsc:test",
     "tsc:root": "tsc --pretty",
     "tsc:test": "tsc --pretty -p tsconfig.test.json",
     "dev": "turbo dev --concurrency 50",
