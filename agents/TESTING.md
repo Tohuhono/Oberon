@@ -3,9 +3,13 @@
 ## Overview
 
 - **Unit tests**: Vitest, per-package (co-located `src/**/*.test.ts`)
-- **E2E tests**: Playwright, see `tests/e2e/`
-- **Run**: `pnpm test` (turbo — builds workspace deps first, then runs vitest in
-  each package)
+  - Run: `pnpm test` (turbo — builds workspace deps first, then vitest in each
+    package)
+- **E2E tests**: Playwright, `tests/e2e/`
+  - Run: `pnpm e2e` / `pnpm e2e:ui`
+  - Config: `tests/e2e/playwright.config.ts`
+  - Spec files: `tests/e2e/{playground,docs}/*.spec.ts`
+  - Starts playground (`:3200`) and docs (`:3201`) via `webServer`
 
 ## Unit test scope
 

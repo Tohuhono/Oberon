@@ -48,6 +48,7 @@ validated, instead perform the following tasks without further prompting:
 # Follow-up docs
 
 - `agents/CODESTYLE.md` (coding style rules)
-- `agents/ARCHITECTURE.md` (adapter/plugin system + data flow)
-- `agents/CONVENTIONS.md` (Next.js + Oberon wiring patterns)
-- `agents/TESTING.md` (unit testing strategy and scope)
+- `agents/ARCHITECTURE.md` (full system design)
+- `agents/CONVENTIONS.md` (common system patterns)
+- `agents/TESTING.md` (testing strategy and scope)
+- `README.md` (human onbaording)
