@@ -1158,9 +1158,51 @@ importers:
 
   tests:
     devDependencies:
+      '@oberon/docs':
+        specifier: workspace:*
+        version: link:../apps/documentation
+      '@oberon/playground':
+        specifier: workspace:*
+        version: link:../apps/playground
+      '@oberon/recipe-nextjs':
+        specifier: workspace:*
+        version: link:../recipes/nextjs
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../packages/oberoncms/core
+      '@oberoncms/plugin-development':
+        specifier: workspace:*
+        version: link:../packages/plugins/development
+      '@oberoncms/plugin-flydrive':
+        specifier: workspace:*
+        version: link:../packages/plugins/flydrive
+      '@oberoncms/plugin-pgsql':
+        specifier: workspace:*
+        version: link:../packages/plugins/pgsql
+      '@oberoncms/plugin-turso':
+        specifier: workspace:*
+        version: link:../packages/plugins/turso
+      '@oberoncms/plugin-uploadthing':
+        specifier: workspace:*
+        version: link:../packages/plugins/uploadthing
+      '@oberoncms/sqlite':
+        specifier: workspace:*
+        version: link:../packages/oberoncms/sqlite
       '@playwright/test':
         specifier: ^1.52.0
         version: 1.58.2
+      '@tohuhono/puck-blocks':
+        specifier: workspace:*
+        version: link:../packages/tohuhono/puck-blocks
+      '@tohuhono/ui':
+        specifier: workspace:*
+        version: link:../packages/tohuhono/ui
+      '@tohuhono/utils':
+        specifier: workspace:*
+        version: link:../packages/tohuhono/utils
+      create-oberon-app:
+        specifier: workspace:*
+        version: link:../packages/create-oberon-app
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
