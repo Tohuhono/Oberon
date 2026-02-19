@@ -16,5 +16,10 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["packages/**/src/**/*.test.ts", "apps/**/src/**/*.test.ts"]
+  "include": [
+    "./playwright.config.ts",
+    "./e2e/**/*.ts",
+    "../packages/**/src/**/*.test.ts",
+    "../apps/**/src/**/*.test.ts"
+  ]
 }

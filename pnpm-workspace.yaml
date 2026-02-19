@@ -6,6 +6,7 @@ packages:
   - "packages/plugins/*"
   - "packages/tohuhono/*"
   - "recipes/*"
+  - "tests"
 useNodeVersion: "24.13.0"
 allowBuilds:
   bufferutil: true

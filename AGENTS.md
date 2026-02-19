@@ -9,18 +9,18 @@ This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps.
 
 ## Plan mode
 
-- Read `agents/ARCHITECTURE.md` before planning.
-- Plan mode required before edits. Keep plan ultra-concise (telegraphic style).
-- End each plan with unresolved questions list (if none, say “None”).
-- If you are unsure, ask for clarification.
+- Read `agents/ARCHITECTURE.md` before planning
+- Plan mode required before edits. Keep plan ultra-concise (telegraphic style)
+- End each plan with unresolved questions list (if none, say “None”)
+- If you are unsure, ask for clarification
 
 ## Edit mode
 
-- Read `agents/CODESTYLE.md` before any edits.
-- Execute plan, if uncertain ask.
-- Validate with `pnpm check`; iterate until warnings/errors are resolved.
-- Validate with `pnpm build`; iterate until warnings/errors are resolved.
-- Run `pnpm test`; iterate until passing.
+- CRITICAL: Read `agents/CODESTYLE.md` before any edits.
+- Execute plan, if uncertain ask
+- Validate with `pnpm check`; iterate until warnings/errors are resolved
+- Validate with `pnpm build`; iterate until warnings/errors are resolved
+- Run `pnpm test`; iterate until passing
 - Create changeset
 
 ## Finalise

@@ -5,10 +5,10 @@
 - **Unit tests**: Vitest, per-package (co-located `src/**/*.test.ts`)
   - Run: `pnpm test` (turbo — builds workspace deps first, then vitest in each
     package)
-- **E2E tests**: Playwright, `tests/e2e/`
+- **E2E tests**: Playwright, `@oberon/tests` package (`tests/`)
   - Run locally: `pnpm e2e` (all tests) / `pnpm e2e:ui` (interactive)
   - Run in CI: `pnpm e2e:smoke` (only `@smoke`-tagged tests)
-  - Config: `tests/e2e/playwright.config.ts`
+  - Config: `tests/playwright.config.ts`
   - Spec files: `tests/e2e/{playground,docs}/*.spec.ts`
   - Starts playground (`:3200`) and docs (`:3201`) via `webServer`
 

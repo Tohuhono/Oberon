@@ -46,5 +46,5 @@ jobs:
         if: failure()
         with:
           name: playwright-e2e-report
-          path: tests/e2e/report
+          path: tests/report
           retention-days: 10
