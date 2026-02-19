@@ -1,4 +1,8 @@
 import { defineConfig, devices } from "@playwright/test"
+import { dirname, resolve } from "node:path"
+import { fileURLToPath } from "node:url"
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..")
 
 export default defineConfig({
   testDir: "./e2e",
@@ -31,6 +35,7 @@ export default defineConfig({
   webServer: [
     {
       command: "pnpm start:oberon",
+      cwd: repoRoot,
       url: "http://localhost:3200",
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
@@ -43,6 +48,7 @@ export default defineConfig({
     },
     {
       command: "pnpm start:docs",
+      cwd: repoRoot,
       url: "http://localhost:3201",
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
