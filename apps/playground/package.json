@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "next": "next",
     "typegen": "next typegen",
+    "test": "vitest run",
     "tsc": "next typegen && tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"
@@ -31,6 +32,7 @@
     "@config/eslint": "workspace:*",
     "@config/scripts": "workspace:*",
     "@config/typescript": "workspace:*",
+    "@config/vitest": "workspace:*",
     "@next/bundle-analyzer": "^16.1.6",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "24.10.1",

@@ -10,6 +10,7 @@
     "prebuild": "tsx ./src/oberon/prebuild.ts",
     "start": "next start",
     "lint": "eslint .",
+    "test": "vitest run",
     "typegen": "next typegen",
     "tsc": "next typegen && tsc --pretty"
   },
@@ -27,6 +28,7 @@
     "@config/eslint": "workspace:*",
     "@config/scripts": "workspace:*",
     "@config/typescript": "workspace:*",
+    "@config/vitest": "workspace:*",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",

@@ -4,5 +4,5 @@
     "rootDir": "."
   },
   "include": ["src", "plugins/**/*.ts"],
-  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"]
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
 }

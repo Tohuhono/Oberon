@@ -26,6 +26,8 @@ pnpm prettier:fix # Run prettier, fixing any issues
 
 pnpm build # Build all packages
 
+pnpm test # Run unit tests
+
 pnpm change # Add a changset entry
 ```
 

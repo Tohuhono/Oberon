@@ -32,6 +32,13 @@
 
 - Next.js App Router conventions apply; keep server actions with `"use server"`
 
+## Testing
+
+- Co-located siblings: `src/foo.test.ts` next to `src/foo.ts`
+- Only test pure logic with real branching/transformation — not library
+  behaviour
+- See `agents/TESTING.md` for full strategy
+
 ## Validation
 
 Shell-Validation Pattern: Zod at the gates, Types in the streets.

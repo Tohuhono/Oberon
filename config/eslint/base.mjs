@@ -76,10 +76,11 @@ export default defineConfig(
     },
   },
   {
-    files: ["**/*.spec.ts"],
+    files: ["**/*.test.ts", "**/*.spec.ts"],
     rules: {
-      // any is ok in test files
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "tohuhono/no-type-assertion-except-object-keys": "off",
     },
   },
 )

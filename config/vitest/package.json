@@ -1,0 +1,25 @@
+{
+  "name": "@config/vitest",
+  "private": true,
+  "version": "0.1.0",
+  "author": "Tohuhono ltd",
+  "license": "MIT",
+  "description": "Shared Vitest config for @tohuhono and @oberoncms packages",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "config/vitest"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./vitest.config.ts"
+    }
+  },
+  "files": [
+    "vitest.config.ts"
+  ],
+  "dependencies": {
+    "vitest": "^4.0.18"
+  }
+}

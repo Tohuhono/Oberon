@@ -18,6 +18,7 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
+    "test": "vitest run",
     "tsc": "tsc --pretty"
   },
   "files": [
@@ -88,6 +89,7 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@config/vitest": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

@@ -42,6 +42,7 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
+    "test": "vitest run",
     "tsc": "tsc --pretty"
   },
   "publishConfig": {
@@ -73,6 +74,7 @@
     "@config/scripts": "workspace:*",
     "@config/typescript": "workspace:*",
     "@config/vite": "workspace:*",
+    "@config/vitest": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

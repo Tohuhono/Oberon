@@ -49,6 +49,7 @@
     "generate:migrations": "drizzle-kit generate:pg",
     "dev": "vite build --watch",
     "lint": "eslint .",
+    "test": "vitest run",
     "tsc": "tsc --pretty",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"
@@ -73,6 +74,7 @@
     "@config/scripts": "workspace:*",
     "@config/typescript": "workspace:*",
     "@config/vite": "workspace:*",
+    "@config/vitest": "workspace:*",
     "@types/node": "24.10.1",
     "@types/pg": "^8.16.0",
     "@types/react": "19.2.14",

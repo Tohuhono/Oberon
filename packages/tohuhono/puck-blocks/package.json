@@ -41,6 +41,7 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
+    "test": "vitest run",
     "tsc": "tsc --pretty"
   },
   "publishConfig": {
@@ -62,6 +63,7 @@
     "@config/eslint": "workspace:*",
     "@config/scripts": "workspace:*",
     "@config/vite": "workspace:*",
+    "@config/vitest": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

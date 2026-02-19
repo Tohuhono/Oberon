@@ -1,4 +1,4 @@
-name: Jest tests
+name: Unit tests
 
 on:
   workflow_call:
@@ -11,16 +11,8 @@ on:
         type: string
 
 jobs:
-  jest:
-    name: Jest
-    env:
-      # Must be the length of the shardIndex array
-      SHARD_INDEX_LENGTH: 2
-    strategy:
-      fail-fast: false
-      matrix:
-        # Must be the length of env.SHARD_INDEX_LENGTH
-        SHARD_INDEX: [1]
+  unit-test:
+    name: Vitest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -45,5 +37,5 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
-      - name: Package
-        run: pnpm jest --cache-dir .turbo -- --shard=${{ matrix.SHARD_INDEX }}/${{ env.SHARD_INDEX_LENGTH }}
+      - name: Test
+        run: pnpm test

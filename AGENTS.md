@@ -20,6 +20,7 @@ This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps.
 - Execute plan, if uncertain ask.
 - Validate with `pnpm check`; iterate until warnings/errors are resolved.
 - Validate with `pnpm build`; iterate until warnings/errors are resolved.
+- Run `pnpm test`; iterate until passing.
 - Create changeset
 
 ## Finalise
@@ -49,3 +50,4 @@ validated, instead perform the following tasks without further prompting:
 - `agents/CODESTYLE.md` (coding style rules)
 - `agents/ARCHITECTURE.md` (adapter/plugin system + data flow)
 - `agents/CONVENTIONS.md` (Next.js + Oberon wiring patterns)
+- `agents/TESTING.md` (unit testing strategy and scope)
