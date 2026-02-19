@@ -38,4 +38,4 @@ jobs:
       - name: Install
         run: pnpm i
       - name: Test
-        run: pnpm test
+        run: pnpm test:unit

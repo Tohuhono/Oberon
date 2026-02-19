@@ -37,5 +37,8 @@
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "chat.useNestedAgentsMdFiles": true,
+    "chat.tools.terminal.autoApprove": {
+      "git remote": true,
+    },
   },
 }

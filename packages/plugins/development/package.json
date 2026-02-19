@@ -35,7 +35,8 @@
     "generate:migrations": "drizzle-kit generate:sqlite",
     "dev": "vite build --watch",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
     "tsc": "tsc --pretty",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"

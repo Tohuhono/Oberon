@@ -39,6 +39,20 @@
     },
     "test": {
       "dependsOn": ["^build"],
+      "outputs": ["report", "results"]
+    },
+    "test:unit": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test:smoke": {
+      "dependsOn": ["^build"],
+      "outputs": ["report", "results"]
+    },
+    "test:ui": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "test:watch": {

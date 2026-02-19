@@ -128,7 +128,7 @@ jobs:
 
   e2e-test:
     name: E2E Test
-    uses: ./.github/workflows/call-playwright-e2e.yml
+    uses: ./.github/workflows/call-e2e.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
