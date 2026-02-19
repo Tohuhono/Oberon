@@ -1,5 +1,5 @@
 {
-  "name": "@oberon/tests",
+  "name": "@dev/test",
   "version": "0.0.0",
   "private": true,
   "type": "module",

@@ -1,5 +1,5 @@
 {
-  "name": "@config/vitest",
+  "name": "@dev/vitest",
   "private": true,
   "version": "0.1.0",
   "author": "Tohuhono ltd",
@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "config/vitest"
+    "directory": "dev/vitest"
   },
   "scripts": {
     "clean": "odt clean",

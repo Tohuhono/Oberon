@@ -4,7 +4,7 @@
 
 Add Vitest unit testing infrastructure
 
-- `@config/vitest` shared package with `initTestConfig()` helper
+- `@dev/vitest` shared package with `initTestConfig()` helper
 - `vitest.config.ts` + `test` script added to all packages and apps
 - `tsconfig.test.json` at root for standalone type-checking of test files
 - Relaxed ESLint rules for `*.test.ts` files (`no-explicit-any`,

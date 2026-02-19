@@ -5,7 +5,7 @@
 
 Add Playwright e2e smoke tests for playground and docs
 
-- Configure e2e tests under `tests/e2e/` with shared build via globalSetup
+- Configure e2e tests under `dev/test/e2e/` with shared build via globalSetup
 - Playground smoke tests: homepage, CMS route, 404 page
 - Docs smoke tests: homepage, docs index, CMS route, 404 page
 - Uses development plugin with SQLite for playground persistence

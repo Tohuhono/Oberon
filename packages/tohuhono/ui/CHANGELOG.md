@@ -88,13 +88,13 @@
 
 - d51da69: Split shared repo configs into dedicated internal packages and
   migrate all consumers:
-  - add `@config/eslint`, `@config/typescript`, and `@config/vite`
+  - add `@dev/eslint`, `@dev/typescript`, and `@dev/vite`
   - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
     those packages
-  - replace `@tohuhono/dev` with `@config/scripts` and keep only the `odt`
-    tooling export
+  - replace `@tohuhono/dev` with `@dev/scripts` and keep only the `odt` tooling
+    export
   - modernize package `exports` maps with explicit `types`/`default` conditions
-  - simplify `@config/vite` to source export + typecheck-only workflow
+  - simplify `@dev/vite` to source export + typecheck-only workflow
 
 - 40a22ae: Remove UI type assertions for Base UI class names and keep
   type-safety intact.
@@ -110,10 +110,10 @@
 - Updated dependencies [d51da69]
 - Updated dependencies [40a22ae]
   - @tohuhono/utils@0.13.0
-  - @config/scripts@0.1.1
-  - @config/eslint@0.1.1
-  - @config/typescript@0.1.1
-  - @config/vite@0.1.1
+  - @dev/scripts@0.1.1
+  - @dev/eslint@0.1.1
+  - @dev/typescript@0.1.1
+  - @dev/vite@0.1.1
 
 ## 0.13.0
 

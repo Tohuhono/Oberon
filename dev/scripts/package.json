@@ -1,5 +1,5 @@
 {
-  "name": "@config/scripts",
+  "name": "@dev/scripts",
   "private": true,
   "version": "0.1.1",
   "author": "Tohuhono ltd",
@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "config/scripts"
+    "directory": "dev/scripts"
   },
   "scripts": {
     "clean": "odt clean",
@@ -35,8 +35,8 @@
     "tsx": "^4.21.0"
   },
   "devDependencies": {
-    "@config/eslint": "workspace:*",
-    "@config/typescript": "workspace:*",
+    "@dev/eslint": "workspace:*",
+    "@dev/typescript": "workspace:*",
     "@types/node": "24.10.1",
     "eslint": "^9.39.2",
     "typescript": "5.9.3"

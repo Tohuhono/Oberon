@@ -70,11 +70,11 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@config/eslint": "workspace:*",
-    "@config/scripts": "workspace:*",
-    "@config/typescript": "workspace:*",
-    "@config/vite": "workspace:*",
-    "@config/vitest": "workspace:*",
+    "@dev/eslint": "workspace:*",
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
+    "@dev/vite": "workspace:*",
+    "@dev/vitest": "workspace:*",
     "@types/node": "24.10.1",
     "@types/pg": "^8.16.0",
     "@types/react": "19.2.14",

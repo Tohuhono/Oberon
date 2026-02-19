@@ -1,5 +1,5 @@
 {
-  "name": "@config/vite",
+  "name": "@dev/vite",
   "private": true,
   "version": "0.1.1",
   "author": "Tohuhono ltd",
@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
-    "directory": "config/vite"
+    "directory": "dev/vite"
   },
   "type": "module",
   "scripts": {
@@ -34,9 +34,9 @@
     "vite-plugin-externalize-deps": "^0.10.0"
   },
   "devDependencies": {
-    "@config/eslint": "workspace:*",
-    "@config/scripts": "workspace:*",
-    "@config/typescript": "workspace:*",
+    "@dev/eslint": "workspace:*",
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
     "@types/node": "24.10.1",
     "eslint": "^9.39.2",
     "typescript": "5.9.3"
