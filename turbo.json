@@ -46,7 +46,7 @@
       "outputs": [".playwright"]
     },
     "test:smoke": {
-      "dependsOn": ["build"],
+      "dependsOn": [],
       "outputs": [".playwright"]
     },
     "test:ui": {

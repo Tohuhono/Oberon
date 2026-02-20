@@ -5,12 +5,13 @@
 - **Unit tests**: Vitest, per-package (co-located `src/**/*.test.ts`)
   - Run: `pnpm test` (turbo — builds workspace deps first, then vitest in each
     package)
-- **E2E tests**: Playwright, `@dev/test` package (`dev/test/`)
-  - Run locally: `pnpm e2e` (all tests) / `pnpm e2e:ui` (interactive)
-  - Run in CI: `pnpm e2e:smoke` (only `@smoke`-tagged tests)
-  - Config: `dev/test/playwright.config.ts`
-  - Spec files: `dev/test/e2e/{playground,docs}/*.spec.ts`
-  - Starts playground (`:3200`) and docs (`:3201`) via `webServer`
+- **E2E tests**: Playwright, `@dev/playwright` package (`dev/playwright/`)
+  - Run locally (full): `pnpm test:e2e`
+  - Run locally/CI (deployed smoke):
+    `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
+  - Shared config: `dev/playwright/base.config.ts`
+  - Deployed smoke config: `dev/playwright/playwright.config.ts`
+  - Spec files: `apps/{documentation,playground}/test/**/*.spec.ts`
 
 ## Unit test scope
 

@@ -46,8 +46,8 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm i
-      - name: Build apps and install Playwright browsers
-        run: pnpx playwright install --with-deps chromium & wait
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
       - name: Run E2E (local)
         if: ${{ inputs.target != 'deployed' }}
         run: pnpm test:e2e
@@ -56,13 +56,12 @@ jobs:
           SQLITE_FILE: "file:.oberon/e2e-test.db"
       - name: Run Smoke (deployed)
         if: ${{ inputs.target == 'deployed' }}
-        run: pnpm --dir dev/test test:smoke -- --project "${{ inputs.project }}"
+        run: pnpm test:smoke -- --project "${{ inputs.project }}"
         env:
-          PLAYWRIGHT_PLAYGROUND_BASE_URL: ${{ inputs.base_url }}
-          PLAYWRIGHT_DOCS_BASE_URL: ${{ inputs.base_url }}
+          PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-e2e-report
-          path: dev/test/report
+          path: dev/playwright/.playwright/report
           retention-days: 10

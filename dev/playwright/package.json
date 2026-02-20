@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "odt clean",
+    "test:smoke": "playwright test",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
@@ -14,7 +15,8 @@
     }
   },
   "files": [
-    "base.config.ts"
+    "base.config.ts",
+    "playwright.config.ts"
   ],
   "devDependencies": {
     "@playwright/test": "^1.52.0",

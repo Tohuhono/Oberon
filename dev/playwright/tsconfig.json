@@ -3,5 +3,5 @@
   "compilerOptions": {
     "rootDir": "."
   },
-  "include": ["base.config.ts"]
+  "include": ["*.config.ts"]
 }

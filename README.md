@@ -28,9 +28,9 @@ pnpm build # Build all packages
 
 pnpm test # Run unit tests
 
-pnpm e2e # Run e2e tests
+pnpm test:e2e # Run e2e tests
 
-pnpm e2e:smoke # Run e2e smoke tests (CI subset)
+pnpm test:smoke # Run e2e smoke tests (CI subset)
 
 pnpm change # Add a changset entry
 ```

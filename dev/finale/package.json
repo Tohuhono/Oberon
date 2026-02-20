@@ -1,5 +1,6 @@
 {
-  "name": "@dev/test",
+  "name": "@dev/final",
+  "description": "typescript config with all other packages as deps",
   "version": "0.0.0",
   "private": true,
   "type": "module",
