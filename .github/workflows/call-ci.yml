@@ -36,6 +36,38 @@ jobs:
       ref: ${{ inputs.ref }}
       base: ${{ inputs.base }}
 
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+      - name: Use pNpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+      - name: Install
+        run: pnpm i
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
+      - name: Prettier
+        run: pnpm prettier
+      - name: Check
+        run: pnpm check
+
   deploy_docs:
     name: Oberon Docs
     needs: [changed-packages]
@@ -68,45 +100,9 @@ jobs:
       TURSO_URL: ${{ secrets.TURSO_URL }}
       TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
 
-  lint:
-    name: Lint and Type Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ inputs.repository }}
-          ref: ${{ inputs.ref }}
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-      - name: Use pNpm
-        uses: pnpm/action-setup@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24.x"
-          cache: "pnpm"
-      - name: Install
-        run: pnpm i
-      - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
-      - name: Prettier
-        run: pnpm prettier
-      - name: Check
-        run: pnpm check
-
   smoke-docs:
     name: Smoke Test Docs
     needs: [changed-packages, deploy_docs]
-    if: |
-      always() &&
-      !contains(needs.*.result, 'cancelled') &&
-      needs.deploy_docs.result == 'success'
     uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
@@ -117,10 +113,6 @@ jobs:
   smoke-playground:
     name: Smoke Test Playground
     needs: [changed-packages, deploy_playground]
-    if: |
-      always() &&
-      !contains(needs.*.result, 'cancelled') &&
-      needs.deploy_playground.result == 'success'
     uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
@@ -128,9 +120,57 @@ jobs:
       project: playground
       base_url: ${{ needs.deploy_playground.outputs.url }}
 
+  promote_docs:
+    name: Oberon CMS Docs
+    needs: [check, deploy_docs, smoke-docs]
+    uses: ./.github/workflows/call-promote.yml
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    with:
+      environment: ${{ inputs.environment }}
+      project: oberon-docs
+      staging_url: ${{ needs.deploy_docs.outputs.url }}
+      production_url: www.oberoncms.com
+
+  promote_playground:
+    name: Oberon Playground
+    needs: [check, deploy_playground, smoke_playground]
+    uses: ./.github/workflows/call-promote.yml
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    with:
+      environment: ${{ inputs.environment }}
+      project: playground
+      staging_url: ${{ needs.deploy_playground.outputs.url }}
+      production_url: playground.tohuhono.com
+
+  smoke-promoted-docs:
+    name: Smoke Test Promoted Docs
+    needs: [promote_docs]
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: docs
+      base_url: https://www.oberoncms.com
+
+  smoke-promoted-playground:
+    name: Smoke Test Promoted Playground
+    needs: [promote_playground]
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: playground
+      base_url: https://playground.tohuhono.com
+
   deploy-status:
     name: Deploy Status
-    needs: [changed-packages, deploy_docs, deploy_playground, smoke-docs, smoke-playground]
+    needs: [changed-packages, deploy_docs, deploy_playground]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
@@ -146,83 +186,3 @@ jobs:
       - name: Failing deploy
         if: ${{ env.STATUS == 'failed' }}
         run: exit 1
-
-  test-status:
-    name: Test Status
-    needs: [deploy-status, lint]
-    if: always() && !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
-    env:
-      STATUS: "${{ ( contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') ) && 'failed' || 'passed'}}"
-    steps:
-      - name: Failing deploy
-        if: ${{ env.STATUS == 'failed' }}
-        run: exit 1
-
-  promote_docs:
-    name: Oberon CMS Docs
-    needs: [deploy_docs, test-status]
-    if: |
-      always() && 
-      inputs.environment == 'production' &&
-      !contains(needs.*.result, 'cancelled') &&
-      !contains(needs.*.result, 'failure') &&
-      needs.deploy_docs.result == 'success'
-    uses: ./.github/workflows/call-promote.yml
-    secrets:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-    with:
-      environment: ${{ inputs.environment }}
-      project: oberon-docs
-      staging_url: ${{ needs.deploy_docs.outputs.url }}
-      production_url: www.oberoncms.com
-
-  promote_playground:
-    name: Oberon Playground
-    needs: [deploy_playground, test-status]
-    if: |
-      always() && 
-      inputs.environment == 'production' &&
-      !contains(needs.*.result, 'cancelled') &&
-      !contains(needs.*.result, 'failure') &&
-      needs.deploy_playground.result == 'success'
-    uses: ./.github/workflows/call-promote.yml
-    secrets:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-    with:
-      environment: ${{ inputs.environment }}
-      project: playground
-      staging_url: ${{ needs.deploy_playground.outputs.url }}
-      production_url: playground.tohuhono.com
-
-  smoke-promoted-docs:
-    name: Smoke Test Promoted Docs
-    needs: [changed-packages, promote_docs]
-    if: |
-      always() &&
-      !contains(needs.*.result, 'cancelled') &&
-      needs.promote_docs.result == 'success'
-    uses: ./.github/workflows/call-smoke.yml
-    with:
-      repository: ${{ inputs.repository }}
-      ref: ${{ inputs.ref }}
-      project: docs
-      base_url: https://www.oberoncms.com
-
-  smoke-promoted-playground:
-    name: Smoke Test Promoted Playground
-    needs: [changed-packages, promote_playground]
-    if: |
-      always() &&
-      !contains(needs.*.result, 'cancelled') &&
-      needs.promote_playground.result == 'success'
-    uses: ./.github/workflows/call-smoke.yml
-    with:
-      repository: ${{ inputs.repository }}
-      ref: ${{ inputs.ref }}
-      project: playground
-      base_url: https://playground.tohuhono.com

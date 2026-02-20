@@ -14,7 +14,7 @@ This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps
 - End each plan with unresolved questions list (if none, say “None”)
 - If you are unsure, ask for clarification
 
-## Edit mode
+## Agent mode / Edit mode
 
 - CRITICAL: Read `agents/CODESTYLE.md` before any edits.
 - Execute plan, if uncertain ask
@@ -34,6 +34,18 @@ validated, instead perform the following tasks without further prompting:
 - Commit and push changes; the commit message should be concise; the changeset
   is the description
 - Open a PR against `main`
+
+## Update PR
+
+If asked to Update PR then skip plan mode and assume the task is complete and
+validated, instead perform the following tasks without further prompting:
+
+- Make sure current branch has all changes, not just files touched in the
+  current task
+- Add or update [changeset](https://github.com/changesets/changesets) for any
+  new changes
+- Commit and push changes; the commit message should be concise; the changeset
+  is the description
 
 ## Guardrails
 
