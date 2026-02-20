@@ -126,6 +126,25 @@ jobs:
     secrets:
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
 
+  test-status:
+    name: Test Status
+    needs: [changed-packages, validate, deploy_docs, deploy_playground, smoke_docs, smoke_playground]
+    if: always() && !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    env:
+      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
+      MESSAGE: |
+        Latest deployments available at: 
+        ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
+        ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
+    steps:
+      - name: Add preview URL to job summary
+        run: |
+          echo "${{ env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
+      - name: Failing deploy
+        if: ${{ env.STATUS == 'failed' }}
+        run: exit 1
+
   promote_docs:
     name: Oberon CMS Docs
     needs: [validate, deploy_docs, smoke_docs]
@@ -177,22 +196,3 @@ jobs:
       ref: ${{ inputs.ref }}
       project: playground
       base_url: https://playground.tohuhono.com
-
-  deploy-status:
-    name: Deploy Status
-    needs: [changed-packages, deploy_docs, deploy_playground]
-    if: always() && !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
-    env:
-      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
-      MESSAGE: |
-        Latest deployments available at: 
-        ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
-        ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
-    steps:
-      - name: Add preview URL to job summary
-        run: |
-          echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
-      - name: Failing deploy
-        if: ${{ env.STATUS == 'failed' }}
-        run: exit 1
