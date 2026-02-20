@@ -1,5 +1,6 @@
 ---
-"@oberoncms/core": patch
+"@oberon/docs": patch
+"@oberon/playground": patch
 ---
 
 Switch Turbo from loose to strict env handling and explicitly model runtime env
