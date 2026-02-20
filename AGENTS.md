@@ -1,9 +1,9 @@
 ## Essentials
 
-This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps.
+This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps
 
-- Use pnpm workspaces with turborepo.
-- Non-standard check: `pnpm check` runs lint + typecheck.
+- Use pnpm workspaces with turborepo
+- Non-standard check: `pnpm check` runs cachec lint, typecheck, build, tests
 
 # Agent workflows
 
@@ -19,8 +19,6 @@ This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps.
 - CRITICAL: Read `agents/CODESTYLE.md` before any edits.
 - Execute plan, if uncertain ask
 - Validate with `pnpm check`; iterate until warnings/errors are resolved
-- Validate with `pnpm build`; iterate until warnings/errors are resolved
-- Run `pnpm test`; iterate until passing
 - Create changeset
 
 ## Finalise
@@ -40,15 +38,14 @@ validated, instead perform the following tasks without further prompting:
 ## Guardrails
 
 - Never use `--lockfile-only`; use plain `pnpm install` (it refreshes the
-  lockfile).
+  lockfile)
 - Never use `pnpm --filter`; use turborepo commands (`pnpm check`, `pnpm build`)
-  which handle dependency ordering automatically.
-- Never use '-f' for rm; Try to remove without forcing.
+  which handle dependency ordering automatically
+- Never use '-f' for rm; Try to remove without forcing
 
 # Follow-up docs
 
-- `agents/CODESTYLE.md` (coding style rules)
-- `agents/ARCHITECTURE.md` (full system design)
-- `agents/CONVENTIONS.md` (common system patterns)
-- `agents/TESTING.md` (testing strategy and scope)
-- `README.md` (human onbaording)
+- Read `agents/CODESTYLE.md` for coding style rules
+- Read `agents/ARCHITECTURE.md` for full system design
+- Read `agents/CONVENTIONS.md` for common system patterns
+- Read `agents/TESTING.md` for testing strategy and scope
