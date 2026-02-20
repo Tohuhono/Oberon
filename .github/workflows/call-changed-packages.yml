@@ -49,16 +49,6 @@ jobs:
           node-version: "24.x"
           cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Validate base ref
-        run: |
-          if [ -z "$TURBO_REF_FILTER" ]; then
-            echo "::error::Missing 'base' input. Expected a commit SHA for TURBO_REF_FILTER."
-            exit 1
-          fi
-
       - name: Changeset
         id: changeset
         # 1. We need the 'output' of a turbo dry-run to get a json with all affected packages of these run.
