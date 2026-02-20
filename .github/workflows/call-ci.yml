@@ -129,6 +129,7 @@ jobs:
   promote_docs:
     name: Oberon CMS Docs
     needs: [validate, deploy_docs, smoke_docs]
+    if: inputs.environment == 'production'
     uses: ./.github/workflows/call-promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -143,6 +144,7 @@ jobs:
   promote_playground:
     name: Oberon Playground
     needs: [validate, deploy_playground, smoke_playground]
+    if: inputs.environment == 'production'
     uses: ./.github/workflows/call-promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -157,6 +159,7 @@ jobs:
   smoke-docs-production:
     name: Smoke Test Promoted Docs
     needs: [promote_docs]
+    if: inputs.environment == 'production'
     uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
@@ -167,6 +170,7 @@ jobs:
   smoke-playground-production:
     name: Smoke Test Promoted Playground
     needs: [promote_playground]
+    if: inputs.environment == 'production'
     uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
