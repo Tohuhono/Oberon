@@ -46,7 +46,7 @@
     "test:smoke": {
       "dependsOn": [],
       "outputs": [".playwright"],
-      "env": ["PLAYWRIGHT_BASE_URL"]
+      "env": ["PLAYWRIGHT_BASE_URL", "VERCEL_PROTECTION_BYPASS"]
     },
     "test:ui": {
       "cache": false,

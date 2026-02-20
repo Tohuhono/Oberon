@@ -16,6 +16,9 @@ on:
       base_url:
         required: false
         type: string
+    secrets:
+      VERCEL_PROTECTION_BYPASS:
+        required: false
 
 jobs:
   smoke:
@@ -48,6 +51,7 @@ jobs:
         run: pnpm test:smoke -- --project "${{ inputs.project }}"
         env:
           PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}
+          VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
