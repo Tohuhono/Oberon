@@ -1,5 +1,44 @@
 # @oberon/playground
 
+## 0.10.3
+
+### Patch Changes
+
+- 5fcb1cd: Add Playwright e2e smoke tests for playground and docs
+  - Configure e2e tests under `dev/test/e2e/` with shared build via globalSetup
+  - Playground smoke tests: homepage, CMS route, 404 page
+  - Docs smoke tests: homepage, docs index, CMS route, 404 page
+  - Uses development plugin with SQLite for playground persistence
+  - Add CI workflow (`call-playwright-e2e.yml`) wired into the CI pipeline
+  - New scripts: `pnpm e2e` and `pnpm e2e:ui`
+
+- fed3aa0: Switch Turbo from loose to strict env handling and explicitly model
+  runtime env dependencies.
+  - set `envMode` to `strict`
+  - scope task `env` allowlists to app packages only (`apps/playground`,
+    `apps/documentation`)
+  - keep root turbo tasks env-agnostic so non-app packages are not invalidated
+    by app env changes
+  - remove redundant task-level `CI` declarations (covered by root `globalEnv`)
+  - narrow app `build` env hashing to currently wired env dependencies to reduce
+    unnecessary cache misses
+  - keep test task env minimal while allowing required Playwright vars
+  - expand env file hashing for app build inputs with package-local `.env*`
+
+- Updated dependencies [fbad025]
+- Updated dependencies [d383641]
+- Updated dependencies [01fa4b5]
+- Updated dependencies [bcf3676]
+- Updated dependencies [f06f0b5]
+- Updated dependencies [25706d7]
+- Updated dependencies [8265abe]
+- Updated dependencies [4a4ab91]
+  - @oberoncms/core@0.17.3
+  - @oberoncms/plugin-uploadthing@0.16.3
+  - @oberoncms/plugin-development@0.7.3
+  - @oberoncms/plugin-turso@0.17.3
+  - @tohuhono/puck-blocks@0.13.3
+
 ## 0.10.2
 
 ### Patch Changes

@@ -1,5 +1,24 @@
 # @oberon/utils
 
+## 0.14.0
+
+### Minor Changes
+
+- 25706d7: Add concurrency limit to migration transforms to prevent database
+  connection pool exhaustion on large sites
+
+### Patch Changes
+
+- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making
+  `test` call `test:unit`.
+  - rename direct unit test command from `test` to `test:unit`
+  - keep `test` as the entrypoint by delegating to `pnpm test:unit`
+  - add root `test:unit` orchestration for consistent workspace-level unit-test
+    invocation
+  - preserve existing e2e-oriented test scripts
+
 ## 0.13.2
 
 ### Patch Changes

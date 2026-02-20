@@ -1,5 +1,46 @@
 # @oberoncms/core
 
+## 0.17.3
+
+### Patch Changes
+
+- fbad025: Add Vitest unit testing infrastructure
+  - `@dev/vitest` shared package with `initTestConfig()` helper
+  - `vitest.config.ts` + `test` script added to all packages and apps
+  - `tsconfig.test.json` at root for standalone type-checking of test files
+  - Relaxed ESLint rules for `*.test.ts` files (`no-explicit-any`,
+    `no-non-null-assertion`, type assertions)
+  - Replace Jest CI workflow with Vitest (`pnpm test`)
+  - `agents/TESTING.md` documents testing strategy and scope
+  - First test: `packages/oberoncms/core/src/adapter/transforms.test.ts` (9
+    tests)
+
+- d383641: Fix broken async reduce in zone transformations by replacing local
+  transformProps copy with upstream @puckeditor/core export. The local copy had
+  a bug where spreading an unawaited Promise accumulator silently dropped all
+  but the last zone's data during prop transforms.
+- bcf3676: Fix unsafe permission dictionary access in hasPermission() that
+  caused silent failures when actions are undefined for a role. The function now
+  explicitly checks for undefined actions and returns false (deny permission)
+  instead of allowing undefined comparisons.
+- 25706d7: Add concurrency limit to migration transforms to prevent database
+  connection pool exhaustion on large sites
+- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making
+  `test` call `test:unit`.
+  - rename direct unit test command from `test` to `test:unit`
+  - keep `test` as the entrypoint by delegating to `pnpm test:unit`
+  - add root `test:unit` orchestration for consistent workspace-level unit-test
+    invocation
+  - preserve existing e2e-oriented test scripts
+
+- Updated dependencies [25706d7]
+- Updated dependencies [8265abe]
+- Updated dependencies [4a4ab91]
+  - @tohuhono/utils@0.14.0
+  - @tohuhono/ui@0.14.3
+
 ## 0.17.2
 
 ### Patch Changes

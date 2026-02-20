@@ -1,5 +1,21 @@
 # oberon-cms-example
 
+## 0.16.3
+
+### Patch Changes
+
+- d680fc0: Remove dead code: unused legacy Pages Router file, unused Welcome component
+  duplicate, and unused import. Add noUnusedLocals/noUnusedParameters to recipe
+  tsconfig to prevent future unused imports.
+- Updated dependencies [fbad025]
+- Updated dependencies [d383641]
+- Updated dependencies [bcf3676]
+- Updated dependencies [25706d7]
+- Updated dependencies [8265abe]
+- Updated dependencies [4a4ab91]
+  - @oberoncms/core@0.17.3
+  - @oberoncms/plugin-development@0.7.3
+
 ## 0.16.2
 
 ### Patch Changes

@@ -1,5 +1,28 @@
 # @oberoncms/plugin-development
 
+## 0.7.3
+
+### Patch Changes
+
+- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making
+  `test` call `test:unit`.
+  - rename direct unit test command from `test` to `test:unit`
+  - keep `test` as the entrypoint by delegating to `pnpm test:unit`
+  - add root `test:unit` orchestration for consistent workspace-level unit-test
+    invocation
+  - preserve existing e2e-oriented test scripts
+
+- Updated dependencies [fbad025]
+- Updated dependencies [d383641]
+- Updated dependencies [bcf3676]
+- Updated dependencies [25706d7]
+- Updated dependencies [8265abe]
+- Updated dependencies [4a4ab91]
+  - @oberoncms/core@0.17.3
+  - @oberoncms/sqlite@0.7.3
+
 ## 0.7.2
 
 ### Patch Changes

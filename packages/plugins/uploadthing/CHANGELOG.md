@@ -1,5 +1,36 @@
 # @oberoncms/plugin-upload-thing
 
+## 0.16.3
+
+### Patch Changes
+
+- 01fa4b5: Fix silent data loss in deleteImage operations. Previously,
+  Promise.allSettled silently swallowed errors from both storage and database
+  deletions, causing users to see success even when operations failed. Now
+  properly handles errors by collecting failures and throwing an AggregateError,
+  ensuring users are aware of partial failures that require admin intervention.
+- f06f0b5: Add memory limit (128KB) to stream processing in getImageSize() to
+  prevent unbounded memory consumption. Large image uploads now abort gracefully
+  after reading sufficient data for header detection, preventing OOM crashes
+  while maintaining backward compatibility.
+- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making
+  `test` call `test:unit`.
+  - rename direct unit test command from `test` to `test:unit`
+  - keep `test` as the entrypoint by delegating to `pnpm test:unit`
+  - add root `test:unit` orchestration for consistent workspace-level unit-test
+    invocation
+  - preserve existing e2e-oriented test scripts
+
+- Updated dependencies [fbad025]
+- Updated dependencies [d383641]
+- Updated dependencies [bcf3676]
+- Updated dependencies [25706d7]
+- Updated dependencies [8265abe]
+- Updated dependencies [4a4ab91]
+  - @oberoncms/core@0.17.3
+
 ## 0.16.2
 
 ### Patch Changes

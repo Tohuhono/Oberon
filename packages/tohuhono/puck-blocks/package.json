@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/puck-blocks",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A collection of puck components for building pages in OberonCMS",

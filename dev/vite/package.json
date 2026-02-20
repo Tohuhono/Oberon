@@ -1,7 +1,7 @@
 {
   "name": "@dev/vite",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "Shared Vite library config for @tohuhono and @oberoncms packages",
