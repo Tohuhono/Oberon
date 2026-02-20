@@ -100,28 +100,28 @@ jobs:
       - name: Check
         run: pnpm check
 
-  e2e-docs:
-    name: E2E Smoke Docs
+  smoke-docs:
+    name: Smoke Test Docs
     needs: [changed-packages, deploy_docs]
     if: |
       always() &&
       !contains(needs.*.result, 'cancelled') &&
       needs.deploy_docs.result == 'success'
-    uses: ./.github/workflows/call-e2e.yml
+    uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: docs
       base_url: ${{ needs.deploy_docs.outputs.url }}
 
-  e2e-playground:
-    name: E2E Smoke Playground
+  smoke-playground:
+    name: Smoke Test Playground
     needs: [changed-packages, deploy_playground]
     if: |
       always() &&
       !contains(needs.*.result, 'cancelled') &&
       needs.deploy_playground.result == 'success'
-    uses: ./.github/workflows/call-e2e.yml
+    uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
@@ -130,7 +130,7 @@ jobs:
 
   deploy-status:
     name: Deploy Status
-    needs: [changed-packages, deploy_docs, deploy_playground, e2e-docs, e2e-playground]
+    needs: [changed-packages, deploy_docs, deploy_playground, smoke-docs, smoke-playground]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
@@ -198,3 +198,31 @@ jobs:
       project: playground
       staging_url: ${{ needs.deploy_playground.outputs.url }}
       production_url: playground.tohuhono.com
+
+  smoke-promoted-docs:
+    name: Smoke Test Promoted Docs
+    needs: [changed-packages, promote_docs]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.promote_docs.result == 'success'
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: docs
+      base_url: https://www.oberoncms.com
+
+  smoke-promoted-playground:
+    name: Smoke Test Promoted Playground
+    needs: [changed-packages, promote_playground]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.promote_playground.result == 'success'
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: playground
+      base_url: https://playground.tohuhono.com

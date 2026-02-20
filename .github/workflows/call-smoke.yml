@@ -1,4 +1,4 @@
-name: E2E Tests
+name: Smoke Tests
 
 on:
   workflow_call:
@@ -18,8 +18,8 @@ on:
         type: string
 
 jobs:
-  e2e:
-    name: Full E2E
+  smoke:
+    name: Smoke Test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -51,6 +51,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-e2e-report
+          name: playwright-smoke-report
           path: dev/playwright/.playwright/report
           retention-days: 10
