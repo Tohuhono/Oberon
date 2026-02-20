@@ -1,5 +1,22 @@
 # create-oberon-app
 
+## 0.10.2
+
+### Patch Changes
+
+- f24ecd0: Fix a Node.js compatibility issue in the scaffolder by resolving
+  template/plugin paths by documenting and enforcing a Node.js runtime
+  requirement of 22+ in the package metadata and README.
+- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub
+  repository URL used in npm provenance validation.
+- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making
+  `test` call `test:unit`.
+  - rename direct unit test command from `test` to `test:unit`
+  - keep `test` as the entrypoint by delegating to `pnpm test:unit`
+  - add root `test:unit` orchestration for consistent workspace-level unit-test
+    invocation
+  - preserve existing e2e-oriented test scripts
+
 ## 0.10.1
 
 ### Patch Changes
