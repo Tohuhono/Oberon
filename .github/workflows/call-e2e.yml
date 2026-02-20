@@ -9,10 +9,6 @@ on:
       ref:
         required: true
         type: string
-      target:
-        required: false
-        default: local
-        type: string
       project:
         required: false
         default: ""
@@ -48,14 +44,7 @@ jobs:
         run: pnpm i
       - name: Install Playwright browsers
         run: pnpx playwright install --with-deps chromium
-      - name: Run E2E (local)
-        if: ${{ inputs.target != 'deployed' }}
-        run: pnpm test:e2e
-        env:
-          USE_DEVELOPMENT_DATABASE: "true"
-          SQLITE_FILE: "file:.oberon/e2e-test.db"
       - name: Run Smoke (deployed)
-        if: ${{ inputs.target == 'deployed' }}
         run: pnpm test:smoke -- --project "${{ inputs.project }}"
         env:
           PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}

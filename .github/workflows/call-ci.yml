@@ -68,25 +68,6 @@ jobs:
       TURSO_URL: ${{ secrets.TURSO_URL }}
       TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
 
-  deploy-status:
-    name: Deploy Status
-    needs: [changed-packages, deploy_docs, deploy_playground]
-    if: always() && !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
-    env:
-      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
-      MESSAGE: |
-        Latest deployments available at: 
-        ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
-        ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
-    steps:
-      - name: Add preview URL to job summary
-        run: |
-          echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
-      - name: Failing deploy
-        if: ${{ env.STATUS == 'failed' }}
-        run: exit 1
-
   lint:
     name: Lint and Type Check
     runs-on: ubuntu-latest
@@ -112,19 +93,12 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
       - name: Prettier
         run: pnpm prettier
-      - name: Lint
-        run: pnpm lint --cache-dir=.turbo
-      - name: Types
-        run: pnpm tsc --cache-dir=.turbo
-
-  unit-test:
-    name: Unit Test
-    uses: ./.github/workflows/call-unit-tests.yml
-    with:
-      repository: ${{ inputs.repository }}
-      ref: ${{ inputs.ref }}
+      - name: Check
+        run: pnpm check
 
   e2e-docs:
     name: E2E Smoke Docs
@@ -137,7 +111,6 @@ jobs:
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
-      target: deployed
       project: docs
       base_url: ${{ needs.deploy_docs.outputs.url }}
 
@@ -152,36 +125,31 @@ jobs:
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
-      target: deployed
       project: playground
       base_url: ${{ needs.deploy_playground.outputs.url }}
 
-  e2e-status:
-    name: E2E Status
-    needs: [changed-packages, e2e-docs, e2e-playground]
+  deploy-status:
+    name: Deploy Status
+    needs: [changed-packages, deploy_docs, deploy_playground, e2e-docs, e2e-playground]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
-      DOCS_CHANGED: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/docs') }}
-      PLAYGROUND_CHANGED: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/playground') }}
-      DOCS_E2E_RESULT: ${{ needs.e2e-docs.result }}
-      PLAYGROUND_E2E_RESULT: ${{ needs.e2e-playground.result }}
+      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
+      MESSAGE: |
+        Latest deployments available at: 
+        ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
+        ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
     steps:
-      - name: Validate post-deploy e2e status
+      - name: Add preview URL to job summary
         run: |
-          if [[ "${DOCS_CHANGED}" == "true" && "${DOCS_E2E_RESULT}" != "success" ]]; then
-            echo "Docs e2e status: ${DOCS_E2E_RESULT}"
-            exit 1
-          fi
-
-          if [[ "${PLAYGROUND_CHANGED}" == "true" && "${PLAYGROUND_E2E_RESULT}" != "success" ]]; then
-            echo "Playground e2e status: ${PLAYGROUND_E2E_RESULT}"
-            exit 1
-          fi
+          echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
+      - name: Failing deploy
+        if: ${{ env.STATUS == 'failed' }}
+        run: exit 1
 
   test-status:
     name: Test Status
-    needs: [deploy-status, lint, unit-test, e2e-status]
+    needs: [deploy-status, lint]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
