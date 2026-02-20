@@ -11,17 +11,29 @@ if (!baseRef) {
 
 const verifyRef = spawnSync(
   "git",
-  ["rev-parse", "--verify", "--quiet", `${baseRef}^{commit}`],
+  ["rev-parse", "--verify", `${baseRef}^{commit}`],
   {
     encoding: "utf8",
   },
 )
 
+if (verifyRef.error) {
+  console.error(verifyRef.error.message)
+  console.error("::error::Failed to execute git while validating base ref.")
+  process.exit(1)
+}
+
 if (verifyRef.status !== 0) {
+  if (verifyRef.stderr.trim()) {
+    console.error(verifyRef.stderr.trim())
+  }
+  if (verifyRef.stdout.trim()) {
+    console.error(verifyRef.stdout.trim())
+  }
   console.error(
     `::error::Invalid base ref '${baseRef}'. Ensure the commit exists in checkout history.`,
   )
-  process.exit(1)
+  process.exit(verifyRef.status ?? 1)
 }
 
 const turbo = spawnSync(
@@ -30,6 +42,14 @@ const turbo = spawnSync(
   { encoding: "utf8" },
 )
 
+if (turbo.error) {
+  console.error(turbo.error.message)
+  console.error(
+    "::error::Failed to execute pnpm/turbo for changed package detection.",
+  )
+  process.exit(1)
+}
+
 if (turbo.status !== 0) {
   if (turbo.stderr.trim()) {
     console.error(turbo.stderr.trim())
@@ -37,7 +57,9 @@ if (turbo.status !== 0) {
   if (turbo.stdout.trim()) {
     console.error(turbo.stdout.trim())
   }
-  console.error(`::error::Turbo dry-run failed for base ref '${baseRef}'.`)
+  console.error(
+    `::error::Turbo dry-run failed for base ref '${baseRef}' with exit code ${turbo.status ?? 1}.`,
+  )
   process.exit(turbo.status ?? 1)
 }
 
@@ -55,6 +77,7 @@ let parsed: unknown
 try {
   parsed = JSON.parse(output)
 } catch {
+  console.error(output)
   console.error("::error::Turbo dry-run output is not valid JSON.")
   process.exit(1)
 }

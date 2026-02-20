@@ -49,6 +49,9 @@ jobs:
           node-version: "24.x"
           cache: "pnpm"
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Validate base ref
         run: |
           if [ -z "$TURBO_REF_FILTER" ]; then
