@@ -49,6 +49,9 @@ jobs:
           node-version: "24.x"
           cache: "pnpm"
 
+      - name: Install
+        run: pnpm i
+
       - name: Changeset
         id: changeset
         # 1. We need the 'output' of a turbo dry-run to get a json with all affected packages of these run.
@@ -56,7 +59,7 @@ jobs:
         # 3. We specify the .github/ folder as a dependency here. Just to be safe, if workflows changed, we use that to mean everything has changes pending... to force redeploys
         run: |
           echo 'result<<CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
-          echo "$(sh ./dev/scripts/scripts/changed.sh $TURBO_REF_FILTER)" >> $GITHUB_OUTPUT
+          echo "$(pnpm exec tsx ./dev/scripts/scripts/changed.ts "$TURBO_REF_FILTER")" >> $GITHUB_OUTPUT
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
       - name: skip

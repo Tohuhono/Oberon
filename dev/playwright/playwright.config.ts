@@ -1,6 +1,7 @@
 import { base, defineConfig } from "./base.config"
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL
+const vercelProtectionBypass = process.env.VERCEL_PROTECTION_BYPASS || ""
 
 if (!baseURL) {
   throw new Error(
@@ -10,6 +11,13 @@ if (!baseURL) {
 
 export default defineConfig({
   ...base,
+  use: {
+    ...base.use,
+    extraHTTPHeaders: {
+      "x-vercel-protection-bypass": vercelProtectionBypass,
+      "x-vercel-set-bypass-cookie": "true",
+    },
+  },
   testDir: "../..",
   testMatch: "apps/**/test/**/*.spec.ts",
   projects: [
