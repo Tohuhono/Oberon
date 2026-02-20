@@ -17,6 +17,7 @@ node_modules
 coverage
 
 # Playwright
+.playwright
 test-results
 playwright-report
 playwright/.cache

@@ -1,23 +1,21 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "envMode": "loose",
+  "envMode": "strict",
+  "globalEnv": ["CI"],
   "globalDependencies": [
     ".github/**",
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
     "package.json",
-    "tsconfig.json",
-    ".env",
-    ".env.local"
+    "tsconfig.json"
   ],
   "tasks": {
     "build": {
       "dependsOn": ["wait:clean", "^build", "prebuild"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "check": {
-      "dependsOn": ["lint", "tsc"]
+      "dependsOn": ["lint", "tsc", "test:unit", "test:e2e"]
     },
     "clean": {
       "cache": false
@@ -37,21 +35,18 @@
       "cache": false,
       "dependsOn": ["^wait"]
     },
-    "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["report", "results"]
-    },
     "test:unit": {
       "dependsOn": ["^build"],
       "outputs": []
     },
     "test:e2e": {
-      "dependsOn": ["^build"],
-      "outputs": ["report", "results"]
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
     },
     "test:smoke": {
-      "dependsOn": ["^build"],
-      "outputs": ["report", "results"]
+      "dependsOn": [],
+      "outputs": [".playwright"],
+      "env": ["PLAYWRIGHT_BASE_URL"]
     },
     "test:ui": {
       "cache": false,

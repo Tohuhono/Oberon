@@ -68,25 +68,6 @@ jobs:
       TURSO_URL: ${{ secrets.TURSO_URL }}
       TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
 
-  deploy-status:
-    name: Deploy Status
-    needs: [changed-packages, deploy_docs, deploy_playground]
-    if: always() && !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
-    env:
-      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
-      MESSAGE: |
-        Latest deployments available at: 
-        ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
-        ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
-    steps:
-      - name: Add preview URL to job summary
-        run: |
-          echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
-      - name: Failing deploy
-        if: ${{ env.STATUS == 'failed' }}
-        run: exit 1
-
   lint:
     name: Lint and Type Check
     runs-on: ubuntu-latest
@@ -112,30 +93,63 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
       - name: Prettier
         run: pnpm prettier
-      - name: Lint
-        run: pnpm lint --cache-dir=.turbo
-      - name: Types
-        run: pnpm tsc --cache-dir=.turbo
+      - name: Check
+        run: pnpm check
 
-  unit-test:
-    name: Unit Test
-    uses: ./.github/workflows/call-unit-tests.yml
+  smoke-docs:
+    name: Smoke Test Docs
+    needs: [changed-packages, deploy_docs]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.deploy_docs.result == 'success'
+    uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
+      project: docs
+      base_url: ${{ needs.deploy_docs.outputs.url }}
 
-  e2e-test:
-    name: E2E Test
-    uses: ./.github/workflows/call-e2e.yml
+  smoke-playground:
+    name: Smoke Test Playground
+    needs: [changed-packages, deploy_playground]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.deploy_playground.result == 'success'
+    uses: ./.github/workflows/call-smoke.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
+      project: playground
+      base_url: ${{ needs.deploy_playground.outputs.url }}
+
+  deploy-status:
+    name: Deploy Status
+    needs: [changed-packages, deploy_docs, deploy_playground, smoke-docs, smoke-playground]
+    if: always() && !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    env:
+      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
+      MESSAGE: |
+        Latest deployments available at: 
+        ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
+        ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
+    steps:
+      - name: Add preview URL to job summary
+        run: |
+          echo "${{ env.STATUS == 'failed' && 'Deploy Failed' || env.MESSAGE }}" >> $GITHUB_STEP_SUMMARY
+      - name: Failing deploy
+        if: ${{ env.STATUS == 'failed' }}
+        run: exit 1
 
   test-status:
     name: Test Status
-    needs: [deploy-status, lint, unit-test, e2e-test]
+    needs: [deploy-status, lint]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
@@ -184,3 +198,31 @@ jobs:
       project: playground
       staging_url: ${{ needs.deploy_playground.outputs.url }}
       production_url: playground.tohuhono.com
+
+  smoke-promoted-docs:
+    name: Smoke Test Promoted Docs
+    needs: [changed-packages, promote_docs]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.promote_docs.result == 'success'
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: docs
+      base_url: https://www.oberoncms.com
+
+  smoke-promoted-playground:
+    name: Smoke Test Promoted Playground
+    needs: [changed-packages, promote_playground]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      needs.promote_playground.result == 'success'
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: playground
+      base_url: https://playground.tohuhono.com

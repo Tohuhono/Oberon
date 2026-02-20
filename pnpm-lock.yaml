@@ -101,15 +101,15 @@ importers:
       '@dev/eslint':
         specifier: workspace:*
         version: link:../../dev/eslint
+      '@dev/playwright':
+        specifier: workspace:*
+        version: link:../../dev/playwright
       '@dev/scripts':
         specifier: workspace:*
         version: link:../../dev/scripts
       '@dev/typescript':
         specifier: workspace:*
         version: link:../../dev/typescript
-      '@dev/vitest':
-        specifier: workspace:*
-        version: link:../../dev/vitest
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.1.18)
@@ -275,32 +275,7 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
-  dev/scripts:
-    dependencies:
-      rimraf:
-        specifier: ^6.1.2
-        version: 6.1.2
-      tsx:
-        specifier: ^4.21.0
-        version: 4.21.0
-    devDependencies:
-      '@dev/eslint':
-        specifier: workspace:*
-        version: link:../eslint
-      '@dev/typescript':
-        specifier: workspace:*
-        version: link:../typescript
-      '@types/node':
-        specifier: 24.10.1
-        version: 24.10.1
-      eslint:
-        specifier: ^9.39.2
-        version: 9.39.2(jiti@2.6.1)
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
-
-  dev/test:
+  dev/finale:
     devDependencies:
       '@oberon/docs':
         specifier: workspace:*
@@ -332,9 +307,6 @@ importers:
       '@oberoncms/sqlite':
         specifier: workspace:*
         version: link:../../packages/oberoncms/sqlite
-      '@playwright/test':
-        specifier: ^1.52.0
-        version: 1.58.2
       '@tohuhono/puck-blocks':
         specifier: workspace:*
         version: link:../../packages/tohuhono/puck-blocks
@@ -347,6 +319,40 @@ importers:
       create-oberon-app:
         specifier: workspace:*
         version: link:../../packages/create-oberon-app
+      eslint:
+        specifier: ^9.39.2
+        version: 9.39.2(jiti@2.6.1)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
+  dev/playwright:
+    devDependencies:
+      '@playwright/test':
+        specifier: ^1.52.0
+        version: 1.58.2
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
+  dev/scripts:
+    dependencies:
+      rimraf:
+        specifier: ^6.1.2
+        version: 6.1.2
+      tsx:
+        specifier: ^4.21.0
+        version: 4.21.0
+    devDependencies:
+      '@dev/eslint':
+        specifier: workspace:*
+        version: link:../eslint
+      '@dev/typescript':
+        specifier: workspace:*
+        version: link:../typescript
+      '@types/node':
+        specifier: 24.10.1
+        version: 24.10.1
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)

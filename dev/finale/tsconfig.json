@@ -1,6 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "rootDir": "../../",
     "noEmit": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -17,9 +18,9 @@
     "noUnusedParameters": false
   },
   "include": [
-    "./playwright.config.ts",
-    "./e2e/**/*.ts",
-    "../packages/**/src/**/*.test.ts",
-    "../apps/**/src/**/*.test.ts"
+    "../../**/*.spec.ts",
+    "../../**/*.spec.tsx",
+    "../../**/*.test.ts",
+    "../../**/*.test.tsx"
   ]
 }

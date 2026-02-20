@@ -28,12 +28,20 @@ pnpm build # Build all packages
 
 pnpm test # Run unit tests
 
-pnpm e2e # Run e2e tests
+pnpm test:e2e # Run e2e tests
 
-pnpm e2e:smoke # Run e2e smoke tests (CI subset)
+pnpm test:smoke # Run e2e smoke tests (CI subset)
 
 pnpm change # Add a changset entry
 ```
+
+## CI testing pipeline
+
+- `pnpm test:e2e` runs local full e2e coverage in CI using built apps.
+- Smoke e2e tests (`@smoke`) also run after each deploy against deployed URLs
+  for docs and playground.
+- Post-deploy smoke results gate downstream CI stages (including promotion), so
+  failed deployed smoke tests block progression.
 
 ## What's inside?
 

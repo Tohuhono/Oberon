@@ -1,8 +1,7 @@
 {
   "extends": "@dev/typescript",
   "compilerOptions": {
-    "noEmit": true,
     "rootDir": "."
   },
-  "include": ["*.config.*"]
+  "include": ["*.config.ts"]
 }

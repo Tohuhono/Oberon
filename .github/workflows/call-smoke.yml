@@ -1,4 +1,4 @@
-name: E2E Tests
+name: Smoke Tests
 
 on:
   workflow_call:
@@ -9,10 +9,17 @@ on:
       ref:
         required: true
         type: string
+      project:
+        required: false
+        default: ""
+        type: string
+      base_url:
+        required: false
+        type: string
 
 jobs:
-  e2e:
-    name: Full E2E
+  smoke:
+    name: Smoke Test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -35,16 +42,15 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm i
-      - name: Build apps and install Playwright browsers
-        run: pnpx playwright install --with-deps chromium & wait
-      - name: Run E2E
-        run: pnpm test:e2e
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
+      - name: Run Smoke (deployed)
+        run: pnpm test:smoke -- --project "${{ inputs.project }}"
         env:
-          USE_DEVELOPMENT_DATABASE: "true"
-          SQLITE_FILE: "file:.oberon/e2e-test.db"
+          PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-e2e-report
-          path: dev/test/report
+          name: playwright-smoke-report
+          path: dev/playwright/.playwright/report
           retention-days: 10

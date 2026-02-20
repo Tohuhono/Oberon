@@ -10,8 +10,7 @@
     "lint": "eslint .",
     "next": "next",
     "typegen": "next typegen",
-    "test": "pnpm test:unit",
-    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
     "tsc": "next typegen && tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"
