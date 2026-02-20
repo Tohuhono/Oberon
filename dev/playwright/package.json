@@ -1,0 +1,23 @@
+{
+  "name": "@dev/playwright",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "odt clean",
+    "lint": "eslint .",
+    "tsc": "tsc --pretty"
+  },
+  "exports": {
+    ".": {
+      "default": "./base.config.ts"
+    }
+  },
+  "files": [
+    "base.config.ts"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "typescript": "5.9.3"
+  }
+}

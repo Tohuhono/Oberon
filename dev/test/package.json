@@ -4,10 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "pnpm test:e2e",
-    "test:e2e": "playwright test",
-    "test:smoke": "playwright test --grep @smoke",
-    "test:ui": "playwright test --config dev/test/playwright.config.ts --ui",
     "clean": "odt clean",
     "tsc": "tsc --pretty"
   },
@@ -22,7 +18,6 @@
     "@oberoncms/plugin-turso": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
-    "@playwright/test": "^1.52.0",
     "@tohuhono/puck-blocks": "workspace:*",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",

@@ -17,7 +17,7 @@
       "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env"]
     },
     "check": {
-      "dependsOn": ["lint", "tsc"]
+      "dependsOn": ["lint", "tsc", "test:unit", "test:e2e"]
     },
     "clean": {
       "cache": false
@@ -37,21 +37,17 @@
       "cache": false,
       "dependsOn": ["^wait"]
     },
-    "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["report", "results"]
-    },
     "test:unit": {
       "dependsOn": ["^build"],
       "outputs": []
     },
     "test:e2e": {
-      "dependsOn": ["^build"],
-      "outputs": ["report", "results"]
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
     },
     "test:smoke": {
-      "dependsOn": ["^build"],
-      "outputs": ["report", "results"]
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
     },
     "test:ui": {
       "cache": false,

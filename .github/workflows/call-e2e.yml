@@ -58,7 +58,6 @@ jobs:
         if: ${{ inputs.target == 'deployed' }}
         run: pnpm --dir dev/test test:smoke -- --project "${{ inputs.project }}"
         env:
-          PLAYWRIGHT_TARGET: deployed
           PLAYWRIGHT_PLAYGROUND_BASE_URL: ${{ inputs.base_url }}
           PLAYWRIGHT_DOCS_BASE_URL: ${{ inputs.base_url }}
       - uses: actions/upload-artifact@v4

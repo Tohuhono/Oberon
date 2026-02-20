@@ -10,8 +10,7 @@
     "prebuild": "tsx ./src/oberon/prebuild.ts",
     "start": "next start",
     "lint": "eslint .",
-    "test": "pnpm test:unit",
-    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
     "typegen": "next typegen",
     "tsc": "next typegen && tsc --pretty"
   },
@@ -27,9 +26,9 @@
   },
   "devDependencies": {
     "@dev/eslint": "workspace:*",
+    "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
-    "@dev/vitest": "workspace:*",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
