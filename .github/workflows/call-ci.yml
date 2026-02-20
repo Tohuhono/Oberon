@@ -122,7 +122,7 @@ jobs:
 
   promote_docs:
     name: Oberon CMS Docs
-    needs: [check, deploy_docs, smoke-docs]
+    needs: [validate, deploy_docs, smoke-docs]
     uses: ./.github/workflows/call-promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -136,7 +136,7 @@ jobs:
 
   promote_playground:
     name: Oberon Playground
-    needs: [check, deploy_playground, smoke_playground]
+    needs: [validate, deploy_playground, smoke_playground]
     uses: ./.github/workflows/call-promote.yml
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
