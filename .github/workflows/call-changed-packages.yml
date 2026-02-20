@@ -31,7 +31,6 @@ jobs:
       # Defining a job output for used by the next jobs:
       # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs
       changed_packages: ${{ steps.output-changed-packages.outputs.changed_packages }}
-    #      api_changed: ${{ steps.api-changed.outputs.result }}
 
     steps:
       - uses: actions/checkout@v4
@@ -41,6 +40,9 @@ jobs:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
           fetch-depth: 0
+
+      - name: Use pNpm
+        uses: pnpm/action-setup@v4
 
       - name: Changeset
         id: changeset
