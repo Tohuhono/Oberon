@@ -1,0 +1,83 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["wait:clean", "^build", "prebuild"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "env": [
+        "NODE_ENV",
+        "USE_DEVELOPMENT_DATABASE",
+        "USE_DEVELOPMENT_SEND",
+        "SQLITE_FILE",
+        "MASTER_EMAIL"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["wait:clean", "^wait", "prebuild"],
+      "env": [
+        "NODE_ENV",
+        "AUTH_*",
+        "NEXTAUTH_*",
+        "USE_DEVELOPMENT_DATABASE",
+        "USE_DEVELOPMENT_SEND",
+        "SQLITE_FILE",
+        "DATABASE_URL",
+        "TURSO_URL",
+        "TURSO_TOKEN",
+        "MASTER_EMAIL",
+        "EMAIL_FROM",
+        "RESEND_SECRET",
+        "UPLOADTHING_SECRET",
+        "VERCEL_BLOB_API_URL",
+        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
+      ]
+    },
+    "prebuild": {
+      "cache": false,
+      "dependsOn": ["^wait"],
+      "env": [
+        "NODE_ENV",
+        "AUTH_*",
+        "NEXTAUTH_*",
+        "USE_DEVELOPMENT_DATABASE",
+        "USE_DEVELOPMENT_SEND",
+        "SQLITE_FILE",
+        "DATABASE_URL",
+        "TURSO_URL",
+        "TURSO_TOKEN",
+        "MASTER_EMAIL",
+        "EMAIL_FROM",
+        "RESEND_SECRET",
+        "UPLOADTHING_SECRET",
+        "VERCEL_BLOB_API_URL",
+        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
+      ]
+    },
+    "start": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"],
+      "env": [
+        "NODE_ENV",
+        "AUTH_*",
+        "NEXTAUTH_*",
+        "USE_DEVELOPMENT_DATABASE",
+        "USE_DEVELOPMENT_SEND",
+        "SQLITE_FILE",
+        "DATABASE_URL",
+        "TURSO_URL",
+        "TURSO_TOKEN",
+        "MASTER_EMAIL",
+        "EMAIL_FROM",
+        "RESEND_SECRET",
+        "UPLOADTHING_SECRET",
+        "VERCEL_BLOB_API_URL",
+        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
+      ]
+    }
+  }
+}
