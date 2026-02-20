@@ -22,11 +22,11 @@ on:
         required: true
       VERCEL_ORG_ID:
         required: true
+      VERCEL_PROTECTION_BYPASS:
+        required: false
       TURSO_URL:
         required: false
       TURSO_TOKEN:
-        required: false
-      VERCEL_PROTECTION_BYPASS:
         required: false
 
 jobs:
