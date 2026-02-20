@@ -2,7 +2,7 @@
 "@dev/scripts": patch
 ---
 
-Improve changed package detection by validating the Turbo base ref and failing
-with clear errors for missing, invalid, empty, or non-JSON dry-run output.
-Update the changed-packages CI workflow to avoid masking script failures and
-validate missing base input early.
+Simplify changed package detection to a minimal fail-loud script that directly
+runs Turbo dry-run JSON output and prints the `packages` array. Update the
+changed-packages workflow step to call the script inline and fail immediately
+when Turbo or Git ref resolution fails.
