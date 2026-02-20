@@ -3,7 +3,7 @@
   "envMode": "strict",
   "globalEnv": ["CI"],
   "globalDependencies": [
-    ".github/workflow/**",
+    ".github/workflows/**",
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
     "package.json",

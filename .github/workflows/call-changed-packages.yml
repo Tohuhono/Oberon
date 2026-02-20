@@ -49,14 +49,22 @@ jobs:
           node-version: "24.x"
           cache: "pnpm"
 
+      - name: Validate base ref
+        run: |
+          if [ -z "$TURBO_REF_FILTER" ]; then
+            echo "::error::Missing 'base' input. Expected a commit SHA for TURBO_REF_FILTER."
+            exit 1
+          fi
+
       - name: Changeset
         id: changeset
         # 1. We need the 'output' of a turbo dry-run to get a json with all affected packages of these run.
         # 2. The multi line json string is wrapped in EOF delimeters to make the GHA happy: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
         # 3. We specify the .github/ folder as a dependency here. Just to be safe, if workflows changed, we use that to mean everything has changes pending... to force redeploys
         run: |
+          changed_packages="$(pnpm exec tsx ./dev/scripts/scripts/changed.ts "$TURBO_REF_FILTER")"
           echo 'result<<CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
-          echo "$(sh ./dev/scripts/scripts/changed.sh $TURBO_REF_FILTER)" >> $GITHUB_OUTPUT
+          echo "$changed_packages" >> $GITHUB_OUTPUT
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
       - name: skip
