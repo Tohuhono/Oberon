@@ -1,5 +1,12 @@
 # @oberoncms/plugin-development
 
+## 0.7.4
+
+### Patch Changes
+
+- @oberoncms/core@0.17.4
+- @oberoncms/sqlite@0.7.4
+
 ## 0.7.3
 
 ### Patch Changes

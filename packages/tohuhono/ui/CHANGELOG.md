@@ -1,5 +1,14 @@
 # @oberon/ui
 
+## 0.14.4
+
+### Patch Changes
+
+- Updated dependencies [39d2f88]
+  - @dev/scripts@0.1.2
+  - @dev/vite@0.1.2
+  - @tohuhono/utils@0.14.0
+
 ## 0.14.3
 
 ### Patch Changes
