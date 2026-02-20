@@ -1,6 +1,4 @@
 # Turbo dry run to determine which apps have changed between the latest commit and target or previous commit
-name: "Changed packages"
-
 on:
   workflow_call:
     inputs:
@@ -20,6 +18,7 @@ on:
 
 jobs:
   dry-run:
+    name: "Changed packages"
     runs-on: ubuntu-latest
     env:
       # The turbo filter here varies depending on if we're using this workflow in a PR or on a push to a branch
@@ -43,6 +42,12 @@ jobs:
 
       - name: Use pNpm
         uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
 
       - name: Changeset
         id: changeset
