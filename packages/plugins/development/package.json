@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-development",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A development plugin for OberonCMS",
