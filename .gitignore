@@ -53,3 +53,12 @@ vite.config.*.timestamp-*
 
 # Vercel adds this if it's not last
 .vercel
+
+# Workspace-specific consolidated ignores
+/apps/documentation/next-env.d.ts
+/apps/playground/next-env.d.ts
+
+# playwright
+/dev/finale/report
+/dev/finale/results
+/dev/finale/playwright/.cache
