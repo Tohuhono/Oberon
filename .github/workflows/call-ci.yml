@@ -41,6 +41,8 @@ jobs:
   validate:
     name: Validate
     runs-on: ubuntu-latest
+    env:
+      USE_DEVELOPMENT_DATABASE: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,16 +65,12 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
-        env:
-          USE_DEVELOPMENT_DATABASE: "true"
       - name: Install Playwright browsers
         run: pnpx playwright install --with-deps chromium
       - name: Prettier
         run: pnpm prettier
       - name: Check
         run: pnpm check
-        env:
-          USE_DEVELOPMENT_DATABASE: "true"
 
   deploy_docs:
     name: Oberon Docs
