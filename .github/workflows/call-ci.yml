@@ -64,18 +64,22 @@ jobs:
       - name: Install
         run: pnpm i
         env:
-          USE_DEVELOPMENT_DATABASE: true
+          USE_DEVELOPMENT_DATABASE: "true"
       - name: Install Playwright browsers
         run: pnpx playwright install --with-deps chromium
       - name: Prettier
         run: pnpm prettier
       - name: Check
         run: pnpm check
+        env:
+          USE_DEVELOPMENT_DATABASE: "true"
 
   deploy_docs:
     name: Oberon Docs
     needs: [changed-packages]
-    if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/docs') }}
+    if:
+      ${{ contains(needs.changed-packages.outputs.changed_packages,
+      '@oberon/docs') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
       environment: ${{ inputs.environment }}
@@ -90,7 +94,9 @@ jobs:
   deploy_playground:
     name: Oberon Playground
     needs: [changed-packages]
-    if: ${{ contains(needs.changed-packages.outputs.changed_packages, '@oberon/playground') }}
+    if:
+      ${{ contains(needs.changed-packages.outputs.changed_packages,
+      '@oberon/playground') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
       environment: ${{ inputs.environment }}
@@ -130,11 +136,20 @@ jobs:
 
   test-status:
     name: Test Status
-    needs: [changed-packages, validate, deploy_docs, deploy_playground, smoke_docs, smoke_playground]
+    needs:
+      [
+        changed-packages,
+        validate,
+        deploy_docs,
+        deploy_playground,
+        smoke_docs,
+        smoke_playground,
+      ]
     if: always() && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
-      STATUS: "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
+      STATUS:
+        "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
       MESSAGE: |
         Latest deployments available at: 
         ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
