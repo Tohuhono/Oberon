@@ -63,6 +63,8 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
+        env:
+          USE_DEVELOPMENT_DATABASE: true
       - name: Install Playwright browsers
         run: pnpx playwright install --with-deps chromium
       - name: Prettier
