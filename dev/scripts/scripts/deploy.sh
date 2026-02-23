@@ -20,8 +20,10 @@ fi
 if [[ $VERCEL_ENVIRONMENT == "production" ]]
 then
 PROD_FLAG=--prod
+export USE_DEVELOPMENT_DATABASE=false
 else
 PROD_FLAG=
+export USE_DEVELOPMENT_DATABASE=true
 fi
 
 if [[ -n $VERCEL_API_TOKEN ]]
