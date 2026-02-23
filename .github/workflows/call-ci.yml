@@ -56,13 +56,13 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
-      - name: Use pNpm
-        uses: pnpm/action-setup@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24.x"
           cache: "pnpm"
+      - name: Enable Corepack
+        run: corepack enable
       - name: Install
         run: pnpm i
       - name: Install Playwright browsers

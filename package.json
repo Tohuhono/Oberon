@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "deploy": "bash ./dev/scripts/scripts/deploy.sh",
+    "validate": "bash ./dev/scripts/scripts/validate.sh",
     "build": "turbo build --concurrency 50",
     "build:packages": "turbo build --concurrency 50 --filter={./packages/**/*}...",
     "build:docs": "turbo build --concurrency 50 --filter=@oberon/docs...",
@@ -11,7 +12,7 @@
     "build:nextjs": "turbo build --concurrency 50 --filter=@oberon/recipe-nextjs...",
     "build:coa": "turbo build --concurrency 50 --filter=create-oberon-app... && turbo generate:recipes",
     "change": "changeset",
-    "check": "turbo check --concurrency 50",
+    "check": "USE_DEVELOPMENT_DATABASE=true USE_DEVELOPMENT_SEND=true turbo check --concurrency 50",
     "clean": "turbo clean --continue && odt clean",
     "clean:next": "turbo clean --continue -- --only ./.next",
     "clean:node": "pnpm clean && rimraf --glob ./**/node_modules",

@@ -26,13 +26,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-      - name: Use pNpm
-        uses: pnpm/action-setup@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24.x"
           cache: "pnpm"
+      - name: Enable Corepack
+        run: corepack enable
       - name: Cache turbo build setup
         uses: actions/cache@v4
         with:

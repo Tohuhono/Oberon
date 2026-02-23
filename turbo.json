@@ -1,7 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "envMode": "strict",
-  "globalEnv": ["CI"],
+  "globalEnv": [
+    "CI",
+    "NODE_ENV",
+    "AUTH_*",
+    "NEXTAUTH_*",
+    "USE_DEVELOPMENT_*",
+    "SQLITE_FILE",
+    "DATABASE_URL",
+    "TURSO_URL",
+    "TURSO_TOKEN",
+    "MASTER_EMAIL",
+    "EMAIL_FROM",
+    "RESEND_SECRET",
+    "UPLOADTHING_SECRET",
+    "VERCEL_BLOB_API_URL",
+    "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
+  ],
   "globalDependencies": [
     ".github/workflows/**",
     "pnpm-workspace.yaml",
