@@ -5,6 +5,9 @@ export default defineConfig({
   webServer: {
     command: "pnpm start -p 3200",
     url: "http://localhost:3200",
+    env: {
+      USE_DEVELEPMONT_DATABASE: "true",
+    },
   },
   projects: [
     {
