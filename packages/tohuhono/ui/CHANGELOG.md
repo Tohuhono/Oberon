@@ -1,5 +1,13 @@
 # @oberon/ui
 
+## 0.14.5
+
+### Patch Changes
+
+- 788c79c: Move `@dev/*` workspace packages from `dependencies` to
+  `devDependencies` to keep private dev tooling out of runtime dependency
+  graphs.
+
 ## 0.14.4
 
 ### Patch Changes

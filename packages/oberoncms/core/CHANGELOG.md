@@ -1,5 +1,12 @@
 # @oberoncms/core
 
+## 0.17.5
+
+### Patch Changes
+
+- Updated dependencies [788c79c]
+  - @tohuhono/ui@0.14.5
+
 ## 0.17.4
 
 ### Patch Changes
