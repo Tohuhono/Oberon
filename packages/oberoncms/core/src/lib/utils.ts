@@ -58,6 +58,10 @@ export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(
   process.env.USE_DEVELOPMENT_DATABASE,
 )
 
+console.log(
+  `CORE: use dev db plugin ${USE_DEVELOPMENT_DATABASE_PLUGIN} ${process.env.USE_DEVELOPMENT_DATABASE}`,
+)
+
 export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(
   process.env.USE_DEVELOPMENT_SEND,
 )
