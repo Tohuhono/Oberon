@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-uploadthing",
-  "version": "0.16.3",
+  "version": "0.16.4",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "An Puck component and OberonCMS plugin for embeding uploadthing images",

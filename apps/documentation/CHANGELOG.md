@@ -1,5 +1,12 @@
 # @oberon/docs
 
+## 0.11.6
+
+### Patch Changes
+
+- @oberoncms/core@0.17.4
+- @tohuhono/puck-blocks@0.13.4
+
 ## 0.11.5
 
 ### Patch Changes

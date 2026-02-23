@@ -1,7 +1,7 @@
 {
   "name": "@dev/scripts",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "Shared monorepo scripts used by @tohuhono and @oberoncms packages",

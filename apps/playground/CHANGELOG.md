@@ -1,5 +1,15 @@
 # @oberon/playground
 
+## 0.10.4
+
+### Patch Changes
+
+- @oberoncms/core@0.17.4
+- @oberoncms/plugin-development@0.7.4
+- @oberoncms/plugin-turso@0.17.4
+- @oberoncms/plugin-uploadthing@0.16.4
+- @tohuhono/puck-blocks@0.13.4
+
 ## 0.10.3
 
 ### Patch Changes

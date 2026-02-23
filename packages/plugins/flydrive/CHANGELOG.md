@@ -1,5 +1,11 @@
 # @oberoncms/plugin-flydrive
 
+## 0.8.4
+
+### Patch Changes
+
+- @oberoncms/core@0.17.4
+
 ## 0.8.3
 
 ### Patch Changes
