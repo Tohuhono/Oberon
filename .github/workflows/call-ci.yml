@@ -69,6 +69,8 @@ jobs:
         run: pnpm prettier
       - name: Check
         run: pnpm check
+        env:
+          USE_DEVELOPMENT_DATABASE: true
 
   deploy_docs:
     name: Oberon Docs
