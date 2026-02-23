@@ -57,13 +57,13 @@ jobs:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
           fetch-depth: 0
+      - name: Use pNpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24.x"
           cache: "pnpm"
-      - name: Enable Corepack
-        run: corepack enable
       - name: Cache turbo build setup
         uses: actions/cache@v4
         with:
