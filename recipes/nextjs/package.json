@@ -24,6 +24,7 @@
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",

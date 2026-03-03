@@ -11,12 +11,6 @@ export const packageManagerChoices = [
   { title: "yarn", value: "yarn" },
 ]
 
-type PackageJsonData = {
-  name?: string
-  dependencies?: Record<string, string>
-  devDependencies?: Record<string, string>
-}
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }
@@ -37,7 +31,7 @@ function getDependencyMap(value: unknown): Record<string, string> {
   return dependencies
 }
 
-function parsePackageJson(rawPackageJson: string): PackageJsonData {
+function parsePackageJson(rawPackageJson: string) {
   const parsed: unknown = JSON.parse(rawPackageJson)
 
   if (!isRecord(parsed)) {
@@ -46,6 +40,10 @@ function parsePackageJson(rawPackageJson: string): PackageJsonData {
 
   return {
     name: typeof parsed.name === "string" ? parsed.name : undefined,
+    version: "0.0.1",
+    private: true,
+    type: parsed.type || "module",
+    scripts: parsed.scripts || {},
     dependencies: getDependencyMap(parsed.dependencies),
     devDependencies: getDependencyMap(parsed.devDependencies),
   }

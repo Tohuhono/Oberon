@@ -92,6 +92,9 @@
     },
     "wait:clean": {
       "cache": false
+    },
+    "prepublishOnly": {
+      "dependsOn": ["build"]
     }
   }
 }
