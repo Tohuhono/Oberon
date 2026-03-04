@@ -27,6 +27,7 @@
   ],
   "tasks": {
     "build": {
+      "inputs": ["$TURBO_DEFAULT$", ".oberon/**"],
       "dependsOn": ["wait:clean", "^build", "prebuild"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
@@ -67,7 +68,7 @@
     "test:ui": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^build"],
+      "dependsOn": ["build"],
       "outputs": []
     },
     "test:watch": {

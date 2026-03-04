@@ -15,10 +15,6 @@ import { name, version } from "../package.json" with { type: "json" }
 
 import { getClient, initialise } from "./db/client"
 
-console.warn(
-  `Use developement database: ${USE_DEVELOPMENT_DATABASE_PLUGIN} ${!!USE_DEVELOPMENT_DATABASE_PLUGIN}`,
-)
-
 export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,

@@ -21,7 +21,9 @@
     "tsc": "tsc --pretty"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./map-concurrent": "./dist/map-concurrent.js",
+    "./use-client-state": "./dist/use-client-state.js"
   },
   "files": [
     "dist",

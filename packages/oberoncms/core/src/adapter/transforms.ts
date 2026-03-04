@@ -1,5 +1,5 @@
 import { transformProps, type Data } from "@puckeditor/core"
-import { mapConcurrent } from "@tohuhono/utils"
+import { mapConcurrent } from "@tohuhono/utils/map-concurrent"
 
 type PropTransform = Parameters<typeof transformProps>[1]
 

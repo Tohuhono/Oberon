@@ -42,6 +42,8 @@ export function initOberon({
   handler: OberonHandler<{ path: string[] }>
   adapter: OberonAdapter
 } {
+  console.info("Initialise Oberon")
+
   const { versions, handlers, adapter: pluginAdapter } = initPlugins(plugins)
 
   const adapter = initAdapter({
@@ -49,8 +51,6 @@ export function initOberon({
     versions,
     pluginAdapter,
   })
-
-  console.log("....")
 
   const handler = {
     GET: handle("GET", handlers, adapter),

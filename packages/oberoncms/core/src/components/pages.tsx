@@ -150,7 +150,9 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
           <div className="text-sm">
             <LocalDate date={updatedAt} />
           </div>
-          <div className="text-sm">{updatedBy}</div>
+          <div aria-label={`${route} updated by`} className="text-sm">
+            {updatedBy}
+          </div>
           {pending ? (
             <Button size="sm" disabled>
               Edit
@@ -168,11 +170,17 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
             </Link>
           )}
 
-          <Button size="sm" onClick={() => copyPage(route)} disabled={pending}>
+          <Button
+            aria-label={`Copy ${route}`}
+            size="sm"
+            onClick={() => copyPage(route)}
+            disabled={pending}
+          >
             Copy
           </Button>
 
           <Button
+            aria-label={`Delete ${route}`}
             variant="destructive"
             size="sm"
             onClick={() => deletePage(route)}
