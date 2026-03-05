@@ -107,12 +107,13 @@ For each issue:
       Vitest per-package, `TESTING.md` strategy, `pnpm test` turbo task in
       place.
 
-- [ ] **3.2** Write unit tests for core logic -
+- [x] **3.2** Write unit tests for core logic -
       [Review #15](./critical-code-review.md#15-virtually-non-existent-test-suite)
-      **Partial**: `transforms.test.ts` covers `getTransforms` and
-      `getComponentTransformVersions`. Remaining candidates per `TESTING.md`:
-      `mapConcurrent`, `utils.ts` (resolveSlug/getTitle), `create-oberon-app`
-      installer functions.
+      `transforms.test.ts` covers
+      `getTransforms`/`getComponentTransformVersions`; `map-concurrent.test.ts`
+      covers `mapConcurrent`. `getTitle`/`resolveSlug` skipped (module-level
+      Next.js imports). `create-oberon-app` installer helpers skipped
+      (unexported implementation details — see `TESTING.md`).
 
 - [ ] **3.3** Write integration tests
 
@@ -131,4 +132,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 13/25 complete (1 deferred to 2.1, 4 false positives)
+**Progress**: 14/25 complete (1 deferred to 2.1, 4 false positives)
