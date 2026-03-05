@@ -70,9 +70,10 @@ For each issue:
       `packages/plugins/pgsql/src/db/database-adapter.ts`
       `packages/oberoncms/sqlite/src/db/database-adapter.ts`
 
-- [ ] **2.2** Validate callback URLs -
+- [x] **2.2** ~~Validate callback URLs~~ - **Already mitigated**
       [Review #10](./critical-code-review.md#10-open-redirect-vulnerability)
-      `packages/oberoncms/core/src/auth/next-auth.ts:46-48`
+      `withCallback()` forces `callbackUrl.pathname = "/cms"` — user-supplied
+      path is ignored; no open redirect exists.
 
 - [ ] **2.3** Add DB error handling -
       [Review #11](./critical-code-review.md#11-no-input-validation-on-database-operations)
@@ -82,9 +83,10 @@ For each issue:
       [Review #12](./critical-code-review.md#12-path-traversal-risk-in-page-keys)
       `packages/oberoncms/core/src/lib/dtd.ts:78-82`
 
-- [ ] **2.5** Fix site config race condition -
+- [x] **2.5** ~~Fix site config race condition~~ - **False positive**
       [Review #13](./critical-code-review.md#13-race-condition-on-site-config-creation)
-      `packages/oberoncms/core/src/adapter/init-adapter.ts:173-181`
+      Both `pgsql` and `sqlite` `updateSite` use `onConflictDoUpdate` (upsert);
+      concurrent calls converge safely with no duplicates.
 
 - [ ] **2.6** Improve batch error reporting -
       [Review #14](./critical-code-review.md#14-silent-error-suppression)
@@ -100,15 +102,22 @@ For each issue:
 
 ## Phase 3: P2 - Quality Improvements 🟡
 
-- [ ] **3.1** Set up testing framework -
+- [x] **3.1** Set up testing framework -
       [Review #15](./critical-code-review.md#15-virtually-non-existent-test-suite)
+      Vitest per-package, `TESTING.md` strategy, `pnpm test` turbo task in
+      place.
 
 - [ ] **3.2** Write unit tests for core logic -
       [Review #15](./critical-code-review.md#15-virtually-non-existent-test-suite)
+      **Partial**: `transforms.test.ts` covers `getTransforms` and
+      `getComponentTransformVersions`. Remaining candidates per `TESTING.md`:
+      `mapConcurrent`, `utils.ts` (resolveSlug/getTitle), `create-oberon-app`
+      installer functions.
 
 - [ ] **3.3** Write integration tests
 
-- [ ] **3.4** Write e2e tests
+- [x] **3.4** Write e2e tests 6 Playwright specs: `cms-edit`, `cms-images`,
+      `cms-pages`, `cms-users`, `cms-routes`, `smoke` (playground + docs).
 
 - [ ] **3.5** Resolve TODO comments -
       [Review #16](./critical-code-review.md#16-23-todo-comments-indicating-incomplete-features)
@@ -122,4 +131,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 9/25 complete (1 deferred to 2.1, 2 false positives)
+**Progress**: 13/25 complete (1 deferred to 2.1, 4 false positives)
