@@ -44,6 +44,8 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 - Co-located siblings: `src/foo.test.ts` next to `src/foo.ts`
 - One `describe` per module, `it` per behaviour
 - No mocking framework dependencies — keep tests simple and direct
+- Do not export functions solely to enable testing — unexported functions are
+  implementation details; test only via the public API
 - Every workspace package has a `vitest.config.ts` and `"test": "vitest run"`
   script pre-scaffolded — just add a `.test.ts` file to start testing
 
@@ -53,7 +55,6 @@ Examples to guide future decisions:
 
 - `core/src/adapter/transforms.ts` — `getTransforms`,
   `getComponentTransformVersions`
-- `core/src/lib/utils.ts` — `getTitle`, `resolveSlug`
+- `core/src/lib/utils.ts` — `getTitle`, `resolveSlug` (module imports
+  `next/navigation`; needs Next.js resolution to be testable)
 - `@tohuhono/utils` — `mapConcurrent`, `getRandomInt`
-- `create-oberon-app` installer — `createAdapter`, `parsePackageJson`,
-  `getDependencyMap`
