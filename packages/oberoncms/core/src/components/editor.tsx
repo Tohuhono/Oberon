@@ -2,13 +2,21 @@
 
 import "@puckeditor/core/puck.css"
 
-import { Config, Data, Puck, usePuck } from "@puckeditor/core"
+import { Config, Data, Puck, createUsePuck } from "@puckeditor/core"
 import { Button } from "@tohuhono/ui/button"
 import { useState } from "react"
 import { useLocalData } from "../hooks/use-local-data"
 import { INITIAL_DATA } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
 import { Menu } from "./menu"
+
+const usePuck = createUsePuck()
+
+const useHeaderState = () => ({
+  dispatch: usePuck((s) => s.dispatch),
+  leftSideBarVisible: usePuck((s) => s.appState.ui.leftSideBarVisible),
+  data: usePuck((s) => s.appState.data),
+})
 
 const Header = ({
   path,
@@ -17,14 +25,12 @@ const Header = ({
   path: string
   onPublish: (data: Data) => Promise<void>
 }) => {
-  const { appState, dispatch } = usePuck()
+  const { dispatch, leftSideBarVisible, data } = useHeaderState()
   const [ispublishing, setIspublishing] = useState(false)
-
-  const { leftSideBarVisible } = appState.ui
 
   return (
     <div style={{ gridArea: "header" }}>
-      <Menu title={appState.data.root.title} path={path}>
+      <Menu title={data.root.title} path={path}>
         <Button
           onClick={() =>
             dispatch({
@@ -76,7 +82,7 @@ const Header = ({
           disabled={ispublishing}
           onClick={async () => {
             setIspublishing(true)
-            await onPublish(appState.data)
+            await onPublish(data)
             setIspublishing(false)
           }}
           size="sm"

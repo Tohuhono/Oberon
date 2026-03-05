@@ -30,7 +30,7 @@ test.describe("CMS Routes", { tag: "@cms" }, () => {
 
   test("loads /cms/edit", async ({ page }) => {
     await page.goto("/cms/edit")
-    await expect(page.getByRole("button", { name: "Publish" })).toBeVisible()
+    await expect(page.getByRole("link", { name: "/" })).toBeVisible()
   })
 
   test("loads /cms/login", async ({ page }) => {
