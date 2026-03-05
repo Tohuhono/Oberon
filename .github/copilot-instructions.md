@@ -1,4 +1,4 @@
-Read and follow `AGENTS.md`
+** IMPORTANT ALWAYS READ `AGENTS.md` **
 
 # Escalated commands
 
