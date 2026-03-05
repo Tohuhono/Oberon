@@ -86,7 +86,10 @@ export function withExamples(config: Partial<OberonConfig>) {
       ...config.components,
       Welcome,
       Container,
-      Text,
+      Text: {
+        ...Text,
+        transforms: [(props: Record<string, unknown>) => props],
+      },
       Dashboard: {
         render: () => <Dashboard />,
       },

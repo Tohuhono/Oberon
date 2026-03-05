@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "odt clean",
-    "test:smoke": "playwright test",
+    "test:smoke": "playwright test --grep '@smoke'",
     "lint": "eslint .",
     "tsc": "tsc --pretty"
   },

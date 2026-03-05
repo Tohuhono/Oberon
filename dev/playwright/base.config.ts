@@ -6,7 +6,7 @@ export const base = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : 3,
-  reporter: [["html", { outputFolder: ".playwright/report" }]],
+  reporter: "line",
   outputDir: ".playwright/results",
   use: {
     ...devices["Desktop Chrome"],

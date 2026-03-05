@@ -9,8 +9,6 @@ import {
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
 
-console.log(`use dev db plugin ${USE_DEVELOPMENT_DATABASE_PLUGIN}`)
-
 export const plugin: OberonPlugin = (adapter) => ({
   name,
   version,

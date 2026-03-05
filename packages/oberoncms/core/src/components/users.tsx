@@ -97,7 +97,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
             render={({ field }) => (
               <FormItem className="row-span-2">
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input aria-label="User email" placeholder="" {...field} />
                 </FormControl>
                 <FormMessage>
                   {form.formState.errors.email?.message}
@@ -148,7 +148,10 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
                 }
               }}
             >
-              <SelectTrigger className="h-6 text-xs">
+              <SelectTrigger
+                aria-label={`Role ${email}`}
+                className="h-6 text-xs"
+              >
                 <SelectValue placeholder={role} />
               </SelectTrigger>
               <SelectContent>
@@ -160,6 +163,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
               </SelectContent>
             </Select>
             <Button
+              aria-label={`Delete ${email}`}
               variant="destructive"
               size="sm"
               disabled={pending}
