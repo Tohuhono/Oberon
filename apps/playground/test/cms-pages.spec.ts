@@ -4,7 +4,7 @@ import { createPage, deletePages } from "./helpers/page-helpers"
 const testPageKey = (testInfo: TestInfo) =>
   `/e2e_page_${testInfo.parallelIndex}_${testInfo.repeatEachIndex}`
 
-test.describe("CMS Pages Actions @cms", () => {
+test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
   test.describe.configure({ mode: "serial" })
 
   test.beforeAll(async ({ browser }, testInfo) =>

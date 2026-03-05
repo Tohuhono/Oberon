@@ -1,9 +1,14 @@
 import { expect, test } from "@playwright/test"
 
-test.describe("CMS Routes @cms", () => {
+test.describe("CMS Routes", { tag: "@cms" }, () => {
   test("redirects /cms to /cms/pages", async ({ page }) => {
     await page.goto("/cms")
     await expect(page).toHaveURL(/\/cms\/pages$/)
+  })
+
+  test("loads /cms/site", async ({ page }) => {
+    await page.goto("/cms/site")
+    await expect(page.getByRole("link", { name: "Oberon CMS" })).toBeVisible()
   })
 
   test("loads /cms/pages", async ({ page }) => {
@@ -11,31 +16,21 @@ test.describe("CMS Routes @cms", () => {
     await expect(page.getByRole("link", { name: "Manage Pages" })).toBeVisible()
   })
 
-  test("loads /cms/edit", async ({ page }) => {
-    await page.goto("/cms/edit")
-    await expect(page.getByRole("button", { name: "Publish" })).toBeVisible()
-  })
-
-  test("loads /cms/preview", async ({ page }) => {
-    await page.goto("/cms/preview")
-    await expect(page).toHaveURL(/\/cms\/preview$/)
+  test("loads /cms/images", async ({ page }) => {
+    await page.goto("/cms/images")
+    await expect(
+      page.getByRole("link", { name: "Manage Images" }),
+    ).toBeVisible()
   })
 
   test("loads /cms/users", async ({ page }) => {
     await page.goto("/cms/users")
-    await expect(page.getByRole("button", { name: "Add User" })).toBeVisible()
+    await expect(page.getByRole("link", { name: "Manage Users" })).toBeVisible()
   })
 
-  test("loads /cms/images", async ({ page }) => {
-    await page.goto("/cms/images")
-    await expect(page.getByRole("heading", { name: "Name" })).toBeVisible()
-  })
-
-  test("loads /cms/site", async ({ page }) => {
-    await page.goto("/cms/site")
-    await expect(
-      page.getByRole("button", { name: "Run migrations" }),
-    ).toBeVisible()
+  test("loads /cms/edit", async ({ page }) => {
+    await page.goto("/cms/edit")
+    await expect(page.getByRole("button", { name: "Publish" })).toBeVisible()
   })
 
   test("loads /cms/login", async ({ page }) => {

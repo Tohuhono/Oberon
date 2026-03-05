@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test"
 
 const prefix = "e2e-cms-user"
 
-test.describe("CMS Users Actions @cms", () => {
+test.describe("CMS Users Actions", { tag: "@cms" }, () => {
   test("adds user", async ({ page }) => {
     const email = `${prefix}-${Date.now()}@example.com`
 

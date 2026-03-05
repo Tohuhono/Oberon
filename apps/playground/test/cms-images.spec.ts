@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test"
 
-test.describe("CMS Images & Site Actions @cms", () => {
+test.describe("CMS Images & Site Actions", { tag: "@cms" }, () => {
   test.skip("deletes an image from cms images page", async ({ page }) => {
     // TODO: seed image via CMS upload UI (requires UploadThing flow)
     await page.goto("/cms/images")

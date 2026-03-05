@@ -20,6 +20,7 @@ export default defineConfig({
   },
   testDir: "../..",
   testMatch: "apps/**/test/**/*.spec.ts",
+  tag: "@smoke",
   projects: [
     {
       name: "playground",
