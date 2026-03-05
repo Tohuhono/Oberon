@@ -1,5 +1,12 @@
 # create-oberon-app
 
+## 0.10.3
+
+### Patch Changes
+
+- bf90ed0: Fix package installation behavior in the app installer and align
+  supporting CI/template updates used by generated projects.
+
 ## 0.10.2
 
 ### Patch Changes

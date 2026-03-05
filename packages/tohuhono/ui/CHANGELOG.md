@@ -1,5 +1,16 @@
 # @oberon/ui
 
+## 0.14.6
+
+### Patch Changes
+
+- 28aa7e5: Add aria-labels to pages and users components for E2E testability;
+  fix LocalDate hydration using useClientState; remove debug console logs from
+  development and turso plugins; add useClientState hook to utils.
+- Updated dependencies [28aa7e5]
+- Updated dependencies [37488ec]
+  - @tohuhono/utils@0.14.1
+
 ## 0.14.5
 
 ### Patch Changes

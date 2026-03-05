@@ -1,5 +1,19 @@
 # @oberoncms/core
 
+## 0.17.6
+
+### Patch Changes
+
+- 28aa7e5: Add aria-labels to pages and users components for E2E testability;
+  fix LocalDate hydration using useClientState; remove debug console logs from
+  development and turso plugins; add useClientState hook to utils.
+- aa5371a: Replace `usePuck` with `createUsePuck` and targeted selectors in the
+  editor Header component to reduce unnecessary re-renders.
+- Updated dependencies [28aa7e5]
+- Updated dependencies [37488ec]
+  - @tohuhono/ui@0.14.6
+  - @tohuhono/utils@0.14.1
+
 ## 0.17.5
 
 ### Patch Changes

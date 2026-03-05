@@ -1,5 +1,14 @@
 # oberon-cms-example
 
+## 0.16.6
+
+### Patch Changes
+
+- Updated dependencies [28aa7e5]
+- Updated dependencies [aa5371a]
+  - @oberoncms/core@0.17.6
+  - @oberoncms/plugin-development@0.7.6
+
 ## 0.16.5
 
 ### Patch Changes

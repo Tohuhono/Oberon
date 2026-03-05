@@ -1,5 +1,17 @@
 # @oberoncms/plugin-development
 
+## 0.7.6
+
+### Patch Changes
+
+- 28aa7e5: Add aria-labels to pages and users components for E2E testability;
+  fix LocalDate hydration using useClientState; remove debug console logs from
+  development and turso plugins; add useClientState hook to utils.
+- Updated dependencies [28aa7e5]
+- Updated dependencies [aa5371a]
+  - @oberoncms/core@0.17.6
+  - @oberoncms/sqlite@0.7.6
+
 ## 0.7.5
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @oberoncms/plugin-pgsql
 
+## 0.9.6
+
+### Patch Changes
+
+- Updated dependencies [28aa7e5]
+- Updated dependencies [aa5371a]
+  - @oberoncms/core@0.17.6
+
 ## 0.9.5
 
 ### Patch Changes

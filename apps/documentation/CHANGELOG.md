@@ -1,5 +1,15 @@
 # @oberon/docs
 
+## 0.11.8
+
+### Patch Changes
+
+- Updated dependencies [28aa7e5]
+- Updated dependencies [28aa7e5]
+- Updated dependencies [aa5371a]
+  - @tohuhono/puck-blocks@0.13.6
+  - @oberoncms/core@0.17.6
+
 ## 0.11.7
 
 ### Patch Changes
