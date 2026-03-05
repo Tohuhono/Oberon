@@ -1,5 +1,18 @@
 # @tohuhono/puck-blocks
 
+## 0.13.6
+
+### Patch Changes
+
+- 28aa7e5: Add transform metadata to the example Text component configuration so
+  migration state can be tracked consistently.
+- Updated dependencies [28aa7e5]
+- Updated dependencies [aa5371a]
+- Updated dependencies [37488ec]
+  - @oberoncms/core@0.17.6
+  - @tohuhono/ui@0.14.6
+  - @tohuhono/utils@0.14.1
+
 ## 0.13.5
 
 ### Patch Changes
