@@ -115,9 +115,7 @@ For each issue:
       Next.js imports). `create-oberon-app` installer helpers skipped
       (unexported implementation details — see `TESTING.md`).
 
-- [ ] **3.3** Write integration tests
-
-- [x] **3.4** Write e2e tests 6 Playwright specs: `cms-edit`, `cms-images`,
+- [x] **3.3** Write e2e tests 6 Playwright specs: `cms-edit`, `cms-images`,
       `cms-pages`, `cms-users`, `cms-routes`, `smoke` (playground + docs).
 
 - [ ] **3.5** Resolve TODO comments -
@@ -132,4 +130,4 @@ For each issue:
 - [ ] **3.8** Add input validation -
       [Review](./critical-code-review.md#input-validation-gaps)
 
-**Progress**: 14/25 complete (1 deferred to 2.1, 4 false positives)
+**Progress**: 14/24 complete (1 deferred to 2.1, 4 false positives)
