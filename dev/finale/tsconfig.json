@@ -14,10 +14,11 @@
     "target": "es2022",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": [
+    "../../**/test/**/*.ts",
     "../../**/*.spec.ts",
     "../../**/*.spec.tsx",
     "../../**/*.test.ts",

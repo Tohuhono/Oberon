@@ -1,4 +1,4 @@
-@import "@tohuhono/ui/tailwind.css";
+@import "@oberoncms/core/tailwind.css";
 
 @source ".";
 @source "../oberon";

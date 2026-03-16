@@ -30,9 +30,10 @@
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "test:unit": "vitest run",
+    "test:e2e": "playwright test --config playwright.config.ts",
     "tsc": "tsc --pretty",
-    "generate:recipes": "node scripts/generate.mjs",
-    "prepublishOnly": "pnpm generate:recipes"
+    "prebuild": "node scripts/generate.mjs",
+    "generate:recipes": "node scripts/generate.mjs"
   },
   "publishConfig": {
     "provenance": true
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@dev/eslint": "workspace:*",
+    "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
@@ -71,6 +73,7 @@
     "resend": "^6.9.2",
     "server-cli-only": "^0.3.2",
     "typescript": "5.9.3",
+    "verdaccio": "^6.0.5",
     "vite": "^7.3.1"
   }
 }
