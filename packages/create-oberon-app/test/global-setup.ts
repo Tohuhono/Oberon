@@ -19,8 +19,7 @@ const VERDACCIO_PORT = 4873
 const VERDACCIO_REGISTRY = `http://localhost:${VERDACCIO_PORT}`
 const VERDACCIO_STORAGE = path.join(os.tmpdir(), "oberon-verdaccio-storage")
 const LOCAL_PACKS_DIR = path.join(os.tmpdir(), "oberon-local-packs")
-// Use a fresh npm cache so local packages are always fetched from Verdaccio
-const NPM_CACHE = path.join(os.tmpdir(), "oberon-test-npm-cache")
+const PNPM_STORE = path.join(os.tmpdir(), "oberon-test-pnpm-store")
 const MONOREPO_ROOT = path.resolve(import.meta.dirname, "../../../")
 
 // All publishable workspace packages in dependency order
@@ -76,7 +75,11 @@ function execAsync(
 async function startVerdaccio() {
   killPort(VERDACCIO_PORT)
 
-  await rm(VERDACCIO_STORAGE, { recursive: true }).catch(() => {})
+  for (const scope of ["@oberoncms", "@tohuhono"]) {
+    await rm(path.join(VERDACCIO_STORAGE, scope), { recursive: true }).catch(
+      () => {},
+    )
+  }
   await mkdir(VERDACCIO_STORAGE, { recursive: true })
 
   const verdaccioConfig = path.join(os.tmpdir(), "oberon-verdaccio.yaml")
@@ -162,9 +165,9 @@ export default async function globalSetup() {
     const npmrcPath = path.join(os.tmpdir(), "oberon-verdaccio.npmrc")
     await writeFile(npmrcPath, npmrcContent)
 
-    // Give npm a fake HOME so $HOME/.npmrc is our controlled registry config.
+    // Give pnpm a fake HOME so $HOME/.npmrc is our controlled registry config.
     // Project-level and home-dir npmrc are read before env-var config, making
-    // this more reliable than NPM_CONFIG_* vars on some npm/OS combinations.
+    // this more reliable than NPM_CONFIG_* vars on some pnpm/OS combinations.
     const fakeHome = path.join(os.tmpdir(), "oberon-test-home")
     await rm(fakeHome, { recursive: true }).catch(() => {})
     await mkdir(fakeHome, { recursive: true })
@@ -176,34 +179,32 @@ export default async function globalSetup() {
 
     const sqliteFile = `file:${path.join(scaffoldDir, ".oberon", "oberon.db")}`
     const { SQLITE_FILE: _stripped, ...envWithoutSqlite } = process.env
-    await rm(NPM_CACHE, { recursive: true }).catch(() => {})
-
     const scaffoldEnv = {
       ...envWithoutSqlite,
       HOME: fakeHome,
       SQLITE_FILE: sqliteFile,
       NPM_CONFIG_REGISTRY: VERDACCIO_REGISTRY,
       npm_config_registry: VERDACCIO_REGISTRY,
-      // Prevent npm from replacing our local registry URL with registry.npmjs.org
+      // Prevent pnpm from replacing our local registry URL with registry.npmjs.org
       NPM_CONFIG_REPLACE_REGISTRY_HOST: "never",
       npm_config_replace_registry_host: "never",
       NPM_CONFIG_USERCONFIG: npmrcPath,
-      NPM_CONFIG_CACHE: NPM_CACHE,
+      PNPM_STORE_DIR: PNPM_STORE,
     }
 
-    // scaffold, build and start all use npm install / npm run — must be async
-    // so Verdaccio can handle the registry requests for npm install
+    // scaffold, build and start all use pnpm install / pnpm run — must be async
+    // so Verdaccio can handle the registry requests for pnpm install
     await execAsync(
-      `node "${distIndex}" test-app --database turso --send resend --recipe nextjs --use npm --email admin@test.com --dir "${scaffoldDir}"`,
+      `node "${distIndex}" test-app --database turso --send resend --recipe nextjs --use pnpm --email admin@test.com --dir "${scaffoldDir}"`,
       { env: scaffoldEnv },
     )
 
-    await execAsync("npm run build", {
+    await execAsync("pnpm run build", {
       cwd: scaffoldDir,
       env: { ...scaffoldEnv, USE_DEVELOPMENT_DATABASE: "true" },
     })
 
-    server = spawn("npm", ["run", "start"], {
+    server = spawn("pnpm", ["run", "start"], {
       cwd: scaffoldDir,
       stdio: "inherit",
       env: { ...scaffoldEnv, USE_DEVELOPMENT_DATABASE: "true" },
