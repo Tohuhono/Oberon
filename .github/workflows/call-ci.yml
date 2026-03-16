@@ -72,9 +72,11 @@ jobs:
       - name: Check
         run: pnpm check
 
-  scaffold:
-    name: Scaffold Test
+  e2e:
+    name: E2E Tests
     runs-on: ubuntu-latest
+    env:
+      USE_DEVELOPMENT_DATABASE: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -85,9 +87,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-scaffold-${{ github.sha }}
+          key: ${{ runner.os }}-turbo-e2e-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-turbo-scaffold-
+            ${{ runner.os }}-turbo-e2e-
       - name: Use pNpm
         uses: pnpm/action-setup@v4
       - name: Use Node.js
@@ -99,8 +101,8 @@ jobs:
         run: pnpm i
       - name: Install Playwright browsers
         run: pnpx playwright install --with-deps chromium
-      - name: Scaffold Test
-        run: pnpm test:scaffold
+      - name: E2E Tests
+        run: pnpm test:e2e
 
   deploy_docs:
     name: Oberon Docs
@@ -168,7 +170,7 @@ jobs:
       [
         changed-packages,
         validate,
-        scaffold,
+        e2e,
         deploy_docs,
         deploy_playground,
         smoke_docs,
