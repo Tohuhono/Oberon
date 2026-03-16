@@ -60,6 +60,10 @@
       "dependsOn": ["build"],
       "outputs": [".playwright"]
     },
+    "test:scaffold": {
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
+    },
     "test:smoke": {
       "dependsOn": [],
       "outputs": [".playwright"],

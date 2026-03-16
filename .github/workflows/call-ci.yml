@@ -72,6 +72,36 @@ jobs:
       - name: Check
         run: pnpm check
 
+  scaffold:
+    name: Scaffold Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-scaffold-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-scaffold-
+      - name: Use pNpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+      - name: Install
+        run: pnpm i
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
+      - name: Scaffold Test
+        run: pnpm test:scaffold
+
   deploy_docs:
     name: Oberon Docs
     needs: [changed-packages]
@@ -138,6 +168,7 @@ jobs:
       [
         changed-packages,
         validate,
+        scaffold,
         deploy_docs,
         deploy_playground,
         smoke_docs,

@@ -35,6 +35,7 @@
     "test": "turbo test:unit test:e2e --concurrency 50",
     "test:e2e": "SQLITE_FILE=file:.oberon/e2e.db turbo test:e2e --concurrency 50",
     "test:unit": "turbo test:unit --concurrency 50",
+    "test:scaffold": "turbo test:scaffold --concurrency 50",
     "test:smoke": "turbo test:smoke --concurrency 50",
     "test:ui": "SQLITE_FILE=file:.oberon/e2e.db turbo test:ui --concurrency 50",
     "postinstall": "pnpm manypkg",
