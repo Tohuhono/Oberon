@@ -3,7 +3,8 @@
 This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps
 
 - Use pnpm workspaces with turborepo
-- Non-standard check: `pnpm check` runs cachec lint, typecheck, build, tests
+- Use `pnpm check` to run lint, typecheck, build and tests with correct caching
+  and dependency management
 
 # Agent workflows
 

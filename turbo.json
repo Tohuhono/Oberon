@@ -32,7 +32,7 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "check": {
-      "dependsOn": ["lint", "tsc", "test:unit", "test:e2e"]
+      "dependsOn": ["lint", "tsc", "test:unit"]
     },
     "clean": {
       "cache": false

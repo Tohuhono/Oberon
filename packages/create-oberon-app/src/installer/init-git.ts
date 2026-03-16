@@ -18,10 +18,6 @@ export function initGit(appPath: string) {
     execSync("git init", { cwd: appPath, stdio: "inherit" })
 
     execSync("git add .", { cwd: appPath, stdio: "inherit" })
-    execSync('git commit -m "build(puck): generate app"', {
-      cwd: appPath,
-      stdio: "inherit",
-    })
   } catch (error) {
     console.error("Failed to commit git changes", error)
   }

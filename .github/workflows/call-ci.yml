@@ -65,12 +65,56 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
-      - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
       - name: Prettier
         run: pnpm prettier
       - name: Check
         run: pnpm check
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    env:
+      USE_DEVELOPMENT_DATABASE: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-e2e-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-e2e-
+      - name: Use pNpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+      - name: Install
+        run: pnpm i
+      - name: Cache Verdaccio storage
+        uses: actions/cache@v4
+        with:
+          path: /tmp/oberon-verdaccio-storage
+          key: ${{ runner.os }}-verdaccio-${{ hashFiles('recipes/nextjs/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-verdaccio-
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: /tmp/oberon-test-pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('recipes/nextjs/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
+      - name: E2E Tests
+        run: pnpm test:e2e
 
   deploy_docs:
     name: Oberon Docs
@@ -138,6 +182,7 @@ jobs:
       [
         changed-packages,
         validate,
+        e2e,
         deploy_docs,
         deploy_playground,
         smoke_docs,
