@@ -97,20 +97,6 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm i
-      - name: Cache Verdaccio storage
-        uses: actions/cache@v4
-        with:
-          path: /tmp/oberon-verdaccio-storage
-          key: ${{ runner.os }}-verdaccio-${{ hashFiles('recipes/nextjs/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-verdaccio-
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: /tmp/oberon-test-pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('recipes/nextjs/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
       - name: Install Playwright browsers
         run: pnpx playwright install --with-deps chromium
       - name: E2E Tests
@@ -188,11 +174,11 @@ jobs:
         smoke_docs,
         smoke_playground,
       ]
-    if: always() && !contains(needs.*.result, 'cancelled')
+    if: always()
     runs-on: ubuntu-latest
     env:
       STATUS:
-        "${{ contains(needs.*.result, 'failure') && 'failed' || 'passed' }}"
+        "${{ contains(needs.*.result, 'failure') && 'failed' || contains(needs.*.result, 'cancelled') || 'passed' }}"
       MESSAGE: |
         Latest deployments available at: 
         ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}

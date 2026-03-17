@@ -62,8 +62,7 @@
     "./tailwind.css": "./tailwind.css"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",

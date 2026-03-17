@@ -26,6 +26,7 @@ export default defineConfig(
       "node_modules/**/*",
       "dist/**/*",
       ".rollup.cache/**/*",
+      ".playwright/e2e-runtime/**",
     ],
   },
   {

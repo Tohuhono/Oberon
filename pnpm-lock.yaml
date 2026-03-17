@@ -59,8 +59,8 @@ importers:
         specifier: ^6.1.2
         version: 6.1.2
       turbo:
-        specifier: ^2.8.10
-        version: 2.8.10
+        specifier: ^2.8.17
+        version: 2.8.17
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -448,6 +448,9 @@ importers:
       '@dev/vitest':
         specifier: workspace:*
         version: link:../../dev/vitest
+      '@oberon/recipe-nextjs':
+        specifier: workspace:*
+        version: link:../../recipes/nextjs
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../oberoncms/core
@@ -505,6 +508,76 @@ importers:
       vite:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/create-oberon-app/.playwright/e2e-runtime/scaffold:
+    dependencies:
+      '@oberoncms/core':
+        specifier: ^0.17.5
+        version: 0.17.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      '@oberoncms/plugin-development':
+        specifier: ^0.7.5
+        version: 0.7.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/pg@8.16.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vercel/postgres@0.10.0)(bufferutil@4.1.0)(immer@11.1.4)(pg@8.18.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      '@oberoncms/plugin-turso':
+        specifier: ^0.17.5
+        version: 0.17.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/pg@8.16.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vercel/postgres@0.10.0)(bufferutil@4.1.0)(immer@11.1.4)(pg@8.18.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      next:
+        specifier: ^16.1.6
+        version: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react:
+        specifier: ^19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.4
+        version: 19.2.4(react@19.2.4)
+      resend:
+        specifier: ^6.9.2
+        version: 6.9.2(@react-email/render@1.1.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
+      server-cli-only:
+        specifier: ^0.3.2
+        version: 0.3.2
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.2.1
+        version: 4.2.1
+      '@tailwindcss/typography':
+        specifier: ^0.5.19
+        version: 0.5.19(tailwindcss@4.2.1)
+      '@types/node':
+        specifier: 24.10.1
+        version: 24.10.1
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      eslint:
+        specifier: ^9.39.2
+        version: 9.39.2(jiti@2.6.1)
+      eslint-config-next:
+        specifier: 16.1.6
+        version: 16.1.6(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      postcss:
+        specifier: ^8.5.6
+        version: 8.5.6
+      prettier:
+        specifier: ^3.8.1
+        version: 3.8.1
+      prettier-plugin-tailwindcss:
+        specifier: ^0.7.2
+        version: 0.7.2(prettier@3.8.1)
+      tailwindcss:
+        specifier: ^4.1.18
+        version: 4.2.1
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@4.2.1)
+      tsx:
+        specifier: ^4.21.0
+        version: 4.21.0
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/oberoncms/core:
     dependencies:
@@ -2743,6 +2816,30 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
+  '@oberoncms/core@0.17.5':
+    resolution: {integrity: sha512-H/CKlV4FhbxiJzWjFn/+Cz/9svEcoKzvqK1d2WTpdbps8ZqEQvJcZ+HRaHrTTqvhlaXEEhhx7HNK5YmIhMHfNQ==}
+    peerDependencies:
+      react: ^19.2.0
+      react-dom: ^19.2.0
+
+  '@oberoncms/plugin-development@0.7.5':
+    resolution: {integrity: sha512-i0nIFFwjOJcHZRRpm2pXXTRILTec3FwGfYAaiHI2thF0XqHHt3qrhHfNh96V6mM2jGGweyxVMVeT+iksvc0zwA==}
+    peerDependencies:
+      react: ^19.2.0
+      react-dom: ^19.2.0
+
+  '@oberoncms/plugin-turso@0.17.5':
+    resolution: {integrity: sha512-Dyzkp0lyu3wEdgbsJQ5GeeMLV6cdR9WF8MQkU98vDa7wIsn/6KkEGiGhFIlfYr/wHwPh8TxYjaPu8tCQFrLmhQ==}
+    peerDependencies:
+      react: ^19.2.0
+      react-dom: ^19.2.0
+
+  '@oberoncms/sqlite@0.7.5':
+    resolution: {integrity: sha512-CKoF82KCWhOf5ALgvDHgkX0LblJkj7iXnPCPAe/AW7NpDMdJwhhHcDucY5iM7MzrMrIPdUH8h+Dy1ItPwBSE3Q==}
+    peerDependencies:
+      react: ^19.2.0
+      react-dom: ^19.2.0
+
   '@opentelemetry/semantic-conventions@1.39.0':
     resolution: {integrity: sha512-R5R9tb2AXs2IRLNKLBJDynhkfmx7mX0vi8NkhZb3gUkPWHn6HXk5J8iQ/dql0U3ApfWym4kXXmBDRGO+oeOfjg==}
     engines: {node: '>=14'}
@@ -4288,6 +4385,18 @@ packages:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
 
+  '@tohuhono/ui@0.14.5':
+    resolution: {integrity: sha512-3OVkIe2QgGmBPL9x/0cD3BQ6x2N3ChuIwmQGXskNlxeo2OY33ERCKiZc6Bwsrygk03IfBszRb2VjkVH7DRsn9A==}
+    peerDependencies:
+      react: ^19.2.0
+      react-dom: ^19.2.0
+
+  '@tohuhono/utils@0.14.0':
+    resolution: {integrity: sha512-a5U1USTR+Wctv/vj33W0zfW/Fs7l2754+g2OINNsx6dVB/Brmi5REPDI3bam16NyvTbEA6b7l8Lo4mkpm8tuIQ==}
+    peerDependencies:
+      react: ^19.2.0
+      react-dom: ^19.2.0
+
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -5185,6 +5294,7 @@ packages:
   basic-ftp@5.1.0:
     resolution: {integrity: sha512-RkaJzeJKDbaDWTIPiJwubyljaEPwpVWkm9Rt5h9Nd6h7tEXTJ3VB4qxdZBioV7JO5yLUaOKwz7vDOzlncUsegw==}
     engines: {node: '>=10.0.0'}
+    deprecated: Security vulnerability fixed in 5.2.0, please upgrade
 
   bcrypt-pbkdf@1.0.2:
     resolution: {integrity: sha512-qeFIXtP4MSoi6NLqO12WfqARWWuCKi2Rn/9hJLEmtB5yTNr9DqFWkJRCf2qShWzPeAMRnOgCrq0sg/KLv5ES9w==}
@@ -7744,9 +7854,6 @@ packages:
     resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
     engines: {node: 18 || 20 || >=22}
 
-  minimatch@3.1.2:
-    resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
-
   minimatch@3.1.5:
     resolution: {integrity: sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==}
 
@@ -8277,9 +8384,6 @@ packages:
     resolution: {integrity: sha512-MJYfvHwtGp870aeusDh+hg9apvOe2zmpZJpyt+BMtzUWlVqbhFmMK6bOBXLBUPd7iRtIF9fZplDc7KrPN3PN7w==}
     peerDependencies:
       pg: '>=8.0'
-
-  pg-protocol@1.11.0:
-    resolution: {integrity: sha512-pfsxk2M9M3BuGgDOfuy37VNRRX3jmKgMjcvAcWqNDpZSf4cUmv8HSOl5ViRQFsfARFn0KuUQTgLxVMbNq5NW3g==}
 
   pg-protocol@1.12.0:
     resolution: {integrity: sha512-uOANXNRACNdElMXJ0tPz6RBM0XQ61nONGAwlt8da5zs/iUOOCLBQOHSXnrC6fMsvtjxbOJrZZl5IScGv+7mpbg==}
@@ -9582,38 +9686,38 @@ packages:
   tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
 
-  turbo-darwin-64@2.8.10:
-    resolution: {integrity: sha512-A03fXh+B7S8mL3PbdhTd+0UsaGrhfyPkODvzBDpKRY7bbeac4MDFpJ7I+Slf2oSkCEeSvHKR7Z4U71uKRUfX7g==}
+  turbo-darwin-64@2.8.17:
+    resolution: {integrity: sha512-ZFkv2hv7zHpAPEXBF6ouRRXshllOavYc+jjcrYyVHvxVTTwJWsBZwJ/gpPzmOKGvkSjsEyDO5V6aqqtZzwVF+Q==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@2.8.10:
-    resolution: {integrity: sha512-sidzowgWL3s5xCHLeqwC9M3s9M0i16W1nuQF3Mc7fPHpZ+YPohvcbVFBB2uoRRHYZg6yBnwD4gyUHKTeXfwtXA==}
+  turbo-darwin-arm64@2.8.17:
+    resolution: {integrity: sha512-5DXqhQUt24ycEryXDfMNKEkW5TBHs+QmU23a2qxXwwFDaJsWcPo2obEhBxxdEPOv7qmotjad+09RGeWCcJ9JDw==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@2.8.10:
-    resolution: {integrity: sha512-YK9vcpL3TVtqonB021XwgaQhY9hJJbKKUhLv16osxV0HkcQASQWUqR56yMge7puh6nxU67rQlTq1b7ksR1T3KA==}
+  turbo-linux-64@2.8.17:
+    resolution: {integrity: sha512-KLUbz6w7F73D/Ihh51hVagrKR0/CTsPEbRkvXLXvoND014XJ4BCrQUqSxlQ4/hu+nqp1v5WlM85/h3ldeyujuA==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@2.8.10:
-    resolution: {integrity: sha512-3+j2tL0sG95iBJTm+6J8/45JsETQABPqtFyYjVjBbi6eVGdtNTiBmHNKrbvXRlQ3ZbUG75bKLaSSDHSEEN+btQ==}
+  turbo-linux-arm64@2.8.17:
+    resolution: {integrity: sha512-pJK67XcNJH40lTAjFu7s/rUlobgVXyB3A3lDoq+/JccB3hf+SysmkpR4Itlc93s8LEaFAI4mamhFuTV17Z6wOg==}
     cpu: [arm64]
     os: [linux]
 
-  turbo-windows-64@2.8.10:
-    resolution: {integrity: sha512-hdeF5qmVY/NFgiucf8FW0CWJWtyT2QPm5mIsX0W1DXAVzqKVXGq+Zf+dg4EUngAFKjDzoBeN6ec2Fhajwfztkw==}
+  turbo-windows-64@2.8.17:
+    resolution: {integrity: sha512-EijeQ6zszDMmGZLP2vT2RXTs/GVi9rM0zv2/G4rNu2SSRSGFapgZdxgW4b5zUYLVaSkzmkpWlGfPfj76SW9yUg==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@2.8.10:
-    resolution: {integrity: sha512-QGdr/Q8LWmj+ITMkSvfiz2glf0d7JG0oXVzGL3jxkGqiBI1zXFj20oqVY0qWi+112LO9SVrYdpHS0E/oGFrMbQ==}
+  turbo-windows-arm64@2.8.17:
+    resolution: {integrity: sha512-crpfeMPkfECd4V1PQ/hMoiyVcOy04+bWedu/if89S15WhOalHZ2BYUi6DOJhZrszY+mTT99OwpOsj4wNfb/GHQ==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@2.8.10:
-    resolution: {integrity: sha512-OxbzDES66+x7nnKGg2MwBA1ypVsZoDTLHpeaP4giyiHSixbsiTaMyeJqbEyvBdp5Cm28fc+8GG6RdQtic0ijwQ==}
+  turbo@2.8.17:
+    resolution: {integrity: sha512-YwPsNSqU2f/RXU/+Kcb7cPkPZARxom4+me7LKEdN5jsvy2tpfze3zDZ4EiGrJnvOm9Avu9rK0aaYsP7qZ3iz7A==}
     hasBin: true
 
   tweetnacl@0.14.5:
@@ -11051,7 +11155,7 @@ snapshots:
     dependencies:
       '@eslint/object-schema': 2.1.7
       debug: 4.4.3
-      minimatch: 3.1.2
+      minimatch: 3.1.5
     transitivePeerDependencies:
       - supports-color
 
@@ -11072,7 +11176,7 @@ snapshots:
       ignore: 5.3.2
       import-fresh: 3.3.1
       js-yaml: 4.1.1
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -11612,6 +11716,209 @@ snapshots:
       fastq: 1.20.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@oberoncms/core@0.17.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))':
+    dependencies:
+      '@auth/core': 0.37.4
+      '@hookform/resolvers': 5.2.2(react-hook-form@7.71.1(react@19.2.4))
+      '@puckeditor/core': 0.21.1(@floating-ui/dom@1.7.5)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      '@tohuhono/ui': 0.14.5(@babel/core@7.29.0)(@playwright/test@1.58.2)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@tohuhono/utils': 0.14.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      dotenv: 17.3.1
+      filesize: 11.0.13
+      next: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next-auth: 5.0.0-beta.30(next@16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      react-hook-form: 7.71.1(react@19.2.4)
+      swr: 2.4.0(react@19.2.4)
+      use-debounce: 10.1.0(react@19.2.4)
+      walkjs: 6.0.1
+      zod: 4.3.6
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@floating-ui/dom'
+      - '@opentelemetry/api'
+      - '@playwright/test'
+      - '@simplewebauthn/browser'
+      - '@simplewebauthn/server'
+      - '@types/react'
+      - '@types/react-dom'
+      - babel-plugin-macros
+      - babel-plugin-react-compiler
+      - bufferutil
+      - immer
+      - nodemailer
+      - sass
+      - use-sync-external-store
+      - utf-8-validate
+
+  '@oberoncms/plugin-development@0.7.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/pg@8.16.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vercel/postgres@0.10.0)(bufferutil@4.1.0)(immer@11.1.4)(pg@8.18.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))':
+    dependencies:
+      '@libsql/client': 0.17.0(bufferutil@4.1.0)
+      '@libsql/core': 0.17.0
+      '@oberoncms/core': 0.17.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      '@oberoncms/sqlite': 0.7.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/pg@8.16.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vercel/postgres@0.10.0)(bufferutil@4.1.0)(immer@11.1.4)(pg@8.18.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      drizzle-orm: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+      next: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      server-cli-only: 0.3.2
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@babel/core'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@floating-ui/dom'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@opentelemetry/api'
+      - '@planetscale/database'
+      - '@playwright/test'
+      - '@prisma/client'
+      - '@simplewebauthn/browser'
+      - '@simplewebauthn/server'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/react'
+      - '@types/react-dom'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - babel-plugin-macros
+      - babel-plugin-react-compiler
+      - better-sqlite3
+      - bufferutil
+      - bun-types
+      - encoding
+      - expo-sqlite
+      - gel
+      - immer
+      - knex
+      - kysely
+      - mysql2
+      - nodemailer
+      - pg
+      - postgres
+      - prisma
+      - sass
+      - sql.js
+      - sqlite3
+      - use-sync-external-store
+      - utf-8-validate
+
+  '@oberoncms/plugin-turso@0.17.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/pg@8.16.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vercel/postgres@0.10.0)(bufferutil@4.1.0)(immer@11.1.4)(pg@8.18.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))':
+    dependencies:
+      '@libsql/client': 0.17.0(bufferutil@4.1.0)
+      '@oberoncms/core': 0.17.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      '@oberoncms/sqlite': 0.7.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/pg@8.16.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vercel/postgres@0.10.0)(bufferutil@4.1.0)(immer@11.1.4)(pg@8.18.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      drizzle-orm: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      server-cli-only: 0.3.2
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@babel/core'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@floating-ui/dom'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@opentelemetry/api'
+      - '@planetscale/database'
+      - '@playwright/test'
+      - '@prisma/client'
+      - '@simplewebauthn/browser'
+      - '@simplewebauthn/server'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/react'
+      - '@types/react-dom'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - babel-plugin-macros
+      - babel-plugin-react-compiler
+      - better-sqlite3
+      - bufferutil
+      - bun-types
+      - encoding
+      - expo-sqlite
+      - gel
+      - immer
+      - knex
+      - kysely
+      - mysql2
+      - nodemailer
+      - pg
+      - postgres
+      - prisma
+      - sass
+      - sql.js
+      - sqlite3
+      - use-sync-external-store
+      - utf-8-validate
+
+  '@oberoncms/sqlite@0.7.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/pg@8.16.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vercel/postgres@0.10.0)(bufferutil@4.1.0)(immer@11.1.4)(pg@8.18.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))':
+    dependencies:
+      '@libsql/client': 0.17.0(bufferutil@4.1.0)
+      '@libsql/core': 0.17.0
+      '@oberoncms/core': 0.17.5(@babel/core@7.29.0)(@floating-ui/dom@1.7.5)(@playwright/test@1.58.2)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      drizzle-orm: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      server-cli-only: 0.3.2
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@babel/core'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@floating-ui/dom'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@opentelemetry/api'
+      - '@planetscale/database'
+      - '@playwright/test'
+      - '@prisma/client'
+      - '@simplewebauthn/browser'
+      - '@simplewebauthn/server'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/react'
+      - '@types/react-dom'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - babel-plugin-macros
+      - babel-plugin-react-compiler
+      - better-sqlite3
+      - bufferutil
+      - bun-types
+      - encoding
+      - expo-sqlite
+      - gel
+      - immer
+      - knex
+      - kysely
+      - mysql2
+      - nodemailer
+      - pg
+      - postgres
+      - prisma
+      - sass
+      - sql.js
+      - sqlite3
+      - use-sync-external-store
+      - utf-8-validate
 
   '@opentelemetry/semantic-conventions@1.39.0': {}
 
@@ -12926,6 +13233,11 @@ snapshots:
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.1.18
 
+  '@tailwindcss/typography@0.5.19(tailwindcss@4.2.1)':
+    dependencies:
+      postcss-selector-parser: 6.0.10
+      tailwindcss: 4.2.1
+
   '@tanstack/react-table@8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@tanstack/table-core': 8.21.3
@@ -13083,6 +13395,39 @@ snapshots:
       '@tiptap/extension-floating-menu': 3.19.0(@floating-ui/dom@1.7.5)(@tiptap/core@3.19.0(@tiptap/pm@3.19.0))(@tiptap/pm@3.19.0)
     transitivePeerDependencies:
       - '@floating-ui/dom'
+
+  '@tohuhono/ui@0.14.5(@babel/core@7.29.0)(@playwright/test@1.58.2)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@base-ui/react': 1.2.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@radix-ui/react-icons': 1.3.2(react@19.2.4)
+      '@tailwindcss/typography': 0.5.19(tailwindcss@4.2.1)
+      '@tohuhono/utils': 0.14.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      class-variance-authority: 0.7.1
+      cmdk: 1.1.1(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      date-fns: 4.1.0
+      input-otp: 1.4.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-day-picker: 9.13.2(react@19.2.4)
+      react-dom: 19.2.4(react@19.2.4)
+      react-hook-form: 7.71.1(react@19.2.4)
+      tailwindcss: 4.2.1
+      tailwindcss-animate: 1.0.7(tailwindcss@4.2.1)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@opentelemetry/api'
+      - '@playwright/test'
+      - '@types/react'
+      - '@types/react-dom'
+      - babel-plugin-macros
+      - babel-plugin-react-compiler
+      - sass
+
+  '@tohuhono/utils@0.14.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      tailwind-merge: 3.4.1
 
   '@tootallnate/once@2.0.0': {}
 
@@ -13311,7 +13656,7 @@ snapshots:
   '@types/pg@8.16.0':
     dependencies:
       '@types/node': 24.10.1
-      pg-protocol: 1.11.0
+      pg-protocol: 1.12.0
       pg-types: 2.2.0
 
   '@types/pluralize@0.0.33': {}
@@ -14092,14 +14437,17 @@ snapshots:
     dependencies:
       acorn: 8.15.0
 
+  acorn-jsx@5.3.2(acorn@8.16.0):
+    dependencies:
+      acorn: 8.16.0
+
   acorn-walk@8.3.4:
     dependencies:
       acorn: 8.15.0
 
   acorn@8.15.0: {}
 
-  acorn@8.16.0:
-    optional: true
+  acorn@8.16.0: {}
 
   agent-base@6.0.2:
     dependencies:
@@ -15370,6 +15718,26 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
+  eslint-config-next@16.1.6(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
+    dependencies:
+      '@next/eslint-plugin-next': 16.1.6
+      eslint: 9.39.2(jiti@2.6.1)
+      eslint-import-resolver-node: 0.3.9
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-jsx-a11y: 6.10.2(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-react: 7.37.5(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-react-hooks: 7.0.1(eslint@9.39.2(jiti@2.6.1))
+      globals: 16.4.0
+      typescript-eslint: 8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+    optionalDependencies:
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - eslint-import-resolver-webpack
+      - eslint-plugin-import-x
+      - supports-color
+
   eslint-config-next@16.1.6(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
     dependencies:
       '@next/eslint-plugin-next': 16.1.6
@@ -15413,17 +15781,18 @@ snapshots:
       tinyglobby: 0.2.15
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.2(jiti@2.6.1)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.39.2(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
@@ -15437,6 +15806,35 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1)):
+    dependencies:
+      '@rtsao/scc': 1.1.0
+      array-includes: 3.1.9
+      array.prototype.findlastindex: 1.2.6
+      array.prototype.flat: 1.3.3
+      array.prototype.flatmap: 1.3.3
+      debug: 3.2.7
+      doctrine: 2.1.0
+      eslint: 9.39.2(jiti@2.6.1)
+      eslint-import-resolver-node: 0.3.9
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
+      hasown: 2.0.2
+      is-core-module: 2.16.1
+      is-glob: 4.0.3
+      minimatch: 3.1.5
+      object.fromentries: 2.0.8
+      object.groupby: 1.0.3
+      object.values: 1.2.1
+      semver: 6.3.1
+      string.prototype.trimend: 1.0.9
+      tsconfig-paths: 3.15.0
+    optionalDependencies:
+      '@typescript-eslint/parser': 8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+    transitivePeerDependencies:
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
+
   eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       '@rtsao/scc': 1.1.0
@@ -15448,11 +15846,11 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.39.2(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.2(jiti@2.6.1))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.55.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -15481,7 +15879,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -15507,7 +15905,7 @@ snapshots:
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
       language-tags: 1.0.9
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
@@ -15535,7 +15933,7 @@ snapshots:
       estraverse: 5.3.0
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       object.entries: 1.1.9
       object.fromentries: 2.0.8
       object.values: 1.2.1
@@ -15587,7 +15985,7 @@ snapshots:
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
       lodash.merge: 4.6.2
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       natural-compare: 1.4.0
       optionator: 0.9.4
     optionalDependencies:
@@ -15599,8 +15997,8 @@ snapshots:
 
   espree@10.4.0:
     dependencies:
-      acorn: 8.15.0
-      acorn-jsx: 5.3.2(acorn@8.15.0)
+      acorn: 8.16.0
+      acorn-jsx: 5.3.2(acorn@8.16.0)
       eslint-visitor-keys: 4.2.1
 
   esprima@4.0.1: {}
@@ -17534,14 +17932,9 @@ snapshots:
       brace-expansion: 5.0.4
     optional: true
 
-  minimatch@3.1.2:
-    dependencies:
-      brace-expansion: 1.1.12
-
   minimatch@3.1.5:
     dependencies:
       brace-expansion: 1.1.12
-    optional: true
 
   minimatch@7.4.6:
     dependencies:
@@ -17620,6 +18013,12 @@ snapshots:
   neo-async@2.6.2: {}
 
   netmask@2.0.2: {}
+
+  next-auth@5.0.0-beta.30(next@16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
+    dependencies:
+      '@auth/core': 0.41.0
+      next: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
 
   next-auth@5.0.0-beta.30(next@16.1.6(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
     dependencies:
@@ -18095,10 +18494,7 @@ snapshots:
     dependencies:
       pg: 8.18.0
 
-  pg-protocol@1.11.0: {}
-
-  pg-protocol@1.12.0:
-    optional: true
+  pg-protocol@1.12.0: {}
 
   pg-types@2.2.0:
     dependencies:
@@ -18123,7 +18519,7 @@ snapshots:
     dependencies:
       pg-connection-string: 2.11.0
       pg-pool: 3.11.0(pg@8.18.0)
-      pg-protocol: 1.11.0
+      pg-protocol: 1.12.0
       pg-types: 2.2.0
       pgpass: 1.0.5
     optionalDependencies:
@@ -19492,6 +19888,10 @@ snapshots:
     dependencies:
       tailwindcss: 4.1.18
 
+  tailwindcss-animate@1.0.7(tailwindcss@4.2.1):
+    dependencies:
+      tailwindcss: 4.2.1
+
   tailwindcss@4.1.18: {}
 
   tailwindcss@4.2.1: {}
@@ -19639,32 +20039,32 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  turbo-darwin-64@2.8.10:
+  turbo-darwin-64@2.8.17:
     optional: true
 
-  turbo-darwin-arm64@2.8.10:
+  turbo-darwin-arm64@2.8.17:
     optional: true
 
-  turbo-linux-64@2.8.10:
+  turbo-linux-64@2.8.17:
     optional: true
 
-  turbo-linux-arm64@2.8.10:
+  turbo-linux-arm64@2.8.17:
     optional: true
 
-  turbo-windows-64@2.8.10:
+  turbo-windows-64@2.8.17:
     optional: true
 
-  turbo-windows-arm64@2.8.10:
+  turbo-windows-arm64@2.8.17:
     optional: true
 
-  turbo@2.8.10:
+  turbo@2.8.17:
     optionalDependencies:
-      turbo-darwin-64: 2.8.10
-      turbo-darwin-arm64: 2.8.10
-      turbo-linux-64: 2.8.10
-      turbo-linux-arm64: 2.8.10
-      turbo-windows-64: 2.8.10
-      turbo-windows-arm64: 2.8.10
+      turbo-darwin-64: 2.8.17
+      turbo-darwin-arm64: 2.8.17
+      turbo-linux-64: 2.8.17
+      turbo-linux-arm64: 2.8.17
+      turbo-windows-64: 2.8.17
+      turbo-windows-arm64: 2.8.17
 
   tweetnacl@0.14.5: {}
 
