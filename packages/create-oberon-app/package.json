@@ -30,13 +30,10 @@
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "test:unit": "vitest run",
-    "test:e2e": "playwright test --config playwright.config.ts",
+    "test:coa": "playwright test --config playwright.config.ts",
     "tsc": "tsc --pretty",
     "prebuild": "node scripts/generate.mjs",
     "generate:recipes": "node scripts/generate.mjs"
-  },
-  "publishConfig": {
-    "provenance": true
   },
   "engines": {
     "node": ">=22.0.0"
@@ -56,6 +53,7 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
+    "@oberon/recipe-nextjs": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-flydrive": "workspace:*",

@@ -2,6 +2,6 @@
 "create-oberon-app": patch
 ---
 
-Improve e2e global-setup: cross-platform port killing (macOS + Linux), teardown
-on setup failure, waitForServer progress logging, robust tarball discovery via
-directory diff, Verdaccio config stub, consistent os.tmpdir() usage
+Improve e2e global setup with cross-platform port killing (macOS + Linux),
+deterministic workspace-local runtime paths, safer teardown on setup failure,
+waitForServer progress logging, and Verdaccio startup hardening.

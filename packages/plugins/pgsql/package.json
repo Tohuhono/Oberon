@@ -55,8 +55,7 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",

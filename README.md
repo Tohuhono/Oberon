@@ -30,6 +30,8 @@ pnpm test # Run unit tests
 
 pnpm test:e2e # Run e2e tests
 
+pnpm test:coa # Run create-oberon-app containerized smoke e2e (Podman, Linux)
+
 pnpm test:smoke # Run e2e smoke tests (CI subset)
 
 pnpm change # Add a changset entry
