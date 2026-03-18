@@ -134,6 +134,10 @@
       "dependsOn": ["build"],
       "outputs": [".playwright"]
     },
+    "test:coa": {
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
+    },
     "test:smoke": {
       "dependsOn": [],
       "outputs": [".playwright"],

@@ -30,7 +30,7 @@
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "test:unit": "vitest run",
-    "test:e2e": "playwright test --config playwright.config.ts",
+    "test:coa": "playwright test --config playwright.config.ts",
     "tsc": "tsc --pretty",
     "prebuild": "node scripts/generate.mjs",
     "generate:recipes": "node scripts/generate.mjs"

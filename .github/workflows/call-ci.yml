@@ -102,6 +102,42 @@ jobs:
       - name: E2E Tests
         run: pnpm test:e2e
 
+  coa:
+    name: Create Oberon App
+    runs-on: ubuntu-latest
+    env:
+      USE_DEVELOPMENT_DATABASE: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-coa-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-coa-
+      - name: Use pNpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+      - name: Install Podman
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
+      - name: Install
+        run: pnpm i
+      - name: Install Playwright browsers
+        run: pnpx playwright install --with-deps chromium
+      - name: COA Tests
+        run: pnpm test:coa
+
   deploy_docs:
     name: Oberon Docs
     needs: [changed-packages]
@@ -169,6 +205,7 @@ jobs:
         changed-packages,
         validate,
         e2e,
+        coa,
         deploy_docs,
         deploy_playground,
         smoke_docs,

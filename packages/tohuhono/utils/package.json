@@ -22,8 +22,16 @@
   },
   "exports": {
     ".": "./dist/index.js",
+    "./exec-async": {
+      "types": "./src/exec-async.ts",
+      "default": "./dist/exec-async.js"
+    },
     "./map-concurrent": "./dist/map-concurrent.js",
-    "./use-client-state": "./dist/use-client-state.js"
+    "./use-client-state": "./dist/use-client-state.js",
+    "./wait-for-server": {
+      "types": "./src/wait-for-server.ts",
+      "default": "./dist/wait-for-server.js"
+    }
   },
   "files": [
     "dist",
