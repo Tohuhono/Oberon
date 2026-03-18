@@ -8,7 +8,7 @@ const storagePath = path.join(verdaccioRoot, "storage")
 const configPath = path.join(verdaccioRoot, "verdaccio.yaml")
 const logPath = path.join(verdaccioRoot, "verdaccio.log")
 
-await rm(verdaccioRoot, { recursive: true, force: true })
+await rm(storagePath, { recursive: true, force: true })
 await mkdir(storagePath, { recursive: true })
 
 const app = await runServer({
