@@ -2,7 +2,7 @@ import { mkdir, rm } from "fs/promises"
 import path from "path"
 import { runServer } from "verdaccio"
 
-const verdaccioRoot = "/opt/coa/verdaccio"
+const verdaccioRoot = "/opt/verdaccio"
 const verdaccioPort = 4873
 const storagePath = path.join(verdaccioRoot, "storage")
 const configPath = path.join(verdaccioRoot, "verdaccio.yaml")

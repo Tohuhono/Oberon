@@ -16,4 +16,6 @@ Simplify local e2e publishing by using root recursive workspace publish to
 Verdaccio and removing extra setup complexity. Also remove package-level
 provenance defaults from publish configs so local recursive publish works in
 non-CI environments, while release provenance remains controlled by CI
-environment settings.
+environment settings. Modernize GitHub Actions Node setup to use setup-node +
+Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio` while keeping the
+create-oberon-app scaffold runtime in `/opt/coa`.

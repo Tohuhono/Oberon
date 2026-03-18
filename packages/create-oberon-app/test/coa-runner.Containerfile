@@ -4,9 +4,9 @@ ARG PNPM_VERSION=10.27.0
 
 RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
 
-RUN mkdir -p /opt/coa && npm install --prefix /opt/coa verdaccio@6
+RUN mkdir -p /opt/verdaccio /opt/coa && pnpm install --prefix /opt/verdaccio verdaccio@6
 
-COPY verdaccio-container.mjs /opt/coa/verdaccio-container.mjs
+COPY verdaccio-container.mjs /opt/verdaccio/verdaccio-container.mjs
 
 WORKDIR /opt/coa
 
@@ -18,4 +18,4 @@ ENV npm_config_registry=http://localhost:4873
 ENV npm_config_replace_registry_host=never
 ENV USE_DEVELOPMENT_DATABASE=true
 
-CMD ["node", "/opt/coa/verdaccio-container.mjs"]
+CMD ["node", "/opt/verdaccio/verdaccio-container.mjs"]
