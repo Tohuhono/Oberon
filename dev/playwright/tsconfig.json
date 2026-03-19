@@ -3,5 +3,5 @@
   "compilerOptions": {
     "rootDir": "."
   },
-  "include": ["*.config.ts"]
+  "include": ["*.config.ts", "helpers/**/*.ts"]
 }

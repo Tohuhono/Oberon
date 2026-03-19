@@ -12,11 +12,18 @@
   "exports": {
     ".": {
       "default": "./base.config.ts"
+    },
+    "./helpers/bootstrap": {
+      "default": "./helpers/bootstrap.ts"
+    },
+    "./helpers/fixtures": {
+      "default": "./helpers/fixtures.ts"
     }
   },
   "files": [
     "base.config.ts",
-    "playwright.config.ts"
+    "playwright.config.ts",
+    "helpers"
   ],
   "devDependencies": {
     "@playwright/test": "^1.52.0",

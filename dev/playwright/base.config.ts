@@ -1,4 +1,28 @@
-import { defineConfig, devices } from "@playwright/test"
+import {
+  test as baseTest,
+  defineConfig as baseDefineConfig,
+  devices,
+} from "@playwright/test"
+
+type AuthSetupOptions = {
+  readLog: () => Promise<string>
+  authEmail?: string
+  authStorageStatePath?: string
+}
+
+export const test = baseTest.extend<AuthSetupOptions>({
+  readLog: [
+    async (_, use) =>
+      use(async () => {
+        throw new Error("authHelpers.readLog fixture option must be provided")
+      }),
+    { option: true },
+  ],
+  authEmail: [undefined, { option: true }],
+  authStorageStatePath: [undefined, { option: true }],
+})
+
+export const defineConfig = baseDefineConfig<AuthSetupOptions>
 
 export const base = defineConfig({
   testMatch: "test/**/*.spec.ts",
@@ -13,5 +37,3 @@ export const base = defineConfig({
     trace: "on-first-retry",
   },
 })
-
-export { defineConfig }
