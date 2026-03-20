@@ -11,6 +11,33 @@ function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
 
+function createRequestPattern(path: string) {
+  return new RegExp(
+    `requested\\s+['"]?(?:GET|HEAD)\\s+/${escapeRegExp(path)}(?:\\?|['"\\s]|$)`,
+    "i",
+  )
+}
+
+function createNpmjsRequestPattern(path: string) {
+  return new RegExp(
+    `making request:\\s+['"]?(?:GET|HEAD)\\s+https://registry\\.npmjs\\.org/${escapeRegExp(path)}(?:\\?|['"\\s]|$)`,
+    "i",
+  )
+}
+
+function getRelevantLogContext(logs: string, path: string) {
+  const matchedLines = logs
+    .split("\n")
+    .filter((line) => line.includes(path))
+    .slice(0, 10)
+
+  if (matchedLines.length > 0) {
+    return matchedLines.join("\n")
+  }
+
+  return logs.split("\n").slice(0, 20).join("\n")
+}
+
 function getTarballName(packageName: string, version: string) {
   const packageParts = packageName.split("/")
   const packageBaseName = packageParts[packageParts.length - 1] || packageName
@@ -103,19 +130,25 @@ test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
 
       const tarballPath = `${metadataPath}/-/${getTarballName(packageName, installedVersion)}`
 
-      const metadataRequestPattern = new RegExp(
-        `requested 'GET /${escapeRegExp(metadataPath)}(?:[?']|\\s)`,
-      )
-      const npmjsMetadataFallbackPattern = new RegExp(
-        `making request: 'GET https://registry\\.npmjs\\.org/${escapeRegExp(metadataPath)}(?:[?']|\\s)`,
-      )
-      const npmjsTarballFallbackPattern = new RegExp(
-        `making request: 'GET https://registry\\.npmjs\\.org/${escapeRegExp(tarballPath)}(?:[?']|\\s)`,
-      )
+      const metadataRequestPattern = createRequestPattern(metadataPath)
+      const npmjsMetadataFallbackPattern =
+        createNpmjsRequestPattern(metadataPath)
+      const npmjsTarballFallbackPattern = createNpmjsRequestPattern(tarballPath)
 
-      expect(metadataRequestPattern.test(verdaccioLogs)).toBe(true)
-      expect(npmjsMetadataFallbackPattern.test(verdaccioLogs)).toBe(false)
-      expect(npmjsTarballFallbackPattern.test(verdaccioLogs)).toBe(false)
+      expect(
+        metadataRequestPattern.test(verdaccioLogs),
+        `Expected Verdaccio metadata request for ${packageName}. Relevant logs:\n${getRelevantLogContext(verdaccioLogs, metadataPath)}`,
+      ).toBe(true)
+
+      expect(
+        npmjsMetadataFallbackPattern.test(verdaccioLogs),
+        `Unexpected npmjs metadata fallback for ${packageName}. Relevant logs:\n${getRelevantLogContext(verdaccioLogs, metadataPath)}`,
+      ).toBe(false)
+
+      expect(
+        npmjsTarballFallbackPattern.test(verdaccioLogs),
+        `Unexpected npmjs tarball fallback for ${packageName}. Relevant logs:\n${getRelevantLogContext(verdaccioLogs, tarballPath)}`,
+      ).toBe(false)
     }
   })
 
@@ -132,14 +165,17 @@ test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
     const metadataPath = getVerdaccioPackagePath(NEGATIVE_PROVENANCE_PACKAGE)
     const verdaccioLogs = await readVerdaccioLogs()
 
-    const metadataRequestPattern = new RegExp(
-      `requested 'GET /${escapeRegExp(metadataPath)}(?:[?']|\\s)`,
-    )
-    const npmjsMetadataProxyPattern = new RegExp(
-      `making request: 'GET https://registry\\.npmjs\\.org/${escapeRegExp(metadataPath)}(?:[?']|\\s)`,
-    )
+    const metadataRequestPattern = createRequestPattern(metadataPath)
+    const npmjsMetadataProxyPattern = createNpmjsRequestPattern(metadataPath)
 
-    expect(metadataRequestPattern.test(verdaccioLogs)).toBe(true)
-    expect(npmjsMetadataProxyPattern.test(verdaccioLogs)).toBe(true)
+    expect(
+      metadataRequestPattern.test(verdaccioLogs),
+      `Expected Verdaccio metadata request for ${NEGATIVE_PROVENANCE_PACKAGE}. Relevant logs:\n${getRelevantLogContext(verdaccioLogs, metadataPath)}`,
+    ).toBe(true)
+
+    expect(
+      npmjsMetadataProxyPattern.test(verdaccioLogs),
+      `Expected npmjs metadata proxy for ${NEGATIVE_PROVENANCE_PACKAGE}. Relevant logs:\n${getRelevantLogContext(verdaccioLogs, metadataPath)}`,
+    ).toBe(true)
   })
 })

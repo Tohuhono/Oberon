@@ -1,5 +1,5 @@
 import path from "node:path"
-import { mkdir } from "node:fs/promises"
+import { mkdir, readdir, rm } from "node:fs/promises"
 import { execAsync } from "@tohuhono/utils/exec-async"
 
 const MONOREPO_ROOT = path.resolve(import.meta.dirname, "../../../")
@@ -25,6 +25,16 @@ export const VERDACCIO_PING_PATH = `/-/ping`
 export const VERDACCIO_AUTH_KEY = `npm_config_//localhost:${VERDACCIO_PORT}/:_authToken`
 
 const PODMAN_BASE_ARGS = ["--storage-opt", "ignore_chown_errors=true"]
+
+async function clearLocalLogs() {
+  const entries = await readdir(LOCAL_LOG_PATH)
+
+  await Promise.all(
+    entries
+      .filter((entry) => entry.endsWith(".log"))
+      .map((entry) => rm(path.join(LOCAL_LOG_PATH, entry))),
+  )
+}
 
 export async function buildContainerImage() {
   const containerBuildContext = path.resolve(import.meta.dirname)
@@ -60,6 +70,7 @@ export async function startContainer() {
   await stopContainer()
 
   await mkdir(LOCAL_LOG_PATH, { recursive: true })
+  await clearLocalLogs()
 
   await execAsync(
     "podman",

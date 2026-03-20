@@ -6,7 +6,7 @@ const verdaccioRoot = "/opt/verdaccio"
 const verdaccioPort = 4873
 const storagePath = path.join(verdaccioRoot, "storage")
 const configPath = path.join(verdaccioRoot, "verdaccio.yaml")
-const logPath = path.join(verdaccioRoot, "verdaccio.log")
+const logPath = "/logs/verdaccio.log"
 
 await rm(storagePath, { recursive: true, force: true })
 await mkdir(storagePath, { recursive: true })
