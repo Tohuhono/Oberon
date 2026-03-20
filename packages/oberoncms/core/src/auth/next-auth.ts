@@ -95,12 +95,20 @@ export const authPlugin: OberonPlugin = (adapter) => {
     adapter,
     callbacks: {
       async signIn(props) {
-        const { user, profile } = props
+        const { account, user, profile } = props
+
+        const isMasterSignIn =
+          !!masterEmail &&
+          (user?.email === masterEmail ||
+            account?.providerAccountId === masterEmail)
 
         // Master user override
-        if (user?.email && masterEmail && user.email === masterEmail) {
-          // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
-          user.role = "admin"
+        if (isMasterSignIn) {
+          if (user) {
+            // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
+            user.role = "admin"
+          }
+
           return true
         }
         // Existing user or email verification
@@ -130,6 +138,13 @@ export const authPlugin: OberonPlugin = (adapter) => {
         return token
       },
       session({ session, token }) {
+        const id =
+          typeof token.sub === "string" ? token.sub : session.user.email || null
+
+        if (id) {
+          session.user.id = id
+        }
+
         // @ts-expect-error TODO fix auth types https://github.com/nextauthjs/next-auth/issues/9493
         session.user.role = token.role
         return session

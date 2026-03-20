@@ -31,6 +31,7 @@
     "lint": "eslint .",
     "test:unit": "vitest run",
     "test:coa": "playwright test --config playwright.config.ts",
+    "test:coa:ui": "playwright test --config playwright.config.ts --ui",
     "tsc": "tsc --pretty",
     "prebuild": "node scripts/generate.mjs",
     "generate:recipes": "node scripts/generate.mjs"

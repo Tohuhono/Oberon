@@ -10,14 +10,14 @@ This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps
 
 ## Plan mode
 
-- Read `agents/ARCHITECTURE.md` before planning
+- Read `.agents/ARCHITECTURE.md` before planning
 - Plan mode required before edits. Keep plan ultra-concise (telegraphic style)
 - End each plan with unresolved questions list (if none, say “None”)
 - If you are unsure, ask for clarification
 
 ## Agent mode / Edit mode
 
-- CRITICAL: Read `agents/CODESTYLE.md` before any edits.
+- CRITICAL: Read `.agents/CODESTYLE.md` before any edits.
 - Execute plan, if uncertain ask
 - Validate with `pnpm check`; iterate until warnings/errors are resolved
 - Create changeset
@@ -58,7 +58,7 @@ validated, instead perform the following tasks without further prompting:
 
 # Follow-up docs
 
-- Read `agents/CODESTYLE.md` for coding style rules
-- Read `agents/ARCHITECTURE.md` for full system design
-- Read `agents/CONVENTIONS.md` for common system patterns
-- Read `agents/TESTING.md` for testing strategy and scope
+- Read `.agents/CODESTYLE.md` for coding style rules
+- Read `.agents/ARCHITECTURE.md` for full system design
+- Read `.agents/CONVENTIONS.md` for common system patterns
+- Read `.agents/TESTING.md` for testing strategy and scope

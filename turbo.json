@@ -138,6 +138,12 @@
       "dependsOn": ["build"],
       "outputs": [".playwright"]
     },
+    "test:coa:ui": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"],
+      "outputs": []
+    },
     "test:smoke": {
       "dependsOn": [],
       "outputs": [".playwright"],
@@ -161,7 +167,9 @@
       "dependsOn": ["^build"]
     },
     "//#tsc:root": {},
-    "wait": {},
+    "wait": {
+      "inputs": ["./dist/version"]
+    },
     "wait:clean": {},
     "prepublishOnly": {
       "dependsOn": ["build"]
