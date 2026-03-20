@@ -167,7 +167,9 @@
       "dependsOn": ["^build"]
     },
     "//#tsc:root": {},
-    "wait": {},
+    "wait": {
+      "inputs": ["./dist/version"]
+    },
     "wait:clean": {},
     "prepublishOnly": {
       "dependsOn": ["build"]
