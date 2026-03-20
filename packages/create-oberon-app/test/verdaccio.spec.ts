@@ -4,7 +4,7 @@ import { readVerdaccioLogs, execInContainer, COA_NEXTJS_DIR } from "./container"
 const NEGATIVE_PROVENANCE_PACKAGE = "next"
 
 function getVerdaccioPackagePath(packageName: string) {
-  return packageName.replace("/", "%2F")
+  return packageName.replace(/\//g, "%2F")
 }
 
 function escapeRegExp(value: string) {
