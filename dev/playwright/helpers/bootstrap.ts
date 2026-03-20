@@ -10,16 +10,6 @@ type DevelopmentOtpEntry = {
   url?: string
 }
 
-type LoginFlowCommonOptions = {
-  page: Page
-  email: string
-  storageStatePath?: string
-}
-
-type CompleteUiLoginWithOtpOptions = LoginFlowCommonOptions & {
-  getLog: () => Promise<string>
-}
-
 function sleep(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds))
 }
@@ -110,13 +100,6 @@ async function pollDevelopmentOtpEntry({
   throw new Error(`Timed out waiting 20000ms for OTP token for ${email}`)
 }
 
-function formatError(error: unknown) {
-  if (error instanceof Error) {
-    return `${error.name}: ${error.message}`
-  }
-  return String(error)
-}
-
 async function completeSignIn(page: Page) {
   const completeSignInButton = page.getByRole("button", {
     name: "Complete Sign in",
@@ -152,61 +135,61 @@ async function completeSignIn(page: Page) {
   }
 }
 
-export async function completeUiLoginWithOtp(
-  options: CompleteUiLoginWithOtpOptions,
-): Promise<{ token: string }> {
-  const { page, email, storageStatePath, getLog } = options
+export async function completeUiLoginWithOtp({
+  page,
+  email,
+  storageStatePath,
+  getLog,
+}: {
+  page: Page
+  email: string
+  storageStatePath: string
+  getLog: () => Promise<string>
+}): Promise<{ token: string }> {
+  const initialLoginUrl = new URL(LOGIN_PATH, "http://localhost")
+  initialLoginUrl.searchParams.set("callbackUrl", CALLBACK_PATH)
 
-  try {
-    const initialLoginUrl = new URL(LOGIN_PATH, "http://localhost")
-    initialLoginUrl.searchParams.set("callbackUrl", CALLBACK_PATH)
+  await page.goto(`${initialLoginUrl.pathname}${initialLoginUrl.search}`)
 
-    await page.goto(`${initialLoginUrl.pathname}${initialLoginUrl.search}`)
+  const emailInput = page.getByRole("textbox").first()
+  await expect(emailInput).toBeEditable()
+  await emailInput.fill(email)
 
-    const emailInput = page.getByRole("textbox").first()
-    await expect(emailInput).toBeEditable()
-    await emailInput.fill(email)
+  const initialLogs = await getLog()
+  const initialLogLength = initialLogs.length
 
-    const initialLogs = await getLog()
-    const initialLogLength = initialLogs.length
+  await page.getByRole("button", { name: "Sign in" }).click()
 
-    await page.getByRole("button", { name: "Sign in" }).click()
+  const otpEntry = await pollDevelopmentOtpEntry({
+    email,
+    readLogs: async () => {
+      const currentLogs = await getLog()
+      if (currentLogs.length <= initialLogLength) {
+        return currentLogs.length === initialLogLength ? "" : currentLogs
+      }
 
-    const otpEntry = await pollDevelopmentOtpEntry({
-      email,
-      readLogs: async () => {
-        const currentLogs = await getLog()
-        if (currentLogs.length <= initialLogLength) {
-          return currentLogs.length === initialLogLength ? "" : currentLogs
-        }
+      return currentLogs.slice(initialLogLength)
+    },
+  })
 
-        return currentLogs.slice(initialLogLength)
-      },
-    })
+  const { token, url: completionUrl } = otpEntry
 
-    const { token, url: completionUrl } = otpEntry
+  const completionLoginUrl = new URL(LOGIN_PATH, "http://localhost")
+  completionLoginUrl.searchParams.set("callbackUrl", CALLBACK_PATH)
+  completionLoginUrl.searchParams.set("email", email)
+  completionLoginUrl.searchParams.set("token", token)
 
-    const completionLoginUrl = new URL(LOGIN_PATH, "http://localhost")
-    completionLoginUrl.searchParams.set("callbackUrl", CALLBACK_PATH)
-    completionLoginUrl.searchParams.set("email", email)
-    completionLoginUrl.searchParams.set("token", token)
+  await page.goto(
+    completionUrl ??
+      `${completionLoginUrl.pathname}${completionLoginUrl.search}`,
+  )
 
-    await page.goto(
-      completionUrl ??
-        `${completionLoginUrl.pathname}${completionLoginUrl.search}`,
-    )
+  await completeSignIn(page)
 
-    await completeSignIn(page)
+  await mkdir(path.dirname(storageStatePath), { recursive: true })
+  await page.context().storageState({ path: storageStatePath })
 
-    if (storageStatePath) {
-      await mkdir(path.dirname(storageStatePath), { recursive: true })
-      await page.context().storageState({ path: storageStatePath })
-    }
-
-    return {
-      token,
-    }
-  } catch (error) {
-    throw new Error(`UI auth bootstrap failed. ${formatError(error)}`)
+  return {
+    token,
   }
 }

@@ -14,6 +14,7 @@ export default defineConfig({
     {
       name: "playground",
       testMatch: "test/**/*.spec.ts",
+      grep: /@smoke|@cms/,
       use: { baseURL: "http://localhost:3210" },
     },
   ],

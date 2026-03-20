@@ -24,11 +24,13 @@ export default defineConfig({
     {
       name: "playground",
       testMatch: "apps/playground/test/**/*.spec.ts",
+      grep: /@smoke/,
       use: { baseURL },
     },
     {
       name: "docs",
       testMatch: "apps/documentation/test/**/*.spec.ts",
+      grep: /@smoke/,
       use: { baseURL },
     },
   ],

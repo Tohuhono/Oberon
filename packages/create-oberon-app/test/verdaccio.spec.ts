@@ -1,9 +1,5 @@
 import { expect, test } from "@playwright/test"
-import {
-  COA_CONTAINER_SCAFFOLD_DIR,
-  COA_VERDACCIO_LOG_PATH,
-} from "./coa-constants"
-import { readContainerFile, readInstalledPackages } from "./coa-runtime"
+import { readVerdaccioLogs, execInContainer, COA_NEXTJS_DIR } from "./container"
 
 const NEGATIVE_PROVENANCE_PACKAGE = "next"
 
@@ -22,18 +18,85 @@ function getTarballName(packageName: string, version: string) {
   return `${packageBaseName}-${version}.tgz`
 }
 
-test.describe("COA package provenance", { tag: "@coa" }, () => {
+function parseJsonOutput(output: string): unknown {
+  const trimmed = output.trim()
+
+  if (!trimmed) {
+    throw new Error("Expected JSON output but received an empty string")
+  }
+
+  const arrayStart = trimmed.indexOf("[")
+  const arrayEnd = trimmed.lastIndexOf("]")
+
+  if (arrayStart >= 0 && arrayEnd > arrayStart) {
+    return JSON.parse(trimmed.slice(arrayStart, arrayEnd + 1))
+  }
+
+  const objectStart = trimmed.indexOf("{")
+  const objectEnd = trimmed.lastIndexOf("}")
+
+  if (objectStart >= 0 && objectEnd > objectStart) {
+    return JSON.parse(trimmed.slice(objectStart, objectEnd + 1))
+  }
+
+  throw new Error(`Unable to parse JSON output: ${trimmed}`)
+}
+
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null
+}
+
+async function readInstalledDependencies(cwd: string) {
+  const output = await execInContainer("pnpm list --json --depth=0", { cwd })
+
+  const parsed = parseJsonOutput(output)
+  const results = Array.isArray(parsed) ? parsed : [parsed]
+  const dependencies: Record<string, unknown> = {}
+
+  for (const result of results) {
+    if (!isObjectRecord(result)) {
+      continue
+    }
+
+    const dependencyGroups = [result.dependencies, result.devDependencies]
+
+    for (const dependencyGroup of dependencyGroups) {
+      if (!isObjectRecord(dependencyGroup)) {
+        continue
+      }
+
+      for (const [packageName, dependency] of Object.entries(dependencyGroup)) {
+        dependencies[packageName] = dependency
+      }
+    }
+  }
+
+  return dependencies
+}
+
+async function readInstalledPackages() {
+  const dependencies = await readInstalledDependencies(COA_NEXTJS_DIR)
+  const installedPackages: Record<string, string> = {}
+
+  for (const [packageName, dependency] of Object.entries(dependencies)) {
+    if (isObjectRecord(dependency) && typeof dependency.version === "string") {
+      installedPackages[packageName] = dependency.version
+    }
+  }
+
+  return installedPackages
+}
+
+test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
   test("installs @oberoncms packages via verdaccio without npmjs fallback", async () => {
-    const installedPackages = await readInstalledPackages(
-      COA_CONTAINER_SCAFFOLD_DIR,
-    )
+    const installedPackages = await readInstalledPackages()
     const provenancePackages = Object.entries(installedPackages).filter(
       ([packageName]) => packageName.startsWith("@oberoncms/"),
     )
 
     expect(provenancePackages.length).toBeGreaterThan(0)
 
-    const verdaccioLogs = await readContainerFile(COA_VERDACCIO_LOG_PATH)
+    const verdaccioLogs = await readVerdaccioLogs()
 
     for (const [packageName, installedVersion] of provenancePackages) {
       const metadataPath = getVerdaccioPackagePath(packageName)
@@ -57,9 +120,7 @@ test.describe("COA package provenance", { tag: "@coa" }, () => {
   })
 
   test("proxies next metadata from npmjs via verdaccio", async () => {
-    const installedPackages = await readInstalledPackages(
-      COA_CONTAINER_SCAFFOLD_DIR,
-    )
+    const installedPackages = await readInstalledPackages()
 
     const nextVersion = installedPackages[NEGATIVE_PROVENANCE_PACKAGE]
     if (!nextVersion) {
@@ -69,7 +130,7 @@ test.describe("COA package provenance", { tag: "@coa" }, () => {
     }
 
     const metadataPath = getVerdaccioPackagePath(NEGATIVE_PROVENANCE_PACKAGE)
-    const verdaccioLogs = await readContainerFile(COA_VERDACCIO_LOG_PATH)
+    const verdaccioLogs = await readVerdaccioLogs()
 
     const metadataRequestPattern = new RegExp(
       `requested 'GET /${escapeRegExp(metadataPath)}(?:[?']|\\s)`,

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 
-test.describe("Docs Smoke Tests @smoke", () => {
+test.describe("Docs Smoke Tests", { tag: "@smoke @docs" }, () => {
   test("homepage loads", async ({ page }) => {
     const response = await page.goto("/")
     expect(response?.status()).toBe(200)

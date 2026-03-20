@@ -40,5 +40,3 @@ function closeServer() {
 
 process.on("SIGTERM", closeServer)
 process.on("SIGINT", closeServer)
-
-await new Promise(() => {})

@@ -5,7 +5,7 @@ export async function waitForServer(url: string, timeout = 120_000) {
   while (Date.now() - start < timeout) {
     try {
       await fetch(url)
-      return
+      return true
     } catch {
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }

@@ -4,7 +4,7 @@ import { completeUiLoginWithOtp } from "./bootstrap"
 test.describe("Shared auth setup", { tag: "@auth" }, () => {
   test("logs in and writes reusable browser state", async ({
     page,
-    readLog,
+    serverLog,
     authEmail,
     authStorageStatePath,
   }) => {
@@ -19,7 +19,7 @@ test.describe("Shared auth setup", { tag: "@auth" }, () => {
     await completeUiLoginWithOtp({
       page,
       email: authEmail,
-      getLog: readLog,
+      getLog: serverLog.read,
       storageStatePath: authStorageStatePath,
     })
   })
