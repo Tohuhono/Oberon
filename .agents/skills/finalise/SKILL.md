@@ -25,27 +25,24 @@ complete.
    - Include all changes, even if they are from the user or out of scope of the
      task
 2. Ensure release metadata
-   - Add a [changeset](https://github.com/changesets/changesets) for any new
-     package changes.
+   - Add a [changeset](https://github.com/changesets/changesets) for any package
+     changes.
 3. Fetch origin
    - Ensure we have all remote changes in this branch and main
 4. Create fresh final branch
    - Create a new branch from main
 5. Commit and push
    - Stage all changes
-   - Commit with a very concise summary
+   - Commit with a concise description
    - Push branch to origin
 6. Open PR against main
    - Create PR targeting `main`.
-   - Include a concise summary of the finalised change set.
+   - Include an extremely concise description
 
 ## Decision Points
 
 - Do not run validations or checks; assume the code is correct
-- Commit summary chould be very short; details are already captured in the
-  changeset
-- If there are uncommitted changes, include them even when they are outside the
-  scope of the current plan.
+- Missing changeset: add/update changeset before committing.
 - If source branch is clean and has no commits ahead of `origin/main`, stop and
   report no changes to finalise.
 - If package changes exist without a changeset, add a changeset.
