@@ -236,7 +236,7 @@ jobs:
 
   promote_docs:
     name: Oberon CMS Docs
-    needs: [validate, deploy_docs, smoke_docs]
+    needs: [test-status, deploy_docs]
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-promote.yml
     secrets:
@@ -251,7 +251,7 @@ jobs:
 
   promote_playground:
     name: Oberon Playground
-    needs: [validate, deploy_playground, smoke_playground]
+    needs: [test-status, deploy_playground]
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-promote.yml
     secrets:
