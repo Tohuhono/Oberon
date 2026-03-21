@@ -24,28 +24,35 @@ implementation and validation are already complete.
    - Capture current branch and working tree status.
    - Include all changes, even if they are from the user or out of scope of the
      task
-2. Ensure release metadata
+2. Derive work metadata
+   - Follow [METADATA](../../METADATA.md).
+   - Summarise completed work outcomes, not workflow mechanics.
+3. Ensure release metadata
    - Add or update a [changeset](https://github.com/changesets/changesets) for
      new package changes.
-3. Commit
+4. Commit
    - Stage intended files.
-   - Commit with a very concise summary
-4. Push current branch
+   - Commit with a very concise summary of completed work.
+   - Avoid process wording like "update PR" or "latest changes".
+5. Push current branch
    - Push to `origin` on the same branch.
    - Do not create a new branch.
    - Do not create a new PR.
-5. Update PR
-   - If the scope of the PR has increased, rewright the description to include
-     our changes. Be very concise
-6. Report outcome
+6. Update PR
+   - If the scope of the PR has increased, rewrite PR title/description to
+     include the completed work outcome.
+   - Be very concise.
+7. Report outcome
    - Share branch name, commit SHA, and push result.
    - If blocked, report the blocker and next required manual action.
 
 ## Decision Points
 
 - Do not run validations or checks; assume the code is correct
-- Commit summary chould be extremely brief; details are already captured in the
-  changeset
+- Always generate concise work-focused metadata via
+  [METADATA](../../METADATA.md); do not ask for wording.
+- Commit summary should be extremely brief; details are already captured in the
+  changeset.
 - Missing changeset: add/update changeset before committing.
 - Push rejected (non-fast-forward): pull remote and merge, resolve conflicts,
   then retry push.
@@ -56,5 +63,6 @@ implementation and validation are already complete.
 - Current branch is preserved (no branch switch)
 - All intended branch changes are included
 - Changeset is present for new package changes
-- Commit is created with a concise message
+- Commit and PR metadata describe completed work outcomes (not workflow
+  mechanics)
 - Push to current branch succeeds
