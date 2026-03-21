@@ -38,11 +38,14 @@
     },
     "chat.useNestedAgentsMdFiles": true,
     "chat.tools.terminal.autoApprove": {
-      "git remote": true,
-      "/^gh issue view 294 --comments$/": {
-        "approve": true,
-        "matchCommandLine": true,
-      },
+      "git": true,
+      "pnpm": true,
+      "gh": true,
+      "set": true,
+      "git push": true,
+      "curl": true,
+      "awk": true,
+      "true": true,
     },
   },
 }
