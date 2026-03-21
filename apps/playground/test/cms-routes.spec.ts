@@ -33,11 +33,6 @@ test.describe("CMS Routes", { tag: "@cms" }, () => {
     await expect(page.getByRole("link", { name: "/" })).toBeVisible()
   })
 
-  test("loads /cms/login", async ({ page }) => {
-    await page.goto("/cms/login")
-    await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible()
-  })
-
   test("shows 404 for unknown cms route", async ({ page }) => {
     await page.goto("/cms/unknown-route")
     await expect(page.getByText(/404 - page not found/i)).toBeVisible()

@@ -3,12 +3,17 @@
 This is the OberonCMS monorepo for the CMS core, plugins, documentation, website
 and create-oberon-app script
 
-- Use pnpm workspaces with turborepo
-- Use `pnpm check` to run lint, typecheck, build and tests with correct caching
-  and dependency management
-
+- CRITICAL: Read [package.json](./package.json)
 - CRITICAL: Read [ARCHITECTURE](.agents/ARCHITECTURE.md) before planning
 - CRITICAL: Read [CODESTYLE](.agents/ARCHITECTURE.md) before any edits
+
+# Pnpm and life cycle
+
+- Prefer `pnpm` commands configured in base package.json - these use turborepo
+  to correctly manage and cache dependancies
+- Avoid filtering or otherwise targeting specfic packages (--filter, --dir)
+- Use `pnpm check` to run lint, typecheck, build and tests which is cached for
+  efficiency
 
 # Follow-up docs
 

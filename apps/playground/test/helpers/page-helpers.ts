@@ -1,7 +1,6 @@
-import { expect, type Browser } from "@playwright/test"
+import { expect, type Page } from "@playwright/test"
 
-export const createPage = async (browser: Browser, key: string) => {
-  const page = await browser.newPage()
+export const createPage = async (page: Page, key: string) => {
   await page.goto("/cms/pages")
   const textbox = page.getByRole("textbox")
   await expect(textbox).toBeEditable()
@@ -15,21 +14,19 @@ export const createPage = async (browser: Browser, key: string) => {
   ).toHaveText("test@tohuhono.com")
 }
 
-export const deletePages = async (browser: Browser, key: string) => {
-  const page = await browser.newPage()
-
+export const deletePages = async (page: Page, key: string) => {
   await page.goto("/cms/pages")
 
   const links = page.getByRole("link", { name: key })
 
   for (const _ of Array(await links.count())) {
-    const key = await links.first().innerText()
-    expect(key).toMatch(/.+/)
+    const pageKey = await links.first().innerText()
+    expect(pageKey).toMatch(/.+/)
     await page
-      .getByRole("button", { name: `Delete ${key}`, exact: true })
+      .getByRole("button", { name: `Delete ${pageKey}`, exact: true })
       .click()
     await expect(
-      page.getByRole("link", { name: key, exact: true }),
+      page.getByRole("link", { name: pageKey, exact: true }),
     ).not.toBeVisible()
   }
 

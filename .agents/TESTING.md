@@ -49,6 +49,24 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 - Every workspace package has a `vitest.config.ts` and `"test": "vitest run"`
   script pre-scaffolded — just add a `.test.ts` file to start testing
 
+## E2E lane conventions
+
+- Shared Playwright lane constants live in `@dev/playwright/projects`
+- Treat lane constants as fixed canonical defaults
+  - consumers compose from shared constants in app/package configs
+  - do not mutate shared constant values directly
+- Keep app/package Playwright config as the composition root
+  - app-specific `webServer` and root `use` stay local
+  - lane-specific defaults (for example authenticated storage state) come from
+    shared constants
+- Tag semantics:
+  - `@auth`: shared auth bootstrap lane
+  - `@cms`: authenticated CMS behavior lane
+  - `@login`: unauthenticated login behavior lane
+  - `@smoke`: smoke lane
+- Broad tag discovery is intentional; CI/tag discipline is the guardrail for
+  accidental collisions.
+
 ## Current candidates
 
 Examples to guide future decisions:

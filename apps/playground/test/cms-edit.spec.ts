@@ -1,16 +1,45 @@
-import { expect, test, type TestInfo } from "@playwright/test"
+import {
+  expect,
+  test,
+  type BrowserContext,
+  type TestInfo,
+} from "@playwright/test"
+import { authenticatedProject } from "@dev/playwright/projects"
 import { createPage, deletePages } from "./helpers/page-helpers"
 
 const testPageKey = (testInfo: TestInfo) =>
   `/e2e_edit_${testInfo.parallelIndex}_${testInfo.repeatEachIndex}`
 
+const authStorageStatePath = authenticatedProject.use?.storageState
+
 test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
+  let authenticatedContext: BrowserContext | null = null
+
   test.beforeAll(async ({ browser }, testInfo) => {
-    await createPage(browser, testPageKey(testInfo))
+    if (!authStorageStatePath) {
+      throw new Error("authStorageStatePath fixture option must be provided")
+    }
+
+    authenticatedContext = await browser.newContext({
+      storageState: authStorageStatePath,
+    })
+
+    const page = await authenticatedContext.newPage()
+    await createPage(page, testPageKey(testInfo))
+    await page.close()
   })
 
-  test.afterAll(async ({ browser }, testInfo) => {
-    await deletePages(browser, testPageKey(testInfo))
+  test.afterAll(async ({}, testInfo) => {
+    if (!authenticatedContext) {
+      return
+    }
+
+    const page = await authenticatedContext.newPage()
+    await deletePages(page, testPageKey(testInfo))
+    await page.close()
+
+    await authenticatedContext.close()
+    authenticatedContext = null
   })
 
   test("publishes from editor", async ({ page }, testInfo) => {

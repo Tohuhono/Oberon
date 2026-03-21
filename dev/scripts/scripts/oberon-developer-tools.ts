@@ -23,6 +23,7 @@ const dirs = ONLY
       "./.turbo",
       "./.rollup.cache",
       "./.vercel",
+      "./.playwright",
       "./tsconfig.tsbuildinfo",
       "./next-env.d.ts",
       ...(WITH ? [WITH] : []),
