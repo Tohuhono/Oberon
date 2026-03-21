@@ -1,64 +1,18 @@
 ## Essentials
 
-This is the OberonCMS monorepo for the CMS core, plugins, and Next.js apps
+This is the OberonCMS monorepo for the CMS core, plugins, documentation, website
+and create-oberon-app script
 
 - Use pnpm workspaces with turborepo
 - Use `pnpm check` to run lint, typecheck, build and tests with correct caching
   and dependency management
 
-# Agent workflows
-
-## Plan mode
-
-- Read `.agents/ARCHITECTURE.md` before planning
-- Plan mode required before edits. Keep plan ultra-concise (telegraphic style)
-- End each plan with unresolved questions list (if none, say “None”)
-- If you are unsure, ask for clarification
-
-## Agent mode / Edit mode
-
-- CRITICAL: Read `.agents/CODESTYLE.md` before any edits.
-- Execute plan, if uncertain ask
-- Validate with `pnpm check`; iterate until warnings/errors are resolved
-- Create changeset
-
-## Finalise
-
-If asked to finalise then skip plan mode and assume the task is complete and
-validated, instead perform the following tasks without further prompting:
-
-- Make sure main has all changes from remote
-- Checkout a new branch from main
-- Include all changes, not just files touched in the current task
-- Add or update [changeset](https://github.com/changesets/changesets) for any
-  new changes
-- Commit and push changes; the commit message should be concise; the changeset
-  is the description
-- Open a PR against `main`
-
-## Update PR
-
-If asked to Update PR then skip plan mode and assume the task is complete and
-validated, instead perform the following tasks without further prompting:
-
-- Make sure current branch has all changes, not just files touched in the
-  current task
-- Add or update [changeset](https://github.com/changesets/changesets) for any
-  new changes
-- Commit and push changes; the commit message should be concise; the changeset
-  is the description
-
-## Guardrails
-
-- Never use `--lockfile-only`; use plain `pnpm install` (it refreshes the
-  lockfile)
-- Never use `pnpm --filter`; use turborepo commands (`pnpm check`, `pnpm build`)
-  which handle dependency ordering automatically
-- Never use '-f' for rm; Try to remove without forcing
+- CRITICAL: Read [ARCHITECTURE](.agents/ARCHITECTURE.md) before planning
+- CRITICAL: Read [CODESTYLE](.agents/ARCHITECTURE.md) before any edits
 
 # Follow-up docs
 
-- Read `.agents/CODESTYLE.md` for coding style rules
-- Read `.agents/ARCHITECTURE.md` for full system design
-- Read `.agents/CONVENTIONS.md` for common system patterns
-- Read `.agents/TESTING.md` for testing strategy and scope
+- [coding style rules and guidelines](.agents/CODESTYLE.md)
+- [design and archetectur](.agents/ARCHITECTURE.md)
+- [common patterns and conventions](.agents/CONVENTIONS.md)
+- [testing strategy and scope](.agents/TESTING.md)
