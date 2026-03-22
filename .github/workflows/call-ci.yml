@@ -109,6 +109,14 @@ jobs:
         run: pnpx playwright install --with-deps chromium
       - name: E2E Tests
         run: pnpm test:e2e
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          if-no-files-found: ignore
+          path: |
+            **/playwright-report/**
 
   coa:
     name: Create Oberon App
