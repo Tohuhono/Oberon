@@ -29,6 +29,8 @@ export default defineConfig({
     ].join(" && "),
     url: "http://localhost:3210",
     reuseExistingServer: false,
+    stderr: "pipe",
+    stdout: "pipe",
     env: {
       PORT: "3210",
       USE_DEVELOPMENT_DATABASE: "true",
