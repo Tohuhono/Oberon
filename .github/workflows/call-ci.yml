@@ -115,8 +115,7 @@ jobs:
         with:
           name: playwright-report
           if-no-files-found: ignore
-          path: |
-            **/playwright-report/**
+          path: apps/playground/playwright-report/**
 
   coa:
     name: Create Oberon App
