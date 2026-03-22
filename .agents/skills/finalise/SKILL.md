@@ -24,28 +24,44 @@ complete.
    - Record current branch and working tree state.
    - Include all changes, even if they are from the user or out of scope of the
      task
-2. Ensure release metadata
+2. Derive work metadata
+   - Follow [METADATA](../../METADATA.md).
+   - Keep branch/commit/PR wording concise and focused on completed work
+     outcomes.
+3. Ensure release metadata
    - Add a [changeset](https://github.com/changesets/changesets) for any package
      changes.
-3. Fetch origin
-   - Ensure we have all remote changes in this branch and main
-4. Create fresh final branch
-   - Create a new branch from main
-5. Commit and push
-   - Stage all changes
-   - Commit with a concise description
+4. Fetch origin
+   - Ensure we have all remote changes in this branch and main.
+   - This should happen before creating the final branch.
+5. Create fresh final branch
+   - Create a new branch from latest `origin/main`.
+   - Branch name format: `finalise/<timestamp>-<work-slug>`
+   - `work-slug` should reflect the work area and outcome.
+6. Integrate source branch work
+   - Keep source branch history untouched.
+   - Apply the source-vs-main net diff onto the fresh final branch.
+   - Create one commit representing the net-new logical work.
+7. Commit and push
+   - Stage all changes from the replayed diff.
+   - Commit with a concise summary of completed work (not finalisation
+     mechanics).
    - Push branch to origin
-6. Open PR against main
+8. Open PR against main
    - Create PR targeting `main`.
-   - Include an extremely concise description
+   - Title and description must describe completed work outcomes, not workflow
+     steps.
 
 ## Decision Points
 
 - Do not run validations or checks; assume the code is correct
+- Always generate concise work-focused metadata via
+  [METADATA](../../METADATA.md); do not ask for wording.
 - Missing changeset: add/update changeset before committing.
 - If source branch is clean and has no commits ahead of `origin/main`, stop and
   report no changes to finalise.
 - If package changes exist without a changeset, add a changeset.
+- Do not rewrite source branch history.
 - Use `gh pr create`.
 - If `gh` is unavailable or unauthenticated, stop and report the blocker.
 - If there are conflicts, attempt to resolve; If unsure how to resolve or unable
@@ -55,15 +71,19 @@ complete.
 ## Completion Checks
 
 - Final branch starts from latest `origin/main`
-- All source branch changes are included
-- No cherry-pick mode is used
+- All source branch changes are included by content
+- Final branch commit history reflects net-new logical work only
+- Source branch history is unchanged
 - Required changeset exists
 - Commit is created and pushed
 - PR is open against `main`
+- Branch name, commit summary, PR title, and PR body describe completed work
+  outcomes (not workflow mechanics)
 
 ## Output
 
 - Final branch name
 - Commit SHA
 - PR URL
+- Derived work summary used for branch/PR metadata
 - Any blockers or manual follow-up steps

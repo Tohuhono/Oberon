@@ -1,80 +1,29 @@
 import path from "node:path"
 import { mkdir } from "node:fs/promises"
+import { stripVTControlCharacters } from "node:util"
 import { expect, type Page } from "@playwright/test"
 
 const LOGIN_PATH = "/cms/login"
 const CALLBACK_PATH = "/cms/pages"
 
-type DevelopmentOtpEntry = {
-  token: string
-  url?: string
-}
-
 function sleep(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds))
 }
 
-function escapeRegExp(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-}
-
-function parseDevelopmentOtpEntry(logs: string, email: string) {
-  const escapedEmail = escapeRegExp(email)
-
-  const withUrlAndToken = new RegExp(
-    `sendVerificationRequest not sent in development[\\s\\S]*?email:\\s*["']${escapedEmail}["'][\\s\\S]*?url:\\s*["']([^"']+)["'][\\s\\S]*?token:\\s*["']?(\\d{6})["']?`,
-    "g",
-  )
-
-  let lastEntry: DevelopmentOtpEntry | null = null
-
-  for (const match of logs.matchAll(withUrlAndToken)) {
-    const url = match[1]
-    const token = match[2]
-
-    if (token) {
-      lastEntry = {
-        token,
-        url,
-      }
-    }
-  }
-
-  if (lastEntry) {
-    return lastEntry
-  }
-
-  const fromTokenField = new RegExp(
-    `sendVerificationRequest not sent in development[\\s\\S]*?email:\\s*["']${escapedEmail}["'][\\s\\S]*?token:\\s*["']?(\\d{6})["']?`,
-    "g",
-  )
+function parseDevelopmentOtpEntry(logs: string): string | null {
+  const stripedLog = stripVTControlCharacters(logs)
+  const tokenPattern = /token:\s*["']?(\d{6})["']?/g
 
   let lastMatch: string | null = null
 
-  for (const match of logs.matchAll(fromTokenField)) {
+  for (const match of stripedLog.matchAll(tokenPattern)) {
     const token = match[1]
     if (token) {
       lastMatch = token
     }
   }
 
-  if (lastMatch) {
-    return { token: lastMatch }
-  }
-
-  const fromUrlField = new RegExp(
-    `sendVerificationRequest not sent in development[\\s\\S]*?email:\\s*["']${escapedEmail}["'][\\s\\S]*?url:\\s*["'][^"']*token=(\\d{6})`,
-    "g",
-  )
-
-  for (const match of logs.matchAll(fromUrlField)) {
-    const token = match[1]
-    if (token) {
-      lastMatch = token
-    }
-  }
-
-  return lastMatch ? { token: lastMatch } : null
+  return lastMatch
 }
 
 async function pollDevelopmentOtpEntry({
@@ -88,7 +37,7 @@ async function pollDevelopmentOtpEntry({
 
   while (Date.now() < deadline) {
     const logs = await readLogs()
-    const entry = parseDevelopmentOtpEntry(logs, email)
+    const entry = parseDevelopmentOtpEntry(logs)
 
     if (entry) {
       return entry
@@ -160,7 +109,7 @@ export async function completeUiLoginWithOtp({
 
   await page.getByRole("button", { name: "Sign in" }).click()
 
-  const otpEntry = await pollDevelopmentOtpEntry({
+  const token = await pollDevelopmentOtpEntry({
     email,
     readLogs: async () => {
       const currentLogs = await getLog()
@@ -172,17 +121,12 @@ export async function completeUiLoginWithOtp({
     },
   })
 
-  const { token, url: completionUrl } = otpEntry
-
   const completionLoginUrl = new URL(LOGIN_PATH, "http://localhost")
   completionLoginUrl.searchParams.set("callbackUrl", CALLBACK_PATH)
   completionLoginUrl.searchParams.set("email", email)
   completionLoginUrl.searchParams.set("token", token)
 
-  await page.goto(
-    completionUrl ??
-      `${completionLoginUrl.pathname}${completionLoginUrl.search}`,
-  )
+  await page.goto(`${completionLoginUrl.pathname}${completionLoginUrl.search}`)
 
   await completeSignIn(page)
 

@@ -13,6 +13,9 @@
     ".": {
       "default": "./base.config.ts"
     },
+    "./projects": {
+      "default": "./projects.ts"
+    },
     "./helpers/bootstrap": {
       "default": "./helpers/bootstrap.ts"
     },
@@ -22,6 +25,7 @@
   },
   "files": [
     "base.config.ts",
+    "projects.ts",
     "playwright.config.ts",
     "helpers"
   ],

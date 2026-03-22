@@ -15,6 +15,7 @@ export default defineConfig(
   },
   {
     files: ["**/*.ts", "**/*.tsx"],
+    ignores: ["**/*.spec.ts", "**/*.test.ts"],
     plugins: {
       "@next/next": nextPlugin,
     },

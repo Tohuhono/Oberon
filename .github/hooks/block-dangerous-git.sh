@@ -67,7 +67,7 @@ fi
 
 if echo "$COMMAND" | grep -qE '(^|[[:space:]])pnpm([[:space:]]|$)' &&
   echo "$COMMAND" | grep -qE -- '(^|[[:space:]])-F([[:space:]]|$)'; then
-  block_command "Do not use 'pnpm --filter'. Use commands from the base package.json to ensure dependency caching with turborepo."
+  block_command "Do not use 'pnpm -F'. Use commands from the base package.json to ensure dependency caching with turborepo."
 fi
 
 if echo "$COMMAND" | grep -qE '(^|[;&|][[:space:]]*)rm[[:space:]][^;&|]*-[^[:space:]]*f[^[:space:]]*'; then
@@ -105,6 +105,7 @@ DANGEROUS_PATTERNS=(
   "git restore \."
   "push --force"
   "reset --hard"
+  "pnpm --filter"
 )
 
 for pattern in "${DANGEROUS_PATTERNS[@]}"; do
