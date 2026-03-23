@@ -15,9 +15,9 @@ export const authProject = {
   dependencies: [],
 } satisfies SharedProject
 
-export const contractProject = {
-  name: "contract",
-  grep: /@contract/,
+export const authenticatedProject = {
+  name: "authenticated",
+  grep: /@cms/,
   use: {
     storageState: base.use?.authStorageStatePath,
   },

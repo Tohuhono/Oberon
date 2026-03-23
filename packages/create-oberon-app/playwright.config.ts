@@ -1,7 +1,7 @@
 import { base, defineConfig } from "@dev/playwright"
 import {
   authProject,
-  contractProject,
+  authenticatedProject,
   loginProject,
 } from "@dev/playwright/projects"
 import { readNextjsLogs } from "./test/container"
@@ -22,8 +22,11 @@ export default defineConfig({
       dependencies: ["container-initialise", ...authProject.dependencies],
     },
     {
-      ...contractProject,
-      dependencies: ["container-initialise", ...contractProject.dependencies],
+      ...authenticatedProject,
+      dependencies: [
+        "container-initialise",
+        ...authenticatedProject.dependencies,
+      ],
     },
     {
       name: "container-initialise",

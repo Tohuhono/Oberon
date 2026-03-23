@@ -35,7 +35,7 @@ const test = base.extend<{
   },
 })
 
-test.describe("CMS Users Actions", { tag: "@contract" }, () => {
+test.describe("CMS Users Actions", { tag: "@cms" }, () => {
   test("adds user", async ({ cms, cmsSeededUserEmail }) => {
     await expect(cms.getByText(cmsSeededUserEmail)).toBeVisible()
   })

@@ -1,6 +1,6 @@
 import { expect, test } from "@dev/playwright/helpers/fixtures"
 
-test.describe("CMS Images & Site Actions", { tag: "@contract" }, () => {
+test.describe("CMS Images & Site Actions", { tag: "@cms" }, () => {
   test.skip("deletes an image from cms images page", async ({ cms }) => {
     await cms.goto("/cms/images")
   })

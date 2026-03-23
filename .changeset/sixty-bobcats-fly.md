@@ -3,6 +3,6 @@
 "create-oberon-app": patch
 ---
 
-Make the shared CMS Playwright contract suite explicit in `dev/playwright`, add
-an opt-in `@tdd` lane for playground red/green work, and align the root and COA
-test commands around the new contract structure.
+Make the shared CMS Playwright suite explicit in `dev/playwright`, keep the
+existing `@cms` lane as the shared authenticated behavior lane, and add a
+separate playground `@tdd` config for red/green work.

@@ -2,12 +2,7 @@ import path from "node:path"
 import { readFile } from "node:fs/promises"
 import { randomBytes } from "crypto"
 import { base, defineConfig } from "@dev/playwright"
-import {
-  authProject,
-  authenticatedProject,
-  loginProject,
-  smokeProject,
-} from "@dev/playwright/projects"
+import { authProject, tddProject } from "@dev/playwright/projects"
 
 const APP_LOG_PATH = path.resolve(process.cwd(), ".playwright/logs/app.log")
 const AUTH_SECRET = `${randomBytes(64).toString("hex")}`
@@ -49,5 +44,5 @@ export default defineConfig({
       read: readNextjsLogs,
     },
   },
-  projects: [authProject, authenticatedProject, loginProject, smokeProject],
+  projects: [authProject, tddProject],
 })

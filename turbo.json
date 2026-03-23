@@ -134,10 +134,6 @@
       "dependsOn": ["build"],
       "outputs": [".playwright"]
     },
-    "test:contract": {
-      "dependsOn": ["build"],
-      "outputs": [".playwright"]
-    },
     "test:coa": {
       "dependsOn": ["build"],
       "outputs": [".playwright"]

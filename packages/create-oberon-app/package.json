@@ -29,7 +29,6 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
-    "test:contract": "playwright test --config playwright.config.ts --project contract",
     "test:unit": "vitest run",
     "test:coa": "playwright test --config playwright.config.ts",
     "test:coa:ui": "playwright test --config playwright.config.ts --ui",
