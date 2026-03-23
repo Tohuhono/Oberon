@@ -21,8 +21,7 @@ const PLAYWRIGHT_AUTH_STATE_PATH = path.resolve(
 
 export const test = baseTest.extend<AuthSetupOptions>({
   serverLog: [
-    // eslint-disable-next-line no-empty-pattern
-    async ({}, use) => use({ read: async () => "" }),
+    async (_options, use) => use({ read: async () => "" }),
     { option: true },
   ],
   authEmail: [undefined, { option: true }],
