@@ -42,6 +42,7 @@
       "curl": true,
       "awk": true,
       "true": true,
+      "rmdir": true,
       "rm": true,
       "/^rm\\b.*(?:\\s|^)-[A-Za-z]*f[A-Za-z]*(?:\\s|$)/": false,
       "/^rm\\b.*(?:\\s|^)--force(?:\\s|$)/": false,
