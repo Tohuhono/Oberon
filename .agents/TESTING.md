@@ -8,6 +8,7 @@
 - **E2E tests**: Playwright, `@dev/playwright` package (`dev/playwright/`)
   - Run locally (full): `pnpm test:e2e`
   - Run playground `@tdd` lane locally: `pnpm test:tdd`
+  - Run playground `@tdd` lane in UI mode: `pnpm test:tdd:ui`
   - Run locally/CI (deployed smoke):
     `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
   - Shared config: `dev/playwright/base.config.ts`
@@ -66,6 +67,7 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
   - `@auth`: shared auth bootstrap lane
   - `@cms`: shared authenticated CMS behavior lane
   - `@tdd`: opt-in authenticated CMS red/green lane
+  - `@pages`, `@users`, etc.: stable feature tags for targeted TDD runs
   - `@login`: unauthenticated login behavior lane
   - `@smoke`: host-specific smoke lane
 - Broad tag discovery is intentional; CI/tag discipline is the guardrail for

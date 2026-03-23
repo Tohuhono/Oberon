@@ -36,6 +36,8 @@ pnpm test:smoke # Run e2e smoke tests (CI subset)
 
 pnpm test:tdd # Run the opt-in CMS red/green lane in playground
 
+pnpm test:tdd:ui # Open the opt-in CMS red/green lane in Playwright UI
+
 pnpm change # Add a changset entry
 ```
 
@@ -44,6 +46,8 @@ pnpm change # Add a changset entry
 - `pnpm test:e2e` runs local full e2e coverage in CI using built apps.
 - `pnpm test:tdd` is the opt-in playground lane for targeted package-level
   red/green iteration.
+- `pnpm test:tdd:ui` opens the same playground TDD config in Playwright UI for
+  interactive feature work.
 - Smoke e2e tests (`@smoke`) also run after each deploy against deployed URLs
   for docs and playground.
 - Post-deploy smoke results gate downstream CI stages (including promotion), so

@@ -153,6 +153,12 @@
       "dependsOn": ["build"],
       "outputs": [".playwright"]
     },
+    "test:tdd:ui": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"],
+      "outputs": []
+    },
     "test:ui": {
       "cache": false,
       "persistent": true,
