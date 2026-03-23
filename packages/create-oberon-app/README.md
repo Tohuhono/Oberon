@@ -24,8 +24,10 @@ yarn create oberon-app my-app
 The COA Playwright suite is separated into explicit lanes:
 
 - `@auth`: one-time real login bootstrap that writes reusable browser state
-- `@cms` / `@smoke` / `@coa`: authenticated behavior lanes reusing that state
+- `@contract`: shared CMS contract behavior reusing that state
 - `@login`: unauthenticated login-journey behavior tests
+- `@verdaccio`: package provenance checks inside the container harness
+- `@container-initialise` / `@container-teardown`: container lifecycle lanes
 
 Run headless COA e2e:
 

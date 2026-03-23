@@ -4,9 +4,10 @@ import { randomBytes } from "crypto"
 import { base, defineConfig } from "@dev/playwright"
 import {
   authProject,
-  authenticatedProject,
+  contractProject,
   loginProject,
   smokeProject,
+  tddProject,
 } from "@dev/playwright/projects"
 
 const APP_LOG_PATH = path.resolve(process.cwd(), ".playwright/logs/app.log")
@@ -49,5 +50,11 @@ export default defineConfig({
       read: readNextjsLogs,
     },
   },
-  projects: [authProject, authenticatedProject, loginProject, smokeProject],
+  projects: [
+    authProject,
+    contractProject,
+    tddProject,
+    loginProject,
+    smokeProject,
+  ],
 })

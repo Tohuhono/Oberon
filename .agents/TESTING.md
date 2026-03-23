@@ -7,11 +7,14 @@
     package)
 - **E2E tests**: Playwright, `@dev/playwright` package (`dev/playwright/`)
   - Run locally (full): `pnpm test:e2e`
+  - Run shared CMS contracts locally: `pnpm test:contract`
+  - Run playground `@tdd` lane locally: `pnpm test:tdd`
   - Run locally/CI (deployed smoke):
     `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
   - Shared config: `dev/playwright/base.config.ts`
   - Deployed smoke config: `dev/playwright/playwright.config.ts`
-  - Spec files: `apps/{documentation,playground}/test/**/*.spec.ts`
+  - Shared CMS specs: `dev/playwright/cms/**/*.spec.ts`
+  - Host smoke specs: `apps/{documentation,playground}/test/**/*.spec.ts`
 
 ## Unit test scope
 
@@ -61,9 +64,10 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
     shared constants
 - Tag semantics:
   - `@auth`: shared auth bootstrap lane
-  - `@cms`: authenticated CMS behavior lane
+  - `@contract`: shared authenticated CMS product contract lane
+  - `@tdd`: opt-in authenticated CMS red/green lane
   - `@login`: unauthenticated login behavior lane
-  - `@smoke`: smoke lane
+  - `@smoke`: host-specific smoke lane
 - Broad tag discovery is intentional; CI/tag discipline is the guardrail for
   accidental collisions.
 

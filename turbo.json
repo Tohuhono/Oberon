@@ -134,6 +134,10 @@
       "dependsOn": ["build"],
       "outputs": [".playwright"]
     },
+    "test:contract": {
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
+    },
     "test:coa": {
       "dependsOn": ["build"],
       "outputs": [".playwright"]
@@ -148,6 +152,10 @@
       "dependsOn": [],
       "outputs": [".playwright"],
       "env": ["PLAYWRIGHT_BASE_URL", "VERCEL_PROTECTION_BYPASS"]
+    },
+    "test:tdd": {
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
     },
     "test:ui": {
       "cache": false,

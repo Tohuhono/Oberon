@@ -1,6 +1,6 @@
 import { expect, test } from "@dev/playwright/helpers/fixtures"
 
-test.describe("CMS Routes", { tag: "@cms" }, () => {
+test.describe("CMS Routes", { tag: "@contract" }, () => {
   test("redirects /cms to /cms/pages", async ({ cms }) => {
     await cms.goto("/cms")
     await expect(cms).toHaveURL(/\/cms\/pages$/)

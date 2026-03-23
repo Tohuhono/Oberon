@@ -10,8 +10,10 @@
     "lint": "eslint .",
     "next": "next",
     "typegen": "next typegen",
-    "test:e2e": "playwright test",
-    "test:ui": "playwright test --ui",
+    "test:contract": "playwright test --project contract",
+    "test:e2e": "playwright test --project auth --project contract --project login --project smoke",
+    "test:tdd": "playwright test --project tdd --pass-with-no-tests",
+    "test:ui": "playwright test --ui --project auth --project contract --project login --project smoke",
     "tsc": "next typegen && tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"

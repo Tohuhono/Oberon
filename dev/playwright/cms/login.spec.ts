@@ -2,7 +2,7 @@ import { test } from "@dev/playwright"
 import { completeUiLoginWithOtp } from "@dev/playwright/helpers/bootstrap"
 import { expect } from "@playwright/test"
 
-test.describe("COA login behavior", { tag: "@login" }, () => {
+test.describe("CMS Login Behavior", { tag: "@login" }, () => {
   test("redirects to login and completes real OTP sign-in", async ({
     page,
     serverLog,

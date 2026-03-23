@@ -1,6 +1,6 @@
 import { expect, test } from "@dev/playwright/helpers/fixtures"
 
-test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
+test.describe("CMS Pages Actions", { tag: "@contract" }, () => {
   test("shows add page button", async ({ cms }) => {
     await cms.goto("/cms/pages")
     await expect(cms.getByRole("button", { name: "Add Page" })).toBeVisible()
