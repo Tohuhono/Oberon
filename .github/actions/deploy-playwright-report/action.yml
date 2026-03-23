@@ -14,22 +14,9 @@ inputs:
   summary_label:
     description: Summary link label written into the GitHub job summary.
     required: true
-  vercel_scope:
-    description: Vercel scope that owns the Playwright report project.
-    required: false
-    default: tohuhono
-  vercel_project:
-    description: Vercel project name used to host the Playwright report.
-    required: false
-    default: oberon-playwright-report
   vercel_token:
     description: Vercel API token used for link and deploy commands.
     required: false
-
-outputs:
-  url:
-    description: Deployed Playwright report URL.
-    value: ${{ steps.deploy.outputs.url }}
 
 runs:
   using: composite
@@ -59,14 +46,15 @@ runs:
 
         npx vercel link \
           --yes \
-          --project "${{ inputs.vercel_project }}" \
-          --scope "${{ inputs.vercel_scope }}" \
+          --project "oberon-playwright-report" \
+          --scope "tohuhono" \
           --cwd "${{ inputs.report_dir }}" \
           --token "${{ inputs.vercel_token }}"
 
         url=$(npx vercel deploy \
           --yes \
-          --scope "${{ inputs.vercel_scope }}" \
+          --scope "tohuhono" \
+          --target "preview" \
           --cwd "${{ inputs.report_dir }}" \
           --token "${{ inputs.vercel_token }}")
 
