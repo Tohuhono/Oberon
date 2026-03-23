@@ -1,14 +1,14 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "@dev/playwright/helpers/fixtures"
 
 test.describe("CMS Images & Site Actions", { tag: "@cms" }, () => {
-  test.skip("deletes an image from cms images page", async ({ page }) => {
+  test.skip("deletes an image from cms images page", async ({ cms }) => {
     // TODO: seed image via CMS upload UI (requires UploadThing flow)
-    await page.goto("/cms/images")
+    await cms.goto("/cms/images")
   })
 
-  test("shows no pending migrations on site page", async ({ page }) => {
-    await page.goto("/cms/site")
+  test("shows no pending migrations on site page", async ({ cms }) => {
+    await cms.goto("/cms/site")
 
-    await expect(page.getByText("No pending migrations")).toBeVisible()
+    await expect(cms.getByText("No pending migrations")).toBeVisible()
   })
 })

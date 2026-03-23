@@ -32,12 +32,17 @@ export const test = baseTest.extend<AuthSetupOptions>({
 export const defineConfig = baseDefineConfig<AuthSetupOptions>
 
 export const base = defineConfig({
-  testMatch: "**/test/**/*.spec.ts",
+  testMatch: "**/*.spec.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : 3,
-  reporter: "line",
+  reporter: process.env.CI
+    ? [
+        ["github"],
+        ["html", { open: "never", outputFolder: ".playwright/report" }],
+      ]
+    : "line",
   outputDir: ".playwright/results",
   use: {
     ...devices["Desktop Chrome"],

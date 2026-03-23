@@ -1,4 +1,9 @@
 import { base, defineConfig } from "@dev/playwright"
+import {
+  authProject,
+  authenticatedProject,
+  loginProject,
+} from "@dev/playwright/projects"
 import { readNextjsLogs } from "./test/container"
 
 export default defineConfig({
@@ -13,17 +18,15 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "auth",
-      grep: /@auth/,
-      dependencies: ["container-initialise"],
+      ...authProject,
+      dependencies: ["container-initialise", ...authProject.dependencies],
     },
     {
-      name: "authenticated",
-      grep: /@cms/,
-      use: {
-        storageState: base.use?.authStorageStatePath,
-      },
-      dependencies: ["container-initialise", "auth"],
+      ...authenticatedProject,
+      dependencies: [
+        "container-initialise",
+        ...authenticatedProject.dependencies,
+      ],
     },
     {
       name: "container-initialise",
@@ -36,9 +39,8 @@ export default defineConfig({
       dependencies: ["container-initialise"],
     },
     {
-      name: "login",
-      grep: /@login/,
-      dependencies: ["container-initialise"],
+      ...loginProject,
+      dependencies: ["container-initialise", ...loginProject.dependencies],
     },
     {
       name: "container-teardown",

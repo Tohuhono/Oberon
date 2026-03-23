@@ -1,16 +1,19 @@
 # Code style
 
-## Formatting and Linting
-
-- Use Prettier for formatting; run `pnpm prettier:fix` when needed
-- ESLint uses flat config; avoid `/* eslint-env */` comments
-- Suggest adding or changing eslint rules where appropriate
-
 ## General
 
 - Avoid comments unless referencing an external bug or workaround
+- Aviod premature optimisation - YAGNI
+- Simple, direct code is easier to fix, test, and understand. Excess options
+  create "dead code" or "configuration hell" that slows down development.
+
+## Formatting and Linting
+
 - If lint or typescript exception is required, comment or link to upstream
   issue/docs.
+- Use Prettier for formatting; run `pnpm prettier:fix` when needed
+- ESLint uses flat config; avoid `/* eslint-env */` comments
+- Suggest adding or changing eslint rules where appropriate
 
 ## TypeScript
 
@@ -18,11 +21,10 @@
 - Minimal typing: Prefer inference and structural typing; add explicit types
   only when they improve correctness or readability. Don’t use as (or extra type
   aliases) to silence errors; fix the source type instead.
-- Prefer implicit types
 - Use existing exported library/parser types instead of ad-hoc local type
   shapes.
-- For function props, prefer inline parameter typing (including discriminated
-  unions).
+- Use inline parameter typing (including discriminated unions).
+- Avoid separate 'type' statements unless intentionally shared or exported
 
 ## React
 

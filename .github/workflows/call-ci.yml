@@ -109,6 +109,17 @@ jobs:
         run: pnpx playwright install --with-deps chromium
       - name: E2E Tests
         run: pnpm test:e2e
+      - name: Publish Playwright report
+        if: ${{ failure() }}
+        uses: ./.github/actions/deploy-playwright-report
+        with:
+          artifact_name: playwright-report
+          artifact_path: |
+            apps/playground/.playwright/report/**
+            apps/playground/.playwright/logs/**
+          report_dir: apps/playground/.playwright/report
+          summary_label: View report
+          vercel_token: ${{ secrets.VERCEL_API_TOKEN }}
 
   coa:
     name: Create Oberon App
@@ -190,6 +201,7 @@ jobs:
       project: docs
       base_url: ${{ needs.deploy_docs.outputs.url }}
     secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
 
   smoke_playground:
@@ -202,6 +214,7 @@ jobs:
       project: playground
       base_url: ${{ needs.deploy_playground.outputs.url }}
     secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
 
   test-status:
@@ -236,7 +249,7 @@ jobs:
 
   promote_docs:
     name: Oberon CMS Docs
-    needs: [validate, deploy_docs, smoke_docs]
+    needs: [test-status, deploy_docs]
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-promote.yml
     secrets:
@@ -251,7 +264,7 @@ jobs:
 
   promote_playground:
     name: Oberon Playground
-    needs: [validate, deploy_playground, smoke_playground]
+    needs: [test-status, deploy_playground]
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-promote.yml
     secrets:
@@ -274,6 +287,8 @@ jobs:
       ref: ${{ inputs.ref }}
       project: docs
       base_url: https://www.oberoncms.com
+    secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
 
   smoke-playground-production:
     name: Smoke Test Promoted Playground
@@ -285,3 +300,5 @@ jobs:
       ref: ${{ inputs.ref }}
       project: playground
       base_url: https://playground.tohuhono.com
+    secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}

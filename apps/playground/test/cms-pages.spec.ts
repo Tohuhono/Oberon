@@ -1,55 +1,63 @@
-import { expect, test, type TestInfo } from "@playwright/test"
-import { createPage, deletePages } from "./helpers/page-helpers"
-
-const testPageKey = (testInfo: TestInfo) =>
-  `/e2e_page_${testInfo.parallelIndex}_${testInfo.repeatEachIndex}`
+import { expect, test } from "@dev/playwright/helpers/fixtures"
 
 test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
-  test.describe.configure({ mode: "serial" })
-
-  test.beforeAll(async ({ browser }, testInfo) =>
-    createPage(browser, testPageKey(testInfo)),
-  )
-
-  test.afterAll(async ({ browser }, testInfo) =>
-    deletePages(browser, testPageKey(testInfo)),
-  )
-
-  test("shows add page button", async ({ page }) => {
-    await page.goto("/cms/pages")
-    await expect(page.getByRole("button", { name: "Add Page" })).toBeVisible()
+  test("shows add page button", async ({ cms }) => {
+    await cms.goto("/cms/pages")
+    await expect(cms.getByRole("button", { name: "Add Page" })).toBeVisible()
   })
 
-  test("adds a page", async ({ browser }, testInfo) => {
-    const key = `${testPageKey(testInfo)}_add_page`
-    await createPage(browser, key)
-  })
+  test("adds a page", async ({ cms, testKey }) => {
+    const key = `/${testKey}_add_page`
 
-  test("copies a page", async ({ page }, testInfo) => {
-    const key = testPageKey(testInfo)
-    await page.goto("/cms/pages")
-
-    await page.getByRole("button", { name: `Copy ${key}`, exact: true }).click()
+    await cms.goto("/cms/pages")
+    const textbox = cms.getByRole("textbox")
+    await expect(textbox).toBeEditable()
+    await textbox.fill(key)
+    const addPageButton = cms.getByRole("button", { name: "Add Page" })
+    await expect(addPageButton).toBeEnabled()
+    await addPageButton.click()
 
     await expect(
-      page.getByRole("link", { name: `${key}_copy`, exact: true }),
+      cms.getByRole("link", { name: key, exact: true }),
     ).toBeVisible()
-
     await expect(
-      page.getByLabel(`${key}_copy updated by`, { exact: true }),
-    ).toBeVisible()
-  })
+      cms.getByLabel(`${key} updated by`, { exact: true }),
+    ).toHaveText("test@tohuhono.com")
 
-  test("deletes a page", async ({ page }, testInfo) => {
-    const key = testPageKey(testInfo)
-    await page.goto("/cms/pages")
-
-    await page
+    await cms.goto("/cms/pages")
+    await cms
       .getByRole("button", { name: `Delete ${key}`, exact: true })
+      .click()
+    await expect(cms.getByRole("link", { name: key, exact: true })).toHaveCount(
+      0,
+    )
+  })
+
+  test("copies a page", async ({ cms, cmsSeededPageKey }) => {
+    await cms.goto("/cms/pages")
+
+    await cms
+      .getByRole("button", { name: `Copy ${cmsSeededPageKey}`, exact: true })
       .click()
 
     await expect(
-      page.getByRole("link", { name: key, exact: true }),
+      cms.getByRole("link", { name: `${cmsSeededPageKey}_copy`, exact: true }),
+    ).toBeVisible()
+
+    await expect(
+      cms.getByLabel(`${cmsSeededPageKey}_copy updated by`, { exact: true }),
+    ).toBeVisible()
+  })
+
+  test("deletes a page", async ({ cms, cmsSeededPageKey }) => {
+    await cms.goto("/cms/pages")
+
+    await cms
+      .getByRole("button", { name: `Delete ${cmsSeededPageKey}`, exact: true })
+      .click()
+
+    await expect(
+      cms.getByRole("link", { name: cmsSeededPageKey, exact: true }),
     ).not.toBeVisible()
   })
 })

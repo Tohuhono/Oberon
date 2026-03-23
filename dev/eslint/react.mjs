@@ -16,6 +16,7 @@ export default defineConfig(
   },
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
+    ignores: ["**/*.spec.ts", "**/*.test.ts"],
     rules: {
       ...reactRecommended.configs.recommended.rules,
       "react/react-in-jsx-scope": "off",
@@ -44,5 +45,8 @@ export default defineConfig(
       "react/no-unknown-property": "off",
     },
   },
-  hooksPlugin.configs.flat.recommended,
+  {
+    ...hooksPlugin.configs.flat.recommended,
+    ignores: ["**/*.spec.ts", "**/*.test.ts"],
+  },
 )

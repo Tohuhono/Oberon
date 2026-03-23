@@ -19,6 +19,8 @@ on:
     secrets:
       VERCEL_PROTECTION_BYPASS:
         required: false
+      VERCEL_API_TOKEN:
+        required: false
 
 jobs:
   smoke:
@@ -57,9 +59,12 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}
           VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
-      - uses: actions/upload-artifact@v4
-        if: failure()
+      - name: Publish Playwright smoke report
+        if: ${{ failure() }}
+        uses: ./.github/actions/deploy-playwright-report
         with:
-          name: playwright-smoke-report
-          path: dev/playwright/.playwright/report
-          retention-days: 10
+          artifact_name: playwright-smoke-report
+          artifact_path: dev/playwright/.playwright/report
+          report_dir: dev/playwright/.playwright/report
+          summary_label: View report for ${{ inputs.project }}
+          vercel_token: ${{ secrets.VERCEL_API_TOKEN }}

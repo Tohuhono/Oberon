@@ -7,7 +7,7 @@ test.describe("Shared auth setup", { tag: "@auth" }, () => {
     serverLog,
     authEmail,
     authStorageStatePath,
-  }) => {
+  }, testInfo) => {
     if (!authEmail) {
       throw new Error("authEmail fixture option must be provided")
     }
@@ -16,11 +16,22 @@ test.describe("Shared auth setup", { tag: "@auth" }, () => {
       throw new Error("authStorageStatePath fixture option must be provided")
     }
 
-    await completeUiLoginWithOtp({
-      page,
-      email: authEmail,
-      getLog: serverLog.read,
-      storageStatePath: authStorageStatePath,
-    })
+    try {
+      await completeUiLoginWithOtp({
+        page,
+        email: authEmail,
+        getLog: serverLog.read,
+        storageStatePath: authStorageStatePath,
+      })
+    } catch (error) {
+      const logs = await serverLog.read()
+
+      await testInfo.attach("nextjs-server-log-tail", {
+        body: logs.slice(-20_000),
+        contentType: "text/plain",
+      })
+
+      throw error
+    }
   })
 })

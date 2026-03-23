@@ -1,0 +1,69 @@
+name: Deploy Playwright Report
+description: Upload a Playwright artifact and deploy the HTML report to Vercel.
+
+inputs:
+  artifact_name:
+    description: Artifact name used for the uploaded Playwright bundle.
+    required: true
+  artifact_path:
+    description: Newline-delimited paths to upload as the Playwright artifact.
+    required: true
+  report_dir:
+    description: Directory containing the Playwright HTML report index.html.
+    required: true
+  summary_label:
+    description: Summary link label written into the GitHub job summary.
+    required: true
+  vercel_token:
+    description: Vercel API token used for link and deploy commands.
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Upload Playwright artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact_name }}
+        if-no-files-found: ignore
+        path: ${{ inputs.artifact_path }}
+
+    - name: Deploy Playwright report
+      id: deploy
+      shell: bash
+      run: |
+        if [[ -z "${{ inputs.vercel_token }}" ]]
+        then
+          echo "url=" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        if [[ ! -f "${{ inputs.report_dir }}/index.html" ]]
+        then
+          echo "url=" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        npx vercel link \
+          --yes \
+          --project "oberon-playwright-report" \
+          --scope "tohuhono" \
+          --cwd "${{ inputs.report_dir }}" \
+          --token "${{ inputs.vercel_token }}"
+
+        url=$(npx vercel deploy \
+          --yes \
+          --scope "tohuhono" \
+          --target "preview" \
+          --skip-domain \
+          --cwd "${{ inputs.report_dir }}" \
+          --token "${{ inputs.vercel_token }}")
+
+        echo "url=$url" >> "$GITHUB_OUTPUT"
+
+    - name: Add Playwright report link to summary
+      if: ${{ steps.deploy.outputs.url != '' }}
+      shell: bash
+      run: |
+        echo "## Playwright report" >> "$GITHUB_STEP_SUMMARY"
+        echo "[${{ inputs.summary_label }}](${{ steps.deploy.outputs.url }})" >> "$GITHUB_STEP_SUMMARY"
