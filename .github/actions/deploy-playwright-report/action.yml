@@ -55,6 +55,7 @@ runs:
           --yes \
           --scope "tohuhono" \
           --target "preview" \
+          --skip-domain \
           --cwd "${{ inputs.report_dir }}" \
           --token "${{ inputs.vercel_token }}")
 
