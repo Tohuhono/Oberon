@@ -17,6 +17,11 @@ and create-oberon-app script
 - Use `pnpm check` to run lint, typecheck, build and tests which is cached for
   efficiency
 
+# Temp files
+
+- Prefer in-memory shell variables for transient state
+- If a temporary file is unavoidable, use `.tmp/` inside the repo root
+
 # Follow-up docs
 
 - [coding style rules and guidelines](.agents/CODESTYLE.md)
