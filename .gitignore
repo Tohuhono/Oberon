@@ -52,5 +52,8 @@ vite.config.*.timestamp-*
 /apps/documentation/next-env.d.ts
 /apps/playground/next-env.d.ts
 
+# Temp / agent scratch
+.tmp
+
 # Vercel adds this if it's not last
 .vercel
