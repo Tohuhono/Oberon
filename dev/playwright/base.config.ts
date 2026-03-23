@@ -37,7 +37,12 @@ export const base = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : 3,
-  reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "line",
+  reporter: process.env.CI
+    ? [
+        ["github"],
+        ["html", { open: "never", outputFolder: ".playwright/report" }],
+      ]
+    : "line",
   outputDir: ".playwright/results",
   use: {
     ...devices["Desktop Chrome"],

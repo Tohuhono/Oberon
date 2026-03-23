@@ -18,9 +18,6 @@ coverage
 
 # Playwright
 .playwright
-test-results
-playwright-report
-playwright/.cache
 
 # Turbo
 .turbo
@@ -51,14 +48,9 @@ tailwind.classes.txt
 # vite doesn't know how to clean up after itself
 vite.config.*.timestamp-*
 
-# Vercel adds this if it's not last
-.vercel
-
 # Workspace-specific consolidated ignores
 /apps/documentation/next-env.d.ts
 /apps/playground/next-env.d.ts
 
-# playwright
-/dev/finale/report
-/dev/finale/results
-/dev/finale/playwright/.cache
+# Vercel adds this if it's not last
+.vercel
