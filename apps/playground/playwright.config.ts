@@ -36,6 +36,7 @@ export default defineConfig({
       USE_DEVELOPMENT_DATABASE: "true",
       USE_DEVELOPMENT_SEND: "true",
       MASTER_EMAIL: "test@tohuhono.com",
+      AUTH_TRUST_HOST: "true",
     },
   },
   use: {
