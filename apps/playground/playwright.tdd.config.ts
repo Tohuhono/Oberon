@@ -1,5 +1,5 @@
 import { defineConfig } from "@dev/playwright"
-import { authProject, tddProject } from "@dev/playwright/projects"
+import { tddProject } from "@dev/playwright/projects"
 import playgroundConfig from "./playwright.config"
 
 export default defineConfig({
@@ -17,5 +17,5 @@ export default defineConfig({
     ...playgroundConfig.use,
     trace: "off",
   },
-  projects: [authProject, tddProject],
+  projects: [...(playgroundConfig.projects ?? []), tddProject],
 })
