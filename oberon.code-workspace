@@ -45,6 +45,7 @@
       "rmdir": true,
       "mkdir": true,
       "exit": true,
+      "gh auth status": true,
       "rm": true,
       "/^rm\\b.*(?:\\s|^)-[A-Za-z]*f[A-Za-z]*(?:\\s|$)/": false,
       "/^rm\\b.*(?:\\s|^)--force(?:\\s|$)/": false,
