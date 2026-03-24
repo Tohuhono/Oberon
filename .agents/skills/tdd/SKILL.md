@@ -9,7 +9,7 @@ description:
 # Test-Driven Development
 
 - Run lifecycle and validation commands from repo root only
-- For red/green work, use `pnpm test:tdd` and `pnpm test:tdd:ui`
+- For red/green work, use `pnpm test:unit` (packages only) or `pnpm test:tdd`
 - Keep shared TDD specs under `dev/playwright/tdd/**/*.spec.ts`
 - For PR completion, review replies, or issue-closure claims, run
   `pnpm validate` without filtering
