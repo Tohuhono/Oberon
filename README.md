@@ -38,7 +38,7 @@ pnpm test:tdd # Run the opt-in CMS red/green lane in playground
 
 pnpm test:tdd:ui # Open the opt-in CMS red/green lane in Playwright UI
 
-pnpm validate:pr # Run the full root validation surface for PR work
+pnpm validate # Run the full root validation surface for PR work
 
 pnpm change # Add a changset entry
 ```
@@ -50,8 +50,8 @@ pnpm change # Add a changset entry
   red/green iteration.
 - `pnpm test:tdd:ui` opens the same playground TDD config in Playwright UI for
   interactive feature work.
-- `pnpm validate:pr` is the canonical root validation command before claiming a
-  PR fix or review response is complete.
+- `pnpm validate` is the canonical root validation command before claiming a PR
+  fix or review response is complete.
 - Smoke e2e tests (`@smoke`) also run after each deploy against deployed URLs
   for docs and playground.
 - Post-deploy smoke results gate downstream CI stages (including promotion), so

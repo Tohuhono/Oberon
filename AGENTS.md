@@ -24,8 +24,7 @@ and create-oberon-app script
 Validation and tests:
 
 - `pnpm check` - cached repo health: lint, tsc, unit
-- `pnpm validate:pr` - PR validation: `check` + `test:e2e` + `test:tdd` +
-  `test:coa`
+- `pnpm validate` - cached validation wrapper: All linting and testing
 - `pnpm test` - unit + e2e aggregate
 - `pnpm test:unit` - workspace unit tests
 - `pnpm test:e2e` - curated local app e2e
@@ -59,7 +58,6 @@ Code quality:
 - `pnpm lint:fix` - lint autofix
 - `pnpm prettier` - prettier check
 - `pnpm prettier:fix` - prettier write
-- `pnpm validate` - repo validation script wrapper
 
 Generation, release, cleanup:
 
@@ -76,10 +74,6 @@ Generation, release, cleanup:
 - `pnpm manypkg:fix` - dependency policy autofix
 - `pnpm postinstall` - workspace dependency policy hook
 - `pnpm prepare` - husky setup
-
-Use `pnpm check` for fast cached repo health during iteration. Use
-`pnpm validate:pr` before any PR fix claim, review-response, or issue-closure
-claim.
 
 # Temp files
 

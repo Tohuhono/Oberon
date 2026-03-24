@@ -9,7 +9,7 @@
   - Run locally (full): `pnpm test:e2e`
   - Run playground `@tdd` lane locally: `pnpm test:tdd`
   - Run playground `@tdd` lane in UI mode: `pnpm test:tdd:ui`
-  - Run full PR validation from repo root: `pnpm validate:pr`
+  - Run full PR validation from repo root: `pnpm validate`
   - Run locally/CI (deployed smoke):
     `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
   - Shared config: `dev/playwright/base.config.ts`
@@ -77,7 +77,7 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 ## Agent workflow
 
 - Final validation for PR work, review replies, and issue-closure claims must
-  run from repo root with `pnpm validate:pr`
+  run from repo root with `pnpm validate`
 - Do not replace final validation with package-local scripts, direct
   `playwright` commands, `--list`, or manually filtered `turbo` runs
 - Use package-local and direct Playwright commands only for exploration or when
