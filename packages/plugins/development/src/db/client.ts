@@ -11,7 +11,7 @@ declare global {
   var oberonDb: Client
 }
 
-const url = process.env.SQLITE_FILE || "file:.oberon/oberon.db"
+const url = process.env.SQLITE_FILE || "file:.oberon/db/oberon.db"
 
 // ensure there is only one database client
 const getGlobalClient: () => Client = () =>
@@ -23,6 +23,6 @@ export const getClient = () =>
   })
 
 export async function initialise() {
-  await mkdir(".oberon", { recursive: true })
+  await mkdir(".oberon/db", { recursive: true })
   await getClient().run(sql`PRAGMA journal_mode=WAL;`)
 }
