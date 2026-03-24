@@ -8,13 +8,11 @@ description:
 
 # Test-Driven Development
 
-## Oberon repo override
-
 - Run lifecycle and validation commands from repo root only
-- Use root `pnpm` scripts rather than package-local scripts for final validation
-- For playground CMS red/green work, use `pnpm test:tdd` and `pnpm test:tdd:ui`
+- For red/green work, use `pnpm test:tdd` and `pnpm test:tdd:ui`
+- Keep shared TDD specs under `dev/playwright/tdd/**/*.spec.ts`
 - For PR completion, review replies, or issue-closure claims, run
-  `pnpm validate`
+  `pnpm validate` without filtering
 - Use grep targeting through the root TDD commands, for example:
   - `pnpm test:tdd -- --grep '@tdd'`
   - `pnpm test:tdd -- --grep '@tdd.*@pages'`

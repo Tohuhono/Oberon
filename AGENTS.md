@@ -75,6 +75,12 @@ Generation, release, cleanup:
 - `pnpm postinstall` - workspace dependency policy hook
 - `pnpm prepare` - husky setup
 
+# Completion gate
+
+- If you changed branch content and are about to claim the work is complete,
+  fixed, or ready to commit/push/review, run `pnpm validate` from repo root
+  without filtering unless the user explicitly waives it
+
 # Temp files
 
 - Prefer in-memory shell variables for transient state

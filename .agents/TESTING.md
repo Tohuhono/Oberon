@@ -15,7 +15,8 @@
   - Shared config: `dev/playwright/base.config.ts`
   - Deployed smoke config: `dev/playwright/playwright.config.ts`
   - Playground TDD config: `apps/playground/playwright.tdd.config.ts`
-  - Shared CMS specs: `dev/playwright/cms/**/*.spec.ts`
+  - Shared CMS happy path specs: `dev/playwright/cms/**/*.spec.ts`
+  - Shared TDD specs: `dev/playwright/tdd/**/*.spec.ts`
   - Host smoke specs: `apps/{documentation,playground}/test/**/*.spec.ts`
 
 ## Unit test scope
@@ -57,6 +58,11 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 ## E2E lane conventions
 
 - Shared Playwright lane constants live in `@dev/playwright/projects`
+- Directory split is part of the contract
+  - `dev/playwright/cms/**/*.spec.ts` is for shared `@cms` contract coverage
+  - `dev/playwright/tdd/**/*.spec.ts` is for opt-in `@tdd` red/green coverage
+  - do not place `@tdd` specs under `dev/playwright/cms`
+  - do not place shared `@cms` contract specs under `dev/playwright/tdd`
 - Treat lane constants as fixed canonical defaults
   - consumers compose from shared constants in app/package configs
   - do not mutate shared constant values directly
@@ -78,8 +84,12 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 
 - Final validation for PR work, review replies, and issue-closure claims must
   run from repo root with `pnpm validate`
+- If you changed code or docs and are about to say the work is complete, fixed,
+  or ready for commit/review, `pnpm validate` is the completion gate
 - Do not replace final validation with package-local scripts, direct
   `playwright` commands, `--list`, or manually filtered `turbo` runs
+- Targeted Playwright or package-local runs are for exploration and iteration
+  only; report them as supplementary evidence, not as final validation
 - Use package-local and direct Playwright commands only for exploration or when
   the user explicitly asks for a narrower run
 
@@ -97,7 +107,7 @@ Use the root playground TDD commands and add grep filters after `--`:
 
 Current repo examples:
 
-- `@tdd @pages @issue-308` in `dev/playwright/cms/tdd-pages.spec.ts`
+- `@tdd @pages @issue-308` in `dev/playwright/tdd/tdd-pages.spec.ts`
 
 ## Current candidates
 

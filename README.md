@@ -69,11 +69,14 @@ pnpm test:tdd:ui -- --grep '@tdd.*@pages'
 ```
 
 Those examples match the current repo tags in
-`dev/playwright/cms/tdd-pages.spec.ts`:
+`dev/playwright/tdd/tdd-pages.spec.ts`:
 
 - `@tdd` for opt-in development workflow
 - `@pages` for the stable feature slice
 - `@issue-308` for optional work-item targeting
+
+Shared CMS contract coverage stays under `dev/playwright/cms/**/*.spec.ts`.
+Opt-in red/green TDD coverage belongs under `dev/playwright/tdd/**/*.spec.ts`.
 
 ## What's inside?
 
