@@ -21,6 +21,7 @@ const PLAYWRIGHT_AUTH_STATE_PATH = path.resolve(
 
 export const test = baseTest.extend<AuthSetupOptions>({
   serverLog: [
+    // Empty destructure required for playwright runtime validation
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => use({ read: async () => "" }),
     { option: true },

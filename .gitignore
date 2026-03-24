@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # Dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
 .pnpm-store/
@@ -17,16 +17,16 @@ node_modules
 coverage
 
 # Playwright
-.playwright
+.playwright/
 
 # Turbo
-.turbo
+.turbo/
 
 # Build Outputs
 .next/
 out/
-build
-dist
+build/
+dist/
 .rollup.cache
 tsconfig.tsbuildinfo
 
@@ -40,10 +40,7 @@ yarn-error.log*
 *.pem
 
 # Oberon
-.oberon
-
-# Genereated tailwind classes
-tailwind.classes.txt
+.oberon/
 
 # vite doesn't know how to clean up after itself
 vite.config.*.timestamp-*
@@ -53,7 +50,7 @@ vite.config.*.timestamp-*
 /apps/playground/next-env.d.ts
 
 # Temp / agent scratch
-.tmp
+.tmp/
 
 # Vercel adds this if it's not last
-.vercel
+.vercel/

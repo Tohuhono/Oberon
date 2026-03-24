@@ -24,6 +24,15 @@ export const authenticatedProject = {
   dependencies: ["auth"],
 } satisfies SharedProject
 
+export const tddProject = {
+  name: "tdd",
+  grep: /@tdd/,
+  use: {
+    storageState: base.use?.authStorageStatePath,
+  },
+  dependencies: ["auth"],
+} satisfies SharedProject
+
 export const loginProject = {
   name: "login",
   grep: /@login/,

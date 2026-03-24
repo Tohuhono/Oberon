@@ -51,6 +51,7 @@ implementation and validation are already complete.
 
 ## Decision Points
 
+- Include all user changes, update scope if required
 - Do not run validations or checks; assume the code is correct
 - Always generate concise work-focused metadata via
   [METADATA](../../METADATA.md); do not ask for wording.

@@ -11,8 +11,10 @@
     "next": "next",
     "typegen": "next typegen",
     "test:e2e": "playwright test",
+    "test:tdd": "playwright test --config playwright.tdd.config.ts",
+    "test:tdd:ui": "playwright test --config playwright.tdd.config.ts --ui",
     "test:ui": "playwright test --ui",
-    "tsc": "next typegen && tsc --pretty",
+    "tsc": "tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"
   },

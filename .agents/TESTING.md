@@ -7,11 +7,17 @@
     package)
 - **E2E tests**: Playwright, `@dev/playwright` package (`dev/playwright/`)
   - Run locally (full): `pnpm test:e2e`
+  - Run playground `@tdd` lane locally: `pnpm test:tdd`
+  - Run playground `@tdd` lane in UI mode: `pnpm test:tdd:ui`
+  - Run full PR validation from repo root: `pnpm validate`
   - Run locally/CI (deployed smoke):
     `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
   - Shared config: `dev/playwright/base.config.ts`
   - Deployed smoke config: `dev/playwright/playwright.config.ts`
-  - Spec files: `apps/{documentation,playground}/test/**/*.spec.ts`
+  - Playground TDD config: `apps/playground/playwright.tdd.config.ts`
+  - Shared CMS happy path specs: `dev/playwright/cms/**/*.spec.ts`
+  - Shared TDD specs: `dev/playwright/tdd/**/*.spec.ts`
+  - Host smoke specs: `apps/{documentation,playground}/test/**/*.spec.ts`
 
 ## Unit test scope
 
@@ -52,6 +58,11 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 ## E2E lane conventions
 
 - Shared Playwright lane constants live in `@dev/playwright/projects`
+- Directory split is part of the contract
+  - `dev/playwright/cms/**/*.spec.ts` is for shared `@cms` contract coverage
+  - `dev/playwright/tdd/**/*.spec.ts` is for opt-in `@tdd` red/green coverage
+  - do not place `@tdd` specs under `dev/playwright/cms`
+  - do not place shared `@cms` contract specs under `dev/playwright/tdd`
 - Treat lane constants as fixed canonical defaults
   - consumers compose from shared constants in app/package configs
   - do not mutate shared constant values directly
@@ -61,11 +72,42 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
     shared constants
 - Tag semantics:
   - `@auth`: shared auth bootstrap lane
-  - `@cms`: authenticated CMS behavior lane
+  - `@cms`: shared authenticated CMS behavior lane
+  - `@tdd`: opt-in authenticated CMS red/green lane
+  - `@pages`, `@users`, etc.: stable feature tags for targeted TDD runs
   - `@login`: unauthenticated login behavior lane
-  - `@smoke`: smoke lane
+  - `@smoke`: host-specific smoke lane
 - Broad tag discovery is intentional; CI/tag discipline is the guardrail for
   accidental collisions.
+
+## Agent workflow
+
+- Final validation for PR work, review replies, and issue-closure claims must
+  run from repo root with `pnpm validate`
+- If you changed code or docs and are about to say the work is complete, fixed,
+  or ready for commit/review, `pnpm validate` is the completion gate
+- Do not replace final validation with package-local scripts, direct
+  `playwright` commands, `--list`, or manually filtered `turbo` runs
+- Targeted Playwright or package-local runs are for exploration and iteration
+  only; report them as supplementary evidence, not as final validation
+- Use package-local and direct Playwright commands only for exploration or when
+  the user explicitly asks for a narrower run
+
+## TDD grep workflow
+
+Use the root playground TDD commands and add grep filters after `--`:
+
+- Run all TDD coverage: `pnpm test:tdd`
+- Run all current `@tdd` specs: `pnpm test:tdd -- --grep '@tdd'`
+- Run a feature slice: `pnpm test:tdd -- --grep '@tdd.*@pages'`
+- Run a feature slice for one issue:
+  `pnpm test:tdd -- --grep '@tdd.*@pages.*@issue-308'`
+- Open the same feature slice in UI mode:
+  `pnpm test:tdd:ui -- --grep '@tdd.*@pages'`
+
+Current repo examples:
+
+- `@tdd @pages @issue-308` in `dev/playwright/tdd/tdd-pages.spec.ts`
 
 ## Current candidates
 

@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "test:e2e": "playwright test",
     "typegen": "next typegen",
-    "tsc": "next typegen && tsc --pretty"
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "@datacom-digital/ui-sample-components": "^0.3.3",

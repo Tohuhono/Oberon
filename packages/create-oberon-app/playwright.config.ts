@@ -23,10 +23,6 @@ export default defineConfig({
     },
     {
       ...authenticatedProject,
-      dependencies: [
-        "container-initialise",
-        ...authenticatedProject.dependencies,
-      ],
     },
     {
       name: "container-initialise",

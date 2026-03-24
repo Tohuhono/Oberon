@@ -46,9 +46,6 @@ yarn-error.log*
 # Oberon
 .oberon
 
-# Genereated tailwind classes
-tailwind.classes.txt
-
 # vite doesn't know how to clean up after itself
 vite.config.*.timestamp-*
 

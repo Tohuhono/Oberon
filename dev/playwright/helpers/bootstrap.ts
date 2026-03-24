@@ -11,12 +11,12 @@ function sleep(milliseconds: number) {
 }
 
 function parseDevelopmentOtpEntry(logs: string): string | null {
-  const stripedLog = stripVTControlCharacters(logs)
+  const strippedLog = stripVTControlCharacters(logs)
   const tokenPattern = /token:\s*["']?(\d{6})["']?/g
 
   let lastMatch: string | null = null
 
-  for (const match of stripedLog.matchAll(tokenPattern)) {
+  for (const match of strippedLog.matchAll(tokenPattern)) {
     const token = match[1]
     if (token) {
       lastMatch = token
@@ -76,7 +76,7 @@ async function completeSignIn(page: Page) {
 
   try {
     await expect.poll(() => new URL(page.url()).pathname).toBe(expectedPathname)
-  } catch (error) {
+  } catch {
     const currentPathname = new URL(page.url()).pathname
     throw new Error(
       `Auth completion did not reach ${expectedPathname}. Current path: ${currentPathname}. Callback status: ${callbackStatus}. Callback location: ${callbackLocation ?? "<none>"}.`,

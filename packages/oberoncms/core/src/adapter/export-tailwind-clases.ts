@@ -12,9 +12,9 @@ export async function exportTailwindClasses({
 
   const pagesPromise = getAllPages()
 
-  await mkdir(".oberon", { recursive: true })
+  await mkdir(".oberon/tailwind", { recursive: true })
 
-  const outFile = createWriteStream(".oberon/tailwind.classes")
+  const outFile = createWriteStream(".oberon/tailwind/tailwind.classes")
 
   let matchedFields = 0
 

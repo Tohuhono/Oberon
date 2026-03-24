@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "envMode": "strict",
+  "remoteCache": { "enabled": false },
   "globalEnv": [
     "CI",
     "NODE_ENV",
@@ -18,17 +19,23 @@
     "VERCEL_BLOB_API_URL",
     "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
   ],
-  "globalDependencies": [
-    ".github/workflows/**",
-    "pnpm-workspace.yaml",
-    "pnpm-lock.yaml",
-    "package.json",
-    "tsconfig.json"
-  ],
+  "globalDependencies": [".github/workflows/**"],
+  "futureFlags": {
+    "watchUsingTaskInputs": true
+  },
   "tasks": {
     "prebuild": {
-      "dependsOn": ["^wait"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", ".oberon/**"],
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        ".oberon/db/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**",
+        "!.oberon/db/e2e*"
+      ],
+      "outputs": [".oberon/tailwind/**"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -48,9 +55,18 @@
       ]
     },
     "build": {
-      "dependsOn": ["wait:clean", "^build", "prebuild"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", ".oberon/**", "plugins/**"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "dependsOn": ["^build", "prebuild"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        ".oberon/**",
+        "plugins/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**",
+        "!.oberon/db/e2e*"
+      ],
+      "outputs": [".next/**", "dist/**", "!.next/cache/**", "!.next/types/**"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -91,7 +107,6 @@
         "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
       ]
     },
-
     "start": {
       "cache": false,
       "persistent": true,
@@ -128,14 +143,37 @@
     },
     "test:unit": {
       "dependsOn": ["^build"],
-      "outputs": []
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ]
     },
     "test:e2e": {
       "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
       "outputs": [".playwright"]
     },
     "test:coa": {
       "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
       "outputs": [".playwright"]
     },
     "test:coa:ui": {
@@ -148,6 +186,24 @@
       "dependsOn": [],
       "outputs": [".playwright"],
       "env": ["PLAYWRIGHT_BASE_URL", "VERCEL_PROTECTION_BYPASS"]
+    },
+    "test:tdd": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
+      "dependsOn": ["build"],
+      "outputs": [".playwright"]
+    },
+    "test:tdd:ui": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"],
+      "outputs": []
     },
     "test:ui": {
       "cache": false,
@@ -164,15 +220,42 @@
       "outputs": []
     },
     "tsc": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["typegen"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
+      "outputs": []
     },
-    "//#tsc:root": {},
+    "typegen": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
+      "outputs": [".next/types/**"]
+    },
     "wait": {
-      "inputs": ["./dist/version"]
+      "cache": false,
+      "outputs": []
     },
-    "wait:clean": {},
+    "wait:clean": {
+      "cache": false,
+      "outputs": []
+    },
     "prepublishOnly": {
       "dependsOn": ["build"]
+    },
+    "validate": {
+      "dependsOn": ["tsc", "test:unit", "test:tdd"]
     }
   }
 }

@@ -4,4 +4,4 @@
 
 @source ".";
 @source "../oberon";
-@source "../.oberon/tailwind.classes";
+@source "../.oberon/tailwind/tailwind.classes";

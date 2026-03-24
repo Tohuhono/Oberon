@@ -8,6 +8,16 @@ description:
 
 # Test-Driven Development
 
+- Run lifecycle and validation commands from repo root only
+- For red/green work, use `pnpm test:tdd` and `pnpm test:tdd:ui`
+- Keep shared TDD specs under `dev/playwright/tdd/**/*.spec.ts`
+- For PR completion, review replies, or issue-closure claims, run
+  `pnpm validate` without filtering
+- Use grep targeting through the root TDD commands, for example:
+  - `pnpm test:tdd -- --grep '@tdd'`
+  - `pnpm test:tdd -- --grep '@tdd.*@pages'`
+  - `pnpm test:tdd -- --grep '@tdd.*@pages.*@issue-308'`
+
 ## Philosophy
 
 **Core principle**: Tests should verify behavior through public interfaces, not
