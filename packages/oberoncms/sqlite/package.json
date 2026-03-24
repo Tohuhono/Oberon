@@ -44,6 +44,7 @@
     "dev": "vite build --watch",
     "lint": "eslint .",
     "test:unit": "vitest run",
+    "test:watch": "vitest",
     "tsc": "tsc --pretty",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"

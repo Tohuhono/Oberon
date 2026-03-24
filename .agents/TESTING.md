@@ -3,8 +3,9 @@
 ## Overview
 
 - **Unit tests**: Vitest, per-package (co-located `src/**/*.test.ts`)
-  - Run: `pnpm test` (turbo — builds workspace deps first, then vitest in each
-    package)
+  - Run full package unit lane: `pnpm test:unit`
+  - Run package unit watch lane: `pnpm test:watch`
+  - Shared config + typed test helper: `@dev/vitest`
 - **E2E tests**: Playwright, `@dev/playwright` package (`dev/playwright/`)
   - Run locally (full): `pnpm test:e2e`
   - Run playground `@tdd` lane locally: `pnpm test:tdd`
@@ -52,8 +53,28 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 - No mocking framework dependencies — keep tests simple and direct
 - Do not export functions solely to enable testing — unexported functions are
   implementation details; test only via the public API
-- Every workspace package has a `vitest.config.ts` and `"test": "vitest run"`
-  script pre-scaffolded — just add a `.test.ts` file to start testing
+- Unit-test packages expose `test:unit` (`vitest run`) and `test:watch`
+  (`vitest`) scripts — just add a `.test.ts` file to start testing
+
+## Unit tag conventions
+
+- Prefer suite-level `describe(..., { tags: [...] }, ...)` tags over tagging
+  every individual test
+- Stable tags:
+  - `baseline` - pre-existing or otherwise non-AI baseline tests
+  - `ai` - agent-authored test provenance
+  - `slow` - expensive unit tests that are awkward in tight red/green loops
+- Dynamic slice tags are allowed for current work, for example:
+  - `issue-308`
+  - `bug-123`
+  - `feature-editor-refactor`
+- Mixed files are allowed, but keep provenance boundaries explicit with tagged
+  suites instead of ambiguous untagged blocks
+- Canonical narrow agent loop example:
+  - `pnpm test:watch --tags-filter="ai && issue-308"`
+- Broader provenance filters are also valid:
+  - `pnpm test:watch --tags-filter="baseline"`
+  - `pnpm test:watch --tags-filter="ai && !slow"`
 
 ## E2E lane conventions
 

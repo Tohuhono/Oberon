@@ -40,6 +40,7 @@
     "test:coa:ui": "turbo test:coa:ui --concurrency 50 --filter=create-oberon-app... --output-logs new-only",
     "test:e2e": "SQLITE_FILE=file:.oberon/db/e2e.db turbo test:e2e --filter={./apps/*}... --concurrency 50 --output-logs errors-only",
     "test:unit": "turbo test:unit --filter={./packages/*}... --concurrency 50",
+    "test:watch": "turbo test:watch --filter={./packages/*}... --concurrency 50",
     "test:tdd": "SQLITE_FILE=file:.oberon/db/e2e.db turbo test:tdd --concurrency 50 --filter=@oberon/playground... --output-logs errors-only",
     "test:tdd:ui": "SQLITE_FILE=file:.oberon/db/e2e.db turbo test:tdd:ui --concurrency 50 --filter=@oberon/playground...",
     "test:smoke": "turbo test:smoke --concurrency 50",

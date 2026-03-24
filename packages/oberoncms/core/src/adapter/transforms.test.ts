@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, expect, it } from "@dev/vitest"
 import { getComponentTransformVersions, getTransforms } from "./transforms"
 
 function config(
@@ -14,7 +14,7 @@ function config(
   return { components } as Parameters<typeof getComponentTransformVersions>[0]
 }
 
-describe("getComponentTransformVersions", () => {
+describe("getComponentTransformVersions", { tags: ["baseline"] }, () => {
   it("returns 0 for components with no transforms", () => {
     expect(getComponentTransformVersions(config({ Hero: {} }))).toEqual({
       Hero: 0,
@@ -39,7 +39,7 @@ describe("getComponentTransformVersions", () => {
   })
 })
 
-describe("getTransforms", () => {
+describe("getTransforms", { tags: ["baseline"] }, () => {
   const addTitle = (props: Record<string, unknown>) => ({
     ...props,
     title: "default",

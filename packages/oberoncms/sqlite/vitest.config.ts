@@ -1,3 +1,3 @@
-import { initTestConfig } from "@dev/vitest"
+import { initTestConfig } from "@dev/vitest/config"
 
 export default initTestConfig()

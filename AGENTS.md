@@ -27,6 +27,7 @@ Validation and tests:
 - `pnpm validate` - cached validation wrapper: All linting and testing
 - `pnpm test` - unit + e2e aggregate
 - `pnpm test:unit` - workspace unit tests
+- `pnpm test:watch` - package unit watch lane
 - `pnpm test:e2e` - curated local app e2e
 - `pnpm test:tdd` - playground TDD lane
 - `pnpm test:tdd:ui` - playground TDD UI
