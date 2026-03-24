@@ -43,41 +43,6 @@ pnpm validate # Run the full root validation surface for PR work
 pnpm change # Add a changset entry
 ```
 
-## CI testing pipeline
-
-- `pnpm test:e2e` runs local full e2e coverage in CI using built apps.
-- `pnpm test:tdd` is the opt-in playground lane for targeted package-level
-  red/green iteration.
-- `pnpm test:tdd:ui` opens the same playground TDD config in Playwright UI for
-  interactive feature work.
-- `pnpm validate` is the canonical root validation command before claiming a PR
-  fix or review response is complete.
-- Smoke e2e tests (`@smoke`) also run after each deploy against deployed URLs
-  for docs and playground.
-- Post-deploy smoke results gate downstream CI stages (including promotion), so
-  failed deployed smoke tests block progression.
-
-## TDD grep workflow
-
-Use the root TDD commands and pass grep filters after `--`:
-
-```sh
-pnpm test:tdd -- --grep '@tdd'
-pnpm test:tdd -- --grep '@tdd.*@pages'
-pnpm test:tdd -- --grep '@tdd.*@pages.*@issue-308'
-pnpm test:tdd:ui -- --grep '@tdd.*@pages'
-```
-
-Those examples match the current repo tags in
-`dev/playwright/tdd/tdd-pages.spec.ts`:
-
-- `@tdd` for opt-in development workflow
-- `@pages` for the stable feature slice
-- `@issue-308` for optional work-item targeting
-
-Shared CMS contract coverage stays under `dev/playwright/cms/**/*.spec.ts`.
-Opt-in red/green TDD coverage belongs under `dev/playwright/tdd/**/*.spec.ts`.
-
 ## What's inside?
 
 This [Turborepo](https://turbo.build/repo/) that includes the following packages
