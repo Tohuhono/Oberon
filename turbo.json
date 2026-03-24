@@ -29,6 +29,7 @@
     "prebuild": {
       "dependsOn": ["^wait"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", ".oberon/**"],
+      "outputs": [".oberon/**"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -50,7 +51,7 @@
     "build": {
       "dependsOn": ["wait:clean", "^build", "prebuild"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", ".oberon/**", "plugins/**"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "outputs": [".next/**", "dist/**", "!.next/cache/**", "!.next/types/**"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -174,15 +175,22 @@
       "outputs": []
     },
     "tsc": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "typegen"]
     },
     "//#tsc:root": {},
+    "typegen": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/types/**"]
+    },
     "wait": {
       "inputs": ["./dist/version"]
     },
     "wait:clean": {},
     "prepublishOnly": {
       "dependsOn": ["build"]
+    },
+    "validate": {
+      "dependsOn": ["lint", "tsc", "test:unit", "test:tdd", "test:coa"]
     }
   }
 }

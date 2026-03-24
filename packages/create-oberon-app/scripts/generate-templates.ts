@@ -1,14 +1,10 @@
-#!/usr/bin/env node
-// @ts-check
-
 import { mkdir, copyFile } from "fs/promises"
 import { existsSync } from "fs"
 import path from "path"
 import walk from "ignore-walk"
 import fg from "fast-glob"
 
-//
-;(async () => {
+export const generateTemplates = async () => {
   // Copy template files to the new directory
   const recipePath = path.join(import.meta.dirname, "..", "..", "..", "recipes")
   if (!existsSync(recipePath)) {
@@ -86,4 +82,4 @@ import fg from "fast-glob"
   }
 
   console.log(`Copied ${counter} files into generator!`)
-})()
+}

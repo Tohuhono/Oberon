@@ -9,7 +9,7 @@
     "dev": "next dev --turbo",
     "lint": "eslint .",
     "typegen": "next typegen",
-    "tsc": "next typegen && tsc --pretty",
+    "tsc": "tsc --pretty",
     "prettier": "prettier",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "prebuild": "tsx ./oberon/prebuild.ts",
