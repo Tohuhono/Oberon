@@ -9,6 +9,7 @@
   - Run locally (full): `pnpm test:e2e`
   - Run playground `@tdd` lane locally: `pnpm test:tdd`
   - Run playground `@tdd` lane in UI mode: `pnpm test:tdd:ui`
+  - Run full PR validation from repo root: `pnpm validate:pr`
   - Run locally/CI (deployed smoke):
     `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
   - Shared config: `dev/playwright/base.config.ts`
@@ -72,6 +73,31 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
   - `@smoke`: host-specific smoke lane
 - Broad tag discovery is intentional; CI/tag discipline is the guardrail for
   accidental collisions.
+
+## Agent workflow
+
+- Final validation for PR work, review replies, and issue-closure claims must
+  run from repo root with `pnpm validate:pr`
+- Do not replace final validation with package-local scripts, direct
+  `playwright` commands, `--list`, or manually filtered `turbo` runs
+- Use package-local and direct Playwright commands only for exploration or when
+  the user explicitly asks for a narrower run
+
+## TDD grep workflow
+
+Use the root playground TDD commands and add grep filters after `--`:
+
+- Run all TDD coverage: `pnpm test:tdd`
+- Run all current `@tdd` specs: `pnpm test:tdd -- --grep '@tdd'`
+- Run a feature slice: `pnpm test:tdd -- --grep '@tdd.*@pages'`
+- Run a feature slice for one issue:
+  `pnpm test:tdd -- --grep '@tdd.*@pages.*@issue-308'`
+- Open the same feature slice in UI mode:
+  `pnpm test:tdd:ui -- --grep '@tdd.*@pages'`
+
+Current repo examples:
+
+- `@tdd @pages @issue-308` in `dev/playwright/cms/tdd-pages.spec.ts`
 
 ## Current candidates
 

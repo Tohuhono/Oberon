@@ -50,6 +50,7 @@
       "/^pnpm\\b.*(?:\\s|^)--lockfile-only(?:\\s|=|$)/": false,
       "/^pnpm\\b.*(?:\\s|^)--filter(?:\\s|=|$)/": false,
       "/^pnpm\\b.*(?:\\s|^)-F(?:\\s|$)/": false,
+      "pnpm exec": false,
       "gh": true,
       "/^gh (alias|auth|cache|codespace|extension|gist|gpg-key|project|release|repo|run|secret|ssh-key|variable|workflow)\\b/": false,
       "/^gh issue delete\\b/": false,

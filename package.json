@@ -39,6 +39,7 @@
     "test:unit": "turbo test:unit --concurrency 50",
     "test:tdd": "SQLITE_FILE=file:.oberon/e2e.db turbo test:tdd --concurrency 50 --filter=@oberon/playground... --output-logs errors-only",
     "test:tdd:ui": "SQLITE_FILE=file:.oberon/e2e.db turbo test:tdd:ui --concurrency 50 --filter=@oberon/playground...",
+    "validate:pr": "pnpm check && pnpm test:e2e && pnpm test:tdd && pnpm test:coa",
     "test:smoke": "turbo test:smoke --concurrency 50",
     "test:ui": "SQLITE_FILE=file:.oberon/e2e.db turbo test:ui --concurrency 50",
     "postinstall": "pnpm manypkg",

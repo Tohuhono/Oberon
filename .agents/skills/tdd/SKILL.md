@@ -8,6 +8,20 @@ description:
 
 # Test-Driven Development
 
+## Oberon repo override
+
+When using this skill inside the Oberon monorepo:
+
+- Run lifecycle and validation commands from repo root only
+- Use root `pnpm` scripts rather than package-local scripts for final validation
+- For playground CMS red/green work, use `pnpm test:tdd` and `pnpm test:tdd:ui`
+- For PR completion, review replies, or issue-closure claims, run
+  `pnpm validate:pr`
+- Use grep targeting through the root TDD commands, for example:
+  - `pnpm test:tdd -- --grep '@tdd'`
+  - `pnpm test:tdd -- --grep '@tdd.*@pages'`
+  - `pnpm test:tdd -- --grep '@tdd.*@pages.*@issue-308'`
+
 ## Philosophy
 
 **Core principle**: Tests should verify behavior through public interfaces, not
