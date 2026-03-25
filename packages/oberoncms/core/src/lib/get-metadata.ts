@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import type { OberonAdapter } from "./dtd"
-import { getTitle, parseClientAction, resolveSlug } from "./utils"
+import { parseClientAction } from "./navigation-utils"
+import { getTitle, resolveSlug } from "./utils"
 
 export async function getMetaData(
   { getPageData }: OberonAdapter,

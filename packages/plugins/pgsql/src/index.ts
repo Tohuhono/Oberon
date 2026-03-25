@@ -1,10 +1,7 @@
 import "server-cli-only"
 
-import {
-  USE_DEVELOPMENT_DATABASE_PLUGIN,
-  type OberonDatabaseAdapter,
-  type OberonPlugin,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_DATABASE_PLUGIN } from "@oberoncms/core/env"
+import { type OberonDatabaseAdapter, type OberonPlugin } from "@oberoncms/core"
 
 import { migrate } from "drizzle-orm/node-postgres/migrator"
 import { name, version } from "../package.json" with { type: "json" }

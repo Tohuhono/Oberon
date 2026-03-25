@@ -33,7 +33,6 @@ already supplied some of that material, use grill-me to validate and complete it
 rather than assuming it is settled.
 
 _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
-
 - Prioritise correctness over speed. Confirm assumptions by reading real-world
   documentation, searching the codebase, and checking recent GitHub issues when
   appropriate.

@@ -8,7 +8,8 @@ import type {
   OberonClientContext,
   OberonServerActions,
 } from "./lib/dtd"
-import { parseClientAction, resolveSlug } from "./lib/utils"
+import { parseClientAction } from "./lib/navigation-utils"
+import { resolveSlug } from "./lib/utils"
 
 async function getContext(
   {

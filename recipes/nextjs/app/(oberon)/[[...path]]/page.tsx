@@ -23,5 +23,18 @@ export default async function OberonRender({
   params: Promise<{ path?: string[] }>;
 }) {
   const { path = [] } = await params;
-  return <Render path={path} adapter={adapter} config={config} />;
+  const activeTailwindHash = await adapter.getActiveTailwindHash();
+
+  return (
+    <>
+      {activeTailwindHash ? (
+        <link
+          rel="stylesheet"
+          href={`/cms/api/tailwind/${activeTailwindHash}.css`}
+          precedence="default"
+        />
+      ) : null}
+      <Render path={path} adapter={adapter} config={config} />
+    </>
+  );
 }

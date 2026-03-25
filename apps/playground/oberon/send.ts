@@ -1,11 +1,8 @@
 import "server-cli-only"
 
 import { Resend } from "resend"
-import {
-  USE_DEVELOPMENT_SEND_PLUGIN,
-  type OberonPlugin,
-  type OberonSendAdapter,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_SEND_PLUGIN } from "@oberoncms/core/env"
+import { type OberonPlugin, type OberonSendAdapter } from "@oberoncms/core"
 
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
 

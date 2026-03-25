@@ -65,6 +65,10 @@ loop.
 - Keep reproduction inside that approved test-script allowlist. Do not use
   build/start commands or runtime-only steps to debug or validate behavior; if
   the allowlist cannot reproduce the issue, add or extend tests first.
+- Run focused checks during slices and the repo completion gate before claiming
+  success.
+- Follow repo workflow rules while implementing; prefer canonical repo scripts
+  and do not invent ad-hoc lifecycle commands when root scripts exist.
 - If no GitHub PR exists yet, use the `finalise` skill to package the current
   work into a PR from fresh main.
 - If a GitHub PR already exists, use the `commit` skill to push the latest
@@ -74,6 +78,8 @@ loop.
 - Keep the PR summary concise and include validation notes plus any intentional
   deviations.
 - Do not hand off to review until all local work is pushed to the GitHub PR
+- Do not hand off to review until a GitHub PR exists, unless the user
+  explicitly asks for a non-review branch assessment.
 
 ## Details
 

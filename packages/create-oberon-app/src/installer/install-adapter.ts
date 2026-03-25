@@ -75,6 +75,10 @@ export const { adapter, handler } = initOberon({
   plugins: [
     ${pluginAliasNames.join(", ")}
   ],
+  tailwind: {
+    sourceCssFile: new URL("../app/tailwind-asset.css", import.meta.url)
+      .pathname,
+  },
 })
 `
 }

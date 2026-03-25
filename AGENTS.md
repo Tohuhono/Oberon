@@ -7,6 +7,11 @@ and create-oberon-app script
 
 ## Constraints
 
+For any investigation, first map the task to an approved root script; if none
+exists, ask to add one.
+
+# Life cycle
+
 - Run all lifecycle commands from repo root
 - If you want to lint, check types, build or run all tests then `pnpm validate`
   will do all these, dependency checked, cached correctly and stop at the first

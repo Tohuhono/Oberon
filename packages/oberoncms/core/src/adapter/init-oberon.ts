@@ -32,12 +32,41 @@ function handle<TMethod extends OberonMethod = OberonMethod>(
   }
 }
 
+function getTailwindHandler(adapter: OberonAdapter): OberonHandler {
+  return {
+    GET: async (request) => {
+      const url = new URL(request.url)
+      const name = url.pathname.split("/").at(-1)
+
+      if (!name?.endsWith(".css")) {
+        return new Response("", { status: 404 })
+      }
+
+      const hash = name.slice(0, -4)
+      const asset = await adapter.getTailwindAsset(hash)
+
+      if (!asset) {
+        return new Response("", { status: 404 })
+      }
+
+      return new Response(asset.css, {
+        headers: {
+          "cache-control": "public, max-age=31536000, immutable",
+          "content-type": "text/css; charset=utf-8",
+        },
+      })
+    },
+  }
+}
+
 export function initOberon({
   config,
   plugins,
+  tailwind,
 }: {
   config: OberonConfig
   plugins: OberonPlugin[]
+  tailwind?: { sourceCssFile: string }
 }): {
   handler: OberonHandler<{ path: string[] }>
   adapter: OberonAdapter
@@ -48,16 +77,24 @@ export function initOberon({
 
   const adapter = initAdapter({
     config,
+    tailwind,
     versions,
     pluginAdapter,
   })
 
+  const mergedHandlers = tailwind
+    ? {
+        ...handlers,
+        tailwind: () => getTailwindHandler(adapter),
+      }
+    : handlers
+
   const handler = {
-    GET: handle("GET", handlers, adapter),
-    PUT: handle("PUT", handlers, adapter),
-    PATCH: handle("PATCH", handlers, adapter),
-    POST: handle("POST", handlers, adapter),
-    DELETE: handle("DELETE", handlers, adapter),
+    GET: handle("GET", mergedHandlers, adapter),
+    PUT: handle("PUT", mergedHandlers, adapter),
+    PATCH: handle("PATCH", mergedHandlers, adapter),
+    POST: handle("POST", mergedHandlers, adapter),
+    DELETE: handle("DELETE", mergedHandlers, adapter),
   }
 
   return {

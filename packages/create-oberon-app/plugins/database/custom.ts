@@ -1,10 +1,10 @@
 import {
-  USE_DEVELOPMENT_DATABASE_PLUGIN,
   notImplemented,
   type OberonDatabaseAdapter,
   type OberonInitAdapter,
   type OberonPlugin,
 } from "@oberoncms/core"
+import { USE_DEVELOPMENT_DATABASE_PLUGIN } from "@oberoncms/core/env"
 
 export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
@@ -20,11 +20,14 @@ export const databasePlugin: OberonPlugin = () => ({
     deleteImage: notImplemented("deleteImage"),
     deletePage: notImplemented("deletePage"),
     deleteUser: notImplemented("deleteUser"),
+    getActiveTailwindHash: notImplemented("getActiveTailwindHash"),
     getAllImages: notImplemented("getAllImages"),
     getAllPages: notImplemented("getAllPages"),
     getAllUsers: notImplemented("getAllUsers"),
     getPageData: notImplemented("getPageData"),
     getSite: notImplemented("getSite"),
+    getTailwindAsset: notImplemented("getTailwindAsset"),
+    updateTailwind: notImplemented("updateTailwind"),
     updatePageData: notImplemented("updatePageData"),
     updateSite: notImplemented("updateSite"),
     // OberonAuthAdapter

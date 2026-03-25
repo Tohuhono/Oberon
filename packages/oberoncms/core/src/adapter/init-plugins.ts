@@ -7,7 +7,6 @@ import {
   type OberonAdapter,
 } from "../lib/dtd"
 import { notImplemented } from "../lib/utils"
-import { getInitialData } from "./get-initial-data"
 
 type InititalisedPlugins = {
   adapter: OberonPluginAdapter
@@ -55,11 +54,14 @@ export const baseAccumulator: InititalisedPlugins = {
     deleteImage: notImplemented("deleteImage"),
     deletePage: notImplemented("deletePage"),
     deleteUser: notImplemented("deleteUser"),
+    getActiveTailwindHash: notImplemented("getActiveTailwindHash"),
     getAllImages: notImplemented("getAllImages"),
     getAllPages: notImplemented("getAllPages"),
     getAllUsers: notImplemented("getAllUsers"),
     getPageData: notImplemented("getPageData"),
     getSite: notImplemented("getSite"),
+    getTailwindAsset: notImplemented("getTailwindAsset"),
+    updateTailwind: notImplemented("updateTailwind"),
     updatePageData: notImplemented("updatePageData"),
     updateSite: notImplemented("updateSite"),
     // OberonAuthAdapter
@@ -125,11 +127,6 @@ export function initPlugins(plugins: OberonPlugin[] = []) {
       ...oberon.adapter,
       prebuild: async () => {
         await oberon.adapter.prebuild()
-        const allPages = await oberon.adapter.getAllPages()
-        if (!allPages.length) {
-          console.log("Initialising welcome page")
-          await oberon.adapter.updatePageData(getInitialData())
-        }
       },
     },
   } satisfies InititalisedPlugins

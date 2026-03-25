@@ -5,7 +5,7 @@ import playgroundConfig from "./playwright.config"
 const command = [
   "rm -f .playwright/logs/app.log",
   "mkdir -p .playwright/logs",
-  "pnpm start > .playwright/logs/app.log 2>&1",
+  "pnpm build && pnpm start > .playwright/logs/app.log 2>&1",
 ].join(" && ")
 
 export default defineConfig({
