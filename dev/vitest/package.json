@@ -18,13 +18,16 @@
   "type": "module",
   "exports": {
     ".": {
+      "default": "./index.ts"
+    },
+    "./config": {
       "default": "./vitest.config.ts"
     }
   },
   "files": [
-    "vitest.config.ts"
+    "index.ts"
   ],
   "dependencies": {
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.1"
   }
 }

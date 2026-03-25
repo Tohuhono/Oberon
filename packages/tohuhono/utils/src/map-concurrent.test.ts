@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, expect, it } from "@dev/vitest"
 import { mapConcurrent } from "./map-concurrent"
 
 async function collect<T>(gen: AsyncGenerator<T>): Promise<T[]> {
@@ -9,7 +9,7 @@ async function collect<T>(gen: AsyncGenerator<T>): Promise<T[]> {
   return results
 }
 
-describe("mapConcurrent", () => {
+describe("mapConcurrent", { tags: ["baseline"] }, () => {
   it("processes all items and returns all results", async () => {
     const results = await collect(
       mapConcurrent([1, 2, 3, 4], async (n) => n * 2, 2),

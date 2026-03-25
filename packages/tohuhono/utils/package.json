@@ -18,6 +18,7 @@
     "wait:clean": "rimraf ./dist/version",
     "lint": "eslint .",
     "test:unit": "vitest run",
+    "test:watch": "vitest",
     "tsc": "tsc --pretty"
   },
   "exports": {

@@ -49,6 +49,15 @@ worktree unless the user explicitly asks for one.
      the fresh final branch.
    - Use the current checkout as the source of truth; do not replay the diff in
      a separate checkout.
+   - Do not use `git merge --squash`. Squash is a PR merge strategy, not the
+     mechanism for assembling the fresh final branch.
+   - Do not create a helper commit on the source branch just to transport the
+     tree state onto the fresh final branch.
+   - Prefer in-memory shell state when possible. If a temporary patch or
+     snapshot file is unavoidable, keep it under `.tmp/` inside the repo root.
+   - Preferred integration shape: snapshot the current tree state, move the
+     checkout to a fresh branch from `origin/main`, restore that tree state, and
+     then create one commit on the fresh final branch.
    - Create one commit representing the net-new logical work.
 7. Commit and push
    - Stage all changes included in the current work state.
@@ -70,6 +79,9 @@ worktree unless the user explicitly asks for one.
   no changes to finalise.
 - If package changes exist without a changeset, add a changeset.
 - Do not create or use a temporary worktree.
+- Do not use `git merge --squash` during finalise.
+- Do not create intermediate source-branch commits purely as transport for the
+  final branch.
 - It is acceptable for finalise to move the user's current checkout onto the new
   final branch.
 - Use `gh pr create`.

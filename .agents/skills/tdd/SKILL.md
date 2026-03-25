@@ -9,14 +9,18 @@ description:
 # Test-Driven Development
 
 - Run lifecycle and validation commands from repo root only
-- For red/green work, use `pnpm test:unit` (packages only) or `pnpm test:tdd`
+- For package red/green work, use `pnpm test:watch`
+- Narrow package red/green loops with Vitest tags, for example:
+  - `pnpm test:unit --tags-filter="issue-308"`
+  - `pnpm test:unit --tags-filter="feature-editor-refactor"`
+- For Playwright red/green work, use `pnpm test:tdd`
 - Keep shared TDD specs under `dev/playwright/tdd/**/*.spec.ts`
 - For PR completion, review replies, or issue-closure claims, run
   `pnpm validate` without filtering
 - Use grep targeting through the root TDD commands, for example:
   - `pnpm test:tdd -- --grep '@tdd'`
-  - `pnpm test:tdd -- --grep '@tdd.*@pages'`
-  - `pnpm test:tdd -- --grep '@tdd.*@pages.*@issue-308'`
+  - `pnpm test:tdd -- --grep '@pages'`
+  - `pnpm test:tdd -- --grep '@issue-308'`
 
 ## Philosophy
 
