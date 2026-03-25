@@ -14,6 +14,7 @@ export const site = pgTable(
     id: integer("id").notNull().primaryKey(),
     version: integer("version").notNull(),
     components: jsonb("components").notNull().$type<TransformVersions>(),
+    activeTailwindHash: text("active_tailwind_hash"),
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },

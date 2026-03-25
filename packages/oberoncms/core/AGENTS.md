@@ -15,6 +15,9 @@ implementations (storage/auth/send) → persistence.
 
 ## Core behaviors
 
-- `adapter.prebuild()` exports Tailwind classes and seeds a welcome page.
+- `adapter.prebuild()` seeds a welcome page through the wrapped `updatePageData`
+  boundary when storage is empty.
 - Cache tags: `oberon-pages`, `oberon-users`, `oberon-images`, `oberon-config`.
 - Mutations call `revalidatePath` + `updateTag`.
+- `updatePageData` is the live page-data update boundary for publish,
+  migrations, and welcome-page initialization.

@@ -35,7 +35,7 @@
         "!.playwright/**",
         "!.oberon/db/e2e*"
       ],
-      "outputs": [".oberon/tailwind/**"],
+      "outputs": [".oberon/db/**", "!.oberon/db/e2e*"],
       "env": [
         "NODE_ENV",
         "AUTH_*",

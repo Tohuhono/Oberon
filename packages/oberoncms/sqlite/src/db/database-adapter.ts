@@ -1,8 +1,14 @@
 import { randomUUID } from "crypto"
 import { eq } from "drizzle-orm"
-import { type OberonBaseAdapter, type PageData } from "@oberoncms/core"
+import {
+  type OberonBaseAdapter,
+  type OberonPageUpdate,
+  type OberonTailwindUpdate,
+  type PageData,
+} from "@oberoncms/core"
+import { ResponseError } from "@oberoncms/core/errors"
 
-import { images, pages, site, users } from "./schema"
+import { images, pages, site, tailwindAssets, users } from "./schema"
 import type { DatabaseClient } from "./client"
 
 function isPageData(value: unknown): value is PageData {
@@ -41,6 +47,7 @@ export const getDatabaseAdapter = (
       .select({
         version: site.version,
         components: site.components,
+        activeTailwindHash: site.activeTailwindHash,
         updatedAt: site.updatedAt,
         updatedBy: site.updatedBy,
       })
@@ -49,15 +56,79 @@ export const getDatabaseAdapter = (
       .execute()
     return result[0]
   },
-  updateSite: async ({ version, components, updatedAt, updatedBy }) => {
+  getActiveTailwindHash: async () => {
+    const result = await db()
+      .select({ activeTailwindHash: site.activeTailwindHash })
+      .from(site)
+      .where(eq(site.id, 1))
+      .execute()
+
+    return result[0]?.activeTailwindHash ?? null
+  },
+  updateSite: async ({
+    version,
+    components,
+    activeTailwindHash,
+    updatedAt,
+    updatedBy,
+  }) => {
     await db()
       .insert(site)
-      .values({ id: 1, version, components, updatedAt, updatedBy })
+      .values({
+        id: 1,
+        version,
+        components,
+        activeTailwindHash: activeTailwindHash ?? null,
+        updatedAt,
+        updatedBy,
+      })
       .onConflictDoUpdate({
         target: site.id,
-        set: { version, components, updatedAt, updatedBy },
+        set: {
+          version,
+          components,
+          ...(activeTailwindHash === undefined ? {} : { activeTailwindHash }),
+          updatedAt,
+          updatedBy,
+        },
       })
       .execute()
+  },
+  updateTailwind: async ({
+    activeTailwindHash,
+    baselineActiveTailwindHash,
+    tailwindAsset,
+    updatedAt,
+    updatedBy,
+  }: OberonTailwindUpdate) => {
+    await db().transaction(async (tx) => {
+      const currentSite = await tx
+        .select({ activeTailwindHash: site.activeTailwindHash })
+        .from(site)
+        .where(eq(site.id, 1))
+        .execute()
+
+      if (
+        baselineActiveTailwindHash !== undefined &&
+        currentSite[0]?.activeTailwindHash !== baselineActiveTailwindHash
+      ) {
+        throw new ResponseError(
+          "Tailwind asset state changed while publishing. Please retry.",
+        )
+      }
+
+      await tx
+        .insert(tailwindAssets)
+        .values(tailwindAsset)
+        .onConflictDoNothing({ target: tailwindAssets.hash })
+        .execute()
+
+      await tx
+        .update(site)
+        .set({ activeTailwindHash, updatedAt, updatedBy })
+        .where(eq(site.id, 1))
+        .execute()
+    })
   },
   addImage: async (image) => {
     await db().insert(images).values(image).execute()
@@ -102,12 +173,71 @@ export const getDatabaseAdapter = (
 
     return isPageData(pageData) ? pageData : null
   },
-  updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
-    await db()
-      .insert(pages)
-      .values({ key, data, updatedAt, updatedBy })
-      .onConflictDoUpdate({ target: pages.key, set: { data } })
+  getTailwindAsset: async (hash) => {
+    const result = await db()
+      .select({
+        hash: tailwindAssets.hash,
+        classList: tailwindAssets.classList,
+        css: tailwindAssets.css,
+      })
+      .from(tailwindAssets)
+      .where(eq(tailwindAssets.hash, hash))
       .execute()
+
+    return result[0] ?? null
+  },
+  updatePageData: async ({
+    activeTailwindHash,
+    baselineActiveTailwindHash,
+    key,
+    data,
+    tailwindAsset,
+    updatedAt,
+    updatedBy,
+  }: OberonPageUpdate) => {
+    await db().transaction(async (tx) => {
+      await tx
+        .insert(pages)
+        .values({ key, data, updatedAt, updatedBy })
+        .onConflictDoUpdate({
+          target: pages.key,
+          set: { data, updatedAt, updatedBy },
+        })
+        .execute()
+
+      if (activeTailwindHash === undefined) {
+        return
+      }
+
+      const currentSite = await tx
+        .select({ activeTailwindHash: site.activeTailwindHash })
+        .from(site)
+        .where(eq(site.id, 1))
+        .execute()
+
+      if (
+        baselineActiveTailwindHash !== undefined &&
+        currentSite[0]?.activeTailwindHash !== baselineActiveTailwindHash
+      ) {
+        throw new ResponseError(
+          "Tailwind asset state changed while publishing. Please retry.",
+        )
+      }
+
+      if (tailwindAsset) {
+        await tx
+          .insert(tailwindAssets)
+          .values(tailwindAsset)
+          .onConflictDoNothing({ target: tailwindAssets.hash })
+          .execute()
+      }
+
+      await tx
+        .update(site)
+        .set({ activeTailwindHash, updatedAt, updatedBy })
+        .where(eq(site.id, 1))
+        .execute()
+    })
   },
   getAllPages: async () => {
     return await db()

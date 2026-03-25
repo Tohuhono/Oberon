@@ -4,6 +4,8 @@ import { migrate } from "drizzle-orm/libsql/migrator"
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   USE_DEVELOPMENT_SEND_PLUGIN,
+} from "@oberoncms/core/env"
+import {
   type OberonAuthAdapter,
   type OberonBaseAdapter,
   type OberonInitAdapter,
@@ -14,6 +16,8 @@ import { getAdapter } from "@oberoncms/sqlite/adapter"
 import { name, version } from "../package.json" with { type: "json" }
 
 import { getClient, initialise } from "./db/client"
+
+export { getClient } from "./db/client"
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,

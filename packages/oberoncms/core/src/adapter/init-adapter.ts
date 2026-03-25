@@ -20,6 +20,7 @@ import {
   type MigrationResult,
   type TransformResult,
   type OberonPage,
+  type OberonTailwindAsset,
   type PageData,
   type OberonPluginAdapter,
   type PluginVersion,
@@ -29,14 +30,22 @@ import {
   getComponentTransformVersions,
   getTransforms,
 } from "./transforms"
-import { exportTailwindClasses } from "./export-tailwind-clases"
+import { getInitialData } from "./get-initial-data"
+import {
+  buildTailwindAsset,
+  getTailwindAssetDecision,
+  getTailwindClassList,
+  mergeTailwindClassLists,
+} from "./tailwind-assets"
 
 export function initAdapter({
   config,
+  tailwind,
   versions,
   pluginAdapter: adapter,
 }: {
   config: OberonConfig
+  tailwind?: { sourceCssFile: string }
   pluginAdapter: OberonPluginAdapter
   versions: PluginVersion[]
 }): OberonAdapter {
@@ -143,24 +152,178 @@ export function initAdapter({
     },
   )
 
-  const updatePageData = async ({
+  const ensureSite = async () => {
+    const site = await adapter.getSite()
+
+    if (site) {
+      return site
+    }
+
+    const nextSite = {
+      version: config.version,
+      components: getComponentTransformVersions(config),
+      activeTailwindHash: null,
+      updatedAt: new Date(),
+      updatedBy: "system",
+    }
+
+    await adapter.updateSite(nextSite)
+
+    return nextSite
+  }
+
+  const getActiveTailwindHashCached = cache(
+    async () => {
+      const site = await adapter.getSite()
+      return site?.activeTailwindHash ?? null
+    },
+    undefined,
+    { tags: ["oberon-config"] },
+  )
+
+  const getTailwindAsset = async (
+    hash: string,
+  ): Promise<OberonTailwindAsset | null> => {
+    return adapter.getTailwindAsset(hash)
+  }
+
+  const getTailwindState = async () => {
+    const site = await ensureSite()
+    const activeTailwindHash = site.activeTailwindHash ?? null
+
+    return {
+      activeTailwindHash,
+      activeTailwindAsset: activeTailwindHash
+        ? await adapter.getTailwindAsset(activeTailwindHash)
+        : null,
+    }
+  }
+
+  const getPublishedTailwindClassLists = async (
+    ignoreKey?: string,
+  ): Promise<string[][]> => {
+    const pages = await adapter.getAllPages()
+    const classLists = await Promise.all(
+      pages
+        .filter(({ key }) => key !== ignoreKey)
+        .map(async ({ key }) => {
+          const pageData = await adapter.getPageData(key)
+
+          return pageData ? getTailwindClassList(pageData) : []
+        }),
+    )
+
+    return classLists.filter((classList) => classList.length > 0)
+  }
+
+  const getTailwindPageUpdate = async ({
     key,
     data,
-    updatedBy,
-  }: Pick<OberonPage, "key" | "data" | "updatedBy">) => {
-    await adapter.updatePageData({
-      key,
-      data,
+  }: Pick<OberonPage, "key" | "data">) => {
+    if (!tailwind) {
+      return {}
+    }
+
+    const submittedClassList = await getTailwindClassList(data)
+    const { activeTailwindHash, activeTailwindAsset } = await getTailwindState()
+    const publishedClassLists = await getPublishedTailwindClassLists(key)
+    const { effectiveClassList, shouldCompile } = getTailwindAssetDecision({
+      activeClassList: activeTailwindAsset?.classList ?? null,
+      publishedClassLists,
+      submittedClassList,
+    })
+
+    if (!shouldCompile) {
+      return {
+        baselineActiveTailwindHash: activeTailwindHash,
+      }
+    }
+
+    const tailwindAsset = await buildTailwindAsset({
+      classList: effectiveClassList,
+      sourceCssFile: tailwind.sourceCssFile,
+    })
+
+    return {
+      activeTailwindHash: tailwindAsset.hash,
+      baselineActiveTailwindHash: activeTailwindHash,
+      tailwindAsset,
+    }
+  }
+
+  const syncActiveTailwindAsset = async ({
+    invalidateCache = true,
+    updatedBy = "build",
+  }: {
+    invalidateCache?: boolean
+    updatedBy?: string
+  } = {}) => {
+    if (!tailwind) {
+      return
+    }
+
+    const { activeTailwindHash, activeTailwindAsset } = await getTailwindState()
+    const publishedClassLists = await getPublishedTailwindClassLists()
+    const effectiveClassList = mergeTailwindClassLists(publishedClassLists)
+
+    if (!effectiveClassList.length) {
+      return
+    }
+
+    if (
+      activeTailwindAsset &&
+      getTailwindAssetDecision({
+        activeClassList: activeTailwindAsset.classList,
+        publishedClassLists: [],
+        submittedClassList: effectiveClassList,
+      }).shouldCompile === false
+    ) {
+      return
+    }
+
+    const tailwindAsset = await buildTailwindAsset({
+      classList: effectiveClassList,
+      sourceCssFile: tailwind.sourceCssFile,
+    })
+
+    await adapter.updateTailwind({
+      tailwindAsset,
+      activeTailwindHash: tailwindAsset.hash,
+      baselineActiveTailwindHash: activeTailwindHash,
       updatedAt: new Date(),
       updatedBy,
     })
-    revalidatePath(key)
-    updateTag("oberon-pages")
+
+    if (invalidateCache) {
+      updateTag("oberon-config")
+    }
+  }
+
+  const updatePageData = async (
+    { key, data, updatedBy }: Pick<OberonPage, "key" | "data" | "updatedBy">,
+    { invalidateCache = true }: { invalidateCache?: boolean } = {},
+  ) => {
+    const tailwindUpdate = await getTailwindPageUpdate({ key, data })
+
+    await adapter.updatePageData({
+      key,
+      data,
+      ...tailwindUpdate,
+      updatedAt: new Date(),
+      updatedBy,
+    })
+    if (invalidateCache) {
+      revalidatePath(key)
+      updateTag("oberon-pages")
+      if (tailwindUpdate.activeTailwindHash !== undefined) {
+        updateTag("oberon-config")
+      }
+    }
   }
 
   const getConfigCached = cache(
     async () => {
-      const site = await adapter.getSite()
+      const site = await ensureSite()
 
       const { components, transforms } = getTransforms(site?.components, config)
 
@@ -170,16 +333,6 @@ export function initAdapter({
         components,
         pendingMigrations: transforms && Object.keys(transforms),
       }
-
-      if (!site) {
-        await adapter.updateSite({
-          version: config.version,
-          components: getComponentTransformVersions(config),
-          updatedAt: new Date(),
-          updatedBy: "system",
-        })
-      }
-
       return siteConfig
     },
     undefined,
@@ -237,9 +390,19 @@ export function initAdapter({
     prebuild: async () => {
       console.log("adapter prebuild")
       await adapter.prebuild()
-      console.log("tailwind prebuild")
-      await exportTailwindClasses(adapter)
-      console.log("prebuild done")
+      await ensureSite()
+      const allPages = await adapter.getAllPages()
+
+      if (!allPages.length) {
+        console.log("Initialising welcome page")
+        const { key, data, updatedBy } = getInitialData()
+        await updatePageData(
+          { key, data, updatedBy },
+          { invalidateCache: false },
+        )
+      }
+
+      await syncActiveTailwindAsset({ invalidateCache: false })
     },
     /*
      * Auth
@@ -253,6 +416,9 @@ export function initAdapter({
     getConfig: async () => {
       await will("site", "read")
       return await getConfigCached()
+    },
+    getActiveTailwindHash: async () => {
+      return getActiveTailwindHashCached()
     },
     migrateData: async () => {
       const user = await whoWill("site", "write")
@@ -269,6 +435,9 @@ export function initAdapter({
     getAllPages: async function () {
       await will("pages", "read")
       return getAllPagesCached()
+    },
+    getTailwindAsset: async function (hash) {
+      return getTailwindAsset(hash)
     },
     getPageData: async function (key) {
       await will("pages", "read")

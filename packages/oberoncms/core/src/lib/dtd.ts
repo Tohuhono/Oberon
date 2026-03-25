@@ -102,6 +102,28 @@ export type OberonPage = z.infer<typeof PageSchema> & {
   key: Route
 }
 
+export const TailwindAssetSchema = z.object({
+  hash: z.string(),
+  classList: z.array(z.string()),
+  css: z.string(),
+})
+
+export type OberonTailwindAsset = z.infer<typeof TailwindAssetSchema>
+
+export type OberonPageUpdate = OberonPage & {
+  tailwindAsset?: OberonTailwindAsset
+  activeTailwindHash?: string | null
+  baselineActiveTailwindHash?: string | null
+}
+
+export type OberonTailwindUpdate = {
+  tailwindAsset: OberonTailwindAsset
+  activeTailwindHash: string | null
+  baselineActiveTailwindHash?: string | null
+  updatedAt: Date
+  updatedBy: string
+}
+
 // Cannot infer from zod because we need nextjs to understand key is a valid Route
 export type OberonPageMeta = MaybeOptimistic<
   z.infer<typeof PageMetaSchema> & {
@@ -201,6 +223,7 @@ export type OberonSiteConfig = MaybeOptimistic<{
 export const SiteSchema = z.object({
   version: z.number(),
   components: z.record(z.string(), z.number()),
+  activeTailwindHash: z.string().nullable().optional(),
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
@@ -257,10 +280,13 @@ export type OberonBaseAdapter = {
   changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
+  getActiveTailwindHash: () => Promise<string | null>
   getAllUsers: () => Promise<OberonUser[]>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
   getSite: () => Promise<OberonSite | undefined>
-  updatePageData: (data: OberonPage) => Promise<void>
+  getTailwindAsset: (hash: string) => Promise<OberonTailwindAsset | null>
+  updateTailwind: (data: OberonTailwindUpdate) => Promise<void>
+  updatePageData: (data: OberonPageUpdate) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
 }
 
@@ -316,9 +342,11 @@ export type OberonAdapter = {
   changeRole: (
     data: z.infer<typeof ChangeRoleSchema>,
   ) => Promise<Pick<OberonUser, "role" | "id"> | null>
+  getActiveTailwindHash: () => Promise<string | null>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
   getAllPaths: () => Promise<Array<{ path: string[] }>>
+  getTailwindAsset: (hash: string) => Promise<OberonTailwindAsset | null>
   getAllUsers: () => Promise<OberonUser[]>
   getConfig: () => Promise<OberonSiteConfig>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>

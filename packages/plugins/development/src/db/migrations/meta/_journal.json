@@ -15,6 +15,13 @@
       "when": 1715905837965,
       "tag": "0001_dear_vapor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1774489500000,
+      "tag": "0002_tailwind_assets",
+      "breakpoints": true
     }
   ]
 }

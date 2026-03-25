@@ -27,11 +27,13 @@ handoffs:
       and update the governing artifact.
   - label: Re-Run Technical Review
     agent: technical-review
-    prompt: Re-review the updated branch or PR for remaining technical issues.
+    prompt:
+      Re-review the updated GitHub pull request for remaining technical issues.
   - label: Re-Run PRD Review
     agent: implementation-review
     prompt:
-      Re-review the updated branch or PR against the approved PRD and scope.
+      Re-review the updated GitHub pull request against the approved PRD and
+      scope.
 user-invocable: false
 target: vscode
 ---
@@ -53,6 +55,7 @@ PRD.
 - Stop and ask what to do about missing, contradictory, or unresolved intent.
 - Re-run focused checks after meaningful fixes and the repo completion gate
   before claiming the review response is done.
+- Only use this stage when a GitHub PR and review findings already exist.
 
 ## Details
 

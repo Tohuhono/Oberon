@@ -1,11 +1,8 @@
 import "server-cli-only"
 
 import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
-import {
-  USE_DEVELOPMENT_DATABASE_PLUGIN,
-  type OberonDatabaseAdapter,
-  type OberonPlugin,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_DATABASE_PLUGIN } from "@oberoncms/core/env"
+import { type OberonDatabaseAdapter, type OberonPlugin } from "@oberoncms/core"
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
 

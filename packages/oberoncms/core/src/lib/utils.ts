@@ -1,6 +1,8 @@
-import { notFound, redirect } from "next/navigation"
-
-import { isRedirectError } from "next/dist/client/components/redirect-error"
+import { isRedirectError } from "next/dist/client/components/redirect-error.js"
+import {
+  USE_DEVELOPMENT_DATABASE_PLUGIN,
+  USE_DEVELOPMENT_SEND_PLUGIN,
+} from "../env"
 import { ResponseError, type ClientAction, type OberonResponse } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
@@ -21,46 +23,9 @@ export function getTitle(action: ClientAction, slug?: string) {
   }
 }
 
-export const parseClientAction = (action: unknown): ClientAction => {
-  switch (action) {
-    case "edit":
-    case "images":
-    case "login":
-    case "pages":
-    case "preview":
-    case "site":
-    case "users":
-      return action
-    case undefined:
-      return redirect("/cms/pages")
-    default:
-      return notFound()
-  }
-}
-
 export const resolveSlug = (path: string[] = []) => `/${path.join("/")}`
 
-const resolveDevEnv = (value?: string) => {
-  switch (value) {
-    case "true":
-      return true
-    case "false":
-      return false
-    default:
-      return (
-        !process.env.CI &&
-        (!process.env.NODE_ENV || process.env.NODE_ENV === "development")
-      )
-  }
-}
-
-export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(
-  process.env.USE_DEVELOPMENT_DATABASE,
-)
-
-export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(
-  process.env.USE_DEVELOPMENT_SEND,
-)
+export { USE_DEVELOPMENT_DATABASE_PLUGIN, USE_DEVELOPMENT_SEND_PLUGIN }
 
 export function notImplemented(action: string) {
   return (): never => {

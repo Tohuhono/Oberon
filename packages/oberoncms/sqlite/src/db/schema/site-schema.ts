@@ -7,6 +7,7 @@ export const site = sqliteTable("site", {
   components: text("components", { mode: "json" })
     .$type<TransformVersions>()
     .notNull(),
+  activeTailwindHash: text("active_tailwind_hash"),
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
   updatedBy: text("updated_by").notNull(),
 })

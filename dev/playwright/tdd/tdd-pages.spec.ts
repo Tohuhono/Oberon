@@ -1,6 +1,6 @@
 import { expect, test } from "@dev/playwright/helpers/fixtures"
 
-test.describe("CMS Pages TDD @tdd @pages @issue-308", () => {
+test.describe("CMS Pages TDD @tdd @pages @issue-308 @issue-314", () => {
   test("creates a page from the CMS list", async ({ cms, testKey }) => {
     const key = `/${testKey}_tdd_page`
 
@@ -31,12 +31,29 @@ test.describe("CMS Pages TDD @tdd @pages @issue-308", () => {
 
   test("publishes a seeded page from the editor", async ({
     cms,
-    cmsSeededPageKey,
+    cmsTailwindPageKey,
   }) => {
-    await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+    await cms.goto(`/cms/edit${cmsTailwindPageKey}`)
     await cms.getByRole("button", { name: "Publish" }).click()
 
-    await cms.goto(cmsSeededPageKey)
-    await expect(cms).toHaveURL(cmsSeededPageKey)
+    await cms.goto(cmsTailwindPageKey)
+    await expect(cms).toHaveURL(cmsTailwindPageKey)
+
+    const tailwindLink = cms.locator(
+      'link[rel="stylesheet"][href^="/cms/api/tailwind/"][href$=".css"]',
+    )
+
+    await expect(tailwindLink).toHaveCount(1)
+
+    const href = await tailwindLink.first().getAttribute("href")
+
+    expect(href).toMatch(/^\/cms\/api\/tailwind\/[a-f0-9]+\.css$/)
+
+    const response = await cms.request.get(href || "")
+
+    expect(response.status()).toBe(200)
+    expect(response.headers()["cache-control"]).toContain("immutable")
+    expect(response.headers()["content-type"]).toContain("text/css")
+    await expect(response.text()).resolves.toContain(":root")
   })
 })

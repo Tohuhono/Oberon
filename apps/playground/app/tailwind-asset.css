@@ -2,6 +2,3 @@
 
 @import "@oberoncms/plugin-uploadthing/source.css";
 @import "@tohuhono/puck-blocks/source.css";
-
-@source ".";
-@source "../oberon";

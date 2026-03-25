@@ -8,4 +8,8 @@ import { config } from "./config";
 export const { handler, adapter } = initOberon({
   config,
   plugins: [mockPlugin, developmentPlugin, authPlugin],
+  tailwind: {
+    sourceCssFile: new URL("../app/tailwind-asset.css", import.meta.url)
+      .pathname,
+  },
 });

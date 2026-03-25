@@ -15,7 +15,8 @@ handoffs:
   - label: Start Implementation
     agent: implement
     prompt:
-      Implement this approved plan with TDD, then open or update a pull request.
+      Implement this approved plan with TDD. Open or update a pull request when
+      the implementation is ready for GitHub review.
 user-invocable: false
 target: vscode
 ---
@@ -28,9 +29,12 @@ Turn an approved PRD or issue into an executable vertical-slice plan.
 - Explore enough of the repo to identify durable decisions and integration
   layers.
 - Break the work into thin end-to-end slices that can be verified independently.
-- Save the plan under `./plans/` and create a concise work-focused branch.
+- Save the plan under `./.agents/plans/` and create a concise work-focused
+  branch.
 - Attempt to resolve minor ambiguity from repo context; if intent is still not
   clear enough to plan, stop and report the gap instead of inventing it.
+- Plan phases so implementation can stay inside canonical repo workflow and hit
+  the GitHub PR gate before any review stage begins.
 
 ## Details
 

@@ -38,6 +38,10 @@ Composition pipeline:
    - Next.js caching (`unstable_cache`, cache tags)
    - revalidation (`revalidatePath`, `updateTag`)
    - component transform migration pipeline
+
+- live page-data side effects at the `updatePageData` boundary, including
+  Tailwind asset persistence when enabled
+
 3. `initOberon` builds a catch-all HTTP handler that dispatches by first path
    segment to plugin handlers (e.g. `auth`, `uploadthing`, `flydrive`).
 
@@ -105,10 +109,14 @@ All Next.js apps define a `prebuild` script that calls `adapter.prebuild()`.
 Current prebuild behavior in core:
 
 1. run plugin `prebuild`
-2. seed welcome page when storage is empty
-3. export Tailwind class usage to `.oberon/tailwind/tailwind.classes`
+2. seed a welcome page when storage is empty through the wrapped
+   `updatePageData` boundary
 
 Turbo tasks wire this into `build` via `dependsOn: ["prebuild", ...]`.
+
+`updatePageData` is the live page-data update boundary in core. Publish,
+component migrations, and welcome-page initialization all flow through that
+boundary rather than bypassing it with thinner CRUD writes.
 
 ## App implementations
 

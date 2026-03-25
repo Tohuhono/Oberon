@@ -30,6 +30,8 @@
     ".": "./dist/index.js",
     "./auth": "./dist/auth.js",
     "./adapter": "./dist/adapter.js",
+    "./errors": "./dist/errors.js",
+    "./env": "./dist/env.js",
     "./render": "./dist/render.js",
     "./editor": "./dist/editor.js",
     "./provider": "./dist/provider.js",
@@ -61,6 +63,7 @@
     "next-auth": "5.0.0-beta.30",
     "react-hook-form": "^7.71.1",
     "swr": "^2.4.0",
+    "tailwindcss": "^4.1.18",
     "use-debounce": "^10.1.0",
     "walkjs": "^6.0.1",
     "zod": "^4.3.6"

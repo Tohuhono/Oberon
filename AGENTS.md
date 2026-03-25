@@ -6,6 +6,9 @@ and create-oberon-app script
 - CRITICAL: Read [ARCHITECTURE](.agents/ARCHITECTURE.md)
 - CRITICAL: Read [CODESTYLE](.agents/CODESTYLE.md) before any edits
 
+For any investigation, first map the task to an approved root script; if none
+exists, ask to add one.
+
 # Life cycle
 
 - Run all lifecycle commands from repo root

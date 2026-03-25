@@ -10,4 +10,8 @@ import { config } from "./config"
 export const { adapter, handler } = initOberon({
   config,
   plugins: [developmentPlugin, tursoPlugin, authPlugin],
+  tailwind: {
+    sourceCssFile: new URL("../app/tailwind-asset.css", import.meta.url)
+      .pathname,
+  },
 })
