@@ -72,6 +72,14 @@ async function completeSignIn(page: Page) {
     )
   }
 
+  if (callbackStatus >= 300 && callbackStatus < 400 && callbackLocation) {
+    const redirectUrl = new URL(callbackLocation, page.url())
+
+    await page.goto(
+      `${redirectUrl.pathname}${redirectUrl.search}${redirectUrl.hash}`,
+    )
+  }
+
   const expectedPathname = CALLBACK_PATH
 
   try {

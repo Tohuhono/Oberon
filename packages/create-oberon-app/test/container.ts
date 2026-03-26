@@ -19,7 +19,6 @@ export const VERDACCIO_LOG_PATH = `${CONTAINER_LOG_PATH}/verdaccio.log`
 export const COA_ROOT = "/opt/coa"
 export const COA_LOG = `${CONTAINER_LOG_PATH}/coa.log`
 export const COA_NEXTJS_PORT = 3000
-
 export const COA_NEXTJS_DIR = `${COA_ROOT}/nextjs`
 export const VERDACCIO_PORT = 4873
 export const VERDACCIO_PING_PATH = `/-/ping`

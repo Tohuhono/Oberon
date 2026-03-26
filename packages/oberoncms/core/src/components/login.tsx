@@ -24,6 +24,12 @@ const LoginSchema = z.object({
   token: z.string().max(6).optional(),
 })
 
+function toRouterPath(target: string) {
+  const url = new URL(target, window.location.origin)
+
+  return `${url.pathname}${url.search}${url.hash}`
+}
+
 export function Login({
   callbackUrl,
   email,
@@ -79,11 +85,20 @@ export function Login({
     setSubmitting(true)
     const response = await fetch(
       `/cms/api/auth/callback/email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token || "")}&callbackUrl=${encodeURIComponent(callback)}`,
+      {
+        redirect: "manual",
+      },
     )
-    if (response.ok) {
-      router.push(callbackUrl || "/cms/pages")
+
+    const redirectLocation = response.headers.get("location")
+    const completedSignIn =
+      response.ok || (response.status >= 300 && response.status < 400)
+
+    if (completedSignIn) {
+      router.push(toRouterPath(redirectLocation || callback))
     }
-    if (!response.ok) {
+
+    if (!completedSignIn) {
       toast({
         variant: "destructive",
         title: "Authentication failed",
