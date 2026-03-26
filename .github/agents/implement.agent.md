@@ -70,9 +70,6 @@ loop.
 - Treat "focused checks" as the same root-script allowlist from repo policy:
   `pnpm validate` by default, with only `pnpm install`, `pnpm test:tdd`,
   `pnpm test:unit` and `pnpm test:coa` as routine narrower exceptions.
-- Keep reproduction inside that approved test-script allowlist. Do not use
-  build/start commands or runtime-only steps to debug or validate behavior; if
-  the allowlist cannot reproduce the issue, add or extend tests first.
 - Follow repo workflow rules while implementing; prefer canonical repo scripts
   and do not invent ad-hoc lifecycle commands when root scripts exist.
 - If no GitHub PR exists yet, use the `finalise` skill to package the current
