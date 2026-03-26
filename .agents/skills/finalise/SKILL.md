@@ -71,7 +71,8 @@ worktree unless the user explicitly asks for one.
 
 ## Decision Points
 
-- Do not run validations or checks; assume the code is correct
+- Do not run extra validations inside this skill, but do not assume correctness
+  either
 - Always generate concise work-focused metadata via
   [METADATA](../../METADATA.md); do not ask for wording.
 - Missing changeset: add/update changeset before committing.

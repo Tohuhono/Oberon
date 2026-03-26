@@ -35,7 +35,7 @@
         "!.playwright/**",
         "!.oberon/db/e2e*"
       ],
-      "outputs": [".oberon/tailwind/**"],
+      "outputs": [".oberon/db/**", "!.oberon/db/e2e*"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -255,7 +255,7 @@
       "dependsOn": ["build"]
     },
     "validate": {
-      "dependsOn": ["tsc", "test:unit", "test:tdd"]
+      "dependsOn": ["lint", "tsc", "build", "test:unit", "test:tdd", "test:coa"]
     }
   }
 }

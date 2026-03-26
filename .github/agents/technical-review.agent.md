@@ -1,9 +1,9 @@
 ---
 name: technical-review
 description:
-  Review a branch or pull request against repo guidelines, validation
+  Review an open GitHub pull request against repo guidelines, validation
   expectations, and regression risk.
-argument-hint: Provide the PR, branch, or diff you want reviewed.
+argument-hint: Provide the GitHub PR to review.
 tools:
   - read
   - search
@@ -22,7 +22,9 @@ target: vscode
 
 # Technical Review Agent
 
-Review the open PR with a senior developer mindset.
+Review the open GitHub PR with a senior developer mindset.
+
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 
 - Compare the work against repo rules, architecture constraints, testing
   strategy, and regression risk.
@@ -31,6 +33,8 @@ Review the open PR with a senior developer mindset.
 - Support findings with the most relevant repo context or validation evidence.
 - Put findings first. If there are none, say so explicitly and note residual
   risk or blind spots.
+- If no GitHub PR exists yet, stop and hand control back rather than treating a
+  branch or local diff as the review stage.
 - Post a PR review using the github-pr-review skill.
 
 ## Details

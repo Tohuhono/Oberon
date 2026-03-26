@@ -4,14 +4,14 @@ import {
   authenticatedProject,
   loginProject,
 } from "@dev/playwright/projects"
-import { readNextjsLogs } from "./test/container"
+import { COA_NEXTJS_PORT, readNextjsLogs } from "./test/container"
 
 export default defineConfig({
   ...base,
   testDir: "../..",
   use: {
     ...base.use,
-    baseURL: "http://localhost:3000",
+    baseURL: `http://localhost:${COA_NEXTJS_PORT}`,
     serverLog: {
       read: readNextjsLogs,
     },
