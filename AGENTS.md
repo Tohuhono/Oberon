@@ -5,17 +5,21 @@ and create-oberon-app script
 
 - CRITICAL: Read [ARCHITECTURE](.agents/ARCHITECTURE.md)
 - CRITICAL: Read [CODESTYLE](.agents/CODESTYLE.md) before any edits
-
-For any investigation, first map the task to an approved root script; if none
-exists, ask to add one.
+- CRITICAL: Try to map your task to `pnpm validate` including: lint, check
+  types, build or run tests
 
 # Life cycle
 
 - Run all lifecycle commands from repo root
+- If you want to lint, check types, build or run all tests then `pnpm validate`
+  will do all these, dependency checked, cached correctly and stop at the first
+  failure for you to review
 - `pnpm` scripts are configured in base package.json and use turborepo to
   correctly manage and cache dependancies
 - Use canonical root scripts below rather than reconstructing task graphs
   manually
+- Reproduction must stay inside approved test scripts; do not use build or start
+  scripts to reproduce, debug, or validate behavior
 - If the existing root scripts do not cover your lifecycle need, stop and ask to
   add or update a root script instead of working around it with package-local
   scripts, or ad-hoc filtered commands
@@ -78,12 +82,6 @@ Generation, release, cleanup:
 - `pnpm manypkg:fix` - dependency policy autofix
 - `pnpm postinstall` - workspace dependency policy hook
 - `pnpm prepare` - husky setup
-
-# Completion gate
-
-- If you changed branch content and are about to claim the work is complete,
-  fixed, or ready to commit/push/review, run `pnpm validate` from repo root
-  without filtering unless the user explicitly waives it
 
 # Temp files
 

@@ -4,12 +4,10 @@
 
 - **Unit tests**: Vitest, per-package (co-located `src/**/*.test.ts`)
   - Run full package unit lane: `pnpm test:unit`
-  - Run package unit watch lane: `pnpm test:watch`
   - Shared config + typed test helper: `@dev/vitest`
 - **E2E tests**: Playwright, `@dev/playwright` package (`dev/playwright/`)
   - Run locally (full): `pnpm test:e2e`
   - Run playground `@tdd` lane locally: `pnpm test:tdd`
-  - Run playground `@tdd` lane in UI mode: `pnpm test:tdd:ui`
   - Run full PR validation from repo root: `pnpm validate`
   - Run locally/CI (deployed smoke):
     `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
@@ -103,16 +101,25 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 
 ## Agent workflow
 
+- First map the verification need to an approved root script from `package.json`
+- If the need is covered by `pnpm validate`, use `pnpm validate`
 - Final validation for PR work, review replies, and issue-closure claims must
   run from repo root with `pnpm validate`
 - If you changed code or docs and are about to say the work is complete, fixed,
   or ready for commit/review, `pnpm validate` is the completion gate
-- Do not replace final validation with package-local scripts, direct
-  `playwright` commands, `--list`, or manually filtered `turbo` runs
-- Targeted Playwright or package-local runs are for exploration and iteration
-  only; report them as supplementary evidence, not as final validation
-- Use package-local and direct Playwright commands only for exploration or when
-  the user explicitly asks for a narrower run
+- The only narrower routine exceptions are from repo root only:
+  - `pnpm install`
+  - `pnpm test:tdd --grep '...'`
+  - `pnpm test:unit ...`
+  - `pnpm test:coa`
+- Reproduction must stay inside the approved test-script allowlist
+- Do not use `pnpm build`, `pnpm start`, package-local scripts, direct
+  `playwright` commands, `--list`, or manually filtered `turbo` runs to
+  reproduce, debug, or validate behavior
+- If the approved test-script allowlist cannot reproduce the issue, write or
+  extend a test so reproduction stays inside the approved test-script path
+- If creating or extending that test path is not possible within the current
+  repo workflow, stop and ask before doing anything else
 
 ## TDD grep workflow
 

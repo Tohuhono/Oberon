@@ -9,14 +9,24 @@ description:
 # Test-Driven Development
 
 - Run lifecycle and validation commands from repo root only
-- For package red/green work, use `pnpm test:watch`
+- If the need is covered by `pnpm validate`, use `pnpm validate`
+- For package red/green work, use `pnpm test:unit`
 - Narrow package red/green loops with Vitest tags, for example:
   - `pnpm test:unit --tags-filter="issue-308"`
   - `pnpm test:unit --tags-filter="feature-editor-refactor"`
 - For Playwright red/green work, use `pnpm test:tdd`
+- `pnpm install` is the only routine non-test exception
 - Keep shared TDD specs under `dev/playwright/tdd/**/*.spec.ts`
 - For PR completion, review replies, or issue-closure claims, run
   `pnpm validate` without filtering
+- Reproduction must stay inside the approved test-script allowlist:
+  `pnpm validate`, `pnpm test:tdd`, `pnpm test:unit` and `pnpm test:coa`
+- Do not use `pnpm build`, `pnpm start`, direct `playwright`, package-local
+  scripts, or ad-hoc `turbo` commands to reproduce, debug, or validate behavior
+- If the current test-script allowlist cannot reproduce the issue, write or
+  extend a test instead of falling back to runtime commands
+- If that test path cannot be added within the current repo workflow, stop and
+  ask
 - Use grep targeting through the root TDD commands, for example:
   - `pnpm test:tdd -- --grep '@tdd'`
   - `pnpm test:tdd -- --grep '@pages'`

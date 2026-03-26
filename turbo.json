@@ -255,7 +255,7 @@
       "dependsOn": ["build"]
     },
     "validate": {
-      "dependsOn": ["tsc", "test:unit", "test:tdd"]
+      "dependsOn": ["lint", "tsc", "build", "test:unit", "test:tdd", "test:coa"]
     }
   }
 }
