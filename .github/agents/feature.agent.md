@@ -77,6 +77,10 @@ _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 - Do not run lifecycle commands yourself unless a single approved root-script
   check is strictly needed to determine the next handoff; otherwise delegate to
   the owning stage.
+- Do not suggest or use build/start commands for reproduction. Reproduction must
+  stay inside the approved test-script allowlist; if that allowlist is
+  insufficient, route to implementation to add or extend tests instead of
+  improvising runtime steps.
 - If the request is new work and there is no approved PRD, issue, or plan in the
   prompt, default to `refine`.
 

@@ -61,6 +61,12 @@ _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 - If you cannot reproduce locally, use the ask questions skill
 - Re-run focused checks after meaningful fixes and the repo completion gate
   before claiming the review response is done.
+- Use the same root-script allowlist for review checks: `pnpm validate` by
+  default, with only `pnpm install`, `pnpm test:tdd`, `pnpm test:unit` and
+  `pnpm test:coa` as routine narrower exceptions.
+- Reproduction must stay inside that approved test-script allowlist. Do not use
+  build/start commands or other runtime shortcuts for CI reproduction; if the
+  allowlist cannot reproduce the issue, add or extend tests instead.
 - Only use this stage when a GitHub PR and review findings already exist.
 
 ## Details

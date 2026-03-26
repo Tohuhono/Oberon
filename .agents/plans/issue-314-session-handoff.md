@@ -1,41 +1,68 @@
-# Session Handoff: Issue 314 Tailwind Assets
+# Session Handoff: Issue 314 PR Resolution
 
 > Canonical implementation plan:
 > [issue-314-db-backed-tailwind-assets.md](./issue-314-db-backed-tailwind-assets.md)
 >
 > Source PRD: https://github.com/Tohuhono/Oberon/issues/314
+>
+> Active PR: https://github.com/Tohuhono/Oberon/pull/315
 
 ## Purpose
 
-This handoff plan exists so a fresh session can resume implementation without
-reconstructing context from chat history or a dirty worktree.
+This handoff is a fresh current-state starting point for the next session.
 
-The canonical scope, phase breakdown, and durable decisions remain in
+Use it to continue PR #315 from the current checkout without reconstructing old
+chat history. The canonical scope and settled architecture remain in
 [issue-314-db-backed-tailwind-assets.md](./issue-314-db-backed-tailwind-assets.md).
-This file only records current status, working assumptions, and the next
-execution steps.
 
-## Current status
+## Current branch and PR state
 
-- Implementation completed on the current branch.
-- Repo-wide validation passed with `pnpm validate` on 2026-03-26.
-- The issue-314 Tailwind asset coverage now passes inside the validated test
-  lanes.
-- A final runtime import-boundary fix was applied so Node-side runtime consumers
-  use the dedicated core errors subpath instead of the broad root barrel.
-- Agent instructions were updated so completed implementation without an open PR
-  should route through the `finalise` skill to create the PR.
+- Current branch: `finalise/20260326-105602-db-tailwind-assets`
+- PR #315 is open against `main`
+- PR title: `Store Tailwind assets in the database`
+- PR is not draft
+- `reviewDecision` is currently empty
 
-## Working decisions already settled
+## What is already true
 
-- `updatePageData` is the live page-data update boundary, not a thin CRUD write.
+- The initial issue-314 implementation is in place on the current PR branch.
+- Local repo validation passed with `pnpm validate` from repo root on
+  2026-03-26.
+- The remaining work is PR resolution, not reopening the design or re-planning
+  the PRD.
+
+## Remote check status on PR #315
+
+Passing:
+
+- `CI / Validate`
+- `CI / E2E Tests`
+- `CI / Changed Packages / Changed packages`
+- `CI / Oberon Docs / preview oberon-docs`
+- `CI / Oberon Playground / preview playground`
+- `Analyze (javascript-typescript)`
+
+Failing:
+
+- `CI / Create Oberon App`
+- `CI / Smoke Test Docs / Smoke Test`
+- `CI / Smoke Test Playground / Smoke Test`
+- `CI / Test Status`
+
+Treat those failing remote checks as the live blocker for PR #315.
+
+## Settled decisions to preserve
+
+- `updatePageData` is the live page-data update boundary.
 - Tailwind asset side effects intentionally hang from that boundary.
-- Initial asset generation is a build-time concern, not a runtime recovery path.
-- Review stages are gated on an open GitHub PR.
+- Initial active asset generation is a build-time concern, not a runtime
+  recovery path.
+- Public renderers attach the active stylesheet link outside core render.
+- Immutable Tailwind assets remain fetchable by hash after active-hash switches.
 
-## Files already in motion
+## Relevant implementation areas
 
-The current implementation touchpoints include, at minimum:
+Most likely touchpoints if the failing PR checks require code changes:
 
 - `packages/oberoncms/core/src/adapter/init-adapter.ts`
 - `packages/oberoncms/core/src/adapter/init-oberon.ts`
@@ -43,7 +70,6 @@ The current implementation touchpoints include, at minimum:
 - `packages/oberoncms/core/src/adapter/init-adapter.test.ts`
 - `packages/oberoncms/core/src/adapter/init-oberon.test.ts`
 - `packages/oberoncms/core/src/adapter/tailwind-assets.test.ts`
-- `packages/oberoncms/core/src/lib/dtd.ts`
 - `packages/oberoncms/sqlite/src/db/database-adapter.ts`
 - `packages/oberoncms/sqlite/src/db/schema/site-schema.ts`
 - `packages/oberoncms/sqlite/src/db/schema/tailwind-schema.ts`
@@ -51,43 +77,43 @@ The current implementation touchpoints include, at minimum:
 - `packages/plugins/pgsql/src/db/schema/site-schema.ts`
 - `packages/plugins/pgsql/src/db/schema/tailwind-schema.ts`
 - `apps/playground/app/(oberon)/[[...path]]/page.tsx`
-- `apps/playground/app/tailwind-asset.css`
 - `apps/playground/oberon/adapter.ts`
 - `recipes/nextjs/app/(oberon)/[[...path]]/page.tsx`
-- `recipes/nextjs/app/tailwind-asset.css`
 - `recipes/nextjs/oberon/adapter.ts`
 - `dev/playwright/tdd/tdd-pages.spec.ts`
 - `dev/playwright/helpers/fixtures.ts`
 
-## Immediate next step
+## Current worktree note
 
-Create or update the GitHub PR for this branch, then enter PR-gated review.
+Current local modifications are:
 
-The next session should prefer this order:
+- `.agents/TESTING.md`
+- `.agents/skills/commit/SKILL.md`
+- `.agents/skills/finalise/SKILL.md`
+- `.agents/skills/tdd/SKILL.md`
+- `.github/agents/feature.agent.md`
+- `.github/agents/implement.agent.md`
+- `.github/agents/review-response.agent.md`
+- `oberon.code-workspace`
+- `turbo.json`
 
-1. If no PR exists yet, use `finalise` to package the current work into a PR.
-2. If a PR already exists, use `commit` to update the branch and PR metadata.
-3. Route to technical review against the PR.
-4. Route to implementation review against the PRD if desired.
+These can be folded into the current PR; they are superficially out of scope of
+the PRD, but actually required for the agents to succeed.
 
-## Worktree note
+## Recommended next steps
 
-- The repository may still contain additional uncommitted documentation or agent
-  instruction edits alongside the issue-314 implementation.
-- Treat the current checkout as the source of truth when finalising; do not
-  reconstruct the branch from this note alone.
+1. Start from the failing remote PR jobs, especially `CI / Create Oberon App`
+   and the two smoke lanes.
+2. Inspect the failing workflow logs and identify whether they reflect a real
+   issue-314 regression or unrelated current-branch drift.
+3. If code changes are needed for PR #315, keep the fix scoped to the PR and
+   rerun `pnpm validate` from repo root.
+4. Only after the branch is locally green again, update the PR branch and
+   re-check the remote review gate.
 
-## Final implementation notes
+## Completion condition for this handoff
 
-- `updatePageData` remains the live page-data update boundary and now owns the
-  Tailwind asset side effects.
-- Initial active asset generation happens during build through `prebuild`, not
-  as a runtime recovery path.
-- Public renderers attach the active stylesheet link outside core render.
-- Immutable assets remain fetchable by hash after active-hash switches.
-
-## Completion condition for this handoff thread
-
-This handoff thread is complete when a fresh session can create or update the PR
-from the current checkout and move directly into PR-gated review without
-reconstructing prior chat context.
+This handoff is complete when a fresh session can pick up the checked-out
+branch, understand that PR #315 is blocked by remote `Create Oberon App` and
+smoke failures, and continue the PR-resolution loop without needing prior chat
+context.
