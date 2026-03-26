@@ -4,10 +4,27 @@ import {
   type Page,
   type TestInfo,
 } from "@playwright/test"
-import { getClient } from "@oberoncms/plugin-development"
-import { pages } from "@oberoncms/sqlite/schema"
-import { eq } from "drizzle-orm"
 import { test as base } from "../base.config"
+
+const puckComponentKey = [
+  "Image",
+  "Welcome",
+  "Container",
+  "Text",
+  "Dashboard",
+  "Activity Goal",
+  "Calendar",
+  "Chat",
+  "Cookie Settings",
+  "Create Account",
+  "Data Table",
+  "Metric",
+  "Payment Method",
+  "Report Issue",
+  "Share",
+  "Stats",
+  "Team Members",
+].join("-")
 
 function sanitizeKeyPart(value: string) {
   return (
@@ -41,8 +58,11 @@ async function createCmsPage(page: Page, key: string) {
   ).toHaveText("test@tohuhono.com")
 }
 
-async function seedCmsTailwindPage(key: string) {
-  const updatedAt = new Date()
+function getCmsDraftStorageKey(key: string) {
+  return `puck-demo:${Buffer.from(puckComponentKey).toString("base64")}:${key}`
+}
+
+async function seedCmsTailwindDraft(page: Page, key: string) {
   const data = {
     content: [
       {
@@ -57,27 +77,25 @@ async function seedCmsTailwindPage(key: string) {
     zones: {},
   }
 
-  await getClient()
-    .insert(pages)
-    .values({
-      key,
-      data,
-      updatedAt,
-      updatedBy: "test@tohuhono.com",
-    })
-    .onConflictDoUpdate({
-      target: pages.key,
-      set: {
-        data,
-        updatedAt,
-        updatedBy: "test@tohuhono.com",
-      },
-    })
-    .execute()
+  await page.goto("/cms/pages")
+
+  await page.evaluate(
+    ({ draftStorageKey, nextData }) => {
+      localStorage.setItem(draftStorageKey, JSON.stringify(nextData))
+    },
+    {
+      draftStorageKey: getCmsDraftStorageKey(key),
+      nextData: data,
+    },
+  )
 }
 
-async function deleteCmsPageDirect(key: string) {
-  await getClient().delete(pages).where(eq(pages.key, key)).execute()
+async function clearCmsDraft(page: Page, key: string) {
+  await page.goto("/cms/pages")
+
+  await page.evaluate((draftStorageKey) => {
+    localStorage.removeItem(draftStorageKey)
+  }, getCmsDraftStorageKey(key))
 }
 
 async function deleteCmsPages(page: Page, key: string) {
@@ -138,12 +156,13 @@ export const test = base.extend<{
     await deleteCmsPages(cms, key)
   },
 
-  cmsTailwindPageKey: async ({ testKey }, use) => {
+  cmsTailwindPageKey: async ({ cms, testKey }, use) => {
     const key = `/${testKey}_tailwind`
 
-    await seedCmsTailwindPage(key)
+    await seedCmsTailwindDraft(cms, key)
     await use(key)
-    await deleteCmsPageDirect(key)
+    await deleteCmsPages(cms, key)
+    await clearCmsDraft(cms, key)
   },
 })
 
