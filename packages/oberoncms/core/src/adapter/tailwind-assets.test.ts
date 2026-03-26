@@ -1,10 +1,16 @@
+import { fileURLToPath } from "url"
 import { describe, expect, it } from "@dev/vitest"
 import {
+  buildTailwindAsset,
   activeTailwindAssetCoversClassList,
   getTailwindAssetDecision,
   mergeTailwindClassLists,
   normalizeTailwindClassList,
 } from "./tailwind-assets"
+
+function getFixturePath(relativePath: string) {
+  return fileURLToPath(new URL(relativePath, import.meta.url))
+}
 
 describe("tailwind asset decisions", { tags: ["ai", "issue-314"] }, () => {
   it("normalizes class lists deterministically", () => {
@@ -55,5 +61,29 @@ describe("tailwind asset decisions", { tags: ["ai", "issue-314"] }, () => {
       effectiveClassList: ["bg-red-500", "md:grid", "text-lg"],
       shouldCompile: true,
     })
+  })
+
+  it("builds a tailwind asset from the documentation app stylesheet", async () => {
+    const asset = await buildTailwindAsset({
+      classList: ["text-lg"],
+      sourceCssFile: getFixturePath(
+        "../../../../../apps/documentation/src/app/app.css",
+      ),
+    })
+
+    expect(asset.classList).toEqual(["text-lg"])
+    expect(asset.css).toContain(".text-lg")
+  })
+
+  it("builds a tailwind asset from the playground app stylesheet", async () => {
+    const asset = await buildTailwindAsset({
+      classList: ["text-lg"],
+      sourceCssFile: getFixturePath(
+        "../../../../../apps/playground/app/app.css",
+      ),
+    })
+
+    expect(asset.classList).toEqual(["text-lg"])
+    expect(asset.css).toContain(".text-lg")
   })
 })
