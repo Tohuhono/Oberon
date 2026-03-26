@@ -8,10 +8,10 @@ import { compile } from "tailwindcss"
 import { walkAsyncStep } from "walkjs"
 import type { OberonTailwindAsset } from "../lib/dtd"
 
-const importModuleAtRuntime = Function("specifier", "return import(specifier)")
+const runtimeRequire = createRequire(import.meta.url)
 
 async function loadModuleAtRuntime(specifier: string) {
-  const module = await importModuleAtRuntime(specifier)
+  const module = await import(/* @vite-ignore */ specifier)
 
   return module && typeof module === "object" ? module : Object.create(null)
 }
@@ -43,16 +43,12 @@ function getStyleFromRootExport(
   return typeof style === "string" ? style : null
 }
 
-function getBaseRequire(base: string) {
-  return createRequire(pathToFileURL(join(base, "__tailwind_loader__.js")).href)
-}
-
 function resolveTailwindImport(id: string, base: string) {
   if (id.startsWith(".") || id.startsWith("/")) {
     return resolve(base, id)
   }
 
-  return getBaseRequire(base).resolve(id)
+  return runtimeRequire.resolve(id, { paths: [base] })
 }
 
 async function findClosestPackageJson(path: string) {
