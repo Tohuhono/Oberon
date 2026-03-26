@@ -8,10 +8,40 @@ import { compile } from "tailwindcss"
 import { walkAsyncStep } from "walkjs"
 import type { OberonTailwindAsset } from "../lib/dtd"
 
-const importModuleAtRuntime = Function(
-  "specifier",
-  "return import(specifier)",
-) as (specifier: string) => Promise<Record<string, unknown>>
+const importModuleAtRuntime = Function("specifier", "return import(specifier)")
+
+async function loadModuleAtRuntime(specifier: string) {
+  const module = await importModuleAtRuntime(specifier)
+
+  return module && typeof module === "object" ? module : Object.create(null)
+}
+
+function getPackageJsonValue(
+  value: unknown,
+  key: string,
+): string | Record<string, unknown> | null {
+  if (!value || typeof value !== "object") {
+    return null
+  }
+
+  const entry = Reflect.get(value, key)
+
+  return typeof entry === "string" || (entry && typeof entry === "object")
+    ? entry
+    : null
+}
+
+function getStyleFromRootExport(
+  rootExport: string | Record<string, unknown> | null,
+) {
+  if (typeof rootExport === "string") {
+    return rootExport.endsWith(".css") ? rootExport : null
+  }
+
+  const style = getPackageJsonValue(rootExport, "style")
+
+  return typeof style === "string" ? style : null
+}
 
 function getBaseRequire(base: string) {
   return createRequire(pathToFileURL(join(base, "__tailwind_loader__.js")).href)
@@ -55,19 +85,16 @@ async function resolveTailwindStylesheetImport(id: string, base: string) {
     return resolvedPath
   }
 
-  const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8")) as {
-    style?: string
-    exports?: string | Record<string, string | Record<string, string>>
-  }
+  const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"))
+  const packageJsonExports = getPackageJsonValue(packageJson, "exports")
   const rootExport =
-    typeof packageJson.exports === "object" ? packageJson.exports["."] : null
+    packageJsonExports && typeof packageJsonExports === "object"
+      ? getPackageJsonValue(packageJsonExports, ".")
+      : null
+  const packageStyle = getPackageJsonValue(packageJson, "style")
   const stylesheetPath =
-    packageJson.style ??
-    (typeof rootExport === "string"
-      ? rootExport.endsWith(".css")
-        ? rootExport
-        : null
-      : (rootExport?.style ?? null))
+    (typeof packageStyle === "string" ? packageStyle : null) ??
+    getStyleFromRootExport(rootExport)
 
   return stylesheetPath
     ? resolve(dirname(packageJsonPath), stylesheetPath)
@@ -168,7 +195,7 @@ export async function buildTailwindAsset({
     from: path,
     loadModule: async (id, base) => {
       const modulePath = resolveTailwindImport(id, base)
-      const module = await importModuleAtRuntime(pathToFileURL(modulePath).href)
+      const module = await loadModuleAtRuntime(pathToFileURL(modulePath).href)
 
       return {
         path: modulePath,
