@@ -26,6 +26,8 @@ target: vscode
 Review the open GitHub PR using the github-pr-review skill to see if it fully
 addresses the PRD, issue or bug.
 
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
+
 ## Responsibilities
 
 - Confirm the PRD, issue, or approved scope is in context.

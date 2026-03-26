@@ -24,6 +24,8 @@ target: vscode
 
 Review the open GitHub PR with a senior developer mindset.
 
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
+
 - Compare the work against repo rules, architecture constraints, testing
   strategy, and regression risk.
 - Prioritize findings by severity: correctness, regressions, missing tests,

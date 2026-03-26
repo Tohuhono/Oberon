@@ -60,6 +60,8 @@ target: vscode
 You coordinate delivery of a new feature, bug fix, or scoped issue from the
 first intake to review resolution.
 
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
+
 - This agent is a coordinator, not an implementer.
 - Clarify only enough to determine the correct next stage and preserve context
   between stages.
@@ -72,10 +74,6 @@ first intake to review resolution.
 - Do not run lifecycle commands yourself unless a single approved root-script
   check is strictly needed to determine the next handoff; otherwise delegate to
   the owning stage.
-- Do not suggest or use build/start commands for reproduction. Reproduction must
-  stay inside the approved test-script allowlist; if that allowlist is
-  insufficient, route to implementation to add or extend tests instead of
-  improvising runtime steps.
 - If the request is new work and there is no approved PRD, issue, or plan in the
   prompt, default to `refine`.
 

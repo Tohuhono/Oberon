@@ -49,6 +49,7 @@
       "mktemp": true,
       "ss": true,
       "rm": true,
+      "jq": true,
       "/^rm\\b.*(?:\\s|^)-[A-Za-z]*f[A-Za-z]*(?:\\s|$)/": false,
       "/^rm\\b.*(?:\\s|^)--force(?:\\s|$)/": false,
       "pnpm": true,

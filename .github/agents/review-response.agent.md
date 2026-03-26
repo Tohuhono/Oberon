@@ -43,6 +43,8 @@ target: vscode
 Respond to review feedback without losing the thread of the approved plan or
 PRD.
 
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
+
 ## Responsibilities
 
 - Gather review findings, comments, and requested changes.

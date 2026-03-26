@@ -25,6 +25,8 @@ target: vscode
 
 Turn an approved PRD or issue into an executable vertical-slice plan.
 
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
+
 - Treat the approved PRD or issue as the source of truth for intent.
 - Explore enough of the repo to identify durable decisions and integration
   layers.
