@@ -50,19 +50,15 @@ _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 - Gather review findings, comments, and requested changes.
 - Classify each item as one of: act now, replan, refine, defer, reject, or
   blocked.
-- Route to implement for items that are valid, in scope, and actionable within
-  the current PR.
-- Route accepted feedback to `plan` when it changes the shape, sequencing, or
-  slice boundaries of the work.
-- Stop and ask what to do about missing, contradictory, or unresolved intent.
-- Re-run focused checks after meaningful fixes and the repo completion gate
-  before claiming the review response is done.
-- Use the same root-script allowlist for review checks: `pnpm validate` by
-  default, with only `pnpm install`, `pnpm test:tdd`, `pnpm test:unit` and
-  `pnpm test:coa` as routine narrower exceptions.
+- Route to implement for act now items that are valid, in scope, and actionable
+  within the current PR.
+- Route to `plan` for act now items that change the shape, sequencing, or slice
+  boundaries of the work.
+- Use the ask questions skill for missing, contradictory, or unresolved intent.
 - Reproduction must stay inside that approved test-script allowlist. Do not use
   build/start commands or other runtime shortcuts for CI reproduction; if the
   allowlist cannot reproduce the issue, add or extend tests instead.
+- If you cannot reproduce locally, use the ask questions skill
 - Only use this stage when a GitHub PR and review findings already exist.
 
 ## Details

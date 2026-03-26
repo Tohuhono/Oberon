@@ -69,6 +69,9 @@ _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 - Preserve settled decisions instead of reopening them in later stages.
 - Do not call work complete until implementation and review expectations are
   satisfied or the user explicitly waives them.
+- Treat explicit delivery intent such as an accepted plan, as authorization to
+  complete the existing PR update flow, including commit and push, unless the
+  user says not to push.
 - Do not explore the repo, write code, edit files, or run validation yourself
   unless that work is strictly needed to determine the next handoff.
 - Do not run lifecycle commands yourself unless a single approved root-script

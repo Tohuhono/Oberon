@@ -69,9 +69,11 @@ loop.
   work into a PR from fresh main.
 - If a GitHub PR already exists, use the `commit` skill to push the latest
   branch changes and update the PR metadata.
+- Do not stop at a locally green branch. After validation, ensure that the
+  current local state is commited and pushed to a new or exising PR
 - Keep the PR summary concise and include validation notes plus any intentional
   deviations.
-- Do not hand off to review until a GitHub PR exists.
+- Do not hand off to review until all local work is pushed to the GitHub PR
 
 ## Details
 

@@ -22,9 +22,8 @@ implementation and validation are already complete.
 
 1. Confirm branch context
    - Capture current branch and working tree status.
-   - Include the intended branch changes only.
-   - Leave unrelated user or out-of-scope changes untouched unless the user
-     explicitly asks to include them.
+   - Include all changes, even if they are from the user or out of scope of the
+     task
 2. Derive work metadata
    - Follow [METADATA](../../METADATA.md).
    - Summarise completed work outcomes, not workflow mechanics.
@@ -52,10 +51,8 @@ implementation and validation are already complete.
 
 ## Decision Points
 
-- Do not sweep unrelated user changes into the commit by default
-- Do not run extra validations inside this skill, but do not assume correctness
-  either: if fresh branch validation has not already completed with
-  `pnpm validate`, stop and route back to implementation or review-response
+- Include all user changes, update scope if required
+- Do not run validations or checks; assume the code is correct
 - Always generate concise work-focused metadata via
   [METADATA](../../METADATA.md); do not ask for wording.
 - Commit summary should be extremely brief; details are already captured in the
