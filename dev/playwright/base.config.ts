@@ -36,6 +36,7 @@ export const base = defineConfig({
   testMatch: "**/*.spec.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
+  respectGitIgnore: true,
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : 3,
   reporter: process.env.CI

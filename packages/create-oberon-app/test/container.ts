@@ -18,10 +18,8 @@ export const VERDACCIO_LOG_PATH = `${CONTAINER_LOG_PATH}/verdaccio.log`
 
 export const COA_ROOT = "/opt/coa"
 export const COA_LOG = `${CONTAINER_LOG_PATH}/coa.log`
-const COA_NEXTJS_INTERNAL_PORT = 3000
-export const COA_NEXTJS_PORT = Number(
-  process.env.COA_NEXTJS_PORT ?? COA_NEXTJS_INTERNAL_PORT,
-)
+export const COA_NEXTJS_PORT = 3000
+
 export const COA_NEXTJS_DIR = `${COA_ROOT}/nextjs`
 export const VERDACCIO_PORT = 4873
 export const VERDACCIO_PING_PATH = `/-/ping`
@@ -86,7 +84,7 @@ export async function startContainer() {
       "--publish",
       `${VERDACCIO_PORT}:${VERDACCIO_PORT}`,
       "--publish",
-      `${COA_NEXTJS_PORT}:${COA_NEXTJS_INTERNAL_PORT}`,
+      `${COA_NEXTJS_PORT}:${COA_NEXTJS_PORT}`,
       "--volume",
       `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`,
       "--volume",
