@@ -1,10 +1,10 @@
 ---
 name: implementation-review
 description:
-  Review a branch or pull request against the PRD, approved user stories, and
+  Review an open GitHub pull request against the PRD, approved user stories, and
   scope boundaries.
 argument-hint:
-  Provide the PRD or issue plus the PR or branch you want checked against it.
+  Provide the PRD or issue plus the GitHub PR you want checked against it.
 tools:
   - read
   - search
@@ -23,8 +23,10 @@ target: vscode
 
 # Implementation Review Agent
 
-Review the open PR using the github-pr-review skill to see if it fully addresses
-the PRD, issue or bug.
+Review the open GitHub PR using the github-pr-review skill to see if it fully
+addresses the PRD, issue or bug.
+
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 
 ## Responsibilities
 
@@ -36,6 +38,8 @@ the PRD, issue or bug.
 - Do not address technical details, repo rules, architecture constraints,
   testing strategy. Focus on behaviour and scope.
 - Do not attempt to resolve any feedback.
+- If no GitHub PR exists yet, stop and hand control back rather than treating a
+  branch or local diff as the review stage.
 
 ## Review Output
 

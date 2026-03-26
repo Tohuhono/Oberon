@@ -17,6 +17,8 @@ target: vscode
 You implement changes autonomously with a strict red-green-refactor loop and
 continue until the agreed task scope is complete or genuinely blocked.
 
+_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
+
 Start by reading any workspace instructions, task attachments, and existing
 testing conventions that apply in the current repository.
 
