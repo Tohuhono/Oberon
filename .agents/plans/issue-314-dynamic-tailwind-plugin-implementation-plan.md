@@ -10,8 +10,8 @@ as a separate concern.
 
 This plan depends on the platform work described in:
 
-- [plugin-settings-primitive-prd.md](./plugin-settings-primitive-prd.md)
-- [plugin-settings-primitive-implementation-plan.md](./plugin-settings-primitive-implementation-plan.md)
+- [issue-318-plugin-settings-primitive-prd.md](./issue-318-plugin-settings-primitive-prd.md)
+- [issue-318-plugin-settings-primitive-implementation-plan.md](./issue-318-plugin-settings-primitive-implementation-plan.md)
 
 ## Settled Decisions
 
@@ -203,3 +203,9 @@ Add tests for the plugin-owned two-asset model.
 This plan is complete when issue 314 is understood as a plugin-owned dynamic
 Tailwind layer on top of the new plugin settings primitive, with the normal
 build-time Tailwind asset preserved as a separate first-class concern.
+
+## Related Docs
+
+- [issue-314-dynamic-tailwind-plugin-prd.md](./issue-314-dynamic-tailwind-plugin-prd.md)
+- [issue-318-plugin-settings-primitive-prd.md](./issue-318-plugin-settings-primitive-prd.md)
+- [issue-318-plugin-settings-primitive-implementation-plan.md](./issue-318-plugin-settings-primitive-implementation-plan.md)

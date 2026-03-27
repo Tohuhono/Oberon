@@ -1,4 +1,4 @@
-# PRD: Plugin Settings Primitive
+# PRD: Issue 318 - Plugin Settings Primitive
 
 ## Purpose
 
@@ -155,3 +155,9 @@ does not need richer query semantics in the first slice.
 
 Introduce the primitive as a core-owned platform contract first, then implement
 the dynamic Tailwind design on top of it as the first client.
+
+## Related Docs
+
+- [issue-318-plugin-settings-primitive-implementation-plan.md](./issue-318-plugin-settings-primitive-implementation-plan.md)
+- [issue-314-dynamic-tailwind-plugin-prd.md](./issue-314-dynamic-tailwind-plugin-prd.md)
+- [issue-314-dynamic-tailwind-plugin-implementation-plan.md](./issue-314-dynamic-tailwind-plugin-implementation-plan.md)
