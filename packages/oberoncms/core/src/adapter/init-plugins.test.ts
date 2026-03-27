@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "@dev/vitest"
 
 import { ResponseError } from "../lib/dtd"
 import { initPlugins } from "./init-plugins"
