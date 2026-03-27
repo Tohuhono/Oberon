@@ -1,4 +1,4 @@
-# Plan: Plugin Settings Primitive
+# Plan: Issue 318 - Plugin Settings Primitive
 
 ## Goal
 
@@ -146,3 +146,9 @@ the normal root flow.
 This plan is complete when core and DB adapters expose a working generic plugin
 settings substrate that the dynamic Tailwind plugin can use without introducing
 new feature-specific persistence methods.
+
+## Related Docs
+
+- [issue-318-plugin-settings-primitive-prd.md](./issue-318-plugin-settings-primitive-prd.md)
+- [issue-314-dynamic-tailwind-plugin-prd.md](./issue-314-dynamic-tailwind-plugin-prd.md)
+- [issue-314-dynamic-tailwind-plugin-implementation-plan.md](./issue-314-dynamic-tailwind-plugin-implementation-plan.md)

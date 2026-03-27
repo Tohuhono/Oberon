@@ -141,3 +141,13 @@ plugin settings primitive for persistence.
    code path?
 3. What rollout path is needed from the current prebuild-export model to a
    plugin-owned runtime asset model in playground, recipes, and generated apps?
+
+## Dependencies
+
+- Depends on #318: Plugin Settings Primitive.
+
+## Related Docs
+
+- [issue-314-dynamic-tailwind-plugin-implementation-plan.md](./issue-314-dynamic-tailwind-plugin-implementation-plan.md)
+- [issue-318-plugin-settings-primitive-prd.md](./issue-318-plugin-settings-primitive-prd.md)
+- [issue-318-plugin-settings-primitive-implementation-plan.md](./issue-318-plugin-settings-primitive-implementation-plan.md)
