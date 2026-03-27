@@ -1,4 +1,4 @@
-# PRD: Issue 318 - Plugin Settings Primitive
+# PRD: Issue 318 - Key Value Store Primitive
 
 ## Purpose
 
@@ -40,8 +40,8 @@ model. The current behavior is a prebuild export to
 
 ## Goal
 
-Provide a minimal, generic plugin settings substrate that lets plugins persist
-data through a namespaced key-value store with JSON payloads.
+Provide a minimal, generic key value store primitive that lets plugins persist
+data through a namespaced store with JSON payloads.
 
 The first slice should be strong enough to support the dynamic Tailwind plugin,
 including:
@@ -126,8 +126,8 @@ does not need richer query semantics in the first slice.
 
 ## Success Criteria
 
-1. Core exposes a generic plugin settings contract in the base adapter types.
-2. Sqlite, pgsql, and turso-backed flows can persist plugin settings without
+1. Core exposes a generic key value store contract in the base adapter types.
+2. Sqlite, pgsql, and turso-backed flows can persist plugin KV data without
    introducing Tailwind-specific methods.
 3. The dynamic Tailwind plugin can store its current state and hashed CSS
    artifacts entirely through the primitive.
@@ -136,7 +136,7 @@ does not need richer query semantics in the first slice.
 
 ## Risks
 
-1. A "settings" primitive may become a de facto general-purpose data store.
+1. A key value store primitive may become a de facto general-purpose data store.
 2. Last-write-wins semantics simplify the first slice but weaken correctness
    guarantees for clients that later need stronger concurrent update handling.
 3. Storing large CSS strings in JSON payloads may create storage and migration
@@ -146,7 +146,7 @@ does not need richer query semantics in the first slice.
 
 1. Should the primitive be introduced as a core-owned feature before the
    Tailwind extraction, or in the same slice as the Tailwind plugin?
-2. Should the settings table include metadata columns such as `updatedAt` and
+2. Should the key value table include metadata columns such as `updatedAt` and
    `updatedBy`, or should the first slice keep the stored shape minimal?
 3. Should future slices add prefix listing, or should plugins remain limited to
    direct key access indefinitely?

@@ -14,6 +14,12 @@ function isPageData(value: unknown): value is PageData {
   )
 }
 
+function notAvailable(): never {
+  throw new Error(
+    "Plugin settings are not yet implemented for the sqlite adapter",
+  )
+}
+
 export const getDatabaseAdapter = (
   db: () => DatabaseClient,
 ): OberonBaseAdapter => ({
@@ -89,6 +95,7 @@ export const getDatabaseAdapter = (
   deletePage: async (key) => {
     await db().delete(pages).where(eq(pages.key, key)).execute()
   },
+  deleteKV: notAvailable,
   getPageData: async (key) => {
     const result = await db()
       .select({
@@ -102,6 +109,7 @@ export const getDatabaseAdapter = (
 
     return isPageData(pageData) ? pageData : null
   },
+  getKV: notAvailable,
   updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db()
       .insert(pages)
@@ -109,6 +117,7 @@ export const getDatabaseAdapter = (
       .onConflictDoUpdate({ target: pages.key, set: { data } })
       .execute()
   },
+  putKV: notAvailable,
   getAllPages: async () => {
     return await db()
       .select({

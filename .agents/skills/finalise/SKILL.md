@@ -11,11 +11,13 @@ argument-hint: What work should be finalised?
 # Finalise Workflow
 
 Run a finalisation flow that packages the current work state into a PR from
-fresh main. This skill does not run validation; it assumes validation is already
-complete.
+fresh main.
 
 Operate in the user's current checkout. Do not create or use a separate git
 worktree unless the user explicitly asks for one.
+
+This skill does not run validations, whether they are required is not a concern
+of this skill.
 
 ## When to Use
 

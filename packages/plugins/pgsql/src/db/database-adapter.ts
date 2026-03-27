@@ -6,6 +6,12 @@ import { type DatabaseClient } from "./client"
 import { images, pages, users, site } from "./schema"
 import { getAuthAdapter } from "./auth-adapter"
 
+function notAvailable(): never {
+  throw new Error(
+    "Plugin settings are not yet implemented for the pgsql adapter",
+  )
+}
+
 export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
   db,
 ) => ({
@@ -78,6 +84,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
   deletePage: async (key) => {
     await db.delete(pages).where(eq(pages.key, key)).execute()
   },
+  deleteKV: notAvailable,
   getPageData: async (key) => {
     const result = await db
       .select({
@@ -89,6 +96,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
 
     return result[0]?.data || null
   },
+  getKV: notAvailable,
   updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db
       .insert(pages)
@@ -99,6 +107,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
       })
       .execute()
   },
+  putKV: notAvailable,
   getAllPages: async () => {
     return await db
       .select({

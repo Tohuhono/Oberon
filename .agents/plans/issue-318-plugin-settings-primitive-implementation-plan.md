@@ -1,8 +1,8 @@
-# Plan: Issue 318 - Plugin Settings Primitive
+# Plan: Issue 318 - Key Value Store Primitive
 
 ## Goal
 
-Implement a generic plugin settings substrate that plugins can use for durable
+Implement a generic key value store substrate that plugins can use for durable
 namespaced JSON persistence, with the proposed dynamic Tailwind plugin as the
 first client.
 
@@ -35,14 +35,14 @@ that work from the higher-level dynamic Tailwind plugin behavior described in:
 
 ### What to build
 
-Add a generic plugin settings persistence surface to the core adapter types.
+Add a generic key value store persistence surface to the core adapter types.
 
 The contract should be core-owned and available to all database adapters.
 
 ### Acceptance criteria
 
-- base adapter types include generic get/put/delete operations for namespaced
-  plugin settings
+- base adapter types include generic get/put/delete operations for namespaced KV
+  records
 - plugin composition can rely on the new contract without Tailwind-specific
   persistence methods
 - documentation makes clear that the first slice is direct key access only
@@ -56,12 +56,12 @@ The contract should be core-owned and available to all database adapters.
 
 ### What to build
 
-Add a generic settings table and sqlite adapter implementation for namespaced
+Add a generic key value table and sqlite adapter implementation for namespaced
 JSON payload records.
 
 ### Acceptance criteria
 
-- sqlite schema includes a generic plugin settings table
+- sqlite schema includes a generic key value table
 - sqlite database adapter implements get/put/delete by namespaced key
 - payloads round-trip as JSON
 - large JSON payloads containing CSS strings are supported
@@ -76,14 +76,15 @@ JSON payload records.
 
 ### What to build
 
-Mirror the generic settings implementation in pgsql and ensure turso-backed
-flows receive the same capability through the shared sqlite adapter path.
+Mirror the generic key value store implementation in pgsql and ensure
+turso-backed flows receive the same capability through the shared sqlite adapter
+path.
 
 ### Acceptance criteria
 
-- pgsql schema includes a generic plugin settings table
+- pgsql schema includes a generic key value table
 - pgsql database adapter implements the same contract as sqlite
-- turso-backed flows inherit working settings support
+- turso-backed flows inherit working key value store support
 
 ### Candidate files
 
@@ -121,8 +122,8 @@ This phase is about explicit compatibility choices around the existing
 
 ### What to build
 
-Add tests for the new generic settings substrate and validate the repo through
-the normal root flow.
+Add tests for the new generic key value store substrate and validate the repo
+through the normal root flow.
 
 ### Acceptance criteria
 
@@ -143,9 +144,9 @@ the normal root flow.
 
 ## Completion Condition
 
-This plan is complete when core and DB adapters expose a working generic plugin
-settings substrate that the dynamic Tailwind plugin can use without introducing
-new feature-specific persistence methods.
+This plan is complete when core and DB adapters expose a working generic key
+value store substrate that the dynamic Tailwind plugin can use without
+introducing new feature-specific persistence methods.
 
 ## Related Docs
 
