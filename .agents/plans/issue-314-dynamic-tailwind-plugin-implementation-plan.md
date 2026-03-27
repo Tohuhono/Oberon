@@ -1,8 +1,5 @@
 # Plan: Issue 314 - Dynamic Tailwind Plugin
 
-> Supersedes the earlier implementation direction captured in
-> [issue-314-db-backed-tailwind-assets.md](./issue-314-db-backed-tailwind-assets.md).
-
 ## Goal
 
 Implement issue 314 as a plugin-owned dynamic Tailwind system built on the new
@@ -34,7 +31,7 @@ This plan depends on the platform work described in:
 
 ## Recommended Slice Order
 
-1. detach the concept from core-owned persistence
+1. establish the feature boundary
 2. plugin persistence model on top of settings primitive
 3. publish path generation
 4. prebuild reconciliation
@@ -42,26 +39,29 @@ This plan depends on the platform work described in:
 6. template/scaffolder alignment
 7. tests and validation
 
-## Phase 1: Reframe the feature boundary
+## Phase 1: Establish the feature boundary
 
 ### What to build
 
 Separate asset-one and asset-two responsibilities in code and documentation.
 
-Core should stop treating dynamic Tailwind as if it owns the application's full
-stylesheet behavior.
+The implementation should keep dynamic Tailwind from taking ownership of the
+application's full stylesheet behavior.
 
 ### Acceptance criteria
 
 - docs and code comments describe asset one and asset two as distinct
   responsibilities
 - dynamic Tailwind compilation is clearly scoped to the second hashed asset
-- the earlier issue-314 single-asset framing is marked as superseded
+- implementation boundaries make it clear that the standard application
+  stylesheet remains a separate concern
 
 ### Candidate files
 
 - `packages/oberoncms/core/src/adapter/init-adapter.ts`
-- `packages/oberoncms/core/src/adapter/tailwind-assets.ts`
+- `packages/oberoncms/core/src/adapter/export-tailwind-clases.ts`
+- `apps/playground/app/app.css`
+- `recipes/nextjs/app/app.css`
 
 ## Phase 2: Plugin persistence model
 
@@ -78,18 +78,17 @@ The plugin should use:
 
 - the plugin can read and write its state entirely through plugin settings
 - no dedicated Tailwind asset table is required in the target model
-- no site-owned `activeTailwindHash` field is required in the target model
+- no Tailwind-specific field on the site record is required in the target model
 
 ### Candidate files
 
-- plugin settings client code under the Tailwind feature implementation
-- adapter persistence wiring replacing current Tailwind-specific methods
+- new Tailwind plugin package files
 
 ## Phase 3: Publish-driven generation
 
 ### What to build
 
-Keep `updatePageData` as the live DB mutation boundary for deriving class-set
+Use `updatePageData` as the live DB mutation boundary for deriving class-set
 changes and generating asset two when needed.
 
 ### Acceptance criteria
@@ -102,14 +101,13 @@ changes and generating asset two when needed.
 
 ### Candidate files
 
-- `packages/oberoncms/core/src/adapter/init-adapter.ts`
 - dynamic Tailwind plugin behavior files
 
 ## Phase 4: Prebuild reconciliation
 
 ### What to build
 
-Retain a prebuild reconciliation path for asset two specifically.
+Extend the current prebuild path so it can reconcile asset two specifically.
 
 This path is allowed to:
 
@@ -126,6 +124,7 @@ This path is allowed to:
 
 ### Candidate files
 
+- `packages/oberoncms/core/src/adapter/export-tailwind-clases.ts`
 - `packages/oberoncms/core/src/adapter/init-adapter.ts`
 - plugin `prebuild` integration path
 
@@ -133,8 +132,8 @@ This path is allowed to:
 
 ### What to build
 
-Preserve the public fetch-by-hash contract and load the dynamic stylesheet after
-the standard asset.
+Add a public fetch-by-hash contract and load the dynamic stylesheet after the
+standard asset.
 
 ### Acceptance criteria
 
@@ -142,9 +141,13 @@ the standard asset.
 - public renderers attach the dynamic stylesheet outside core render
 - the site still renders acceptably when the dynamic stylesheet is missing
 
+This phase starts from a branch where public rendering does not currently load
+any dynamic stylesheet.
+
 ### Candidate files
 
 - `packages/oberoncms/core/src/adapter/init-oberon.ts`
+- `packages/oberoncms/core/src/render.tsx`
 - `apps/playground/app/(oberon)/[[...path]]/page.tsx`
 - `recipes/nextjs/app/(oberon)/[[...path]]/page.tsx`
 
@@ -164,14 +167,16 @@ dynamic stylesheet as asset two only.
 ### Candidate files
 
 - `apps/playground/oberon/adapter.ts`
+- `apps/playground/app/app.css`
 - `recipes/nextjs/oberon/adapter.ts`
+- `recipes/nextjs/app/app.css`
 - `packages/create-oberon-app/src/installer/install-adapter.ts`
 
 ## Phase 7: Test strategy and validation
 
 ### What to build
 
-Rewrite tests to match the plugin-owned two-asset model.
+Add tests for the plugin-owned two-asset model.
 
 ### Acceptance criteria
 
@@ -187,10 +192,11 @@ Rewrite tests to match the plugin-owned two-asset model.
    back into core Mitigation: keep persistence ownership and state conventions
    in the plugin
 2. Risk: last-write-wins semantics create surprising state races Mitigation:
-   document that the rewrite intentionally drops stale-write conflict behavior
-3. Risk: the old issue-314 docs continue to mislead follow-up work Mitigation:
-   explicitly mark the prior plan as superseded and link the new docs from any
-   future handoff
+   document that the first slice accepts plain last-write-wins behavior and add
+   stronger concurrency control only if real races justify it
+3. Risk: the runtime asset path keeps inheriting assumptions from the current
+   core-owned Tailwind implementation Mitigation: keep the two-asset model
+   explicit in docs, tests, and plugin boundaries
 
 ## Completion Condition
 

@@ -3,8 +3,8 @@
 ## Goal
 
 Implement a generic plugin settings substrate that plugins can use for durable
-namespaced JSON persistence, with the dynamic Tailwind plugin as the first
-client.
+namespaced JSON persistence, with the proposed dynamic Tailwind plugin as the
+first client.
 
 ## Scope
 
@@ -28,7 +28,7 @@ that work from the higher-level dynamic Tailwind plugin behavior described in:
 1. core adapter contract
 2. sqlite implementation
 3. pgsql and turso alignment
-4. migration and deprecation path for Tailwind-specific persistence
+4. current Tailwind file-export compatibility decision
 5. test coverage and validation
 
 ## Phase 1: Core contract
@@ -91,29 +91,31 @@ flows receive the same capability through the shared sqlite adapter path.
 - `packages/plugins/pgsql/src/db/database-adapter.ts`
 - `packages/plugins/turso/src/index.ts`
 
-## Phase 4: Tailwind persistence migration path
+## Phase 4: Current Tailwind File-Export Compatibility Decision
 
 ### What to build
 
-Prepare the system so Tailwind-specific persistence can move off the current
-site field and dedicated tables onto the generic settings primitive.
+Decide what, if anything, must be cut over from the current Tailwind file-
+export model so the new primitive does not inherit build-time-only assumptions.
 
-This phase is a migration bridge, not the full Tailwind behavior rewrite.
+This phase is about explicit compatibility choices around the existing
+`.oberon/tailwind/tailwind.classes` export and app-level `@source` wiring.
 
 ### Acceptance criteria
 
-- the plan for removing `activeTailwindHash` from site-owned persistence is
-  documented
-- the plan for removing dedicated `tailwind_assets` tables is documented
+- any required cutover from the current Tailwind file-export model is documented
+  explicitly
+- the plan makes clear which current prebuild export and CSS wiring steps are
+  temporary versus target architecture
 - the dynamic Tailwind plugin can be implemented without adding new persistence
   primitives
 
 ### Candidate files
 
-- `packages/oberoncms/sqlite/src/db/schema/site-schema.ts`
-- `packages/plugins/pgsql/src/db/schema/site-schema.ts`
-- `packages/oberoncms/sqlite/src/db/schema/tailwind-schema.ts`
-- `packages/plugins/pgsql/src/db/schema/tailwind-schema.ts`
+- `packages/oberoncms/core/src/adapter/export-tailwind-clases.ts`
+- `apps/playground/app/app.css`
+- `recipes/nextjs/app/app.css`
+- planning docs for explicit migration decisions
 
 ## Phase 5: Tests and validation
 
@@ -132,8 +134,9 @@ the normal root flow.
 
 1. Risk: the primitive grows into an unbounded plugin data store Mitigation:
    keep the first slice to direct key access only
-2. Risk: last-write-wins loses safety compared with current Tailwind behavior
-   Mitigation: document this as intentional and update tests accordingly
+2. Risk: last-write-wins loses safety compared with the current needs of clients
+   that may later require stronger concurrency behavior Mitigation: document
+   this as intentional and update tests accordingly
 3. Risk: a Tailwind-led design leaks feature assumptions into the primitive
    Mitigation: keep the contract generic and put plugin-specific conventions in
    plugin docs, not core types

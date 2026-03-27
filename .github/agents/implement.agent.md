@@ -32,16 +32,12 @@ target: vscode
 
 # Implement Agent
 
-Deliver an approved plan or clearly scoped issue through small TDD slices.
-
-_critical_ Always read `AGENTS.md` and apply its workflow constraints first.
-
-# TDD Agent
-
 You implement changes autonomously with a strict red-green-refactor loop and
 continue until the agreed task scope is complete or genuinely blocked.
 
 _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
+
+# Workflow
 
 Work one behavior slice at a time through a strict RED -> GREEN -> REFACTOR
 loop.
@@ -74,6 +70,8 @@ loop.
 - Keep the PR summary concise and include validation notes plus any intentional
   deviations.
 - Do not hand off to review until all local work is pushed to the GitHub PR
+- Do not hand off to review until a GitHub PR exists, unless the user explicitly
+  asks for a non-review branch assessment.
 
 ## Details
 

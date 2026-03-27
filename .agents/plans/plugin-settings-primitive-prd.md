@@ -11,11 +11,16 @@ intended client, but the primitive must be useful beyond Tailwind.
 
 ## Problem
 
-The current Oberon persistence contract is feature-specific:
+Oberon currently has no generic durable persistence surface that plugins can use
+for their own namespaced data.
 
-- site-wide singleton state is stored in the `site` row
-- Tailwind hashed CSS artifacts are stored in dedicated `tailwind_assets` tables
-- the base adapter contract includes Tailwind-specific methods
+The current platform model is still oriented around core-owned persistence and
+feature-specific expansion:
+
+- site-wide singleton state is stored in core-owned persistence
+- plugins cannot rely on a shared namespaced store for durable data
+- new durable plugin-backed features tend to force bespoke adapter and schema
+  expansion
 
 That model makes extraction difficult:
 
@@ -24,8 +29,14 @@ That model makes extraction difficult:
 - database adapters need bespoke schema and methods for each new plugin-backed
   feature
 
-For the next generation of the dynamic Tailwind work, this is the wrong
-abstraction boundary.
+Dynamic Tailwind is a concrete example of the broader problem: once a feature
+needs durable runtime state, the current approach pushes storage design toward
+feature-specific tables and methods instead of a reusable plugin contract.
+
+On this branch today, Tailwind does not have a database-backed persistence
+model. The current behavior is a prebuild export to
+`.oberon/tailwind/tailwind.classes`, which is then consumed by app CSS through
+`@source`.
 
 ## Goal
 
@@ -43,9 +54,10 @@ including:
 
 - building a rich document database or query engine for plugins
 - introducing prefix scans, filtering, or secondary indexes in the first slice
-- preserving current Tailwind conflict semantics
-- solving plugin-specific schema evolution beyond what is required to migrate
-  current Tailwind state
+- preserving the current file-export Tailwind flow as the long-term storage
+  architecture
+- solving every cutover concern from the current prebuild export and `@source`
+  wiring in the first slice
 
 ## Primary Users
 
@@ -91,8 +103,9 @@ including:
 ### Concurrency model
 
 - The first slice uses last-write-wins semantics.
-- The primitive does not need compare-and-set or stale-baseline protection.
-- Clients must not assume the current Tailwind conflict policy still exists.
+- The primitive does not need stronger concurrency controls in the first slice.
+- Clients must not assume the primitive provides more than last-write-wins
+  semantics initially.
 
 ### Data shape guidance
 
@@ -115,17 +128,17 @@ does not need richer query semantics in the first slice.
 
 1. Core exposes a generic plugin settings contract in the base adapter types.
 2. Sqlite, pgsql, and turso-backed flows can persist plugin settings without
-   Tailwind-specific methods.
+   introducing Tailwind-specific methods.
 3. The dynamic Tailwind plugin can store its current state and hashed CSS
    artifacts entirely through the primitive.
-4. Tailwind-specific persistence fields and tables are no longer required in the
-   target model.
+4. The target design does not require Tailwind-specific persistence fields or
+   tables.
 
 ## Risks
 
 1. A "settings" primitive may become a de facto general-purpose data store.
 2. Last-write-wins semantics simplify the first slice but weaken correctness
-   guarantees compared with the current Tailwind implementation.
+   guarantees for clients that later need stronger concurrent update handling.
 3. Storing large CSS strings in JSON payloads may create storage and migration
    pressure if more plugins adopt artifact-like usage.
 
@@ -140,5 +153,5 @@ does not need richer query semantics in the first slice.
 
 ## Recommended Direction
 
-Introduce the primitive as a core-owned platform contract first, then migrate
-the dynamic Tailwind design to become its first client.
+Introduce the primitive as a core-owned platform contract first, then implement
+the dynamic Tailwind design on top of it as the first client.

@@ -58,7 +58,7 @@ _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 - Reproduction must stay inside that approved test-script allowlist. Do not use
   build/start commands or other runtime shortcuts for CI reproduction; if the
   allowlist cannot reproduce the issue, add or extend tests instead.
-- If you cannot reproduce locally, use the ask questions skill
+- If you cannot reproduce locally, use the ask questions skill.
 - Only use this stage when a GitHub PR and review findings already exist.
 
 ## Details

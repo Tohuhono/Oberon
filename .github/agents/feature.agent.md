@@ -95,9 +95,9 @@ _critical_ Always read `AGENTS.md` and apply its workflow constraints first.
 - Only route directly to `implement` when the user provides an actionable,
   approved plan or explicitly asks to execute an existing scoped issue.
 - Use `tdd-plan` to turn the PRD into a persisted actionable plan.
-- Use `implement` when there is a persisted actionable actionable plan.
+- Use `implement` when there is a persisted actionable plan.
 - Iterate, implementing until the plan is complete (not just the first slice).
-- Do no move on from `implement` until the plan is complete.
+- Do not move on from `implement` until the plan is complete.
 - Raising a GitHub PR is the gate for the review process.
 - When implementation completes without an open PR yet, route through the
   `finalise` skill before any review stage begins.
