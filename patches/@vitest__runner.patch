@@ -1,0 +1,19 @@
+diff --git a/dist/chunk-artifact.js b/dist/chunk-artifact.js
+index 9de8332c8f77b1b0d8c558ac5b2533e603cf25c7..7430a08079d51269d4d3bf1b1e92aa8b6537a164 100644
+--- a/dist/chunk-artifact.js
++++ b/dist/chunk-artifact.js
+@@ -1404,12 +1404,12 @@ function resolveTagPattern(tagPattern, availableTags) {
+ 		const regex = createWildcardRegex(tagPattern);
+ 		const hasMatch = availableTags.some((tag) => regex.test(tag.name));
+ 		if (!hasMatch) {
+-			throw createNoTagsError(availableTags, tagPattern, "tag pattern");
++			// throw createNoTagsError(availableTags, tagPattern, "tag pattern");
+ 		}
+ 		return regex;
+ 	}
+ 	if (!availableTags.length || !availableTags.some((tag) => tag.name === tagPattern)) {
+-		throw createNoTagsError(availableTags, tagPattern, "tag pattern");
++		// throw createNoTagsError(availableTags, tagPattern, "tag pattern");
+ 	}
+ 	return null;
+ }

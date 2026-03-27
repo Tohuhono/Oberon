@@ -50,7 +50,6 @@
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
-    "@dev/vitest": "workspace:*",
     "@oberon/recipe-nextjs": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
@@ -69,7 +68,6 @@
     "resend": "^6.9.2",
     "server-cli-only": "^0.3.2",
     "typescript": "5.9.3",
-    "verdaccio": "^6.0.5",
-    "vite": "^7.3.1"
+    "verdaccio": "^6.0.5"
   }
 }
