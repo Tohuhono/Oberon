@@ -1,5 +1,7 @@
 import "server-cli-only"
 
+import { dirname, resolve } from "path"
+import { fileURLToPath } from "url"
 import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
@@ -8,6 +10,11 @@ import {
 } from "@oberoncms/core"
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
+
+const migrationsFolder = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../src/db/migrations",
+)
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,
@@ -28,8 +35,7 @@ export const plugin: OberonPlugin = (adapter) => ({
       }
 
       await migrate(db, {
-        migrationsFolder:
-          "node_modules/@oberoncms/plugin-turso/src/db/migrations",
+        migrationsFolder,
       })
 
       console.log(`Database migration complete`)

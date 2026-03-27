@@ -1,8 +1,12 @@
 import { randomUUID } from "crypto"
-import { eq } from "drizzle-orm"
-import { type OberonBaseAdapter, type PageData } from "@oberoncms/core"
+import { and, eq } from "drizzle-orm"
+import {
+  JsonValueSchema,
+  type OberonBaseAdapter,
+  type PageData,
+} from "@oberoncms/core"
 
-import { images, pages, site, users } from "./schema"
+import { images, kv, pages, site, users } from "./schema"
 import type { DatabaseClient } from "./client"
 
 function isPageData(value: unknown): value is PageData {
@@ -109,7 +113,17 @@ export const getDatabaseAdapter = (
 
     return isPageData(pageData) ? pageData : null
   },
-  getKV: notAvailable,
+  getKV: async (namespace, key) => {
+    const result = await db()
+      .select({ value: kv.value })
+      .from(kv)
+      .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
+      .execute()
+
+    const value = result[0]?.value
+
+    return value === undefined ? null : JsonValueSchema.parse(value)
+  },
   updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db()
       .insert(pages)
@@ -117,7 +131,16 @@ export const getDatabaseAdapter = (
       .onConflictDoUpdate({ target: pages.key, set: { data } })
       .execute()
   },
-  putKV: notAvailable,
+  putKV: async (namespace, key, value) => {
+    await db()
+      .insert(kv)
+      .values({ namespace, key, value })
+      .onConflictDoUpdate({
+        target: [kv.namespace, kv.key],
+        set: { value },
+      })
+      .execute()
+  },
   getAllPages: async () => {
     return await db()
       .select({

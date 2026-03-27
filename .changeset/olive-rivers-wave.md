@@ -1,11 +1,12 @@
 ---
 "@oberoncms/core": patch
+"@oberoncms/plugin-development": patch
 "@oberoncms/sqlite": patch
 "@oberoncms/plugin-pgsql": patch
+"@oberoncms/plugin-turso": patch
 "create-oberon-app": patch
 ---
 
-Add the first key value store contract slice to the core adapter surface, stub
-the sqlite and pgsql database adapters plus the create-oberon-app custom
-database template, and align the issue 318 planning docs with the key value
-store naming.
+Add the key value store contract slice and sqlite persistence path, including
+the sqlite KV table, adapter get/put support, development-plugin coverage via
+prebuild, and migration path resolution updates for database plugins.

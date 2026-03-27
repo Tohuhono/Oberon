@@ -1,5 +1,7 @@
 import "server-cli-only"
 
+import { dirname, resolve } from "path"
+import { fileURLToPath } from "url"
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   type OberonDatabaseAdapter,
@@ -13,6 +15,11 @@ import { getDatabaseAdapter } from "./db/database-adapter"
 import { getAuthAdapter } from "./db/auth-adapter"
 
 import { db } from "./db/client"
+
+const migrationsFolder = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../src/db/migrations",
+)
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,
@@ -32,8 +39,7 @@ export const plugin: OberonPlugin = (adapter) => ({
       }
 
       await migrate(db, {
-        migrationsFolder:
-          "node_modules/@oberoncms/plugin-pgsql/src/db/migrations",
+        migrationsFolder,
       })
 
       console.log(`Database migration complete`)
