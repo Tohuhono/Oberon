@@ -1,5 +1,6 @@
 import path from "node:path"
 import { readFile } from "node:fs/promises"
+import { fileURLToPath } from "node:url"
 import { randomBytes } from "crypto"
 import { base, defineConfig } from "@dev/playwright"
 import {
@@ -9,7 +10,11 @@ import {
   smokeProject,
 } from "@dev/playwright/projects"
 
-const APP_LOG_PATH = path.resolve(process.cwd(), ".playwright/logs/app.log")
+const PLAYWRIGHT_DIR = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  ".playwright",
+)
+const APP_LOG_PATH = path.resolve(PLAYWRIGHT_DIR, "logs/app.log")
 const AUTH_SECRET = `${randomBytes(64).toString("hex")}`
 
 async function readNextjsLogs() {
@@ -25,9 +30,9 @@ export default defineConfig({
   testDir: "../..",
   webServer: {
     command: [
-      "rm -f .playwright/logs/app.log",
-      "mkdir -p .playwright/logs",
-      "pnpm build && pnpm start > .playwright/logs/app.log 2>&1",
+      `rm -f '${APP_LOG_PATH}'`,
+      `mkdir -p '${path.dirname(APP_LOG_PATH)}'`,
+      `pnpm build && pnpm start > '${APP_LOG_PATH}' 2>&1`,
     ].join(" && "),
     url: "http://localhost:3210",
     reuseExistingServer: false,
