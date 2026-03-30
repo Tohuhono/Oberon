@@ -1,5 +1,7 @@
 import "server-cli-only"
 
+import { dirname, resolve } from "path"
+import { fileURLToPath } from "url"
 import { migrate } from "drizzle-orm/libsql/migrator"
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
@@ -14,6 +16,11 @@ import { getAdapter } from "@oberoncms/sqlite/adapter"
 import { name, version } from "../package.json" with { type: "json" }
 
 import { getClient, initialise } from "./db/client"
+
+const migrationsFolder = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../src/db/migrations",
+)
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,
@@ -49,8 +56,7 @@ export const plugin: OberonPlugin = (adapter) => ({
           }
 
           await migrate(db, {
-            migrationsFolder:
-              "node_modules/@oberoncms/plugin-development/src/db/migrations",
+            migrationsFolder,
           })
 
           console.log(`Database migration complete`)

@@ -21,7 +21,8 @@
   ],
   "globalDependencies": [".github/workflows/**"],
   "futureFlags": {
-    "watchUsingTaskInputs": true
+    "watchUsingTaskInputs": true,
+    "errorsOnlyShowHash": true
   },
   "tasks": {
     "prebuild": {

@@ -1,9 +1,8 @@
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
-import { type OberonBaseAdapter } from "@oberoncms/core"
-
+import { JsonValueSchema, type OberonBaseAdapter } from "@oberoncms/core"
 import { type DatabaseClient } from "./client"
-import { images, pages, users, site } from "./schema"
+import { images, kv, pages, users, site } from "./schema"
 import { getAuthAdapter } from "./auth-adapter"
 
 export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
@@ -78,6 +77,12 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
   deletePage: async (key) => {
     await db.delete(pages).where(eq(pages.key, key)).execute()
   },
+  deleteKV: async (namespace, key) => {
+    await db
+      .delete(kv)
+      .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
+      .execute()
+  },
   getPageData: async (key) => {
     const result = await db
       .select({
@@ -89,6 +94,17 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
 
     return result[0]?.data || null
   },
+  getKV: async (namespace, key) => {
+    const result = await db
+      .select({ value: kv.value })
+      .from(kv)
+      .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
+      .execute()
+
+    const value = result[0]?.value
+
+    return value === undefined ? null : JsonValueSchema.parse(value)
+  },
   updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
     await db
       .insert(pages)
@@ -96,6 +112,16 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
       .onConflictDoUpdate({
         target: pages.key,
         set: { data, updatedAt, updatedBy },
+      })
+      .execute()
+  },
+  putKV: async (namespace, key, value) => {
+    await db
+      .insert(kv)
+      .values({ namespace, key, value })
+      .onConflictDoUpdate({
+        target: [kv.namespace, kv.key],
+        set: { value },
       })
       .execute()
   },

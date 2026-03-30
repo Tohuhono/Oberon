@@ -6,31 +6,35 @@ description:
   integration tests, or asks for test-first development.
 ---
 
-# Test-Driven Development
+Work one behavior slice at a time through a strict RED -> GREEN -> REFACTOR
+loop.
 
-- Run lifecycle and validation commands from repo root only
-- If the need is covered by `pnpm validate`, use `pnpm validate`
-- For package red/green work, use `pnpm test:unit`
-- Narrow package red/green loops with Vitest tags, for example:
-  - `pnpm test:unit --tags-filter="issue-308"`
-  - `pnpm test:unit --tags-filter="feature-editor-refactor"`
-- For Playwright red/green work, use `pnpm test:tdd`
-- `pnpm install` is the only routine non-test exception
-- Keep shared TDD specs under `dev/playwright/tdd/**/*.spec.ts`
-- For PR completion, review replies, or issue-closure claims, run
-  `pnpm validate` without filtering
-- Reproduction must stay inside the approved test-script allowlist:
-  `pnpm validate`, `pnpm test:tdd`, `pnpm test:unit` and `pnpm test:coa`
-- Do not use `pnpm build`, `pnpm start`, direct `playwright`, package-local
-  scripts, or ad-hoc `turbo` commands to reproduce, debug, or validate behavior
-- If the current test-script allowlist cannot reproduce the issue, write or
-  extend a test instead of falling back to runtime commands
-- If that test path cannot be added within the current repo workflow, stop and
-  ask
-- Use grep targeting through the root TDD commands, for example:
-  - `pnpm test:tdd -- --grep '@tdd'`
-  - `pnpm test:tdd -- --grep '@pages'`
-  - `pnpm test:tdd -- --grep '@issue-308'`
+_Critical_ Use the repo's canonical test commands: `pnpm test:tdd`,
+`pnpm test:unit`, `pnpm test:coa` for tight loops and then finish with the
+completion gate `pnpm validate`
+
+Repo testing guidelines [TESTING.md](../../TESTING.md)
+
+## Workflow
+
+### 1. Planning
+
+Before writing any code:
+
+- [ ] Confirm with user what interface changes are needed
+- [ ] Confirm with user which behaviors to test (prioritize)
+- [ ] Identify opportunities for [deep modules](deep-modules.md) (small
+      interface, deep implementation)
+- [ ] Design interfaces for [testability](interface-design.md)
+- [ ] List the behaviors to test (not implementation steps)
+- [ ] Get user approval on the plan
+
+Ask: "What should the public interface look like? Which behaviors are most
+important to test?"
+
+**You can't test everything.** Confirm with the user exactly which behaviors
+matter most. Focus testing effort on critical paths and complex logic, not every
+possible edge case.
 
 ## Philosophy
 
@@ -71,39 +75,6 @@ This produces **crap tests**:
 implementation → repeat. Each test responds to what you learned from the
 previous cycle. Because you just wrote the code, you know exactly what behavior
 matters and how to verify it.
-
-```
-WRONG (horizontal):
-  RED:   test1, test2, test3, test4, test5
-  GREEN: impl1, impl2, impl3, impl4, impl5
-
-RIGHT (vertical):
-  RED→GREEN: test1→impl1
-  RED→GREEN: test2→impl2
-  RED→GREEN: test3→impl3
-  ...
-```
-
-## Workflow
-
-### 1. Planning
-
-Before writing any code:
-
-- [ ] Confirm with user what interface changes are needed
-- [ ] Confirm with user which behaviors to test (prioritize)
-- [ ] Identify opportunities for [deep modules](deep-modules.md) (small
-      interface, deep implementation)
-- [ ] Design interfaces for [testability](interface-design.md)
-- [ ] List the behaviors to test (not implementation steps)
-- [ ] Get user approval on the plan
-
-Ask: "What should the public interface look like? Which behaviors are most
-important to test?"
-
-**You can't test everything.** Confirm with the user exactly which behaviors
-matter most. Focus testing effort on critical paths and complex logic, not every
-possible edge case.
 
 ### 2. Tracer Bullet
 

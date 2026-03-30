@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import {
-  ResponseError,
+  NotImplementedError,
   type OberonCanAdapter,
   type OberonBaseAdapter,
   type OberonPlugin,
@@ -31,7 +31,7 @@ const mockAllPages = [
 ]
 
 function notAvailable(): never {
-  throw new ResponseError("This action is not available in the demo")
+  throw new NotImplementedError("This action is not available in the demo")
 }
 
 export const mockPlugin: OberonPlugin = () => ({
@@ -43,14 +43,17 @@ export const mockPlugin: OberonPlugin = () => ({
     changeRole: notAvailable,
     deleteImage: notAvailable,
     deletePage: notAvailable,
+    deleteKV: notAvailable,
     deleteUser: notAvailable,
     getAllImages: async () => [],
     getAllPages: async () => mockAllPages,
     getAllUsers: async () => [mockUser],
     getCurrentUser: async () => mockUser,
     getPageData: async (key) => (key === "/" ? mockPage.data : null),
+    getKV: notAvailable,
     getSite: async () => mockSite,
     hasPermission: () => true,
+    putKV: notAvailable,
     updatePageData: notAvailable,
     updateSite: notAvailable,
     signIn: notAvailable,

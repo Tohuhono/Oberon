@@ -16,6 +16,8 @@ export class OberonError extends Error {}
 
 export class ResponseError extends Error {}
 
+export class NotImplementedError extends ResponseError {}
+
 // TODO fix types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Transforms = Array<(props: any) => any>
@@ -71,6 +73,10 @@ export const INITIAL_DATA = {
 export type MaybeOptimistic<T> = T & {
   pending?: boolean
 }
+
+export const JsonValueSchema = z.json()
+
+export type JsonValue = z.infer<typeof JsonValueSchema>
 
 /*
  * Pages
@@ -253,13 +259,16 @@ export type OberonBaseAdapter = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deletePage: (key: OberonPageMeta["key"]) => Promise<void>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
+  deleteKV: (namespace: string, key: string) => Promise<void>
   deleteUser: (id: OberonUser["id"]) => Promise<void>
   changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
   getAllUsers: () => Promise<OberonUser[]>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
+  getKV: (namespace: string, key: string) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
+  putKV: (namespace: string, key: string, value: JsonValue) => Promise<void>
   updatePageData: (data: OberonPage) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
 }

@@ -57,9 +57,12 @@ function parseEntryPoints(entryPoints: string[] = ["src/*.ts"]) {
   // Searches for files that match the patterns defined in the array of input points.
   // Returns an array of absolute file paths.
   const files = fg.sync(entryPoints, { absolute: true })
+  const sourceFiles = files.filter(
+    (file) => !/\.(test|spec)\.[cm]?[jt]sx?$/.test(file),
+  )
 
   // Maps the file paths in the "files" array to an array of key-value pair.
-  const entities = files.map((file) => {
+  const entities = sourceFiles.map((file) => {
     // Extract the part of the file path after the "src" folder and before the file extension.
     const [key] = file.match(/(?<=src\/).*$/) || []
 

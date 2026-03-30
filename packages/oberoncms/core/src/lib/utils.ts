@@ -1,7 +1,13 @@
 import { notFound, redirect } from "next/navigation"
 
 import { isRedirectError } from "next/dist/client/components/redirect-error"
-import { ResponseError, type ClientAction, type OberonResponse } from "./dtd"
+import {
+  NotImplementedError,
+  ResponseError,
+  type ClientAction,
+  type OberonPluginAdapter,
+  type OberonResponse,
+} from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
   switch (action) {
@@ -62,9 +68,27 @@ export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(
   process.env.USE_DEVELOPMENT_SEND,
 )
 
+export async function isNotImplemented(
+  adapter: Partial<OberonPluginAdapter>,
+  methodName: keyof OberonPluginAdapter,
+): Promise<boolean> {
+  const method = adapter[methodName]
+
+  if (typeof method !== "function") {
+    return false
+  }
+
+  try {
+    await Promise.resolve(Reflect.apply(method, adapter, []))
+    return false
+  } catch (error) {
+    return error instanceof NotImplementedError
+  }
+}
+
 export function notImplemented(action: string) {
   return (): never => {
-    throw new ResponseError(
+    throw new NotImplementedError(
       `No oberon plugin provided for ${action} action, please check your oberon adapter configuration.`,
     )
   }

@@ -75,6 +75,8 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
+    "@electric-sql/pglite": "0.4.2",
+    "@electric-sql/pglite-socket": "^0.1.2",
     "@types/node": "24.10.1",
     "@types/pg": "^8.16.0",
     "@types/react": "19.2.14",
