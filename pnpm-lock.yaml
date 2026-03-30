@@ -69,7 +69,7 @@ importers:
         version: 5.9.3
       vercel:
         specifier: ^50.17.1
-        version: 50.17.1(@vercel/backends@0.0.33(rollup@4.57.1)(typescript@5.9.3))(@vercel/elysia@0.1.36(rollup@4.57.1))(@vercel/express@0.1.45(rollup@4.57.1)(typescript@5.9.3))(@vercel/fastify@0.1.39(rollup@4.57.1))(@vercel/go@3.4.0)(@vercel/h3@0.1.45(rollup@4.57.1))(@vercel/hono@0.2.39(rollup@4.57.1))(@vercel/hydrogen@1.3.5)(@vercel/koa@0.1.19(rollup@4.57.1))(@vercel/nestjs@0.2.40(rollup@4.57.1))(@vercel/next@4.15.28(rollup@4.57.1))(@vercel/node@5.6.3(rollup@4.57.1))(@vercel/python@6.12.0)(@vercel/redwood@2.4.9(rollup@4.57.1))(@vercel/remix-builder@5.5.10(rollup@4.57.1))(@vercel/ruby@2.3.0)(@vercel/rust@1.0.5)(@vercel/static-build@2.8.37)
+        version: 50.17.1(@vercel/backends@0.0.33(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3))(@vercel/elysia@0.1.36(rollup@4.57.1))(@vercel/express@0.1.45(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3))(@vercel/fastify@0.1.39(rollup@4.57.1))(@vercel/go@3.4.0)(@vercel/h3@0.1.45(rollup@4.57.1))(@vercel/hono@0.2.39(rollup@4.57.1))(@vercel/hydrogen@1.3.5)(@vercel/koa@0.1.19(rollup@4.57.1))(@vercel/nestjs@0.2.40(rollup@4.57.1))(@vercel/next@4.15.28(rollup@4.57.1))(@vercel/node@5.6.3(rollup@4.57.1))(@vercel/python@6.12.0)(@vercel/redwood@2.4.9(rollup@4.57.1))(@vercel/remix-builder@5.5.10(rollup@4.57.1))(@vercel/ruby@2.3.0)(@vercel/rust@1.0.5)(@vercel/static-build@2.8.37)
       wait-on:
         specifier: ^9.0.4
         version: 9.0.4
@@ -601,7 +601,7 @@ importers:
         version: link:../core
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       server-cli-only:
         specifier: ^0.3.2
         version: 0.3.2
@@ -665,7 +665,7 @@ importers:
         version: link:../../oberoncms/sqlite
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       next:
         specifier: ^16.1.6
         version: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -790,7 +790,7 @@ importers:
         version: link:../../oberoncms/core
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       pg:
         specifier: ^8.18.0
         version: 8.18.0
@@ -813,6 +813,12 @@ importers:
       '@dev/vitest':
         specifier: workspace:*
         version: link:../../../dev/vitest
+      '@electric-sql/pglite':
+        specifier: 0.4.2
+        version: 0.4.2
+      '@electric-sql/pglite-socket':
+        specifier: ^0.1.2
+        version: 0.1.2(@electric-sql/pglite@0.4.2)
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
@@ -851,7 +857,7 @@ importers:
         version: link:../../oberoncms/sqlite
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       server-cli-only:
         specifier: ^0.3.2
         version: 0.3.2
@@ -1494,6 +1500,15 @@ packages:
     resolution: {integrity: sha512-XvQ37yzWQKih4Du2CYladd1i/MzqtgkTPNCaN6Ku6No4CK83hDtXIV/rP03nEoBg2R3Pqgz6gGWmE2id2G81HA==}
     peerDependencies:
       effect: ^3.17.7
+
+  '@electric-sql/pglite-socket@0.1.2':
+    resolution: {integrity: sha512-Hz+IIentlbz9Zpln7Ft0iTDtbLvIfmmwIIC0CCU6ViklsDzbOIZV9xqcbvME21O3pqjjDNhERc57ynRCdshkZA==}
+    hasBin: true
+    peerDependencies:
+      '@electric-sql/pglite': 0.4.2
+
+  '@electric-sql/pglite@0.4.2':
+    resolution: {integrity: sha512-1GUUl/MZpy5QWgWisD3Epho3GkJrZ1MzVgQpo2pifQWUs96F9rXKZxeVLPhkwFYck34CH/kQ8lis6wX9ifn3kg==}
 
   '@emnapi/core@1.8.1':
     resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
@@ -2643,8 +2658,11 @@ packages:
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
 
-  '@napi-rs/wasm-runtime@1.1.1':
-    resolution: {integrity: sha512-p64ah1M1ld8xjWv3qbvFwHiFVWrq1yFvV4f7w+mzaqiR4IlSgkqhcRdHwsGgomwzBH51sRY4NEowLxnaBjcW/A==}
+  '@napi-rs/wasm-runtime@1.1.2':
+    resolution: {integrity: sha512-sNXv5oLJ7ob93xkZ1XnxisYhGYXfaG9f65/ZgYuAu3qt7b3NadcOEhLvx28hv31PgX8SZJRYrAIPQilQmFpLVw==}
+    peerDependencies:
+      '@emnapi/core': ^1.7.1
+      '@emnapi/runtime': ^1.7.1
 
   '@neon-rs/load@0.0.4':
     resolution: {integrity: sha512-kTPhdZyTQxB+2wpiRcFWrDcejc4JI6tkPuS7UZCG4l6Zvc5kU/gGQ/ozvHTh1XR5tS+UlfAfGuPajjzQjCiHCw==}
@@ -7459,10 +7477,6 @@ packages:
     resolution: {integrity: sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==}
     engines: {node: '>=8'}
 
-  lru-cache@11.2.6:
-    resolution: {integrity: sha512-ESL2CrkS/2wTPfuend7Zhkzo2u0daGJ/A2VucJOgQ/C48S/zB8MMeMHSGKYpXhIjbPxfuezITkaBH1wqv00DDQ==}
-    engines: {node: 20 || >=22}
-
   lru-cache@11.2.7:
     resolution: {integrity: sha512-aY/R+aEsRelme17KGQa/1ZSIpLpNYYrhcrepKTZgE+W3WM16YMCaPwOHLHsmopZHELU0Ojin1lPVxKR0MihncA==}
     engines: {node: 20 || >=22}
@@ -7760,8 +7774,8 @@ packages:
     resolution: {integrity: sha512-ugkC31VaVg9cF0DFVoADH12k6061zNZkZON+aX8AWsR9GhPcErkcMBceb6znR8wLERM2AkkOxy2nWRLpT9Jq5w==}
     engines: {node: 20 || >=22}
 
-  minimatch@10.2.4:
-    resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
+  minimatch@10.2.5:
+    resolution: {integrity: sha512-MULkVLfKGYDFYejP07QOurDLLQpcjk7Fw+7jXS2R2czRQzR56yHRveU5NDJEOviH+hETZKSkIk5c+T23GjFUMg==}
     engines: {node: 18 || 20 || >=22}
 
   minimatch@3.1.5:
@@ -10720,6 +10734,12 @@ snapshots:
       msgpackr: 1.11.8
       multipasta: 0.2.7
 
+  '@electric-sql/pglite-socket@0.1.2(@electric-sql/pglite@0.4.2)':
+    dependencies:
+      '@electric-sql/pglite': 0.4.2
+
+  '@electric-sql/pglite@0.4.2': {}
+
   '@emnapi/core@1.8.1':
     dependencies:
       '@emnapi/wasi-threads': 1.1.0
@@ -11572,7 +11592,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.1
     optional: true
 
-  '@napi-rs/wasm-runtime@1.1.1':
+  '@napi-rs/wasm-runtime@1.1.2(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)':
     dependencies:
       '@emnapi/core': 1.9.1
       '@emnapi/runtime': 1.9.1
@@ -11690,9 +11710,12 @@ snapshots:
   '@oxc-transform/binding-openharmony-arm64@0.111.0':
     optional: true
 
-  '@oxc-transform/binding-wasm32-wasi@0.111.0':
+  '@oxc-transform/binding-wasm32-wasi@0.111.0(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)':
     dependencies:
-      '@napi-rs/wasm-runtime': 1.1.1
+      '@napi-rs/wasm-runtime': 1.1.2(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
     optional: true
 
   '@oxc-transform/binding-win32-arm64-msvc@0.111.0':
@@ -12685,9 +12708,12 @@ snapshots:
   '@rolldown/binding-openharmony-arm64@1.0.0-rc.1':
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1':
+  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)':
     dependencies:
-      '@napi-rs/wasm-runtime': 1.1.1
+      '@napi-rs/wasm-runtime': 1.1.2(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
     optional: true
 
   '@rolldown/binding-win32-arm64-msvc@1.0.0-rc.1':
@@ -13574,21 +13600,23 @@ snapshots:
       effect: 3.17.7
       sqids: 0.3.0
 
-  '@vercel/backends@0.0.33(rollup@4.57.1)(typescript@5.9.3)':
+  '@vercel/backends@0.0.33(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3)':
     dependencies:
       '@vercel/build-utils': 13.4.0
       '@vercel/nft': 1.3.0(rollup@4.57.1)
       execa: 3.2.0
       fs-extra: 11.1.0
-      oxc-transform: 0.111.0
+      oxc-transform: 0.111.0(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)
       path-to-regexp: 8.3.0
       resolve.exports: 2.0.3
-      rolldown: 1.0.0-rc.1
+      rolldown: 1.0.0-rc.1(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)
       srvx: 0.8.9
       tsx: 4.21.0
       typescript: 5.9.3
       zod: 3.22.4
     transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
       - encoding
       - rollup
       - supports-color
@@ -13614,11 +13642,13 @@ snapshots:
     dependencies:
       '@vercel/python-analysis': 0.4.1
 
-  '@vercel/cervel@0.0.20(rollup@4.57.1)(typescript@5.9.3)':
+  '@vercel/cervel@0.0.20(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3)':
     dependencies:
-      '@vercel/backends': 0.0.33(rollup@4.57.1)(typescript@5.9.3)
+      '@vercel/backends': 0.0.33(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
       - encoding
       - rollup
       - supports-color
@@ -13639,9 +13669,9 @@ snapshots:
   '@vercel/error-utils@2.0.3':
     optional: true
 
-  '@vercel/express@0.1.45(rollup@4.57.1)(typescript@5.9.3)':
+  '@vercel/express@0.1.45(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3)':
     dependencies:
-      '@vercel/cervel': 0.0.20(rollup@4.57.1)(typescript@5.9.3)
+      '@vercel/cervel': 0.0.20(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3)
       '@vercel/nft': 1.1.1(rollup@4.57.1)
       '@vercel/node': 5.6.3(rollup@4.57.1)
       '@vercel/static-config': 3.1.2
@@ -13650,6 +13680,8 @@ snapshots:
       ts-morph: 12.0.0
       zod: 3.22.4
     transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
       - encoding
       - rollup
       - supports-color
@@ -15077,8 +15109,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0):
+  drizzle-orm@0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0):
     optionalDependencies:
+      '@electric-sql/pglite': 0.4.2
       '@libsql/client': 0.17.0(bufferutil@4.1.0)
       '@types/pg': 8.16.0
       '@vercel/postgres': 0.10.0
@@ -16082,7 +16115,7 @@ snapshots:
 
   glob@13.0.6:
     dependencies:
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       minipass: 7.1.3
       path-scurry: 2.0.2
     optional: true
@@ -16988,10 +17021,7 @@ snapshots:
 
   lowercase-keys@2.0.0: {}
 
-  lru-cache@11.2.6: {}
-
-  lru-cache@11.2.7:
-    optional: true
+  lru-cache@11.2.7: {}
 
   lru-cache@5.1.1:
     dependencies:
@@ -17581,7 +17611,7 @@ snapshots:
     dependencies:
       brace-expansion: 5.0.2
 
-  minimatch@10.2.4:
+  minimatch@10.2.5:
     dependencies:
       brace-expansion: 5.0.5
     optional: true
@@ -17941,7 +17971,7 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  oxc-transform@0.111.0:
+  oxc-transform@0.111.0(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1):
     optionalDependencies:
       '@oxc-transform/binding-android-arm-eabi': 0.111.0
       '@oxc-transform/binding-android-arm64': 0.111.0
@@ -17959,10 +17989,13 @@ snapshots:
       '@oxc-transform/binding-linux-x64-gnu': 0.111.0
       '@oxc-transform/binding-linux-x64-musl': 0.111.0
       '@oxc-transform/binding-openharmony-arm64': 0.111.0
-      '@oxc-transform/binding-wasm32-wasi': 0.111.0
+      '@oxc-transform/binding-wasm32-wasi': 0.111.0(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)
       '@oxc-transform/binding-win32-arm64-msvc': 0.111.0
       '@oxc-transform/binding-win32-ia32-msvc': 0.111.0
       '@oxc-transform/binding-win32-x64-msvc': 0.111.0
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
     optional: true
 
   p-cancelable@2.1.1: {}
@@ -18089,7 +18122,7 @@ snapshots:
 
   path-scurry@2.0.1:
     dependencies:
-      lru-cache: 11.2.6
+      lru-cache: 11.2.7
       minipass: 7.1.2
 
   path-scurry@2.0.2:
@@ -18988,7 +19021,7 @@ snapshots:
 
   robust-predicates@3.0.2: {}
 
-  rolldown@1.0.0-rc.1:
+  rolldown@1.0.0-rc.1(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1):
     dependencies:
       '@oxc-project/types': 0.110.0
       '@rolldown/pluginutils': 1.0.0-rc.1
@@ -19003,9 +19036,12 @@ snapshots:
       '@rolldown/binding-linux-x64-gnu': 1.0.0-rc.1
       '@rolldown/binding-linux-x64-musl': 1.0.0-rc.1
       '@rolldown/binding-openharmony-arm64': 1.0.0-rc.1
-      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1
+      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)
       '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.1
       '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.1
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
     optional: true
 
   rollup-preserve-directives@1.1.3(rollup@4.57.1):
@@ -19978,7 +20014,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vercel@50.17.1(@vercel/backends@0.0.33(rollup@4.57.1)(typescript@5.9.3))(@vercel/elysia@0.1.36(rollup@4.57.1))(@vercel/express@0.1.45(rollup@4.57.1)(typescript@5.9.3))(@vercel/fastify@0.1.39(rollup@4.57.1))(@vercel/go@3.4.0)(@vercel/h3@0.1.45(rollup@4.57.1))(@vercel/hono@0.2.39(rollup@4.57.1))(@vercel/hydrogen@1.3.5)(@vercel/koa@0.1.19(rollup@4.57.1))(@vercel/nestjs@0.2.40(rollup@4.57.1))(@vercel/next@4.15.28(rollup@4.57.1))(@vercel/node@5.6.3(rollup@4.57.1))(@vercel/python@6.12.0)(@vercel/redwood@2.4.9(rollup@4.57.1))(@vercel/remix-builder@5.5.10(rollup@4.57.1))(@vercel/ruby@2.3.0)(@vercel/rust@1.0.5)(@vercel/static-build@2.8.37):
+  vercel@50.17.1(@vercel/backends@0.0.33(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3))(@vercel/elysia@0.1.36(rollup@4.57.1))(@vercel/express@0.1.45(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3))(@vercel/fastify@0.1.39(rollup@4.57.1))(@vercel/go@3.4.0)(@vercel/h3@0.1.45(rollup@4.57.1))(@vercel/hono@0.2.39(rollup@4.57.1))(@vercel/hydrogen@1.3.5)(@vercel/koa@0.1.19(rollup@4.57.1))(@vercel/nestjs@0.2.40(rollup@4.57.1))(@vercel/next@4.15.28(rollup@4.57.1))(@vercel/node@5.6.3(rollup@4.57.1))(@vercel/python@6.12.0)(@vercel/redwood@2.4.9(rollup@4.57.1))(@vercel/remix-builder@5.5.10(rollup@4.57.1))(@vercel/ruby@2.3.0)(@vercel/rust@1.0.5)(@vercel/static-build@2.8.37):
     dependencies:
       '@vercel/blob': 1.0.2
       '@vercel/build-utils': 13.4.0
@@ -19990,9 +20026,9 @@ snapshots:
       jose: 5.9.6
       proxy-agent: 6.4.0
     optionalDependencies:
-      '@vercel/backends': 0.0.33(rollup@4.57.1)(typescript@5.9.3)
+      '@vercel/backends': 0.0.33(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3)
       '@vercel/elysia': 0.1.36(rollup@4.57.1)
-      '@vercel/express': 0.1.45(rollup@4.57.1)(typescript@5.9.3)
+      '@vercel/express': 0.1.45(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(rollup@4.57.1)(typescript@5.9.3)
       '@vercel/fastify': 0.1.39(rollup@4.57.1)
       '@vercel/go': 3.4.0
       '@vercel/h3': 0.1.45(rollup@4.57.1)
