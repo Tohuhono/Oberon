@@ -15,3 +15,7 @@ declare module "vitest" {
     tags: OberonTestTag
   }
 }
+
+export { fromPartial } from "@total-typescript/shoehorn"
+
+export type VitestModule = typeof import("vitest")

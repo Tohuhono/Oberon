@@ -1,6 +1,6 @@
 import { describe, expect, it } from "@dev/vitest"
 
-import { ResponseError } from "../lib/dtd"
+import { NotImplementedError } from "../lib/dtd"
 import { initPlugins } from "./init-plugins"
 import { mockPlugin } from "./mock-plugin"
 
@@ -9,19 +9,19 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     const { adapter } = initPlugins()
 
     expect(() => adapter.getKV("tailwind", "state")).toThrow(
-      new ResponseError(
+      new NotImplementedError(
         "No oberon plugin provided for getKV action, please check your oberon adapter configuration.",
       ),
     )
     expect(() =>
       adapter.putKV("tailwind", "state", { activeHash: "abc123" }),
     ).toThrow(
-      new ResponseError(
+      new NotImplementedError(
         "No oberon plugin provided for putKV action, please check your oberon adapter configuration.",
       ),
     )
     expect(() => adapter.deleteKV("tailwind", "state")).toThrow(
-      new ResponseError(
+      new NotImplementedError(
         "No oberon plugin provided for deleteKV action, please check your oberon adapter configuration.",
       ),
     )
@@ -31,13 +31,15 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     const { adapter } = initPlugins([mockPlugin])
 
     expect(() => adapter.getKV("mock-plugin", "state")).toThrow(
-      new ResponseError("This action is not available in the demo"),
+      new NotImplementedError("This action is not available in the demo"),
     )
     expect(() =>
       adapter.putKV("mock-plugin", "state", { activeHash: "abc123" }),
-    ).toThrow(new ResponseError("This action is not available in the demo"))
+    ).toThrow(
+      new NotImplementedError("This action is not available in the demo"),
+    )
     expect(() => adapter.deleteKV("mock-plugin", "state")).toThrow(
-      new ResponseError("This action is not available in the demo"),
+      new NotImplementedError("This action is not available in the demo"),
     )
   })
 })

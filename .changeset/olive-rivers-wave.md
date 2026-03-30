@@ -8,5 +8,6 @@
 ---
 
 Add the key value store contract slice and sqlite persistence path, including
-the sqlite KV table, adapter get/put support, development-plugin coverage via
-prebuild, and migration path resolution updates for database plugins.
+the sqlite KV table, adapter get/put support, shared adapter KV test
+scaffolding, development-plugin coverage via prebuild, and migration path
+resolution updates for database plugins.

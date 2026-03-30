@@ -16,6 +16,8 @@ export class OberonError extends Error {}
 
 export class ResponseError extends Error {}
 
+export class NotImplementedError extends ResponseError {}
+
 // TODO fix types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Transforms = Array<(props: any) => any>

@@ -6,7 +6,7 @@ import {
   type OberonHandler,
   type OberonAdapter,
 } from "../lib/dtd"
-import { notImplemented } from "../lib/utils"
+import { stubbedAdapter } from "./stubbed-adapter"
 import { getInitialData } from "./get-initial-data"
 
 type InititalisedPlugins = {
@@ -15,12 +15,11 @@ type InititalisedPlugins = {
   versions: PluginVersion[]
 }
 
-export const baseAccumulator: InititalisedPlugins = {
+const baseAccumulator: InititalisedPlugins = {
   handlers: {},
   versions: [],
   adapter: {
-    prebuild: async () => {},
-    getCurrentUser: notImplemented("getCurrentUser"),
+    ...stubbedAdapter,
     hasPermission: ({ user, action, permission }) => {
       const permissions: OberonPermissions = {
         unauthenticated: {
@@ -43,43 +42,6 @@ export const baseAccumulator: InititalisedPlugins = {
           permissions[role][action] === "write")
       )
     },
-    signIn: notImplemented("signIn"),
-    signOut: notImplemented("signOut"),
-    // OberonSendAdapter
-    sendVerificationRequest: notImplemented("sendVerificationRequest"),
-    // OberonBaseAdapter
-    addImage: notImplemented("addImage"),
-    addPage: notImplemented("addPage"),
-    addUser: notImplemented("addUser"),
-    changeRole: notImplemented("changeRole"),
-    deleteImage: notImplemented("deleteImage"),
-    deletePage: notImplemented("deletePage"),
-    deleteKV: notImplemented("deleteKV"),
-    deleteUser: notImplemented("deleteUser"),
-    getAllImages: notImplemented("getAllImages"),
-    getAllPages: notImplemented("getAllPages"),
-    getAllUsers: notImplemented("getAllUsers"),
-    getPageData: notImplemented("getPageData"),
-    getKV: notImplemented("getKV"),
-    getSite: notImplemented("getSite"),
-    putKV: notImplemented("putKV"),
-    updatePageData: notImplemented("updatePageData"),
-    updateSite: notImplemented("updateSite"),
-    // OberonAuthAdapter
-    createSession: notImplemented("createSession"),
-    createUser: notImplemented("createUser"),
-    createVerificationToken: notImplemented("createVerificationToken"),
-    deleteSession: notImplemented("deleteSession"),
-    // deleteUser // duplicate
-    getSessionAndUser: notImplemented("getSessionAndUser"),
-    getUser: notImplemented("getUser"),
-    getUserByAccount: notImplemented("getUserByAccount"),
-    getUserByEmail: notImplemented("getUserByEmail"),
-    linkAccount: notImplemented("linkAccount"),
-    unlinkAccount: notImplemented("unlinkAccount"),
-    useVerificationToken: notImplemented("useVerificationToken"),
-    updateSession: notImplemented("updateSession"),
-    updateUser: notImplemented("updateUser"),
   } satisfies OberonPluginAdapter,
 }
 

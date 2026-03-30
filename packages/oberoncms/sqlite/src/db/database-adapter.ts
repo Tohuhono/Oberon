@@ -6,6 +6,7 @@ import {
   type PageData,
 } from "@oberoncms/core"
 
+import { notImplemented } from "@oberoncms/core/adapter"
 import { images, kv, pages, site, users } from "./schema"
 import type { DatabaseClient } from "./client"
 
@@ -15,12 +16,6 @@ function isPageData(value: unknown): value is PageData {
     value !== null &&
     "content" in value &&
     "root" in value
-  )
-}
-
-function notAvailable(): never {
-  throw new Error(
-    "Plugin settings are not yet implemented for the sqlite adapter",
   )
 }
 
@@ -99,7 +94,7 @@ export const getDatabaseAdapter = (
   deletePage: async (key) => {
     await db().delete(pages).where(eq(pages.key, key)).execute()
   },
-  deleteKV: notAvailable,
+  deleteKV: notImplemented("deleteKV"),
   getPageData: async (key) => {
     const result = await db()
       .select({
