@@ -5,8 +5,6 @@ import {
   type OberonBaseAdapter,
   type PageData,
 } from "@oberoncms/core"
-
-import { notImplemented } from "@oberoncms/core/adapter"
 import { images, kv, pages, site, users } from "./schema"
 import type { DatabaseClient } from "./client"
 
@@ -94,7 +92,12 @@ export const getDatabaseAdapter = (
   deletePage: async (key) => {
     await db().delete(pages).where(eq(pages.key, key)).execute()
   },
-  deleteKV: notImplemented("deleteKV"),
+  deleteKV: async (namespace, key) => {
+    await db()
+      .delete(kv)
+      .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
+      .execute()
+  },
   getPageData: async (key) => {
     const result = await db()
       .select({

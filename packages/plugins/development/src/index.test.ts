@@ -59,6 +59,10 @@ createAdapterTests({
       await rm(sqliteFile, { force: true })
     })
 
-    return fromPartial({ putKV: adapter.putKV, getKV: adapter.getKV })
+    return fromPartial({
+      putKV: adapter.putKV,
+      getKV: adapter.getKV,
+      deleteKV: adapter.deleteKV,
+    })
   },
 })
