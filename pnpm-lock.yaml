@@ -408,6 +408,9 @@ importers:
 
   dev/vitest:
     dependencies:
+      '@total-typescript/shoehorn':
+        specifier: ^0.1.2
+        version: 0.1.2
       vitest:
         specifier: ^4.1.2
         version: 4.1.2(@edge-runtime/vm@3.2.0)(@types/node@25.2.3)(happy-dom@20.6.1(bufferutil@4.1.0))(vite@7.3.1(@types/node@25.2.3)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
@@ -598,7 +601,7 @@ importers:
         version: link:../core
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       server-cli-only:
         specifier: ^0.3.2
         version: 0.3.2
@@ -662,7 +665,7 @@ importers:
         version: link:../../oberoncms/sqlite
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       next:
         specifier: ^16.1.6
         version: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -787,7 +790,7 @@ importers:
         version: link:../../oberoncms/core
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       pg:
         specifier: ^8.18.0
         version: 8.18.0
@@ -810,6 +813,12 @@ importers:
       '@dev/vitest':
         specifier: workspace:*
         version: link:../../../dev/vitest
+      '@electric-sql/pglite':
+        specifier: 0.4.2
+        version: 0.4.2
+      '@electric-sql/pglite-socket':
+        specifier: ^0.1.2
+        version: 0.1.2(@electric-sql/pglite@0.4.2)
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
@@ -848,7 +857,7 @@ importers:
         version: link:../../oberoncms/sqlite
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
       server-cli-only:
         specifier: ^0.3.2
         version: 0.3.2
@@ -1491,6 +1500,15 @@ packages:
     resolution: {integrity: sha512-XvQ37yzWQKih4Du2CYladd1i/MzqtgkTPNCaN6Ku6No4CK83hDtXIV/rP03nEoBg2R3Pqgz6gGWmE2id2G81HA==}
     peerDependencies:
       effect: ^3.17.7
+
+  '@electric-sql/pglite-socket@0.1.2':
+    resolution: {integrity: sha512-Hz+IIentlbz9Zpln7Ft0iTDtbLvIfmmwIIC0CCU6ViklsDzbOIZV9xqcbvME21O3pqjjDNhERc57ynRCdshkZA==}
+    hasBin: true
+    peerDependencies:
+      '@electric-sql/pglite': 0.4.2
+
+  '@electric-sql/pglite@0.4.2':
+    resolution: {integrity: sha512-1GUUl/MZpy5QWgWisD3Epho3GkJrZ1MzVgQpo2pifQWUs96F9rXKZxeVLPhkwFYck34CH/kQ8lis6wX9ifn3kg==}
 
   '@emnapi/core@1.8.1':
     resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
@@ -4273,6 +4291,9 @@ packages:
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
+
+  '@total-typescript/shoehorn@0.1.2':
+    resolution: {integrity: sha512-p7nNZbOZIofpDNyP0u1BctFbjxD44Qc+oO5jufgQdFdGIXJLc33QRloJpq7k5T59CTgLWfQSUxsuqLcmeurYRw==}
 
   '@ts-morph/common@0.11.1':
     resolution: {integrity: sha512-7hWZS0NRpEsNV8vWJzg7FEz6V8MaLNeJOmwmghqUXTpzk16V1LLZhdo+4QvE/+zv4cVci0OviuJFnqhEfoV3+g==}
@@ -10714,6 +10735,12 @@ snapshots:
       msgpackr: 1.11.8
       multipasta: 0.2.7
 
+  '@electric-sql/pglite-socket@0.1.2(@electric-sql/pglite@0.4.2)':
+    dependencies:
+      '@electric-sql/pglite': 0.4.2
+
+  '@electric-sql/pglite@0.4.2': {}
+
   '@emnapi/core@1.8.1':
     dependencies:
       '@emnapi/wasi-threads': 1.1.0
@@ -13106,6 +13133,8 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
+  '@total-typescript/shoehorn@0.1.2': {}
+
   '@ts-morph/common@0.11.1':
     dependencies:
       fast-glob: 3.3.3
@@ -15069,8 +15098,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.45.1(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0):
+  drizzle-orm@0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0):
     optionalDependencies:
+      '@electric-sql/pglite': 0.4.2
       '@libsql/client': 0.17.0(bufferutil@4.1.0)
       '@types/pg': 8.16.0
       '@vercel/postgres': 0.10.0
