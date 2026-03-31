@@ -12,6 +12,4 @@ export function notImplemented(action: string) {
 
 export { mockPlugin } from "./adapter/mock-plugin"
 
-export { exportTailwindClasses } from "./adapter/export-tailwind-clases"
-
 export { initOberon } from "./adapter/init-oberon"
