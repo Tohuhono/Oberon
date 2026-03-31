@@ -184,7 +184,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   )
 
   tailwindTest(
-    "skips dynamic state persistence when KV storage is unavailable",
+    "fails loudly during prebuild when KV storage is unavailable",
     async ({ expect }) => {
       const plugin = tailwindPlugin(
         fromPartial({
@@ -204,7 +204,44 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
         }),
       )
 
-      await expect(plugin.adapter?.prebuild?.()).resolves.toBeUndefined()
+      await expect(plugin.adapter?.prebuild?.()).rejects.toThrow(
+        new NotImplementedError("This action is not available in the demo"),
+      )
+
+      const response = await plugin.handlers
+        ?.tailwind?.(fromPartial({}))
+        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind") as never)
+
+      expect(response?.status).toBe(404)
+    },
+  )
+
+  tailwindTest(
+    "fails loudly during page updates when KV storage is unavailable",
+    async ({ expect }) => {
+      const plugin = tailwindPlugin(
+        fromPartial({
+          updatePageData: async () => {},
+          getAllPages: async () => [{ key: "/" }],
+          getPageData: async () => createPage("underline").data,
+          getKV: async () => {
+            throw new NotImplementedError(
+              "This action is not available in the demo",
+            )
+          },
+          putKV: async () => {
+            throw new NotImplementedError(
+              "This action is not available in the demo",
+            )
+          },
+        }),
+      )
+
+      await expect(
+        plugin.adapter?.updatePageData?.(createPage("underline")),
+      ).rejects.toThrow(
+        new NotImplementedError("This action is not available in the demo"),
+      )
 
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))

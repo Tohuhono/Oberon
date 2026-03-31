@@ -72,17 +72,7 @@ export async function extractTailwindClasses(data: unknown) {
 }
 
 async function getState(adapter: Pick<OberonPluginAdapter, "getKV">) {
-  let value: JsonValue | null
-
-  try {
-    value = await adapter.getKV(namespace, stateKey)
-  } catch (error) {
-    if (isUnavailable(error)) {
-      return null
-    }
-
-    throw error
-  }
+  const value = await adapter.getKV(namespace, stateKey)
 
   if (!isTailwindState(value)) {
     return {
@@ -101,10 +91,14 @@ async function getAsset(
   adapter: Pick<OberonPluginAdapter, "getKV">,
   hash: string,
 ) {
-  let asset: JsonValue | null
+  const asset = await adapter.getKV(namespace, getTailwindAssetKey(hash))
 
+  return typeof asset === "string" ? asset : null
+}
+
+async function getOptionalState(adapter: Pick<OberonPluginAdapter, "getKV">) {
   try {
-    asset = await adapter.getKV(namespace, getTailwindAssetKey(hash))
+    return await getState(adapter)
   } catch (error) {
     if (isUnavailable(error)) {
       return null
@@ -112,8 +106,21 @@ async function getAsset(
 
     throw error
   }
+}
 
-  return typeof asset === "string" ? asset : null
+async function getOptionalAsset(
+  adapter: Pick<OberonPluginAdapter, "getKV">,
+  hash: string,
+) {
+  try {
+    return await getAsset(adapter, hash)
+  } catch (error) {
+    if (isUnavailable(error)) {
+      return null
+    }
+
+    throw error
+  }
 }
 
 async function buildCss(classes: string[]) {
@@ -166,24 +173,14 @@ async function persistState(
   hash: string | null,
   css: string | null,
 ) {
-  try {
-    if (hash && css) {
-      await adapter.putKV(namespace, getTailwindAssetKey(hash), css)
-    }
-
-    await adapter.putKV(namespace, stateKey, {
-      activeHash: hash,
-      classes,
-    })
-  } catch (error) {
-    if (isUnavailable(error)) {
-      return false
-    }
-
-    throw error
+  if (hash && css) {
+    await adapter.putKV(namespace, getTailwindAssetKey(hash), css)
   }
 
-  return true
+  await adapter.putKV(namespace, stateKey, {
+    activeHash: hash,
+    classes,
+  })
 }
 
 async function reconcileTailwindState(
@@ -196,18 +193,12 @@ async function reconcileTailwindState(
   const classes = await getAllPublishedClasses(adapter, pageOverride)
   const state = await getState(adapter)
 
-  if (state === null) {
-    return null
-  }
-
   if (!classes.length) {
     if (!state.classes.length && state.activeHash === null) {
       return state
     }
 
-    if (!(await persistState(adapter, [], null, null))) {
-      return null
-    }
+    await persistState(adapter, [], null, null)
 
     return {
       activeHash: null,
@@ -228,9 +219,7 @@ async function reconcileTailwindState(
     } satisfies TailwindState
   }
 
-  if (!(await persistState(adapter, classes, hash, await buildCss(classes)))) {
-    return null
-  }
+  await persistState(adapter, classes, hash, await buildCss(classes))
 
   return {
     activeHash: hash,
@@ -245,7 +234,7 @@ export const plugin: OberonPlugin = (adapter) => ({
     tailwind: () => ({
       GET: async (request) => {
         const hash = new URL(request.url).searchParams.get("hash")
-        const state = await getState(adapter)
+        const state = hash ? null : await getOptionalState(adapter)
         const activeHash = hash || state?.activeHash
 
         if (!activeHash) {
@@ -258,7 +247,7 @@ export const plugin: OberonPlugin = (adapter) => ({
           })
         }
 
-        const css = await getAsset(adapter, activeHash)
+        const css = await getOptionalAsset(adapter, activeHash)
 
         if (!css) {
           return new Response("", {
@@ -292,11 +281,6 @@ export const plugin: OberonPlugin = (adapter) => ({
       const classes = await getAllPublishedClasses(adapter, page)
       const hash = classes.length ? getHash(classes) : null
       const state = await getState(adapter)
-
-      if (state === null) {
-        await adapter.updatePageData(page)
-        return
-      }
 
       const needsPersist =
         classes.join("\n") !== state.classes.join("\n") ||
