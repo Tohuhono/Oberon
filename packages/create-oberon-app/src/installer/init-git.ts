@@ -23,6 +23,7 @@ export function initGit(appPath: string) {
 
   try {
     execSync("git init", { cwd: appPath, stdio: "inherit" })
+    execSync("git add .", { cwd: appPath, stdio: "inherit" })
   } catch (error) {
     console.error("Failed to commit git changes", error)
   }
