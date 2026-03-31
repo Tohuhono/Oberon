@@ -1,7 +1,7 @@
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { fromPartial, test } from "@dev/vitest"
-import type { OberonPage } from "@oberoncms/core"
+import { NotImplementedError, type OberonPage } from "@oberoncms/core"
 import { createPluginTest } from "@oberoncms/testing"
 import { createSqliteAdapterFactory } from "@oberoncms/testing/sqlite"
 import { getAdapter } from "@oberoncms/sqlite/adapter"
@@ -174,6 +174,37 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "degrades when no dynamic asset is available",
     async ({ expect, adapter, plugin }) => {
       await expect(getStylesheets(adapter)).resolves.toEqual([])
+
+      const response = await plugin.handlers
+        ?.tailwind?.(fromPartial({}))
+        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind") as never)
+
+      expect(response?.status).toBe(404)
+    },
+  )
+
+  tailwindTest(
+    "skips dynamic state persistence when KV storage is unavailable",
+    async ({ expect }) => {
+      const plugin = tailwindPlugin(
+        fromPartial({
+          prebuild: async () => {},
+          getAllPages: async () => [{ key: "/" }],
+          getPageData: async () => createPage("underline").data,
+          getKV: async () => {
+            throw new NotImplementedError(
+              "This action is not available in the demo",
+            )
+          },
+          putKV: async () => {
+            throw new NotImplementedError(
+              "This action is not available in the demo",
+            )
+          },
+        }),
+      )
+
+      await expect(plugin.adapter?.prebuild?.()).resolves.toBeUndefined()
 
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))
