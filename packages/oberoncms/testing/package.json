@@ -23,12 +23,13 @@
   ],
   "exports": {
     ".": "./dist/index.js",
-    "./sqlite": "./dist/sqlite.js"
+    "./storage": "./dist/storage.js"
   },
   "dependencies": {
     "@dev/vitest": "workspace:*",
     "@libsql/client": "^0.17.0",
     "@oberoncms/core": "workspace:*",
+    "@oberoncms/sqlite": "workspace:*",
     "drizzle-orm": "^0.45.1"
   },
   "devDependencies": {

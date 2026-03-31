@@ -2,10 +2,10 @@ import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { fromPartial, test } from "@dev/vitest"
 import { NotImplementedError, type OberonPage } from "@oberoncms/core"
-import { createPluginTest } from "@oberoncms/testing"
-import { createSqliteAdapterFactory } from "@oberoncms/testing/sqlite"
-import { getAdapter } from "@oberoncms/sqlite/adapter"
-import * as schema from "@oberoncms/sqlite/schema"
+import {
+  createPluginTest,
+  createStorageAdapterFactory,
+} from "@oberoncms/testing"
 import { name as pluginName } from "../package.json" with { type: "json" }
 import { getTailwindAssetKey, plugin as tailwindPlugin } from "./index"
 
@@ -15,10 +15,6 @@ const rootDirectory = resolve(
 )
 
 const sqliteFile = resolve(rootDirectory, ".tmp/tailwind-plugin-unit-tests.db")
-const migrationsFolder = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../oberoncms/sqlite/src/db/migrations",
-)
 
 function createPage(className: string, key = "/"): OberonPage {
   return {
@@ -77,11 +73,8 @@ async function getStylesheets(adapter: {
   return [`/cms/api/tailwind?hash=${state.activeHash}`]
 }
 
-const createAdapter = createSqliteAdapterFactory({
+const createAdapter = createStorageAdapterFactory({
   sqliteFile,
-  schema,
-  migrationsFolder,
-  getAdapter: (db) => getAdapter(() => db),
 })
 
 const tailwindTest = createPluginTest(test)

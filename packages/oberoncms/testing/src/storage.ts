@@ -1,25 +1,24 @@
 import { mkdir, rm } from "fs/promises"
-import { dirname } from "path"
+import { dirname, resolve } from "path"
+import { fileURLToPath } from "url"
 import { createClient } from "@libsql/client"
 import { fromPartial } from "@dev/vitest"
 import type { OberonPluginAdapter } from "@oberoncms/core"
-import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql"
-import { migrate } from "drizzle-orm/libsql/migrator"
+import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
+import * as schema from "@oberoncms/sqlite/schema"
+import { drizzle } from "drizzle-orm/libsql"
 
 type OnCleanup = (callback: () => Promise<void>) => void
 
-export function createSqliteAdapterFactory<
-  TSchema extends Record<string, unknown>,
->({
+const migrationsFolder = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../sqlite/src/db/migrations",
+)
+
+export function createStorageAdapterFactory({
   sqliteFile,
-  schema,
-  migrationsFolder,
-  getAdapter,
 }: {
   sqliteFile: string
-  schema: TSchema
-  migrationsFolder?: string
-  getAdapter: (db: LibSQLDatabase<TSchema>) => Partial<OberonPluginAdapter>
 }) {
   return async (onCleanup: OnCleanup): Promise<OberonPluginAdapter> => {
     await mkdir(dirname(sqliteFile), { recursive: true })
@@ -39,7 +38,7 @@ export function createSqliteAdapterFactory<
 
     return fromPartial({
       prebuild: async () => {},
-      ...getAdapter(db),
+      ...getAdapter(() => db),
     })
   }
 }
