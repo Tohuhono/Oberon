@@ -29,7 +29,6 @@ import {
   getComponentTransformVersions,
   getTransforms,
 } from "./transforms"
-import { exportTailwindClasses } from "./export-tailwind-clases"
 
 export function initAdapter({
   config,
@@ -234,11 +233,12 @@ export function initAdapter({
   })
 
   return {
+    getSetting: async (namespace, key) => {
+      return adapter.getKV(namespace, key)
+    },
     prebuild: async () => {
       console.log("adapter prebuild")
       await adapter.prebuild()
-      console.log("tailwind prebuild")
-      await exportTailwindClasses(adapter)
       console.log("prebuild done")
     },
     /*

@@ -63,6 +63,7 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
+    "@oberoncms/testing": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",

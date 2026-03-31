@@ -3,7 +3,7 @@ import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { test, fromPartial, vi } from "@dev/vitest"
 import type { OberonPluginAdapter } from "@oberoncms/core"
-import { createAdapterTests } from "@oberoncms/core/testing"
+import { createAdapterTests } from "@oberoncms/testing"
 
 const rootDirectory = resolve(
   dirname(fileURLToPath(import.meta.url)),

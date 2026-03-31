@@ -7,7 +7,7 @@ import { fromPartial, test } from "@dev/vitest"
 import { drizzle } from "drizzle-orm/node-postgres"
 import { migrate } from "drizzle-orm/node-postgres/migrator"
 import pg from "pg"
-import { createAdapterTests } from "@oberoncms/core/testing"
+import { createAdapterTests } from "@oberoncms/testing"
 import { getDatabaseAdapter } from "./db/database-adapter"
 import * as schema from "./db/schema"
 

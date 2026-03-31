@@ -310,6 +310,7 @@ export type OberonHandler<Params = undefined> = Params extends undefined
 
 export type OberonAdapter = {
   prebuild: () => Promise<void>
+  getSetting: (namespace: string, key: string) => Promise<JsonValue | null>
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>

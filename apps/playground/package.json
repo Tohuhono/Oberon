@@ -22,6 +22,7 @@
     "@datacom-digital/ui-sample-components": "^0.3.3",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
+    "@oberoncms/plugin-tailwind": "workspace:*",
     "@oberoncms/plugin-turso": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",

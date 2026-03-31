@@ -45,7 +45,7 @@
     "test:tdd:ui": "SQLITE_FILE=file:.oberon/db/e2e.db turbo test:tdd:ui --concurrency 50 --filter=@oberon/playground...",
     "test:smoke": "turbo test:smoke --concurrency 50",
     "test:ui": "SQLITE_FILE=file:.oberon/db/e2e.db turbo test:ui --concurrency 50",
-    "validate": "SQLITE_FILE=file:.oberon/db/e2e.db turbo validate --concurrency 50 --output-logs new-only"
+    "validate": "SQLITE_FILE=file:.oberon/db/e2e.db turbo validate --concurrency 50 --output-logs errors-only"
   },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier -l --write"

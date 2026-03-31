@@ -158,6 +158,9 @@ importers:
       '@oberoncms/plugin-development':
         specifier: workspace:*
         version: link:../../packages/plugins/development
+      '@oberoncms/plugin-tailwind':
+        specifier: workspace:*
+        version: link:../../packages/plugins/tailwind
       '@oberoncms/plugin-turso':
         specifier: workspace:*
         version: link:../../packages/plugins/turso
@@ -649,6 +652,52 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
+  packages/oberoncms/testing:
+    dependencies:
+      '@dev/vitest':
+        specifier: workspace:*
+        version: link:../../../dev/vitest
+      '@libsql/client':
+        specifier: ^0.17.0
+        version: 0.17.0(bufferutil@4.1.0)
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../core
+      drizzle-orm:
+        specifier: ^0.45.1
+        version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)
+    devDependencies:
+      '@dev/eslint':
+        specifier: workspace:*
+        version: link:../../../dev/eslint
+      '@dev/scripts':
+        specifier: workspace:*
+        version: link:../../../dev/scripts
+      '@dev/typescript':
+        specifier: workspace:*
+        version: link:../../../dev/typescript
+      '@dev/vite':
+        specifier: workspace:*
+        version: link:../../../dev/vite
+      '@types/node':
+        specifier: 24.10.1
+        version: 24.10.1
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      react:
+        specifier: ^19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.4
+        version: 19.2.4(react@19.2.4)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
   packages/plugins/development:
     dependencies:
       '@libsql/client':
@@ -691,6 +740,9 @@ importers:
       '@dev/vitest':
         specifier: workspace:*
         version: link:../../../dev/vitest
+      '@oberoncms/testing':
+        specifier: workspace:*
+        version: link:../../oberoncms/testing
       '@puckeditor/core':
         specifier: ^0.21.1
         version: 0.21.1(@floating-ui/dom@1.7.5)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
@@ -819,6 +871,9 @@ importers:
       '@electric-sql/pglite-socket':
         specifier: ^0.1.2
         version: 0.1.2(@electric-sql/pglite@0.4.2)
+      '@oberoncms/testing':
+        specifier: workspace:*
+        version: link:../../oberoncms/testing
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
@@ -834,6 +889,61 @@ importers:
       drizzle-kit:
         specifier: ^0.31.9
         version: 0.31.9
+      react:
+        specifier: ^19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.4
+        version: 19.2.4(react@19.2.4)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
+  packages/plugins/tailwind:
+    dependencies:
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../../oberoncms/core
+      '@tailwindcss/node':
+        specifier: ^4.2.1
+        version: 4.2.1
+      server-cli-only:
+        specifier: ^0.3.2
+        version: 0.3.2
+      walkjs:
+        specifier: ^6.0.1
+        version: 6.0.1
+    devDependencies:
+      '@dev/eslint':
+        specifier: workspace:*
+        version: link:../../../dev/eslint
+      '@dev/scripts':
+        specifier: workspace:*
+        version: link:../../../dev/scripts
+      '@dev/typescript':
+        specifier: workspace:*
+        version: link:../../../dev/typescript
+      '@dev/vite':
+        specifier: workspace:*
+        version: link:../../../dev/vite
+      '@dev/vitest':
+        specifier: workspace:*
+        version: link:../../../dev/vitest
+      '@oberoncms/sqlite':
+        specifier: workspace:*
+        version: link:../../oberoncms/sqlite
+      '@oberoncms/testing':
+        specifier: workspace:*
+        version: link:../../oberoncms/testing
+      '@types/node':
+        specifier: 24.10.1
+        version: 24.10.1
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
       react:
         specifier: ^19.2.4
         version: 19.2.4
@@ -880,6 +990,9 @@ importers:
       '@dev/vitest':
         specifier: workspace:*
         version: link:../../../dev/vitest
+      '@oberoncms/testing':
+        specifier: workspace:*
+        version: link:../../oberoncms/testing
       '@puckeditor/core':
         specifier: ^0.21.1
         version: 0.21.1(@floating-ui/dom@1.7.5)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(bufferutil@4.1.0)(immer@11.1.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
@@ -1148,6 +1261,9 @@ importers:
       '@oberoncms/plugin-development':
         specifier: workspace:*
         version: link:../../packages/plugins/development
+      '@oberoncms/plugin-tailwind':
+        specifier: workspace:*
+        version: link:../../packages/plugins/tailwind
       next:
         specifier: ^16.1.6
         version: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)

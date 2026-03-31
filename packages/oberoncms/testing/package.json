@@ -1,0 +1,46 @@
+{
+  "name": "@oberoncms/testing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "clean": "odt clean",
+    "dev": "vite build --watch",
+    "lint": "eslint .",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "tsc": "tsc --pretty",
+    "wait": "wait-on ./dist/version && echo done",
+    "wait:clean": "rimraf ./dist/version"
+  },
+  "files": [
+    "dist",
+    "src",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./sqlite": "./dist/sqlite.js"
+  },
+  "dependencies": {
+    "@dev/vitest": "workspace:*",
+    "@libsql/client": "^0.17.0",
+    "@oberoncms/core": "workspace:*",
+    "drizzle-orm": "^0.45.1"
+  },
+  "devDependencies": {
+    "@dev/eslint": "workspace:*",
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
+    "@dev/vite": "workspace:*",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "typescript": "5.9.3"
+  }
+}
