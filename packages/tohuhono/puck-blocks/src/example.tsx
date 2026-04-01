@@ -57,16 +57,24 @@ const cards = {
   },
 }
 
-const Text: OberonComponent<{ body?: ReactNode }> = {
+const Text: OberonComponent<{
+  body?: ReactNode
+  text?: ReactNode
+  className?: string
+}> = {
   fields: {
-    body: {
-      type: "richtext",
+    text: {
+      type: "textarea",
       contentEditable: true,
     },
+    className: {
+      type: "text",
+    },
   },
-  render: ({ body }) => (
-    <div className="prose dark:prose-invert lg:prose-lg p-1">{body}</div>
-  ),
+  defaultProps: {
+    className: "prose dark:prose-invert lg:prose-lg p-2",
+  },
+  render: ({ text, className }) => <div className={className}>{text}</div>,
 }
 
 export function withExamples(config: Partial<OberonConfig>) {

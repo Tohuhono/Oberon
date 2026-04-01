@@ -1,4 +1,4 @@
-import NextImage from "next/image"
+import NextImage from "next/image.js"
 import { ImageIcon } from "@radix-ui/react-icons"
 import type { OberonComponent, OberonImage } from "@oberoncms/core"
 

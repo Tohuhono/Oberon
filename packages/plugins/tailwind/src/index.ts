@@ -1,12 +1,15 @@
 import "server-cli-only"
 
 import { createHash } from "crypto"
+import { createRequire } from "module"
+import { fileURLToPath } from "url"
 import {
   NotImplementedError,
   type JsonValue,
   type OberonPage,
   type OberonPlugin,
   type OberonPluginAdapter,
+  ResponseError,
 } from "@oberoncms/core"
 import { walkAsyncStep } from "walkjs"
 import { name, version } from "../package.json" with { type: "json" }
@@ -18,10 +21,13 @@ type TailwindState = {
 
 const namespace = name
 const stateKey = "state"
+const require = createRequire(import.meta.url)
 const tailwindEntry = [
   '@import "tailwindcss/theme" theme(reference);',
   '@import "tailwindcss/utilities";',
 ].join("\n")
+
+type CompilerModule = typeof import("./compiler")
 
 function isStringArray(value: unknown): value is string[] {
   return (
@@ -55,6 +61,27 @@ export function getTailwindAssetKey(hash: string) {
 
 function isUnavailable(error: unknown) {
   return error instanceof NotImplementedError
+}
+
+function hasBuildCss(value: unknown): value is CompilerModule {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "buildCss" in value &&
+    typeof value.buildCss === "function"
+  )
+}
+
+function toResponseError(error: unknown, message: string) {
+  if (error instanceof ResponseError) {
+    return error
+  }
+
+  if (error instanceof Error && error.message) {
+    return new ResponseError(`${message}: ${error.message}`)
+  }
+
+  return new ResponseError(message)
 }
 
 export async function extractTailwindClasses(data: unknown) {
@@ -125,10 +152,16 @@ async function getOptionalAsset(
 
 async function buildCss(classes: string[]) {
   const extension = import.meta.url.endsWith(".ts") ? "ts" : "js"
-  const moduleUrl = new URL(`./compiler.${extension}`, import.meta.url)
-  const { buildCss } = await import(moduleUrl.href)
+  const compilerPath = fileURLToPath(
+    new URL(`./compiler.${extension}`, import.meta.url),
+  )
+  const compiler = require(compilerPath)
 
-  return buildCss(tailwindEntry, classes)
+  if (!hasBuildCss(compiler)) {
+    throw new Error("Failed to load Tailwind compiler module")
+  }
+
+  return compiler.buildCss(tailwindEntry, classes)
 }
 
 function getHash(classes: string[]) {
@@ -274,28 +307,36 @@ export const plugin: OberonPlugin = (adapter) => ({
   },
   adapter: {
     prebuild: async () => {
-      await adapter.prebuild()
-      await reconcileTailwindState(adapter)
+      try {
+        await adapter.prebuild()
+        await reconcileTailwindState(adapter)
+      } catch (error) {
+        throw toResponseError(error, "Failed to prepare Tailwind styles")
+      }
     },
     updatePageData: async (page) => {
-      const classes = await getAllPublishedClasses(adapter, page)
-      const hash = classes.length ? getHash(classes) : null
-      const state = await getState(adapter)
+      try {
+        const classes = await getAllPublishedClasses(adapter, page)
+        const hash = classes.length ? getHash(classes) : null
+        const state = await getState(adapter)
 
-      const needsPersist =
-        classes.join("\n") !== state.classes.join("\n") ||
-        hash !== state.activeHash ||
-        (!!hash && !(await getAsset(adapter, hash)))
+        const needsPersist =
+          classes.join("\n") !== state.classes.join("\n") ||
+          hash !== state.activeHash ||
+          (!!hash && !(await getAsset(adapter, hash)))
 
-      const css = hash && needsPersist ? await buildCss(classes) : null
+        const css = hash && needsPersist ? await buildCss(classes) : null
 
-      await adapter.updatePageData(page)
+        await adapter.updatePageData(page)
 
-      if (!needsPersist) {
-        return
+        if (!needsPersist) {
+          return
+        }
+
+        await persistState(adapter, classes, hash, css)
+      } catch (error) {
+        throw toResponseError(error, "Failed to update Tailwind styles")
       }
-
-      await persistState(adapter, classes, hash, css)
     },
   },
 })

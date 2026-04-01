@@ -1,7 +1,11 @@
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { fromPartial, test } from "@dev/vitest"
-import { NotImplementedError, type OberonPage } from "@oberoncms/core"
+import {
+  NotImplementedError,
+  ResponseError,
+  type OberonPage,
+} from "@oberoncms/core"
 import {
   createPluginTest,
   createStorageAdapterFactory,
@@ -140,6 +144,27 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   )
 
   tailwindTest(
+    "publishes the playground text example classes without throwing",
+    async ({ expect, adapter, plugin }) => {
+      const page = createPage("prose dark:prose-invert lg:prose-lg p-1")
+
+      await expect(
+        plugin.adapter?.updatePageData?.(page),
+      ).resolves.toBeUndefined()
+
+      const state = await getState(adapter)
+
+      expect(state?.classes).toEqual([
+        "dark:prose-invert",
+        "lg:prose-lg",
+        "p-1",
+        "prose",
+      ])
+      expect(state?.activeHash).toHaveLength(64)
+    },
+  )
+
+  tailwindTest(
     "reconciles missing assets during prebuild",
     async ({ expect, adapter, plugin }) => {
       await plugin.adapter?.updatePageData?.(createPage("underline"))
@@ -241,6 +266,29 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
         .GET?.(new Request("https://oberon.invalid/cms/api/tailwind") as never)
 
       expect(response?.status).toBe(404)
+    },
+  )
+
+  tailwindTest(
+    "surfaces generic Tailwind update failures as response errors",
+    async ({ expect }) => {
+      const plugin = tailwindPlugin(
+        fromPartial({
+          updatePageData: async () => {},
+          getAllPages: async () => [{ key: "/" }],
+          getPageData: async () => createPage("underline").data,
+          getKV: async () => null,
+          putKV: async () => {
+            throw new Error("boom")
+          },
+        }),
+      )
+
+      await expect(
+        plugin.adapter?.updatePageData?.(createPage("underline")),
+      ).rejects.toThrow(
+        new ResponseError("Failed to update Tailwind styles: boom"),
+      )
     },
   )
 })

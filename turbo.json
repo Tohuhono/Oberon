@@ -30,13 +30,12 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
-        ".oberon/db/**",
+        "!.oberon/**",
         "!.turbo/**",
         "!.next/**",
-        "!.playwright/**",
-        "!.oberon/db/e2e*"
+        "!.playwright/**"
       ],
-      "outputs": [".oberon/db/**", "!.oberon/db/e2e*"],
+      "outputs": [".oberon/**"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -64,8 +63,7 @@
         "plugins/**",
         "!.turbo/**",
         "!.next/**",
-        "!.playwright/**",
-        "!.oberon/db/e2e*"
+        "!.playwright/**"
       ],
       "outputs": [".next/**", "dist/**", "!.next/cache/**", "!.next/types/**"],
       "env": [

@@ -149,9 +149,6 @@ importers:
 
   apps/playground:
     dependencies:
-      '@datacom-digital/ui-sample-components':
-        specifier: ^0.3.3
-        version: 0.3.3(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
@@ -663,6 +660,9 @@ importers:
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../core
+      '@oberoncms/sqlite':
+        specifier: workspace:*
+        version: link:../sqlite
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@electric-sql/pglite@0.4.2)(@libsql/client@0.17.0(bufferutil@4.1.0))(@types/pg@8.16.0)(@vercel/postgres@0.10.0)(pg@8.18.0)

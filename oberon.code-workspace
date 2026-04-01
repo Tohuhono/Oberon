@@ -78,5 +78,6 @@
       "/^git push\\b.*(?:\\s|^)--force(?:\\s|$)/": false,
       "printf": true,
     },
+    "tailwindCSS.experimental.configFile": "packages/oberoncms/core/tailwind.css",
   },
 }

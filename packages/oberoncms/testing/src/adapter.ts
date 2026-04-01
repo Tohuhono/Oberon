@@ -32,7 +32,17 @@ export function createAdapterTests({
     async ({}, { onCleanup }) => getAdapter(onCleanup),
   )
 
-  extendedTest.describe(description, () => {
-    testKV(extendedTest)
+  describeAdapterTests({ description, test: extendedTest })
+}
+
+export function describeAdapterTests({
+  description,
+  test,
+}: {
+  description: string
+  test: AdapterTestAPI
+}) {
+  test.describe(description, () => {
+    testKV(test)
   })
 }
