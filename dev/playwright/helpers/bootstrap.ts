@@ -35,7 +35,7 @@ async function pollDevelopmentOtpEntry({
     .poll(
       async () => {
         token = parseDevelopmentOtpEntry(await readLogs())
-        return token
+        return token !== null
       },
       {
         timeout: 20_000,
@@ -43,13 +43,13 @@ async function pollDevelopmentOtpEntry({
         message: `Expected development OTP token for ${email}`,
       },
     )
-    .toMatch(/^\d{6}$/)
+    .toBe(true)
 
-  if (token) {
-    return token
+  if (!token) {
+    throw new Error(`Timed out waiting 20000ms for OTP token for ${email}`)
   }
 
-  throw new Error(`Timed out waiting 20000ms for OTP token for ${email}`)
+  return token
 }
 
 async function completeSignIn(page: Page) {
