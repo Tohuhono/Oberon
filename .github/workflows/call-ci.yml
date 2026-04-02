@@ -106,7 +106,7 @@ jobs:
       - name: Install
         run: pnpm i
       - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: E2E Tests
         run: pnpm test:e2e
       - name: Publish Playwright report
@@ -151,7 +151,7 @@ jobs:
       - name: Install
         run: pnpm i
       - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: COA Tests
         run: pnpm test:coa
 

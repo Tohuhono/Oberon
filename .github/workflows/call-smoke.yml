@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i
       - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: Run Smoke (deployed)
         run: pnpm test:smoke -- --project "${{ inputs.project }}"
         env:
