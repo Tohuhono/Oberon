@@ -20,6 +20,7 @@ const BASE_DB = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   ".oberon/db/oberon.db",
 )
+const AUTH_SECRET = "playwright-test-auth-secret"
 
 async function readNextjsLogs() {
   try {
@@ -51,6 +52,7 @@ export default defineConfig({
       MASTER_EMAIL: "test@tohuhono.com",
       SQLITE_FILE: `file:${APP_DB_PATH}`,
       AUTH_TRUST_HOST: "true",
+      AUTH_SECRET,
     },
   },
   use: {
