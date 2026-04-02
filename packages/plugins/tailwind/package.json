@@ -28,8 +28,7 @@
     "LICENSE*"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./compiler": "./dist/compiler.js"
+    ".": "./dist/index.js"
   },
   "scripts": {
     "build": "vite build",

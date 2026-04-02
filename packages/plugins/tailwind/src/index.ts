@@ -1,8 +1,6 @@
 import "server-cli-only"
 
 import { createHash } from "crypto"
-import { createRequire } from "module"
-import { fileURLToPath } from "url"
 import {
   NotImplementedError,
   type JsonValue,
@@ -13,6 +11,7 @@ import {
 } from "@oberoncms/core"
 import { walkAsyncStep } from "walkjs"
 import { name, version } from "../package.json" with { type: "json" }
+import { buildCss } from "./compiler"
 
 type TailwindState = {
   activeHash: string | null
@@ -21,13 +20,6 @@ type TailwindState = {
 
 const namespace = name
 const stateKey = "state"
-const require = createRequire(import.meta.url)
-const tailwindEntry = [
-  '@import "tailwindcss/theme" theme(reference);',
-  '@import "tailwindcss/utilities";',
-].join("\n")
-
-type CompilerModule = typeof import("./compiler")
 
 function isStringArray(value: unknown): value is string[] {
   return (
@@ -61,15 +53,6 @@ export function getTailwindAssetKey(hash: string) {
 
 function isUnavailable(error: unknown) {
   return error instanceof NotImplementedError
-}
-
-function hasBuildCss(value: unknown): value is CompilerModule {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "buildCss" in value &&
-    typeof value.buildCss === "function"
-  )
 }
 
 function toResponseError(error: unknown, message: string) {
@@ -148,20 +131,6 @@ async function getOptionalAsset(
 
     throw error
   }
-}
-
-async function buildCss(classes: string[]) {
-  const extension = import.meta.url.endsWith(".ts") ? "ts" : "js"
-  const compilerPath = fileURLToPath(
-    new URL(`./compiler.${extension}`, import.meta.url),
-  )
-  const compiler = require(compilerPath)
-
-  if (!hasBuildCss(compiler)) {
-    throw new Error("Failed to load Tailwind compiler module")
-  }
-
-  return compiler.buildCss(tailwindEntry, classes)
 }
 
 function getHash(classes: string[]) {
@@ -252,7 +221,9 @@ async function reconcileTailwindState(
     } satisfies TailwindState
   }
 
-  await persistState(adapter, classes, hash, await buildCss(classes))
+  const css = await buildCss(classes)
+
+  await persistState(adapter, classes, hash, css)
 
   return {
     activeHash: hash,

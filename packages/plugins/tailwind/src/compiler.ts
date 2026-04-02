@@ -25,9 +25,14 @@ async function loadTailwindNode() {
   return module
 }
 
-export async function buildCss(entry: string, classes: string[]) {
+const tailwindEntry = [
+  '@import "tailwindcss/theme" theme(reference);',
+  '@import "tailwindcss/utilities";',
+].join("\n")
+
+export async function buildCss(classes: string[]) {
   const { compile } = await loadTailwindNode()
-  const compiler = await compile(entry, {
+  const compiler = await compile(tailwindEntry, {
     base: process.cwd(),
     onDependency() {},
   })

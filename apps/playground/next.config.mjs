@@ -6,6 +6,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  serverExternalPackages: ["@tailwindcss/node", "lightningcss"],
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
