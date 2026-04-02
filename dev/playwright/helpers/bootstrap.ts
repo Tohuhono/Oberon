@@ -110,15 +110,13 @@ export async function completeUiLoginWithOtp({
   const initialLogs = await getLog()
   const initialLogLength = initialLogs.length
 
-  const signInResponsePromise = page.waitForResponse(
-    (response) =>
-      response.request().method() === "POST" &&
-      response.url().includes("/cms/api/auth/signin/email"),
-  )
+  const completeSignInButton = page.getByRole("button", {
+    name: "Complete Sign in",
+  })
 
   await page.getByRole("button", { name: "Sign in" }).click()
 
-  await expect(await signInResponsePromise).toBeOK()
+  await expect(completeSignInButton).toBeVisible()
 
   const token = await pollDevelopmentOtpEntry({
     email,
