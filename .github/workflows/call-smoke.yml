@@ -63,7 +63,7 @@ jobs:
         if: ${{ failure() }}
         uses: ./.github/actions/deploy-playwright-report
         with:
-          artifact_name: playwright-smoke-report
+          artifact_name: playwright-smoke-report-${{ inputs.project != '' && inputs.project || 'default' }}
           artifact_path: dev/playwright/.playwright/report
           report_dir: dev/playwright/.playwright/report
           summary_label: View report for ${{ inputs.project }}

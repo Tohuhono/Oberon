@@ -27,6 +27,7 @@ runs:
         name: ${{ inputs.artifact_name }}
         if-no-files-found: ignore
         path: ${{ inputs.artifact_path }}
+        overwrite: true
 
     - name: Deploy Playwright report
       id: deploy

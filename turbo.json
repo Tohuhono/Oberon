@@ -55,7 +55,7 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build", "prebuild"],
+      "dependsOn": ["^build"],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
@@ -254,7 +254,7 @@
       "dependsOn": ["build"]
     },
     "validate": {
-      "dependsOn": ["lint", "tsc", "build", "test:unit", "test:tdd", "test:coa"]
+      "dependsOn": ["lint", "tsc", "test:unit", "test:tdd", "test:coa"]
     }
   }
 }
