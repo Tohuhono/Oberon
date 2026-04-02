@@ -106,7 +106,9 @@ Current prebuild behavior in core:
 
 1. run plugin `prebuild`
 2. seed welcome page when storage is empty
-3. export Tailwind class usage to `.oberon/tailwind/tailwind.classes`
+
+Dynamic Tailwind extraction is now handled by `@oberoncms/plugin-tailwind` when
+that plugin is installed.
 
 Turbo tasks wire this into `build` via `dependsOn: ["prebuild", ...]`.
 

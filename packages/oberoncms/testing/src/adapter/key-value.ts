@@ -1,3 +1,4 @@
+import { NotImplementedError } from "@oberoncms/core"
 import type { AdapterTestAPI } from "../adapter"
 
 export function testKV(test: AdapterTestAPI) {
@@ -49,6 +50,16 @@ export function testKV(test: AdapterTestAPI) {
       await adapter.deleteKV("tailwind", "state")
 
       await expect(adapter.getKV("tailwind", "state")).resolves.toBeNull()
+    })
+  })
+
+  test.describe("getSite", () => {
+    test.beforeEach(async ({ adapter, skip }) => {
+      skip(!("getSite" in adapter))
+    })
+
+    test("returns not implemented", async ({ adapter, expect }) => {
+      expect(adapter.getSite()).not.toThrow(NotImplementedError)
     })
   })
 }

@@ -32,7 +32,6 @@
     "./adapter": "./dist/adapter.js",
     "./render": "./dist/render.js",
     "./editor": "./dist/editor.js",
-    "./testing": "./dist/testing.js",
     "./provider": "./dist/provider.js",
     "./tailwind.css": "./tailwind.css"
   },

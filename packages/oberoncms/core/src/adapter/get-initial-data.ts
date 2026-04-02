@@ -5,6 +5,7 @@ export function getInitialData(): OberonPage {
     key: "/",
     data: {
       content: [
+        { type: "Welcome", props: { id: "Welcome-1" } },
         { type: "Text", props: { id: "Text-1", text: "Welcome to OberonCMS" } },
       ],
       root: { props: { title: "OberonCMS - Welcome" } },

@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i
       - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: Run Smoke (deployed)
         run: pnpm test:smoke -- --project "${{ inputs.project }}"
         env:
@@ -63,7 +63,7 @@ jobs:
         if: ${{ failure() }}
         uses: ./.github/actions/deploy-playwright-report
         with:
-          artifact_name: playwright-smoke-report
+          artifact_name: playwright-smoke-report-${{ inputs.project != '' && inputs.project || 'default' }}
           artifact_path: dev/playwright/.playwright/report
           report_dir: dev/playwright/.playwright/report
           summary_label: View report for ${{ inputs.project }}

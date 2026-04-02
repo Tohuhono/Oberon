@@ -2,48 +2,43 @@ import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { createClient } from "@libsql/client"
-import { fromPartial, test } from "@dev/vitest"
-import { createAdapterTests } from "@oberoncms/testing"
+import { fromPartial } from "@dev/vitest"
+import type { OberonPluginAdapter } from "@oberoncms/core"
 import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
+import * as schema from "@oberoncms/sqlite/schema"
 import { drizzle } from "drizzle-orm/libsql"
-import * as schema from "./db/schema"
 
-const rootDirectory = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../..",
-)
+type OnCleanup = (callback: () => Promise<void>) => void
 
 const migrationsFolder = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  "./db/migrations",
+  "../../sqlite/src/db/migrations",
 )
 
-const sqliteFile = resolve(rootDirectory, ".tmp/turso-plugin-unit-tests.db")
-
-createAdapterTests({
-  description: "turso plugin",
-  test,
-  getAdapter: async (onCleanup) => {
+export function createStorageAdapterFactory({
+  sqliteFile,
+}: {
+  sqliteFile: string
+}) {
+  return async (onCleanup: OnCleanup): Promise<OberonPluginAdapter> => {
     await mkdir(dirname(sqliteFile), { recursive: true })
     await rm(sqliteFile, { force: true })
 
     const client = createClient({ url: `file:${sqliteFile}` })
     const db = drizzle(client, { schema })
 
-    await migrate(db, { migrationsFolder })
+    if (migrationsFolder) {
+      await migrate(db, { migrationsFolder })
+    }
 
     onCleanup(async () => {
       await client.close()
       await rm(sqliteFile, { force: true })
     })
 
-    const adapter = getAdapter(() => db)
-
     return fromPartial({
       prebuild: async () => {},
-      getKV: adapter.getKV,
-      putKV: adapter.putKV,
-      deleteKV: adapter.deleteKV,
+      ...getAdapter(() => db),
     })
-  },
-})
+  }
+}

@@ -49,6 +49,13 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 - Co-located siblings: `src/foo.test.ts` next to `src/foo.ts`
 - One `describe` per module, `it` per behaviour
 - No mocking framework dependencies — keep tests simple and direct
+- For adapter or adapter-like plugin tests, prefer the shared fixtures from
+  `@oberoncms/testing` before inventing package-local harnesses
+  - use `createAdapterTests(...)` for canonical adapter contract coverage
+  - use `createAdapterTest(test)` or `createPluginTest(test)` when you need
+    package-specific cases on top of a shared adapter fixture
+  - only add custom local fixtures for behavior the shared adapter fixtures
+    cannot express cleanly
 - Do not export functions solely to enable testing — unexported functions are
   implementation details; test only via the public API
 - Unit-test packages expose `test:unit` (`vitest run`) and `test:watch`

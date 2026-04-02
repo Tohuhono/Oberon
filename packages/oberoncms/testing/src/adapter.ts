@@ -1,5 +1,5 @@
 import { fromPartial, type test as vitest } from "@dev/vitest"
-import type { OberonPluginAdapter } from "../lib/dtd"
+import type { OberonPluginAdapter } from "@oberoncms/core"
 import { testKV } from "./adapter/key-value"
 
 export function createAdapterTest(baseTest: typeof vitest) {
@@ -28,12 +28,21 @@ export function createAdapterTests({
   const extendedTest = test.extend(
     "adapter",
     { scope: "worker" },
-
     // eslint-disable-next-line no-empty-pattern
     async ({}, { onCleanup }) => getAdapter(onCleanup),
   )
 
-  extendedTest.describe(description, () => {
-    testKV(extendedTest)
+  describeAdapterTests({ description, test: extendedTest })
+}
+
+export function describeAdapterTests({
+  description,
+  test,
+}: {
+  description: string
+  test: AdapterTestAPI
+}) {
+  test.describe(description, () => {
+    testKV(test)
   })
 }

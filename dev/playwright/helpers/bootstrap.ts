@@ -6,10 +6,6 @@ import { expect, type Page } from "@playwright/test"
 const LOGIN_PATH = "/cms/login"
 const CALLBACK_PATH = "/cms/pages"
 
-function sleep(milliseconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds))
-}
-
 function parseDevelopmentOtpEntry(logs: string): string | null {
   const strippedLog = stripVTControlCharacters(logs)
   const tokenPattern = /token:\s*["']?(\d{6})["']?/g
@@ -33,20 +29,27 @@ async function pollDevelopmentOtpEntry({
   email: string
   readLogs: () => Promise<string>
 }) {
-  const deadline = Date.now() + 20_000
+  let token: string | null = null
 
-  while (Date.now() < deadline) {
-    const logs = await readLogs()
-    const entry = parseDevelopmentOtpEntry(logs)
+  await expect
+    .poll(
+      async () => {
+        token = parseDevelopmentOtpEntry(await readLogs())
+        return token !== null
+      },
+      {
+        timeout: 20_000,
+        intervals: [250, 500, 1_000],
+        message: `Expected development OTP token for ${email}`,
+      },
+    )
+    .toBe(true)
 
-    if (entry) {
-      return entry
-    }
-
-    await sleep(500)
+  if (!token) {
+    throw new Error(`Timed out waiting 20000ms for OTP token for ${email}`)
   }
 
-  throw new Error(`Timed out waiting 20000ms for OTP token for ${email}`)
+  return token
 }
 
 async function completeSignIn(page: Page) {
@@ -107,7 +110,13 @@ export async function completeUiLoginWithOtp({
   const initialLogs = await getLog()
   const initialLogLength = initialLogs.length
 
+  const completeSignInButton = page.getByRole("button", {
+    name: "Complete Sign in",
+  })
+
   await page.getByRole("button", { name: "Sign in" }).click()
+
+  await expect(completeSignInButton).toBeVisible()
 
   const token = await pollDevelopmentOtpEntry({
     email,

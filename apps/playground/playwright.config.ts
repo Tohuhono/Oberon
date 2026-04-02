@@ -1,7 +1,6 @@
 import path from "node:path"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
-import { randomBytes } from "crypto"
 import { base, defineConfig } from "@dev/playwright"
 import {
   authProject,
@@ -14,8 +13,14 @@ const PLAYWRIGHT_DIR = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   ".playwright",
 )
+
 const APP_LOG_PATH = path.resolve(PLAYWRIGHT_DIR, "logs/app.log")
-const AUTH_SECRET = `${randomBytes(64).toString("hex")}`
+const APP_DB_PATH = path.resolve(PLAYWRIGHT_DIR, "db/oberon.db")
+const BASE_DB = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  ".oberon/db/oberon.db",
+)
+const AUTH_SECRET = "playwright-test-auth-secret"
 
 async function readNextjsLogs() {
   try {
@@ -32,7 +37,9 @@ export default defineConfig({
     command: [
       `rm -f '${APP_LOG_PATH}'`,
       `mkdir -p '${path.dirname(APP_LOG_PATH)}'`,
-      `pnpm build && pnpm start > '${APP_LOG_PATH}' 2>&1`,
+      `mkdir -p '${path.dirname(APP_DB_PATH)}'`,
+      `cp -r '${BASE_DB}'* '${path.dirname(APP_DB_PATH)}'`,
+      `pnpm start > '${APP_LOG_PATH}' 2>&1`,
     ].join(" && "),
     url: "http://localhost:3210",
     reuseExistingServer: false,
@@ -43,6 +50,7 @@ export default defineConfig({
       USE_DEVELOPMENT_DATABASE: "true",
       USE_DEVELOPMENT_SEND: "true",
       MASTER_EMAIL: "test@tohuhono.com",
+      SQLITE_FILE: `file:${APP_DB_PATH}`,
       AUTH_TRUST_HOST: "true",
       AUTH_SECRET,
     },

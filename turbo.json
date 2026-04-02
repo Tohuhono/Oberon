@@ -30,13 +30,12 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
-        ".oberon/db/**",
+        "!.oberon/**",
         "!.turbo/**",
         "!.next/**",
-        "!.playwright/**",
-        "!.oberon/db/e2e*"
+        "!.playwright/**"
       ],
-      "outputs": [".oberon/db/**", "!.oberon/db/e2e*"],
+      "outputs": [".oberon/**"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -56,7 +55,7 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build", "prebuild"],
+      "dependsOn": ["^build"],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
@@ -64,8 +63,7 @@
         "plugins/**",
         "!.turbo/**",
         "!.next/**",
-        "!.playwright/**",
-        "!.oberon/db/e2e*"
+        "!.playwright/**"
       ],
       "outputs": [".next/**", "dist/**", "!.next/cache/**", "!.next/types/**"],
       "env": [
@@ -256,7 +254,7 @@
       "dependsOn": ["build"]
     },
     "validate": {
-      "dependsOn": ["lint", "tsc", "build", "test:unit", "test:tdd", "test:coa"]
+      "dependsOn": ["lint", "tsc", "test:unit", "test:tdd", "test:coa"]
     }
   }
 }

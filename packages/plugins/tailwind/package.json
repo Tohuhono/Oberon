@@ -1,9 +1,9 @@
 {
-  "name": "@oberoncms/plugin-development",
-  "version": "0.7.5",
+  "name": "@oberoncms/plugin-tailwind",
+  "version": "0.17.5",
   "author": "Tohuhono ltd",
   "license": "MIT",
-  "description": "A development plugin for OberonCMS",
+  "description": "A dynamic Tailwind utilities plugin for OberonCMS",
   "keywords": [
     "oberon",
     "oberoncms",
@@ -11,12 +11,13 @@
     "nextjs",
     "react",
     "adapter",
-    "plugin"
+    "plugin",
+    "tailwind"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
-    "directory": "packages/plugins/development"
+    "directory": "packages/plugins/tailwind"
   },
   "type": "module",
   "files": [
@@ -32,7 +33,6 @@
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
-    "generate:migrations": "drizzle-kit generate:sqlite",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "test:unit": "vitest run",
@@ -45,31 +45,26 @@
     "access": "public"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.0",
-    "@libsql/core": "^0.17.0",
     "@oberoncms/core": "workspace:*",
-    "@oberoncms/sqlite": "workspace:*",
-    "drizzle-orm": "^0.45.1",
-    "next": "^16.1.6",
-    "server-cli-only": "^0.3.2"
+    "@tailwindcss/node": "^4.2.1",
+    "server-cli-only": "^0.3.2",
+    "walkjs": "^6.0.1"
   },
   "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@auth/core": "^0.37.4",
     "@dev/eslint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
+    "@oberoncms/sqlite": "workspace:*",
     "@oberoncms/testing": "workspace:*",
-    "@puckeditor/core": "^0.21.1",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "drizzle-kit": "^0.31.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
