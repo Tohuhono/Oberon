@@ -1,5 +1,12 @@
 # @dev/eslint
 
+## 0.1.2
+
+### Patch Changes
+
+- 138dc59: Refine Playwright CMS E2E fixture architecture and route Next/React
+  lint rules away from Playwright spec files.
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,31 @@
 # @oberon/ui
 
+## 0.14.6
+
+### Patch Changes
+
+- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead
+  of failing repo-wide test runs.
+- 28aa7e5: Add aria-labels to pages and users components for E2E testability;
+  fix LocalDate hydration using useClientState; remove debug console logs from
+  development and turso plugins; add useClientState hook to utils.
+- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for
+  focused AI and baseline unit-test slices.
+- 237d393: Simplify local e2e publishing by using root recursive workspace
+  publish to Verdaccio and removing extra setup complexity. Also remove
+  package-level provenance defaults from publish configs so local recursive
+  publish works in non-CI environments, while release provenance remains
+  controlled by CI environment settings. Modernize GitHub Actions Node setup to
+  use setup-node + Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio`
+  while keeping the create-oberon-app scaffold runtime in `/opt/coa`.
+- Updated dependencies [a73560b]
+- Updated dependencies [237d393]
+- Updated dependencies [28aa7e5]
+- Updated dependencies [36a3b7e]
+- Updated dependencies [237d393]
+- Updated dependencies [37488ec]
+  - @tohuhono/utils@0.14.1
+
 ## 0.14.5
 
 ### Patch Changes

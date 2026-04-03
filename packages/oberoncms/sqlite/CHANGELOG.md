@@ -1,5 +1,37 @@
 # @oberoncms/sqlite
 
+## 0.7.6
+
+### Patch Changes
+
+- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead
+  of failing repo-wide test runs.
+- 48de893: Add the key value store contract slice and sqlite persistence path,
+  including the sqlite KV table, adapter get/put support, shared adapter KV test
+  scaffolding, development-plugin coverage via prebuild, and migration path
+  resolution updates for database plugins.
+- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for
+  focused AI and baseline unit-test slices.
+- 237d393: Simplify local e2e publishing by using root recursive workspace
+  publish to Verdaccio and removing extra setup complexity. Also remove
+  package-level provenance defaults from publish configs so local recursive
+  publish works in non-CI environments, while release provenance remains
+  controlled by CI environment settings. Modernize GitHub Actions Node setup to
+  use setup-node + Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio`
+  while keeping the create-oberon-app scaffold runtime in `/opt/coa`.
+- Updated dependencies [a73560b]
+- Updated dependencies [8109ea8]
+- Updated dependencies [b654991]
+- Updated dependencies [8109ea8]
+- Updated dependencies [a4578f6]
+- Updated dependencies [a011a89]
+- Updated dependencies [28aa7e5]
+- Updated dependencies [48de893]
+- Updated dependencies [aa5371a]
+- Updated dependencies [36a3b7e]
+- Updated dependencies [237d393]
+  - @oberoncms/core@0.18.0
+
 ## 0.7.5
 
 ### Patch Changes

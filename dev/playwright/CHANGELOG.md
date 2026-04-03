@@ -1,5 +1,27 @@
 # @dev/playwright
 
+## 0.0.3
+
+### Patch Changes
+
+- b654991: Implement issue #294 E2E auth lane workflow with shared Playwright
+  auth helpers, add COA login/provenance lane coverage and UI test commands, and
+  fix email callback/session handling required for deterministic UI sign-in
+  completion.
+- 138dc59: Refine Playwright CMS E2E fixture architecture and route Next/React
+  lint rules away from Playwright spec files.
+- 138dc59: Share fixed Playwright lane constants across playground and COA,
+  improve OTP token parsing reliability from dev logs, and align E2E lane
+  coverage for auth, login, CMS, and smoke flows.
+- a011a89: Make the shared CMS Playwright suite explicit in `dev/playwright`,
+  keep the existing `@cms` lane as the shared authenticated behavior lane, add a
+  real playground `@tdd` suite for red/green work, expose dedicated TDD UI
+  commands, keep opt-in `@tdd` specs separate from shared CMS contract specs,
+  and document the canonical root validation, completion gate, and grep workflow
+  for agents.
+- 138dc59: Standardise Playwright HTML output on `.playwright/report` and add
+  shared CI report publishing so failed runs expose a hosted Vercel report link.
+
 ## 0.0.2
 
 ### Patch Changes

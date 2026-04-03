@@ -1,5 +1,76 @@
 # create-oberon-app
 
+## 0.10.3
+
+### Patch Changes
+
+- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead
+  of failing repo-wide test runs.
+- 8109ea8: Add a dynamic Tailwind plugin, expose public plugin settings through
+  the core adapter, and scaffold the Tailwind plugin into new apps.
+- b654991: Implement issue #294 E2E auth lane workflow with shared Playwright
+  auth helpers, add COA login/provenance lane coverage and UI test commands, and
+  fix email callback/session handling required for deterministic UI sign-in
+  completion.
+- c80fd22: Fix e2e test creating multiple SQLite databases by pinning
+  SQLITE_FILE to an absolute path during scaffold build and start phases
+- b654991: Stabilize Verdaccio provenance tests by writing Verdaccio HTTP logs
+  to the mounted `/logs/verdaccio.log` path, clearing stale local
+  `.playwright/logs/*.log` files before each container run, and making
+  metadata/proxy log assertions tolerant to quote/method formatting differences
+  while preserving fallback/proxy guarantees.
+- a4578f6: Respect gitignore during shared Playwright test discovery, simplify
+  shared auth redirect handling, and align the create-oberon-app test container
+  with the shared Playwright defaults used across the repo.
+- a011a89: Separate generated Tailwind artifacts into `.oberon/tailwind`, move
+  the development SQLite database into `.oberon/db`, align the recipe and
+  scaffold test container with the new paths, and tighten shared Turbo and
+  Vitest defaults for more stable local and CI runs.
+- 237d393: Replace the legacy create-oberon-app e2e lane with a Podman-based
+  `test:coa` flow that builds a dedicated runner image (`podman build` with
+  cacheable layers), starts Verdaccio for the full container lifetime, publishes
+  workspace packages to that registry, scaffolds via
+  `pnpm dlx create-oberon-app`, and runs the smoke test against the generated
+  app.
+
+  Keep workspace files unmounted while mounting only a named pnpm store volume
+  for faster repeated dependency resolution across runs, and reset Verdaccio
+  storage at startup so the local registry is always clean and same-version
+  workspace packages can be republished each e2e run.
+
+  Add `@tohuhono/utils/exec-async` and `@tohuhono/utils/wait-for-server` helper
+  exports and use them in the COA global setup harness.
+
+- c80fd22: Improve e2e global setup with cross-platform port killing (macOS +
+  Linux), deterministic workspace-local runtime paths, safer teardown on setup
+  failure, waitForServer progress logging, and Verdaccio startup hardening.
+- 48de893: Add the key value store contract slice and sqlite persistence path,
+  including the sqlite KV table, adapter get/put support, shared adapter KV test
+  scaffolding, development-plugin coverage via prebuild, and migration path
+  resolution updates for database plugins.
+- 138dc59: Share fixed Playwright lane constants across playground and COA,
+  improve OTP token parsing reliability from dev logs, and align E2E lane
+  coverage for auth, login, CMS, and smoke flows.
+- c80fd22: Move all e2e tests to a separate parallel CI job, removing them from
+  `pnpm check` to speed up the main validate pipeline.
+- bf90ed0: Fix package installation behavior in the app installer and align
+  supporting CI/template updates used by generated projects.
+- 237d393: Simplify local e2e publishing by using root recursive workspace
+  publish to Verdaccio and removing extra setup complexity. Also remove
+  package-level provenance defaults from publish configs so local recursive
+  publish works in non-CI environments, while release provenance remains
+  controlled by CI environment settings. Modernize GitHub Actions Node setup to
+  use setup-node + Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio`
+  while keeping the create-oberon-app scaffold runtime in `/opt/coa`.
+- a011a89: Make the shared CMS Playwright suite explicit in `dev/playwright`,
+  keep the existing `@cms` lane as the shared authenticated behavior lane, add a
+  real playground `@tdd` suite for red/green work, expose dedicated TDD UI
+  commands, keep opt-in `@tdd` specs separate from shared CMS contract specs,
+  and document the canonical root validation, completion gate, and grep workflow
+  for agents.
+- 8fad881: Align unit-test workflow with package-only runs by removing the
+  unused create-oberon-app Vitest config and package-level `test:unit` script.
+
 ## 0.10.2
 
 ### Patch Changes
