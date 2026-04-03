@@ -48,7 +48,8 @@
     "@oberoncms/core": "workspace:*",
     "@tailwindcss/node": "^4.2.1",
     "server-cli-only": "^0.3.2",
-    "walkjs": "^6.0.1"
+    "walkjs": "^6.0.1",
+    "zod": "^4.3.6"
   },
   "peerDependencies": {
     "react": "^19.2.0",

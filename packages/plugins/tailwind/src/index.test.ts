@@ -1,6 +1,7 @@
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { fromPartial, test } from "@dev/vitest"
+import type { OberonPluginAdapter } from "@oberoncms/core"
 import {
   NotImplementedError,
   ResponseError,
@@ -10,8 +11,9 @@ import {
   createPluginTest,
   createStorageAdapterFactory,
 } from "@oberoncms/testing"
+import { z } from "zod"
 import { name as pluginName } from "../package.json" with { type: "json" }
-import { getTailwindAssetKey, plugin as tailwindPlugin } from "./index"
+import { plugin as tailwindPlugin } from "./index"
 
 const rootDirectory = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -43,25 +45,29 @@ function createPage(className: string, key = "/"): OberonPage {
   }
 }
 
-async function getState(adapter: {
-  getKV: (namespace: string, key: string) => Promise<unknown>
-}) {
-  return (await adapter.getKV(pluginName, "state")) as {
-    activeHash: string | null
-    classes: string[]
-  } | null
+const tailwindStateSchema = z.object({
+  activeHash: z.string().nullable(),
+  classes: z.array(z.string()),
+})
+
+type TailwindState = z.infer<typeof tailwindStateSchema>
+
+async function getState(adapter: Pick<OberonPluginAdapter, "getKV">) {
+  const parsed = tailwindStateSchema.safeParse(
+    await adapter.getKV(pluginName, "state"),
+  )
+
+  return parsed.success ? (parsed.data satisfies TailwindState) : null
 }
 
 async function getAsset(
-  adapter: { getKV: (namespace: string, key: string) => Promise<unknown> },
+  adapter: Pick<OberonPluginAdapter, "getKV">,
   hash: string,
 ) {
-  return await adapter.getKV(pluginName, getTailwindAssetKey(hash))
+  return await adapter.getKV(pluginName, `asset:${hash}`)
 }
 
-async function getStylesheets(adapter: {
-  getKV: (namespace: string, key: string) => Promise<unknown>
-}) {
+async function getStylesheets(adapter: Pick<OberonPluginAdapter, "getKV">) {
   const state = await getState(adapter)
 
   if (!state?.activeHash) {
@@ -74,7 +80,7 @@ async function getStylesheets(adapter: {
     return []
   }
 
-  return [`/cms/api/tailwind?hash=${state.activeHash}`]
+  return [`/cms/api/tailwind/${state.activeHash}.css`]
 }
 
 const createAdapter = createStorageAdapterFactory({
@@ -99,7 +105,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     const state = await getState(adapter)
 
     if (state?.activeHash) {
-      await adapter.deleteKV(pluginName, getTailwindAssetKey(state.activeHash))
+      await adapter.deleteKV(pluginName, `asset:${state.activeHash}`)
     }
 
     await adapter.deleteKV(pluginName, "state")
@@ -127,14 +133,14 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       )
 
       await expect(getStylesheets(adapter)).resolves.toEqual([
-        `/cms/api/tailwind?hash=${state!.activeHash}`,
+        `/cms/api/tailwind/${state!.activeHash}.css`,
       ])
 
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))
         .GET?.(
           new Request(
-            `https://oberon.invalid/cms/api/tailwind?hash=${state!.activeHash}`,
+            `https://oberon.invalid/cms/api/tailwind/${state!.activeHash}.css`,
           ) as never,
         )
 
@@ -173,10 +179,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       const firstState = await getState(adapter)
 
-      await adapter.deleteKV(
-        pluginName,
-        getTailwindAssetKey(firstState!.activeHash!),
-      )
+      await adapter.deleteKV(pluginName, `asset:${firstState!.activeHash}`)
 
       await expect(getStylesheets(adapter)).resolves.toEqual([])
 
