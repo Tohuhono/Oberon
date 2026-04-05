@@ -1,0 +1,98 @@
+import { Callout } from "nextra/components"
+
+# Tailwind CSS Plugin
+
+A plugin that provides dynamic Tailwind CSS generation for OberonCMS. It
+automatically extracts Tailwind classes from your page content and generates
+optimized CSS on demand.
+
+## Installation
+
+```sh npm2yarn
+npm install @oberoncms/plugin-tailwind
+```
+
+```tsx filename="oberon/adapter.ts"
+import { initOberon } from "@oberoncms/core/adapter"
+import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
+
+export const { adapter, handler } = initOberon({
+  config,
+  plugins: [developmentPlugin, databasePlugin, tailwindPlugin, authPlugin],
+})
+```
+
+## How it works
+
+The Tailwind plugin monitors all `className` attributes in your page data and
+dynamically generates CSS for the classes you actually use. When pages are built
+or updated, the plugin:
+
+1. Extracts all Tailwind classes from the page content
+2. Generates a hash of the class list
+3. Compiles only those classes using Tailwind CSS
+4. Caches the CSS with long-term expiration
+
+This ensures your styles are always in sync with your content and you never
+ship unused CSS.
+
+## Setup
+
+If your project was created with `create-oberon-app`, Tailwind is already
+configured. In custom setups, ensure Tailwind CSS is configured in your Next.js
+app before enabling this plugin.
+
+## In your page render route
+
+The generated CSS is served from `/cms/api/tailwind/:hash.css`. Resolve the
+active hash from adapter settings, then render a stylesheet link:
+
+```tsx filename="app/(oberon)/[[...path]]/page.tsx"
+import { adapter } from "@/oberon/adapter"
+
+function getActiveHash(value: unknown) {
+  return typeof value === "object" &&
+    value !== null &&
+    "activeHash" in value &&
+    (typeof value.activeHash === "string" || value.activeHash === null)
+    ? value.activeHash
+    : null
+}
+
+async function getDynamicStylesheets() {
+  const activeHash = getActiveHash(
+    await adapter.getSetting("@oberoncms/plugin-tailwind", "state"),
+  )
+
+  return activeHash
+    ? [`/cms/api/tailwind/${encodeURIComponent(activeHash)}.css`]
+    : []
+}
+
+export default async function Page() {
+  const stylesheets = await getDynamicStylesheets()
+
+  return (
+    <>
+      {stylesheets.map((href) => (
+        <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
+      ))}
+      {/* ...render content... */}
+    </>
+  )
+}
+```
+
+<Callout type="info">
+  The plugin stores active hash and assets in adapter settings under
+  `@oberoncms/plugin-tailwind`.
+</Callout>
+
+## Performance
+
+The plugin uses content-based hashing and long-lived cache headers to ensure:
+
+- CSS is only regenerated when classes actually change
+- Browsers cache CSS indefinitely when the hash changes
+- No unused CSS in your stylesheets
+- Minimal overhead during page updates

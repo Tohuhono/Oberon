@@ -1,0 +1,109 @@
+# Handler Hooks
+
+Custom route handlers are provided through the `handlers` field on
+`OberonPlugin`:
+
+```tsx
+handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
+```
+
+Each key in that record maps to the first CMS path segment.
+
+## Dispatch model
+
+`initOberon` builds the final CMS handler by:
+
+- resolving the requested `path`
+- taking `path[0]` as the action key
+- looking up `handlers[action]`
+- selecting the method-specific handler such as `GET` or `POST`
+
+If no action is present, the response is `404`. If the action exists but does
+not implement the requested HTTP method, the response is `405`.
+
+## OberonHandler
+
+```tsx
+type OberonHandler<Params = undefined> = Params extends undefined
+  ? {
+      [key in OberonMethod]?: (req: NextRequest) => Promise<Response> | Response
+    }
+  : {
+      [key in OberonMethod]: (
+        req: NextRequest,
+        context: { params: Promise<Params> },
+      ) => Promise<Response>
+    }
+```
+
+For plugin handlers used in Oberon, the practical shape is the no-params form:
+
+- keys are HTTP methods
+- each method receives `NextRequest`
+- methods return `Response` or `Promise<Response>`
+
+## Minimal handler example
+
+```tsx
+import type { OberonPlugin } from "@oberoncms/core"
+
+export const plugin: OberonPlugin = () => ({
+  name: "health-plugin",
+  handlers: {
+    health: () => ({
+      GET: async () => Response.json({ ok: true }),
+    }),
+  },
+})
+```
+
+That handler is mounted under the `health` action key and is reached through the
+CMS catch-all route when the first path segment is `health`.
+
+## OberonAdapter passed to handler factories
+
+Handler factories receive the final `OberonAdapter`, not the partial plugin
+adapter. This is the higher-level runtime surface exported by `initOberon`.
+
+### Runtime and settings
+
+- `prebuild`
+- `getSetting`
+
+### Pages
+
+- `addPage`
+- `deletePage`
+- `getAllPages`
+- `getAllPaths`
+- `getPageData`
+- `publishPageData`
+
+### Images
+
+- `addImage`
+- `deleteImage`
+- `getAllImages`
+
+### Users and permissions
+
+- `addUser`
+- `deleteUser`
+- `getAllUsers`
+- `changeRole`
+- `can`
+
+### Site and migrations
+
+- `getConfig`
+- `migrateData`
+
+### Auth
+
+- `signIn`
+- `signOut`
+
+## When to use handlers vs adapter hooks
+
+Use `adapter` hooks when you are extending Oberon behavior itself. Use
+`handlers` when you need a CMS route endpoint keyed by a custom action segment.

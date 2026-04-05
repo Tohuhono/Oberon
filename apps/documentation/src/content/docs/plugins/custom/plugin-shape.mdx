@@ -1,0 +1,84 @@
+# Plugin Shape
+
+Custom plugins implement `OberonPlugin`:
+
+```tsx
+export type OberonPlugin = (adapter: OberonPluginAdapter) => {
+  name: string
+  version?: string
+  disabled?: boolean
+  handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
+  adapter?: Partial<OberonPluginAdapter>
+}
+```
+
+## Input
+
+The plugin function receives the current accumulated `OberonPluginAdapter`.
+
+That means a plugin can:
+
+- inspect capabilities already provided by earlier plugins
+- wrap or replace existing adapter methods
+- return handler factories that will later receive the final runtime `OberonAdapter`
+
+## Return value
+
+### `name`
+
+Required. Used for site config and plugin version reporting.
+
+### `version`
+
+Optional. Included in plugin version metadata.
+
+### `disabled`
+
+Optional. When `true`, the plugin is recorded in plugin metadata but its
+`adapter` and `handlers` are not merged.
+
+### `adapter`
+
+Optional. A partial `OberonPluginAdapter`. Only provide the methods your plugin
+owns or overrides.
+
+### `handlers`
+
+Optional. A map of route segment to handler factory. These are merged into the
+CMS handler tree and dispatched by the first path segment.
+
+## Merge behavior
+
+Plugins are initialised left to right by `initPlugins`.
+
+- returned `handlers` are merged into the accumulated handler map
+- returned `adapter` methods are merged into the accumulated adapter
+- later keys overwrite earlier keys
+- disabled plugins contribute version metadata only
+
+## Minimal shape
+
+```tsx
+import type { OberonPlugin } from "@oberoncms/core"
+
+export const plugin: OberonPlugin = () => ({
+  name: "my-plugin",
+})
+```
+
+## Plugin with adapter and handlers
+
+```tsx
+import type { OberonPlugin } from "@oberoncms/core"
+
+export const plugin: OberonPlugin = () => ({
+  name: "my-plugin",
+  adapter: {
+    signOut: async () => {},
+  },
+  handlers: {},
+})
+```
+
+Use [Adapter Hooks](/docs/plugins/custom/adapter-hooks) for the adapter surface
+and [Handler Hooks](/docs/plugins/custom/handler-hooks) for route handlers.

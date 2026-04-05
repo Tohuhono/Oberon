@@ -1,0 +1,66 @@
+import { Callout } from "nextra/components"
+
+# Development Plugin
+
+A plugin that provides local development defaults for database and email
+verification flows.
+
+The development plugin helps you run OberonCMS quickly without provisioning
+external infrastructure during local development.
+
+## Installation
+
+```sh npm2yarn
+npm install @oberoncms/plugin-development
+```
+
+```tsx filename="oberon/adapter.ts"
+import { initOberon } from "@oberoncms/core/adapter"
+import { authPlugin } from "@oberoncms/core/auth"
+import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
+import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
+import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
+
+import { config } from "./config"
+
+export const { adapter, handler } = initOberon({
+  config,
+  plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
+})
+```
+
+## What it does
+
+When enabled, the plugin can provide:
+
+- A local development database adapter
+- A development email sender that logs verification details instead of sending
+  real emails
+- Database migrations during prebuild
+
+## Environment-based behavior
+
+The plugin auto-disables itself when both development feature flags are off.
+
+<Callout type="info">
+  In production, you should use real database and send plugins (for example,
+  Turso/PostgreSQL plus a custom send implementation).
+</Callout>
+
+## Typical workflow
+
+1. Add the plugin first in your plugin list
+2. Keep your production database plugin configured
+3. Run your app locally and let the development plugin handle local-only needs
+4. Deploy with production environment variables so real plugins are used
+
+## Verification emails in development
+
+For local development, verification requests are logged instead of sent by email.
+This allows quick sign-in testing without SMTP setup.
+
+## Notes
+
+- The plugin is intended for development only
+- Do not rely on development send behavior in production
+- Always verify production plugin configuration before release

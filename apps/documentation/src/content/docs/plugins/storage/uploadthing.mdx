@@ -1,5 +1,91 @@
-# Uploadthing
-
 import { Callout } from "nextra/components"
 
-<Callout type="warning">Not documented yet.</Callout>
+# Uploadthing
+
+A plugin that provides image storage and upload functionality for OberonCMS
+using [Uploadthing](https://uploadthing.com/).
+
+## Installation
+
+```sh npm2yarn
+npm install @oberoncms/plugin-uploadthing uploadthing
+```
+
+## Configuration
+
+### 1. Set up Uploadthing
+
+First, create an [Uploadthing](https://uploadthing.com/) account and get your
+API keys.
+
+Set your environment variables:
+
+```sh
+UPLOADTHING_SECRET=<your-uploadthing-secret>
+UPLOADTHING_APP_ID=<your-uploadthing-app-id>
+```
+
+### 2. Add the plugin
+
+```tsx filename="oberon/adapter.ts"
+import { initOberon } from "@oberoncms/core/adapter"
+import { plugin as uploadthingPlugin } from "@oberoncms/plugin-uploadthing/plugin"
+
+export const { adapter, handler } = initOberon({
+  config,
+  plugins: [
+    developmentPlugin,
+    databasePlugin,
+    uploadthingPlugin,
+    authPlugin,
+  ],
+})
+```
+
+### 3. Ensure the CMS API route is wired
+
+Uploadthing endpoints are exposed through the Oberon catch-all API handler.
+
+```tsx filename="app/(oberon)/cms/api/[...path]/route.tsx"
+import { handler } from "@/oberon/adapter"
+
+export const { GET, POST, PUT, PATCH, DELETE } = handler
+```
+
+## Using in the editor
+
+Import the Image component from the plugin:
+
+```tsx filename="oberon/config.tsx"
+import { Image } from "@oberoncms/plugin-uploadthing"
+import { type OberonConfig } from "@oberoncms/core"
+
+export const config: OberonConfig = {
+  version: 1,
+  components: {
+    Image,
+    // other components...
+  },
+}
+```
+
+<Callout type="info">
+  The Uploadthing plugin ships the file router and route handler internally.
+  You only need to include the plugin and wire your Oberon API route.
+</Callout>
+
+## Image deletion
+
+The Uploadthing plugin automatically handles image deletion. When you delete an
+image in the CMS, it:
+
+1. Removes the image metadata from your database
+2. Deletes the image from Uploadthing storage
+
+## CSS styling
+
+The plugin includes default styles. Import the stylesheet in your layout:
+
+```tsx filename="app/layout.tsx"
+import "@oberoncms/plugin-uploadthing/source.css"
+```

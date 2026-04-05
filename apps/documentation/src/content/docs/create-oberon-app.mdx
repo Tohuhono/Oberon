@@ -1,0 +1,55 @@
+import { Callout } from "nextra/components"
+
+# Getting Started
+
+## Prerequisites
+
+Node.js 22 or later
+
+## Installation
+
+```sh npx2yarn copy
+npx create-oberon-app my-app
+```
+
+Answer the prompts:
+- **App name** - Valid npm package name
+- **Package manager** - npm, pnpm, or yarn
+- **Recipe** - Application recipe (currently `nextjs`)
+- **Database** - Turso, PostgreSQL, or custom
+- **Email service** - Resend, SendGrid, or custom
+- **Admin email** - Initial account email
+
+The installer then:
+
+- Copies the selected recipe into your target directory
+- Generates `oberon/adapter.ts` from selected plugins
+- Creates `.env.local` with the provided admin email
+- Installs dependencies and runs recipe prebuild
+
+## Run
+
+```sh
+cd my-app
+pnpm dev
+```
+
+Open `http://localhost:3000/cms` for the editor.
+
+## Options
+
+Pre-fill prompts with flags:
+
+```sh
+npx create-oberon-app my-app --use pnpm --recipe nextjs --database turso --send resend --email admin@example.com
+```
+
+<Callout type="info">
+	Use `--dir <directory>` to scaffold into a directory different from the app
+	name.
+</Callout>
+
+## See Also
+
+- [Configuration](/docs/configuration) - Adapter and `oberon/config`
+- [Plugins](/docs/plugins) - Database and email adapters
