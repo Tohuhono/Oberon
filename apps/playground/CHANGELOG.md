@@ -1,5 +1,31 @@
 # @oberon/playground
 
+## 0.10.6
+
+### Patch Changes
+
+- 138dc59: Refine Playwright CMS E2E fixture architecture and route Next/React
+  lint rules away from Playwright spec files.
+- Updated dependencies [a73560b]
+- Updated dependencies [8109ea8]
+- Updated dependencies [b654991]
+- Updated dependencies [8109ea8]
+- Updated dependencies [28aa7e5]
+- Updated dependencies [a4578f6]
+- Updated dependencies [a011a89]
+- Updated dependencies [28aa7e5]
+- Updated dependencies [48de893]
+- Updated dependencies [aa5371a]
+- Updated dependencies [36a3b7e]
+- Updated dependencies [237d393]
+- Updated dependencies [fc1747c]
+  - @oberoncms/core@0.18.0
+  - @oberoncms/plugin-development@0.7.6
+  - @oberoncms/plugin-turso@0.17.6
+  - @oberoncms/plugin-uploadthing@0.16.6
+  - @tohuhono/puck-blocks@0.13.6
+  - @oberoncms/plugin-tailwind@0.18.0
+
 ## 0.10.5
 
 ### Patch Changes

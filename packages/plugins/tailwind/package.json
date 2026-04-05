@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-tailwind",
-  "version": "0.17.5",
+  "version": "0.18.0",
   "author": "Tohuhono ltd",
   "license": "MIT",
   "description": "A dynamic Tailwind utilities plugin for OberonCMS",

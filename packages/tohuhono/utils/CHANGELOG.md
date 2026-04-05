@@ -1,5 +1,41 @@
 # @oberon/utils
 
+## 0.14.1
+
+### Patch Changes
+
+- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead
+  of failing repo-wide test runs.
+- 237d393: Replace the legacy create-oberon-app e2e lane with a Podman-based
+  `test:coa` flow that builds a dedicated runner image (`podman build` with
+  cacheable layers), starts Verdaccio for the full container lifetime, publishes
+  workspace packages to that registry, scaffolds via
+  `pnpm dlx create-oberon-app`, and runs the smoke test against the generated
+  app.
+
+  Keep workspace files unmounted while mounting only a named pnpm store volume
+  for faster repeated dependency resolution across runs, and reset Verdaccio
+  storage at startup so the local registry is always clean and same-version
+  workspace packages can be republished each e2e run.
+
+  Add `@tohuhono/utils/exec-async` and `@tohuhono/utils/wait-for-server` helper
+  exports and use them in the COA global setup harness.
+
+- 28aa7e5: Add aria-labels to pages and users components for E2E testability;
+  fix LocalDate hydration using useClientState; remove debug console logs from
+  development and turso plugins; add useClientState hook to utils.
+- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for
+  focused AI and baseline unit-test slices.
+- 237d393: Simplify local e2e publishing by using root recursive workspace
+  publish to Verdaccio and removing extra setup complexity. Also remove
+  package-level provenance defaults from publish configs so local recursive
+  publish works in non-CI environments, while release provenance remains
+  controlled by CI environment settings. Modernize GitHub Actions Node setup to
+  use setup-node + Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio`
+  while keeping the create-oberon-app scaffold runtime in `/opt/coa`.
+- 37488ec: Add unit tests for `mapConcurrent`; update TESTING.md with
+  no-export-for-testing convention
+
 ## 0.14.0
 
 ### Minor Changes

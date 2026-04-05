@@ -1,5 +1,56 @@
 # @oberoncms/core
 
+## 0.18.0
+
+### Minor Changes
+
+- 8109ea8: Add a dynamic Tailwind plugin, expose public plugin settings through
+  the core adapter, and scaffold the Tailwind plugin into new apps.
+
+### Patch Changes
+
+- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead
+  of failing repo-wide test runs.
+- b654991: Implement issue #294 E2E auth lane workflow with shared Playwright
+  auth helpers, add COA login/provenance lane coverage and UI test commands, and
+  fix email callback/session handling required for deterministic UI sign-in
+  completion.
+- 8109ea8: Fix Tailwind compiler loading, seed the welcome block on initial
+  pages, and make Playwright smoke report uploads rerun-safe.
+- a4578f6: Respect gitignore during shared Playwright test discovery, simplify
+  shared auth redirect handling, and align the create-oberon-app test container
+  with the shared Playwright defaults used across the repo.
+- a011a89: Separate generated Tailwind artifacts into `.oberon/tailwind`, move
+  the development SQLite database into `.oberon/db`, align the recipe and
+  scaffold test container with the new paths, and tighten shared Turbo and
+  Vitest defaults for more stable local and CI runs.
+- 28aa7e5: Add aria-labels to pages and users components for E2E testability;
+  fix LocalDate hydration using useClientState; remove debug console logs from
+  development and turso plugins; add useClientState hook to utils.
+- 48de893: Add the key value store contract slice and sqlite persistence path,
+  including the sqlite KV table, adapter get/put support, shared adapter KV test
+  scaffolding, development-plugin coverage via prebuild, and migration path
+  resolution updates for database plugins.
+- aa5371a: Replace `usePuck` with `createUsePuck` and targeted selectors in the
+  editor Header component to reduce unnecessary re-renders.
+- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for
+  focused AI and baseline unit-test slices.
+- 237d393: Simplify local e2e publishing by using root recursive workspace
+  publish to Verdaccio and removing extra setup complexity. Also remove
+  package-level provenance defaults from publish configs so local recursive
+  publish works in non-CI environments, while release provenance remains
+  controlled by CI environment settings. Modernize GitHub Actions Node setup to
+  use setup-node + Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio`
+  while keeping the create-oberon-app scaffold runtime in `/opt/coa`.
+- Updated dependencies [a73560b]
+- Updated dependencies [237d393]
+- Updated dependencies [28aa7e5]
+- Updated dependencies [36a3b7e]
+- Updated dependencies [237d393]
+- Updated dependencies [37488ec]
+  - @tohuhono/ui@0.14.6
+  - @tohuhono/utils@0.14.1
+
 ## 0.17.5
 
 ### Patch Changes
