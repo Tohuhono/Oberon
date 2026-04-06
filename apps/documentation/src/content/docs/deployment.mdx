@@ -1,0 +1,350 @@
+import { Callout } from "nextra/components"
+
+# Deployment
+
+OberonCMS applications are built on Next.js and can be deployed to any platform
+that supports Node.js 22+. Here's how to deploy your OberonCMS app to popular
+platforms.
+
+## Before You Deploy
+
+1. **Build locally to test**:
+
+```sh npm2yarn
+npm run build
+npm run start
+```
+
+2. **Set environment variables** on your hosting platform
+3. **Verify database migrations** have run
+4. **Test the editor** at `/cms` with your admin credentials
+
+## Vercel (Recommended)
+
+Vercel is the easiest option for Next.js applications and offers a free tier.
+
+### Setup
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Click "New Project" and select your repository
+4. Vercel auto-detects Next.js
+5. Add your environment variables in "Environment Variables"
+6. Click "Deploy"
+
+### Environment Variables
+
+In Vercel Dashboard → Settings → Environment Variables, add:
+
+```
+TURSO_URL=libsql://your-db.turso.io
+TURSO_TOKEN=your-token
+OBERON_SITE_URL=https://your-domain.vercel.app
+EMAIL_FROM=noreply@your-domain.com
+SEND_SECRET=your-email-secret
+UPLOADTHING_SECRET=your-uploadthing-secret
+UPLOADTHING_APP_ID=your-uploadthing-app-id
+```
+
+### Custom Domain
+
+1. Go to your project's Domain settings
+2. Add your domain (e.g., `yoursite.com`)
+3. Update DNS records per Vercel's instructions
+
+<Callout type="info">
+  Vercel provides automatic HTTPS, global CDN, and serverless functions out of
+  the box.
+</Callout>
+
+## Docker
+
+For self-hosted or containerized deployments:
+
+### Dockerfile
+
+```dockerfile
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
+
+COPY . .
+RUN pnpm build
+
+FROM node:22-alpine
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/public ./public
+
+ENV NODE_ENV=production
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+### Environment Variables
+
+Pass environment variables to the container:
+
+```bash
+docker run \
+  -e TURSO_URL=libsql://your-db.turso.io \
+  -e TURSO_TOKEN=your-token \
+  -e OBERON_SITE_URL=https://yourdomain.com \
+  -p 3000:3000 \
+  oberon-cms:latest
+```
+
+## Railway
+
+[Railway](https://railway.app/) offers a simple interface for deploying Node.js
+apps:
+
+1. Connect your GitHub repo
+2. Railway auto-detects Next.js
+3. Add environment variables in Railway dashboard
+4. Deploy with one click
+
+Railway handles scaling, SSL, and monitoring.
+
+## AWS (EC2 / App Runner)
+
+For production workloads:
+
+### EC2
+
+1. Launch an Ubuntu 24.04 instance (min. t3.small)
+2. SSH into the instance
+3. Install Node.js 22 and pnpm:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+nvm install 22
+npm install -g pnpm
+```
+
+4. Clone your repo:
+
+```bash
+git clone your-repo-url
+cd your-app
+```
+
+5. Install dependencies and build:
+
+```bash
+pnpm install
+pnpm build
+```
+
+6. Set up environment variables:
+
+```bash
+nano .env.production.local
+```
+
+7. Start the app:
+
+```bash
+npm start
+```
+
+Use PM2 for process management:
+
+```bash
+npm install -g pm2
+pm2 start "npm start" --name "oberon"
+pm2 save
+pm2 startup
+```
+
+### App Runner
+
+AWS App Runner automates container deployment:
+
+1. Build a Docker image (see Docker section above)
+2. Push to AWS ECR
+3. Create an App Runner service
+4. Configure environment variables
+5. App Runner handles auto-scaling and SSL
+
+## Self-Hosted Linux
+
+For maximal control:
+
+### Prerequisites
+
+- Ubuntu/Debian server
+- Node.js 22+
+- pnpm
+- Nginx (reverse proxy)
+- PostgreSQL or Turso (for database)
+
+### Steps
+
+1. **Clone and build**:
+
+```bash
+git clone your-repo
+cd your-app
+pnpm install
+pnpm build
+```
+
+2. **Configure Nginx**:
+
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+3. **Use systemd service**:
+
+```ini
+[Unit]
+Description=OberonCMS
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/oberon-cms
+ExecStart=/usr/bin/npm start
+Restart=always
+Environment="NODE_ENV=production"
+EnvironmentFile=/var/www/oberon-cms/.env.production
+
+[Install]
+WantedBy=multi-user.target
+```
+
+4. **Enable and start**:
+
+```bash
+systemctl enable oberon
+systemctl start oberon
+```
+
+## Database Setup
+
+### Turso (Cloud SQLite)
+
+[Turso](https://turso.tech/) is the recommended database for OberonCMS:
+
+1. Create account at turso.tech
+2. Create a database:
+
+```bash
+turso db create my-oberon-db
+```
+
+3. Get connection URL and token:
+
+```bash
+turso db show --url my-oberon-db
+turso db tokens create my-oberon-db --expiration none
+```
+
+4. Set environment variables with the values
+
+### PostgreSQL
+
+For PostgreSQL deployments:
+
+1. Provision a PostgreSQL instance
+2. Use the PostgreSQL plugin:
+
+```bash
+npm install @oberoncms/plugin-pgsql
+```
+
+3. Set connection URL:
+
+```
+DATABASE_URL=postgresql://user:password@host:5432/dbname
+```
+
+## SSL/HTTPS
+
+<Callout type="warning">
+  Always use HTTPS in production. Never expose your editor over HTTP.
+</Callout>
+
+- **Vercel**: Automatic ✓
+- **Railway**: Automatic ✓
+- **Self-hosted**: Use Let's Encrypt with Certbot
+
+```bash
+apt install certbot python3-certbot-nginx
+certbot --nginx -d yourdomain.com
+```
+
+## Monitoring
+
+### Logging
+
+Ensure your hosting platform logs errors:
+
+- Vercel: Automatic via dashboard
+- Docker: Use `docker logs`
+- systemd: `journalctl -u oberon -f`
+
+### Performance
+
+Monitor key metrics:
+
+- **Response time**: Should be < 500ms
+- **Database queries**: Check query logs
+- **CSS generation**: Verify Tailwind plugin working
+- **Image uploads**: Confirm Uploadthing processing
+
+### Health Checks
+
+Set up health checks on your hosting platform:
+
+```tsx filename="app/health/route.ts"
+export async function GET() {
+  // Check database connectivity
+  const healthy = true // implement your checks
+
+  return new Response(JSON.stringify({ status: healthy ? "ok" : "error" }), {
+    status: healthy ? 200 : 503,
+    headers: { "Content-Type": "application/json" },
+  })
+}
+```
+
+## Troubleshooting Deployments
+
+<Callout type="warning">
+  **Build fails?** Check that all required environment variables are set.
+</Callout>
+
+<Callout type="warning">
+  **Editor won't load?** Verify `OBERON_SITE_URL` matches your deployment URL.
+</Callout>
+
+<Callout type="warning">
+  **Database connection errors?** Check that database credentials are correct
+  and the database is accessible from your deployment environment.
+</Callout>
+
+## Next Steps
+
+- [Configuration Guide](/docs/configuration)
+- [Plugins](/docs/plugins)
+- [Troubleshooting](/docs/troubleshooting)

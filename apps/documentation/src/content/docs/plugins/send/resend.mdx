@@ -1,0 +1,55 @@
+# Resend
+
+A send adapter template for delivering sign-in verification emails with
+[Resend](https://resend.com/).
+
+## Installation
+
+```sh npm2yarn
+npm install resend
+```
+
+## Example plugin
+
+```tsx filename="oberon/send.ts"
+import "server-cli-only"
+
+import { Resend } from "resend"
+import {
+  USE_DEVELOPMENT_SEND_PLUGIN,
+  type OberonPlugin,
+  type OberonSendAdapter,
+} from "@oberoncms/core"
+
+const EMAIL_FROM = process.env.EMAIL_FROM
+const RESEND_SECRET = process.env.RESEND_SECRET || process.env.SEND_SECRET
+
+export const plugin: OberonPlugin = () => ({
+  name: "Resend",
+  disabled: USE_DEVELOPMENT_SEND_PLUGIN,
+  adapter: {
+    sendVerificationRequest: async ({ email, token, url }) => {
+      if (!RESEND_SECRET) throw new Error("No RESEND_SECRET configured")
+      if (!EMAIL_FROM) throw new Error("No EMAIL_FROM configured")
+
+      const resend = new Resend(RESEND_SECRET)
+
+      await resend.emails.send({
+        from: EMAIL_FROM,
+        to: email,
+        subject: "One time login to Oberon CMS",
+        text: `Sign in with code\n\n${token}\n\n ${url} \n\n`,
+      })
+    },
+  } satisfies OberonSendAdapter,
+})
+```
+
+## Environment variables
+
+```sh
+EMAIL_FROM=noreply@example.com
+RESEND_SECRET=your-resend-api-key
+```
+
+`SEND_SECRET` can be used as a fallback alias for `RESEND_SECRET`.

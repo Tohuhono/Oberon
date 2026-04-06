@@ -1,0 +1,110 @@
+import { Callout } from "nextra/components"
+
+# Configuration
+
+OberonCMS generated apps are configured in two files under `oberon/`:
+
+- `adapter.ts` for runtime/plugin composition
+- `config.tsx` for editor component configuration
+
+## File Structure
+
+```
+oberon/
+├── adapter.ts
+├── config.tsx
+├── database.ts?        # Present if database=custom
+└── send.ts?            # Present if send=custom
+```
+
+## adapter.ts
+
+`adapter.ts` initializes Oberon with selected plugins and exports both:
+
+- `adapter` for server-side operations
+- `handler` for CMS/auth route handling
+
+### Basic Setup
+
+```tsx filename="oberon/adapter.ts"
+import "server-cli-only"
+
+import { initOberon } from "@oberoncms/core/adapter"
+import { authPlugin } from "@oberoncms/core/auth"
+import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
+import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
+import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
+import { config } from "./config"
+
+export const { adapter, handler } = initOberon({
+  config,
+  plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
+})
+```
+
+### Plugin Order
+
+Plugin order is significant. Generated apps place:
+
+- `developmentPlugin` first
+- database plugin after development
+- storage plugin after database
+- send plugin after storage
+- other runtime plugins after send
+- `authPlugin` last
+
+## config.tsx
+
+`config.tsx` is mostly Puck configuration. Keep Oberon docs brief and use Puck
+as the primary reference for overlapping API surface.
+
+Use the Puck docs for component fields, blocks, root configuration, and layout:
+[https://puckeditor.com/docs](https://puckeditor.com/docs)
+
+### Oberon-specific divergences from Puck
+
+- `OberonConfig` requires `version: 1`
+- Each entry in `components` may include optional `transforms`
+- `OberonComponent` is a typed alias over Puck `ComponentConfig`
+
+```tsx filename="oberon/config.tsx"
+import { type OberonConfig, type OberonComponent } from "@oberoncms/core"
+
+const Text = {
+  fields: {
+    text: { type: "text" },
+  },
+  defaultProps: {
+    text: "Welcome to OberonCMS",
+  },
+  transforms: [(props) => ({ ...props })],
+  render: ({ text }) => <div>{text}</div>,
+} satisfies OberonComponent
+
+export const config: OberonConfig = {
+  version: 1,
+  components: {
+    Text,
+  },
+}
+```
+
+<Callout type="info">
+  When in doubt, follow Puck docs first and only apply Oberon-specific additions
+  listed above.
+</Callout>
+
+## Environment Variables
+
+Required keys depend on selected plugins. See plugin pages for exact variables.
+At minimum, generated apps include:
+
+```sh
+OBERON_SITE_URL=http://localhost:3000
+EMAIL_FROM=noreply@example.com
+```
+
+<Callout type="info">
+  The `create-oberon-app` CLI automatically generates a `.env.local` template
+  with placeholders for your chosen plugins.
+</Callout>

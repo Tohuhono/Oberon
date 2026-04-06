@@ -1,62 +1,11 @@
 # Database Adapters
 
-A database adapter must implement the following interface:
+Database plugins provide Oberon persistence. In practice that means page, image,
+user, site, and key-value storage, plus the Auth.js adapter methods used by
+Oberon auth.
 
-```tsx
-export type OberonDatabaseAdapter = {
-  addPage: (page: OberonPage) => Promise<void>
-  addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
-  deletePage: (key: OberonPageMeta["key"]) => Promise<void>
-  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
-  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
-  getAllImages: () => Promise<OberonImage[]>
-  getAllPages: () => Promise<OberonPageMeta[]>
-  getAllUsers: () => Promise<OberonUser[]>
-  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
-  getSite: () => Promise<OberonSite | undefined>
-  updatePageData: (data: OberonPage) => Promise<void>
-  updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
-}
-```
+Use the provider pages in this section for concrete integrations such as Turso
+and PostgreSQL.
 
-Additionally, if you are using the recommended Auth.js implemenation you should
-implement the following. See
-[Auth.js adapters](https://authjs.dev/reference/core/adapters) for more details.
-
-```tsx
-export type OberonAuthAdapter = Required<
-  Pick<
-    AuthAdapter,
-    | "createSession"
-    | "createUser"
-    | "createVerificationToken"
-    | "deleteSession"
-    | "deleteUser"
-    | "getSessionAndUser"
-    | "getUser"
-    | "getUserByAccount"
-    | "getUserByEmail"
-    | "linkAccount"
-    | "unlinkAccount"
-    | "updateSession"
-    | "updateUser"
-    | "useVerificationToken"
-  >
-> & {
-  createUser(
-    user: Omit<AdapterUser & { role: OberonRole }, "id">,
-  ): Awaitable<AdapterUser & { role: OberonRole }>
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
-}
-```
-
-Finally, you can make use of the prebuild hook to run migrations or other
-databse updates before building your site.
-
-```tsx
-export type OberonInitAdapter = {
-  prebuild: () => Promise<void>
-}
-```
+If you are implementing your own database plugin, see
+[Custom > Adapter Hooks](/docs/plugins/custom/adapter-hooks).

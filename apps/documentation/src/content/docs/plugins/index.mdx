@@ -1,0 +1,81 @@
+---
+title: Plugins
+asIndexPage: true
+---
+
+# Plugins
+
+Configure plugins in `oberon/adapter.ts` by passing them to `initOberon`.
+
+```tsx filename="oberon/adapter.ts"
+import { initOberon } from "@oberoncms/core/adapter"
+import { authPlugin } from "@oberoncms/core/auth"
+import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
+import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
+import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
+
+import { config } from "./config"
+
+export const { adapter, handler } = initOberon({
+  config,
+  plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
+})
+```
+
+## Order matters
+
+Plugins are initialised in array order. Their `adapter` methods and `handlers`
+are merged from left to right, so later plugins can override keys provided by
+earlier plugins.
+
+Generated apps therefore put:
+
+- development first
+- database next
+- storage after database
+- send after storage
+- other runtime plugins after send
+- auth last
+
+## Custom plugin shape
+
+A custom plugin returns an object with:
+
+- `name`
+- optional `version`
+- optional `disabled`
+- optional `adapter`
+- optional `handlers`
+
+```tsx
+import type { OberonPlugin } from "@oberoncms/core"
+
+export const plugin: OberonPlugin = (adapter) => ({
+  name: "my-plugin",
+  adapter: {
+    ...adapter,
+  },
+  handlers: {},
+})
+```
+
+## Available hooks
+
+Plugins can contribute two kinds of extension points.
+
+`adapter` hooks:
+
+- lifecycle: `prebuild`
+- content: `addPage`, `deletePage`, `getAllPages`, `getPageData`,
+  `updatePageData`
+- media: `addImage`, `deleteImage`, `getAllImages`
+- users: `addUser`, `deleteUser`, `getAllUsers`, `changeRole`, `getCurrentUser`
+- auth/session: `signIn`, `signOut`, `hasPermission` and Auth.js adapter methods
+- site and kv: `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`
+
+`handlers` hooks:
+
+- route handlers keyed by path segment, merged into the CMS handler tree
+
+Use the section pages in this Plugins area for concrete examples of each plugin
+type.

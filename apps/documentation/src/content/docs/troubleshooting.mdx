@@ -1,0 +1,465 @@
+import { Callout } from "nextra/components"
+
+# Troubleshooting
+
+Common issues and solutions when working with OberonCMS.
+
+## Installation & Setup
+
+### "Node.js version too old"
+
+OberonCMS requires Node.js 22.x or later.
+
+**Fix:**
+
+```bash
+node --version  # Check current version
+nvm install 22  # Update Node.js
+nvm use 22
+```
+
+### "create-oberon-app: command not found"
+
+The CLI tool isn't installed globally or there's a PATH issue.
+
+**Fix:**
+
+```bash
+# Use npx to run directly
+npx create-oberon-app my-app
+
+# Or install globally
+npm install -g create-oberon-app
+create-oberon-app my-app
+```
+
+### "Invalid package name" during creation
+
+App names must be valid npm package names (lowercase, hyphens OK).
+
+**Fix:**
+
+```bash
+# ✓ Good
+npx create-oberon-app my-cms-app
+
+# ✗ Bad
+npx create-oberon-app "My CMS App"
+npx create-oberon-app MyCMSApp
+```
+
+## Database Issues
+
+### "Connection refused" error
+
+Database credentials are wrong or database is unreachable.
+
+**Check:**
+
+```bash
+# Verify your .env.local has correct values
+cat .env.local
+
+# Test Turso connection
+turso db show your-db-name
+
+# Test PostgreSQL connection
+psql --host=your-host --user=your-user --dbname=your-db
+```
+
+**Fix:**
+
+```bash
+# Update .env.local with correct credentials
+TURSO_URL=libsql://your-correct-db.turso.io
+TURSO_TOKEN=your-correct-token
+```
+
+### "Migrations failed"
+
+Database schema setup encountered an error.
+
+**Check logs:**
+
+```bash
+# During build
+npm run build
+
+# Look for specific migration errors in console output
+```
+
+**Fix:**
+
+```bash
+# Reset development database (loses data!)
+TURSO_URL=file:./local.db npm run prebuild
+
+# Or reinitialize with Turso
+turso db list
+turso db shell your-db-name < schema.sql
+```
+
+### Database works in dev, fails in production
+
+Environment variables not set on production platform.
+
+**Fix:**
+
+Check your hosting provider's environment variable configuration:
+
+- **Vercel**: Settings → Environment Variables
+- **Railway**: Variables tab in project settings
+- **Docker**: Pass via `-e` flags or `.env` file
+- **Self-hosted**: Check systemd service or .env file permissions
+
+Then redeploy.
+
+## Authentication Issues
+
+### "Sign-in link expired"
+
+Email verification tokens expire after 24 hours by default.
+
+**Fix:**
+
+Request a new sign-in email. Tokens are generated fresh each time.
+
+### "Email won't send"
+
+Send plugin not configured or invalid credentials.
+
+**Check:**
+
+```bash
+# Verify SEND_SECRET and EMAIL_FROM are set
+echo $SEND_SECRET
+echo $EMAIL_FROM
+
+# Test with custom send plugin
+```
+
+**Common causes:**
+
+- Wrong email provider credentials
+- Email domain not verified
+- Email service quota exceeded
+
+### "Only admin email can log in"
+
+Custom email address not whitelisted.
+
+**Fix:**
+
+Only the email provided during setup has initial access. To add more admins:
+
+1. Log in as the initial admin
+2. Go to Users in the CMS
+3. Add new users with admin role
+
+## Editor Issues
+
+### "Editor won't load" at `/cms`
+
+Frontend can't reach the API or environment not configured correctly.
+
+**Check:**
+
+```bash
+# Verify OBERON_SITE_URL matches your domain
+echo $OBERON_SITE_URL
+
+# Check if API is responding
+curl http://localhost:3000/cms/api/site
+```
+
+**Common causes:**
+
+- `OBERON_SITE_URL` not set or wrong URL
+- Dev server not running
+- API route not accessible
+- CORS issues
+
+**Fix:**
+
+```bash
+# During development
+OBERON_SITE_URL=http://localhost:3000 npm run dev
+
+# In production, set to your domain
+OBERON_SITE_URL=https://yourdomain.com
+```
+
+### "Images won't upload"
+
+Uploadthing plugin not configured or API route missing.
+
+**Check:**
+
+1. Is the plugin registered in `oberon/adapter.ts`?
+2. Is the CMS catch-all API route created at
+   `app/(oberon)/cms/api/[...path]/route.tsx`?
+3. Are UPLOADTHING credentials set?
+
+**Fix:**
+
+```bash
+# Verify credentials in .env.local
+UPLOADTHING_SECRET=your-secret
+UPLOADTHING_APP_ID=your-app-id
+
+# Rebuild and restart
+npm run build
+npm run dev
+```
+
+See [Uploadthing Plugin](/docs/plugins/storage/uploadthing) for setup.
+
+### "Styles not loading" or "CSS missing"
+
+Tailwind plugin not generating or serving CSS correctly.
+
+**Check:**
+
+1. Is the Tailwind plugin registered in `oberon/adapter.ts`?
+2. Are you resolving Tailwind hash from adapter settings in your render route?
+3. Check browser DevTools → Network for CSS file status
+
+**Common causes:**
+
+- Tailwind plugin not added to adapter
+- Dynamic stylesheet link missing from the render route
+- Build hasn't run (no classes extracted yet)
+
+**Fix:**
+
+1. Add plugin to adapter.ts:
+
+```tsx
+import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
+
+export const { adapter, handler } = initOberon({
+  plugins: [, /* ... */ tailwindPlugin],
+})
+```
+
+2. Add dynamic stylesheet resolution in your page render route:
+
+```tsx
+import { adapter } from "@/oberon/adapter"
+
+function getActiveHash(value: unknown) {
+  return typeof value === "object" &&
+    value !== null &&
+    "activeHash" in value &&
+    (typeof value.activeHash === "string" || value.activeHash === null)
+    ? value.activeHash
+    : null
+}
+
+async function getDynamicStylesheets() {
+  const activeHash = getActiveHash(
+    await adapter.getSetting("@oberoncms/plugin-tailwind", "state"),
+  )
+
+  return activeHash
+    ? [`/cms/api/tailwind/${encodeURIComponent(activeHash)}.css`]
+    : []
+}
+
+export default async function Page() {
+  const stylesheets = await getDynamicStylesheets()
+
+  return (
+    <>
+      {stylesheets.map((href) => (
+        <link
+          key={href}
+          rel="stylesheet"
+          href={href}
+          precedence="oberon-dynamic"
+        />
+      ))}
+      {/* ...render content... */}
+    </>
+  )
+}
+```
+
+3. Rebuild:
+
+```bash
+npm run prebuild && npm run dev
+```
+
+## Build Issues
+
+### "Build fails with type errors"
+
+TypeScript compilation errors.
+
+**Fix:**
+
+```bash
+# Check for errors
+npm run tsc
+
+# Fix issues in your code
+
+# Rebuild
+npm run build
+```
+
+### "Build takes too long"
+
+Dependency issues or Tailwind compilation slow.
+
+**Optimize:**
+
+```bash
+# Clear caches
+npm run clean
+
+# Rebuild with fresh dependencies
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+pnpm build
+```
+
+### Out of memory during build
+
+Large projects can exceed Node.js memory limits.
+
+**Fix:**
+
+```bash
+# Increase memory for Node.js
+NODE_OPTIONS=--max-old-space-size=4096 npm run build
+```
+
+## Performance Issues
+
+### Slow page loads
+
+Check what's making the page slow:
+
+```bash
+# Look at bundle size
+npm run build
+
+# Check Next.js analysis
+npm analyze  # if you've set up webpack-bundle-analyzer
+```
+
+**Common causes:**
+
+- Large images not optimized
+- Too many components on a page
+- Database queries not optimized
+- Missing static generation
+
+**Fix:**
+
+- Optimize images with Next.js `<Image>` component
+- Use `revalidate` for static generation
+- Check database query performance
+
+### Editor slow to save
+
+Database writes might be slow.
+
+**Check:**
+
+- Is the database remote? Network latency?
+- Are there many pages? More pages = slower sync
+- Check database connection pooling
+
+**Fix:**
+
+```bash
+# Use a faster database option
+# Turso > PostgreSQL > SQLite (local)
+
+# For PostgreSQL, enable connection pooling
+```
+
+## Deployment Issues
+
+### "Can't find database in production"
+
+Environment variables not passed to deployment.
+
+**Fix:**
+
+Check your hosting platform's environment variable settings and redeploy.
+
+See [Deployment Guide](/docs/deployment) for platform-specific instructions.
+
+### "502 Bad Gateway" errors
+
+Server crashed or not responding.
+
+**Debug:**
+
+```bash
+# Check logs on your hosting platform
+# Vercel: Logs tab in dashboard
+# Docker: docker logs container-id
+# systemd: journalctl -u oberon -f
+```
+
+**Common causes:**
+
+- Database not accessible
+- Memory limit exceeded
+- Missing required environment variable
+- Unhandled error in middleware
+
+### CORS errors when accessing API
+
+API request blocked by browser security.
+
+**Usually caused by:**
+
+- Requesting from different origin
+- Credentials not sent properly
+
+**This shouldn't happen with same-domain requests**, but if it does:
+
+- Check browser DevTools Network tab
+- Verify API URL in requests
+- Check for middleware blocking requests
+
+## Still Having Issues?
+
+1. **Check the
+   [GitHub discussions](https://github.com/Tohuhono/Oberon/discussions)**
+2. **Search [GitHub issues](https://github.com/Tohuhono/Oberon/issues)** for
+   similar problems
+3. **Review the [roadmap](/docs/roadmap)** for known limitations
+4. **Check plugin documentation** for plugin-specific issues
+
+### Enable Debug Logging
+
+For development debugging:
+
+```bash
+# Enable verbose logging
+DEBUG=* npm run dev
+
+# Or for specific module
+DEBUG=oberon:* npm run dev
+```
+
+### Check Browser Console
+
+Open DevTools (F12) → Console tab for client-side errors.
+
+### Enable Source Maps
+
+During development, source maps help with debugging:
+
+```tsx filename="next.config.js"
+module.exports = {
+  productionBrowserSourceMaps: true,
+}
+```

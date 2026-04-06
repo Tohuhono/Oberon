@@ -1,7 +1,7 @@
 export default {
-  index: "About",
-  installation: "Installation",
-  auth: "Auth",
+  index: "Introduction",
+  "create-oberon-app": "Getting Started",
+  configuration: "Configuration",
   plugins: "Plugins",
   roadmap: "Roadmap",
 }

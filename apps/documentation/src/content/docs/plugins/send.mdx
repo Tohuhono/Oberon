@@ -1,14 +1,10 @@
 # Send Adapter
 
-The send adapter is used to send verification requests to users, usually by
+Send plugins are responsible for delivering verification requests, usually by
 email.
 
-```tsx
-export type OberonSendAdapter = {
-  sendVerificationRequest: (props: {
-    email: string
-    token: string
-    url: string
-  }) => Promise<void>
-}
-```
+Use the provider pages in this section for concrete integrations such as Resend
+and SendGrid.
+
+If you are implementing your own send plugin, see
+[Custom > Adapter Hooks](/docs/plugins/custom/adapter-hooks).
