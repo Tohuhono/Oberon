@@ -33,12 +33,7 @@ import { plugin as uploadthingPlugin } from "@oberoncms/plugin-uploadthing/plugi
 
 export const { adapter, handler } = initOberon({
   config,
-  plugins: [
-    developmentPlugin,
-    databasePlugin,
-    uploadthingPlugin,
-    authPlugin,
-  ],
+  plugins: [developmentPlugin, databasePlugin, uploadthingPlugin, authPlugin],
 })
 ```
 
@@ -70,8 +65,8 @@ export const config: OberonConfig = {
 ```
 
 <Callout type="info">
-  The Uploadthing plugin ships the file router and route handler internally.
-  You only need to include the plugin and wire your Oberon API route.
+  The Uploadthing plugin ships the file router and route handler internally. You
+  only need to include the plugin and wire your Oberon API route.
 </Callout>
 
 ## Image deletion

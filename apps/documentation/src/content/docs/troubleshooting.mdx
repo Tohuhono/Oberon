@@ -196,7 +196,8 @@ Uploadthing plugin not configured or API route missing.
 **Check:**
 
 1. Is the plugin registered in `oberon/adapter.ts`?
-2. Is the CMS catch-all API route created at `app/(oberon)/cms/api/[...path]/route.tsx`?
+2. Is the CMS catch-all API route created at
+   `app/(oberon)/cms/api/[...path]/route.tsx`?
 3. Are UPLOADTHING credentials set?
 
 **Fix:**
@@ -237,7 +238,7 @@ Tailwind plugin not generating or serving CSS correctly.
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
 
 export const { adapter, handler } = initOberon({
-  plugins: [/* ... */, tailwindPlugin],
+  plugins: [, /* ... */ tailwindPlugin],
 })
 ```
 
@@ -271,7 +272,12 @@ export default async function Page() {
   return (
     <>
       {stylesheets.map((href) => (
-        <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
+        <link
+          key={href}
+          rel="stylesheet"
+          href={href}
+          precedence="oberon-dynamic"
+        />
       ))}
       {/* ...render content... */}
     </>
@@ -363,7 +369,7 @@ Database writes might be slow.
 
 **Check:**
 
-- Is the database remote?  Network latency?
+- Is the database remote? Network latency?
 - Are there many pages? More pages = slower sync
 - Check database connection pooling
 
@@ -425,8 +431,10 @@ API request blocked by browser security.
 
 ## Still Having Issues?
 
-1. **Check the [GitHub discussions](https://github.com/Tohuhono/Oberon/discussions)**
-2. **Search [GitHub issues](https://github.com/Tohuhono/Oberon/issues)** for similar problems
+1. **Check the
+   [GitHub discussions](https://github.com/Tohuhono/Oberon/discussions)**
+2. **Search [GitHub issues](https://github.com/Tohuhono/Oberon/issues)** for
+   similar problems
 3. **Review the [roadmap](/docs/roadmap)** for known limitations
 4. **Check plugin documentation** for plugin-specific issues
 

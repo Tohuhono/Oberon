@@ -33,8 +33,8 @@ or updated, the plugin:
 3. Compiles only those classes using Tailwind CSS
 4. Caches the CSS with long-term expiration
 
-This ensures your styles are always in sync with your content and you never
-ship unused CSS.
+This ensures your styles are always in sync with your content and you never ship
+unused CSS.
 
 ## Setup
 
@@ -75,7 +75,12 @@ export default async function Page() {
   return (
     <>
       {stylesheets.map((href) => (
-        <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
+        <link
+          key={href}
+          rel="stylesheet"
+          href={href}
+          precedence="oberon-dynamic"
+        />
       ))}
       {/* ...render content... */}
     </>

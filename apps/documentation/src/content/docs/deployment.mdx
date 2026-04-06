@@ -100,7 +100,8 @@ docker run \
 
 ## Railway
 
-[Railway](https://railway.app/) offers a simple interface for deploying Node.js apps:
+[Railway](https://railway.app/) offers a simple interface for deploying Node.js
+apps:
 
 1. Connect your GitHub repo
 2. Railway auto-detects Next.js
@@ -199,7 +200,7 @@ pnpm build
 server {
     listen 80;
     server_name yourdomain.com;
-    
+
     location / {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
@@ -319,14 +320,11 @@ Set up health checks on your hosting platform:
 export async function GET() {
   // Check database connectivity
   const healthy = true // implement your checks
-  
-  return new Response(
-    JSON.stringify({ status: healthy ? "ok" : "error" }),
-    {
-      status: healthy ? 200 : 503,
-      headers: { "Content-Type": "application/json" },
-    },
-  )
+
+  return new Response(JSON.stringify({ status: healthy ? "ok" : "error" }), {
+    status: healthy ? 200 : 503,
+    headers: { "Content-Type": "application/json" },
+  })
 }
 ```
 
