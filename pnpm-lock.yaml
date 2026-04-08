@@ -186,6 +186,9 @@ importers:
       '@dev/eslint':
         specifier: workspace:*
         version: link:../../dev/eslint
+      '@dev/playwright':
+        specifier: workspace:*
+        version: link:../../dev/playwright
       '@dev/scripts':
         specifier: workspace:*
         version: link:../../dev/scripts
