@@ -2,96 +2,26 @@
 
 import "@puckeditor/core/puck.css"
 
-import { Config, Data, Puck, createUsePuck } from "@puckeditor/core"
-import { Button } from "@tohuhono/ui/button"
-import { useState } from "react"
+import { Config, Data, Puck } from "@puckeditor/core"
+import { type ReactNode } from "react"
 import { useLocalData } from "../hooks/use-local-data"
 import { INITIAL_DATA } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
-import { Menu } from "./menu"
+import { Preview } from "./editor/preview"
+import { Header } from "./editor/header"
+import { Sidebar } from "./editor/sidebar"
 
-const usePuck = createUsePuck()
-
-const useHeaderState = () => ({
-  dispatch: usePuck((s) => s.dispatch),
-  leftSideBarVisible: usePuck((s) => s.appState.ui.leftSideBarVisible),
-  data: usePuck((s) => s.appState.data),
-})
-
-const Header = ({
-  path,
-  onPublish,
-}: {
-  path: string
-  onPublish: (data: Data) => Promise<void>
-}) => {
-  const { dispatch, leftSideBarVisible, data } = useHeaderState()
-  const [ispublishing, setIspublishing] = useState(false)
-
-  return (
-    <div style={{ gridArea: "header" }}>
-      <Menu title={data.root.title} path={path}>
-        <Button
-          onClick={() =>
-            dispatch({
-              type: "setUi",
-              ui: {
-                leftSideBarVisible: !leftSideBarVisible,
-              },
-            })
-          }
-          variant="outline"
-          size="sm"
-        >
-          {leftSideBarVisible ? "<" : ">"}
-        </Button>
-        {/*
-     // TODO puck history
-    <Button
-      variant="outline"
-      size="sm"
-      disabled={!canRewind}
-      onClick={() => rewind()}
-    >
-      {"Undo"}
-    </Button>
-    <Button
-      size="sm"
-      variant="outline"
-      disabled={!canForward}
-      onClick={() => forward()}
-    >
-      {"Redo"}
-    </Button>
-    */}
-        <Button
-          onClick={() => window.open(`/cms/preview${path}`, "_blank")?.focus()}
-          variant="outline"
-          size="sm"
-        >
-          Preview
-        </Button>
-        <Button
-          onClick={() => window.open(path, "_blank")?.focus()}
-          variant="outline"
-          size="sm"
-        >
-          View
-        </Button>
-        <Button
-          disabled={ispublishing}
-          onClick={async () => {
-            setIspublishing(true)
-            await onPublish(data)
-            setIspublishing(false)
-          }}
-          size="sm"
-        >
-          Publish
-        </Button>
-      </Menu>
+const editorOverrides = {
+  drawer: ({ children }: { children: ReactNode }) => (
+    <div className="bg-background/40 border-border h-full space-y-2 rounded-lg border p-2">
+      {children}
     </div>
-  )
+  ),
+  drawerItem: ({ name }: { name: string }) => (
+    <div className="bg-card text-card-foreground border-border hover:bg-accent/40 hover:text-accent-foreground rounded-xl border shadow transition-colors">
+      {name}
+    </div>
+  ),
 }
 
 export function Editor({
@@ -113,7 +43,6 @@ export function Editor({
     })
   }
 
-  /* TODO types need fixing */
   return (
     <Puck
       config={config}
@@ -121,12 +50,14 @@ export function Editor({
       onChange={(data: Data) => {
         setLocalData(data)
       }}
-      onPublish={() => {}}
-      plugins={[]}
-      headerPath={path}
-      overrides={{
-        header: () => <Header path={path} onPublish={onPublish} />,
-      }}
-    />
+      onPublish={onPublish}
+      overrides={editorOverrides}
+    >
+      <div className="grid h-dvh grid-cols-[minmax(0,1fr)_300px] grid-rows-[auto_1fr] overflow-hidden">
+        <Header path={path} onPublish={onPublish} className="col-span-2" />
+        <Preview />
+        <Sidebar />
+      </div>
+    </Puck>
   )
 }

@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@dev/eslint": "workspace:*",
+    "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vitest": "workspace:*",

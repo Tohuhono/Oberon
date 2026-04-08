@@ -64,8 +64,26 @@ test.describe("CMS Pages TDD @tdd @pages @issue-308", () => {
     ).toHaveText("test@tohuhono.com")
 
     await cms.goto(`/cms/edit${copiedPageKey}`)
-    await cms.locator("li", { hasText: "Outline" }).first().click()
-    await cms.getByRole("button", { name: "Text" }).last().click()
+    await cms.getByRole("tab", { name: "Insert", exact: true }).click()
+    const insertPanel = cms.getByRole("tabpanel")
+    const drawerTextLabel = insertPanel
+      .getByText("Text", { exact: true })
+      .first()
+    const drawerText = drawerTextLabel.locator("xpath=..")
+
+    await expect(drawerText).toBeVisible()
+    await drawerText.click({ force: true })
+
+    await cms.getByRole("tab", { name: "Outline", exact: true }).click()
+    const outlinePanel = cms.getByRole("tabpanel")
+    const outlineTextNode = outlinePanel
+      .locator("button", { hasText: "Text" })
+      .last()
+    await expect(outlineTextNode).toBeVisible()
+    await outlineTextNode.click()
+
+    await cms.getByRole("tab", { name: "Inspector", exact: true }).click()
+    await expect(cms.locator('input[name="className"]:visible')).toBeVisible()
     await cms.locator('input[name="className"]:visible').fill("p-1")
 
     await cms.getByRole("button", { name: "Publish" }).click()

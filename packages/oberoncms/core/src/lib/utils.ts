@@ -115,3 +115,10 @@ export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
     }
   }
 }
+
+export function isValidKey<TObj extends object>(
+  key: PropertyKey,
+  obj: TObj,
+): key is keyof TObj {
+  return key in obj
+}

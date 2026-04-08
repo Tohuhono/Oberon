@@ -23,6 +23,9 @@ and create-oberon-app script
 - Avoid filtering, changing directory, or otherwise targeting specific packages
   (--filter, --dir) manually
 - Prefer in-memory shell variables for transient state
+- Prefer documenting durable repo guidance in `.agents/` rather than relying on
+  opaque background memory; repo-visible instructions are the maintainable
+  source of truth
 - Never use `/tmp` or other external temp directories for session artifacts
 - If a temporary file is unavoidable, use `.tmp/` inside the repo root
 
