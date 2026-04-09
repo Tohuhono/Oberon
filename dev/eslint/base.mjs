@@ -23,6 +23,7 @@ export default defineConfig(
     ignores: [
       ".next/**/*",
       ".vercel/**/*",
+      ".playwright/**/*",
       "node_modules/**/*",
       "dist/**/*",
       ".rollup.cache/**/*",

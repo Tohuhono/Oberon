@@ -3,5 +3,5 @@
   "compilerOptions": {
     "rootDir": "."
   },
-  "include": ["*.ts", "helpers/**/*.ts"]
+  "include": ["*.ts", "test/helpers/**/*.ts", "test/helpers/setup-auth.spec.ts"]
 }

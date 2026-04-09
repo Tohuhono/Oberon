@@ -32,7 +32,6 @@ async function readNextjsLogs() {
 
 export default defineConfig({
   ...base,
-  testDir: "../..",
   webServer: {
     command: [
       `rm -f '${APP_LOG_PATH}'`,

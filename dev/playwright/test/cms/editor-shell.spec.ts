@@ -1,6 +1,6 @@
 import { expect, test } from "@dev/playwright/helpers/fixtures"
 
-test.describe("CMS Editor Shell TDD @tdd @editor @issue-329", () => {
+test.describe("CMS Editor Shell", { tag: "@cms" }, () => {
   test("shows modern header actions without legacy sidebar toggle", async ({
     cms,
     cmsSeededPageKey,

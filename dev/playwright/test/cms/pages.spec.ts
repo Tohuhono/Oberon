@@ -10,9 +10,9 @@ test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
     const key = `/${testKey}_add_page`
 
     await cms.goto("/cms/pages")
-    const textbox = cms.getByRole("textbox")
-    await expect(textbox).toBeEditable()
-    await textbox.fill(key)
+    const pagePathInput = cms.getByLabel("Page path", { exact: true })
+    await expect(pagePathInput).toBeEditable()
+    await pagePathInput.fill(key)
     const addPageButton = cms.getByRole("button", { name: "Add Page" })
     await expect(addPageButton).toBeEnabled()
     await addPageButton.click()

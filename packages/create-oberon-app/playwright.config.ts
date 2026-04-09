@@ -8,7 +8,6 @@ import { COA_NEXTJS_PORT, readNextjsLogs } from "./test/container"
 
 export default defineConfig({
   ...base,
-  testDir: "../..",
   use: {
     ...base.use,
     baseURL: `http://localhost:${COA_NEXTJS_PORT}`,
@@ -23,14 +22,17 @@ export default defineConfig({
     },
     {
       ...authenticatedProject,
+      grepInvert: /@playground/,
     },
     {
       name: "container-initialise",
+      testDir: "./test",
       grep: /@container-initialise/,
       teardown: "container-teardown",
     },
     {
       name: "container-verdaccio",
+      testDir: "./test",
       grep: /@verdaccio/,
       dependencies: ["container-initialise"],
     },

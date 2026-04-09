@@ -22,7 +22,7 @@ const PanelTabs = ({
       <Button
         role="tab"
         aria-selected={value === "insert"}
-        aria-controls="editor-panel-insert"
+        aria-controls="editor-tool-insert"
         variant={value === "insert" ? "secondary" : "ghost"}
         size="sm"
         onClick={() => onChange("insert")}
@@ -32,7 +32,7 @@ const PanelTabs = ({
       <Button
         role="tab"
         aria-selected={value === "outline"}
-        aria-controls="editor-panel-outline"
+        aria-controls="editor-tool-outline"
         variant={value === "outline" ? "secondary" : "ghost"}
         size="sm"
         onClick={() => onChange("outline")}
@@ -42,7 +42,7 @@ const PanelTabs = ({
       <Button
         role="tab"
         aria-selected={value === "inspector"}
-        aria-controls="editor-panel-inspector"
+        aria-controls="editor-tool-inspector"
         variant={value === "inspector" ? "secondary" : "ghost"}
         size="sm"
         onClick={() => onChange("inspector")}

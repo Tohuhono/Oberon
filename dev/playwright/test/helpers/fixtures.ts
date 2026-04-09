@@ -1,10 +1,11 @@
 import {
+  type ConsoleMessage,
   expect,
   type BrowserContext,
   type Page,
   type TestInfo,
 } from "@playwright/test"
-import { test as base } from "../base.config"
+import { test as base } from "../../base.config"
 
 function sanitizeKeyPart(value: string) {
   return (
@@ -26,9 +27,9 @@ function getTestKey(testInfo: TestInfo) {
 
 async function createCmsPage(page: Page, key: string) {
   await page.goto("/cms/pages")
-  const textbox = page.getByRole("textbox")
-  await expect(textbox).toBeEditable()
-  await textbox.fill(key)
+  const pagePathInput = page.getByLabel("Page path", { exact: true })
+  await expect(pagePathInput).toBeEditable()
+  await pagePathInput.fill(key)
   const addPageButton = page.getByRole("button", { name: "Add Page" })
   await expect(addPageButton).toBeEnabled()
   await addPageButton.click()
@@ -62,6 +63,10 @@ export const test = base.extend<{
   cms: Page
   testKey: string
   cmsSeededPageKey: string
+  errorCapture: {
+    browserErrors: string[]
+    clear: () => void
+  }
 }>({
   cmsContext: async ({ browser, authStorageStatePath }, use) => {
     if (!authStorageStatePath) {
@@ -93,6 +98,33 @@ export const test = base.extend<{
     await createCmsPage(cms, key)
     await use(key)
     await deleteCmsPages(cms, key)
+  },
+
+  errorCapture: async ({ cms }, use) => {
+    const browserErrors: string[] = []
+
+    const onPageError = (error: Error) => {
+      browserErrors.push(error.message)
+    }
+
+    const onConsoleMessage = (message: ConsoleMessage) => {
+      if (message.type() === "error") {
+        browserErrors.push(message.text())
+      }
+    }
+
+    cms.on("pageerror", onPageError)
+    cms.on("console", onConsoleMessage)
+
+    await use({
+      browserErrors,
+      clear: () => {
+        browserErrors.length = 0
+      },
+    })
+
+    cms.off("pageerror", onPageError)
+    cms.off("console", onConsoleMessage)
   },
 })
 

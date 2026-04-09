@@ -117,6 +117,7 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
               <FormItem className="row-span-2">
                 <FormControl>
                   <Input
+                    aria-label="Page path"
                     placeholder=""
                     {...field}
                     onChange={(e) => {

@@ -32,7 +32,6 @@ export function PreviewFrameTailwind() {
       document.querySelector("#preview-frame")
 
     if (!iframe?.contentDocument) {
-      console.warn("no preview iframe found")
       return
     }
 

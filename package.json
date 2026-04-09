@@ -39,12 +39,12 @@
     "test:coa": "turbo test:coa --concurrency 50 --filter=create-oberon-app... --output-logs new-only",
     "test:coa:ui": "turbo test:coa:ui --concurrency 50 --filter=create-oberon-app... --output-logs new-only",
     "test:e2e": "turbo test:e2e --filter={./apps/*}... --concurrency 50 --output-logs errors-only",
+    "test:e2e:ui": "turbo test:e2e:ui --concurrency 50",
     "test:unit": "turbo test:unit --filter={./packages/tohuhono/*}... --filter={./packages/plugins/*}... --filter={./packages/oberoncms/*}... --concurrency 50 ",
     "test:watch": "turbo test:watch --filter={./packages/*}... --concurrency 50",
     "test:tdd": "turbo test:tdd --concurrency 50 --filter=@oberon/playground... --output-logs new-only",
     "test:tdd:ui": "turbo test:tdd:ui --concurrency 50 --filter=@oberon/playground...",
     "test:smoke": "turbo test:smoke --concurrency 50",
-    "test:ui": "turbo test:ui --concurrency 50",
     "validate": "turbo validate --concurrency 50 --output-logs errors-only"
   },
   "lint-staged": {

@@ -1,6 +1,8 @@
 ---
+"@tohuhono/ui": patch
+"create-oberon-app": patch
 "@oberoncms/core": patch
 ---
 
-Align the CMS editor to the compositional Puck shell and update TDD coverage to
-user-facing Playwright locators.
+Align CMS editor accessibility contracts and migrate Playwright CMS coverage to
+the shared test fixture layout, including playground-only className assertions.
