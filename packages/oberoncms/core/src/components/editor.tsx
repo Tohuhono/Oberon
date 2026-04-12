@@ -3,25 +3,24 @@
 import "@puckeditor/core/puck.css"
 
 import { Config, Data, Puck } from "@puckeditor/core"
-import { type ReactNode } from "react"
+
 import { useLocalData } from "../hooks/use-local-data"
 import { INITIAL_DATA } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
-import { Preview } from "./editor/preview"
+import { Preview, PreviewHeading, useViewPort } from "./editor/preview"
 import { Header } from "./editor/header"
-import { Sidebar } from "./editor/sidebar"
+import {
+  Drawer,
+  DrawerItem,
+  Sidebar,
+  SidebarHeading,
+  SidebarTabs,
+  useSidebarTab,
+} from "./editor/sidebar"
 
 const editorOverrides = {
-  drawer: ({ children }: { children: ReactNode }) => (
-    <div className="bg-background/40 border-border h-full space-y-2 rounded-lg border p-2">
-      {children}
-    </div>
-  ),
-  drawerItem: ({ name }: { name: string }) => (
-    <div className="bg-card text-card-foreground border-border hover:bg-accent/40 hover:text-accent-foreground rounded-xl border shadow transition-colors">
-      {name}
-    </div>
-  ),
+  drawer: Drawer,
+  drawerItem: DrawerItem,
 }
 
 export function Editor({
@@ -35,6 +34,9 @@ export function Editor({
 }) {
   const { publishPageData } = useOberonActions()
   const [localData, setLocalData] = useLocalData(path, config)
+
+  const { activeTab, setActiveTab } = useSidebarTab()
+  const { currentViewport, setCurrentViewport } = useViewPort()
 
   const onPublish = async (data: Data) => {
     await publishPageData({
@@ -50,13 +52,41 @@ export function Editor({
       onChange={(data: Data) => {
         setLocalData(data)
       }}
+      onAction={(action) => {
+        if (action.type === "insert") {
+          console.log("A componlement was inserted:", action.componentType)
+          setActiveTab("fields")
+        }
+      }}
       onPublish={onPublish}
       overrides={editorOverrides}
     >
-      <div className="grid h-dvh grid-cols-[minmax(0,1fr)_300px] grid-rows-[auto_1fr] overflow-hidden">
-        <Header path={path} onPublish={onPublish} className="col-span-2" />
-        <Preview />
-        <Sidebar />
+      <div className="bg-card grid h-dvh grid-cols-[minmax(0,1fr)_auto_300px] grid-rows-[auto_auto_1fr] overflow-hidden">
+        <span className="col-span-3">
+          <Header path={path} onPublish={onPublish} />
+        </span>
+        <PreviewHeading
+          className="flex flex-row items-center justify-center"
+          currentViewport={currentViewport}
+          setCurrentViewport={setCurrentViewport}
+        />
+        <div className="" />
+        <SidebarHeading
+          className="bg-sidebar-primary text-sidebar-primary-foreground rounded-tl-lg"
+          activeTab={activeTab}
+        />
+
+        <Preview className="p-1" currentViewport={currentViewport} />
+
+        <SidebarTabs
+          className="[&>button]:aria-selected:bg-sidebar-primary flex flex-col pt-2"
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+        <Sidebar
+          className="border-sidebar-primary bg-sidebar-background text-sidebar-foreground border-t-2 border-l-2"
+          activeTab={activeTab}
+        />
       </div>
     </Puck>
   )

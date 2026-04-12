@@ -126,3 +126,10 @@ export function iterateStreamResponse<T>(
     },
   }
 }
+
+export function isValidKey<TObj extends object>(
+  key: PropertyKey,
+  obj: TObj,
+): key is keyof TObj {
+  return key in obj
+}

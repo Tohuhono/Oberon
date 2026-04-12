@@ -1,5 +1,6 @@
 ---
 "@tohuhono/ui": patch
+"@tohuhono/utils": patch
 "create-oberon-app": patch
 "@oberoncms/core": patch
 ---

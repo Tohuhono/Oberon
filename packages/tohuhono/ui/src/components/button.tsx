@@ -9,7 +9,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@tohuhono/utils"
 
 const buttonVariants = cva(
-  "focus-visible:ring-ring inline-flex items-center rounded-md font-medium text-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+  "focus-visible:ring-ring aria-selected:bg-secondary aria-selected:text-secondary-foreground inline-flex cursor-pointer items-center rounded-md font-medium text-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -23,6 +23,12 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        tab: [
+          "relative rounded-r-none",
+          "aria-selected:bg-sidebar-primary aria-selected:text-sidebar-primary-foreground aria-selected:after:block",
+          "hover:bg-accent hover:text-accent-foreground hover:after:block",
+          "after:corner-scoop after:absolute after:right-0 after:hidden after:h-10 after:w-1 after:rounded-l-full after:bg-inherit after:content-['']",
+        ],
       },
       size: {
         default: "h-8 justify-center px-4 py-2 text-sm",

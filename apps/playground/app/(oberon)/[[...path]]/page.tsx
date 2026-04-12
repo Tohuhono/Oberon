@@ -25,7 +25,7 @@ async function getDynamicStylesheets() {
         "@oberoncms/plugin-tailwind",
         `asset:${activeHash}`,
       )) === "string"
-      ? [`/cms/api/tailwind?hash=${encodeURIComponent(activeHash)}`]
+      ? [`/cms/api/tailwind/${encodeURIComponent(activeHash)}.css`]
       : []
   } catch {
     return []

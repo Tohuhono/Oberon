@@ -2,77 +2,107 @@
 
 import "@puckeditor/core/puck.css"
 
-import { Puck } from "@puckeditor/core"
 import { Button } from "@tohuhono/ui/button"
-import { useState } from "react"
+import { cn, isValidKey } from "@tohuhono/utils"
 
-const PanelTabs = ({
-  value,
-  onChange,
-}: {
-  value: "insert" | "outline" | "inspector"
-  onChange: (tab: "insert" | "outline" | "inspector") => void
-}) => (
-  <div
-    role="tablist"
-    aria-label="Editor tools"
-    className="bg-secondary/50 border-b p-2"
-  >
-    <div className="grid grid-cols-3 gap-1">
-      <Button
-        role="tab"
-        aria-selected={value === "insert"}
-        aria-controls="editor-tool-insert"
-        variant={value === "insert" ? "secondary" : "ghost"}
-        size="sm"
-        onClick={() => onChange("insert")}
-      >
-        Insert
-      </Button>
-      <Button
-        role="tab"
-        aria-selected={value === "outline"}
-        aria-controls="editor-tool-outline"
-        variant={value === "outline" ? "secondary" : "ghost"}
-        size="sm"
-        onClick={() => onChange("outline")}
-      >
-        Outline
-      </Button>
-      <Button
-        role="tab"
-        aria-selected={value === "inspector"}
-        aria-controls="editor-tool-inspector"
-        variant={value === "inspector" ? "secondary" : "ghost"}
-        size="sm"
-        onClick={() => onChange("inspector")}
-      >
-        Inspector
-      </Button>
-    </div>
+import {
+  CardStackPlusIcon,
+  ListBulletIcon,
+  MixerHorizontalIcon,
+  DragHandleDots2Icon,
+} from "@radix-ui/react-icons"
+
+import { useState, type PropsWithChildren } from "react"
+import { createUsePuck, Puck } from "@puckeditor/core"
+
+const usePuck = createUsePuck()
+
+const sidebarTabs = {
+  components: { label: "Components", Icon: CardStackPlusIcon },
+  outline: { label: "Layout", Icon: ListBulletIcon },
+  fields: { label: "Page Settings", Icon: MixerHorizontalIcon },
+} as const
+export type SidebarTab = keyof typeof sidebarTabs
+
+export const Drawer = ({ children }: PropsWithChildren) => (
+  <div className="h-full space-y-1">{children}</div>
+)
+
+export const DrawerItem = ({ name }: { name: string }) => (
+  <div className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground flex-cols-2 flex cursor-grab items-baseline justify-between rounded-sm border px-2 py-1 shadow transition-colors">
+    {name}
+    <DragHandleDots2Icon />
   </div>
 )
 
-export const Sidebar = () => {
-  const [activeTab, setActiveTab] = useState<
-    "insert" | "outline" | "inspector"
-  >("insert")
-
-  return (
-    <aside
-      data-testid="editor-tool-shell"
-      className="bg-background text-card-foreground flex h-full flex-col"
-    >
-      <PanelTabs value={activeTab} onChange={setActiveTab} />
-      <div
-        className="h-full overflow-auto p-2"
-        id={`editor-tool-${activeTab}`}
-        role="tabpanel"
+export const SidebarTabs = ({
+  activeTab,
+  setActiveTab,
+  className,
+}: {
+  activeTab: SidebarTab
+  setActiveTab: (tab: SidebarTab) => void
+  className?: string
+}) => (
+  <div role="tablist" aria-label="Editor tools" className={className}>
+    {Object.entries(sidebarTabs).map(([tabValue, { label, Icon }]) => (
+      <Button
+        key={tabValue}
+        role="tab"
+        aria-label={label}
+        aria-selected={activeTab === tabValue}
+        aria-controls={`editor-tool-${tabValue}`}
+        title={label}
+        variant="tab"
+        size="icon"
+        onClick={() =>
+          isValidKey(tabValue, sidebarTabs) && setActiveTab(tabValue)
+        }
       >
-        {activeTab === "insert" && <Puck.Components />}
+        <Icon className="s-4" />
+        <span className="sr-only">{label}</span>
+      </Button>
+    ))}
+  </div>
+)
+
+export const useSidebarTab = () => {
+  const [activeTab, setActiveTab] = useState<SidebarTab>("fields")
+
+  return { activeTab, setActiveTab }
+}
+
+export const SidebarHeading = ({
+  activeTab,
+  className,
+}: {
+  activeTab: SidebarTab
+  className?: string
+}) => {
+  const selectedComponent = usePuck(
+    (s) => s.selectedItem?.type || sidebarTabs["fields"].label,
+  )
+
+  const tabLabel =
+    activeTab === "fields" ? selectedComponent : sidebarTabs[activeTab].label
+
+  return <h3 className={cn(className, "p-2 pl-4")}>{tabLabel}</h3>
+}
+
+export const Sidebar = ({
+  activeTab,
+  className,
+}: {
+  activeTab: SidebarTab
+  className?: string
+}) => {
+  return (
+    <div className={cn(className, "h-full overflow-auto p-2")}>
+      <div id={`editor-tool-${activeTab}`} role="tabpanel">
+        {activeTab === "components" && <Puck.Components />}
         {activeTab === "outline" && <Puck.Outline />}
-        {activeTab === "inspector" && <Puck.Fields />}
+        {activeTab === "fields" && <Puck.Fields />}
       </div>
-    </aside>
+    </div>
   )
 }

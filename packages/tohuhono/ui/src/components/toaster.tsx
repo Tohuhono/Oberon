@@ -88,7 +88,7 @@ export function Toaster() {
   return (
     <ToastPrimitive.Provider toastManager={toastManager} limit={1}>
       <ToastPrimitive.Portal>
-        <ToastPrimitive.Viewport className="fixed top-0 left-[50%] z-[100] flex max-h-screen w-full translate-x-[-50%] flex-col-reverse p-4 sm:right-0 sm:flex-col md:max-w-[420px]">
+        <ToastPrimitive.Viewport className="fixed top-0 left-[50%] z-100 flex max-h-screen min-h-0 w-full translate-x-[-50%] flex-col-reverse sm:right-0 sm:flex-col md:max-w-[420px]">
           <ToastItems />
         </ToastPrimitive.Viewport>
       </ToastPrimitive.Portal>
