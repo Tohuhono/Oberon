@@ -17,17 +17,17 @@
       "default": "./projects.ts"
     },
     "./helpers/bootstrap": {
-      "default": "./helpers/bootstrap.ts"
+      "default": "./test/helpers/bootstrap.ts"
     },
     "./helpers/fixtures": {
-      "default": "./helpers/fixtures.ts"
+      "default": "./test/helpers/fixtures.ts"
     }
   },
   "files": [
     "base.config.ts",
     "projects.ts",
     "playwright.config.ts",
-    "helpers"
+    "test"
   ],
   "devDependencies": {
     "@playwright/test": "^1.52.0",

@@ -54,6 +54,8 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
   - use `createAdapterTests(...)` for canonical adapter contract coverage
   - use `createAdapterTest(test)` or `createPluginTest(test)` when you need
     package-specific cases on top of a shared adapter fixture
+  - use `createSqliteAdapterFactory(...)` for disposable sqlite-backed
+    plugin/adapter fixtures when database behavior matters
   - only add custom local fixtures for behavior the shared adapter fixtures
     cannot express cleanly
 - Do not export functions solely to enable testing — unexported functions are
@@ -73,6 +75,8 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
   - `issue-308`
   - `bug-123`
   - `feature-editor-refactor`
+- Tagged suites require a package `vitest.config.ts` that imports
+  `initTestConfig()` from `@dev/vitest/config`
 - Mixed files are allowed, but keep provenance boundaries explicit with tagged
   suites instead of ambiguous untagged blocks
 - Canonical narrow agent loop example:

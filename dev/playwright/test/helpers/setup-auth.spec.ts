@@ -1,4 +1,4 @@
-import { test } from "../base.config"
+import { test } from "../../base.config"
 import { completeUiLoginWithOtp } from "./bootstrap"
 
 test.describe("Shared auth setup", { tag: "@auth" }, () => {

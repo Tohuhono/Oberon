@@ -11,9 +11,9 @@
     "next": "next",
     "typegen": "next typegen",
     "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "test:tdd": "playwright test --config playwright.tdd.config.ts",
     "test:tdd:ui": "playwright test --config playwright.tdd.config.ts --ui",
-    "test:ui": "playwright test --ui",
     "tsc": "tsc --pretty",
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start"
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@dev/eslint": "workspace:*",
+    "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vitest": "workspace:*",

@@ -1,2 +1,5 @@
 export * from "./theme/theme-editor-menu"
+export * from "./theme/theme-switcher-menu"
+export * from "./theme/themes"
 export * from "./theme/dynamic-tailwind"
+export { ModeToggle } from "./theme/mode-toggle"

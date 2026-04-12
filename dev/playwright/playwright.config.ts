@@ -18,18 +18,16 @@ export default defineConfig({
       "x-vercel-set-bypass-cookie": "true",
     },
   },
-  testDir: "../..",
-  testMatch: "apps/**/test/**/*.spec.ts",
   projects: [
     {
       name: "playground",
-      testMatch: "apps/playground/test/**/*.spec.ts",
+      testDir: "../../apps/playground/test",
       grep: /@smoke/,
       use: { baseURL },
     },
     {
       name: "docs",
-      testMatch: "apps/documentation/test/**/*.spec.ts",
+      testDir: "../../apps/documentation/test",
       grep: /@smoke/,
       use: { baseURL },
     },
