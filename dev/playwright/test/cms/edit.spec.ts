@@ -3,7 +3,17 @@ import { expect, test } from "@dev/playwright/helpers/fixtures"
 test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
   test("publishes from editor", async ({ cms, cmsSeededPageKey }) => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
-    await cms.getByRole("button", { name: "Publish" }).click()
+    const publishButton = cms.getByRole("button", {
+      name: "Publish",
+      exact: true,
+    })
+
+    await publishButton.click()
+    await expect(
+      cms.getByText(`Successfully published ${cmsSeededPageKey}`, {
+        exact: true,
+      }),
+    ).toBeVisible()
 
     await cms.goto(cmsSeededPageKey)
     await expect(cms).toHaveURL(cmsSeededPageKey)
@@ -97,7 +107,17 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
       await expect(classNameInput).toBeVisible()
       await classNameInput.fill("p-1")
 
-      await cms.getByRole("button", { name: "Publish" }).click()
+      const publishButton = cms.getByRole("button", {
+        name: "Publish",
+        exact: true,
+      })
+
+      await publishButton.click()
+      await expect(
+        cms.getByText(`Successfully published ${cmsSeededPageKey}`, {
+          exact: true,
+        }),
+      ).toBeVisible()
 
       errorCapture.clear()
       await cms.goto(cmsSeededPageKey)
