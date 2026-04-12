@@ -2,96 +2,25 @@
 
 import "@puckeditor/core/puck.css"
 
-import { Config, Data, Puck, createUsePuck } from "@puckeditor/core"
-import { Button } from "@tohuhono/ui/button"
-import { useState } from "react"
+import { Config, Data, Puck } from "@puckeditor/core"
+
 import { useLocalData } from "../hooks/use-local-data"
 import { INITIAL_DATA } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
-import { Menu } from "./menu"
+import { Preview, PreviewHeading, useViewPort } from "./editor/preview"
+import { Header } from "./editor/header"
+import {
+  Drawer,
+  DrawerItem,
+  Sidebar,
+  SidebarHeading,
+  SidebarTabs,
+  useSidebarTab,
+} from "./editor/sidebar"
 
-const usePuck = createUsePuck()
-
-const useHeaderState = () => ({
-  dispatch: usePuck((s) => s.dispatch),
-  leftSideBarVisible: usePuck((s) => s.appState.ui.leftSideBarVisible),
-  data: usePuck((s) => s.appState.data),
-})
-
-const Header = ({
-  path,
-  onPublish,
-}: {
-  path: string
-  onPublish: (data: Data) => Promise<void>
-}) => {
-  const { dispatch, leftSideBarVisible, data } = useHeaderState()
-  const [ispublishing, setIspublishing] = useState(false)
-
-  return (
-    <div style={{ gridArea: "header" }}>
-      <Menu title={data.root.title} path={path}>
-        <Button
-          onClick={() =>
-            dispatch({
-              type: "setUi",
-              ui: {
-                leftSideBarVisible: !leftSideBarVisible,
-              },
-            })
-          }
-          variant="outline"
-          size="sm"
-        >
-          {leftSideBarVisible ? "<" : ">"}
-        </Button>
-        {/*
-     // TODO puck history
-    <Button
-      variant="outline"
-      size="sm"
-      disabled={!canRewind}
-      onClick={() => rewind()}
-    >
-      {"Undo"}
-    </Button>
-    <Button
-      size="sm"
-      variant="outline"
-      disabled={!canForward}
-      onClick={() => forward()}
-    >
-      {"Redo"}
-    </Button>
-    */}
-        <Button
-          onClick={() => window.open(`/cms/preview${path}`, "_blank")?.focus()}
-          variant="outline"
-          size="sm"
-        >
-          Preview
-        </Button>
-        <Button
-          onClick={() => window.open(path, "_blank")?.focus()}
-          variant="outline"
-          size="sm"
-        >
-          View
-        </Button>
-        <Button
-          disabled={ispublishing}
-          onClick={async () => {
-            setIspublishing(true)
-            await onPublish(data)
-            setIspublishing(false)
-          }}
-          size="sm"
-        >
-          Publish
-        </Button>
-      </Menu>
-    </div>
-  )
+const editorOverrides = {
+  drawer: Drawer,
+  drawerItem: DrawerItem,
 }
 
 export function Editor({
@@ -106,6 +35,9 @@ export function Editor({
   const { publishPageData } = useOberonActions()
   const [localData, setLocalData] = useLocalData(path, config)
 
+  const { activeTab, setActiveTab } = useSidebarTab()
+  const { currentViewport, setCurrentViewport } = useViewPort()
+
   const onPublish = async (data: Data) => {
     await publishPageData({
       key: path,
@@ -113,7 +45,6 @@ export function Editor({
     })
   }
 
-  /* TODO types need fixing */
   return (
     <Puck
       config={config}
@@ -121,12 +52,42 @@ export function Editor({
       onChange={(data: Data) => {
         setLocalData(data)
       }}
-      onPublish={() => {}}
-      plugins={[]}
-      headerPath={path}
-      overrides={{
-        header: () => <Header path={path} onPublish={onPublish} />,
+      onAction={(action) => {
+        if (action.type === "insert") {
+          console.log("A componlement was inserted:", action.componentType)
+          setActiveTab("fields")
+        }
       }}
-    />
+      onPublish={onPublish}
+      overrides={editorOverrides}
+    >
+      <div className="bg-card grid h-dvh grid-cols-[minmax(0,1fr)_auto_300px] grid-rows-[auto_auto_1fr] overflow-hidden">
+        <span className="col-span-3">
+          <Header path={path} onPublish={onPublish} />
+        </span>
+        <PreviewHeading
+          className="flex flex-row items-center justify-center"
+          currentViewport={currentViewport}
+          setCurrentViewport={setCurrentViewport}
+        />
+        <div className="" />
+        <SidebarHeading
+          className="bg-sidebar-primary text-sidebar-primary-foreground rounded-tl-lg"
+          activeTab={activeTab}
+        />
+
+        <Preview className="p-1" currentViewport={currentViewport} />
+
+        <SidebarTabs
+          className="[&>button]:aria-selected:bg-sidebar-primary flex flex-col pt-2"
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+        <Sidebar
+          className="border-sidebar-primary bg-sidebar-background text-sidebar-foreground border-t-2 border-l-2"
+          activeTab={activeTab}
+        />
+      </div>
+    </Puck>
   )
 }

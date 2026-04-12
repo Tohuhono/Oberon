@@ -1,6 +1,7 @@
 "use client"
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
+import { cn } from "@tohuhono/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,11 +40,11 @@ export const getMode = (): "light" | "dark" | "system" => {
   return "system"
 }
 
-export const ModeToggle = () => {
+export const ModeToggle = ({ className }: { className?: string }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="align-middle">
+        <Button variant="outline" className={cn(className, "align-middle")}>
           <SunIcon className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
           <MoonIcon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
