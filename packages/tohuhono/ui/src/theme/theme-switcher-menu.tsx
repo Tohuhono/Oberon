@@ -3,18 +3,19 @@
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useMemo, useState } from "react"
 import { cn } from "@tohuhono/utils"
+import { useMode } from "@tohuhono/utils/use-mode"
 import { Button } from "../button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../dropdown-menu"
-import { getMode, setMode } from "./mode-toggle"
 import { ApplyTheme } from "./theme-editor"
 import { fallbackTheme, themePresets } from "./themes"
 
 export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
-  const [selectedMode, setSelectedMode] = useState(getMode())
+  const [mode, setMode] = useMode()
+
   const [selectedThemeId, setSelectedThemeId] = useState(
     themePresets[0]?.id ?? "",
   )
@@ -23,11 +24,6 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
     () => themePresets.find((preset) => preset.id === selectedThemeId)?.theme,
     [selectedThemeId],
   )
-
-  const onModeClick = (mode: "light" | "dark" | "system") => {
-    setSelectedMode(mode)
-    setMode(mode)
-  }
 
   return (
     <DropdownMenu>
@@ -46,9 +42,9 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
             size="sm"
             className={cn(
               "active w-full justify-self-center",
-              selectedMode === "system" && "bg-accent text-accent-foreground",
+              mode === "system" && "bg-accent text-accent-foreground",
             )}
-            onClick={() => onModeClick("system")}
+            onClick={() => setMode("system")}
           >
             system
           </Button>
@@ -57,9 +53,9 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
             size="sm"
             className={cn(
               "active w-full justify-self-center",
-              selectedMode === "light" && "bg-accent text-accent-foreground",
+              mode === "light" && "bg-accent text-accent-foreground",
             )}
-            onClick={() => onModeClick("light")}
+            onClick={() => setMode("light")}
           >
             light
           </Button>
@@ -68,9 +64,9 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
             size="sm"
             className={cn(
               "active w-full justify-self-center",
-              selectedMode === "dark" && "bg-accent text-accent-foreground",
+              mode === "dark" && "bg-accent text-accent-foreground",
             )}
-            onClick={() => onModeClick("dark")}
+            onClick={() => setMode("dark")}
           >
             dark
           </Button>

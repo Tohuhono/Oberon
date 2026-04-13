@@ -3,6 +3,7 @@
 import "@puckeditor/core/puck.css"
 
 import { Config, Data, Puck } from "@puckeditor/core"
+import { useMemo, useState, type PropsWithChildren } from "react"
 
 import { useLocalData } from "../hooks/use-local-data"
 import { INITIAL_DATA } from "../lib/dtd"
@@ -17,11 +18,7 @@ import {
   SidebarTabs,
   useSidebarTab,
 } from "./editor/sidebar"
-
-const editorOverrides = {
-  drawer: Drawer,
-  drawerItem: DrawerItem,
-}
+import { PreviewIframe, type PreviewMode } from "./editor/preview-iframe"
 
 export function Editor({
   path,
@@ -37,6 +34,26 @@ export function Editor({
 
   const { activeTab, setActiveTab } = useSidebarTab()
   const { currentViewport, setCurrentViewport } = useViewPort()
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("follow")
+
+  const editorOverrides = useMemo(
+    () => ({
+      drawer: Drawer,
+      drawerItem: DrawerItem,
+      iframe: ({
+        children,
+        document: iframeDocument,
+      }: PropsWithChildren<{ document?: Document }>) => (
+        <PreviewIframe
+          iframeDocument={iframeDocument}
+          previewMode={previewMode}
+        >
+          {children}
+        </PreviewIframe>
+      ),
+    }),
+    [previewMode],
+  )
 
   const onPublish = async (data: Data) => {
     await publishPageData({
@@ -66,9 +83,11 @@ export function Editor({
           <Header path={path} onPublish={onPublish} />
         </span>
         <PreviewHeading
-          className="flex flex-row items-center justify-center"
+          className="flex flex-row items-center justify-center gap-6 pt-0.5"
           currentViewport={currentViewport}
           setCurrentViewport={setCurrentViewport}
+          previewMode={previewMode}
+          setPreviewMode={setPreviewMode}
         />
         <div className="" />
         <SidebarHeading

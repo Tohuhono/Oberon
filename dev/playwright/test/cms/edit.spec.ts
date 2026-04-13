@@ -130,3 +130,105 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
     },
   )
 })
+
+test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
+  test("applies preview follow mode when editor mode changes", async ({
+    cms,
+    cmsSeededPageKey,
+  }) => {
+    await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+
+    const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
+
+    const openPreviewModeMenu = async () => {
+      await cms
+        .getByRole("button", { name: "Preview mode", exact: true })
+        .click()
+    }
+
+    const openThemeMenu = async () => {
+      await cms.getByRole("button", { name: /theme/i }).first().click()
+    }
+
+    await openPreviewModeMenu()
+    await cms.getByRole("menuitem", { name: "Follow", exact: true }).click()
+
+    await openThemeMenu()
+    await cms.getByRole("menuitem", { name: "Light", exact: true }).click()
+    await expect(frameHtml).not.toHaveClass(/dark/)
+
+    await openThemeMenu()
+    await cms.getByRole("menuitem", { name: "Dark", exact: true }).click()
+    await expect(frameHtml).toHaveClass(/dark/)
+  })
+
+  test("applies explicit preview light and dark modes", async ({
+    cms,
+    cmsSeededPageKey,
+  }) => {
+    await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+
+    const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
+
+    const openPreviewModeMenu = async () => {
+      await cms
+        .getByRole("button", { name: "Preview mode", exact: true })
+        .click()
+    }
+
+    const openThemeMenu = async () => {
+      await cms.getByRole("button", { name: /theme/i }).first().click()
+    }
+
+    await openThemeMenu()
+    await cms.getByRole("menuitem", { name: "Dark", exact: true }).click()
+    await expect(frameHtml).toHaveClass(/dark/)
+
+    await openPreviewModeMenu()
+    await cms.getByRole("menuitem", { name: "Light", exact: true }).click()
+    await expect(frameHtml).not.toHaveClass(/dark/)
+
+    await openPreviewModeMenu()
+    await cms.getByRole("menuitem", { name: "Dark", exact: true }).click()
+    await expect(frameHtml).toHaveClass(/dark/)
+  })
+
+  test("hides preview mode controls outside editor pages", async ({ cms }) => {
+    await cms.goto("/cms/pages")
+
+    await expect(
+      cms.getByRole("button", { name: "Preview mode", exact: true }),
+    ).toHaveCount(0)
+  })
+
+  test("resets preview mode to follow on editor remount", async ({
+    cms,
+    cmsSeededPageKey,
+  }) => {
+    await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+
+    const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
+
+    const openPreviewModeMenu = async () => {
+      await cms
+        .getByRole("button", { name: "Preview mode", exact: true })
+        .click()
+    }
+
+    const openThemeMenu = async () => {
+      await cms.getByRole("button", { name: /theme/i }).first().click()
+    }
+
+    await openPreviewModeMenu()
+    await cms.getByRole("menuitem", { name: "Dark", exact: true }).click()
+    await expect(frameHtml).toHaveClass(/dark/)
+
+    await cms.goto("/cms/pages")
+    await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+
+    await openThemeMenu()
+    await cms.getByRole("menuitem", { name: "Light", exact: true }).click()
+
+    await expect(frameHtml).not.toHaveClass(/dark/)
+  })
+})

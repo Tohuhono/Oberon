@@ -3,6 +3,7 @@
 import { ClipboardCopyIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useState, ChangeEvent, Fragment } from "react"
 import { cn } from "@tohuhono/utils"
+import { useMode } from "@tohuhono/utils/use-mode"
 import { Input } from "../input"
 import { Label } from "../label"
 import {
@@ -13,17 +14,11 @@ import {
 import { Button } from "../button"
 import { ApplyTheme, copyToClipboard } from "./theme-editor"
 import { defaultTheme } from "./default-theme"
-import { getMode, setMode } from "./mode-toggle"
 
 export const ThemeEditorMenu = ({ className }: { className?: string }) => {
   const [theme, setTheme] = useState(defaultTheme)
 
-  const [selectedMode, setSelectedMode] = useState(getMode())
-
-  const onModeClick = (mode: "light" | "dark" | "system") => {
-    setSelectedMode(mode)
-    setMode(mode)
-  }
+  const [mode, setMode] = useMode()
 
   const onInputChange =
     (id: string, mode: "light" | "dark") =>
@@ -54,9 +49,9 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
             size="sm"
             className={cn(
               "active w-full justify-self-center",
-              selectedMode === "system" && "bg-accent text-accent-foreground",
+              mode === "system" && "bg-accent text-accent-foreground",
             )}
-            onClick={() => onModeClick("system")}
+            onClick={() => setMode("system")}
           >
             system
           </Button>
@@ -65,9 +60,9 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
             size="sm"
             className={cn(
               "active w-full justify-self-center",
-              selectedMode === "light" && "bg-accent text-accent-foreground",
+              mode === "light" && "bg-accent text-accent-foreground",
             )}
-            onClick={() => onModeClick("light")}
+            onClick={() => setMode("light")}
           >
             light
           </Button>
@@ -76,9 +71,9 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
             size="sm"
             className={cn(
               "active w-full justify-self-center",
-              selectedMode === "dark" && "bg-accent text-accent-foreground",
+              mode === "dark" && "bg-accent text-accent-foreground",
             )}
-            onClick={() => onModeClick("dark")}
+            onClick={() => setMode("dark")}
           >
             dark
           </Button>

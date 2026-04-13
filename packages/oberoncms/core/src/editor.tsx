@@ -1,4 +1,4 @@
-import { DynamicTailwind, PreviewFrameTailwind } from "@tohuhono/ui/theme"
+import { DynamicTailwind } from "@tohuhono/ui/theme"
 import { notFound } from "next/navigation"
 import type { PropsWithChildren } from "react"
 import type { OberonConfig } from "./lib/dtd"
@@ -14,17 +14,6 @@ import { Site } from "./components/site"
 import { Login } from "./components/login"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
-
-const editorConfig = {
-  root: {
-    render: ({ children }: PropsWithChildren) => (
-      <>
-        <PreviewFrameTailwind />
-        {children}
-      </>
-    ),
-  },
-}
 
 const previewConfig = {
   root: {
@@ -45,9 +34,7 @@ export function OberonClient({ config }: { config: OberonConfig }) {
   }
 
   if (action === "edit") {
-    return (
-      <Editor path={slug} data={data} config={{ ...editorConfig, ...config }} />
-    )
+    return <Editor path={slug} data={data} config={config} />
   }
 
   if (action === "preview") {
