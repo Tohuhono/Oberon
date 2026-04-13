@@ -29,6 +29,8 @@
     },
     "./map-concurrent": "./dist/map-concurrent.js",
     "./use-client-state": "./dist/use-client-state.js",
+    "./use-local-storage": "./dist/use-local-storage.js",
+    "./use-mode": "./dist/use-mode.js",
     "./wait-for-server": {
       "types": "./src/wait-for-server.ts",
       "default": "./dist/wait-for-server.js"

@@ -7,14 +7,24 @@ import { Puck } from "@puckeditor/core"
 import { useState } from "react"
 
 import { Button } from "@tohuhono/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@tohuhono/ui/dropdown-menu"
 import { cn, isValidKey } from "@tohuhono/utils"
 import {
   MobileIcon,
   LaptopIcon,
   DesktopIcon,
   WidthIcon,
+  SunIcon,
+  MoonIcon,
 } from "@radix-ui/react-icons"
 import { useFitZoom } from "../../hooks/use-fit-zoom"
+import { type PreviewMode } from "./preview-iframe"
 
 const viewPorts = {
   small: {
@@ -44,23 +54,27 @@ const viewPorts = {
 } as const
 type ViewPort = keyof typeof viewPorts
 
+const previewModes: Record<PreviewMode, string> = {
+  follow: "Follow",
+  light: "Light",
+  dark: "Dark",
+}
+
 export const useViewPort = () => {
   const [currentViewport, setCurrentViewport] = useState<ViewPort>("full")
 
   return { currentViewport, setCurrentViewport }
 }
 
-export const PreviewHeading = ({
+const ViewPortSwitcher = ({
   currentViewport,
   setCurrentViewport,
-  className,
 }: {
   currentViewport: ViewPort
   setCurrentViewport: (ViewPort: ViewPort) => void
-  className?: string
 }) => {
   return (
-    <div className={className} role="group" aria-label="Viewport size">
+    <div role="group" aria-label="Viewport size" className="flex flex-row">
       {Object.entries(viewPorts).map(([value, { label, icon: Icon }]) => {
         const isSelected = currentViewport === value
 
@@ -71,7 +85,7 @@ export const PreviewHeading = ({
             aria-label={label}
             aria-selected={isSelected}
             variant="ghost"
-            size="icon"
+            size="sm"
             onClick={() => {
               if (isValidKey(value, viewPorts)) {
                 setCurrentViewport(value)
@@ -83,6 +97,98 @@ export const PreviewHeading = ({
           </Button>
         )
       })}
+    </div>
+  )
+}
+
+const PreviewModeSwitcher = ({
+  previewMode,
+  setPreviewMode,
+}: {
+  previewMode: PreviewMode
+  setPreviewMode: (mode: PreviewMode) => void
+}) => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="align-middle"
+          aria-label="Preview mode"
+        >
+          <SunIcon
+            className={cn(
+              "scale-100 rotate-0 transition-all",
+              previewMode === "follow" && "dark:scale-0 dark:-rotate-90",
+              previewMode === "dark" && "scale-0 -rotate-90",
+            )}
+          />
+          <MoonIcon
+            className={cn(
+              "absolute scale-0 rotate-90 transition-all",
+              previewMode === "follow" && "dark:scale-100 dark:rotate-0",
+              previewMode === "dark" && "scale-100 rotate-0",
+            )}
+          />
+          <span className="sr-only">Preview Theme switcher</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            aria-selected={previewMode === "light"}
+            onClick={() => {
+              setPreviewMode("light")
+            }}
+          >
+            {previewModes.light}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-selected={previewMode === "dark"}
+            onClick={() => {
+              setPreviewMode("dark")
+            }}
+          >
+            {previewModes.dark}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-selected={previewMode === "follow"}
+            onClick={() => {
+              setPreviewMode("follow")
+            }}
+          >
+            {previewModes.follow}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+export const PreviewHeading = ({
+  currentViewport,
+  setCurrentViewport,
+  previewMode,
+  setPreviewMode,
+  className,
+}: {
+  currentViewport: ViewPort
+  setCurrentViewport: (ViewPort: ViewPort) => void
+  previewMode: PreviewMode
+  setPreviewMode: (mode: PreviewMode) => void
+  className?: string
+}) => {
+  return (
+    <div className={className}>
+      <ViewPortSwitcher
+        currentViewport={currentViewport}
+        setCurrentViewport={setCurrentViewport}
+      />
+      <PreviewModeSwitcher
+        previewMode={previewMode}
+        setPreviewMode={setPreviewMode}
+      />
     </div>
   )
 }

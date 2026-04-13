@@ -2,45 +2,20 @@
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { cn } from "@tohuhono/utils"
+
+import { useMode } from "@tohuhono/utils/use-mode"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../dropdown-menu"
 import { Button } from "../button"
 
-export const setMode = (theme: "light" | "dark" | "system") => {
-  if (theme === "system") {
-    localStorage?.removeItem("theme")
-
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      document.documentElement.classList.add("dark")
-    }
-  }
-
-  if (theme === "light") {
-    localStorage?.setItem("theme", "light")
-    document.documentElement.classList.remove("dark")
-  }
-
-  if (theme === "dark") {
-    localStorage?.setItem("theme", "dark")
-    document.documentElement.classList.add("dark")
-  }
-}
-
-export const getMode = (): "light" | "dark" | "system" => {
-  if (typeof localStorage !== "undefined" && localStorage.theme === "dark") {
-    return "dark"
-  }
-  if (typeof localStorage !== "undefined" && localStorage.theme === "light") {
-    return "light"
-  }
-  return "system"
-}
-
 export const ModeToggle = ({ className }: { className?: string }) => {
+  const [mode, setMode] = useMode()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,15 +26,26 @@ export const ModeToggle = ({ className }: { className?: string }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setMode("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setMode("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setMode("system")}>
-          System
-        </DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            aria-selected={mode === "light"}
+            onClick={() => setMode("light")}
+          >
+            Light
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-selected={mode === "dark"}
+            onClick={() => setMode("dark")}
+          >
+            Dark
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-selected={mode === "system"}
+            onClick={() => setMode("system")}
+          >
+            System
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )

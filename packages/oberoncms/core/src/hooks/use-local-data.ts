@@ -1,5 +1,7 @@
-import { useRef, useSyncExternalStore } from "react"
+import { useCallback, useRef } from "react"
 import { Config, Data } from "@puckeditor/core"
+import { useLocalStorage } from "@tohuhono/utils/use-local-storage"
+import { encode } from "@tohuhono/utils"
 
 function isData(value: unknown): value is Data {
   return (
@@ -18,39 +20,25 @@ export const useLocalData = (path: string, config: Config) => {
     data: Data | null
   } | null>(null)
 
-  const getKey = (path: string, componentKey: string) =>
-    `puck-demo:${window.btoa(componentKey)}:${path}`
+  const key = `${encode(componentKey)}:${path}`
 
-  const data = useSyncExternalStore(
-    (callback) => {
-      window.addEventListener("storage", callback)
-      return () => window.removeEventListener("storage", callback)
-    },
-    (): Data | null => {
-      const localData = localStorage.getItem(getKey(path, componentKey))
-      const cached = cachedSnapshot.current
+  const parser = useCallback((maybeData: string | null) => {
+    const cached = cachedSnapshot.current
 
-      if (cached && cached.raw === localData) {
-        return cached.data
-      }
+    if (cached && cached.raw === maybeData) {
+      return cached.data
+    }
 
-      const rawParsed = localData ? JSON.parse(localData) : null
+    try {
+      const rawParsed = maybeData ? JSON.parse(maybeData) : null
       const parsed = isData(rawParsed) ? rawParsed : null
-      cachedSnapshot.current = { raw: localData, data: parsed }
+      cachedSnapshot.current = { raw: maybeData, data: parsed }
 
       return parsed
-    },
-    () => null,
-  )
+    } catch {
+      return null
+    }
+  }, [])
 
-  const setLocalData = (data: Data) => {
-    const key = getKey(path, componentKey)
-
-    localStorage.setItem(key, JSON.stringify(data))
-
-    // Manually dispatch event so THIS tab also gets the update immediately
-    window.dispatchEvent(new StorageEvent("storage", { key }))
-  }
-
-  return [data, setLocalData] as const
+  return useLocalStorage(key, { parser })
 }

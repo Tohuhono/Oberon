@@ -10,9 +10,10 @@ export const Menu = ({
   title,
   path,
   children,
-}: PropsWithChildren<
-  { title?: string; path: string } | { title: string; path?: string }
->) => {
+}: PropsWithChildren<{
+  title?: string
+  path?: string
+}>) => {
   const { can, signOut } = useOberonActions()
 
   const router = useRouter()

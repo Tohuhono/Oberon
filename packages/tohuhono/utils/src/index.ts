@@ -133,3 +133,9 @@ export function isValidKey<TObj extends object>(
 ): key is keyof TObj {
   return key in obj
 }
+
+export const encode = (str: string) => {
+  return typeof window === "undefined"
+    ? Buffer.from(str).toString("base64") // Server logic
+    : window.btoa(str) // Browser logic
+}
