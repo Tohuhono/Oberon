@@ -1,5 +1,17 @@
 # @oberon/docs
 
+## 0.11.9
+
+### Patch Changes
+
+- 4dfddf1: Restructure the create-oberon-app and custom plugin documentation.
+- Updated dependencies [6e8ba23]
+- Updated dependencies [ad993d0]
+- Updated dependencies [0e72818]
+- Updated dependencies [6e8ba23]
+  - @tohuhono/puck-blocks@0.13.7
+  - @oberoncms/core@0.18.1
+
 ## 0.11.8
 
 ### Patch Changes
