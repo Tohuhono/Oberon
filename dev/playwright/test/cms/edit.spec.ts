@@ -143,9 +143,6 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
       name: "Preview mode",
       exact: true,
     })
-    const previewModeMenu = cms.getByRole("menu").filter({
-      has: cms.getByRole("menuitem", { name: "Follow", exact: true }),
-    })
     const editorThemeToggle = cms.getByRole("button", {
       name: "Toggle theme",
       exact: true,
