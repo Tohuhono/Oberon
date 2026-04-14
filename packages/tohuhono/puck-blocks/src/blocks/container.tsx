@@ -13,7 +13,7 @@ export const Container = {
   render: ({ className, content: Content }) => {
     return (
       <div className={cn("flex w-full justify-center p-2", className)}>
-        {Content?.()}
+        <Content />
       </div>
     )
   },

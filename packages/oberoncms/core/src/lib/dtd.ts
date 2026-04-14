@@ -1,11 +1,13 @@
 import { z } from "zod"
 import { Route } from "next"
+import type { ReactNode } from "react"
 import type {
   ComponentConfig,
   Config,
   Data,
   DefaultComponentProps,
   DefaultComponents,
+  SlotComponent,
 } from "@puckeditor/core"
 import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
@@ -41,6 +43,64 @@ export type OberonComponent<
 > = ComponentConfig<{
   props: Props
 }>
+
+type OberonFieldMap = Record<string, { type: string }>
+
+type InferOberonFieldProp<FieldConfig> = FieldConfig extends { type: "slot" }
+  ? SlotComponent
+  : FieldConfig extends { type: "richtext" }
+    ? ReactNode
+    : FieldConfig extends { type: "textarea"; contentEditable: true }
+      ? ReactNode
+      : FieldConfig extends { type: "text" | "textarea" }
+        ? string
+        : FieldConfig extends { type: "number" }
+          ? number
+          : unknown
+
+type InferOberonRequiredFieldKeys<FieldMap extends OberonFieldMap> = {
+  [Key in keyof FieldMap]: FieldMap[Key] extends { type: "slot" } ? Key : never
+}[keyof FieldMap]
+
+type InferOberonOptionalFieldKeys<FieldMap extends OberonFieldMap> = Exclude<
+  keyof FieldMap,
+  InferOberonRequiredFieldKeys<FieldMap>
+>
+
+type InferOberonFieldProps<FieldMap extends OberonFieldMap> = {
+  [Key in InferOberonRequiredFieldKeys<FieldMap>]: InferOberonFieldProp<
+    FieldMap[Key]
+  >
+} & {
+  [Key in InferOberonOptionalFieldKeys<FieldMap>]?: InferOberonFieldProp<
+    FieldMap[Key]
+  >
+}
+
+type DefineOberonComponentConfig<
+  Props extends DefaultComponentProps,
+  FieldMap extends OberonFieldMap,
+> = Omit<OberonComponent<Props>, "fields"> & {
+  fields?: FieldMap & NonNullable<OberonComponent<Props>["fields"]>
+}
+
+export function defineOberonComponent<const FieldMap extends OberonFieldMap>(
+  config: DefineOberonComponentConfig<
+    InferOberonFieldProps<FieldMap>,
+    FieldMap
+  >,
+): OberonComponent<InferOberonFieldProps<FieldMap>>
+
+export function defineOberonComponent<
+  Props extends DefaultComponentProps,
+  const FieldMap extends OberonFieldMap = {},
+>(config: DefineOberonComponentConfig<Props, FieldMap>): OberonComponent<Props>
+
+export function defineOberonComponent(
+  config: DefineOberonComponentConfig<DefaultComponentProps, OberonFieldMap>,
+): OberonComponent<DefaultComponentProps> {
+  return config
+}
 
 export const clientActions = [
   "edit",

@@ -1,7 +1,7 @@
-import type { ComponentConfig, SlotComponent } from "@puckeditor/core"
+import { defineOberonComponent } from "@oberoncms/core"
 import { Prose as ProseUI } from "@tohuhono/ui/prose"
 
-export const Prose = {
+export const Prose = defineOberonComponent({
   fields: {
     className: {
       type: "text",
@@ -11,6 +11,10 @@ export const Prose = {
     },
   },
   render: ({ className, content: Content }) => {
-    return <ProseUI className={className}>{Content?.()}</ProseUI>
+    return (
+      <ProseUI className={className}>
+        <Content />
+      </ProseUI>
+    )
   },
-} satisfies ComponentConfig<{ className?: string; content?: SlotComponent }>
+})
