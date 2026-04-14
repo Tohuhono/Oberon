@@ -226,6 +226,8 @@
         "!.oberon/**",
         "!.turbo/**",
         "!.next/**",
+        ".next/types/**",
+        "next-env.d.ts",
         "!.playwright/**"
       ],
       "outputs": []
