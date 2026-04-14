@@ -1,4 +1,4 @@
-import type { ComponentConfig } from "@puckeditor/core"
+import type { ComponentConfig, SlotComponent } from "@puckeditor/core"
 import { Prose as ProseUI } from "@tohuhono/ui/prose"
 
 export const Prose = {
@@ -6,12 +6,11 @@ export const Prose = {
     className: {
       type: "text",
     },
+    content: {
+      type: "slot",
+    },
   },
-  render: ({ className, puck: { renderDropZone: DropZone } }) => {
-    return (
-      <ProseUI className={className}>
-        <DropZone zone="prose" />
-      </ProseUI>
-    )
+  render: ({ className, content: Content }) => {
+    return <ProseUI className={className}>{Content?.()}</ProseUI>
   },
-} satisfies ComponentConfig<{ className?: string }>
+} satisfies ComponentConfig<{ className?: string; content?: SlotComponent }>

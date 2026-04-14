@@ -240,7 +240,7 @@
         "!.next/**",
         "!.playwright/**"
       ],
-      "outputs": [".next/types/**"]
+      "outputs": [".next/types/**", "next-env.d.ts"]
     },
     "wait": {
       "cache": false,
