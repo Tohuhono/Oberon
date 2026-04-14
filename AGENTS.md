@@ -8,6 +8,8 @@ and create-oberon-app script
 ## Constraints
 
 - Run all lifecycle commands from repo root
+- For Puck API questions or source changes, check the current official docs
+  first: https://puckeditor.com/docs
 - If you want to lint, check types, build or run all tests then `pnpm validate`
   will do all these, dependency checked, cached correctly and stop at the first
   failure for you to review
