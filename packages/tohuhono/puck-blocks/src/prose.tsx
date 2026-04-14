@@ -1,17 +1,20 @@
-import type { ComponentConfig } from "@puckeditor/core"
+import { defineOberonComponent } from "@oberoncms/core"
 import { Prose as ProseUI } from "@tohuhono/ui/prose"
 
-export const Prose = {
+export const Prose = defineOberonComponent({
   fields: {
     className: {
       type: "text",
     },
+    content: {
+      type: "slot",
+    },
   },
-  render: ({ className, puck: { renderDropZone: DropZone } }) => {
+  render: ({ className, content: Content }) => {
     return (
       <ProseUI className={className}>
-        <DropZone zone="prose" />
+        <Content />
       </ProseUI>
     )
   },
-} satisfies ComponentConfig<{ className?: string }>
+})

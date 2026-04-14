@@ -1,5 +1,5 @@
-import type { OberonComponent, OberonConfig } from "@oberoncms/core"
-import type { ReactNode } from "react"
+import { defineOberonComponent } from "@oberoncms/core"
+import type { OberonConfig } from "@oberoncms/core"
 import { Container } from "./blocks/container"
 import { Dashboard } from "./dynamic/dashboard"
 import { Welcome } from "./blocks/welcome"
@@ -57,11 +57,7 @@ const cards = {
   },
 }
 
-const Text: OberonComponent<{
-  body?: ReactNode
-  text?: ReactNode
-  className?: string
-}> = {
+const Text = defineOberonComponent({
   fields: {
     text: {
       type: "textarea",
@@ -75,7 +71,7 @@ const Text: OberonComponent<{
     className: "prose dark:prose-invert lg:prose-lg p-2",
   },
   render: ({ text, className }) => <div className={className}>{text}</div>,
-}
+})
 
 export function withExamples(config: Partial<OberonConfig>) {
   return {
