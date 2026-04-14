@@ -6,6 +6,7 @@ import {
   authProject,
   authenticatedProject,
   loginProject,
+  tddProject,
   smokeProject,
 } from "@dev/playwright/projects"
 
@@ -61,5 +62,11 @@ export default defineConfig({
       read: readNextjsLogs,
     },
   },
-  projects: [authProject, authenticatedProject, loginProject, smokeProject],
+  projects: [
+    authProject,
+    authenticatedProject,
+    tddProject,
+    loginProject,
+    smokeProject,
+  ],
 })

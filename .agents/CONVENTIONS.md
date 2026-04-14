@@ -15,3 +15,8 @@
 - Email sending: `apps/playground/oberon/send.ts` uses Resend (`RESEND_SECRET`,
   optional `EMAIL_FROM`).
 - `USE_DEVELOPMENT_SEND_PLUGIN` disables Resend for local development.
+
+## Puck
+
+- For Puck API questions or source migrations, check the current official docs
+  first: https://puckeditor.com/docs

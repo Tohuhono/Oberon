@@ -139,26 +139,34 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
+    const previewModeButton = cms.getByRole("button", {
+      name: "Preview mode",
+      exact: true,
+    })
+    const previewModeMenu = cms.getByRole("menu").filter({
+      has: cms.getByRole("menuitem", { name: "Follow", exact: true }),
+    })
+    const editorThemeToggle = cms.getByRole("button", {
+      name: "Toggle theme",
+      exact: true,
+    })
+    const editorThemeMenu = cms.getByRole("menu").filter({
+      has: cms.getByRole("menuitem", { name: "System", exact: true }),
+    })
 
-    const openPreviewModeMenu = async () => {
-      await cms
-        .getByRole("button", { name: "Preview mode", exact: true })
-        .click()
-    }
-
-    const openThemeMenu = async () => {
-      await cms.getByRole("button", { name: /theme/i }).first().click()
-    }
-
-    await openPreviewModeMenu()
+    await previewModeButton.click()
     await cms.getByRole("menuitem", { name: "Follow", exact: true }).click()
 
-    await openThemeMenu()
-    await cms.getByRole("menuitem", { name: "Light", exact: true }).click()
+    await editorThemeToggle.click()
+    await editorThemeMenu
+      .getByRole("menuitem", { name: "Light", exact: true })
+      .click()
     await expect(frameHtml).not.toHaveClass(/dark/)
 
-    await openThemeMenu()
-    await cms.getByRole("menuitem", { name: "Dark", exact: true }).click()
+    await editorThemeToggle.click()
+    await editorThemeMenu
+      .getByRole("menuitem", { name: "Dark", exact: true })
+      .click()
     await expect(frameHtml).toHaveClass(/dark/)
   })
 
@@ -169,19 +177,26 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
+    const previewModeButton = cms.getByRole("button", {
+      name: "Preview mode",
+      exact: true,
+    })
+    const previewModeMenu = cms.getByRole("menu").filter({
+      has: cms.getByRole("menuitem", { name: "Follow", exact: true }),
+    })
 
     const openPreviewModeMenu = async () => {
-      await cms
-        .getByRole("button", { name: "Preview mode", exact: true })
-        .click()
+      await previewModeButton.click()
     }
 
     const openThemeMenu = async () => {
-      await cms.getByRole("button", { name: /theme/i }).first().click()
+      await previewModeButton.click()
     }
 
     await openThemeMenu()
-    await cms.getByRole("menuitem", { name: "Dark", exact: true }).click()
+    await previewModeMenu
+      .getByRole("menuitem", { name: "Dark", exact: true })
+      .click()
     await expect(frameHtml).toHaveClass(/dark/)
 
     await openPreviewModeMenu()
@@ -208,15 +223,20 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
+    const previewModeButton = cms.getByRole("button", {
+      name: "Preview mode",
+      exact: true,
+    })
+    const previewModeMenu = cms.getByRole("menu").filter({
+      has: cms.getByRole("menuitem", { name: "Follow", exact: true }),
+    })
 
     const openPreviewModeMenu = async () => {
-      await cms
-        .getByRole("button", { name: "Preview mode", exact: true })
-        .click()
+      await previewModeButton.click()
     }
 
     const openThemeMenu = async () => {
-      await cms.getByRole("button", { name: /theme/i }).first().click()
+      await previewModeButton.click()
     }
 
     await openPreviewModeMenu()
@@ -227,7 +247,9 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     await openThemeMenu()
-    await cms.getByRole("menuitem", { name: "Light", exact: true }).click()
+    await previewModeMenu
+      .getByRole("menuitem", { name: "Light", exact: true })
+      .click()
 
     await expect(frameHtml).not.toHaveClass(/dark/)
   })
