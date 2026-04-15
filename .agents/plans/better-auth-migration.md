@@ -19,7 +19,9 @@ Non-negotiable implementation constraints for all phases:
 Durable decisions that apply across all phases:
 
 - **Release shape**: ship as a breaking major; no dual-support bridge and no
-  legacy schema migration path for existing installs.
+  long-lived legacy compatibility bridge for existing installs.
+- **Migration policy**: perform a clean schema migration and carry minimal core
+  user state (`id`, `email`, `role`).
 - **Plugin identity**: keep the public `authPlugin` name.
 - **Routes**: keep the public CMS auth base path at `/cms/api/auth`; keep the
   Oberon catch-all route shape as `[...path]`; keep `/cms/login` as the CMS
@@ -43,6 +45,10 @@ Durable decisions that apply across all phases:
 - **Development behavior**: preserve development-mode OTP logging to console
   instead of sending real email.
 - **Rollout scope**: core lands first; scaffolding and docs follow later.
+- **Lane strategy**: keep mock auth for docs/templates while migrating Better
+  Auth behavior in the playground lane.
+- **Slice sequencing**: land database persistence before Better Auth runtime
+  behavior.
 
 ---
 
@@ -154,7 +160,73 @@ builds on.
 
 ---
 
-## Phase 5: Existing-user-only 6-digit email OTP sign-in
+## Phase 4.5: Explicit auth lane split
+
+**User stories**: as a maintainer, I can migrate Better Auth behavior in one
+execution lane without destabilizing docs/templates; as a contributor, I can see
+explicit auth imports that communicate migration intent.
+
+### What to build
+
+Introduce explicit auth entrypoints so the playground lane can target Better
+Auth independently while docs/scaffolding stay on the mock lane.
+
+### Acceptance criteria
+
+- [x] Core exports an explicit mock auth lane and an explicit playground auth
+      lane.
+- [x] Playground consumes the playground auth lane explicitly.
+- [x] Docs/snippets/templates consume the mock auth lane explicitly.
+- [x] The split preserves existing CMS auth route shape and plugin composition.
+
+---
+
+## Phase 5: Database-first Better Auth persistence (sqlite lane)
+
+**User stories**: as a maintainer, I can land Better Auth persistence
+foundations before runtime behavior changes; as an operator, existing core user
+state is carried forward during schema migration.
+
+### What to build
+
+Implement Better Auth persistence in sqlite first using Better Auth guidance,
+including schema and migration generation, while carrying forward minimal user
+state (`id`, `email`, `role`). This slice is persistence-only and does not
+switch playground runtime auth behavior yet.
+
+### Acceptance criteria
+
+- [ ] sqlite lands Better Auth-aligned persistence schema with generated
+      migrations.
+- [ ] Schema migration carries forward minimal core user state (`id`, `email`,
+      `role`).
+- [ ] `role` is represented in the migrated auth user model.
+- [ ] Focused tests cover schema/migration/adapter persistence behavior.
+- [ ] Docs/templates/COA remain on mock auth imports.
+
+---
+
+## Phase 6: Core contract updates and explicit not-implemented paths
+
+**User stories**: as a maintainer, I can keep type checks honest while only
+sqlite persistence is implemented; as a contributor, non-implemented database
+lanes fail explicitly.
+
+### What to build
+
+Update core database/auth contracts for the persistence-first rollout and add
+explicit `NotImplementedError` behavior for database lanes that are not yet
+implemented in this migration sequence.
+
+### Acceptance criteria
+
+- [ ] Adapter contracts reflect the new persistence expectations.
+- [ ] Non-implemented lanes throw explicit `NotImplementedError` where required.
+- [ ] Type checks pass without pretending unimplemented persistence exists.
+
+---
+
+## Phase 7: Existing-user-only 6-digit email OTP sign-in (playground lane)
 
 **User stories**: as an existing CMS user, I can request a 6-digit code and
 complete sign-in from the CMS login screen; as a maintainer, unknown emails do
@@ -162,15 +234,14 @@ not create users implicitly.
 
 ### What to build
 
-Replace the NextAuth email flow with Better Auth email OTP while preserving the
-current CMS experience. The slice must deliver the end-to-end behavior from
-email entry to OTP verification to authenticated session creation, but must
-continue to reject unknown users rather than auto-registering them.
+Switch playground lane runtime behavior to use Better Auth session primitives on
+top of the sqlite persistence foundation. Preserve two-step email OTP UX and
+existing-user-only sign-in policy.
 
 ### Acceptance criteria
 
-- [ ] The sign-in flow uses Better Auth email OTP rather than NextAuth email
-      callbacks.
+- [ ] The sign-in flow uses Better Auth email OTP rather than NextAuth callbacks
+      in playground lane.
 - [ ] The CMS login experience remains a two-step email plus 6-digit code flow.
 - [ ] Unknown emails do not auto-create CMS users.
 - [ ] Successful OTP completion creates a valid CMS session and redirects into
@@ -178,101 +249,41 @@ continue to reject unknown users rather than auto-registering them.
 
 ---
 
-## Phase 6: Role-aware session model with immediate revocation on role change
+## Phase 8: Role-aware session model and revocation semantics
 
-**User stories**: as a signed-in user, my role is available to permission checks
-without an extra read on every request; as an admin, when I change another
-user's role, their active sessions are revoked immediately; as an operator,
-`MASTER_EMAIL` still grants emergency admin access.
+**User stories**: as a signed-in user, role checks remain session-backed and
+cheap; as an admin, role changes revoke active sessions immediately.
 
 ### What to build
 
-Model `role` as a Better Auth user field and surface it through the
-session-backed auth path that Oberon already relies on. Preserve cheap
-permission checks while defining explicit freshness behavior for role changes by
-revoking affected sessions. Keep the master admin override behavior intact.
+Complete role-aware session behavior, including immediate revocation on role
+change, while preserving `MASTER_EMAIL` override semantics.
 
 ### Acceptance criteria
 
-- [ ] `role` is stored as a real auth user field and is not user-supplied input.
-- [ ] The session-backed auth path exposes enough role data for Oberon
-      permission checks.
-- [ ] Changing a user's role invalidates that user's active sessions
-      immediately.
-- [ ] `MASTER_EMAIL` still results in admin access under the new auth flow.
+- [ ] Session-backed role data supports permission checks without extra reads.
+- [ ] Role change invalidates active sessions immediately.
+- [ ] `MASTER_EMAIL` admin override still applies.
 
 ---
 
-## Phase 7: Database plugins own Better Auth persistence wiring
+## Phase 9: PostgreSQL parity for Better Auth persistence wiring
 
-**User stories**: as a database plugin author, I can continue to provide the
-auth persistence integration for Oberon; as a maintainer, Better Auth storage
-requirements fit the existing plugin composition model; as a custom adapter
-author, user-supplied database integrations remain possible.
-
-### What to build
-
-Move database plugin responsibility from Auth.js adapter hooks to Better Auth
-persistence and schema wiring. This slice preserves the existing division of
-responsibility where the auth engine lives in core but database-specific
-persistence belongs to the database plugin layer.
-
-### Acceptance criteria
-
-- [ ] Database plugins remain the ownership boundary for auth persistence
-      integration.
-- [ ] Better Auth core schema requirements for user, session, account, and
-      verification are supported through the plugin-owned database layer.
-- [ ] The previous Auth.js-specific persistence surface is no longer required.
-- [ ] Custom database integrations remain viable through the same general plugin
-      pattern.
-
----
-
-## Phase 8: Send plugin boundary and development OTP logging
-
-**User stories**: as a send plugin author, I remain responsible for delivery
-rather than auth state; as a developer, OTPs still log to console locally
-instead of sending real mail.
+**User stories**: as a plugin author, pgsql provides the same Better Auth
+persistence capabilities as sqlite; as a maintainer, plugin ownership boundaries
+remain intact.
 
 ### What to build
 
-Preserve the current send-plugin boundary while adapting it to Better Auth's OTP
-flow. The slice must keep delivery concerns separate from auth state management
-and preserve the development plugin behavior that logs OTP details to the
-console for local work and tests.
+Implement Better Auth persistence wiring in pgsql to match sqlite behavior and
+schema expectations.
 
 ### Acceptance criteria
 
-- [ ] Email delivery remains a separate plugin concern rather than being
-      hard-wired into core.
-- [ ] The Better Auth OTP flow can invoke plugin-provided delivery behavior.
-- [ ] Development mode still logs OTP details to console instead of sending real
-      email.
-- [ ] The development logging path remains usable for local debugging and
-      automated tests.
-
----
-
-## Phase 9: Oberon permission semantics on top of Better Auth
-
-**User stories**: as a maintainer, I can keep Oberon's `adapter.can()` and
-current-user semantics stable after the migration; as a CMS user, authz behavior
-remains consistent across pages and actions.
-
-### What to build
-
-Reconnect Oberon's permission and current-user helpers to the Better Auth-backed
-session model. This slice ensures the CMS still performs authorization the same
-way conceptually even though the underlying auth engine has changed.
-
-### Acceptance criteria
-
-- [ ] Current-user resolution works through Better Auth-backed sessions.
-- [ ] Permission checks continue to operate from the session-backed role model.
-- [ ] Sign-out semantics work correctly under Better Auth.
-- [ ] CMS page and action protection behavior remains consistent with the
-      intended pre-migration semantics.
+- [ ] pgsql supports Better Auth schema requirements through generated
+      migrations.
+- [ ] pgsql adapter behavior aligns with sqlite slice behavior.
+- [ ] Plugin-owned persistence boundary remains clear.
 
 ---
 
@@ -290,9 +301,9 @@ decisions before expanding the change into scaffolding and documentation work.
 
 ### Acceptance criteria
 
-- [ ] Focused validation exists for OTP login, session-backed current-user
-      lookup, role-aware permission checks, role-change revocation, and
-      development OTP logging.
+- [ ] Focused validation exists for persistence migrations, OTP login,
+      session-backed current-user lookup, role-aware permission checks, and
+      role-change revocation.
 - [ ] The initial migration scope is limited to core and the directly affected
       plugin layers.
 - [ ] Follow-up work for scaffolding and docs is explicitly deferred rather than
