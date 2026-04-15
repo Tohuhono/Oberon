@@ -286,20 +286,21 @@ export type OberonCanAdapter = {
   signOut: () => Promise<void>
 }
 
-export type OberonAuthAdapter = {}
+export type OberonAuthAdapter = {
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
+  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
+  getAllUsers: () => Promise<OberonUser[]>
+}
 
 export type OberonBaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deletePage: (key: OberonPageMeta["key"]) => Promise<void>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   deleteKV: (namespace: string, key: string) => Promise<void>
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
-  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
-  getAllUsers: () => Promise<OberonUser[]>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
   getKV: (namespace: string, key: string) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>

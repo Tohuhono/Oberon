@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import {
   NotImplementedError,
   type OberonCanAdapter,
-  type OberonBaseAdapter,
+  type OberonDatabaseAdapter,
   type OberonPlugin,
 } from "../lib/dtd"
 import { getInitialData } from "./get-initial-data"
@@ -58,5 +58,5 @@ export const mockPlugin: OberonPlugin = () => ({
     updateSite: notAvailable,
     signIn: notAvailable,
     signOut: async () => redirect("/"),
-  } satisfies OberonBaseAdapter & OberonCanAdapter,
+  } satisfies OberonDatabaseAdapter & OberonCanAdapter,
 })

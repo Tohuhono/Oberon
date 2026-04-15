@@ -6,7 +6,7 @@ import { migrate } from "drizzle-orm/libsql/migrator"
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   USE_DEVELOPMENT_SEND_PLUGIN,
-  type OberonBaseAdapter,
+  type OberonDatabaseAdapter,
   type OberonInitAdapter,
   type OberonPlugin,
   type OberonSendAdapter,
@@ -60,6 +60,6 @@ export const plugin: OberonPlugin = (adapter) => ({
 
           console.log(`Database migration complete`)
         },
-      } satisfies OberonBaseAdapter & OberonInitAdapter)),
+      } satisfies OberonDatabaseAdapter & OberonInitAdapter)),
   },
 })

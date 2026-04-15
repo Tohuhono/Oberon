@@ -1,9 +1,8 @@
-import { randomUUID } from "crypto"
 import { and, eq } from "drizzle-orm"
 
 import { JsonValueSchema, type OberonBaseAdapter } from "@oberoncms/core"
 import { type DatabaseClient } from "./client"
-import { images, kv, pages, users, site } from "./schema"
+import { images, kv, pages, site } from "./schema"
 
 export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
   db,
@@ -30,33 +29,6 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
         set: { version, components, updatedAt, updatedBy },
       })
       .execute()
-  },
-  getAllUsers: async () => {
-    return await db
-      .select({ id: users.id, email: users.email, role: users.role })
-      .from(users)
-      .execute()
-  },
-  addUser: async ({ email, role }) => {
-    const result = await db
-      .insert(users)
-      .values({ id: randomUUID(), email, role, emailVerified: null })
-      .returning({ id: users.id, email: users.email, role: users.role })
-      .execute()
-
-    const createdUser = result[0]
-
-    if (!createdUser) {
-      throw new Error("Failed to create user.")
-    }
-
-    return createdUser
-  },
-  deleteUser: async (id) => {
-    await db.delete(users).where(eq(users.id, id)).execute()
-  },
-  changeRole: async ({ role, id }) => {
-    await db.update(users).set({ role }).where(eq(users.id, id)).execute()
   },
   addImage: async (image) => {
     await db.insert(images).values(image).execute()
