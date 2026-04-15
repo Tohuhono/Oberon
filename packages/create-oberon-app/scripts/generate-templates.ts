@@ -1,4 +1,4 @@
-import { mkdir, copyFile } from "fs/promises"
+import { mkdir, copyFile, rm } from "fs/promises"
 import { existsSync } from "fs"
 import path from "path"
 import walk from "ignore-walk"
@@ -31,6 +31,10 @@ export const generateTemplates = async () => {
     "dist",
     "templates",
   )
+
+  await rm(pluginsTargetPath, { recursive: true, force: true })
+  await rm(templateTargetPath, { recursive: true, force: true })
+
   await mkdir(templatePath, { recursive: true })
 
   if (!existsSync(templatePath)) {

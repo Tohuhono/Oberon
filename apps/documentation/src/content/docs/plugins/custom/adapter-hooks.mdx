@@ -58,26 +58,6 @@ type OberonDatabaseAdapter = Partial<OberonInitAdapter> &
 - `putKV`
 - `deleteKV`
 
-### Auth.js methods included in database responsibilities
-
-- `createSession`
-- `createUser`
-- `createVerificationToken`
-- `deleteSession`
-- `deleteUser`
-- `getSessionAndUser`
-- `getUser`
-- `getUserByAccount`
-- `getUserByEmail`
-- `linkAccount`
-- `unlinkAccount`
-- `updateSession`
-- `updateUser`
-- `useVerificationToken`
-
-If your plugin is the database layer used by Oberon auth, it is expected to own
-those Auth.js adapter methods as part of the same plugin surface.
-
 ## OberonCanAdapter
 
 Permission and session helpers:
@@ -141,19 +121,6 @@ export const databasePlugin: OberonPlugin = () => ({
     putKV: notImplemented("putKV"),
     updatePageData: notImplemented("updatePageData"),
     updateSite: notImplemented("updateSite"),
-    createSession: notImplemented("createSession"),
-    createUser: notImplemented("createUser"),
-    createVerificationToken: notImplemented("createVerificationToken"),
-    deleteSession: notImplemented("deleteSession"),
-    getSessionAndUser: notImplemented("getSessionAndUser"),
-    getUser: notImplemented("getUser"),
-    getUserByAccount: notImplemented("getUserByAccount"),
-    getUserByEmail: notImplemented("getUserByEmail"),
-    linkAccount: notImplemented("linkAccount"),
-    unlinkAccount: notImplemented("unlinkAccount"),
-    updateSession: notImplemented("updateSession"),
-    updateUser: notImplemented("updateUser"),
-    useVerificationToken: notImplemented("useVerificationToken"),
   } satisfies OberonInitAdapter & OberonDatabaseAdapter,
 })
 ```

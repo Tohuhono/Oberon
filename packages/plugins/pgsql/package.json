@@ -59,7 +59,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.11.1",
     "@oberoncms/core": "workspace:*",
     "drizzle-orm": "^0.45.1",
     "pg": "^8.18.0",

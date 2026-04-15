@@ -60,7 +60,7 @@ async function completeSignIn(page: Page) {
   await expect(completeSignInButton).toBeVisible()
 
   const callbackResponsePromise = page.waitForResponse((response) =>
-    response.url().includes("/cms/api/auth/callback/email?"),
+    response.url().includes("/cms/api/auth/verify?"),
   )
 
   await completeSignInButton.click()

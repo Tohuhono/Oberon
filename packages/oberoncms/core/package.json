@@ -29,6 +29,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./auth": "./dist/auth.js",
+    "./auth/client": "./dist/auth/client.js",
+    "./auth/server": "./dist/auth/server.js",
     "./adapter": "./dist/adapter.js",
     "./render": "./dist/render.js",
     "./editor": "./dist/editor.js",
@@ -50,15 +52,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@auth/core": "^0.37.4",
     "@hookform/resolvers": "^5.2.2",
     "@puckeditor/core": "^0.21.1",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
+    "better-auth": "^1.3.9",
     "dotenv": "^17.3.1",
     "filesize": "^11.0.13",
     "next": "^16.1.6",
-    "next-auth": "5.0.0-beta.30",
     "react-hook-form": "^7.71.1",
     "swr": "^2.4.0",
     "use-debounce": "^10.1.0",

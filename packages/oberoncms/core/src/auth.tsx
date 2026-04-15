@@ -1,1 +1,1 @@
-export { authPlugin } from "./auth/next-auth"
+export { authPlugin } from "./auth/mock"

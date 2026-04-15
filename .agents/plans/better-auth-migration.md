@@ -21,9 +21,9 @@ Durable decisions that apply across all phases:
 - **Release shape**: ship as a breaking major; no dual-support bridge and no
   legacy schema migration path for existing installs.
 - **Plugin identity**: keep the public `authPlugin` name.
-- **Routes**: keep the public CMS auth base path at `/cms/api/auth`; align the
-  catch-all route shape to Better Auth style `[...all]`; keep `/cms/login` as
-  the CMS sign-in page.
+- **Routes**: keep the public CMS auth base path at `/cms/api/auth`; keep the
+  Oberon catch-all route shape as `[...path]`; keep `/cms/login` as the CMS
+  sign-in page.
 - **Auth methods**: v1 supports email OTP only; no OAuth, credentials, or
   passkeys in the initial migration.
 - **Login UX**: preserve the current two-step email plus 6-digit code flow.
@@ -61,35 +61,38 @@ database-independent green TDD baseline before migration complexity is added.
 
 ### Acceptance criteria
 
-- [ ] A canonical mock auth plugin exists and composes through core plugin
+- [x] A canonical mock auth plugin exists and composes through core plugin
       boundaries.
-- [ ] The mock auth plugin requires no database dependency to run.
-- [ ] The mock auth plugin requires no current auth stack dependency
+- [x] The mock auth plugin requires no database dependency to run.
+- [x] The mock auth plugin requires no current auth stack dependency
       (Auth.js/NextAuth) to run.
-- [ ] Focused TDD runs are green in a database-independent configuration.
+- [x] Focused TDD runs are green in a database-independent configuration.
 
 ---
 
-## Phase 2: System-wide mock adoption and NextAuth removal
+## Phase 2: System-wide mock adoption and Auth.js stack removal
 
 **User stories**: as a maintainer, I can run the CMS with mock auth across the
-codebase while removing NextAuth; as a contributor, I can iterate on migration
-work without hidden NextAuth coupling.
+codebase while removing NextAuth and remaining `@auth/*` coupling from Phase 2
+surfaces; as a contributor, I can iterate on migration work without hidden
+Auth.js stack dependencies.
 
 ### What to build
 
 Adopt the mock auth plugin across all currently-auth-integrated surfaces and
-remove NextAuth from core paths. This slice ensures the codebase no longer
-depends on NextAuth before Better Auth contract work begins.
+remove NextAuth plus `@auth/*` dependencies from Phase 2 ownership surfaces.
+This slice ensures the codebase no longer depends on the Auth.js stack before
+Better Auth contract work begins.
 
 ### Acceptance criteria
 
-- [ ] Mock auth plugin is wired across the existing auth touchpoints in core and
+- [x] Mock auth plugin is wired across the existing auth touchpoints in core and
       directly affected plugin layers.
-- [ ] NextAuth dependencies are removed from the active core auth flow.
-- [ ] Legacy NextAuth route and callback assumptions are no longer required by
+- [x] NextAuth and `@auth/*` dependencies are removed from active Phase 2
+      execution paths.
+- [x] Legacy NextAuth route and callback assumptions are no longer required by
       default execution paths.
-- [ ] Focused TDD runs remain green after NextAuth removal.
+- [x] Focused TDD runs remain green after NextAuth removal.
 
 ---
 
@@ -119,6 +122,11 @@ sign-in, and separate database/send plugin composition.
 - [ ] Breaking changes are recorded clearly enough that later implementation
       slices do not need to preserve legacy compatibility.
 
+### Breaking changes captured in this slice
+
+- Deferred: contract-level breaking changes were intentionally postponed to keep
+  behavior migration stable while Better Auth routing and instances are landed.
+
 ---
 
 ## Phase 4: Better Auth mounted under CMS routes
@@ -136,12 +144,12 @@ builds on.
 
 ### Acceptance criteria
 
-- [ ] Better Auth is mounted under the public base path `/cms/api/auth` using
-      the Better Auth-style catch-all route shape.
-- [ ] Oberon retains `/cms/login` as the sign-in page.
-- [ ] A canonical Better Auth server instance exists for server-side session and
+- [x] Better Auth is mounted under the public base path `/cms/api/auth` while
+      preserving the Oberon catch-all route shape (`/cms/api/[...path]`).
+- [x] Oberon retains `/cms/login` as the sign-in page.
+- [x] A canonical Better Auth server instance exists for server-side session and
       auth operations.
-- [ ] A canonical Better Auth client instance exists for the CMS client-side
+- [x] A canonical Better Auth client instance exists for the CMS client-side
       login/session flow.
 
 ---

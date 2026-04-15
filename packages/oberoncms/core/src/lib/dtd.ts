@@ -9,9 +9,7 @@ import type {
   DefaultComponents,
   SlotComponent,
 } from "@puckeditor/core"
-import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
-import type { Awaitable } from "@auth/core/types"
 import type { NextRequest } from "next/server"
 
 export class OberonError extends Error {}
@@ -288,30 +286,7 @@ export type OberonCanAdapter = {
   signOut: () => Promise<void>
 }
 
-export type OberonAuthAdapter = Required<
-  Pick<
-    AuthAdapter,
-    | "createSession"
-    | "createUser"
-    | "createVerificationToken"
-    | "deleteSession"
-    | "deleteUser"
-    | "getSessionAndUser"
-    | "getUser"
-    | "getUserByAccount"
-    | "getUserByEmail"
-    | "linkAccount"
-    | "unlinkAccount"
-    | "updateSession"
-    | "updateUser"
-    | "useVerificationToken"
-  >
-> & {
-  createUser(
-    user: Omit<AdapterUser & { role: OberonRole }, "id">,
-  ): Awaitable<AdapterUser & { role: OberonRole }>
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
-}
+export type OberonAuthAdapter = {}
 
 export type OberonBaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
@@ -356,7 +331,6 @@ export type OberonPluginAdapter = OberonInitAdapter &
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
-// Currently the only handles exported are NextAuth Handlers
 export type OberonHandler<Params = undefined> = Params extends undefined
   ? {
       [key in OberonMethod]?: (req: NextRequest) => Promise<Response> | Response

@@ -1,9 +1,9 @@
+import { randomUUID } from "crypto"
 import { and, eq } from "drizzle-orm"
 
 import { JsonValueSchema, type OberonBaseAdapter } from "@oberoncms/core"
 import { type DatabaseClient } from "./client"
 import { images, kv, pages, users, site } from "./schema"
-import { getAuthAdapter } from "./auth-adapter"
 
 export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
   db,
@@ -38,14 +38,22 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
       .execute()
   },
   addUser: async ({ email, role }) => {
-    return await getAuthAdapter(db).createUser({
-      email,
-      role,
-      emailVerified: null,
-    })
+    const result = await db
+      .insert(users)
+      .values({ id: randomUUID(), email, role, emailVerified: null })
+      .returning({ id: users.id, email: users.email, role: users.role })
+      .execute()
+
+    const createdUser = result[0]
+
+    if (!createdUser) {
+      throw new Error("Failed to create user.")
+    }
+
+    return createdUser
   },
   deleteUser: async (id) => {
-    await getAuthAdapter(db).deleteUser?.(id)
+    await db.delete(users).where(eq(users.id, id)).execute()
   },
   changeRole: async ({ role, id }) => {
     await db.update(users).set({ role }).where(eq(users.id, id)).execute()

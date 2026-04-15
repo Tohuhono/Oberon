@@ -12,7 +12,6 @@ import { migrate } from "drizzle-orm/node-postgres/migrator"
 import { name, version } from "../package.json" with { type: "json" }
 
 import { getDatabaseAdapter } from "./db/database-adapter"
-import { getAuthAdapter } from "./db/auth-adapter"
 
 import { db } from "./db/client"
 
@@ -27,7 +26,6 @@ export const plugin: OberonPlugin = (adapter) => ({
   disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
   adapter: {
     ...getDatabaseAdapter(db),
-    ...getAuthAdapter(db),
     prebuild: async () => {
       await adapter.prebuild()
 
