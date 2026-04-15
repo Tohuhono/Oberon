@@ -14,7 +14,7 @@ export const getAuthAdapter = (db: DatabaseClient): OberonAuthAdapter => ({
   addUser: async ({ email, role }) => {
     const result = await db
       .insert(users)
-      .values({ id: randomUUID(), email, role, emailVerified: null })
+      .values({ id: randomUUID(), email, role })
       .returning({ id: users.id, email: users.email, role: users.role })
       .execute()
 

@@ -16,7 +16,7 @@ export const getAuthAdapter = (
   addUser: async ({ email, role }) => {
     return db()
       .insert(users)
-      .values({ email, role, id: randomUUID(), emailVerified: null })
+      .values({ email, role, id: randomUUID() })
       .returning()
       .get()
   },

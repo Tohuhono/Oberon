@@ -10,4 +10,5 @@
 
 Remove remaining Auth.js/NextAuth coupling from core and database plugins,
 standardize user-table methods under auth adapters for sqlite and pgsql, and
-align docs with the current auth model.
+align docs with the current auth model, including reducing auth user schemas to
+active columns only.
