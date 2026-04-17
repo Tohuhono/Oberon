@@ -55,6 +55,7 @@
     "@libsql/client": "^0.17.0",
     "@libsql/core": "^0.17.0",
     "@oberoncms/core": "workspace:*",
+    "better-auth": "^1.6.3",
     "drizzle-orm": "^0.45.1",
     "server-cli-only": "^0.3.2",
     "zod": "^4.3.6"

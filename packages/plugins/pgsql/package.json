@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
+    "better-auth": "^1.6.3",
     "drizzle-orm": "^0.45.1",
     "pg": "^8.18.0",
     "server-cli-only": "^0.3.2",

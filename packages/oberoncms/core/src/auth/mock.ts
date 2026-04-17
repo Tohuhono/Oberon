@@ -4,6 +4,7 @@ import { toNextJsHandler } from "better-auth/next-js"
 
 import { name, version } from "../../package.json" with { type: "json" }
 import {
+  type OberonAuthAdapter,
   type OberonCanAdapter,
   type OberonPlugin,
   type OberonRole,
@@ -225,179 +226,206 @@ function isVerifyPath(path: string): boolean {
   return path.endsWith("/cms/api/auth/verify")
 }
 
-export const authPlugin: OberonPlugin = (adapter) => {
-  const authServer = createAuthServer({
-    sendVerificationRequest: adapter.sendVerificationRequest,
-  })
-  const authHandlers = toNextJsHandler(authServer)
+export function createAuthPlugin(
+  createServer: (adapter: {
+    betterAuth?: OberonAuthAdapter["betterAuth"]
+    sendVerificationRequest: (props: {
+      email: string
+      token: string
+      url: string
+    }) => Promise<void>
+  }) => ReturnType<typeof createAuthServer>,
+): OberonPlugin {
+  return (adapter) => {
+    let authHandlers: ReturnType<typeof toNextJsHandler> | null = null
 
-  const handleAuthCallback = async (request: Request) => {
-    const url = new URL(request.url)
-    if (!isVerifyPath(url.pathname)) {
-      return new Response("", { status: 404 })
+    const getAuthHandlers = () => {
+      authHandlers ||= toNextJsHandler(
+        createServer({
+          betterAuth: adapter.betterAuth,
+          sendVerificationRequest: adapter.sendVerificationRequest,
+        }),
+      )
+
+      return authHandlers
     }
 
-    const email = normalizeEmail(url.searchParams.get("email") || "")
-    const token = url.searchParams.get("token") || ""
-    const callbackUrl = getCallbackUrl(url.searchParams.get("callbackUrl"))
-    const pendingState = decodeState(
-      getCookieFromHeader(request.headers.get("cookie"), otpCookieName),
-    )
-    const pending = isPendingOtp(pendingState) ? pendingState : null
+    const handleAuthCallback = async (request: Request) => {
+      const url = new URL(request.url)
+      if (!isVerifyPath(url.pathname)) {
+        return new Response("", { status: 404 })
+      }
 
-    if (
-      !pending ||
-      pending.expiresAt < Date.now() ||
-      normalizeEmail(pending.email) !== email ||
-      pending.token !== token
-    ) {
-      return new Response("", { status: 401 })
+      const email = normalizeEmail(url.searchParams.get("email") || "")
+      const token = url.searchParams.get("token") || ""
+      const callbackUrl = getCallbackUrl(url.searchParams.get("callbackUrl"))
+      const pendingState = decodeState(
+        getCookieFromHeader(request.headers.get("cookie"), otpCookieName),
+      )
+      const pending = isPendingOtp(pendingState) ? pendingState : null
+
+      if (
+        !pending ||
+        pending.expiresAt < Date.now() ||
+        normalizeEmail(pending.email) !== email ||
+        pending.token !== token
+      ) {
+        return new Response("", { status: 401 })
+      }
+
+      const session: Session = {
+        user: pending.user,
+        expiresAt: Date.now() + sessionTtlMs,
+      }
+
+      const headers = new Headers({
+        "content-type": "application/json",
+      })
+
+      headers.append(
+        "set-cookie",
+        setCookieHeader({
+          name: sessionCookieName,
+          value: encodeState(session),
+          maxAge: sessionTtlMs / 1000,
+        }),
+      )
+
+      headers.append("set-cookie", clearCookieHeader(otpCookieName))
+
+      return new Response(
+        JSON.stringify({
+          callbackUrl,
+          ok: true,
+        }),
+        {
+          status: 200,
+          headers,
+        },
+      )
     }
 
-    const session: Session = {
-      user: pending.user,
-      expiresAt: Date.now() + sessionTtlMs,
-    }
+    return {
+      name: `${name}/auth`,
+      version,
+      handlers: {
+        auth: () => ({
+          GET: async (request) => {
+            const path = new URL(request.url).pathname
 
-    const headers = new Headers({
-      "content-type": "application/json",
-    })
+            if (isVerifyPath(path)) {
+              return handleAuthCallback(request)
+            }
 
-    headers.append(
-      "set-cookie",
-      setCookieHeader({
-        name: sessionCookieName,
-        value: encodeState(session),
-        maxAge: sessionTtlMs / 1000,
-      }),
-    )
+            return getAuthHandlers().GET(request)
+          },
+          POST: async (request) => {
+            const path = new URL(request.url).pathname
 
-    headers.append("set-cookie", clearCookieHeader(otpCookieName))
+            if (isVerifyPath(path)) {
+              return handleAuthCallback(request)
+            }
 
-    return new Response(
-      JSON.stringify({
-        callbackUrl,
-        ok: true,
-      }),
-      {
-        status: 200,
-        headers,
+            return getAuthHandlers().POST(request)
+          },
+        }),
       },
-    )
-  }
+      adapter: {
+        getCurrentUser: async () => {
+          try {
+            const store = await cookies()
+            const sessionState = decodeState(
+              store.get(sessionCookieName)?.value,
+            )
+            const session = isSession(sessionState) ? sessionState : null
 
-  return {
-    name: `${name}/auth`,
-    version,
-    handlers: {
-      auth: () => ({
-        GET: async (request) => {
-          const path = new URL(request.url).pathname
+            if (!session) {
+              return null
+            }
 
-          if (isVerifyPath(path)) {
-            return handleAuthCallback(request)
-          }
+            if (session.expiresAt < Date.now()) {
+              store.set(sessionCookieName, "", {
+                path: "/",
+                expires: new Date(0),
+              })
+              return null
+            }
 
-          return authHandlers.GET(request)
-        },
-        POST: async (request) => {
-          const path = new URL(request.url).pathname
+            if (
+              masterEmail &&
+              normalizeEmail(session.user.email) === normalizeEmail(masterEmail)
+            ) {
+              return {
+                ...session.user,
+                role: "admin",
+              }
+            }
 
-          if (isVerifyPath(path)) {
-            return handleAuthCallback(request)
-          }
-
-          return authHandlers.POST(request)
-        },
-      }),
-    },
-    adapter: {
-      getCurrentUser: async () => {
-        try {
-          const store = await cookies()
-          const sessionState = decodeState(store.get(sessionCookieName)?.value)
-          const session = isSession(sessionState) ? sessionState : null
-
-          if (!session) {
+            return session.user
+          } catch {
             return null
           }
+        },
+        signOut: async () => {
+          try {
+            const store = await cookies()
 
-          if (session.expiresAt < Date.now()) {
             store.set(sessionCookieName, "", {
               path: "/",
               expires: new Date(0),
             })
-            return null
+
+            store.set(otpCookieName, "", {
+              path: "/",
+              expires: new Date(0),
+            })
+          } catch {
+            return
+          }
+        },
+        signIn: async ({ email }) => {
+          const normalizedEmail = normalizeEmail(email)
+          const user = await resolveExistingUser(normalizedEmail)
+
+          if (!user) {
+            return
           }
 
-          if (
-            masterEmail &&
-            normalizeEmail(session.user.email) === normalizeEmail(masterEmail)
-          ) {
-            return {
-              ...session.user,
-              role: "admin",
-            }
+          const token = (
+            parseInt(randomBytes(3).toString("hex"), 16) % 1_000_000
+          )
+            .toString()
+            .padStart(6, "0")
+
+          const pendingOtp: PendingOtp = {
+            email: normalizedEmail,
+            token,
+            user,
+            expiresAt: Date.now() + otpTtlMs,
           }
 
-          return session.user
-        } catch {
-          return null
-        }
-      },
-      signOut: async () => {
-        try {
-          const store = await cookies()
+          const store = await getCookieStore()
 
-          store.set(sessionCookieName, "", {
-            path: "/",
-            expires: new Date(0),
+          if (store) {
+            store.set(otpCookieName, encodeState(pendingOtp), {
+              httpOnly: true,
+              path: "/",
+              sameSite: "lax",
+              maxAge: Math.floor(otpTtlMs / 1000),
+            })
+          }
+
+          await adapter.sendVerificationRequest({
+            email: normalizedEmail,
+            token,
+            url: buildOtpLoginUrl(normalizedEmail, token, "/cms/pages"),
           })
-
-          store.set(otpCookieName, "", {
-            path: "/",
-            expires: new Date(0),
-          })
-        } catch {
-          return
-        }
-      },
-      signIn: async ({ email }) => {
-        const normalizedEmail = normalizeEmail(email)
-        const user = await resolveExistingUser(normalizedEmail)
-
-        if (!user) {
-          return
-        }
-
-        const token = (parseInt(randomBytes(3).toString("hex"), 16) % 1_000_000)
-          .toString()
-          .padStart(6, "0")
-
-        const pendingOtp: PendingOtp = {
-          email: normalizedEmail,
-          token,
-          user,
-          expiresAt: Date.now() + otpTtlMs,
-        }
-
-        const store = await getCookieStore()
-
-        if (store) {
-          store.set(otpCookieName, encodeState(pendingOtp), {
-            httpOnly: true,
-            path: "/",
-            sameSite: "lax",
-            maxAge: Math.floor(otpTtlMs / 1000),
-          })
-        }
-
-        await adapter.sendVerificationRequest({
-          email: normalizedEmail,
-          token,
-          url: buildOtpLoginUrl(normalizedEmail, token, "/cms/pages"),
-        })
-      },
-    } satisfies Partial<OberonCanAdapter>,
+        },
+      } satisfies Partial<OberonCanAdapter>,
+    }
   }
 }
+
+export const authPlugin = createAuthPlugin(({ sendVerificationRequest }) =>
+  createAuthServer({ sendVerificationRequest }),
+)

@@ -1,11 +1,31 @@
 import { describe, expect, it, vi } from "@dev/vitest"
-import { authPlugin } from "./auth"
+import { authPlugin, betterAuthPlugin } from "./auth"
 import { stubbedAdapter } from "./adapter/stubbed-adapter"
 
 describe(
   "authPlugin",
   { tags: ["ai", "feature-better-auth-migration"] },
   () => {
+    it("fails during better-auth plugin initialization when the capability is missing", async () => {
+      expect(() => betterAuthPlugin(stubbedAdapter)).toThrow(
+        "Missing required Better Auth capability on adapter.betterAuth",
+      )
+    })
+
+    it("does not access the better-auth database during initialization", async () => {
+      const adapter = {
+        ...stubbedAdapter,
+        betterAuth: Object.defineProperty({}, "database", {
+          enumerable: true,
+          get() {
+            throw new Error("database accessed too early")
+          },
+        }),
+      }
+
+      expect(() => betterAuthPlugin(adapter)).not.toThrow()
+    })
+
     it("issues an OTP through the send adapter for an existing user", async () => {
       const sendVerificationRequest = vi.fn(async () => {})
 

@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { Route } from "next"
 import type { ReactNode } from "react"
+import type { BetterAuthOptions } from "better-auth"
 import type {
   ComponentConfig,
   Config,
@@ -286,7 +287,10 @@ export type OberonCanAdapter = {
   signOut: () => Promise<void>
 }
 
+export type OberonBetterAuthAdapter = Pick<BetterAuthOptions, "database">
+
 export type OberonAuthAdapter = {
+  betterAuth?: OberonBetterAuthAdapter
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (id: OberonUser["id"]) => Promise<void>
   changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>

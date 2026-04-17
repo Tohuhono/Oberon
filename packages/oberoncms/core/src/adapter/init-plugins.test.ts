@@ -1,5 +1,8 @@
 import { describe, expect, it } from "@dev/vitest"
 
+import { memoryAdapter } from "better-auth/adapters/memory"
+
+import { betterAuthPlugin } from "../auth"
 import { NotImplementedError } from "../lib/dtd"
 import { initPlugins } from "./init-plugins"
 import { mockPlugin } from "./mock-plugin"
@@ -41,5 +44,40 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     expect(() => adapter.deleteKV("mock-plugin", "state")).toThrow(
       new NotImplementedError("This action is not available in the demo"),
     )
+  })
+
+  it("uses deterministic plugin order when multiple plugins provide betterAuth", async () => {
+    const validBetterAuthPlugin = () => ({
+      name: "valid-better-auth-plugin",
+      adapter: {
+        betterAuth: {
+          database: memoryAdapter({}),
+        },
+        sendVerificationRequest: async () => {},
+      },
+    })
+
+    const missingBetterAuthPlugin = () => ({
+      name: "missing-better-auth-plugin",
+      adapter: {
+        betterAuth: undefined,
+      },
+    })
+
+    expect(() =>
+      initPlugins([
+        missingBetterAuthPlugin,
+        validBetterAuthPlugin,
+        betterAuthPlugin,
+      ]),
+    ).not.toThrow()
+
+    expect(() =>
+      initPlugins([
+        validBetterAuthPlugin,
+        missingBetterAuthPlugin,
+        betterAuthPlugin,
+      ]),
+    ).toThrow("Missing required Better Auth capability on adapter.betterAuth")
   })
 })

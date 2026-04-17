@@ -1,6 +1,6 @@
 import { betterAuth, type BetterAuthOptions } from "better-auth"
 import { emailOTP } from "better-auth/plugins"
-import type { OberonSendAdapter } from "../lib/dtd"
+import type { OberonBetterAuthAdapter, OberonSendAdapter } from "../lib/dtd"
 
 export const cmsAuthBasePath = "/cms/api/auth"
 
@@ -8,14 +8,18 @@ const noopSendVerificationRequest: OberonSendAdapter["sendVerificationRequest"] 
   async () => {}
 
 export function createAuthOptions({
+  betterAuth: betterAuthAdapter,
   sendVerificationRequest,
-}: Pick<OberonSendAdapter, "sendVerificationRequest">): BetterAuthOptions {
+}: Pick<OberonSendAdapter, "sendVerificationRequest"> & {
+  betterAuth?: OberonBetterAuthAdapter
+}): BetterAuthOptions {
   const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
   const secret =
     process.env.BETTER_AUTH_SECRET ||
     "oberon-mock-auth-secret-12345678901234567890"
 
   return {
+    ...(betterAuthAdapter ? { database: betterAuthAdapter.database } : {}),
     baseURL,
     basePath: cmsAuthBasePath,
     secret,
