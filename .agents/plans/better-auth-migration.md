@@ -57,6 +57,110 @@ Durable decisions that apply across all phases:
   Auth behavior in the playground lane.
 - **Slice sequencing**: land database persistence before Better Auth runtime
   behavior.
+- **AuthN/AuthZ boundary**: Better Auth owns authentication (session/account/
+  verification lifecycle); Oberon's `can` adapter owns authorization policy.
+- **Role ownership**: `role` is a CMS authorization concern stored on the Better
+  Auth user model so AuthN can carry it and AuthZ can evaluate it.
+- **Contract style**: use capability-based, Oberon-owned wrapped types at the
+  plugin boundary instead of provider/db/schema shape contracts.
+- **Master override semantics**: `MASTER_EMAIL` is a permanent emergency admin
+  escape hatch (not first-boot-only) and must always allow OTP sign-in.
+- **Authorship semantics**: `updatedBy` is a write-time snapshot (signature),
+  not a live relational link to the current user record.
+- **Out-of-band role writes**: external/plugin-direct role mutations are valid
+  state in this architecture; this is an explicit autonomy tradeoff.
+- **User freshness boundary**: authorization decisions are out of scope for
+  persistence wiring; `can` should consume the freshest available
+  `getCurrentUser` value.
+- **Split persistence posture**: keep split persistence possible but do not
+  optimize implementation decisions for it in this migration.
+- **Auth init failure mode**: when the auth plugin is loaded, missing required
+  auth capability is a hard initialization failure, based on auth plugin load
+  state (not handler presence).
+- **Auth capability conflict policy**: preserve deterministic plugin-order
+  override semantics; no extra warning requirement.
+- **Capability shape**: expose a direct `betterAuth` capability object on the
+  plugin adapter contract; avoid getter indirection unless a concrete runtime
+  need appears.
+- **Capability placement**: the `betterAuth` capability is provided by the
+  database/auth plugin lane and merged onto the plugin adapter surface consumed
+  during auth plugin initialization.
+
+## Handoff rationale notes (2026-04-18)
+
+This section captures decision rationale so a follow-up agent can execute
+without reopening settled design branches.
+
+- Keep plugin and backend autonomy as the primary architectural driver. This is
+  why out-of-band role writes are accepted as valid state and why schema/
+  migration ownership remains plugin-local.
+- Keep security behavior explicit and fail-closed. This is why missing auth
+  capability hard-fails during auth plugin initialization rather than degrading
+  to partial auth behavior.
+- Keep user-facing audit semantics stable. This is why `updatedBy` stays as a
+  write-time signature snapshot and is not retroactively rewritten when user
+  profile attributes change.
+- Keep the capability surface straightforward. This is why the handoff contract
+  uses a direct `betterAuth` object instead of a getter-based access method.
+- Keep cutover simple and decisive (pre-release). This is why the branch moves
+  directly to contract removal rather than carrying a long compatibility bridge.
+
+## Proposed contract target for handoff (Phase 6 -> Phase 7)
+
+This is the implementation target implied by the decisions above. It is a
+capability contract (not provider/db/schema shape) and uses Oberon-owned types
+that can internally wrap Better Auth version-specific types.
+
+```ts
+import type { Auth, BetterAuthOptions } from "better-auth"
+
+// CMS-facing user shape used by AuthZ and authorship logic.
+type OberonUser = {
+  id: string
+  email: string
+  role: "user" | "admin"
+}
+
+// Oberon-owned wrapper around Better Auth persistence wiring.
+type OberonBetterAuthAdapter = Pick<BetterAuthOptions, "database">
+
+// Existing CMS user lifecycle API remains plugin-owned and explicit.
+type OberonAuthAdapter = {
+  betterAuth: OberonBetterAuthAdapter
+  addUser: (data: {
+    email: string
+    role: "user" | "admin"
+  }) => Promise<OberonUser>
+  deleteUser: (id: string) => Promise<void>
+  changeRole: (data: { id: string; role: "user" | "admin" }) => Promise<void>
+  getAllUsers: () => Promise<OberonUser[]>
+}
+
+// Existing AuthZ boundary remains explicit and separate from AuthN.
+type OberonCanAdapter = {
+  getCurrentUser: () => Promise<OberonUser | null>
+  hasPermission: (props: {
+    user?: OberonUser | null
+    action: "all" | "users" | "images" | "pages" | "site"
+    permission: "unauthenticated" | "read" | "write"
+  }) => boolean
+  signIn: (data: { email: string }) => Promise<void>
+  signOut: () => Promise<void>
+}
+```
+
+Required runtime semantics to implement alongside this contract:
+
+- Auth plugin initialization must hard-fail if loaded without required auth
+  `betterAuth` capability object, based on auth plugin load state rather than
+  handler-mount state.
+- Plugin order continues to decide which auth capability wins (deterministic
+  override), matching existing merge behavior.
+- `can` authorization checks should consume the freshest available
+  `getCurrentUser` value.
+- `MASTER_EMAIL` remains a permanent admin escape hatch for OTP sign-in.
+- `updatedBy` remains immutable write-time snapshot semantics.
+- Out-of-band role writes are accepted as valid state under plugin autonomy.
 
 ---
 
@@ -218,23 +322,30 @@ persistence-only and does not switch playground runtime auth behavior yet.
 
 ---
 
-## Phase 6: Core contract updates and explicit not-implemented paths
+## Phase 6: Core contract updates and transient-contract removal
 
 **User stories**: as a maintainer, I can keep type checks honest while only
-sqlite persistence is implemented; as a contributor, non-implemented database
-lanes fail explicitly.
+sqlite persistence is implemented; as a contributor, transient migration
+artifacts do not leak into durable contracts.
 
 ### What to build
 
-Update core database/auth contracts for the persistence-first rollout and add
-explicit `NotImplementedError` behavior for database lanes that are not yet
-implemented in this migration sequence.
+Update core database/auth contracts for the persistence-first rollout, keep
+failures explicit at the real capability boundary (auth plugin init) rather than
+via placeholder adapter methods, and place the wrapped `betterAuth` capability
+on the adapter lane that feeds auth plugin initialization.
 
 ### Acceptance criteria
 
-- [ ] Adapter contracts reflect the new persistence expectations.
-- [ ] Non-implemented lanes throw explicit `NotImplementedError` where required.
-- [ ] Type checks pass without pretending unimplemented persistence exists.
+- [x] sqlite/pgsql/core adapters are updated to compile without that transient
+      method.
+- [x] Type checks and validation pass after contract removal.
+- [ ] Capability-based wrapped `betterAuth` contract is finalized and wired for
+      runtime auth plugin initialization.
+- [ ] Auth plugin hard-fails during initialization when required auth
+      capabilities are missing.
+- [ ] Hard-fail behavior is keyed to auth plugin load state, not route handler
+      registration state.
 
 ---
 
@@ -269,13 +380,17 @@ cheap; as an admin, role changes revoke active sessions immediately.
 ### What to build
 
 Complete role-aware session behavior, including immediate revocation on role
-change, while preserving `MASTER_EMAIL` override semantics.
+change, while preserving `MASTER_EMAIL` permanent override semantics and
+maintaining role as a CMS concern carried in auth state.
 
 ### Acceptance criteria
 
-- [ ] Session-backed role data supports permission checks without extra reads.
+- [ ] Session-backed role data supports permission checks without extra reads,
+      using the freshest `getCurrentUser` value available to `can`.
 - [ ] Role change invalidates active sessions immediately.
-- [ ] `MASTER_EMAIL` admin override still applies.
+- [ ] `MASTER_EMAIL` emergency admin override still applies permanently.
+- [ ] Recovery path is covered: when all admin users are removed, `MASTER_EMAIL`
+      can still complete OTP sign-in and resolve as admin.
 
 ---
 
@@ -317,6 +432,12 @@ decisions before expanding the change into scaffolding and documentation work.
 - [ ] Focused validation exists for persistence migrations, OTP login,
       session-backed current-user lookup, role-aware permission checks, and
       role-change revocation.
+- [ ] Focused validation covers auth-plugin init hard-fail when required auth
+      capability is missing.
+- [ ] Focused validation covers deterministic plugin-order override when more
+      than one plugin provides a `betterAuth` capability.
+- [ ] Focused validation covers `updatedBy` snapshot immutability across email
+      change and user deletion scenarios.
 - [ ] The initial migration scope is limited to core and the directly affected
       plugin layers.
 - [ ] Follow-up work for scaffolding and docs is explicitly deferred rather than
