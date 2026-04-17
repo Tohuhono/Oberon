@@ -12,7 +12,7 @@ type OnCleanup = (callback: () => Promise<void>) => void
 
 const migrationsFolder = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  "../../sqlite/src/db/migrations",
+  "../../../plugins/development/src/db/migrations",
 )
 
 export function createStorageAdapterFactory({
@@ -27,9 +27,7 @@ export function createStorageAdapterFactory({
     const client = createClient({ url: `file:${sqliteFile}` })
     const db = drizzle(client, { schema })
 
-    if (migrationsFolder) {
-      await migrate(db, { migrationsFolder })
-    }
+    await migrate(db, { migrationsFolder })
 
     onCleanup(async () => {
       await client.close()

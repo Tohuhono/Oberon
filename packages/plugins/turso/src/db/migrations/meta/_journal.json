@@ -15,6 +15,13 @@
       "when": 1715905837965,
       "tag": "0001_dear_vapor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1776419873094,
+      "tag": "0002_flippant_thaddeus_ross",
+      "breakpoints": true
     }
   ]
 }

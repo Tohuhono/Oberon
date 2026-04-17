@@ -13,7 +13,8 @@ _Critical_ Use the repo's canonical test commands: `pnpm test:tdd`,
 `pnpm test:unit`, `pnpm test:coa` for tight loops and then finish with the
 completion gate `pnpm validate`
 
-Repo testing guidelines [TESTING.md](../../TESTING.md)
+_Critical_ Read and follow repo testing guidelines
+[TESTING.md](../../TESTING.md)
 
 ## Workflow
 
