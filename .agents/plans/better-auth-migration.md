@@ -86,6 +86,19 @@ Durable decisions that apply across all phases:
   database/auth plugin lane and merged onto the plugin adapter surface consumed
   during auth plugin initialization.
 
+## Migration status snapshot (2026-04-18)
+
+Schema and migration generation status at handoff time:
+
+- Better Auth-aligned sqlite schema is present in `@oberoncms/sqlite` and the
+  sqlite migration lane is generated in `@oberoncms/plugin-development`.
+- Better Auth-aligned schema and generated migrations are present in
+  `@oberoncms/plugin-turso`.
+- Better Auth-aligned schema and generated migrations are present in
+  `@oberoncms/plugin-pgsql`.
+- Remaining work is runtime/auth-behavior parity and capability wiring, not
+  schema-generation coverage.
+
 ## Handoff rationale notes (2026-04-18)
 
 This section captures decision rationale so a follow-up agent can execute
@@ -408,7 +421,7 @@ by `@oberoncms/plugin-pgsql`.
 
 ### Acceptance criteria
 
-- [ ] pgsql supports Better Auth schema requirements through generated
+- [x] pgsql supports Better Auth schema requirements through generated
       migrations.
 - [ ] pgsql adapter behavior aligns with sqlite slice behavior.
 - [ ] Plugin-owned persistence boundary remains clear.
