@@ -39,6 +39,14 @@ Durable decisions that apply across all phases:
 - **Persistence ownership**: database plugins continue to own auth persistence
   wiring, but they provide Better Auth schema/database integration instead of
   Auth.js adapter methods.
+- **Schema vs migration ownership**: `@oberoncms/sqlite` is the canonical home
+  for shared Drizzle schema definitions; generated migration files are owned by
+  and executed from consuming database plugins.
+- **PostgreSQL ownership**: `@oberoncms/plugin-pgsql` owns both PostgreSQL
+  schema and PostgreSQL migrations in its own plugin lane.
+- **SQLite migration test lane**: use `@oberoncms/plugin-development` as the
+  canonical migration-generation and migration-contract test lane for sqlite
+  persistence behavior.
 - **Verification storage**: Better Auth owns session/account/verification
   storage shape.
 - **Send boundary**: email delivery remains a separate plugin concern.
@@ -118,14 +126,14 @@ sign-in, and separate database/send plugin composition.
 
 ### Acceptance criteria
 
-- [ ] Core no longer models auth persistence around Auth.js adapter method
+- [x] Core no longer models auth persistence around Auth.js adapter method
       names.
-- [ ] The new canonical contract explicitly represents Better Auth ownership of
+- [x] The new canonical contract explicitly represents Better Auth ownership of
       session/account/verification concerns.
-- [ ] The Oberon-specific responsibilities that remain are clear: current user
+- [x] The Oberon-specific responsibilities that remain are clear: current user
       lookup, permission checks, CMS login flow, role handling, master override,
       and plugin composition.
-- [ ] Breaking changes are recorded clearly enough that later implementation
+- [x] Breaking changes are recorded clearly enough that later implementation
       slices do not need to preserve legacy compatibility.
 
 ### Breaking changes captured in this slice
@@ -189,20 +197,24 @@ state is carried forward during schema migration.
 
 ### What to build
 
-Implement Better Auth persistence in sqlite first using Better Auth guidance,
-including schema and migration generation, while carrying forward minimal user
-state (`id`, `email`, `role`). This slice is persistence-only and does not
-switch playground runtime auth behavior yet.
+Implement Better Auth persistence for the sqlite lane using Better Auth
+guidance, while carrying forward minimal core user state (`id`, `email`,
+`role`). Keep schema definitions in `@oberoncms/sqlite`, and generate/consume
+sqlite migration files in consuming plugins, with
+`@oberoncms/plugin-development` as the canonical test lane. This slice is
+persistence-only and does not switch playground runtime auth behavior yet.
 
 ### Acceptance criteria
 
-- [ ] sqlite lands Better Auth-aligned persistence schema with generated
-      migrations.
-- [ ] Schema migration carries forward minimal core user state (`id`, `email`,
+- [x] `@oberoncms/sqlite` lands Better Auth-aligned persistence schema.
+- [x] `@oberoncms/plugin-development` lands generated sqlite migrations derived
+      from the shared sqlite schema.
+- [x] Schema migration carries forward minimal core user state (`id`, `email`,
       `role`).
-- [ ] `role` is represented in the migrated auth user model.
-- [ ] Focused tests cover schema/migration/adapter persistence behavior.
-- [ ] Docs/templates/COA remain on mock auth imports.
+- [x] `role` is represented in the migrated auth user model.
+- [x] Focused tests cover schema/migration/adapter persistence behavior in the
+      development plugin migration lane.
+- [x] Docs/templates/COA remain on mock auth imports.
 
 ---
 
@@ -276,7 +288,8 @@ remain intact.
 ### What to build
 
 Implement Better Auth persistence wiring in pgsql to match sqlite behavior and
-schema expectations.
+schema expectations, while keeping PostgreSQL schema and migrations fully owned
+by `@oberoncms/plugin-pgsql`.
 
 ### Acceptance criteria
 

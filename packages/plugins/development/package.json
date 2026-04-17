@@ -32,7 +32,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
-    "generate:migrations": "drizzle-kit generate:sqlite",
+    "generate:migrations": "drizzle-kit generate",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "test:unit": "vitest run",
