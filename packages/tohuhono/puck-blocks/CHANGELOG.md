@@ -1,5 +1,20 @@
 # @tohuhono/puck-blocks
 
+## 0.13.7
+
+### Patch Changes
+
+- 6e8ba23: Replace deprecated Puck DropZone usage in shared Container and Prose
+  blocks with slot fields.
+- 6e8ba23: Infer Oberon component render props from field definitions and adopt
+  the helper in shared puck blocks.
+- Updated dependencies [ad993d0]
+- Updated dependencies [0e72818]
+- Updated dependencies [6e8ba23]
+  - @tohuhono/ui@0.14.7
+  - @tohuhono/utils@0.14.2
+  - @oberoncms/core@0.18.1
+
 ## 0.13.6
 
 ### Patch Changes

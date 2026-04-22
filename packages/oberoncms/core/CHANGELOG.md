@@ -1,5 +1,21 @@
 # @oberoncms/core
 
+## 0.18.1
+
+### Patch Changes
+
+- ad993d0: Align CMS editor accessibility contracts and migrate Playwright CMS
+  coverage to the shared test fixture layout, including playground-only
+  className assertions.
+- 0e72818: Add editor preview follow or override theme controls and migrate
+  iframe mode sync to the editor iframe override path.
+- 6e8ba23: Infer Oberon component render props from field definitions and adopt
+  the helper in shared puck blocks.
+- Updated dependencies [ad993d0]
+- Updated dependencies [0e72818]
+  - @tohuhono/ui@0.14.7
+  - @tohuhono/utils@0.14.2
+
 ## 0.18.0
 
 ### Minor Changes
