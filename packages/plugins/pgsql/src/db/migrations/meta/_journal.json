@@ -11,9 +11,16 @@
     },
     {
       "idx": 1,
-      "version": "5",
-      "when": 1774929600000,
-      "tag": "0001_curvy_lizard",
+      "version": "7",
+      "when": 1776435934150,
+      "tag": "0001_misty_jamie_braddock",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776436748217,
+      "tag": "0002_yielding_dazzler",
       "breakpoints": true
     }
   ]

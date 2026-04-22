@@ -32,7 +32,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
-    "generate:migrations": "drizzle-kit generate:sqlite",
+    "generate:migrations": "drizzle-kit generate",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "test:unit": "vitest run",
@@ -58,7 +58,6 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@auth/core": "^0.37.4",
     "@dev/eslint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",

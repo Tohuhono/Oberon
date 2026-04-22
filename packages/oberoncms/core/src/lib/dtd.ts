@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { Route } from "next"
 import type { ReactNode } from "react"
+import type { BetterAuthOptions } from "better-auth"
 import type {
   ComponentConfig,
   Config,
@@ -9,9 +10,7 @@ import type {
   DefaultComponents,
   SlotComponent,
 } from "@puckeditor/core"
-import type { AdapterUser, Adapter as AuthAdapter } from "@auth/core/adapters"
 import type { StreamResponseChunk } from "@tohuhono/utils"
-import type { Awaitable } from "@auth/core/types"
 import type { NextRequest } from "next/server"
 
 export class OberonError extends Error {}
@@ -288,43 +287,24 @@ export type OberonCanAdapter = {
   signOut: () => Promise<void>
 }
 
-export type OberonAuthAdapter = Required<
-  Pick<
-    AuthAdapter,
-    | "createSession"
-    | "createUser"
-    | "createVerificationToken"
-    | "deleteSession"
-    | "deleteUser"
-    | "getSessionAndUser"
-    | "getUser"
-    | "getUserByAccount"
-    | "getUserByEmail"
-    | "linkAccount"
-    | "unlinkAccount"
-    | "updateSession"
-    | "updateUser"
-    | "useVerificationToken"
-  >
-> & {
-  createUser(
-    user: Omit<AdapterUser & { role: OberonRole }, "id">,
-  ): Awaitable<AdapterUser & { role: OberonRole }>
+export type OberonBetterAuthAdapter = Pick<BetterAuthOptions, "database">
+
+export type OberonAuthAdapter = {
+  betterAuth?: OberonBetterAuthAdapter
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (id: OberonUser["id"]) => Promise<void>
+  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
+  getAllUsers: () => Promise<OberonUser[]>
 }
 
 export type OberonBaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deletePage: (key: OberonPageMeta["key"]) => Promise<void>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
   deleteKV: (namespace: string, key: string) => Promise<void>
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
-  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
-  getAllUsers: () => Promise<OberonUser[]>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
   getKV: (namespace: string, key: string) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
@@ -356,7 +336,6 @@ export type OberonPluginAdapter = OberonInitAdapter &
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
-// Currently the only handles exported are NextAuth Handlers
 export type OberonHandler<Params = undefined> = Params extends undefined
   ? {
       [key in OberonMethod]?: (req: NextRequest) => Promise<Response> | Response

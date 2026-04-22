@@ -9,7 +9,7 @@ Configure plugins in `oberon/adapter.ts` by passing them to `initOberon`.
 
 ```tsx filename="oberon/adapter.ts"
 import { initOberon } from "@oberoncms/core/adapter"
-import { authPlugin } from "@oberoncms/core/auth"
+import { authPlugin } from "@oberoncms/core/auth/mock"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
 import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
@@ -70,7 +70,7 @@ Plugins can contribute two kinds of extension points.
   `updatePageData`
 - media: `addImage`, `deleteImage`, `getAllImages`
 - users: `addUser`, `deleteUser`, `getAllUsers`, `changeRole`, `getCurrentUser`
-- auth/session: `signIn`, `signOut`, `hasPermission` and Auth.js adapter methods
+- auth/session: `signIn`, `signOut`, `hasPermission`
 - site and kv: `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`
 
 `handlers` hooks:

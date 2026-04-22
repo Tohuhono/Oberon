@@ -78,7 +78,7 @@ export function Login({
 
     setSubmitting(true)
     const response = await fetch(
-      `/cms/api/auth/callback/email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token || "")}&callbackUrl=${encodeURIComponent(callback)}`,
+      `/cms/api/auth/verify?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token || "")}&callbackUrl=${encodeURIComponent(callback)}`,
     )
     if (response.ok) {
       router.push(callbackUrl || "/cms/pages")

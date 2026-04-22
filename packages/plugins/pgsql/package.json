@@ -46,7 +46,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
-    "generate:migrations": "drizzle-kit generate:pg",
+    "generate:migrations": "drizzle-kit generate",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "test:unit": "vitest run",
@@ -59,11 +59,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.11.1",
     "@oberoncms/core": "workspace:*",
+    "better-auth": "^1.6.3",
     "drizzle-orm": "^0.45.1",
     "pg": "^8.18.0",
-    "server-cli-only": "^0.3.2"
+    "server-cli-only": "^0.3.2",
+    "zod": "^4.3.6"
   },
   "peerDependencies": {
     "react": "^19.2.0",

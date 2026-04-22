@@ -2,8 +2,7 @@ import { and, eq } from "drizzle-orm"
 
 import { JsonValueSchema, type OberonBaseAdapter } from "@oberoncms/core"
 import { type DatabaseClient } from "./client"
-import { images, kv, pages, users, site } from "./schema"
-import { getAuthAdapter } from "./auth-adapter"
+import { images, kv, pages, site } from "./schema"
 
 export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
   db,
@@ -30,25 +29,6 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
         set: { version, components, updatedAt, updatedBy },
       })
       .execute()
-  },
-  getAllUsers: async () => {
-    return await db
-      .select({ id: users.id, email: users.email, role: users.role })
-      .from(users)
-      .execute()
-  },
-  addUser: async ({ email, role }) => {
-    return await getAuthAdapter(db).createUser({
-      email,
-      role,
-      emailVerified: null,
-    })
-  },
-  deleteUser: async (id) => {
-    await getAuthAdapter(db).deleteUser?.(id)
-  },
-  changeRole: async ({ role, id }) => {
-    await db.update(users).set({ role }).where(eq(users.id, id)).execute()
   },
   addImage: async (image) => {
     await db.insert(images).values(image).execute()

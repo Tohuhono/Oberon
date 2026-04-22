@@ -2,15 +2,15 @@ import { Callout } from "nextra/components"
 
 # Authentication and Authorization
 
-OberonCMS uses an auth plugin based on Auth.js for sign-in, session handling,
-and role-aware access control.
+OberonCMS uses an auth plugin for sign-in, session handling, and role-aware
+access control.
 
 ## Overview
 
 The built-in auth integration provides:
 
 - Email-based one-time code login
-- Session management through Auth.js
+- Session management through the Oberon auth plugin
 - Role-aware user context (`admin` and `user`)
 - Route handlers mounted at `/cms/api/auth`
 
@@ -35,8 +35,9 @@ export const { adapter, handler } = initOberon({
 
 ## Required adapter capabilities
 
-The auth flow relies on your database plugin implementing Auth.js adapter
-operations (sessions, users, verification tokens, and account links).
+The current auth flow does not require auth-specific database adapter methods.
+It requires a send adapter that implements `sendVerificationRequest` so codes
+can be delivered to users.
 
 See:
 
@@ -65,7 +66,7 @@ Sign-in page is configured as:
 
 After sign-in, users are redirected to:
 
-- `/cms`
+- `/cms/pages`
 
 ## Roles
 
