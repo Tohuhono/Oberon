@@ -1,5 +1,13 @@
 # @oberon/utils
 
+## 0.14.2
+
+### Patch Changes
+
+- ad993d0: Align CMS editor accessibility contracts and migrate Playwright CMS
+  coverage to the shared test fixture layout, including playground-only
+  className assertions.
+
 ## 0.14.1
 
 ### Patch Changes
