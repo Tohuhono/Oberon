@@ -1,5 +1,14 @@
 # @oberoncms/sqlite
 
+## 0.7.7
+
+### Patch Changes
+
+- Updated dependencies [ad993d0]
+- Updated dependencies [0e72818]
+- Updated dependencies [6e8ba23]
+  - @oberoncms/core@0.18.1
+
 ## 0.7.6
 
 ### Patch Changes
