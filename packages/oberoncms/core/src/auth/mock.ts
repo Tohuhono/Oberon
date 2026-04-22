@@ -12,7 +12,6 @@ import {
 } from "../lib/dtd"
 import { createAuthServer } from "./server"
 
-const masterEmail = process.env.MASTER_EMAIL || null
 const sessionCookieName = "oberon-auth-session"
 const otpCookieName = "oberon-auth-otp"
 const otpTtlMs = 10 * 60 * 1000
@@ -49,7 +48,13 @@ function normalizeEmail(email: string): string {
   return email.trim().toLowerCase()
 }
 
+function getMasterEmail(): string | null {
+  return process.env.MASTER_EMAIL || null
+}
+
 function getMasterUser(email: string): OberonUser | null {
+  const masterEmail = getMasterEmail()
+
   if (!masterEmail || normalizeEmail(masterEmail) !== normalizeEmail(email)) {
     return null
   }
@@ -351,14 +356,10 @@ export function createAuthPlugin(
               return null
             }
 
-            if (
-              masterEmail &&
-              normalizeEmail(session.user.email) === normalizeEmail(masterEmail)
-            ) {
-              return {
-                ...session.user,
-                role: "admin",
-              }
+            const masterUser = getMasterUser(session.user.email)
+
+            if (masterUser) {
+              return masterUser
             }
 
             return session.user

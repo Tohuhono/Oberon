@@ -2,7 +2,8 @@ import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { expect, test, fromPartial, vi } from "@dev/vitest"
-import type { OberonPluginAdapter } from "@oberoncms/core"
+import { eq } from "drizzle-orm"
+import { INITIAL_DATA, type OberonPluginAdapter } from "@oberoncms/core"
 import { createAdapterTest, createAdapterTests } from "@oberoncms/testing"
 
 const rootDirectory = resolve(
@@ -121,6 +122,56 @@ developmentAdapterTest.describe(
         await adapter.deleteUser(added.id)
 
         await expect(adapter.getAllUsers()).resolves.toEqual([])
+      },
+    )
+
+    developmentAdapterTest(
+      "keeps page updatedBy as a write-time snapshot after auth user changes",
+      async ({ adapter }) => {
+        if (!adapter.addUser || !adapter.addPage || !adapter.getAllPages) {
+          throw new Error(
+            "Development plugin adapter is missing page or user methods",
+          )
+        }
+
+        const added = await adapter.addUser({
+          email: "snapshot@example.com",
+          role: "admin",
+        })
+
+        await adapter.addPage({
+          key: "/write-time-snapshot",
+          data: INITIAL_DATA,
+          updatedAt: new Date("2024-01-01T00:00:00.000Z"),
+          updatedBy: added.email,
+        })
+
+        const readUpdatedBy = async () => {
+          const pages = await adapter.getAllPages()
+
+          return pages.find((page) => page.key === "/write-time-snapshot")
+            ?.updatedBy
+        }
+
+        expect(await readUpdatedBy()).toBe("snapshot@example.com")
+
+        const { getClient } = await import("./db/client")
+        const { user } = await import("./db/schema")
+
+        await getClient()
+          .update(user)
+          .set({
+            email: "renamed@example.com",
+            name: "renamed@example.com",
+          })
+          .where(eq(user.id, added.id))
+          .execute()
+
+        expect(await readUpdatedBy()).toBe("snapshot@example.com")
+
+        await adapter.deleteUser?.(added.id)
+
+        expect(await readUpdatedBy()).toBe("snapshot@example.com")
       },
     )
   },

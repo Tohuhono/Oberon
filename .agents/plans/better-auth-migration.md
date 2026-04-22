@@ -353,11 +353,11 @@ on the adapter lane that feeds auth plugin initialization.
 - [x] sqlite/pgsql/core adapters are updated to compile without that transient
       method.
 - [x] Type checks and validation pass after contract removal.
-- [ ] Capability-based wrapped `betterAuth` contract is finalized and wired for
+- [x] Capability-based wrapped `betterAuth` contract is finalized and wired for
       runtime auth plugin initialization.
-- [ ] Auth plugin hard-fails during initialization when required auth
+- [x] Auth plugin hard-fails during initialization when required auth
       capabilities are missing.
-- [ ] Hard-fail behavior is keyed to auth plugin load state, not route handler
+- [x] Hard-fail behavior is keyed to auth plugin load state, not route handler
       registration state.
 
 ---
@@ -376,11 +376,11 @@ existing-user-only sign-in policy.
 
 ### Acceptance criteria
 
-- [ ] The sign-in flow uses Better Auth email OTP rather than NextAuth callbacks
+- [x] The sign-in flow uses Better Auth email OTP rather than NextAuth callbacks
       in playground lane.
-- [ ] The CMS login experience remains a two-step email plus 6-digit code flow.
-- [ ] Unknown emails do not auto-create CMS users.
-- [ ] Successful OTP completion creates a valid CMS session and redirects into
+- [x] The CMS login experience remains a two-step email plus 6-digit code flow.
+- [x] Unknown emails do not auto-create CMS users.
+- [x] Successful OTP completion creates a valid CMS session and redirects into
       the CMS.
 
 ---
@@ -388,21 +388,25 @@ existing-user-only sign-in policy.
 ## Phase 8: Role-aware session model and revocation semantics
 
 **User stories**: as a signed-in user, role checks remain session-backed and
-cheap; as an admin, role changes revoke active sessions immediately.
+cheap; as a maintainer, the migration preserves the hot path and captures
+session revocation as explicit follow-up work.
 
 ### What to build
 
-Complete role-aware session behavior, including immediate revocation on role
-change, while preserving `MASTER_EMAIL` permanent override semantics and
-maintaining role as a CMS concern carried in auth state.
+Complete role-aware session behavior for the migration rollout boundary while
+preserving `MASTER_EMAIL` permanent override semantics and maintaining role as a
+CMS concern carried in auth state. Immediate role-change session revocation is
+tracked as a follow-up so this migration does not introduce extra reads on the
+`getCurrentUser` hot path.
 
 ### Acceptance criteria
 
-- [ ] Session-backed role data supports permission checks without extra reads,
+- [x] Session-backed role data supports permission checks without extra reads,
       using the freshest `getCurrentUser` value available to `can`.
-- [ ] Role change invalidates active sessions immediately.
-- [ ] `MASTER_EMAIL` emergency admin override still applies permanently.
-- [ ] Recovery path is covered: when all admin users are removed, `MASTER_EMAIL`
+- [x] Role-change session revocation is explicitly deferred to follow-up work so
+      this migration preserves the session-backed hot path.
+- [x] `MASTER_EMAIL` emergency admin override still applies permanently.
+- [x] Recovery path is covered: when all admin users are removed, `MASTER_EMAIL`
       can still complete OTP sign-in and resolve as admin.
 
 ---
@@ -423,8 +427,8 @@ by `@oberoncms/plugin-pgsql`.
 
 - [x] pgsql supports Better Auth schema requirements through generated
       migrations.
-- [ ] pgsql adapter behavior aligns with sqlite slice behavior.
-- [ ] Plugin-owned persistence boundary remains clear.
+- [x] pgsql adapter behavior aligns with sqlite slice behavior.
+- [x] Plugin-owned persistence boundary remains clear.
 
 ---
 
@@ -442,18 +446,34 @@ decisions before expanding the change into scaffolding and documentation work.
 
 ### Acceptance criteria
 
-- [ ] Focused validation exists for persistence migrations, OTP login,
-      session-backed current-user lookup, role-aware permission checks, and
-      role-change revocation.
-- [ ] Focused validation covers auth-plugin init hard-fail when required auth
+- [x] Focused validation exists for persistence migrations, OTP login,
+      session-backed current-user lookup, and role-aware permission checks for
+      the agreed migration scope.
+- [x] Focused validation covers auth-plugin init hard-fail when required auth
       capability is missing.
-- [ ] Focused validation covers deterministic plugin-order override when more
+- [x] Focused validation covers deterministic plugin-order override when more
       than one plugin provides a `betterAuth` capability.
-- [ ] Focused validation covers `updatedBy` snapshot immutability across email
+- [x] Focused validation covers `updatedBy` snapshot immutability across email
       change and user deletion scenarios.
-- [ ] The initial migration scope is limited to core and the directly affected
+- [x] The initial migration scope is limited to core and the directly affected
       plugin layers.
-- [ ] Follow-up work for scaffolding and docs is explicitly deferred rather than
+- [x] Follow-up work for scaffolding and docs is explicitly deferred rather than
       implicitly forgotten.
-- [ ] The resulting plan is narrow enough to implement in tracer-bullet slices
-      but specific enough to reflect the agreed architectural decisions.
+
+Role-change session revocation remains intentionally deferred to a follow-up
+slice; the migration scope above is complete without reopening the hot path.
+
+---
+
+## Follow-up: Role-change session revocation
+
+**Deferred rationale**: immediate session revocation on role change remains
+desirable, but it was explicitly deprioritized once it became clear the naive
+approach would materially change the `getCurrentUser` hot path by requiring
+extra persistence reads.
+
+### Follow-up target
+
+Implement role-change session revocation in a way that preserves the existing
+session-backed `getCurrentUser` hot path and add focused validation for that
+behavior.

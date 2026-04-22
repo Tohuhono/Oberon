@@ -1,4 +1,33 @@
-import { describe, expect, it, vi } from "@dev/vitest"
+import { beforeEach, describe, expect, it } from "@dev/vitest"
+import { vi } from "vitest"
+
+const cookieState = {
+  values: new Map<string, string>(),
+  setCalls: [] as Array<{
+    name: string
+    value: string
+    options?: Record<string, unknown>
+  }>,
+  reset() {
+    this.values.clear()
+    this.setCalls.length = 0
+  },
+}
+
+vi.mock("next/headers", () => ({
+  cookies: vi.fn(async () => ({
+    get(name: string) {
+      const value = cookieState.values.get(name)
+
+      return value ? { value } : undefined
+    },
+    set(name: string, value: string, options?: Record<string, unknown>) {
+      cookieState.values.set(name, value)
+      cookieState.setCalls.push({ name, value, options })
+    },
+  })),
+}))
+
 import { authPlugin, betterAuthPlugin } from "./auth"
 import { stubbedAdapter } from "./adapter/stubbed-adapter"
 
@@ -6,6 +35,11 @@ describe(
   "authPlugin",
   { tags: ["ai", "feature-better-auth-migration"] },
   () => {
+    beforeEach(() => {
+      cookieState.reset()
+      vi.unstubAllEnvs()
+    })
+
     it("fails during better-auth plugin initialization when the capability is missing", async () => {
       expect(() => betterAuthPlugin(stubbedAdapter)).toThrow(
         "Missing required Better Auth capability on adapter.betterAuth",
@@ -94,6 +128,77 @@ describe(
       expect(response.headers.get("set-cookie")).toContain(
         "oberon-auth-session=",
       )
+    })
+
+    it("allows MASTER_EMAIL recovery sign-in even when no users remain", async () => {
+      vi.stubEnv("MASTER_EMAIL", "rescue@example.com")
+
+      const adapter = {
+        ...stubbedAdapter,
+        getAllUsers: async () => [],
+        sendVerificationRequest: vi.fn(async () => {}),
+      }
+
+      const plugin = authPlugin(adapter)
+
+      if (!plugin.adapter?.signIn) {
+        throw new Error("Expected auth plugin to expose signIn")
+      }
+
+      const handler = plugin.handlers?.auth?.({} as never)
+
+      if (!handler?.GET) {
+        throw new Error("Expected auth plugin to expose GET auth handler")
+      }
+
+      await plugin.adapter.signIn({ email: "rescue@example.com" })
+
+      const otpCookiePayload = cookieState.values.get("oberon-auth-otp")
+
+      if (!otpCookiePayload) {
+        throw new Error("Expected signIn to persist an OTP cookie")
+      }
+
+      const pendingOtp = JSON.parse(
+        Buffer.from(otpCookiePayload, "base64url").toString("utf8"),
+      ) as {
+        email: string
+        token: string
+      }
+
+      const response = await handler.GET(
+        new Request(
+          `http://localhost/cms/api/auth/verify?email=${encodeURIComponent(pendingOtp.email)}&token=${encodeURIComponent(pendingOtp.token)}&callbackUrl=${encodeURIComponent("/cms/pages")}`,
+          {
+            headers: {
+              cookie: `oberon-auth-otp=${encodeURIComponent(otpCookiePayload)}`,
+            },
+          },
+        ) as never,
+      )
+
+      const setCookieHeader = response.headers.get("set-cookie")
+
+      if (!setCookieHeader) {
+        throw new Error("Expected verify response to issue a session cookie")
+      }
+
+      const sessionCookie = setCookieHeader.split(";")[0]?.split("=")[1]
+
+      if (!sessionCookie || !plugin.adapter.getCurrentUser) {
+        throw new Error("Expected auth plugin to expose getCurrentUser")
+      }
+
+      cookieState.values.set(
+        "oberon-auth-session",
+        decodeURIComponent(sessionCookie),
+      )
+
+      await expect(plugin.adapter.getCurrentUser()).resolves.toEqual({
+        id: "rescue@example.com",
+        email: "rescue@example.com",
+        role: "admin",
+      })
     })
   },
 )
