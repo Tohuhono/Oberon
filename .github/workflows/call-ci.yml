@@ -65,8 +65,6 @@ jobs:
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-validate-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-validate-
       - name: Install
         run: pnpm i
       - name: Prettier
@@ -101,8 +99,6 @@ jobs:
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-e2e-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-e2e-
       - name: Install
         run: pnpm i
       - name: Install Playwright browsers
@@ -146,8 +142,6 @@ jobs:
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-coa-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-coa-
       - name: Install
         run: pnpm i
       - name: Install Playwright browsers
@@ -234,7 +228,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS:
-        "${{ contains(needs.*.result, 'failure') && 'failed' || contains(needs.*.result, 'cancelled') || 'passed' }}"
+        "${{ contains(needs.*.result, 'failure') && 'failed' ||
+        contains(needs.*.result, 'cancelled') || 'passed' }}"
       MESSAGE: |
         Latest deployments available at: 
         ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
