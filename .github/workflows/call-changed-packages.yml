@@ -13,23 +13,23 @@ on:
         type: string
     outputs:
       changed_packages:
-        description: "Stringified JSON array of changed packages in this changeset"
+        description:
+          "Stringified JSON array of changed packages in this changeset"
         value: ${{ jobs.dry-run.outputs.changed_packages }}
+
+permissions:
+  actions: read
+  contents: read
 
 jobs:
   dry-run:
     name: "Changed packages"
     runs-on: ubuntu-latest
-    env:
-      # The turbo filter here varies depending on if we're using this workflow in a PR or on a push to a branch
-      # For PRs, we want to use `github.event.pull_request.base.sha` to tell turbo to see which packages changed since that SHA
-      # For a branch push/merges, the above sha isn't available, so instead, we reference `github.event.before` to determine the previous `HEAD` of the branch we just pushed onto
-      #   See SO answer for more info https://stackoverflow.com/a/61861763/2379922
-      TURBO_REF_FILTER: ${{ inputs.base }}
     outputs:
       # Defining a job output for used by the next jobs:
       # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs
-      changed_packages: ${{ steps.output-changed-packages.outputs.changed_packages }}
+      changed_packages:
+        ${{ steps.output-changed-packages.outputs.changed_packages }}
 
     steps:
       - uses: actions/checkout@v6
@@ -55,6 +55,33 @@ jobs:
       - name: Install
         run: pnpm i
 
+      - name: Detect recovery base ref
+        id: detect-recovery
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ inputs.repository }}
+          REF: ${{ inputs.ref }}
+          FALLBACK_BASE: ${{ inputs.base }}
+        run: |
+          BASE_REF="$FALLBACK_BASE"
+
+          if [[ "$REF" == refs/heads/* ]]; then
+            LAST_SHA=$(gh run list \
+              --repo "$REPOSITORY" \
+              --workflow "production.yml" \
+              --status success \
+              --branch "${REF#refs/heads/}" \
+              --limit 1 \
+              --json headSha \
+              --jq '.[0].headSha // empty')
+
+            if [[ -n "$LAST_SHA" ]]; then
+              BASE_REF="$LAST_SHA"
+            fi
+          fi
+
+          echo "base_ref=$BASE_REF" >> "$GITHUB_OUTPUT"
+
       - name: Changeset
         id: changeset
         # 1. We need the 'output' of a turbo dry-run to get a json with all affected packages of these run.
@@ -62,7 +89,7 @@ jobs:
         # 3. We specify the .github/ folder as a dependency here. Just to be safe, if workflows changed, we use that to mean everything has changes pending... to force redeploys
         run: |
           echo 'result<<CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
-          echo "$(pnpm exec tsx ./dev/scripts/scripts/changed.ts "$TURBO_REF_FILTER")" >> $GITHUB_OUTPUT
+          echo "$(pnpm exec tsx ./dev/scripts/scripts/changed.ts "${{ steps.detect-recovery.outputs.base_ref }}")" >> $GITHUB_OUTPUT
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
       - name: skip

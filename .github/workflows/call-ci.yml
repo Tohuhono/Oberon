@@ -29,31 +29,7 @@ on:
       TURSO_TOKEN:
         required: false
 
-permissions:
-  actions: read
-  contents: read
-
 jobs:
-  detect-recovery:
-    name: Detect Recovery Deploy
-    if: ${{ inputs.environment == 'production' && inputs.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    outputs:
-      force_redeploy: ${{ steps.detect.outputs.force_redeploy }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          repository: ${{ inputs.repository }}
-          ref: ${{ inputs.ref }}
-      - name: Check previous production run
-        id: detect
-        uses: actions/github-script@v9
-        with:
-          script: |
-            const detectRecovery = require('./.github/scripts/detect-recovery.cjs')
-            await detectRecovery({ github, context, core })
-
   changed-packages:
     name: Changed Packages
     uses: ./.github/workflows/call-changed-packages.yml
@@ -175,12 +151,10 @@ jobs:
 
   deploy_docs:
     name: Oberon Docs
-    needs: [changed-packages, detect-recovery]
+    needs: [changed-packages]
     if:
-      ${{ always() && ((needs.detect-recovery.result == 'success' &&
-      needs.detect-recovery.outputs.force_redeploy == 'true') ||
-      contains(needs.changed-packages.outputs.changed_packages,
-      '@oberon/docs')) }}
+      ${{ contains(needs.changed-packages.outputs.changed_packages,
+      '@oberon/docs') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
       environment: ${{ inputs.environment }}
@@ -194,12 +168,10 @@ jobs:
 
   deploy_playground:
     name: Oberon Playground
-    needs: [changed-packages, detect-recovery]
+    needs: [changed-packages]
     if:
-      ${{ always() && ((needs.detect-recovery.result == 'success' &&
-      needs.detect-recovery.outputs.force_redeploy == 'true') ||
-      contains(needs.changed-packages.outputs.changed_packages,
-      '@oberon/playground')) }}
+      ${{ contains(needs.changed-packages.outputs.changed_packages,
+      '@oberon/playground') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
       environment: ${{ inputs.environment }}
