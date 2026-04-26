@@ -168,7 +168,7 @@ jobs:
 
   deploy_playground:
     name: Oberon Playground
-    needs: [changed-packages, detect-recovery]
+    needs: [changed-packages]
     if:
       ${{ always() && contains(needs.changed-packages.outputs.changed_packages,
       '@oberon/playground') }}
