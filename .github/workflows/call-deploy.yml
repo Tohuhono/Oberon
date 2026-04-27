@@ -45,8 +45,7 @@ jobs:
       VERCEL_ENVIRONMENT: ${{ inputs.environment }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
-      TURSO_URL: ${{ secrets.TURSO_URL }}
-      TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest
