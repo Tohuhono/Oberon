@@ -46,10 +46,10 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     needs: [db-branch]
-    env:
-      DATABASE_URL: ${{ needs.db-branch.outputs.db_url }}
     steps:
       - name: Install Neon CLI
+        env:
+          DATABASE_URL: ${{ needs.db-branch.outputs.db_url }}
         run: echo "hmmm $DATABASE_URL"
 
   ci:
