@@ -10,8 +10,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  db-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Neon CLI
+        run: npm install -g neonctl@latest
+      - name: Create/Get Branch
+        id: db-branch
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+        run: |
+          BRANCH_NAME="preview/pr-${{ github.event.number }}"
+          DB_URL=$(neonctl branches create --name $BRANCH_NAME --project-id ${{ vars.NEON_PROJECT_ID }} --output json | jq -r '.connection_uri')
+          echo "::add-mask::$DB_URL"
+          echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
+
   ci:
     name: CI
+    needs: [db-branch]
     uses: ./.github/workflows/call-ci.yml
     with:
       environment: preview
@@ -23,5 +39,4 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
-      TURSO_URL: ${{ secrets.TURSO_URL }}
-      TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
+      DATABASE_URL: ${{ needs.db-branch.outputs.db_url }}
