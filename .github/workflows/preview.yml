@@ -13,9 +13,7 @@ jobs:
   db-branch:
     runs-on: ubuntu-latest
     outputs:
-      db_url:
-        description: The deployment url
-        value: ${{ jobs.branch.outputs.url }}
+      db_url: ${{ steps.branch.outputs.url }}
     steps:
       - name: Use Node.js
         uses: actions/setup-node@v6
