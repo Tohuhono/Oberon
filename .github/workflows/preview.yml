@@ -39,7 +39,14 @@ jobs:
           fi
           echo "::add-mask::$DB_URL"
           echo $DB_URL
-          echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
+          {
+            echo "db_url<<EOF"
+            echo "$DB_URL"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: Verify step output
+        run: |
+          echo "Step output exists: ${{ steps.branch.outputs.db_url != '' }}"
 
   debug:
     runs-on: ubuntu-latest
