@@ -22,7 +22,7 @@ jobs:
         run: |
           BRANCH_NAME="preview/pr-${{ github.event.number }}"
           DB_URL=$(neonctl branches create --name $BRANCH_NAME --project-id ${{ vars.NEON_PROJECT_ID }} --output json | jq -r '.connection_uri')
-          echo "::add-mask::$DB_URL"
+          ## echo "::add-mask::$DB_URL"
           echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
 
   ci:
