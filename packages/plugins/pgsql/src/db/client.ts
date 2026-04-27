@@ -12,6 +12,8 @@ const createRemoteClient = () => {
     )
   }
 
+  console.log("**__**", process.env.DATABASE_URL)
+
   return new Pool({
     connectionString: process.env.DATABASE_URL,
   })
