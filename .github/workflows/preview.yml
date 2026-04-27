@@ -13,6 +13,10 @@ jobs:
   db-branch:
     runs-on: ubuntu-latest
     steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24.x"
       - name: Install Neon CLI
         run: npm install -g neonctl@latest
       - name: Create/Get Branch
@@ -21,10 +25,17 @@ jobs:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         run: |
           BRANCH_NAME="preview/pr-${{ github.event.number }}"
-          DB_URL=$(neonctl branches create --name $BRANCH_NAME --project-id ${{ vars.NEON_PROJECT_ID }} --output json | jq -r '.connection_uri')
+          EXISTING_BRANCH=$(neonctl branches list --project-id $PROJECT_ID --output json | jq -r ".[] | select(.name == \"$BRANCH_NAME\")")
+
+          if [ -z "$EXISTING_BRANCH" ]; then
+            echo "Creating new branch: $BRANCH_NAME"
+            DB_URL=$(neonctl branches create --name "$BRANCH_NAME" --project-id "$PROJECT_ID" --output json | jq -r '.connection_uri')
+          else
+            echo "Branch $BRANCH_NAME already exists, fetching connection string..."
+            DB_URL=$(neonctl connection-string "$BRANCH_NAME" --project-id "$PROJECT_ID")
+          fi
           ## echo "::add-mask::$DB_URL"
           echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
-
   debug:
     runs-on: ubuntu-latest
     needs: [db-branch]
