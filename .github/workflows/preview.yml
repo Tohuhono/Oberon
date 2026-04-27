@@ -12,6 +12,10 @@ concurrency:
 jobs:
   db-branch:
     runs-on: ubuntu-latest
+    outputs:
+      db_url:
+        description: The deployment url
+        value: ${{ jobs.branch.outputs.url }}
     steps:
       - name: Use Node.js
         uses: actions/setup-node@v6
@@ -20,7 +24,7 @@ jobs:
       - name: Install Neon CLI
         run: npm install -g neonctl@latest
       - name: Create/Get Branch
-        id: db-branch
+        id: branch
         env:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
           NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
@@ -44,7 +48,7 @@ jobs:
       DATABASE_URL: ${{ needs.db-branch.outputs.db_url }}
     steps:
       - name: Install Neon CLI
-        run: echo $DATABASE_URL
+        run: echo "hmmm $DATABASE_URL"
 
   ci:
     name: CI
