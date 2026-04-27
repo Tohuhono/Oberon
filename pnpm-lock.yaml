@@ -155,12 +155,12 @@ importers:
       '@oberoncms/plugin-development':
         specifier: workspace:*
         version: link:../../packages/plugins/development
+      '@oberoncms/plugin-pgsql':
+        specifier: workspace:*
+        version: link:../../packages/plugins/pgsql
       '@oberoncms/plugin-tailwind':
         specifier: workspace:*
         version: link:../../packages/plugins/tailwind
-      '@oberoncms/plugin-turso':
-        specifier: workspace:*
-        version: link:../../packages/plugins/turso
       '@oberoncms/plugin-uploadthing':
         specifier: workspace:*
         version: link:../../packages/plugins/uploadthing

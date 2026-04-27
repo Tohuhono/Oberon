@@ -4,11 +4,11 @@ import { JsonValueSchema, type OberonBaseAdapter } from "@oberoncms/core"
 import { type DatabaseClient } from "./client"
 import { images, kv, pages, site } from "./schema"
 
-export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
-  db,
-) => ({
+export const getDatabaseAdapter: (
+  db: () => DatabaseClient,
+) => OberonBaseAdapter = (db) => ({
   getSite: async () => {
-    const result = await db
+    const result = await db()
       .select({
         version: site.version,
         components: site.components,
@@ -21,7 +21,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
     return result[0]
   },
   updateSite: async ({ version, components, updatedAt, updatedBy }) => {
-    await db
+    await db()
       .insert(site)
       .values({ id: 1, version, components, updatedAt, updatedBy })
       .onConflictDoUpdate({
@@ -31,13 +31,13 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
       .execute()
   },
   addImage: async (image) => {
-    await db.insert(images).values(image).execute()
+    await db().insert(images).values(image).execute()
   },
   deleteImage: async (key) => {
-    await db.delete(images).where(eq(images.key, key)).execute()
+    await db().delete(images).where(eq(images.key, key)).execute()
   },
   getAllImages: async () => {
-    return await db
+    return await db()
       .select({
         key: images.key,
         alt: images.alt,
@@ -52,19 +52,22 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
       .execute()
   },
   addPage: async ({ key, data, updatedAt, updatedBy }) => {
-    await db.insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
+    await db()
+      .insert(pages)
+      .values({ key, data, updatedAt, updatedBy })
+      .execute()
   },
   deletePage: async (key) => {
-    await db.delete(pages).where(eq(pages.key, key)).execute()
+    await db().delete(pages).where(eq(pages.key, key)).execute()
   },
   deleteKV: async (namespace, key) => {
-    await db
+    await db()
       .delete(kv)
       .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
       .execute()
   },
   getPageData: async (key) => {
-    const result = await db
+    const result = await db()
       .select({
         data: pages.data,
       })
@@ -75,7 +78,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
     return result[0]?.data || null
   },
   getKV: async (namespace, key) => {
-    const result = await db
+    const result = await db()
       .select({ value: kv.value })
       .from(kv)
       .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
@@ -86,7 +89,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
     return value === undefined ? null : JsonValueSchema.parse(value)
   },
   updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
-    await db
+    await db()
       .insert(pages)
       .values({ key, data, updatedAt, updatedBy })
       .onConflictDoUpdate({
@@ -96,7 +99,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
       .execute()
   },
   putKV: async (namespace, key, value) => {
-    await db
+    await db()
       .insert(kv)
       .values({ namespace, key, value })
       .onConflictDoUpdate({
@@ -106,7 +109,7 @@ export const getDatabaseAdapter: (db: DatabaseClient) => OberonBaseAdapter = (
       .execute()
   },
   getAllPages: async () => {
-    return await db
+    return await db()
       .select({
         key: pages.key,
         updatedAt: pages.updatedAt,

@@ -38,7 +38,7 @@ const migrationsFolder = resolve(
         await client.close()
       })
 
-      return fromPartial(getDatabaseAdapter(db))
+      return fromPartial(getDatabaseAdapter(() => db))
     },
   )
 
