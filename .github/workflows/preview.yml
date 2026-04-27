@@ -34,7 +34,7 @@ jobs:
             echo "Branch $BRANCH_NAME already exists, fetching connection string..."
             DB_URL=$(neonctl connection-string "$BRANCH_NAME" --project-id "$PROJECT_ID")
           fi
-          ## echo "::add-mask::$DB_URL"
+          echo $DB_URL
           echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
   debug:
     runs-on: ubuntu-latest
