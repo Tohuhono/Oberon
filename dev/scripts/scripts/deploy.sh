@@ -20,10 +20,8 @@ fi
 if [[ $VERCEL_ENVIRONMENT == "production" ]]
 then
 PROD_FLAG=--prod
-export USE_DEVELOPMENT_DATABASE=false
 else
 PROD_FLAG=
-export USE_DEVELOPMENT_DATABASE=true
 fi
 
 if [[ -n $VERCEL_API_TOKEN ]]
@@ -40,6 +38,13 @@ else
 SCOPE_FLAG=
 fi
 
+if [[ -n $DATABASE_URL ]]
+then
+DB_FLAG="--env DATABASE_URL=\"$DATABASE_URL\""
+else
+DB_FLAG=
+fi
+
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
-pnpm exec vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG > .vercel/DEPLOY_LOG
+pnpm exec vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG "$DB_FLAG" > .vercel/DEPLOY_LOG
