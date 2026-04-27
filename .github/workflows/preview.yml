@@ -25,6 +25,15 @@ jobs:
           ## echo "::add-mask::$DB_URL"
           echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
 
+  debug:
+    runs-on: ubuntu-latest
+    needs: [db-branch]
+    secrets:
+      DATABASE_URL: ${{ needs.db-branch.outputs.db_url }}
+    steps:
+      - name: Install Neon CLI
+        run: echo $DATABASE_URL
+
   ci:
     name: CI
     needs: [db-branch]
