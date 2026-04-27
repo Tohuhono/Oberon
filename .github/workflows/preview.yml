@@ -23,16 +23,17 @@ jobs:
         id: db-branch
         env:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
         run: |
           BRANCH_NAME="preview/pr-${{ github.event.number }}"
-          EXISTING_BRANCH=$(neonctl branches list --project-id $PROJECT_ID --output json | jq -r ".[] | select(.name == \"$BRANCH_NAME\")")
+          EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r ".[] | select(.name == \"$BRANCH_NAME\")")
 
           if [ -z "$EXISTING_BRANCH" ]; then
             echo "Creating new branch: $BRANCH_NAME"
-            DB_URL=$(neonctl branches create --name "$BRANCH_NAME" --project-id "$PROJECT_ID" --output json | jq -r '.connection_uri')
+            DB_URL=$(neonctl branches create --name "$BRANCH_NAME" --project-id "$NEON_PROJECT_ID" --output json | jq -r '.connection_uri')
           else
             echo "Branch $BRANCH_NAME already exists, fetching connection string..."
-            DB_URL=$(neonctl connection-string "$BRANCH_NAME" --project-id "$PROJECT_ID")
+            DB_URL=$(neonctl connection-string "$BRANCH_NAME" --project-id "$NEON_PROJECT_ID")
           fi
           echo $DB_URL
           echo "db_url=$DB_URL" >> $GITHUB_OUTPUT
