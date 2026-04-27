@@ -26,9 +26,7 @@ on:
         required: true
       VERCEL_ORG_ID:
         required: true
-      TURSO_URL:
-        required: false
-      TURSO_TOKEN:
+      DATABASE_URL:
         required: false
 
 run-name: ${{ format('Deploy {0}', inputs.project ) }}
