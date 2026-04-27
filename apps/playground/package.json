@@ -9,7 +9,6 @@
     "dev": "next dev --turbo",
     "lint": "eslint .",
     "next": "next",
-    "typegen": "next typegen",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "tsc": "tsc --pretty",

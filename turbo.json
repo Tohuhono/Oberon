@@ -65,7 +65,7 @@
         "!.next/**",
         "!.playwright/**"
       ],
-      "outputs": [".next/**", "dist/**", "!.next/cache/**", "!.next/types/**"],
+      "outputs": [".next/**", "dist/**", "!.next/cache/**", "next-env.d.ts"],
       "env": [
         "NODE_ENV",
         "AUTH_*",
@@ -219,7 +219,7 @@
       "outputs": []
     },
     "tsc": {
-      "dependsOn": ["typegen"],
+      "dependsOn": ["build"],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
@@ -231,18 +231,6 @@
         "!.playwright/**"
       ],
       "outputs": []
-    },
-    "typegen": {
-      "dependsOn": ["^build"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env*",
-        "!.oberon/**",
-        "!.turbo/**",
-        "!.next/**",
-        "!.playwright/**"
-      ],
-      "outputs": [".next/types/**", "next-env.d.ts"]
     },
     "wait": {
       "cache": false,
