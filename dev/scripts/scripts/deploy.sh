@@ -63,5 +63,5 @@ DB_BUILD_FLAG=
 fi
 
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
-pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG "$DB_BUILD_FLAG"
+pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG "$DB_RUN_FLAG"
 pnpm exec vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG "$DB_RUN_FLAG" > .vercel/DEPLOY_LOG
