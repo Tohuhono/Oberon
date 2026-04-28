@@ -14,7 +14,7 @@ if [[ -n $VERCEL_ENVIRONMENT ]]
 then
 ENV_FLAG=--environment=$VERCEL_ENVIRONMENT
 else
-ENV_FLAG=--environment=developement
+ENV_FLAG=--environment=development
 fi
 
 if [[ $VERCEL_ENVIRONMENT == "production" ]]
@@ -39,6 +39,7 @@ SCOPE_FLAG=
 fi
 
 if [[ -n $DATABASE_BRANCH ]]
+then
 
 EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r ".[] | select(.name == \"$DATABASE_BRANCH\")")
 
@@ -46,7 +47,7 @@ if [ -z "$EXISTING_BRANCH" ]; then
   echo "Creating new branch: $DATABASE_BRANCH"
   DATABASE_URL=$(neonctl branches create --name "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID" --output json | jq -r '.connection_uri')
 else
-  echo "Branch $BRANCH_NAME already exists, fetching connection string..."
+  echo "Branch $DATABASE_BRANCH already exists, fetching connection string..."
   DATABASE_URL=$(neonctl connection-string "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID")
 fi
 
@@ -54,10 +55,10 @@ fi
 
 if [[ -n $DATABASE_URL ]]
 then
-DB_FLAG="--env DATABASE_URL=\"$DATABASE_URL\""
+DB_RUN_FLAG="--env DATABASE_URL=\"$DATABASE_URL\""
 DB_BUILD_FLAG="--build-env DATABASE_URL=\"$DATABASE_URL\""
 else
-DB_FLAG=
+DB_RUN_FLAG=
 DB_BUILD_FLAG=
 fi
 
