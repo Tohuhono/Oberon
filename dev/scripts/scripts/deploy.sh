@@ -41,7 +41,7 @@ fi
 if [[ -n $DATABASE_BRANCH ]]
 then
 
-EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r --arg BRANCH "$DATABASE_BRANCH" '.[] | select(.name == $BRANCH)')
+EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r '.[] | select(.name == $DATABASE_BRANCH)')
 
 if [ -z "$EXISTING_BRANCH" ]; then
   echo "Creating new branch: $DATABASE_BRANCH"
@@ -55,8 +55,8 @@ fi
 
 if [[ -n $DATABASE_URL ]]
 then
-DB_RUN_FLAG="--env DATABASE_URL=$DATABASE_URL"
-DB_BUILD_FLAG="--build-env DATABASE_URL=$DATABASE_URL"
+DB_RUN_FLAG="--env DATABASE_URL=\"$DATABASE_URL\""
+DB_BUILD_FLAG="--build-env DATABASE_URL=\"$DATABASE_URL\""
 else
 DB_RUN_FLAG=
 DB_BUILD_FLAG=
