@@ -41,7 +41,7 @@ fi
 if [[ -n $DATABASE_BRANCH ]]
 then
 
-EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r '.[] | select(.name == $DATABASE_BRANCH)')
+EXISTING_BRANCH="$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r \".[] | select(.name == $DATABASE_BRANCH)\")"
 
 if [ -z "$EXISTING_BRANCH" ]; then
   echo "Creating new branch: $DATABASE_BRANCH"
