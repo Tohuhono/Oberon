@@ -81,5 +81,7 @@
       "rg": true,
     },
     "tailwindCSS.experimental.configFile": "packages/oberoncms/core/tailwind.css",
+    "nix.formatterPath": "nixfmt",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
 }

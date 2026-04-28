@@ -74,12 +74,13 @@
     "eslint": "^9.39.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "neonctl": "^2.22.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "rimraf": "^6.1.2",
     "turbo": "^2.8.20",
     "typescript": "5.9.3",
-    "vercel": "^50.17.1",
+    "vercel": "^52.0.0",
     "wait-on": "^9.0.4"
   },
   "pnpm": {

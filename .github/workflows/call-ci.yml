@@ -15,6 +15,10 @@ on:
       base:
         required: true
         type: string
+      db_branch:
+        required: false
+        type: string
+
     secrets:
       VERCEL_PROJECT_ID:
         required: true
@@ -24,9 +28,9 @@ on:
         required: true
       VERCEL_PROTECTION_BYPASS:
         required: false
-      TURSO_URL:
+      NEON_API_KEY:
         required: false
-      TURSO_TOKEN:
+      NEON_PROJECT_ID:
         required: false
 
 jobs:
@@ -178,12 +182,13 @@ jobs:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: playground
+      db_branch: ${{ inputs.db_branch }}
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      TURSO_URL: ${{ secrets.TURSO_URL }}
-      TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
 
   smoke_docs:
     name: Smoke Test Docs

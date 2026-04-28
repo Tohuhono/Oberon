@@ -13,7 +13,7 @@ type PgsqlAuthAdapter = OberonAuthAdapter & {
 }
 
 function createBetterAuthAdapter(
-  db: DatabaseClient,
+  db: () => DatabaseClient,
 ): Pick<BetterAuthOptions, "database"> {
   let database: BetterAuthOptions["database"] | undefined
 
@@ -29,20 +29,20 @@ function createBetterAuthAdapter(
   } satisfies Pick<BetterAuthOptions, "database">
 }
 
-export const getAuthAdapter = (db: DatabaseClient): PgsqlAuthAdapter => ({
+export const getAuthAdapter = (db: () => DatabaseClient): PgsqlAuthAdapter => ({
   betterAuth: createBetterAuthAdapter(db),
   getAllUsers: async () => {
     return z
       .array(UserSchema)
       .parse(
-        await db
+        await db()
           .select({ id: user.id, email: user.email, role: user.role })
           .from(user)
           .execute(),
       )
   },
   addUser: async ({ email, role }) => {
-    const result = await db
+    const result = await db()
       .insert(user)
       .values({ id: randomUUID(), name: email, email, role })
       .returning({ id: user.id, email: user.email, role: user.role })
@@ -57,9 +57,9 @@ export const getAuthAdapter = (db: DatabaseClient): PgsqlAuthAdapter => ({
     return UserSchema.parse(createdUser)
   },
   deleteUser: async (id) => {
-    await db.delete(user).where(eq(user.id, id)).execute()
+    await db().delete(user).where(eq(user.id, id)).execute()
   },
   changeRole: async ({ role, id }) => {
-    await db.update(user).set({ role }).where(eq(user.id, id)).execute()
+    await db().update(user).set({ role }).where(eq(user.id, id)).execute()
   },
 })

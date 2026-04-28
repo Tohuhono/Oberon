@@ -15,6 +15,9 @@ on:
       ref:
         required: true
         type: string
+      db_branch:
+        required: false
+        type: string
     outputs:
       url:
         description: The deployment url
@@ -26,9 +29,11 @@ on:
         required: true
       VERCEL_ORG_ID:
         required: true
-      TURSO_URL:
+      DATABASE_URL:
         required: false
-      TURSO_TOKEN:
+      NEON_API_KEY:
+        required: false
+      NEON_PROJECT_ID:
         required: false
 
 run-name: ${{ format('Deploy {0}', inputs.project ) }}
@@ -40,13 +45,15 @@ jobs:
       name: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
       url: ${{ steps.deploy.outputs.url }}
     env:
+      DATABASE_BRANCH: ${{ inputs.db_branch }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT: ${{ inputs.environment }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
-      TURSO_URL: ${{ secrets.TURSO_URL }}
-      TURSO_TOKEN: ${{ secrets.TURSO_TOKEN }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest

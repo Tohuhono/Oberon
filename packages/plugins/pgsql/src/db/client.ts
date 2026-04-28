@@ -17,6 +17,16 @@ const createRemoteClient = () => {
   })
 }
 
-export const db = drizzle(createRemoteClient(), {
-  schema,
-}) satisfies DatabaseClient
+let db: DatabaseClient
+
+const lazy = {
+  get client() {
+    db ??= drizzle(createRemoteClient(), {
+      schema,
+    }) satisfies DatabaseClient
+
+    return db
+  },
+}
+
+export const getClient = () => lazy.client
