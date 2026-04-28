@@ -19,7 +19,8 @@ fi
 
 if [[ $VERCEL_ENVIRONMENT == "production" ]]
 then
-PROD_FLAG="--prod --skip-domain"
+PROD_FLAG="--prod"
+SKIP_FLAG="--skip-domain"
 else
 PROD_FLAG=
 fi
@@ -67,4 +68,4 @@ echo $SCOPE_FLAG
 
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
-pnpm exec vercel deploy --archive=tgz --prebuilt  $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG $DB_RUN_FLAG > .vercel/DEPLOY_LOG
+pnpm exec vercel deploy --archive=tgz --prebuilt $SKIP_FLAG $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG $DB_RUN_FLAG > .vercel/DEPLOY_LOG
