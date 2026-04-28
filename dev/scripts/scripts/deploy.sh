@@ -41,14 +41,14 @@ fi
 if [[ -n $DATABASE_BRANCH ]]
 then
 
-EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r ".[] | select(.name == \"$DATABASE_BRANCH\")")
+EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r ".[] | select(.name == $DATABASE_BRANCH)")
 
 if [ -z "$EXISTING_BRANCH" ]; then
   echo "Creating new branch: $DATABASE_BRANCH"
-  DATABASE_URL=$(neonctl branches create --name "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID" --output json | jq -r '.connection_uri')
+  DATABASE_URL="$(neonctl branches create --name $DATABASE_BRANCH --project-id $NEON_PROJECT_ID --output json | jq -r '.connection_uri')"
 else
   echo "Branch $DATABASE_BRANCH already exists, fetching connection string..."
-  DATABASE_URL=$(neonctl connection-string "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID")
+  DATABASE_URL="$(neonctl connection-string $DATABASE_BRANCH --project-id $NEON_PROJECT_ID)"
 fi
 
 fi
