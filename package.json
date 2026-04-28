@@ -80,7 +80,7 @@
     "rimraf": "^6.1.2",
     "turbo": "^2.8.20",
     "typescript": "5.9.3",
-    "vercel": "^50.17.1",
+    "vercel": "^52.0.0",
     "wait-on": "^9.0.4"
   },
   "pnpm": {
