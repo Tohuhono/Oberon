@@ -38,9 +38,11 @@ else
 SCOPE_FLAG=
 fi
 
+echo "-------------------------------------------------------------"
+
 if [[ -n $DATABASE_BRANCH ]]
 then
-
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 EXISTING_BRANCH=$(pnpm exec neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r --arg NAME "$DATABASE_BRANCH" '.[] | select(.name == $NAME)')
 
 if [ -z "$EXISTING_BRANCH" ]; then
@@ -55,9 +57,11 @@ fi
 
 if [[ -n $DATABASE_URL ]]
 then
+echo "here"
 DB_RUN_FLAG="--env DATABASE_URL=$DATABASE_URL"
-export DATABASE_URL=$DATABASE_URL
+export DATABASE_URL="$DATABASE_URL"
 else
+echo "there"
 DB_RUN_FLAG=
 DB_BUILD_FLAG=
 fi

@@ -31,7 +31,7 @@ export const plugin: OberonPlugin = (adapter) => ({
     prebuild: async () => {
       await adapter.prebuild()
 
-      console.log(`Migrating database`, process.env.DATABASE_URL)
+      console.log(`Migrating database`)
 
       if (!getClient()) {
         console.log("Prepare: No Database Connection Configured")
