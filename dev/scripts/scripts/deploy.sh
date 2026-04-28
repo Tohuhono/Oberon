@@ -38,14 +38,29 @@ else
 SCOPE_FLAG=
 fi
 
+if [[ -n $DATABASE_BRANCH ]]
+
+EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r ".[] | select(.name == \"$DATABASE_BRANCH\")")
+
+if [ -z "$EXISTING_BRANCH" ]; then
+  echo "Creating new branch: $DATABASE_BRANCH"
+  DATABASE_URL=$(neonctl branches create --name "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID" --output json | jq -r '.connection_uri')
+else
+  echo "Branch $BRANCH_NAME already exists, fetching connection string..."
+  DATABASE_URL=$(neonctl connection-string "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID")
+fi
+
+fi
+
 if [[ -n $DATABASE_URL ]]
 then
 DB_FLAG="--env DATABASE_URL=\"$DATABASE_URL\""
 DB_BUILD_FLAG="--build-env DATABASE_URL=\"$DATABASE_URL\""
 else
 DB_FLAG=
+DB_BUILD_FLAG=
 fi
 
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG "$DB_BUILD_FLAG"
-pnpm exec vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG "$DB_FLAG" > .vercel/DEPLOY_LOG
+pnpm exec vercel deploy --archive=tgz --prebuilt --skip-domain $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG "$DB_RUN_FLAG" > .vercel/DEPLOY_LOG

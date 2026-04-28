@@ -10,69 +10,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  db-branch:
-    runs-on: ubuntu-latest
-    outputs:
-      db_url: ${{ steps.branch.outputs.db_url }}
-    steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24.x"
-      - name: Install Neon CLI
-        run: npm install -g neonctl@latest
-      - name: Create/Get Branch
-        id: branch
-        env:
-          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
-          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
-        run: |
-          BRANCH_NAME="preview/pr-${{ github.event.number }}"
-          EXISTING_BRANCH=$(neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r ".[] | select(.name == \"$BRANCH_NAME\")")
-
-          if [ -z "$EXISTING_BRANCH" ]; then
-            echo "Creating new branch: $BRANCH_NAME"
-            DB_URL=$(neonctl branches create --name "$BRANCH_NAME" --project-id "$NEON_PROJECT_ID" --output json | jq -r '.connection_uri')
-          else
-            echo "Branch $BRANCH_NAME already exists, fetching connection string..."
-            DB_URL=$(neonctl connection-string "$BRANCH_NAME" --project-id "$NEON_PROJECT_ID")
-          fi
-          {
-            echo "db_url<<EOF"
-            echo "$DB_URL"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-      - name: Verify step output
-        run: |
-          echo "Step output exists: ${{ steps.branch.outputs.db_url != '' }}"
-
-  debug:
-    runs-on: ubuntu-latest
-    needs: [db-branch]
-    steps:
-      - name: Install Neon CLI
-        env:
-          DATABASE_URL: ${{ needs.db-branch.outputs.db_url }}
-        run: |
-          if [ -n "$DATABASE_URL" ]; then
-            echo "DATABASE_URL is set"
-          else
-            echo "DATABASE_URL is empty"
-            exit 1
-          fi
-
   ci:
     name: CI
-    needs: [db-branch]
     uses: ./.github/workflows/call-ci.yml
     with:
       environment: preview
       repository: ${{ github.event.pull_request.head.repo.full_name }}
       ref: ${{ github.event.pull_request.head.ref }}
       base: ${{ github.event.pull_request.base.sha }}
+      db_branch: preview/pr-${{ github.event.number }}"
     secrets:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
-      DATABASE_URL: ${{ needs.db-branch.outputs.db_url }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}

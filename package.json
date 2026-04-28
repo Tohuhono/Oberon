@@ -90,5 +90,8 @@
       "nextra": "patches/nextra.patch",
       "@vitest/runner": "patches/@vitest__runner.patch"
     }
+  },
+  "dependencies": {
+    "neonctl": "^2.22.0"
   }
 }
