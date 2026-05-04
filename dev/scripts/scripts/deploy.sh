@@ -60,10 +60,10 @@ DB_RUN_FLAG="--env DATABASE_URL=$DATABASE_URL"
 export DATABASE_URL=$DATABASE_URL
 else
 DB_RUN_FLAG=
-DB_BUILD_FLAG=
 fi
 
-echo $DB_BUILD_FLAG
+echo ***********
+echo $DB_RUN_FLAG
 echo $SCOPE_FLAG
 
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
