@@ -8,14 +8,19 @@ const CALLBACK_PATH = "/cms/pages"
 
 function parseDevelopmentOtpEntry(logs: string): string | null {
   const strippedLog = stripVTControlCharacters(logs)
-  const tokenPattern = /token:\s*["']?(\d{6})["']?/g
+  const tokenPatterns = [
+    /token:\s*["']?(\d{6})["']?/g,
+    /Sign in with code\s+(\d{6})/g,
+  ]
 
   let lastMatch: string | null = null
 
-  for (const match of strippedLog.matchAll(tokenPattern)) {
-    const token = match[1]
-    if (token) {
-      lastMatch = token
+  for (const tokenPattern of tokenPatterns) {
+    for (const match of strippedLog.matchAll(tokenPattern)) {
+      const token = match[1]
+      if (token) {
+        lastMatch = token
+      }
     }
   }
 
@@ -60,14 +65,13 @@ async function completeSignIn(page: Page) {
   await expect(completeSignInButton).toBeVisible()
 
   const callbackResponsePromise = page.waitForResponse((response) =>
-    response.url().includes("/cms/api/auth/verify?"),
+    response.url().includes("/cms/api/auth/sign-in/email-otp"),
   )
 
   await completeSignInButton.click()
 
   const callbackResponse = await callbackResponsePromise
   const callbackStatus = callbackResponse.status()
-  const callbackLocation = await callbackResponse.headerValue("location")
 
   if (callbackStatus >= 400) {
     throw new Error(
@@ -82,7 +86,7 @@ async function completeSignIn(page: Page) {
   } catch {
     const currentPathname = new URL(page.url()).pathname
     throw new Error(
-      `Auth completion did not reach ${expectedPathname}. Current path: ${currentPathname}. Callback status: ${callbackStatus}. Callback location: ${callbackLocation ?? "<none>"}.`,
+      `Auth completion did not reach ${expectedPathname}. Current path: ${currentPathname}. Callback status: ${callbackStatus}.`,
     )
   }
 }

@@ -2,7 +2,7 @@ import { describe, expect, it } from "@dev/vitest"
 
 import { memoryAdapter } from "better-auth/adapters/memory"
 
-import { betterAuthPlugin } from "../auth"
+import { authPlugin } from "../auth"
 import { NotImplementedError } from "../lib/dtd"
 import { initPlugins } from "./init-plugins"
 import { mockPlugin } from "./mock-plugin"
@@ -47,7 +47,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
   })
 
   it("uses deterministic plugin order when multiple plugins provide betterAuth", async () => {
-    const validBetterAuthPlugin = () => ({
+    const validAuthCapabilityPlugin = () => ({
       name: "valid-better-auth-plugin",
       adapter: {
         betterAuth: {
@@ -57,7 +57,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
       },
     })
 
-    const missingBetterAuthPlugin = () => ({
+    const missingAuthCapabilityPlugin = () => ({
       name: "missing-better-auth-plugin",
       adapter: {
         betterAuth: undefined,
@@ -66,18 +66,18 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
 
     expect(() =>
       initPlugins([
-        missingBetterAuthPlugin,
-        validBetterAuthPlugin,
-        betterAuthPlugin,
+        missingAuthCapabilityPlugin,
+        validAuthCapabilityPlugin,
+        authPlugin,
       ]),
     ).not.toThrow()
 
     expect(() =>
       initPlugins([
-        validBetterAuthPlugin,
-        missingBetterAuthPlugin,
-        betterAuthPlugin,
+        validAuthCapabilityPlugin,
+        missingAuthCapabilityPlugin,
+        authPlugin,
       ]),
-    ).toThrow("Missing required Better Auth capability on adapter.betterAuth")
+    ).not.toThrow()
   })
 })

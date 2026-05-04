@@ -14,7 +14,7 @@ describe(
       }))
 
       const hasPermission = vi.fn(
-        ({ user }: { user?: { role: "user" | "admin" } | null }) => {
+        ({ user }: { user?: { role: string } | null }) => {
           return user?.role === "admin"
         },
       )

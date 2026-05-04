@@ -1,4 +1,5 @@
-import { betterAuth, type BetterAuthOptions } from "better-auth"
+import { betterAuth } from "better-auth"
+import { nextCookies } from "better-auth/next-js"
 import { emailOTP } from "better-auth/plugins"
 import type { OberonBetterAuthAdapter, OberonSendAdapter } from "../lib/dtd"
 
@@ -12,7 +13,7 @@ export function createAuthOptions({
   sendVerificationRequest,
 }: Pick<OberonSendAdapter, "sendVerificationRequest"> & {
   betterAuth?: OberonBetterAuthAdapter
-}): BetterAuthOptions {
+}) {
   const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
   const secret =
     process.env.BETTER_AUTH_SECRET ||
@@ -26,7 +27,7 @@ export function createAuthOptions({
     user: {
       additionalFields: {
         role: {
-          type: "string",
+          type: "string" as const,
           required: true,
           input: false,
         },
@@ -50,6 +51,7 @@ export function createAuthOptions({
           })
         },
       }),
+      nextCookies(),
     ],
   }
 }

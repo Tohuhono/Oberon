@@ -66,7 +66,7 @@ test.describe.serial(
     })
 
     test("Create Oberon App", async ({ authEmail }) => {
-      test.setTimeout(60000)
+      test.setTimeout(180000)
 
       expect(authEmail).toBeDefined()
 

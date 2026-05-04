@@ -17,10 +17,7 @@ const PLAYWRIGHT_DIR = path.resolve(
 
 const APP_LOG_PATH = path.resolve(PLAYWRIGHT_DIR, "logs/app.log")
 const APP_DB_PATH = path.resolve(PLAYWRIGHT_DIR, "db/oberon.db")
-const BASE_DB = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  ".oberon/db/oberon.db",
-)
+
 const AUTH_SECRET = "playwright-test-auth-secret"
 
 async function readNextjsLogs() {
@@ -36,9 +33,10 @@ export default defineConfig({
   webServer: {
     command: [
       `rm -f '${APP_LOG_PATH}'`,
+      `rm -f '${APP_DB_PATH}*'`,
       `mkdir -p '${path.dirname(APP_LOG_PATH)}'`,
       `mkdir -p '${path.dirname(APP_DB_PATH)}'`,
-      `cp -r '${BASE_DB}'* '${path.dirname(APP_DB_PATH)}'`,
+      `pnpm prebuild`,
       `pnpm start > '${APP_LOG_PATH}' 2>&1`,
     ].join(" && "),
     url: "http://localhost:3210",

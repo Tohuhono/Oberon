@@ -117,10 +117,10 @@ export type ClientAction = (typeof clientActions)[number]
 
 export type AdapterActionGroup = "all" | "users" | "images" | "pages" | "site"
 export type AdapterPermission = "unauthenticated" | "read" | "write"
-export type OberonRole = "user" | "admin"
+export type OberonRole = "user" | "admin" | "unauthenticated" | (string & {})
 
 export type OberonPermissions = Record<
-  "unauthenticated" | "user",
+  OberonRole,
   Partial<Record<AdapterActionGroup, AdapterPermission>>
 >
 
@@ -201,14 +201,16 @@ export type OberonImage = MaybeOptimistic<z.infer<typeof ImageSchema>>
 export const UserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
-  role: z.enum(["user", "admin"]),
+  role: z.union([z.literal("user"), z.literal("admin"), z.string()]),
 })
 
 export const AddUserSchema = UserSchema.pick({ email: true, role: true })
 export const ChangeRoleSchema = UserSchema.pick({ id: true, role: true })
 export const DeleteUserSchema = UserSchema.pick({ id: true })
 
-export type OberonUser = MaybeOptimistic<z.infer<typeof UserSchema>>
+export type OberonUser = MaybeOptimistic<z.infer<typeof UserSchema>> & {
+  role: "user" | "admin" | (string & {})
+}
 
 export const roles: OberonRole[] = ["user", "admin"] as const
 

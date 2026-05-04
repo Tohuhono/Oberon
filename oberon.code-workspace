@@ -38,6 +38,8 @@
     },
     "chat.useNestedAgentsMdFiles": true,
     "chat.tools.terminal.autoApprove": {
+      "tee": true,
+      "test": true,
       "set": true,
       "break": true,
       "curl": true,
