@@ -24,24 +24,6 @@ const LoginSchema = z.object({
   token: z.string().max(6).optional(),
 })
 
-function resolveCallbackUrl(rawCallbackUrl: string): string {
-  if (!rawCallbackUrl) {
-    return "/cms/pages"
-  }
-
-  try {
-    const parsedCallbackUrl = new URL(rawCallbackUrl, "http://localhost")
-
-    if (parsedCallbackUrl.pathname.startsWith("/cms")) {
-      return `${parsedCallbackUrl.pathname}${parsedCallbackUrl.search}`
-    }
-  } catch {
-    return "/cms/pages"
-  }
-
-  return "/cms/pages"
-}
-
 export function Login({
   callbackUrl,
   email,
@@ -92,8 +74,6 @@ export function Login({
   })
 
   const tokenOnClick = form.handleSubmit(async ({ email, token }) => {
-    const callback = resolveCallbackUrl(callbackUrl)
-
     setSubmitting(true)
     const response = await fetch("/cms/api/auth/sign-in/email-otp", {
       method: "POST",
@@ -106,7 +86,7 @@ export function Login({
       }),
     })
     if (response.ok) {
-      router.push(callback)
+      router.push(callbackUrl || "/cms/pages")
     }
     if (!response.ok) {
       toast({

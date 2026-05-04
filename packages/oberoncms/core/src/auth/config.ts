@@ -15,9 +15,7 @@ export function createAuthOptions({
   betterAuth?: OberonBetterAuthAdapter
 }) {
   const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
-  const secret =
-    process.env.BETTER_AUTH_SECRET ||
-    "oberon-mock-auth-secret-12345678901234567890"
+  const secret = process.env.BETTER_AUTH_SECRET
 
   return {
     ...(betterAuthAdapter ? { database: betterAuthAdapter.database } : {}),
