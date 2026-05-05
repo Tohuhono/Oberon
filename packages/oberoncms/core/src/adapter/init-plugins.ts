@@ -30,6 +30,9 @@ const baseAccumulator: InititalisedPlugins = {
           pages: "write",
           images: "write",
         },
+        admin: {
+          all: "write",
+        },
       }
       const role = user?.role || ("unauthenticated" as const)
 
@@ -37,9 +40,12 @@ const baseAccumulator: InititalisedPlugins = {
         return true
       }
       return !!(
+        permissions[role] &&
         permissions[role][action] &&
         (permissions[role][action] === permission ||
-          permissions[role][action] === "write")
+          permissions[role][action] === "write" ||
+          permissions[role].all === permission ||
+          permissions[role].all === "write")
       )
     },
   } satisfies OberonPluginAdapter,

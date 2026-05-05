@@ -46,7 +46,7 @@ EXISTING_BRANCH=$(pnpm exec neonctl branches list --project-id $NEON_PROJECT_ID 
 
 if [ -z "$EXISTING_BRANCH" ]; then
   echo "Creating new branch: $DATABASE_BRANCH"
-  DATABASE_URL="$(pnpm exec neonctl branches create --name $DATABASE_BRANCH --project-id $NEON_PROJECT_ID --output json | jq -r '.connection_uri')"
+  DATABASE_URL="$(pnpm exec neonctl branches create --name $DATABASE_BRANCH --project-id $NEON_PROJECT_ID --output json | jq -r '.connection_uris[0].connection_uri')"
 else
   echo "Branch $DATABASE_BRANCH already exists, fetching connection string..."
   DATABASE_URL="$(pnpm exec neonctl connection-string $DATABASE_BRANCH --project-id $NEON_PROJECT_ID)"
@@ -60,11 +60,7 @@ DB_RUN_FLAG="--env DATABASE_URL=$DATABASE_URL"
 export DATABASE_URL=$DATABASE_URL
 else
 DB_RUN_FLAG=
-DB_BUILD_FLAG=
 fi
-
-echo $DB_BUILD_FLAG
-echo $SCOPE_FLAG
 
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG

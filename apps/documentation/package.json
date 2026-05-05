@@ -7,7 +7,6 @@
     "dev": "next dev",
     "clean": "odt clean",
     "build": "next build",
-    "prebuild": "tsx ./src/oberon/prebuild.ts",
     "start": "next start",
     "lint": "eslint .",
     "test:e2e": "playwright test",

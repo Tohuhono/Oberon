@@ -74,12 +74,17 @@ export function Login({
   })
 
   const tokenOnClick = form.handleSubmit(async ({ email, token }) => {
-    const callback = callbackUrl || "/cms/pages"
-
     setSubmitting(true)
-    const response = await fetch(
-      `/cms/api/auth/verify?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token || "")}&callbackUrl=${encodeURIComponent(callback)}`,
-    )
+    const response = await fetch("/cms/api/auth/sign-in/email-otp", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        otp: token || "",
+      }),
+    })
     if (response.ok) {
       router.push(callbackUrl || "/cms/pages")
     }

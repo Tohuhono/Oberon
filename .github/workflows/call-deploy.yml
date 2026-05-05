@@ -35,6 +35,8 @@ on:
         required: false
       NEON_PROJECT_ID:
         required: false
+      AUTH_SECRET:
+        required: false
 
 run-name: ${{ format('Deploy {0}', inputs.project ) }}
 
@@ -54,6 +56,7 @@ jobs:
       VERCEL_ENVIRONMENT: ${{ inputs.environment }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest

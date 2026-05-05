@@ -1,2 +1,1 @@
-export { authPlugin } from "./auth/mock"
-export { authPlugin as betterAuthPlugin } from "./auth/better-auth"
+export { authPlugin } from "./auth/better-auth"

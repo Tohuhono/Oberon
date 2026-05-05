@@ -26,3 +26,4 @@ jobs:
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}

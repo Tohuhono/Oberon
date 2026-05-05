@@ -71,7 +71,6 @@ export function Editor({
       }}
       onAction={(action) => {
         if (action.type === "insert") {
-          console.log("A componlement was inserted:", action.componentType)
           setActiveTab("fields")
         }
       }}

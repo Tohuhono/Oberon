@@ -32,6 +32,8 @@ on:
         required: false
       NEON_PROJECT_ID:
         required: false
+      AUTH_SECRET:
+        required: false
 
 jobs:
   changed-packages:
@@ -189,6 +191,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
 
   smoke_docs:
     name: Smoke Test Docs

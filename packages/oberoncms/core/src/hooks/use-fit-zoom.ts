@@ -11,8 +11,6 @@ export const useFitZoom = (targetWidth: number | "100%") => {
 
     // Use ResizeObserver to track dynamic changes (window resize, sidebar toggle, etc.)
     const observer = new ResizeObserver((entries) => {
-      console.log("we observer now")
-
       for (const entry of entries) {
         const containerHeight = element.getBoundingClientRect().height
         if (targetWidth === "100%" || targetWidth === 0) {

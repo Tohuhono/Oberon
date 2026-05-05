@@ -6,6 +6,7 @@
 - Aviod premature optimisation - YAGNI
 - Simple, direct code is easier to fix, test, and understand. Excess options
   create "dead code" or "configuration hell" that slows down development.
+- Avoid small single-use helpers unless explicitly justified.
 
 ## Formatting and Linting
 

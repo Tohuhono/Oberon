@@ -41,8 +41,6 @@ export const plugin: OberonPlugin = (adapter) => ({
       ({
         ...getAdapter(getClient),
         prebuild: async () => {
-          await adapter.prebuild()
-
           console.log(`Migrating database`)
 
           await initialise()
@@ -59,6 +57,7 @@ export const plugin: OberonPlugin = (adapter) => ({
           })
 
           console.log(`Database migration complete`)
+          await adapter.prebuild()
         },
       } satisfies OberonDatabaseAdapter & OberonInitAdapter)),
   },
