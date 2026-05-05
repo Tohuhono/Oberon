@@ -36,7 +36,7 @@ on:
       NEON_PROJECT_ID:
         required: false
       AUTH_SECRET:
-        required: true
+        required: false
 
 run-name: ${{ format('Deploy {0}', inputs.project ) }}
 
