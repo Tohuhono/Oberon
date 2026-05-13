@@ -81,7 +81,7 @@ importers:
     dependencies:
       '@datacom-digital/ui-sample-components':
         specifier: ^0.3.3
-        version: 0.3.3(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)
+        version: 0.3.3(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.2.1)
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
@@ -116,9 +116,6 @@ importers:
       '@dev/typescript':
         specifier: workspace:*
         version: link:../../dev/typescript
-      '@tailwindcss/typography':
-        specifier: ^0.5.19
-        version: 0.5.19(tailwindcss@4.1.18)
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
@@ -137,12 +134,6 @@ importers:
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
-      tailwindcss:
-        specifier: ^4.1.18
-        version: 4.1.18
-      tailwindcss-animate:
-        specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@4.1.18)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -11084,7 +11075,7 @@ snapshots:
       tunnel-agent: 0.6.0
       uuid: 8.3.2
 
-  '@datacom-digital/ui-sample-components@0.3.3(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)':
+  '@datacom-digital/ui-sample-components@0.3.3(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.2.1)':
     dependencies:
       '@radix-ui/react-avatar': 1.1.11(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-checkbox': 1.3.3(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -11110,7 +11101,7 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
       recharts: 2.15.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       tailwind-merge: 1.14.0
-      tailwindcss: 4.1.18
+      tailwindcss: 4.2.1
     transitivePeerDependencies:
       - '@babel/core'
       - '@babel/template'
