@@ -1,6 +1,9 @@
-import { CNProps, cn } from "@tohuhono/utils"
+import { cn } from "@tohuhono/utils"
+import type { PropsWithChildren } from "react"
 
-export const Spinner = ({ className }: CNProps) => {
+export const Spinner = ({
+  className,
+}: PropsWithChildren<{ className?: string }>) => {
   return (
     <div
       role="status"

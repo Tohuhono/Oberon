@@ -4,7 +4,12 @@ import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 
 import { cn } from "@tohuhono/utils"
 
-const Checkbox = ({ className, ...props }: CheckboxPrimitive.Root.Props) => (
+const Checkbox = ({
+  className,
+  ...props
+}: Omit<CheckboxPrimitive.Root.Props, "className"> & {
+  className?: string
+}) => (
   <CheckboxPrimitive.Root
     className={cn(
       "peer border-primary focus-visible:ring-ring data-[checked]:bg-primary data-[checked]:text-primary-foreground h-4 w-4 shrink-0 rounded-sm border shadow focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",

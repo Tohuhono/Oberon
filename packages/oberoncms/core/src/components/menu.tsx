@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { PropsWithChildren } from "react"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
-import { ModeToggle } from "@tohuhono/ui/theme"
+import { ModeToggle } from "@tohuhono/ui/mode-toggle"
 import useSWR from "swr"
 import { useRouter } from "next/navigation"
 import { useOberonActions } from "../hooks/use-oberon"

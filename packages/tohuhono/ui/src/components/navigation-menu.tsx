@@ -8,7 +8,9 @@ const NavigationMenu = ({
   className,
   children,
   ...props
-}: NavigationMenuPrimitive.Root.Props) => (
+}: Omit<NavigationMenuPrimitive.Root.Props, "className"> & {
+  className?: string
+}) => (
   <NavigationMenuPrimitive.Root
     className={cn(
       "bg-background grid w-full grid-flow-col items-center justify-between p-1",
@@ -24,7 +26,12 @@ const NavigationMenu = ({
 const NavigationMenuList = ({
   className,
   ...props
-}: ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>) => (
+}: Omit<
+  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>,
+  "className"
+> & {
+  className?: string
+}) => (
   <NavigationMenuPrimitive.List
     className={cn(
       "group flex flex-1 list-none items-center justify-center gap-1",
@@ -44,7 +51,9 @@ const NavigationMenuTrigger = ({
   className,
   children,
   ...props
-}: NavigationMenuPrimitive.Trigger.Props) => (
+}: Omit<NavigationMenuPrimitive.Trigger.Props, "className"> & {
+  className?: string
+}) => (
   <NavigationMenuPrimitive.Trigger
     className={cn(navigationMenuTriggerStyle(), "group", className)}
     {...props}
@@ -70,7 +79,12 @@ const NavigationMenuTrigger = ({
 const NavigationMenuContent = ({
   className,
   ...props
-}: ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>) => (
+}: Omit<
+  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>,
+  "className"
+> & {
+  className?: string
+}) => (
   <NavigationMenuPrimitive.Content
     className={cn(
       "data-[starting-style]:animate-in data-[ending-style]:animate-out data-[starting-style]:fade-in data-[ending-style]:fade-out data-[activation-direction=right]:data-[starting-style]:slide-in-from-right-52 data-[activation-direction=left]:data-[starting-style]:slide-in-from-left-52 data-[activation-direction=right]:data-[ending-style]:slide-out-to-right-52 data-[activation-direction=left]:data-[ending-style]:slide-out-to-left-52 top-0 left-0 w-full md:absolute md:w-auto",
@@ -85,7 +99,12 @@ const NavigationMenuLink = NavigationMenuPrimitive.Link
 const NavigationMenuViewport = ({
   className,
   ...props
-}: ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Positioner>) => (
+}: Omit<
+  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Positioner>,
+  "className"
+> & {
+  className?: string
+}) => (
   <NavigationMenuPrimitive.Portal>
     <NavigationMenuPrimitive.Positioner
       className={cn(
@@ -112,7 +131,12 @@ const NavigationMenuViewport = ({
 const NavigationMenuIndicator = ({
   className,
   ...props
-}: ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Icon>) => (
+}: Omit<
+  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Icon>,
+  "className"
+> & {
+  className?: string
+}) => (
   <NavigationMenuPrimitive.Icon
     className={cn(
       "data-[visible]:animate-in data-[hidden]:animate-out data-[hidden]:fade-out data-[visible]:fade-in top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden",

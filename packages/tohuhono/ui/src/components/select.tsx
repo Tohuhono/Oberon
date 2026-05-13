@@ -14,7 +14,9 @@ const SelectTrigger = ({
   className,
   children,
   ...props
-}: SelectPrimitive.Trigger.Props) => (
+}: Omit<SelectPrimitive.Trigger.Props, "className"> & {
+  className?: string
+}) => (
   <SelectPrimitive.Trigger
     className={cn(
       "border-input ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex h-9 w-full items-center justify-between rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm focus:ring-1 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -51,8 +53,9 @@ const SelectContent = ({
   alignOffset = 0,
   alignItemWithTrigger = true,
   ...props
-}: SelectPrimitive.Popup.Props &
-  Pick<
+}: Omit<SelectPrimitive.Popup.Props, "className"> & {
+  className?: string
+} & Pick<
     SelectPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
   >) => (
@@ -81,7 +84,9 @@ const SelectContent = ({
 const SelectLabel = ({
   className,
   ...props
-}: SelectPrimitive.GroupLabel.Props) => (
+}: Omit<SelectPrimitive.GroupLabel.Props, "className"> & {
+  className?: string
+}) => (
   <SelectPrimitive.GroupLabel
     className={cn("px-2 py-1.5 text-sm font-semibold", className)}
     {...props}
@@ -92,7 +97,9 @@ const SelectItem = ({
   className,
   children,
   ...props
-}: SelectPrimitive.Item.Props) => (
+}: Omit<SelectPrimitive.Item.Props, "className"> & {
+  className?: string
+}) => (
   <SelectPrimitive.Item
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
@@ -121,7 +128,9 @@ const SelectItem = ({
 const SelectSeparator = ({
   className,
   ...props
-}: SelectPrimitive.Separator.Props) => (
+}: Omit<SelectPrimitive.Separator.Props, "className"> & {
+  className?: string
+}) => (
   <SelectPrimitive.Separator
     className={cn("bg-muted -mx-1 my-1 h-px", className)}
     {...props}

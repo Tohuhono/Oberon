@@ -42,8 +42,9 @@ const TooltipContent = ({
   align = "center",
   alignOffset = 0,
   ...props
-}: TooltipPrimitive.Popup.Props &
-  Pick<
+}: Omit<TooltipPrimitive.Popup.Props, "className"> & {
+  className?: string
+} & Pick<
     TooltipPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (

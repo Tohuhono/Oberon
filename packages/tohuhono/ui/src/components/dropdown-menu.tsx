@@ -36,7 +36,8 @@ const DropdownMenuSubTrigger = ({
   inset,
   children,
   ...props
-}: MenuPrimitive.SubmenuTrigger.Props & {
+}: Omit<MenuPrimitive.SubmenuTrigger.Props, "className"> & {
+  className?: string
   inset?: boolean
 }) => (
   <MenuPrimitive.SubmenuTrigger
@@ -68,8 +69,9 @@ const DropdownMenuSubContent = ({
   side = "right",
   sideOffset = 0,
   ...props
-}: MenuPrimitive.Popup.Props &
-  Pick<
+}: Omit<MenuPrimitive.Popup.Props, "className"> & {
+  className?: string
+} & Pick<
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (
@@ -93,8 +95,9 @@ const DropdownMenuContent = ({
   align = "start",
   alignOffset = 0,
   ...props
-}: MenuPrimitive.Popup.Props &
-  Pick<
+}: Omit<MenuPrimitive.Popup.Props, "className"> & {
+  className?: string
+} & Pick<
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (
@@ -122,7 +125,8 @@ const DropdownMenuItem = ({
   className,
   inset,
   ...props
-}: MenuPrimitive.Item.Props & {
+}: Omit<MenuPrimitive.Item.Props, "className"> & {
+  className?: string
   inset?: boolean
 }) => (
   <MenuPrimitive.Item
@@ -140,7 +144,9 @@ const DropdownMenuCheckboxItem = ({
   children,
   checked,
   ...props
-}: MenuPrimitive.CheckboxItem.Props) => (
+}: Omit<MenuPrimitive.CheckboxItem.Props, "className"> & {
+  className?: string
+}) => (
   <MenuPrimitive.CheckboxItem
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
@@ -171,7 +177,9 @@ const DropdownMenuRadioItem = ({
   className,
   children,
   ...props
-}: MenuPrimitive.RadioItem.Props) => (
+}: Omit<MenuPrimitive.RadioItem.Props, "className"> & {
+  className?: string
+}) => (
   <MenuPrimitive.RadioItem
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
@@ -198,7 +206,8 @@ const DropdownMenuLabel = ({
   className,
   inset,
   ...props
-}: MenuPrimitive.GroupLabel.Props & {
+}: Omit<MenuPrimitive.GroupLabel.Props, "className"> & {
+  className?: string
   inset?: boolean
 }) => (
   <MenuPrimitive.GroupLabel
@@ -214,7 +223,9 @@ const DropdownMenuLabel = ({
 const DropdownMenuSeparator = ({
   className,
   ...props
-}: MenuPrimitive.Separator.Props) => (
+}: Omit<MenuPrimitive.Separator.Props, "className"> & {
+  className?: string
+}) => (
   <MenuPrimitive.Separator
     className={cn("bg-muted -mx-1 my-1 h-px", className)}
     {...props}

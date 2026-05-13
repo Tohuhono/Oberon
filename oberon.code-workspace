@@ -85,5 +85,9 @@
     "tailwindCSS.experimental.configFile": "packages/oberoncms/core/tailwind.css",
     "nix.formatterPath": "nixfmt",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "github.copilot.enable": {
+      "*": false,
+    },
   },
 }

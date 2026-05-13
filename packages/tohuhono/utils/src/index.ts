@@ -1,47 +1,7 @@
-import type { PropsWithChildren } from "react"
 import { ClassNameValue, twMerge } from "tailwind-merge"
 
-export type CNProps<T = unknown> = PropsWithChildren<T & { className?: string }>
-type ClassNameFactory<State> = (state: State) => ClassNameValue
-type CNInput<State> = ClassNameValue | ClassNameFactory<State>
-
-export function cn(...inputs: ClassNameValue[]): string
-export function cn<State>(
-  ...inputs: CNInput<State>[]
-): string | ((state: State) => string)
-export function cn<State>(
-  ...inputs: CNInput<State>[]
-): string | ((state: State) => string) {
-  let hasFactory = false
-  const staticInputs: ClassNameValue[] = []
-
-  for (const input of inputs) {
-    if (typeof input === "function") {
-      hasFactory = true
-      continue
-    }
-
-    staticInputs.push(input)
-  }
-
-  if (!hasFactory) {
-    return twMerge(...staticInputs)
-  }
-
-  return (state: State) => {
-    const resolvedInputs: ClassNameValue[] = []
-
-    for (const input of inputs) {
-      if (typeof input === "function") {
-        resolvedInputs.push(input(state))
-        continue
-      }
-
-      resolvedInputs.push(input)
-    }
-
-    return twMerge(...resolvedInputs)
-  }
+export function cn(...inputs: ClassNameValue[]) {
+  return twMerge(inputs)
 }
 
 /**

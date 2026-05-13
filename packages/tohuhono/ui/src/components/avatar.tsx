@@ -4,7 +4,12 @@ import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
 
 import { cn } from "@tohuhono/utils"
 
-const Avatar = ({ className, ...props }: AvatarPrimitive.Root.Props) => (
+const Avatar = ({
+  className,
+  ...props
+}: Omit<AvatarPrimitive.Root.Props, "className"> & {
+  className?: string
+}) => (
   <AvatarPrimitive.Root
     className={cn(
       "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
@@ -14,7 +19,12 @@ const Avatar = ({ className, ...props }: AvatarPrimitive.Root.Props) => (
   />
 )
 
-const AvatarImage = ({ className, ...props }: AvatarPrimitive.Image.Props) => (
+const AvatarImage = ({
+  className,
+  ...props
+}: Omit<AvatarPrimitive.Image.Props, "className"> & {
+  className?: string
+}) => (
   <AvatarPrimitive.Image
     className={cn("aspect-square h-full w-full", className)}
     {...props}
@@ -24,7 +34,9 @@ const AvatarImage = ({ className, ...props }: AvatarPrimitive.Image.Props) => (
 const AvatarFallback = ({
   className,
   ...props
-}: AvatarPrimitive.Fallback.Props) => (
+}: Omit<AvatarPrimitive.Fallback.Props, "className"> & {
+  className?: string
+}) => (
   <AvatarPrimitive.Fallback
     className={cn(
       "bg-muted flex h-full w-full items-center justify-center rounded-full",

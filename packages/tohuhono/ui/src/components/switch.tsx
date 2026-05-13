@@ -4,7 +4,12 @@ import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 
 import { cn } from "@tohuhono/utils"
 
-const Switch = ({ className, ...props }: SwitchPrimitive.Root.Props) => (
+const Switch = ({
+  className,
+  ...props
+}: Omit<SwitchPrimitive.Root.Props, "className"> & {
+  className?: string
+}) => (
   <SwitchPrimitive.Root
     className={cn(
       "peer focus-visible:ring-ring focus-visible:ring-offset-background data-[checked]:bg-primary data-[unchecked]:bg-input inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",

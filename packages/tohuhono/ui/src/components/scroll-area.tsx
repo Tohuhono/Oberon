@@ -8,7 +8,9 @@ const ScrollArea = ({
   className,
   children,
   ...props
-}: ScrollAreaPrimitive.Root.Props) => (
+}: Omit<ScrollAreaPrimitive.Root.Props, "className"> & {
+  className?: string
+}) => (
   <ScrollAreaPrimitive.Root
     className={cn("relative overflow-hidden", className)}
     {...props}
@@ -25,7 +27,9 @@ const ScrollBar = ({
   className,
   orientation = "vertical",
   ...props
-}: ScrollAreaPrimitive.Scrollbar.Props) => (
+}: Omit<ScrollAreaPrimitive.Scrollbar.Props, "className"> & {
+  className?: string
+}) => (
   <ScrollAreaPrimitive.Scrollbar
     orientation={orientation}
     className={cn(

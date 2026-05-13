@@ -16,7 +16,9 @@ const DialogClose = DialogPrimitive.Close
 const DialogOverlay = ({
   className,
   ...props
-}: DialogPrimitive.Backdrop.Props) => (
+}: Omit<DialogPrimitive.Backdrop.Props, "className"> & {
+  className?: string
+}) => (
   <DialogPrimitive.Backdrop
     className={cn(
       "data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 fixed inset-0 z-50 bg-black/80",
@@ -30,7 +32,9 @@ const DialogContent = ({
   className,
   children,
   ...props
-}: DialogPrimitive.Popup.Props) => (
+}: Omit<DialogPrimitive.Popup.Props, "className"> & {
+  className?: string
+}) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Popup
@@ -83,7 +87,12 @@ const DialogFooter = ({
   />
 )
 
-const DialogTitle = ({ className, ...props }: DialogPrimitive.Title.Props) => (
+const DialogTitle = ({
+  className,
+  ...props
+}: Omit<DialogPrimitive.Title.Props, "className"> & {
+  className?: string
+}) => (
   <DialogPrimitive.Title
     className={cn(
       "text-lg leading-none font-semibold tracking-tight",
@@ -96,7 +105,9 @@ const DialogTitle = ({ className, ...props }: DialogPrimitive.Title.Props) => (
 const DialogDescription = ({
   className,
   ...props
-}: DialogPrimitive.Description.Props) => (
+}: Omit<DialogPrimitive.Description.Props, "className"> & {
+  className?: string
+}) => (
   <DialogPrimitive.Description
     className={cn("text-muted-foreground text-sm", className)}
     {...props}

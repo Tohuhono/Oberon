@@ -32,8 +32,9 @@ const PopoverContent = ({
   side = "bottom",
   sideOffset = 4,
   ...props
-}: PopoverPrimitive.Popup.Props &
-  Pick<
+}: Omit<PopoverPrimitive.Popup.Props, "className"> & {
+  className?: string
+} & Pick<
     PopoverPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (

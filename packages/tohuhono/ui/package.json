@@ -31,6 +31,7 @@
     "LICENSE*"
   ],
   "exports": {
+    "./antifouc": "./dist/antifouc.js",
     "./avatar": "./dist/avatar.js",
     "./button": "./dist/button.js",
     "./calendar": "./dist/calendar.js",
@@ -46,6 +47,7 @@
     "./input": "./dist/input.js",
     "./input-otp": "./dist/input-otp.js",
     "./label": "./dist/label.js",
+    "./mode-toggle": "./dist/mode-toggle.js",
     "./navigation-menu": "./dist/navigation-menu.js",
     "./popover": "./dist/popover.js",
     "./prose": "./dist/prose.js",
@@ -60,7 +62,8 @@
     "./theme": "./dist/theme.js",
     "./toast": "./dist/toast.js",
     "./tooltip": "./dist/tooltip.js",
-    "./tailwind.css": "./tailwind.css"
+    "./tailwind.css": "./tailwind.css",
+    "./theme.css": "./theme.css"
   },
   "publishConfig": {
     "access": "public"

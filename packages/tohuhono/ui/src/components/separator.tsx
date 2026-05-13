@@ -8,7 +8,9 @@ const Separator = ({
   className,
   orientation = "horizontal",
   ...props
-}: SeparatorPrimitive.Props) => (
+}: Omit<SeparatorPrimitive.Props, "className"> & {
+  className?: string
+}) => (
   <SeparatorPrimitive
     orientation={orientation}
     className={cn(
