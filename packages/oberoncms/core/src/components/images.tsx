@@ -53,7 +53,10 @@ export function Images({ images: initialImages }: { images: OberonImage[] }) {
                 width={28}
                 height={28}
                 alt={alt}
-                className="m-0 lg:m-0"
+                className="
+                  m-0
+                  lg:m-0
+                "
               />
             </a>
 

@@ -12,7 +12,12 @@ const Checkbox = ({
 }) => (
   <CheckboxPrimitive.Root
     className={cn(
-      "peer border-primary focus-visible:ring-ring data-[checked]:bg-primary data-[checked]:text-primary-foreground h-4 w-4 shrink-0 rounded-sm border shadow focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+      `
+        peer size-4 shrink-0 rounded-sm border border-primary shadow-sm
+        focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none
+        disabled:cursor-not-allowed disabled:opacity-50
+        data-checked:bg-primary data-checked:text-primary-foreground
+      `,
       className,
     )}
     {...props}
@@ -20,7 +25,7 @@ const Checkbox = ({
     <CheckboxPrimitive.Indicator
       className={cn("flex items-center justify-center text-current")}
     >
-      <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+      <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
         <path
           d="M20 6 9 17l-5-5"
           fill="none"

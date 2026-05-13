@@ -89,7 +89,7 @@ export function CardsChat() {
             </Avatar>
             <div>
               <p className="text-sm leading-none font-medium">Sofia Davis</p>
-              <p className="text-muted-foreground text-sm">m@example.com</p>
+              <p className="text-sm text-muted-foreground">m@example.com</p>
             </div>
           </div>
           <TooltipProvider delayDuration={0}>
@@ -101,7 +101,7 @@ export function CardsChat() {
                   className="ml-auto rounded-full"
                   onClick={() => setOpen(true)}
                 >
-                  <PlusIcon className="h-4 w-4" />
+                  <PlusIcon className="size-4" />
                   <span className="sr-only">New message</span>
                 </Button>
               </TooltipTrigger>
@@ -115,9 +115,12 @@ export function CardsChat() {
               <div
                 key={index}
                 className={cn(
-                  "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                  `
+                    flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2
+                    text-sm
+                  `,
                   message.role === "user"
-                    ? "bg-primary text-primary-foreground ml-auto"
+                    ? "ml-auto bg-primary text-primary-foreground"
                     : "bg-muted",
                 )}
               >
@@ -153,7 +156,7 @@ export function CardsChat() {
               onChange={(event) => setInput(event.target.value)}
             />
             <Button type="submit" size="icon" disabled={inputLength === 0}>
-              <PaperPlaneIcon className="h-4 w-4" />
+              <PaperPlaneIcon className="size-4" />
               <span className="sr-only">Send</span>
             </Button>
           </form>
@@ -168,7 +171,11 @@ export function CardsChat() {
               message.
             </DialogDescription>
           </DialogHeader>
-          <Command className="overflow-hidden rounded-t-none border-t bg-transparent">
+          <Command
+            className="
+            overflow-hidden rounded-t-none border-t bg-transparent
+          "
+          >
             <CommandInput placeholder="Search user..." />
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>
@@ -200,32 +207,37 @@ export function CardsChat() {
                       <p className="text-sm leading-none font-medium">
                         {user.name}
                       </p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         {user.email}
                       </p>
                     </div>
                     {selectedUsers.includes(user) ? (
-                      <CheckIcon className="text-primary ml-auto flex h-5 w-5" />
+                      <CheckIcon className="ml-auto flex size-5 text-primary" />
                     ) : null}
                   </CommandItem>
                 ))}
               </CommandGroup>
             </CommandList>
           </Command>
-          <DialogFooter className="flex items-center border-t p-4 sm:justify-between">
+          <DialogFooter
+            className="
+            flex items-center border-t p-4
+            sm:justify-between
+          "
+          >
             {selectedUsers.length > 0 ? (
               <div className="flex -space-x-2 overflow-hidden">
                 {selectedUsers.map((user) => (
                   <Avatar
                     key={user.email}
-                    className="border-background inline-block border-2"
+                    className="inline-block border-2 border-background"
                   >
                     <AvatarFallback>{user.name[0]}</AvatarFallback>
                   </Avatar>
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground text-sm">
+              <p className="text-sm text-muted-foreground">
                 Select users to add to this thread.
               </p>
             )}

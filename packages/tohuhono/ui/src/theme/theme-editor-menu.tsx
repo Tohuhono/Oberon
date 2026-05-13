@@ -36,19 +36,34 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className={cn("align-middle", className)}>
-          <SunIcon className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-          <MoonIcon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+          <SunIcon
+            className="
+            scale-100 rotate-0 transition-all
+            dark:scale-0 dark:-rotate-90
+          "
+          />
+          <MoonIcon
+            className="
+            absolute scale-0 rotate-90 transition-all
+            dark:scale-100 dark:rotate-0
+          "
+          />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <div className="grid grid-cols-[max-content,max-content,max-content] items-center gap-x-2 gap-y-0 p-2 text-sm">
+        <div
+          className="
+          grid grid-cols-[max-content,max-content,max-content] items-center
+          gap-x-2 gap-y-0 p-2 text-sm
+        "
+        >
           <ApplyTheme theme={theme} />
           <Button
             variant="outline"
             size="sm"
             className={cn(
-              "active w-full justify-self-center",
+              "w-full justify-self-center",
               mode === "system" && "bg-accent text-accent-foreground",
             )}
             onClick={() => setMode("system")}
@@ -59,7 +74,7 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
             variant="outline"
             size="sm"
             className={cn(
-              "active w-full justify-self-center",
+              "w-full justify-self-center",
               mode === "light" && "bg-accent text-accent-foreground",
             )}
             onClick={() => setMode("light")}
@@ -70,7 +85,7 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
             variant="outline"
             size="sm"
             className={cn(
-              "active w-full justify-self-center",
+              "w-full justify-self-center",
               mode === "dark" && "bg-accent text-accent-foreground",
             )}
             onClick={() => setMode("dark")}
@@ -104,7 +119,7 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
             className="col-span-3 justify-self-center"
             onClick={() => copyToClipboard(theme)}
           >
-            <ClipboardCopyIcon className="h-max w-max pr-2" />
+            <ClipboardCopyIcon className="size-max pr-2" />
             Copy theme to clipboard
           </Button>
         </div>

@@ -17,7 +17,7 @@ const navbar = (
     logo={
       <div className="flex flex-row items-center gap-2">
         <Image src="/icon.svg" width="30" height="30" alt="OberonCMS logo" />
-        <div className="text-logo text-xl font-extrabold">OberonCMS</div>
+        <div className="text-xl font-extrabold text-logo">OberonCMS</div>
       </div>
     }
     projectLink="https://github.com/tohuhono/oberon"

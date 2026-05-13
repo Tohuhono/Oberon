@@ -206,9 +206,12 @@ export const Preview = ({
 
   return (
     <div className={cn(className, "overflow-hidden")}>
-      <div ref={ref} className="h-full w-full">
+      <div ref={ref} className="size-full">
         <div
-          className="bg-background shadow-foreground mx-auto h-full origin-top-left overflow-hidden shadow-[0_0_3px_1px]"
+          className="
+            mx-auto h-full origin-top-left overflow-hidden bg-background
+            shadow-[0_0_3px_1px] shadow-foreground
+          "
           style={{
             width: currentViewportWidth,
             height: scaledHeight,

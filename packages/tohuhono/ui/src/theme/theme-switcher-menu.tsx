@@ -30,8 +30,18 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
       <ApplyTheme theme={selectedTheme ?? fallbackTheme} />
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className={cn("align-middle", className)}>
-          <SunIcon className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-          <MoonIcon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+          <SunIcon
+            className="
+            scale-100 rotate-0 transition-all
+            dark:scale-0 dark:-rotate-90
+          "
+          />
+          <MoonIcon
+            className="
+            absolute scale-0 rotate-90 transition-all
+            dark:scale-100 dark:rotate-0
+          "
+          />
           <span className="sr-only">Theme switcher</span>
         </Button>
       </DropdownMenuTrigger>
@@ -41,7 +51,7 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
             variant="outline"
             size="sm"
             className={cn(
-              "active w-full justify-self-center",
+              "w-full justify-self-center",
               mode === "system" && "bg-accent text-accent-foreground",
             )}
             onClick={() => setMode("system")}
@@ -52,7 +62,7 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
             variant="outline"
             size="sm"
             className={cn(
-              "active w-full justify-self-center",
+              "w-full justify-self-center",
               mode === "light" && "bg-accent text-accent-foreground",
             )}
             onClick={() => setMode("light")}
@@ -63,7 +73,7 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
             variant="outline"
             size="sm"
             className={cn(
-              "active w-full justify-self-center",
+              "w-full justify-self-center",
               mode === "dark" && "bg-accent text-accent-foreground",
             )}
             onClick={() => setMode("dark")}

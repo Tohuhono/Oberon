@@ -28,7 +28,10 @@ const TableFooter = ({
 }: ComponentPropsWithRef<"tfoot">) => (
   <tfoot
     className={cn(
-      "bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
+      `
+        border-t bg-muted/50 font-medium
+        [&>tr]:last:border-b-0
+      `,
       className,
     )}
     {...props}
@@ -38,7 +41,11 @@ const TableFooter = ({
 const TableRow = ({ className, ...props }: ComponentPropsWithRef<"tr">) => (
   <tr
     className={cn(
-      "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
+      `
+        border-b transition-colors
+        hover:bg-muted/50
+        data-[state=selected]:bg-muted
+      `,
       className,
     )}
     {...props}
@@ -48,7 +55,11 @@ const TableRow = ({ className, ...props }: ComponentPropsWithRef<"tr">) => (
 const TableHead = ({ className, ...props }: ComponentPropsWithRef<"th">) => (
   <th
     className={cn(
-      "text-muted-foreground h-10 px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      `
+        h-10 px-2 text-left align-middle font-medium text-muted-foreground
+        [&:has([role=checkbox])]:pr-0
+        *:[[role=checkbox]]:translate-y-[2px]
+      `,
       className,
     )}
     {...props}
@@ -58,7 +69,11 @@ const TableHead = ({ className, ...props }: ComponentPropsWithRef<"th">) => (
 const TableCell = ({ className, ...props }: ComponentPropsWithRef<"td">) => (
   <td
     className={cn(
-      "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      `
+        p-2 align-middle
+        [&:has([role=checkbox])]:pr-0
+        *:[[role=checkbox]]:translate-y-[2px]
+      `,
       className,
     )}
     {...props}
@@ -70,7 +85,7 @@ const TableCaption = ({
   ...props
 }: ComponentPropsWithRef<"caption">) => (
   <caption
-    className={cn("text-muted-foreground mt-4 text-sm", className)}
+    className={cn("mt-4 text-sm text-muted-foreground", className)}
     {...props}
   />
 )

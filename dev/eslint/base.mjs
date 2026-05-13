@@ -8,6 +8,7 @@ import tseslint from "typescript-eslint"
 import prettierConfig from "eslint-config-prettier"
 import { FlatCompat } from "@eslint/eslintrc"
 import globals from "globals"
+import tailwind from "eslint-plugin-better-tailwindcss"
 import { tohuhonoCustomConfig } from "./custom-rules.mjs"
 
 // https://github.com/import-js/eslint-plugin-import/issues/2556
@@ -17,6 +18,8 @@ const __dirname = path.dirname(__filename)
 const compat = new FlatCompat({
   baseDirectory: __dirname,
 })
+
+const tailwindEntryPoint = `${__dirname}/../../packages/oberoncms/core/tailwind.css`
 
 export default defineConfig(
   {
@@ -75,6 +78,14 @@ export default defineConfig(
         },
       ],
       curly: "off",
+    },
+  },
+  tailwind.configs["recommended-error"],
+  {
+    settings: {
+      "better-tailwindcss": {
+        entryPoint: tailwindEntryPoint,
+      },
     },
   },
   {

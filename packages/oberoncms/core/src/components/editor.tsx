@@ -77,7 +77,12 @@ export function Editor({
       onPublish={onPublish}
       overrides={editorOverrides}
     >
-      <div className="bg-card grid h-dvh grid-cols-[minmax(0,1fr)_auto_300px] grid-rows-[auto_auto_1fr] overflow-hidden">
+      <div
+        className="
+        grid h-dvh grid-cols-[minmax(0,1fr)_auto_300px]
+        grid-rows-[auto_auto_1fr] overflow-hidden bg-card
+      "
+      >
         <span className="col-span-3">
           <Header path={path} onPublish={onPublish} />
         </span>
@@ -90,19 +95,27 @@ export function Editor({
         />
         <div className="" />
         <SidebarHeading
-          className="bg-sidebar-primary text-sidebar-primary-foreground rounded-tl-lg"
+          className="
+            rounded-tl-lg bg-sidebar-primary text-sidebar-primary-foreground
+          "
           activeTab={activeTab}
         />
 
         <Preview className="p-1" currentViewport={currentViewport} />
 
         <SidebarTabs
-          className="[&>button]:aria-selected:bg-sidebar-primary flex flex-col pt-2"
+          className="
+            flex flex-col pt-2
+            [&>button]:aria-selected:bg-sidebar-primary
+          "
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
         <Sidebar
-          className="border-sidebar-primary bg-sidebar-background text-sidebar-foreground border-t-2 border-l-2"
+          className="
+            border-t-2 border-l-2 border-sidebar-primary bg-sidebar-background
+            text-sidebar-foreground
+          "
           activeTab={activeTab}
         />
       </div>

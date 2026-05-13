@@ -29,7 +29,14 @@ export const Drawer = ({ children }: PropsWithChildren) => (
 )
 
 export const DrawerItem = ({ name }: { name: string }) => (
-  <div className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground flex-cols-2 flex cursor-grab items-baseline justify-between rounded-sm border px-2 py-1 shadow transition-colors">
+  <div
+    className="
+    flex cursor-grab flex-col items-baseline justify-between rounded-sm border
+    border-border bg-card px-2 py-1 text-card-foreground shadow-sm
+    transition-colors
+    hover:bg-accent hover:text-accent-foreground
+  "
+  >
     {name}
     <DragHandleDots2Icon />
   </div>
@@ -59,7 +66,7 @@ export const SidebarTabs = ({
           isValidKey(tabValue, sidebarTabs) && setActiveTab(tabValue)
         }
       >
-        <Icon className="s-4" />
+        <Icon className="size-4" />
         <span className="sr-only">{label}</span>
       </Button>
     ))}

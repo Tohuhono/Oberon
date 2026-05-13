@@ -1,7 +1,12 @@
 export function Home() {
   return (
     <div className="flex justify-center pt-10">
-      <div className="prose dark:prose-invert">
+      <div
+        className="
+        prose
+        dark:prose-invert
+      "
+      >
         <h1>OberonCMS</h1>
         <p>
           An extensible content management system for developers, designers and
