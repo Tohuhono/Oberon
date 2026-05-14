@@ -1,6 +1,6 @@
-# @dev/vitest
+# @dev/final
 
-## 0.2.0
+## 0.1.0
 
 ### Minor Changes
 
@@ -23,16 +23,3 @@
 
   Treat this as a coordinated upgrade across core, plugins, recipes, and app
   scaffolds rather than a piecemeal patch.
-
-## 0.1.1
-
-### Patch Changes
-
-- fbad025: Align workspace task/config setup for consistent Turbo `test` and
-  `tsc` behavior.
-  - add missing `scripts`, `eslint.config.mjs`, and `tsconfig.json` in
-    `@dev/vitest`
-  - normalize root `tsc` and `test` scripts (`--concurrency 50`, remove
-    `tsc:root`)
-  - tighten root and package TypeScript include patterns for config packages
-  - add explicit empty outputs for Turbo `test` and `lint` tasks
