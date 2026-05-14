@@ -5,17 +5,33 @@ import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 
 import { cn } from "@tohuhono/utils"
 
-const RadioGroup = ({ className, ...props }: RadioGroupPrimitive.Props) => {
+const RadioGroup = ({
+  className,
+  ...props
+}: Omit<RadioGroupPrimitive.Props, "className"> & {
+  className?: string
+}) => {
   return (
     <RadioGroupPrimitive className={cn("grid gap-2", className)} {...props} />
   )
 }
 
-const RadioGroupItem = ({ className, ...props }: RadioPrimitive.Root.Props) => {
+const RadioGroupItem = ({
+  className,
+  ...props
+}: Omit<RadioPrimitive.Root.Props, "className"> & {
+  className?: string
+}) => {
   return (
     <RadioPrimitive.Root
       className={cn(
-        "border-primary text-primary focus-visible:ring-ring aspect-square h-4 w-4 rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
+        `
+          aspect-square size-4 rounded-full border border-primary text-primary
+          shadow-sm
+          focus:outline-none
+          focus-visible:ring-1 focus-visible:ring-ring
+          disabled:cursor-not-allowed disabled:opacity-50
+        `,
         className,
       )}
       {...props}
@@ -23,7 +39,7 @@ const RadioGroupItem = ({ className, ...props }: RadioPrimitive.Root.Props) => {
       <RadioPrimitive.Indicator className="flex items-center justify-center">
         <svg
           viewBox="0 0 24 24"
-          className="fill-primary h-3.5 w-3.5"
+          className="size-3.5 fill-primary"
           aria-hidden="true"
         >
           <circle cx="12" cy="12" r="8" />

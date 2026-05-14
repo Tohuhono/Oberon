@@ -33,19 +33,19 @@ export function CardsTeamMembers() {
       <CardContent className="grid gap-6">
         <div className="flex items-center justify-between space-x-4">
           <div className="flex items-center space-x-4">
-            <Avatar className="h-8 w-8">
+            <Avatar className="size-8">
               <AvatarFallback>OM</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm leading-none font-medium">Sofia Davis</p>
-              <p className="text-muted-foreground text-sm">m@example.com</p>
+              <p className="text-sm text-muted-foreground">m@example.com</p>
             </div>
           </div>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="ml-auto">
                 Owner{" "}
-                <ChevronDownIcon className="text-muted-foreground ml-2 h-4 w-4" />
+                <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="end">
@@ -54,27 +54,27 @@ export function CardsTeamMembers() {
                 <CommandList>
                   <CommandEmpty>No roles found.</CommandEmpty>
                   <CommandGroup>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Viewer</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view and comment.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Developer</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view, comment and edit.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Billing</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view, comment and manage billing.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Owner</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Admin-level access to all resources.
                       </p>
                     </CommandItem>
@@ -86,19 +86,19 @@ export function CardsTeamMembers() {
         </div>
         <div className="flex items-center justify-between space-x-4">
           <div className="flex items-center space-x-4">
-            <Avatar className="h-8 w-8">
+            <Avatar className="size-8">
               <AvatarFallback>JL</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm leading-none font-medium">Jackson Lee</p>
-              <p className="text-muted-foreground text-sm">p@example.com</p>
+              <p className="text-sm text-muted-foreground">p@example.com</p>
             </div>
           </div>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="ml-auto">
                 Member{" "}
-                <ChevronDownIcon className="text-muted-foreground ml-2 h-4 w-4" />
+                <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="end">
@@ -107,27 +107,27 @@ export function CardsTeamMembers() {
                 <CommandList>
                   <CommandEmpty>No roles found.</CommandEmpty>
                   <CommandGroup className="p-1.5">
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Viewer</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view and comment.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Developer</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view, comment and edit.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Billing</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view, comment and manage billing.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Owner</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Admin-level access to all resources.
                       </p>
                     </CommandItem>
@@ -139,21 +139,21 @@ export function CardsTeamMembers() {
         </div>
         <div className="flex items-center justify-between space-x-4">
           <div className="flex items-center space-x-4">
-            <Avatar className="h-8 w-8">
+            <Avatar className="size-8">
               <AvatarFallback>IN</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm leading-none font-medium">
                 Isabella Nguyen
               </p>
-              <p className="text-muted-foreground text-sm">i@example.com</p>
+              <p className="text-sm text-muted-foreground">i@example.com</p>
             </div>
           </div>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="ml-auto">
                 Member{" "}
-                <ChevronDownIcon className="text-muted-foreground ml-2 h-4 w-4" />
+                <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="end">
@@ -162,27 +162,27 @@ export function CardsTeamMembers() {
                 <CommandList>
                   <CommandEmpty>No roles found.</CommandEmpty>
                   <CommandGroup className="p-1.5">
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Viewer</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view and comment.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Developer</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view, comment and edit.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Billing</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Can view, comment and manage billing.
                       </p>
                     </CommandItem>
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                    <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Owner</p>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-muted-foreground">
                         Admin-level access to all resources.
                       </p>
                     </CommandItem>

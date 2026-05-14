@@ -27,15 +27,12 @@
     "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
-    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.1.6",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18",
-    "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.21.0",
     "typescript": "5.9.3"
   }

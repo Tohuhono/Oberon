@@ -36,19 +36,25 @@ const DropdownMenuSubTrigger = ({
   inset,
   children,
   ...props
-}: MenuPrimitive.SubmenuTrigger.Props & {
+}: Omit<MenuPrimitive.SubmenuTrigger.Props, "className"> & {
+  className?: string
   inset?: boolean
 }) => (
   <MenuPrimitive.SubmenuTrigger
     className={cn(
-      "focus:bg-accent data-[popup-open]:bg-accent flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none",
+      `
+        flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm
+        outline-none select-none
+        focus:bg-accent
+        data-popup-open:bg-accent
+      `,
       inset && "pl-8",
       className,
     )}
     {...props}
   >
     {children}
-    <svg viewBox="0 0 24 24" className="ml-auto h-4 w-4" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="ml-auto size-4" aria-hidden="true">
       <path
         d="m9 6 6 6-6 6"
         fill="none"
@@ -68,14 +74,23 @@ const DropdownMenuSubContent = ({
   side = "right",
   sideOffset = 0,
   ...props
-}: MenuPrimitive.Popup.Props &
-  Pick<
+}: Omit<MenuPrimitive.Popup.Props, "className"> & {
+  className?: string
+} & Pick<
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (
   <DropdownMenuContent
     className={cn(
-      "data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 min-w-[8rem]",
+      `
+        min-w-32
+        data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95
+        data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95
+        data-[side=bottom]:slide-in-from-top-2
+        data-[side=left]:slide-in-from-right-2
+        data-[side=right]:slide-in-from-left-2
+        data-[side=top]:slide-in-from-bottom-2
+      `,
       className,
     )}
     align={align}
@@ -93,8 +108,9 @@ const DropdownMenuContent = ({
   align = "start",
   alignOffset = 0,
   ...props
-}: MenuPrimitive.Popup.Props &
-  Pick<
+}: Omit<MenuPrimitive.Popup.Props, "className"> & {
+  className?: string
+} & Pick<
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (
@@ -108,8 +124,19 @@ const DropdownMenuContent = ({
     >
       <MenuPrimitive.Popup
         className={cn(
-          "bg-popover text-popover-foreground z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md",
-          "data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          `
+            z-50 min-w-32 overflow-hidden rounded-md border bg-popover p-1
+            text-popover-foreground shadow-md
+          `,
+          `
+            data-closed:animate-out data-closed:fade-out-0
+            data-closed:zoom-out-95
+            data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95
+            data-[side=bottom]:slide-in-from-top-2
+            data-[side=left]:slide-in-from-right-2
+            data-[side=right]:slide-in-from-left-2
+            data-[side=top]:slide-in-from-bottom-2
+          `,
           className,
         )}
         {...props}
@@ -122,12 +149,19 @@ const DropdownMenuItem = ({
   className,
   inset,
   ...props
-}: MenuPrimitive.Item.Props & {
+}: Omit<MenuPrimitive.Item.Props, "className"> & {
+  className?: string
   inset?: boolean
 }) => (
   <MenuPrimitive.Item
     className={cn(
-      "focus:bg-accent focus:text-accent-foreground aria-selected:bg-secondary aria-selected:text-secondary-foreground relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
+      `
+        relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm
+        transition-colors outline-none select-none
+        focus:bg-accent focus:text-accent-foreground
+        aria-selected:bg-secondary aria-selected:text-secondary-foreground
+        data-disabled:pointer-events-none data-disabled:opacity-50
+      `,
       inset && "pl-8",
       className,
     )}
@@ -140,18 +174,25 @@ const DropdownMenuCheckboxItem = ({
   children,
   checked,
   ...props
-}: MenuPrimitive.CheckboxItem.Props) => (
+}: Omit<MenuPrimitive.CheckboxItem.Props, "className"> & {
+  className?: string
+}) => (
   <MenuPrimitive.CheckboxItem
     className={cn(
-      "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
+      `
+        relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8
+        text-sm transition-colors outline-none select-none
+        focus:bg-accent focus:text-accent-foreground
+        data-disabled:pointer-events-none data-disabled:opacity-50
+      `,
       className,
     )}
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <MenuPrimitive.CheckboxItemIndicator>
-        <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+        <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
           <path
             d="M20 6 9 17l-5-5"
             fill="none"
@@ -171,19 +212,26 @@ const DropdownMenuRadioItem = ({
   className,
   children,
   ...props
-}: MenuPrimitive.RadioItem.Props) => (
+}: Omit<MenuPrimitive.RadioItem.Props, "className"> & {
+  className?: string
+}) => (
   <MenuPrimitive.RadioItem
     className={cn(
-      "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
+      `
+        relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8
+        text-sm transition-colors outline-none select-none
+        focus:bg-accent focus:text-accent-foreground
+        data-disabled:pointer-events-none data-disabled:opacity-50
+      `,
       className,
     )}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <MenuPrimitive.RadioItemIndicator>
         <svg
           viewBox="0 0 24 24"
-          className="h-3 w-3 fill-current"
+          className="size-3 fill-current"
           aria-hidden="true"
         >
           <circle cx="12" cy="12" r="8" />
@@ -198,7 +246,8 @@ const DropdownMenuLabel = ({
   className,
   inset,
   ...props
-}: MenuPrimitive.GroupLabel.Props & {
+}: Omit<MenuPrimitive.GroupLabel.Props, "className"> & {
+  className?: string
   inset?: boolean
 }) => (
   <MenuPrimitive.GroupLabel
@@ -214,9 +263,11 @@ const DropdownMenuLabel = ({
 const DropdownMenuSeparator = ({
   className,
   ...props
-}: MenuPrimitive.Separator.Props) => (
+}: Omit<MenuPrimitive.Separator.Props, "className"> & {
+  className?: string
+}) => (
   <MenuPrimitive.Separator
-    className={cn("bg-muted -mx-1 my-1 h-px", className)}
+    className={cn("-mx-1 my-1 h-px bg-muted", className)}
     {...props}
   />
 )

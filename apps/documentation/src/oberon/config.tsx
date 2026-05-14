@@ -13,7 +13,15 @@ export const config: OberonConfig = {
         text: "Welcome to OberonCMS",
       },
       render: ({ text }) => (
-        <div className="prose dark:prose-invert lg:prose-lg">{text}</div>
+        <div
+          className="
+            prose
+            lg:prose-lg
+            dark:prose-invert
+          "
+        >
+          {text}
+        </div>
       ),
     },
   },

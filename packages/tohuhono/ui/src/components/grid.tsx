@@ -15,5 +15,15 @@ export const GridHeading = ({
   children,
   className,
 }: PropsWithChildren<{ className?: string }>) => (
-  <h4 className={cn("m-0 pt-4 lg:m-0", className)}>{children}</h4>
+  <h4
+    className={cn(
+      `
+        m-0 pt-4
+        lg:m-0
+      `,
+      className,
+    )}
+  >
+    {children}
+  </h4>
 )

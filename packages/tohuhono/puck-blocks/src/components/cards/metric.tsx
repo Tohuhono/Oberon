@@ -73,18 +73,30 @@ export function CardsMetric() {
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-background rounded-lg border p-2 shadow-xs">
+                      <div
+                        className="
+                          rounded-lg border bg-background p-2 shadow-xs
+                        "
+                      >
                         <div className="grid grid-cols-2 gap-2">
                           <div className="flex flex-col">
-                            <span className="text-muted-foreground text-[0.70rem] uppercase">
+                            <span
+                              className="
+                                text-[0.70rem] text-muted-foreground uppercase
+                              "
+                            >
                               Average
                             </span>
-                            <span className="text-muted-foreground font-bold">
+                            <span className="font-bold text-muted-foreground">
                               {payload[0]?.value}
                             </span>
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-muted-foreground text-[0.70rem] uppercase">
+                            <span
+                              className="
+                                text-[0.70rem] text-muted-foreground uppercase
+                              "
+                            >
                               Today
                             </span>
                             <span className="font-bold">

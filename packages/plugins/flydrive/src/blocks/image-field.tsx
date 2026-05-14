@@ -100,7 +100,15 @@ export const ImageField = ({
     <div>
       <FieldLabel label="Image" />
       <button
-        className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-8 w-full items-center justify-center rounded-md px-2 text-xs font-medium text-nowrap shadow transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+        className="
+          inline-flex h-8 w-full items-center justify-center rounded-md
+          bg-primary px-2 text-xs font-medium text-nowrap
+          text-primary-foreground shadow-sm transition-colors
+          hover:bg-primary/90
+          focus-visible:ring-1 focus-visible:ring-ring
+          focus-visible:outline-none
+          disabled:pointer-events-none disabled:opacity-50
+        "
         onClick={() => setPickerVisible((visible) => !visible)}
         disabled={loading}
       >
@@ -109,10 +117,17 @@ export const ImageField = ({
       {!pickerVisible && (
         <div {...getRootProps({ className: "mt-2" })}>
           <input {...getInputProps({ disabled: loading })} />
-          <div className="border-muted bg-primary-foreground hover:border-primary rounded-lg border-2 border-dashed p-8 text-center transition duration-300 ease-in-out">
+          <div
+            className="
+              rounded-lg border-2 border-dashed border-muted
+              bg-primary-foreground p-8 text-center transition duration-300
+              ease-in-out
+              hover:border-primary
+            "
+          >
             <span className="flex cursor-pointer flex-col items-center space-y-2">
               <svg
-                className="text-primary h-16 w-16"
+                className="size-16 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -127,7 +142,7 @@ export const ImageField = ({
               <span className="text-muted-foreground">
                 Drag and drop your image here
               </span>
-              <span className="text-muted-foreground text-sm">
+              <span className="text-sm text-muted-foreground">
                 (or click to select)
               </span>
             </span>
@@ -136,22 +151,21 @@ export const ImageField = ({
       )}
       {pickerVisible && (
         <div className="mt-2 h-96 overflow-hidden">
-          <div className="grid h-full w-full grid-cols-1 gap-4 overflow-y-auto">
+          <div className="grid size-full grid-cols-1 gap-4 overflow-y-auto">
             {images?.map(({ key, url, alt }) => (
               <div
                 aria-label="image"
-                className="relative h-48 w-full cursor-pointer overflow-hidden rounded-lg border border-gray-300 bg-white p-4 shadow-md"
+                className="
+                  relative h-48 w-full cursor-pointer overflow-hidden rounded-lg
+                  border border-gray-300 bg-white p-4 shadow-md
+                "
                 key={key}
                 onClick={() => {
                   setImageKey(key)
                   setPickerVisible(false)
                 }}
               >
-                <img
-                  src={url}
-                  alt={alt}
-                  className="h-full w-full object-cover"
-                />
+                <img src={url} alt={alt} className="size-full object-cover" />
               </div>
             ))}
           </div>

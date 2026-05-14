@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { PropsWithChildren } from "react"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
-import { ModeToggle } from "@tohuhono/ui/theme"
+import { ModeToggle } from "@tohuhono/ui/mode-toggle"
 import useSWR from "swr"
 import { useRouter } from "next/navigation"
 import { useOberonActions } from "../hooks/use-oberon"
@@ -22,7 +22,12 @@ export const Menu = ({
   const { data: showUsers } = useSWR("/can/users", () => can("users"))
 
   return (
-    <div className="bg-sidebar-background text-sidebar-foreground grid w-full grid-cols-3 items-center p-2">
+    <div
+      className="
+        grid w-full grid-cols-3 items-center bg-sidebar-background p-2
+        text-sidebar-foreground
+      "
+    >
       <div className="flex justify-start gap-1">{children}</div>
       <div className="flex justify-center">
         {path ? (

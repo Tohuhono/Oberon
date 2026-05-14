@@ -53,7 +53,13 @@ export function OberonClient({ config }: { config: OberonConfig }) {
         {/* TODO fix path to be dynamic */}
         <Menu title={getTitle(action, slug)} path={`/cms/${action}`} />
         <div className="flex w-full justify-center">
-          <div className="prose bg-card text-card-foreground dark:prose-invert lg:prose-lg w-full rounded p-3 pb-10 lg:p-5 lg:pb-10">
+          <div
+            className="
+              prose w-full rounded-sm bg-card p-3 pb-10 text-card-foreground
+              lg:prose-lg lg:p-5 lg:pb-10
+              dark:prose-invert
+            "
+          >
             {action === "users" && <Users users={data} />}
             {action === "images" && <Images images={data} />}
             {action === "pages" && <Pages pages={data} />}

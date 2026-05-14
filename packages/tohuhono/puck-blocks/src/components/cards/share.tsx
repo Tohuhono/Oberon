@@ -54,7 +54,7 @@ export function CardsShare() {
                   <p className="text-sm leading-none font-medium">
                     Olivia Martin
                   </p>
-                  <p className="text-muted-foreground text-sm">m@example.com</p>
+                  <p className="text-sm text-muted-foreground">m@example.com</p>
                 </div>
               </div>
               <Select defaultValue="edit">
@@ -76,7 +76,7 @@ export function CardsShare() {
                   <p className="text-sm leading-none font-medium">
                     Isabella Nguyen
                   </p>
-                  <p className="text-muted-foreground text-sm">b@example.com</p>
+                  <p className="text-sm text-muted-foreground">b@example.com</p>
                 </div>
               </div>
               <Select defaultValue="view">
@@ -98,7 +98,7 @@ export function CardsShare() {
                   <p className="text-sm leading-none font-medium">
                     Sofia Davis
                   </p>
-                  <p className="text-muted-foreground text-sm">p@example.com</p>
+                  <p className="text-sm text-muted-foreground">p@example.com</p>
                 </div>
               </div>
               <Select defaultValue="view">

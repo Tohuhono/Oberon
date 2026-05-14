@@ -8,12 +8,14 @@ const ScrollArea = ({
   className,
   children,
   ...props
-}: ScrollAreaPrimitive.Root.Props) => (
+}: Omit<ScrollAreaPrimitive.Root.Props, "className"> & {
+  className?: string
+}) => (
   <ScrollAreaPrimitive.Root
     className={cn("relative overflow-hidden", className)}
     {...props}
   >
-    <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">
+    <ScrollAreaPrimitive.Viewport className="size-full rounded-[inherit]">
       {children}
     </ScrollAreaPrimitive.Viewport>
     <ScrollBar />
@@ -25,20 +27,22 @@ const ScrollBar = ({
   className,
   orientation = "vertical",
   ...props
-}: ScrollAreaPrimitive.Scrollbar.Props) => (
+}: Omit<ScrollAreaPrimitive.Scrollbar.Props, "className"> & {
+  className?: string
+}) => (
   <ScrollAreaPrimitive.Scrollbar
     orientation={orientation}
     className={cn(
       "flex touch-none transition-colors select-none",
       orientation === "vertical" &&
-        "h-full w-2.5 border-l border-l-transparent p-[1px]",
+        "h-full w-2.5 border-l border-l-transparent p-px",
       orientation === "horizontal" &&
-        "h-2.5 flex-col border-t border-t-transparent p-[1px]",
+        "h-2.5 flex-col border-t border-t-transparent p-px",
       className,
     )}
     {...props}
   >
-    <ScrollAreaPrimitive.Thumb className="bg-border relative flex-1 rounded-full" />
+    <ScrollAreaPrimitive.Thumb className="relative flex-1 rounded-full bg-border" />
   </ScrollAreaPrimitive.Scrollbar>
 )
 
