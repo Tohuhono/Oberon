@@ -125,7 +125,11 @@ export const ImageField = ({
               hover:border-primary
             "
           >
-            <span className="flex cursor-pointer flex-col items-center space-y-2">
+            <span
+              className="
+              flex cursor-pointer flex-col items-center space-y-2
+            "
+            >
               <svg
                 className="size-16 text-primary"
                 fill="none"
