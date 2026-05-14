@@ -60,11 +60,7 @@ const InputOTPSlot = ({
             justify-center
           "
         >
-          <div
-            className="
-            h-4 w-px animate-caret-blink bg-foreground duration-1000
-          "
-          />
+          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
         </div>
       )}
     </div>

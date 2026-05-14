@@ -171,11 +171,7 @@ export function CardsChat() {
               message.
             </DialogDescription>
           </DialogHeader>
-          <Command
-            className="
-            overflow-hidden rounded-t-none border-t bg-transparent
-          "
-          >
+          <Command className="overflow-hidden rounded-t-none border-t bg-transparent">
             <CommandInput placeholder="Search user..." />
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>

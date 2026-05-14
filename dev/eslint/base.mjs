@@ -82,6 +82,12 @@ export default defineConfig(
   },
   tailwind.configs["recommended-error"],
   {
+    rules: {
+      "better-tailwindcss/enforce-consistent-line-wrapping": [
+        "error",
+        { strictness: "loose" },
+      ],
+    },
     settings: {
       "better-tailwindcss": {
         entryPoint: tailwindEntryPoint,
