@@ -14,9 +14,9 @@ export const Spinner = ({
     >
       <div
         className="
-        size-16 animate-spin rounded-full border-4 border-solid border-primary
-        border-t-transparent
-      "
+          size-16 animate-spin rounded-full border-4 border-solid border-primary
+          border-t-transparent
+        "
       ></div>
       <span className="sr-only">Loading...</span>
     </div>

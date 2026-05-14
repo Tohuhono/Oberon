@@ -171,11 +171,7 @@ export function CardsChat() {
               message.
             </DialogDescription>
           </DialogHeader>
-          <Command
-            className="
-            overflow-hidden rounded-t-none border-t bg-transparent
-          "
-          >
+          <Command className="overflow-hidden rounded-t-none border-t bg-transparent">
             <CommandInput placeholder="Search user..." />
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>
@@ -221,9 +217,9 @@ export function CardsChat() {
           </Command>
           <DialogFooter
             className="
-            flex items-center border-t p-4
-            sm:justify-between
-          "
+              flex items-center border-t p-4
+              sm:justify-between
+            "
           >
             {selectedUsers.length > 0 ? (
               <div className="flex -space-x-2 overflow-hidden">

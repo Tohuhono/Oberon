@@ -119,16 +119,13 @@ export const ImageField = ({
           <input {...getInputProps({ disabled: loading })} />
           <div
             className="
-            rounded-lg border-2 border-dashed border-muted bg-primary-foreground
-            p-8 text-center transition duration-300 ease-in-out
-            hover:border-primary
-          "
-          >
-            <span
-              className="
-              flex cursor-pointer flex-col items-center space-y-2
+              rounded-lg border-2 border-dashed border-muted
+              bg-primary-foreground p-8 text-center transition duration-300
+              ease-in-out
+              hover:border-primary
             "
-            >
+          >
+            <span className="flex cursor-pointer flex-col items-center space-y-2">
               <svg
                 className="size-16 text-primary"
                 fill="none"

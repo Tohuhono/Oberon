@@ -218,6 +218,9 @@
     "lint": {
       "outputs": []
     },
+    "lint:fix": {
+      "cache": false
+    },
     "tsc": {
       "dependsOn": ["build"],
       "inputs": [

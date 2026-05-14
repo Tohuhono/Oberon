@@ -79,9 +79,9 @@ export function Editor({
     >
       <div
         className="
-        grid h-dvh grid-cols-[minmax(0,1fr)_auto_300px]
-        grid-rows-[auto_auto_1fr] overflow-hidden bg-card
-      "
+          grid h-dvh grid-cols-[minmax(0,1fr)_auto_300px]
+          grid-rows-[auto_auto_1fr] overflow-hidden bg-card
+        "
       >
         <span className="col-span-3">
           <Header path={path} onPublish={onPublish} />

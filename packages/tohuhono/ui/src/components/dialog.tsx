@@ -62,13 +62,13 @@ const DialogContent = ({
       {children}
       <DialogPrimitive.Close
         className="
-        absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background
-        transition-opacity
-        hover:opacity-100
-        focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none
-        disabled:pointer-events-none
-        data-open:bg-accent data-open:text-muted-foreground
-      "
+          absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background
+          transition-opacity
+          hover:opacity-100
+          focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none
+          disabled:pointer-events-none
+          data-open:bg-accent data-open:text-muted-foreground
+        "
       >
         <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
           <path

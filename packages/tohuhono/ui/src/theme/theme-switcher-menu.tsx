@@ -32,15 +32,15 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
         <Button variant="outline" className={cn("align-middle", className)}>
           <SunIcon
             className="
-            scale-100 rotate-0 transition-all
-            dark:scale-0 dark:-rotate-90
-          "
+              scale-100 rotate-0 transition-all
+              dark:scale-0 dark:-rotate-90
+            "
           />
           <MoonIcon
             className="
-            absolute scale-0 rotate-90 transition-all
-            dark:scale-100 dark:rotate-0
-          "
+              absolute scale-0 rotate-90 transition-all
+              dark:scale-100 dark:rotate-0
+            "
           />
           <span className="sr-only">Theme switcher</span>
         </Button>

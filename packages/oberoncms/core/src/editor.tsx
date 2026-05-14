@@ -55,10 +55,10 @@ export function OberonClient({ config }: { config: OberonConfig }) {
         <div className="flex w-full justify-center">
           <div
             className="
-            prose w-full rounded-sm bg-card p-3 pb-10 text-card-foreground
-            lg:prose-lg lg:p-5 lg:pb-10
-            dark:prose-invert
-          "
+              prose w-full rounded-sm bg-card p-3 pb-10 text-card-foreground
+              lg:prose-lg lg:p-5 lg:pb-10
+              dark:prose-invert
+            "
           >
             {action === "users" && <Users users={data} />}
             {action === "images" && <Images images={data} />}

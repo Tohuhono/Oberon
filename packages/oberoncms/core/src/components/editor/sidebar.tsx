@@ -31,11 +31,11 @@ export const Drawer = ({ children }: PropsWithChildren) => (
 export const DrawerItem = ({ name }: { name: string }) => (
   <div
     className="
-    flex cursor-grab flex-col items-baseline justify-between rounded-sm border
-    border-border bg-card px-2 py-1 text-card-foreground shadow-sm
-    transition-colors
-    hover:bg-accent hover:text-accent-foreground
-  "
+      flex cursor-grab flex-col items-baseline justify-between rounded-sm border
+      border-border bg-card px-2 py-1 text-card-foreground shadow-sm
+      transition-colors
+      hover:bg-accent hover:text-accent-foreground
+    "
   >
     {name}
     <DragHandleDots2Icon />

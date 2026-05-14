@@ -75,15 +75,15 @@ export function CardsMetric() {
                     return (
                       <div
                         className="
-                        rounded-lg border bg-background p-2 shadow-xs
-                      "
+                          rounded-lg border bg-background p-2 shadow-xs
+                        "
                       >
                         <div className="grid grid-cols-2 gap-2">
                           <div className="flex flex-col">
                             <span
                               className="
-                              text-[0.70rem] text-muted-foreground uppercase
-                            "
+                                text-[0.70rem] text-muted-foreground uppercase
+                              "
                             >
                               Average
                             </span>
@@ -94,8 +94,8 @@ export function CardsMetric() {
                           <div className="flex flex-col">
                             <span
                               className="
-                              text-[0.70rem] text-muted-foreground uppercase
-                            "
+                                text-[0.70rem] text-muted-foreground uppercase
+                              "
                             >
                               Today
                             </span>

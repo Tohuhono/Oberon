@@ -8,11 +8,11 @@ export const Prose = ({
   <div
     className={cn(
       `
-      prose p-2
-      sm:p-6
-      lg:prose-lg
-      dark:prose-invert
-    `,
+        prose p-2
+        sm:p-6
+        lg:prose-lg
+        dark:prose-invert
+      `,
       className,
     )}
   >

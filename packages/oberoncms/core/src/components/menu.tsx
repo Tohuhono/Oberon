@@ -24,9 +24,9 @@ export const Menu = ({
   return (
     <div
       className="
-      grid w-full grid-cols-3 items-center bg-sidebar-background p-2
-      text-sidebar-foreground
-    "
+        grid w-full grid-cols-3 items-center bg-sidebar-background p-2
+        text-sidebar-foreground
+      "
     >
       <div className="flex justify-start gap-1">{children}</div>
       <div className="flex justify-center">

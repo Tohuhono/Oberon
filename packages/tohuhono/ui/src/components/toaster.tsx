@@ -62,18 +62,18 @@ function ToastItems() {
           >
             <ToastPrimitive.Content
               className="
-              flex w-full items-start justify-between gap-2 overflow-hidden
-              data-behind:opacity-0
-              data-expanded:opacity-100
-            "
+                flex w-full items-start justify-between gap-2 overflow-hidden
+                data-behind:opacity-0
+                data-expanded:opacity-100
+              "
             >
               <div className="grid gap-1">
                 {toast.title && (
                   <ToastPrimitive.Title
                     className="
-                    text-sm font-semibold
-                    [&+div]:text-xs
-                  "
+                      text-sm font-semibold
+                      [&+div]:text-xs
+                    "
                   >
                     {toast.title}
                   </ToastPrimitive.Title>
@@ -86,16 +86,16 @@ function ToastItems() {
               </div>
               <ToastPrimitive.Close
                 className="
-                absolute top-1 right-1 rounded-md p-1 text-foreground/50
-                opacity-0 transition-opacity
-                group-hover:opacity-100
-                group-[.destructive]:text-red-300
-                hover:text-foreground
-                group-[.destructive]:hover:text-red-50
-                focus:opacity-100 focus:ring-1 focus:outline-none
-                group-[.destructive]:focus:ring-red-400
-                group-[.destructive]:focus:ring-offset-red-600
-              "
+                  absolute top-1 right-1 rounded-md p-1 text-foreground/50
+                  opacity-0 transition-opacity
+                  group-hover:opacity-100
+                  group-[.destructive]:text-red-300
+                  hover:text-foreground
+                  group-[.destructive]:hover:text-red-50
+                  focus:opacity-100 focus:ring-1 focus:outline-none
+                  group-[.destructive]:focus:ring-red-400
+                  group-[.destructive]:focus:ring-offset-red-600
+                "
               >
                 <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
                   <path
@@ -121,11 +121,11 @@ export function Toaster() {
       <ToastPrimitive.Portal>
         <ToastPrimitive.Viewport
           className="
-          fixed top-0 left-[50%] z-100 flex max-h-screen min-h-0 w-full
-          translate-x-[-50%] flex-col-reverse
-          sm:right-0 sm:flex-col
-          md:max-w-[420px]
-        "
+            fixed top-0 left-[50%] z-100 flex max-h-screen min-h-0 w-full
+            translate-x-[-50%] flex-col-reverse
+            sm:right-0 sm:flex-col
+            md:max-w-[420px]
+          "
         >
           <ToastItems />
         </ToastPrimitive.Viewport>

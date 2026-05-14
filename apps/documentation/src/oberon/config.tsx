@@ -15,10 +15,10 @@ export const config: OberonConfig = {
       render: ({ text }) => (
         <div
           className="
-          prose
-          lg:prose-lg
-          dark:prose-invert
-        "
+            prose
+            lg:prose-lg
+            dark:prose-invert
+          "
         >
           {text}
         </div>

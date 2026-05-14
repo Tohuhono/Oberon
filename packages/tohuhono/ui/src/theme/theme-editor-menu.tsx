@@ -38,15 +38,15 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
         <Button variant="outline" className={cn("align-middle", className)}>
           <SunIcon
             className="
-            scale-100 rotate-0 transition-all
-            dark:scale-0 dark:-rotate-90
-          "
+              scale-100 rotate-0 transition-all
+              dark:scale-0 dark:-rotate-90
+            "
           />
           <MoonIcon
             className="
-            absolute scale-0 rotate-90 transition-all
-            dark:scale-100 dark:rotate-0
-          "
+              absolute scale-0 rotate-90 transition-all
+              dark:scale-100 dark:rotate-0
+            "
           />
           <span className="sr-only">Toggle theme</span>
         </Button>
@@ -54,9 +54,9 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
       <DropdownMenuContent align="end">
         <div
           className="
-          grid grid-cols-[max-content,max-content,max-content] items-center
-          gap-x-2 gap-y-0 p-2 text-sm
-        "
+            grid grid-cols-[max-content,max-content,max-content] items-center
+            gap-x-2 gap-y-0 p-2 text-sm
+          "
         >
           <ApplyTheme theme={theme} />
           <Button

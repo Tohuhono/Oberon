@@ -18,9 +18,9 @@ export const GridHeading = ({
   <h4
     className={cn(
       `
-    m-0 pt-4
-    lg:m-0
-  `,
+        m-0 pt-4
+        lg:m-0
+      `,
       className,
     )}
   >

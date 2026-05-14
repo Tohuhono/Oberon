@@ -7,9 +7,9 @@ export const Welcome = {
       <div className="flex w-full items-center justify-center">
         <div
           className="
-          prose pt-10
-          dark:prose-invert
-        "
+            prose pt-10
+            dark:prose-invert
+          "
         >
           <h1>Welcome to OberonCMS</h1>
           <p>
