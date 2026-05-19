@@ -1,5 +1,11 @@
 # @oberon/utils
 
+## 0.16.0
+
+### Minor Changes
+
+- e324ad3: Refactor tailwind cn and source to theme
+
 ## 0.15.0
 
 ### Minor Changes

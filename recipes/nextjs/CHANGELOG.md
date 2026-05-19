@@ -1,5 +1,12 @@
 # oberon-cms-example
 
+## 0.17.1
+
+### Patch Changes
+
+- @oberoncms/core@0.19.1
+- @oberoncms/plugin-development@0.8.1
+
 ## 0.17.0
 
 ### Minor Changes

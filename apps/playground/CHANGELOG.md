@@ -1,5 +1,16 @@
 # @oberon/playground
 
+## 0.11.1
+
+### Patch Changes
+
+- @oberoncms/core@0.19.1
+- @tohuhono/puck-blocks@0.14.1
+- @oberoncms/plugin-development@0.8.1
+- @oberoncms/plugin-pgsql@0.10.1
+- @oberoncms/plugin-tailwind@0.19.1
+- @oberoncms/plugin-uploadthing@0.17.1
+
 ## 0.11.0
 
 ### Minor Changes

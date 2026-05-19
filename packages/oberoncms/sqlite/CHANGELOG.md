@@ -1,5 +1,11 @@
 # @oberoncms/sqlite
 
+## 0.8.1
+
+### Patch Changes
+
+- @oberoncms/core@0.19.1
+
 ## 0.8.0
 
 ### Minor Changes

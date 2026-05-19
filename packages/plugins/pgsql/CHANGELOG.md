@@ -1,5 +1,11 @@
 # @oberoncms/plugin-pgsql
 
+## 0.10.1
+
+### Patch Changes
+
+- @oberoncms/core@0.19.1
+
 ## 0.10.0
 
 ### Minor Changes
