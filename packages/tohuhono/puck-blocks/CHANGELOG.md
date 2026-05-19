@@ -1,5 +1,14 @@
 # @tohuhono/puck-blocks
 
+## 0.14.1
+
+### Patch Changes
+
+- Updated dependencies [e324ad3]
+  - @tohuhono/utils@0.16.0
+  - @tohuhono/ui@0.16.0
+  - @oberoncms/core@0.19.1
+
 ## 0.14.0
 
 ### Minor Changes
