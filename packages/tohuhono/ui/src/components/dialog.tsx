@@ -3,7 +3,7 @@
 import { type HTMLAttributes } from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const Dialog = DialogPrimitive.Root
 
@@ -16,9 +16,7 @@ const DialogClose = DialogPrimitive.Close
 const DialogOverlay = ({
   className,
   ...props
-}: Omit<DialogPrimitive.Backdrop.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<DialogPrimitive.Backdrop.Props>) => (
   <DialogPrimitive.Backdrop
     className={cn(
       `
@@ -36,9 +34,7 @@ const DialogContent = ({
   className,
   children,
   ...props
-}: Omit<DialogPrimitive.Popup.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<DialogPrimitive.Popup.Props>) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Popup
@@ -120,9 +116,7 @@ const DialogFooter = ({
 const DialogTitle = ({
   className,
   ...props
-}: Omit<DialogPrimitive.Title.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<DialogPrimitive.Title.Props>) => (
   <DialogPrimitive.Title
     className={cn(
       "text-lg leading-none font-semibold tracking-tight",
@@ -135,9 +129,7 @@ const DialogTitle = ({
 const DialogDescription = ({
   className,
   ...props
-}: Omit<DialogPrimitive.Description.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<DialogPrimitive.Description.Props>) => (
   <DialogPrimitive.Description
     className={cn("text-sm text-muted-foreground", className)}
     {...props}

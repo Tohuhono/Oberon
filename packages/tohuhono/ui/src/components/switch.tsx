@@ -2,14 +2,9 @@
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
-const Switch = ({
-  className,
-  ...props
-}: Omit<SwitchPrimitive.Root.Props, "className"> & {
-  className?: string
-}) => (
+const Switch = ({ className, ...props }: CN<SwitchPrimitive.Root.Props>) => (
   <SwitchPrimitive.Root
     className={cn(
       `

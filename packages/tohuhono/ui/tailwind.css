@@ -1,7 +1,5 @@
 @import "tailwindcss" source(none);
 
-@source "./dist";
-
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 @plugin "./src/plugin/corner-shape.ts";
@@ -31,6 +29,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-sidebar: var(--sidebar, var(--sidebar-background, var(--background)));
   --color-sidebar-background: var(--sidebar-background, var(--background));
   --color-sidebar-foreground: var(--sidebar-foreground, var(--foreground));
   --color-sidebar-primary: var(--sidebar-primary, var(--primary));

@@ -2,14 +2,12 @@
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const Checkbox = ({
   className,
   ...props
-}: Omit<CheckboxPrimitive.Root.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<CheckboxPrimitive.Root.Props>) => (
   <CheckboxPrimitive.Root
     className={cn(
       `

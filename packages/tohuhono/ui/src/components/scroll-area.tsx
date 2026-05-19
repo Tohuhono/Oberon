@@ -2,15 +2,13 @@
 
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const ScrollArea = ({
   className,
   children,
   ...props
-}: Omit<ScrollAreaPrimitive.Root.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<ScrollAreaPrimitive.Root.Props>) => (
   <ScrollAreaPrimitive.Root
     className={cn("relative overflow-hidden", className)}
     {...props}
@@ -27,9 +25,7 @@ const ScrollBar = ({
   className,
   orientation = "vertical",
   ...props
-}: Omit<ScrollAreaPrimitive.Scrollbar.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<ScrollAreaPrimitive.Scrollbar.Props>) => (
   <ScrollAreaPrimitive.Scrollbar
     orientation={orientation}
     className={cn(

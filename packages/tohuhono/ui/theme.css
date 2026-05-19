@@ -1,3 +1,5 @@
+@source "./dist";
+
 @layer base {
   :root {
     --background: hsl(185 1% 95%);
