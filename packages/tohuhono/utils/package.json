@@ -23,6 +23,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
+    "./cn": "./dist/cn.js",
     "./exec-async": {
       "types": "./src/exec-async.ts",
       "default": "./dist/exec-async.js"

@@ -2,7 +2,7 @@
 
 import { Select as SelectPrimitive } from "@base-ui/react/select"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const Select = SelectPrimitive.Root
 
@@ -14,9 +14,7 @@ const SelectTrigger = ({
   className,
   children,
   ...props
-}: Omit<SelectPrimitive.Trigger.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<SelectPrimitive.Trigger.Props>) => (
   <SelectPrimitive.Trigger
     className={cn(
       `
@@ -56,9 +54,8 @@ const SelectContent = ({
   alignOffset = 0,
   alignItemWithTrigger = true,
   ...props
-}: Omit<SelectPrimitive.Popup.Props, "className"> & {
-  className?: string
-} & Pick<
+}: CN<SelectPrimitive.Popup.Props> &
+  Pick<
     SelectPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
   >) => (
@@ -97,9 +94,7 @@ const SelectContent = ({
 const SelectLabel = ({
   className,
   ...props
-}: Omit<SelectPrimitive.GroupLabel.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<SelectPrimitive.GroupLabel.Props>) => (
   <SelectPrimitive.GroupLabel
     className={cn("px-2 py-1.5 text-sm font-semibold", className)}
     {...props}
@@ -110,9 +105,7 @@ const SelectItem = ({
   className,
   children,
   ...props
-}: Omit<SelectPrimitive.Item.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<SelectPrimitive.Item.Props>) => (
   <SelectPrimitive.Item
     className={cn(
       `
@@ -146,9 +139,7 @@ const SelectItem = ({
 const SelectSeparator = ({
   className,
   ...props
-}: Omit<SelectPrimitive.Separator.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<SelectPrimitive.Separator.Props>) => (
   <SelectPrimitive.Separator
     className={cn("-mx-1 my-1 h-px bg-muted", className)}
     {...props}

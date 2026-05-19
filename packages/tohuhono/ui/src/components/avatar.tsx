@@ -2,14 +2,9 @@
 
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
-const Avatar = ({
-  className,
-  ...props
-}: Omit<AvatarPrimitive.Root.Props, "className"> & {
-  className?: string
-}) => (
+const Avatar = ({ className, ...props }: CN<AvatarPrimitive.Root.Props>) => (
   <AvatarPrimitive.Root
     className={cn(
       "relative flex size-10 shrink-0 overflow-hidden rounded-full",
@@ -22,9 +17,7 @@ const Avatar = ({
 const AvatarImage = ({
   className,
   ...props
-}: Omit<AvatarPrimitive.Image.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<AvatarPrimitive.Image.Props>) => (
   <AvatarPrimitive.Image
     className={cn("aspect-square size-full", className)}
     {...props}
@@ -34,9 +27,7 @@ const AvatarImage = ({
 const AvatarFallback = ({
   className,
   ...props
-}: Omit<AvatarPrimitive.Fallback.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<AvatarPrimitive.Fallback.Props>) => (
   <AvatarPrimitive.Fallback
     className={cn(
       "flex size-full items-center justify-center rounded-full bg-muted",

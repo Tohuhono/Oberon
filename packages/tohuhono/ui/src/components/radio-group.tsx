@@ -3,14 +3,9 @@
 import { Radio as RadioPrimitive } from "@base-ui/react/radio"
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
-const RadioGroup = ({
-  className,
-  ...props
-}: Omit<RadioGroupPrimitive.Props, "className"> & {
-  className?: string
-}) => {
+const RadioGroup = ({ className, ...props }: CN<RadioGroupPrimitive.Props>) => {
   return (
     <RadioGroupPrimitive className={cn("grid gap-2", className)} {...props} />
   )
@@ -19,9 +14,7 @@ const RadioGroup = ({
 const RadioGroupItem = ({
   className,
   ...props
-}: Omit<RadioPrimitive.Root.Props, "className"> & {
-  className?: string
-}) => {
+}: CN<RadioPrimitive.Root.Props>) => {
   return (
     <RadioPrimitive.Root
       className={cn(

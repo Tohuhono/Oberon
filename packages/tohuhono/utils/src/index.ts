@@ -1,8 +1,4 @@
-import { ClassNameValue, twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassNameValue[]) {
-  return twMerge(inputs)
-}
+export * from "./cn"
 
 /**
  * CAUTION not cryptographically secure or true random

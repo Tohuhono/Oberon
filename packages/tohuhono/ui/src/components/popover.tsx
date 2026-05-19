@@ -3,7 +3,7 @@
 import { Children, isValidElement } from "react"
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const Popover = PopoverPrimitive.Root
 
@@ -32,9 +32,8 @@ const PopoverContent = ({
   side = "bottom",
   sideOffset = 4,
   ...props
-}: Omit<PopoverPrimitive.Popup.Props, "className"> & {
-  className?: string
-} & Pick<
+}: CN<PopoverPrimitive.Popup.Props> &
+  Pick<
     PopoverPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (

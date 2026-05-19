@@ -3,7 +3,7 @@
 import { Children, isValidElement } from "react"
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const TooltipProvider = ({
   delay,
@@ -42,9 +42,8 @@ const TooltipContent = ({
   align = "center",
   alignOffset = 0,
   ...props
-}: Omit<TooltipPrimitive.Popup.Props, "className"> & {
-  className?: string
-} & Pick<
+}: CN<TooltipPrimitive.Popup.Props> &
+  Pick<
     TooltipPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (

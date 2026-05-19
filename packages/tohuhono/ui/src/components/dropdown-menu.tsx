@@ -3,7 +3,7 @@
 import { Children, HTMLAttributes, isValidElement } from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const DropdownMenu = MenuPrimitive.Root
 
@@ -74,9 +74,8 @@ const DropdownMenuSubContent = ({
   side = "right",
   sideOffset = 0,
   ...props
-}: Omit<MenuPrimitive.Popup.Props, "className"> & {
-  className?: string
-} & Pick<
+}: CN<MenuPrimitive.Popup.Props> &
+  Pick<
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (
@@ -108,9 +107,8 @@ const DropdownMenuContent = ({
   align = "start",
   alignOffset = 0,
   ...props
-}: Omit<MenuPrimitive.Popup.Props, "className"> & {
-  className?: string
-} & Pick<
+}: CN<MenuPrimitive.Popup.Props> &
+  Pick<
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
   >) => (
@@ -174,9 +172,7 @@ const DropdownMenuCheckboxItem = ({
   children,
   checked,
   ...props
-}: Omit<MenuPrimitive.CheckboxItem.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<MenuPrimitive.CheckboxItem.Props>) => (
   <MenuPrimitive.CheckboxItem
     className={cn(
       `
@@ -212,9 +208,7 @@ const DropdownMenuRadioItem = ({
   className,
   children,
   ...props
-}: Omit<MenuPrimitive.RadioItem.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<MenuPrimitive.RadioItem.Props>) => (
   <MenuPrimitive.RadioItem
     className={cn(
       `
@@ -263,9 +257,7 @@ const DropdownMenuLabel = ({
 const DropdownMenuSeparator = ({
   className,
   ...props
-}: Omit<MenuPrimitive.Separator.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<MenuPrimitive.Separator.Props>) => (
   <MenuPrimitive.Separator
     className={cn("-mx-1 my-1 h-px bg-muted", className)}
     {...props}

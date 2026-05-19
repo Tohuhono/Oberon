@@ -2,15 +2,13 @@ import type { ComponentPropsWithoutRef } from "react"
 import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu"
 import { cva } from "class-variance-authority"
 
-import { cn } from "@tohuhono/utils"
+import { cn, type CN } from "@tohuhono/utils"
 
 const NavigationMenu = ({
   className,
   children,
   ...props
-}: Omit<NavigationMenuPrimitive.Root.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<NavigationMenuPrimitive.Root.Props>) => (
   <NavigationMenuPrimitive.Root
     className={cn(
       "grid w-full grid-flow-col items-center justify-between bg-background p-1",
@@ -60,9 +58,7 @@ const NavigationMenuTrigger = ({
   className,
   children,
   ...props
-}: Omit<NavigationMenuPrimitive.Trigger.Props, "className"> & {
-  className?: string
-}) => (
+}: CN<NavigationMenuPrimitive.Trigger.Props>) => (
   <NavigationMenuPrimitive.Trigger
     className={cn(navigationMenuTriggerStyle(), "group", className)}
     {...props}
