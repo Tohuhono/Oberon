@@ -4,6 +4,7 @@ import prompts from "prompts"
 import validateName from "validate-npm-package-name"
 import { z } from "zod"
 
+import { recipeChoices } from "./config"
 import {
   databaseIds,
   databasePlugins,
@@ -13,9 +14,6 @@ import {
   type SendPlugin,
 } from "./install-adapter"
 import { packageManagerChoices, type PackageManager } from "./install-packages"
-
-export const recipes = ["nextjs"] as const
-export const recipeChoices = [{ title: "Next js", value: "nextjs" }]
 
 // Lifted from https://github.com/vercel/next.js/blob/c2d7bbd1b82c71808b99e9a7944fb16717a581db/packages/create-next-app/helpers/get-pkg-manager.ts
 function getPackageManager(): PackageManager | undefined {

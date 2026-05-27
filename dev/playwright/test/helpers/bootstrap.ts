@@ -1,7 +1,11 @@
 import { mkdir } from "node:fs/promises"
 import path from "node:path"
 import { stripVTControlCharacters } from "node:util"
+<<<<<<< HEAD
 
+=======
+import { setTimeout } from "node:timers/promises"
+>>>>>>> 9fbc90e (add initial tanstack recipe)
 import { expect, type Page } from "@playwright/test"
 
 const LOGIN_PATH = "/cms/login"
@@ -65,6 +69,9 @@ async function completeSignIn(page: Page) {
   const callbackResponsePromise = page.waitForResponse((response) =>
     response.url().includes("/cms/api/auth/sign-in/email-otp"),
   )
+
+  // avoid better auth 429 too many requests
+  await setTimeout(50)
 
   await completeSignInButton.click()
 

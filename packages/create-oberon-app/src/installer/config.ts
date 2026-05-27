@@ -1,5 +1,8 @@
-export const recipes = ["nextjs"] as const
-export const recipeChoices = [{ title: "Next js", value: "nextjs" }]
+export const recipes = ["nextjs", "tanstack"] as const
+export const recipeChoices = [
+  { title: "Next js", value: "nextjs" },
+  { title: "Tanstack", value: "tanstack" },
+]
 
 export type Plugin = {
   id: string
