@@ -7,12 +7,12 @@
     "build": "next build",
     "clean": "odt clean",
     "dev": "next dev --turbo",
+    "format": "oxfmt \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
+    "format:check": "oxfmt --check \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
     "lint": "eslint .",
-    "tsc": "tsc --pretty",
-    "prettier": "prettier",
-    "prettier:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "prebuild": "tsx ./oberon/prebuild.ts",
-    "start": "next start"
+    "start": "next start",
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
@@ -30,9 +30,8 @@
     "@types/react-dom": "19.2.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.1.6",
+    "oxfmt": "^0.51.0",
     "postcss": "^8.5.6",
-    "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.21.0",

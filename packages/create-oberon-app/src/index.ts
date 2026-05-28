@@ -1,20 +1,12 @@
 #!/usr/bin/env node
 
-import path from "path"
 import { execSync } from "child_process"
+import path from "path"
+
+import { program, Option, InvalidArgumentError } from "@commander-js/extra-typings"
 import validateName from "validate-npm-package-name"
 
-import {
-  program,
-  Option,
-  InvalidArgumentError,
-} from "@commander-js/extra-typings"
 import { initGit } from "./installer/init-git"
-import { installPackages, packageManagers } from "./installer/install-packages"
-
-import { promptOptions, recipes } from "./installer/prompt-options"
-import { installTemplate } from "./installer/install-template"
-import { installEnv } from "./installer/install-env"
 import {
   databaseIds,
   databasePlugins,
@@ -23,6 +15,10 @@ import {
   sendPlugins,
   Plugin,
 } from "./installer/install-adapter"
+import { installEnv } from "./installer/install-env"
+import { installPackages, packageManagers } from "./installer/install-packages"
+import { installTemplate } from "./installer/install-template"
+import { promptOptions, recipes } from "./installer/prompt-options"
 
 program
   .command("create")
@@ -40,23 +36,16 @@ program
     ).choices(packageManagers),
   )
   .option("--email <email>", "Master email (initial admin user)")
-  .addOption(
-    new Option("--recipe <recipe>", "Base recipe to use").choices(recipes),
-  )
-  .addOption(
-    new Option("--database <database>", "Database plugin").choices(databaseIds),
-  )
-  .addOption(
-    new Option(
-      "--dir <directory>",
-      "Target directory (defaults to project name)",
-    ),
-  )
+  .addOption(new Option("--recipe <recipe>", "Base recipe to use").choices(recipes))
+  .addOption(new Option("--database <database>", "Database plugin").choices(databaseIds))
+  .addOption(new Option("--dir <directory>", "Target directory (defaults to project name)"))
   .addOption(new Option("--send <send>", "Send plugin").choices(sendIds))
   .action(async (_appName, options) => {
     // Ask for options
-    const { appName, recipe, database, email, send, packageManager } =
-      await promptOptions(_appName, options)
+    const { appName, recipe, database, email, send, packageManager } = await promptOptions(
+      _appName,
+      options,
+    )
 
     const templatePath = path.join(import.meta.dirname, "templates", recipe)
     const pluginPath = path.join(import.meta.dirname, "plugins")
@@ -89,7 +78,7 @@ program
       plugins,
     })
 
-    execSync(`${packageManager} run prettier:fix`, {
+    execSync(`${packageManager} run format`, {
       cwd: appPath,
       stdio: "inherit",
     })

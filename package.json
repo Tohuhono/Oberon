@@ -21,6 +21,8 @@
     "dev:nextjs": "turbo dev --concurrency 50 --filter={./packages/**/*}... --filter=@oberon/recipe-nextjs...",
     "dev:oberon": "turbo dev --concurrency 50 --continue --filter=@oberon/playground...",
     "dev:packages": "turbo dev --concurrency 50 --filter={./packages/**/*}...",
+    "format": "oxfmt \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
+    "format:check": "oxfmt --check \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
     "generate:migrations": "turbo generate:migrations",
     "generate:recipes": "turbo generate:recipes",
     "lint": "turbo lint --concurrency 50",
@@ -29,8 +31,6 @@
     "manypkg:fix": "manypkg fix",
     "postinstall": "pnpm manypkg",
     "prepare": "husky",
-    "format": "oxfmt \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
-    "format:check": "oxfmt --check \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
     "release": "pnpm build:packages && changeset publish",
     "start:oberon": "turbo start --concurrency 50 --filter=@oberon/playground",
     "start:docs": "turbo start --concurrency 50 --filter=@oberon/docs",
@@ -47,21 +47,6 @@
     "test:smoke": "turbo test:smoke --concurrency 50",
     "validate": "turbo validate --concurrency 50 --output-logs errors-only"
   },
-  "lint-staged": {
-    "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier -l --write"
-  },
-  "manypkg": {
-    "ignoredRules": [
-      "INTERNAL_MISMATCH"
-    ]
-  },
-  "packageManager": "pnpm@10.27.0",
-  "engines": {
-    "node": ">=24.13.0",
-    "pnpm": ">=10.0.0",
-    "npm": "please-use-pnpm",
-    "yarn": "please-use-pnpm"
-  },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
     "@dev/eslint": "workspace:*",
@@ -76,13 +61,22 @@
     "lint-staged": "^16.2.7",
     "neonctl": "^2.22.0",
     "oxfmt": "^0.51.0",
-    "prettier": "^3.8.3",
     "rimraf": "^6.1.2",
     "turbo": "^2.8.20",
     "typescript": "5.9.3",
     "vercel": "^52.0.0",
     "wait-on": "^9.0.4"
   },
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx,css,md,json}": "oxfmt"
+  },
+  "engines": {
+    "node": ">=24.13.0",
+    "npm": "please-use-pnpm",
+    "pnpm": ">=10.0.0",
+    "yarn": "please-use-pnpm"
+  },
+  "packageManager": "pnpm@10.27.0",
   "pnpm": {
     "overrides": {
       "zod-validation-error": "^4.0.0"
@@ -91,5 +85,10 @@
       "nextra": "patches/nextra.patch",
       "@vitest/runner": "patches/@vitest__runner.patch"
     }
+  },
+  "manypkg": {
+    "ignoredRules": [
+      "INTERNAL_MISMATCH"
+    ]
   }
 }
