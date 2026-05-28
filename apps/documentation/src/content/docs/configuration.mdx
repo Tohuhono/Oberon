@@ -55,8 +55,8 @@ Plugin order is significant. Generated apps place:
 
 ## config.tsx
 
-`config.tsx` is mostly Puck configuration. Keep Oberon docs brief and use Puck
-as the primary reference for overlapping API surface.
+`config.tsx` is mostly Puck configuration. Keep Oberon docs brief and use Puck as the primary
+reference for overlapping API surface.
 
 Use the Puck docs for component fields, blocks, root configuration, and layout:
 [https://puckeditor.com/docs](https://puckeditor.com/docs)
@@ -90,14 +90,13 @@ export const config: OberonConfig = {
 ```
 
 <Callout type="info">
-  When in doubt, follow Puck docs first and only apply Oberon-specific additions
-  listed above.
+  When in doubt, follow Puck docs first and only apply Oberon-specific additions listed above.
 </Callout>
 
 ## Environment Variables
 
-Required keys depend on selected plugins. See plugin pages for exact variables.
-At minimum, generated apps include:
+Required keys depend on selected plugins. See plugin pages for exact variables. At minimum,
+generated apps include:
 
 ```sh
 OBERON_SITE_URL=http://localhost:3000
@@ -105,6 +104,6 @@ EMAIL_FROM=noreply@example.com
 ```
 
 <Callout type="info">
-  The `create-oberon-app` CLI automatically generates a `.env.local` template
-  with placeholders for your chosen plugins.
+  The `create-oberon-app` CLI automatically generates a `.env.local` template with placeholders for
+  your chosen plugins.
 </Callout>

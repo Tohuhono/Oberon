@@ -1,24 +1,14 @@
+import { JsonValueSchema, type OberonBaseAdapter, type PageData } from "@oberoncms/core"
 import { and, eq } from "drizzle-orm"
-import {
-  JsonValueSchema,
-  type OberonBaseAdapter,
-  type PageData,
-} from "@oberoncms/core"
-import { images, kv, pages, site } from "./schema"
+
 import type { DatabaseClient } from "./client"
+import { images, kv, pages, site } from "./schema"
 
 function isPageData(value: unknown): value is PageData {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "content" in value &&
-    "root" in value
-  )
+  return typeof value === "object" && value !== null && "content" in value && "root" in value
 }
 
-export const getDatabaseAdapter = (
-  db: () => DatabaseClient,
-): OberonBaseAdapter => ({
+export const getDatabaseAdapter = (db: () => DatabaseClient): OberonBaseAdapter => ({
   getSite: async () => {
     const result = await db()
       .select({
@@ -64,10 +54,7 @@ export const getDatabaseAdapter = (
       .execute()
   },
   addPage: async ({ key, data, updatedAt, updatedBy }) => {
-    await db()
-      .insert(pages)
-      .values({ key, data, updatedAt, updatedBy })
-      .execute()
+    await db().insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
   },
   deletePage: async (key) => {
     await db().delete(pages).where(eq(pages.key, key)).execute()

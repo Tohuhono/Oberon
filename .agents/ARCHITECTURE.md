@@ -1,7 +1,7 @@
 # OberonCMS architecture
 
-This document describes the architecture currently implemented in the monorepo.
-It focuses on runtime composition, data flow, and workspace boundaries.
+This document describes the architecture currently implemented in the monorepo. It focuses on
+runtime composition, data flow, and workspace boundaries.
 
 ## Monorepo shape
 
@@ -9,11 +9,9 @@ The repository is a pnpm workspace + turborepo with these layers:
 
 - Applications: `apps/playground`, `apps/documentation`, `recipes/nextjs`
 - Core runtime: `packages/oberoncms/core`
-- Database/auth adapters: `packages/oberoncms/sqlite`,
-  `packages/plugins/development`, `packages/plugins/turso`,
-  `packages/plugins/pgsql`
-- Media/storage plugins: `packages/plugins/uploadthing`,
-  `packages/plugins/flydrive`
+- Database/auth adapters: `packages/oberoncms/sqlite`, `packages/plugins/development`,
+  `packages/plugins/turso`, `packages/plugins/pgsql`
+- Media/storage plugins: `packages/plugins/uploadthing`, `packages/plugins/flydrive`
 - Shared UI/utilities: `packages/tohuhono/ui`, `packages/tohuhono/puck-blocks`,
   `packages/tohuhono/utils`
 - Tooling/config: `dev/eslint`, `dev/typescript`, `dev/vite`, `dev/scripts`
@@ -38,8 +36,8 @@ Composition pipeline:
    - Next.js caching (`unstable_cache`, cache tags)
    - revalidation (`revalidatePath`, `updateTag`)
    - component transform migration pipeline
-3. `initOberon` builds a catch-all HTTP handler that dispatches by first path
-   segment to plugin handlers (e.g. `auth`, `uploadthing`, `flydrive`).
+3. `initOberon` builds a catch-all HTTP handler that dispatches by first path segment to plugin
+   handlers (e.g. `auth`, `uploadthing`, `flydrive`).
 
 ### Core data flow
 
@@ -71,8 +69,8 @@ Plugins are `OberonPlugin` factories and can contribute:
 - `handlers` for HTTP routes
 - `name`, `version`, optional `disabled`
 
-Plugin order matters because adapter methods are merged left-to-right with later
-plugins overriding earlier fields.
+Plugin order matters because adapter methods are merged left-to-right with later plugins overriding
+earlier fields.
 
 Base behavior (from `initPlugins`):
 
@@ -101,14 +99,14 @@ Mutations invalidate relevant tags and page paths.
 
 ## Build and prebuild lifecycle
 
-All Next.js apps define a `prebuild` script that calls `adapter.prebuild()`.
-Current prebuild behavior in core:
+All Next.js apps define a `prebuild` script that calls `adapter.prebuild()`. Current prebuild
+behavior in core:
 
 1. run plugin `prebuild`
 2. seed welcome page when storage is empty
 
-Dynamic Tailwind extraction is now handled by `@oberoncms/plugin-tailwind` when
-that plugin is installed.
+Dynamic Tailwind extraction is now handled by `@oberoncms/plugin-tailwind` when that plugin is
+installed.
 
 Turbo tasks wire this into `build` via `dependsOn: ["prebuild", ...]`.
 
@@ -130,8 +128,7 @@ Turbo tasks wire this into `build` via `dependsOn: ["prebuild", ...]`.
 
 ### `recipes/nextjs`
 
-- Template baseline from repo:
-  `plugins: [mockPlugin, developmentPlugin, authPlugin]`
+- Template baseline from repo: `plugins: [mockPlugin, developmentPlugin, authPlugin]`
 - Includes CMS route, API route, and public catch-all render route
 - `create-oberon-app` customizes this pattern by generating adapter/plugin files
 
@@ -151,10 +148,9 @@ Turbo tasks wire this into `build` via `dependsOn: ["prebuild", ...]`.
 
 ## Current state notes
 
-- The playground and documentation apps both include `mockPlugin`, so auth/user
-  context is mocked in those environments by default.
-- `apps/playground/oberon/send.ts` defines a Resend plugin but it is not wired
-  into `apps/playground/oberon/adapter.ts`.
-- `plugin-turso` and `plugin-pgsql` currently expose an `init` adapter field;
-  core calls `prebuild`, so migration hooks in those plugins are not currently
-  invoked through the shared prebuild path.
+- The playground and documentation apps both include `mockPlugin`, so auth/user context is mocked in
+  those environments by default.
+- `apps/playground/oberon/send.ts` defines a Resend plugin but it is not wired into
+  `apps/playground/oberon/adapter.ts`.
+- `plugin-turso` and `plugin-pgsql` currently expose an `init` adapter field; core calls `prebuild`,
+  so migration hooks in those plugins are not currently invoked through the shared prebuild path.

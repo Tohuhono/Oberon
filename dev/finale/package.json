@@ -1,8 +1,8 @@
 {
   "name": "@dev/final",
-  "description": "typescript config with all other packages as deps",
   "version": "0.1.0",
   "private": true,
+  "description": "typescript config with all other packages as deps",
   "type": "module",
   "scripts": {
     "clean": "odt clean",

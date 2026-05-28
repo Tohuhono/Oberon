@@ -1,24 +1,16 @@
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
+
 import { fromPartial, test } from "@dev/vitest"
 import type { OberonPluginAdapter } from "@oberoncms/core"
-import {
-  NotImplementedError,
-  ResponseError,
-  type OberonPage,
-} from "@oberoncms/core"
-import {
-  createPluginTest,
-  createStorageAdapterFactory,
-} from "@oberoncms/testing"
+import { NotImplementedError, ResponseError, type OberonPage } from "@oberoncms/core"
+import { createPluginTest, createStorageAdapterFactory } from "@oberoncms/testing"
 import { z } from "zod"
+
 import { name as pluginName } from "../package.json" with { type: "json" }
 import { plugin as tailwindPlugin } from "./index"
 
-const rootDirectory = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../..",
-)
+const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..")
 
 const sqliteFile = resolve(rootDirectory, ".tmp/tailwind-plugin-unit-tests.db")
 
@@ -53,17 +45,12 @@ const tailwindStateSchema = z.object({
 type TailwindState = z.infer<typeof tailwindStateSchema>
 
 async function getState(adapter: Pick<OberonPluginAdapter, "getKV">) {
-  const parsed = tailwindStateSchema.safeParse(
-    await adapter.getKV(pluginName, "state"),
-  )
+  const parsed = tailwindStateSchema.safeParse(await adapter.getKV(pluginName, "state"))
 
   return parsed.success ? (parsed.data satisfies TailwindState) : null
 }
 
-async function getAsset(
-  adapter: Pick<OberonPluginAdapter, "getKV">,
-  hash: string,
-) {
+async function getAsset(adapter: Pick<OberonPluginAdapter, "getKV">, hash: string) {
   return await adapter.getKV(pluginName, `asset:${hash}`)
 }
 
@@ -128,9 +115,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       expect(state?.classes).toEqual(["md:grid", "text-red-500"])
       expect(state?.activeHash).toHaveLength(64)
-      await expect(getAsset(adapter, state!.activeHash!)).resolves.toContain(
-        ".text-red-500",
-      )
+      await expect(getAsset(adapter, state!.activeHash!)).resolves.toContain(".text-red-500")
 
       await expect(getStylesheets(adapter)).resolves.toEqual([
         `/cms/api/tailwind/${state!.activeHash}.css`,
@@ -139,9 +124,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))
         .GET?.(
-          new Request(
-            `https://oberon.invalid/cms/api/tailwind/${state!.activeHash}.css`,
-          ) as never,
+          new Request(`https://oberon.invalid/cms/api/tailwind/${state!.activeHash}.css`) as never,
         )
 
       expect(response?.status).toBe(200)
@@ -154,42 +137,30 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("prose dark:prose-invert lg:prose-lg p-1")
 
-      await expect(
-        plugin.adapter?.updatePageData?.(page),
-      ).resolves.toBeUndefined()
+      await expect(plugin.adapter?.updatePageData?.(page)).resolves.toBeUndefined()
 
       const state = await getState(adapter)
 
-      expect(state?.classes).toEqual([
-        "dark:prose-invert",
-        "lg:prose-lg",
-        "p-1",
-        "prose",
-      ])
+      expect(state?.classes).toEqual(["dark:prose-invert", "lg:prose-lg", "p-1", "prose"])
       expect(state?.activeHash).toHaveLength(64)
     },
   )
 
-  tailwindTest(
-    "reconciles missing assets during prebuild",
-    async ({ expect, adapter, plugin }) => {
-      await plugin.adapter?.updatePageData?.(createPage("underline"))
+  tailwindTest("reconciles missing assets during prebuild", async ({ expect, adapter, plugin }) => {
+    await plugin.adapter?.updatePageData?.(createPage("underline"))
 
-      await plugin.adapter?.prebuild?.()
+    await plugin.adapter?.prebuild?.()
 
-      const firstState = await getState(adapter)
+    const firstState = await getState(adapter)
 
-      await adapter.deleteKV(pluginName, `asset:${firstState!.activeHash}`)
+    await adapter.deleteKV(pluginName, `asset:${firstState!.activeHash}`)
 
-      await expect(getStylesheets(adapter)).resolves.toEqual([])
+    await expect(getStylesheets(adapter)).resolves.toEqual([])
 
-      await plugin.adapter?.prebuild?.()
+    await plugin.adapter?.prebuild?.()
 
-      await expect(
-        getAsset(adapter, firstState!.activeHash!),
-      ).resolves.toContain(".underline")
-    },
-  )
+    await expect(getAsset(adapter, firstState!.activeHash!)).resolves.toContain(".underline")
+  })
 
   tailwindTest(
     "degrades when no dynamic asset is available",
@@ -213,14 +184,10 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
           getAllPages: async () => [{ key: "/" }],
           getPageData: async () => createPage("underline").data,
           getKV: async () => {
-            throw new NotImplementedError(
-              "This action is not available in the demo",
-            )
+            throw new NotImplementedError("This action is not available in the demo")
           },
           putKV: async () => {
-            throw new NotImplementedError(
-              "This action is not available in the demo",
-            )
+            throw new NotImplementedError("This action is not available in the demo")
           },
         }),
       )
@@ -246,21 +213,15 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
           getAllPages: async () => [{ key: "/" }],
           getPageData: async () => createPage("underline").data,
           getKV: async () => {
-            throw new NotImplementedError(
-              "This action is not available in the demo",
-            )
+            throw new NotImplementedError("This action is not available in the demo")
           },
           putKV: async () => {
-            throw new NotImplementedError(
-              "This action is not available in the demo",
-            )
+            throw new NotImplementedError("This action is not available in the demo")
           },
         }),
       )
 
-      await expect(
-        plugin.adapter?.updatePageData?.(createPage("underline")),
-      ).rejects.toThrow(
+      await expect(plugin.adapter?.updatePageData?.(createPage("underline"))).rejects.toThrow(
         new NotImplementedError("This action is not available in the demo"),
       )
 
@@ -287,9 +248,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
         }),
       )
 
-      await expect(
-        plugin.adapter?.updatePageData?.(createPage("underline")),
-      ).rejects.toThrow(
+      await expect(plugin.adapter?.updatePageData?.(createPage("underline"))).rejects.toThrow(
         new ResponseError("Failed to update Tailwind styles: boom"),
       )
     },

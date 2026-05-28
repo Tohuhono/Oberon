@@ -1,5 +1,6 @@
 import { Buffer } from "node:buffer"
 import type { Readable } from "node:stream"
+
 import { copy, del, head, list, put } from "@vercel/blob"
 import { DriveDirectory, DriveFile } from "flydrive"
 import type {
@@ -27,10 +28,7 @@ export class VercelBlobDriver implements DriverContract {
    * Return the signed URL for direct uploads. Throw exception
    * when the driver does not support generating upload URLs.
    */
-  async getSignedUploadUrl(
-    _key: string,
-    _options?: SignedURLOptions,
-  ): Promise<string> {
+  async getSignedUploadUrl(_key: string, _options?: SignedURLOptions): Promise<string> {
     throw new Error("Method not implemented.")
   }
 
@@ -101,9 +99,7 @@ export class VercelBlobDriver implements DriverContract {
     try {
       // wrapping this code in a try/catch as this function is used in the browser and Vite doesn't define the process.env.
       // As this varaible is NOT used in production, it will always default to production endpoint
-      baseUrl =
-        process.env.VERCEL_BLOB_API_URL ||
-        process.env.NEXT_PUBLIC_VERCEL_BLOB_API_URL
+      baseUrl = process.env.VERCEL_BLOB_API_URL || process.env.NEXT_PUBLIC_VERCEL_BLOB_API_URL
     } catch {
       // noop
     }
@@ -114,10 +110,7 @@ export class VercelBlobDriver implements DriverContract {
    * Return the signed URL to serve a private file. Throw exception
    * when the driver does not support generating URLs.
    */
-  async getSignedUrl(
-    _key: string,
-    _options?: SignedURLOptions,
-  ): Promise<string> {
+  async getSignedUrl(_key: string, _options?: SignedURLOptions): Promise<string> {
     throw new Error("Method not implemented.")
   }
 
@@ -126,10 +119,7 @@ export class VercelBlobDriver implements DriverContract {
    * when the driver does not support the concept of
    * visibility.
    */
-  async setVisibility(
-    _key: string,
-    _visibility: ObjectVisibility,
-  ): Promise<void> {
+  async setVisibility(_key: string, _visibility: ObjectVisibility): Promise<void> {
     throw new Error("Method not implemented.")
   }
 
@@ -146,11 +136,7 @@ export class VercelBlobDriver implements DriverContract {
    * Create a new file or update an existing file. The contents
    * will be a Readable stream.
    */
-  async putStream(
-    _key: string,
-    _contents: Readable,
-    _options?: WriteOptions,
-  ): Promise<void> {
+  async putStream(_key: string, _contents: Readable, _options?: WriteOptions): Promise<void> {
     throw new Error("Method not implemented.")
   }
 
@@ -168,11 +154,7 @@ export class VercelBlobDriver implements DriverContract {
    * has the same visibility as the existing file. It might require
    * manually fetching the visibility of the "source" file.
    */
-  async move(
-    _source: string,
-    _destination: string,
-    _options?: WriteOptions,
-  ): Promise<void> {
+  async move(_source: string, _destination: string, _options?: WriteOptions): Promise<void> {
     throw new Error("Method not implemented.")
   }
 
@@ -214,21 +196,15 @@ export class VercelBlobDriver implements DriverContract {
     })
 
     if (mode === "expanded") {
-      const files = blobList.blobs.map(
-        (blob) => new DriveFile(blob.pathname, this),
-      )
+      const files = blobList.blobs.map((blob) => new DriveFile(blob.pathname, this))
       return {
         paginationToken: blobList.cursor,
         objects: files,
       }
     } else {
-      const files = blobList.blobs.map(
-        (blob) => new DriveFile(blob.pathname, this),
-      )
+      const files = blobList.blobs.map((blob) => new DriveFile(blob.pathname, this))
       const folders =
-        "folders" in blobList
-          ? blobList.folders.map((folder) => new DriveDirectory(folder))
-          : []
+        "folders" in blobList ? blobList.folders.map((folder) => new DriveDirectory(folder)) : []
       return {
         paginationToken: blobList.cursor,
         objects: [...files, ...folders],

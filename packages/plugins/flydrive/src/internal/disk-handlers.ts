@@ -1,8 +1,10 @@
 import { randomUUID } from "crypto"
 import path from "path"
-import { NextRequest } from "next/server"
-import type { Disk } from "flydrive"
+
 import { OberonAdapter, OberonError, ResponseError } from "@oberoncms/core"
+import type { Disk } from "flydrive"
+import { NextRequest } from "next/server"
+
 import { getImageSize } from "./get-image-size"
 
 export function initRouteHandler(

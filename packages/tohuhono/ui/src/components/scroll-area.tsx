@@ -1,18 +1,10 @@
 "use client"
 
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area"
-
 import { cn, type CN } from "@tohuhono/utils"
 
-const ScrollArea = ({
-  className,
-  children,
-  ...props
-}: CN<ScrollAreaPrimitive.Root.Props>) => (
-  <ScrollAreaPrimitive.Root
-    className={cn("relative overflow-hidden", className)}
-    {...props}
-  >
+const ScrollArea = ({ className, children, ...props }: CN<ScrollAreaPrimitive.Root.Props>) => (
+  <ScrollAreaPrimitive.Root className={cn("relative overflow-hidden", className)} {...props}>
     <ScrollAreaPrimitive.Viewport className="size-full rounded-[inherit]">
       {children}
     </ScrollAreaPrimitive.Viewport>
@@ -30,10 +22,8 @@ const ScrollBar = ({
     orientation={orientation}
     className={cn(
       "flex touch-none transition-colors select-none",
-      orientation === "vertical" &&
-        "h-full w-2.5 border-l border-l-transparent p-px",
-      orientation === "horizontal" &&
-        "h-2.5 flex-col border-t border-t-transparent p-px",
+      orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent p-px",
+      orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent p-px",
       className,
     )}
     {...props}

@@ -1,19 +1,16 @@
 "use client"
 
 import { ClipboardCopyIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
-import { useState, ChangeEvent, Fragment } from "react"
 import { cn } from "@tohuhono/utils"
 import { useMode } from "@tohuhono/utils/use-mode"
+import { useState, ChangeEvent, Fragment } from "react"
+
+import { Button } from "../button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../dropdown-menu"
 import { Input } from "../input"
 import { Label } from "../label"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../dropdown-menu"
-import { Button } from "../button"
-import { ApplyTheme, copyToClipboard } from "./theme-editor"
 import { defaultTheme } from "./default-theme"
+import { ApplyTheme, copyToClipboard } from "./theme-editor"
 
 export const ThemeEditorMenu = ({ className }: { className?: string }) => {
   const [theme, setTheme] = useState(defaultTheme)
@@ -21,8 +18,7 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
   const [mode, setMode] = useMode()
 
   const onInputChange =
-    (id: string, mode: "light" | "dark") =>
-    (event: ChangeEvent<HTMLInputElement>) =>
+    (id: string, mode: "light" | "dark") => (event: ChangeEvent<HTMLInputElement>) =>
       setTheme(
         theme.map((t) => ({
           ...t,

@@ -1,7 +1,3 @@
-import { z } from "zod"
-import { Route } from "next"
-import type { ReactNode } from "react"
-import type { BetterAuthOptions } from "better-auth"
 import type {
   ComponentConfig,
   Config,
@@ -11,7 +7,11 @@ import type {
   SlotComponent,
 } from "@puckeditor/core"
 import type { StreamResponseChunk } from "@tohuhono/utils"
+import type { BetterAuthOptions } from "better-auth"
+import { Route } from "next"
 import type { NextRequest } from "next/server"
+import type { ReactNode } from "react"
+import { z } from "zod"
 
 export class OberonError extends Error {}
 
@@ -25,9 +25,9 @@ type Transforms = Array<(props: any) => any>
 
 export type PageData = Data
 
-export type OberonConfig<
-  Components extends DefaultComponents = DefaultComponents,
-> = Config<{ components: Components }> & {
+export type OberonConfig<Components extends DefaultComponents = DefaultComponents> = Config<{
+  components: Components
+}> & {
   version: 1
   components: Record<
     string,
@@ -37,11 +37,10 @@ export type OberonConfig<
   >
 }
 
-export type OberonComponent<
-  Props extends DefaultComponentProps = DefaultComponentProps,
-> = ComponentConfig<{
-  props: Props
-}>
+export type OberonComponent<Props extends DefaultComponentProps = DefaultComponentProps> =
+  ComponentConfig<{
+    props: Props
+  }>
 
 type OberonFieldMap = Record<string, { type: string }>
 
@@ -67,13 +66,9 @@ type InferOberonOptionalFieldKeys<FieldMap extends OberonFieldMap> = Exclude<
 >
 
 type InferOberonFieldProps<FieldMap extends OberonFieldMap> = {
-  [Key in InferOberonRequiredFieldKeys<FieldMap>]: InferOberonFieldProp<
-    FieldMap[Key]
-  >
+  [Key in InferOberonRequiredFieldKeys<FieldMap>]: InferOberonFieldProp<FieldMap[Key]>
 } & {
-  [Key in InferOberonOptionalFieldKeys<FieldMap>]?: InferOberonFieldProp<
-    FieldMap[Key]
-  >
+  [Key in InferOberonOptionalFieldKeys<FieldMap>]?: InferOberonFieldProp<FieldMap[Key]>
 }
 
 type DefineOberonComponentConfig<
@@ -84,10 +79,7 @@ type DefineOberonComponentConfig<
 }
 
 export function defineOberonComponent<const FieldMap extends OberonFieldMap>(
-  config: DefineOberonComponentConfig<
-    InferOberonFieldProps<FieldMap>,
-    FieldMap
-  >,
+  config: DefineOberonComponentConfig<InferOberonFieldProps<FieldMap>, FieldMap>,
 ): OberonComponent<InferOberonFieldProps<FieldMap>>
 
 export function defineOberonComponent<
@@ -253,10 +245,7 @@ export type MigrationResult = {
 
 export type TransformVersions = Record<string, number>
 
-export type PluginVersion = Pick<
-  ReturnType<OberonPlugin>,
-  "name" | "version" | "disabled"
->
+export type PluginVersion = Pick<ReturnType<OberonPlugin>, "name" | "version" | "disabled">
 
 export type OberonSiteConfig = MaybeOptimistic<{
   version: string
@@ -316,11 +305,7 @@ export type OberonBaseAdapter = {
 }
 
 export type OberonSendAdapter = {
-  sendVerificationRequest: (props: {
-    email: string
-    token: string
-    url: string
-  }) => Promise<void>
+  sendVerificationRequest: (props: { email: string; token: string; url: string }) => Promise<void>
 }
 
 export type OberonInitAdapter = {
@@ -357,13 +342,8 @@ export type OberonAdapter = {
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
   deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
-  deleteUser: (
-    data: z.infer<typeof DeleteUserSchema>,
-  ) => Promise<Pick<OberonUser, "id"> | null>
-  can: (
-    action: AdapterActionGroup,
-    permission?: AdapterPermission,
-  ) => Promise<boolean>
+  deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<Pick<OberonUser, "id"> | null>
+  can: (action: AdapterActionGroup, permission?: AdapterPermission) => Promise<boolean>
   changeRole: (
     data: z.infer<typeof ChangeRoleSchema>,
   ) => Promise<Pick<OberonUser, "role" | "id"> | null>
@@ -373,12 +353,8 @@ export type OberonAdapter = {
   getAllUsers: () => Promise<OberonUser[]>
   getConfig: () => Promise<OberonSiteConfig>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
-  migrateData: () => Promise<
-    StreamResponseChunk<TransformResult | MigrationResult>
-  >
-  publishPageData: (
-    data: z.infer<typeof PublishPageSchema>,
-  ) => Promise<{ message: string }>
+  migrateData: () => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
+  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<{ message: string }>
   signOut: () => Promise<void>
   signIn: (data: { email: string }) => Promise<void>
 }
@@ -407,18 +383,13 @@ export type OberonResponse<T = unknown> = Promise<
 export type OberonServerActions = {
   addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
-  addUser: (
-    data: z.infer<typeof AddUserSchema>,
-  ) => OberonResponse<OberonUser | null>
+  addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse
   deleteImage: (key: OberonImage["key"]) => OberonResponse
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
   ) => OberonResponse<Pick<OberonUser, "id"> | null>
-  can: (
-    action: AdapterActionGroup,
-    permission?: AdapterPermission,
-  ) => OberonResponse<boolean>
+  can: (action: AdapterActionGroup, permission?: AdapterPermission) => OberonResponse<boolean>
   changeRole: (
     data: z.infer<typeof ChangeRoleSchema>,
   ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
@@ -428,9 +399,7 @@ export type OberonServerActions = {
   getAllUsers: () => OberonResponse<OberonUser[]>
   getConfig: () => OberonResponse<OberonSiteConfig>
   getPageData: (key: OberonPageMeta["key"]) => OberonResponse<Data | null>
-  migrateData: () => OberonResponse<
-    StreamResponseChunk<TransformResult | MigrationResult>
-  >
+  migrateData: () => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse
   signIn: (data: { email: string }) => OberonResponse
   signOut: () => OberonResponse

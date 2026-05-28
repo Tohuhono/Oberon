@@ -1,9 +1,8 @@
 "use client"
 
-import { type HTMLAttributes } from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-
 import { cn, type CN } from "@tohuhono/utils"
+import { type HTMLAttributes } from "react"
 
 const Dialog = DialogPrimitive.Root
 
@@ -13,10 +12,7 @@ const DialogPortal = DialogPrimitive.Portal
 
 const DialogClose = DialogPrimitive.Close
 
-const DialogOverlay = ({
-  className,
-  ...props
-}: CN<DialogPrimitive.Backdrop.Props>) => (
+const DialogOverlay = ({ className, ...props }: CN<DialogPrimitive.Backdrop.Props>) => (
   <DialogPrimitive.Backdrop
     className={cn(
       `
@@ -30,11 +26,7 @@ const DialogOverlay = ({
   />
 )
 
-const DialogContent = ({
-  className,
-  children,
-  ...props
-}: CN<DialogPrimitive.Popup.Props>) => (
+const DialogContent = ({ className, children, ...props }: CN<DialogPrimitive.Popup.Props>) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Popup
@@ -81,10 +73,7 @@ const DialogContent = ({
   </DialogPortal>
 )
 
-const DialogHeader = ({
-  className,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+const DialogHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       `
@@ -97,10 +86,7 @@ const DialogHeader = ({
   />
 )
 
-const DialogFooter = ({
-  className,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+const DialogFooter = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       `
@@ -113,23 +99,14 @@ const DialogFooter = ({
   />
 )
 
-const DialogTitle = ({
-  className,
-  ...props
-}: CN<DialogPrimitive.Title.Props>) => (
+const DialogTitle = ({ className, ...props }: CN<DialogPrimitive.Title.Props>) => (
   <DialogPrimitive.Title
-    className={cn(
-      "text-lg leading-none font-semibold tracking-tight",
-      className,
-    )}
+    className={cn("text-lg leading-none font-semibold tracking-tight", className)}
     {...props}
   />
 )
 
-const DialogDescription = ({
-  className,
-  ...props
-}: CN<DialogPrimitive.Description.Props>) => (
+const DialogDescription = ({ className, ...props }: CN<DialogPrimitive.Description.Props>) => (
   <DialogPrimitive.Description
     className={cn("text-sm text-muted-foreground", className)}
     {...props}

@@ -43,18 +43,14 @@ function githubHeaders(): Record<string, string> {
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url, { headers: githubHeaders() })
   if (!response.ok) {
-    throw new Error(
-      `GitHub API error: ${response.status} ${response.statusText}`,
-    )
+    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`)
   }
   return response.json() satisfies Promise<T>
 }
 
 async function fetchDisplayName(login: string): Promise<string> {
   try {
-    const data = await fetchJson<{ name?: string }>(
-      `https://api.github.com/users/${login}`,
-    )
+    const data = await fetchJson<{ name?: string }>(`https://api.github.com/users/${login}`)
     return data.name || login
   } catch {
     return login
@@ -75,9 +71,7 @@ async function fetchContributors(): Promise<Contributor[]> {
     page++
   }
 
-  const users = raw.filter(
-    (c) => c.type === "User" && !c.login.includes("[bot]"),
-  )
+  const users = raw.filter((c) => c.type === "User" && !c.login.includes("[bot]"))
 
   return Promise.all(
     users.map(async (c) => ({
@@ -124,15 +118,12 @@ if (headingIndex === -1) {
 const updated = readme.slice(0, headingIndex) + HEADING + "\n\n" + table
 writeFileSync(README_PATH, updated)
 
-console.log(
-  `Updated contributors: ${contributors.map((c) => c.login).join(", ")}`,
-)
+console.log(`Updated contributors: ${contributors.map((c) => c.login).join(", ")}`)
 
 execSync("git add README.md", { stdio: "inherit" })
 
 const hasChanges =
-  execSync("git diff --staged --quiet || echo changed").toString().trim() ===
-  "changed"
+  execSync("git diff --staged --quiet || echo changed").toString().trim() === "changed"
 
 if (hasChanges) {
   execSync(

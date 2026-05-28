@@ -1,8 +1,9 @@
 import { exit } from "process"
+
 import prompts from "prompts"
-import { z } from "zod"
 import validateName from "validate-npm-package-name"
-import { packageManagerChoices, type PackageManager } from "./install-packages"
+import { z } from "zod"
+
 import {
   databaseIds,
   databasePlugins,
@@ -11,6 +12,7 @@ import {
   type DatabasePlugin,
   type SendPlugin,
 } from "./install-adapter"
+import { packageManagerChoices, type PackageManager } from "./install-packages"
 
 export const recipes = ["nextjs"] as const
 export const recipeChoices = [{ title: "Next js", value: "nextjs" }]
@@ -76,8 +78,7 @@ export async function promptOptions(
       {
         type: "text" as const,
         name: "email",
-        message:
-          "Master email - this user has superadmin priviledges for the cms",
+        message: "Master email - this user has superadmin priviledges for the cms",
         initial: args.email,
         validate: (value: string) => {
           const { success, error } = z.string().email().safeParse(value)

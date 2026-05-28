@@ -1,22 +1,17 @@
 "use client"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@tohuhono/ui/form"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Input } from "@tohuhono/ui/input"
 import { Button } from "@tohuhono/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@tohuhono/ui/form"
+import { Input } from "@tohuhono/ui/input"
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@tohuhono/ui/input-otp"
+import { toast } from "@tohuhono/ui/toast"
+import { cn } from "@tohuhono/utils"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { useDebouncedCallback } from "use-debounce"
-import { cn } from "@tohuhono/utils"
-import { toast } from "@tohuhono/ui/toast"
+import { z } from "zod"
+
 import { useOberonActions } from "../hooks/use-oberon"
 
 const LoginSchema = z.object({
@@ -49,10 +44,7 @@ export function Login({
   const [submitting, setSubmitting] = useState(false)
   const [sent, setSent] = useState(!!email && !!token)
 
-  const debouncedSetSending = useDebouncedCallback(
-    (loading: boolean) => setSending(loading),
-    3000,
-  )
+  const debouncedSetSending = useDebouncedCallback((loading: boolean) => setSending(loading), 3000)
 
   const sendOnCLick = form.handleSubmit(async ({ email }) => {
     setSending(true)
@@ -108,9 +100,7 @@ export function Login({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {form.formState.errors.email?.message ?? "Email adress"}
-                </FormLabel>
+                <FormLabel>{form.formState.errors.email?.message ?? "Email adress"}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -122,9 +112,7 @@ export function Login({
             control={form.control}
             name="token"
             render={({ field }) => (
-              <FormItem
-                className={cn(sent ? "visible animate-fade-in" : "hidden")}
-              >
+              <FormItem className={cn(sent ? "visible animate-fade-in" : "hidden")}>
                 <FormControl>
                   <InputOTP maxLength={6} {...field}>
                     <InputOTPGroup>

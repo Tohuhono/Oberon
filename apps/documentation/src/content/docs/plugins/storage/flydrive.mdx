@@ -4,9 +4,8 @@ import { Callout } from "nextra/components"
 # plugin-flydrive
 
 A plugin that provides an Image storage and a component, pre-configured using
-[flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction
-layer that allows you to easily interact with files systems of different cloud
-storage providers.
+[flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction layer that allows you
+to easily interact with files systems of different cloud storage providers.
 
 ## Installation
 
@@ -16,12 +15,12 @@ npm install @oberoncms/plugin-flydrive flydrive
 
 ## Setup
 
-Use `getFlyDrivePlugin` function to generate the plugin, it takes a driver as an
-argument, the driver should be an instance of the flydrive any flydrive driver
+Use `getFlyDrivePlugin` function to generate the plugin, it takes a driver as an argument, the
+driver should be an instance of the flydrive any flydrive driver
 
 <Callout type="info" emoji="ℹ️">
-  Make sure to follow the [flydrive
-  documentation](https://flydrive.dev/docs/introduction) instructions.
+  Make sure to follow the [flydrive documentation](https://flydrive.dev/docs/introduction)
+  instructions.
 </Callout>
 
 ```typescript
@@ -127,8 +126,7 @@ That's it! you can now use the Image component in your editor!
 To use the Vercel Blob storage, you need to install the `@vercel/blob` package
 
 <Callout type="info" emoji="ℹ️">
-  Make sure to follow the [Vercel
-  Blob](https://vercel.com/docs/storage/vercel-blob#getting-started)
+  Make sure to follow the [Vercel Blob](https://vercel.com/docs/storage/vercel-blob#getting-started)
   instructions.
 </Callout>
 
@@ -147,5 +145,4 @@ export const { adapter, handler } = initOberon({
 })
 ```
 
-for API and Editor configuration, follow the same steps as shown in the S3
-example.
+for API and Editor configuration, follow the same steps as shown in the S3 example.

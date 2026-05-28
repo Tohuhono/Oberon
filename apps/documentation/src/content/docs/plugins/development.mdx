@@ -2,11 +2,10 @@ import { Callout } from "nextra/components"
 
 # Development Plugin
 
-A plugin that provides local development defaults for database and email
-verification flows.
+A plugin that provides local development defaults for database and email verification flows.
 
-The development plugin helps you run OberonCMS quickly without provisioning
-external infrastructure during local development.
+The development plugin helps you run OberonCMS quickly without provisioning external infrastructure
+during local development.
 
 ## Installation
 
@@ -34,8 +33,7 @@ export const { adapter, handler } = initOberon({
 When enabled, the plugin can provide:
 
 - A local development database adapter
-- A development email sender that logs verification details instead of sending
-  real emails
+- A development email sender that logs verification details instead of sending real emails
 - Database migrations during prebuild
 
 ## Environment-based behavior
@@ -43,8 +41,8 @@ When enabled, the plugin can provide:
 The plugin auto-disables itself when both development feature flags are off.
 
 <Callout type="info">
-  In production, you should use real database and send plugins (for example,
-  Turso/PostgreSQL plus a custom send implementation).
+  In production, you should use real database and send plugins (for example, Turso/PostgreSQL plus a
+  custom send implementation).
 </Callout>
 
 ## Typical workflow
@@ -56,8 +54,8 @@ The plugin auto-disables itself when both development feature flags are off.
 
 ## Verification emails in development
 
-For local development, verification requests are logged instead of sent by
-email. This allows quick sign-in testing without SMTP setup.
+For local development, verification requests are logged instead of sent by email. This allows quick
+sign-in testing without SMTP setup.
 
 ## Notes
 

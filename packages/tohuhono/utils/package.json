@@ -1,26 +1,22 @@
 {
   "name": "@tohuhono/utils",
   "version": "0.16.0",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
   "description": "A collection of utility functions used by @tohuhono and @oberoncms packages",
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/tohuhono/utils"
   },
+  "files": [
+    "dist",
+    "src",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "type": "module",
-  "scripts": {
-    "build": "vite build",
-    "clean": "odt clean",
-    "dev": "vite build --watch",
-    "wait": "wait-on ./dist/version && echo done",
-    "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
-    "test:unit": "vitest run",
-    "test:watch": "vitest",
-    "tsc": "tsc --pretty"
-  },
   "exports": {
     ".": "./dist/index.js",
     "./cn": "./dist/cn.js",
@@ -37,22 +33,22 @@
       "default": "./dist/wait-for-server.js"
     }
   },
-  "files": [
-    "dist",
-    "src",
-    "CHANGELOG*",
-    "README*",
-    "LICENSE*"
-  ],
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "build": "vite build",
+    "clean": "odt clean",
+    "dev": "vite build --watch",
+    "wait": "wait-on ./dist/version && echo done",
+    "wait:clean": "rimraf ./dist/version",
+    "lint": "eslint .",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "tsc": "tsc --pretty"
+  },
   "dependencies": {
     "tailwind-merge": "^3.4.1"
-  },
-  "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@dev/eslint": "workspace:*",
@@ -66,5 +62,9 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

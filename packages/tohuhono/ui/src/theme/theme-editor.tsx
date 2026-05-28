@@ -5,14 +5,10 @@ import { Theme } from "./default-theme"
 export const ApplyTheme = ({ theme }: { theme: Theme }) => (
   <style>{`
     :root {
-      ${theme
-        .map(({ id, light }) => (light ? `  --${id}: ${light};` : ""))
-        .join("\n")}
+      ${theme.map(({ id, light }) => (light ? `  --${id}: ${light};` : "")).join("\n")}
     }
     .dark {
-      ${theme
-        .map(({ id, dark }) => (dark ? `  --${id}: ${dark};` : ""))
-        .join("\n")}
+      ${theme.map(({ id, dark }) => (dark ? `  --${id}: ${dark};` : "")).join("\n")}
     }
   `}</style>
 )
@@ -30,14 +26,10 @@ export const copyToClipboard = (theme: Theme) =>
       --radius: 0.5rem;
   
       /* light */
-      ${theme
-        .map(({ id, light }) => (light ? `  --${id}: ${light};` : ""))
-        .join("\n")}
+      ${theme.map(({ id, light }) => (light ? `  --${id}: ${light};` : "")).join("\n")}
     }
     .dark {
-      ${theme
-        .map(({ id, dark }) => (dark ? `  --${id}: ${dark};` : ""))
-        .join("\n")}
+      ${theme.map(({ id, dark }) => (dark ? `  --${id}: ${dark};` : "")).join("\n")}
     }
   }
 

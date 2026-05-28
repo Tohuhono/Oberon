@@ -1,21 +1,23 @@
 {
   "name": "@dev/eslint",
-  "private": true,
   "version": "0.2.0",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
+  "private": true,
   "description": "Shared ESLint flat configs for @tohuhono and @oberoncms packages",
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
     "directory": "dev/eslint"
   },
+  "files": [
+    "*.mjs",
+    "*.d.ts",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
   "type": "module",
-  "scripts": {
-    "clean": "odt clean",
-    "lint": "eslint .",
-    "tsc": "tsc --pretty"
-  },
   "exports": {
     "./base": {
       "types": "./base.d.ts",
@@ -30,13 +32,11 @@
       "default": "./next.mjs"
     }
   },
-  "files": [
-    "*.mjs",
-    "*.d.ts",
-    "CHANGELOG*",
-    "README*",
-    "LICENSE*"
-  ],
+  "scripts": {
+    "clean": "odt clean",
+    "lint": "eslint .",
+    "tsc": "tsc --pretty"
+  },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",

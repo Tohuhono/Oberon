@@ -1,12 +1,7 @@
+import { cn } from "@tohuhono/utils"
 import { type ComponentPropsWithRef } from "react"
 
-import { cn } from "@tohuhono/utils"
-
-const Input = ({
-  className,
-  type,
-  ...props
-}: ComponentPropsWithRef<"input">) => {
+const Input = ({ className, type, ...props }: ComponentPropsWithRef<"input">) => {
   return (
     <input
       type={type}

@@ -1,8 +1,8 @@
 ---
 name: github-pr-review
 description:
-  Use when reviewing GitHub pull requests with gh CLI - creates pending reviews
-  with code suggestions, batches comments, and chooses appropriate event types
+  Use when reviewing GitHub pull requests with gh CLI - creates pending reviews with code
+  suggestions, batches comments, and chooses appropriate event types
   (COMMENT/APPROVE/REQUEST_CHANGES)
 ---
 
@@ -10,9 +10,8 @@ description:
 
 ## Overview
 
-Workflow for reviewing GitHub pull requests using `gh api` to create pending
-reviews with code suggestions. **Always use pending reviews to batch comments,
-even under time pressure.**
+Workflow for reviewing GitHub pull requests using `gh api` to create pending reviews with code
+suggestions. **Always use pending reviews to batch comments, even under time pressure.**
 
 ## When to Use
 
@@ -84,8 +83,7 @@ gh repo view --json owner,name
 - `commit_id`: Latest commit SHA from the PR
 - `comments[][path]`: File path relative to repo root
 - `comments[][line]`: End line number (use `-F` for numbers)
-- `comments[][side]`: Use `RIGHT` for added/modified lines (most common), `LEFT`
-  for deleted lines
+- `comments[][side]`: Use `RIGHT` for added/modified lines (most common), `LEFT` for deleted lines
 - `comments[][body]`: Comment text with optional ```suggestion block
 
 ### Optional Parameters

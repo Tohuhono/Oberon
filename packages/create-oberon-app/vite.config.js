@@ -2,6 +2,7 @@
 
 import { initConfig } from "@dev/vite"
 import { defineConfig } from "vite"
+
 import { generateTemplates } from "./scripts/generate-templates"
 
 const base = initConfig()

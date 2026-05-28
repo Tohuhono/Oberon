@@ -1,10 +1,8 @@
 # @oberoncms/plugin-flydrive
 
-A plugin that provides an Image component for
-[OberonCMS](https://github.com/Tohuhono/Oberon) it's pre-configured to using
-[flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction
-layer that allows you to easily interact with files systems of different cloud
-storage providers.
+A plugin that provides an Image component for [OberonCMS](https://github.com/Tohuhono/Oberon) it's
+pre-configured to using [flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction
+layer that allows you to easily interact with files systems of different cloud storage providers.
 
 ## Table of Contents
 
@@ -125,5 +123,5 @@ That's it! you can now use the Image component in your editor!
 
 ## Want to discuss this plugin?
 
-contact me on Discord [@sudoahmed](https://discord.com/users/793772577595719701)
-GitHub [@ahmedrowaihi](https://github.com/ahmedrowaihi)
+contact me on Discord [@sudoahmed](https://discord.com/users/793772577595719701) GitHub
+[@ahmedrowaihi](https://github.com/ahmedrowaihi)

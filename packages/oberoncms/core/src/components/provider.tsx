@@ -1,12 +1,9 @@
 "use client"
 
-import { createContext, useMemo, type PropsWithChildren } from "react"
 import { Toaster, toast } from "@tohuhono/ui/toast"
-import type {
-  OberonClientContext,
-  OberonResponse,
-  OberonServerActions,
-} from "../lib/dtd"
+import { createContext, useMemo, type PropsWithChildren } from "react"
+
+import type { OberonClientContext, OberonResponse, OberonServerActions } from "../lib/dtd"
 
 export const ClientContext = createContext<OberonClientContext | null>(null)
 
@@ -56,9 +53,7 @@ function unwrapServerAction<TProps extends unknown[], TResult>(
     }
 
     if (response?.status === "error") {
-      throw new Error(
-        response.message || `${String(key)}: An unknown error has occured`,
-      )
+      throw new Error(response.message || `${String(key)}: An unknown error has occured`)
     }
 
     throw new Error(`${String(key)}: Invalid action response`)
@@ -83,20 +78,14 @@ export const OberonClientProvider = ({
       deleteUser: unwrapServerAction("deleteUser", serverActions.deleteUser),
       can: unwrapServerAction("can", serverActions.can),
       changeRole: unwrapServerAction("changeRole", serverActions.changeRole),
-      getAllImages: unwrapServerAction(
-        "getAllImages",
-        serverActions.getAllImages,
-      ),
+      getAllImages: unwrapServerAction("getAllImages", serverActions.getAllImages),
       getAllPages: unwrapServerAction("getAllPages", serverActions.getAllPages),
       getAllPaths: unwrapServerAction("getAllPaths", serverActions.getAllPaths),
       getAllUsers: unwrapServerAction("getAllUsers", serverActions.getAllUsers),
       getConfig: unwrapServerAction("getConfig", serverActions.getConfig),
       getPageData: unwrapServerAction("getPageData", serverActions.getPageData),
       migrateData: unwrapServerAction("migrateData", serverActions.migrateData),
-      publishPageData: unwrapServerAction(
-        "publishPageData",
-        serverActions.publishPageData,
-      ),
+      publishPageData: unwrapServerAction("publishPageData", serverActions.publishPageData),
       signIn: unwrapServerAction("signIn", serverActions.signIn),
       signOut: unwrapServerAction("signOut", serverActions.signOut),
     }

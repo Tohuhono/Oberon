@@ -1,25 +1,24 @@
 {
   "name": "@oberoncms/sqlite",
   "version": "0.8.1",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
   "description": "A Sqlite libsql drizzle database adapter for OberonCMS",
   "keywords": [
+    "adapter",
+    "cms",
+    "drizzle",
+    "nextjs",
     "oberon",
     "oberoncms",
-    "cms",
-    "nextjs",
-    "drizzle",
-    "react",
-    "adapter",
-    "plugin"
+    "plugin",
+    "react"
   ],
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/oberoncms/sqlite"
   },
-  "type": "module",
   "files": [
     "dist",
     "src",
@@ -27,6 +26,7 @@
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "exports": {
     "./adapter": {
       "types": "./dist/adapter.d.ts",
@@ -36,6 +36,9 @@
       "types": "./dist/schema.d.ts",
       "default": "./dist/schema.js"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "vite build",
@@ -48,9 +51,6 @@
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "@libsql/client": "^0.17.0",
     "@libsql/core": "^0.17.0",
@@ -59,10 +59,6 @@
     "drizzle-orm": "^0.45.1",
     "server-cli-only": "^0.3.2",
     "zod": "^4.3.6"
-  },
-  "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@dev/eslint": "workspace:*",
@@ -78,5 +74,9 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

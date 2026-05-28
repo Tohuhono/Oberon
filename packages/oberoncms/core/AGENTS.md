@@ -10,8 +10,8 @@ This package implements the OberonCMS adapter/plugin core used by apps.
 
 ## Data flow
 
-Next.js route handler → `handler` → `adapter` methods → plugin adapter
-implementations (storage/auth/send) → persistence.
+Next.js route handler → `handler` → `adapter` methods → plugin adapter implementations
+(storage/auth/send) → persistence.
 
 ## Core behaviors
 

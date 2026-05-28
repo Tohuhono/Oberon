@@ -1,5 +1,6 @@
-import { drizzle } from "drizzle-orm/libsql"
 import { createClient } from "@libsql/client/web"
+import { drizzle } from "drizzle-orm/libsql"
+
 import * as schema from "./schema"
 
 export const getClient = () => {

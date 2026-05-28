@@ -1,9 +1,6 @@
 import path from "node:path"
-import {
-  test as baseTest,
-  defineConfig as baseDefineConfig,
-  devices,
-} from "@playwright/test"
+
+import { test as baseTest, defineConfig as baseDefineConfig, devices } from "@playwright/test"
 
 type AuthSetupOptions = {
   serverLog: {
@@ -14,10 +11,7 @@ type AuthSetupOptions = {
 }
 
 const PLAYWRIGHT_AUTH_EMAIL = "test@tohuhono.com"
-const PLAYWRIGHT_AUTH_STATE_PATH = path.resolve(
-  process.cwd(),
-  ".playwright/storage-state.json",
-)
+const PLAYWRIGHT_AUTH_STATE_PATH = path.resolve(process.cwd(), ".playwright/storage-state.json")
 
 export const test = baseTest.extend<AuthSetupOptions>({
   serverLog: [
@@ -40,10 +34,7 @@ export const base = defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : 3,
   reporter: process.env.CI
-    ? [
-        ["github"],
-        ["html", { open: "never", outputFolder: ".playwright/report" }],
-      ]
+    ? [["github"], ["html", { open: "never", outputFolder: ".playwright/report" }]]
     : "line",
   outputDir: ".playwright/results",
   use: {

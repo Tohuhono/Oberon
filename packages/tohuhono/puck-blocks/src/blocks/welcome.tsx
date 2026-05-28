@@ -13,9 +13,7 @@ export const Welcome = {
         >
           <h1>Welcome to OberonCMS</h1>
           <p>
-            <Link href="/cms/edit">
-              Click here to login with your admin email to start editing
-            </Link>
+            <Link href="/cms/edit">Click here to login with your admin email to start editing</Link>
           </p>
         </div>
       </div>

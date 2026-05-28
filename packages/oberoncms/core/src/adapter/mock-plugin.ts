@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation"
+
 import {
   NotImplementedError,
   type OberonCanAdapter,

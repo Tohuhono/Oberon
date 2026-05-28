@@ -79,19 +79,12 @@ export const { adapter, handler } = initOberon({
 `
 }
 
-export async function installAdapter(
-  oberonPath: string,
-  pluginPath: string,
-  plugins: Plugin[],
-) {
+export async function installAdapter(oberonPath: string, pluginPath: string, plugins: Plugin[]) {
   for (const { packageName, type, id } of plugins) {
     if (packageName) {
       continue
     }
-    await copyFile(
-      path.join(pluginPath, type, `${id}.ts`),
-      path.join(oberonPath, `${type}.ts`),
-    )
+    await copyFile(path.join(pluginPath, type, `${id}.ts`), path.join(oberonPath, `${type}.ts`))
   }
 
   const adapter = createAdapter(plugins)

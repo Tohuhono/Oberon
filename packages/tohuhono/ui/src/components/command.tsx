@@ -1,19 +1,12 @@
 "use client"
 
-import {
-  type ComponentProps,
-  type ComponentPropsWithRef,
-  type ReactNode,
-} from "react"
-import { Command as CommandPrimitive } from "cmdk"
-
 import { cn } from "@tohuhono/utils"
+import { Command as CommandPrimitive } from "cmdk"
+import { type ComponentProps, type ComponentPropsWithRef, type ReactNode } from "react"
+
 import { Dialog, DialogContent } from "./dialog"
 
-const Command = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof CommandPrimitive>) => (
+const Command = ({ className, ...props }: ComponentPropsWithRef<typeof CommandPrimitive>) => (
   <CommandPrimitive
     className={cn(
       `
@@ -59,19 +52,8 @@ const CommandInput = ({
   ...props
 }: ComponentPropsWithRef<typeof CommandPrimitive.Input>) => (
   <div className="flex items-center border-b px-3" data-cmdk-input-wrapper="">
-    <svg
-      viewBox="0 0 24 24"
-      className="mr-2 size-4 shrink-0 opacity-50"
-      aria-hidden="true"
-    >
-      <circle
-        cx="11"
-        cy="11"
-        r="7"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
+    <svg viewBox="0 0 24 24" className="mr-2 size-4 shrink-0 opacity-50" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
       <path
         d="m20 20-3.5-3.5"
         fill="none"
@@ -104,9 +86,9 @@ const CommandList = ({
   />
 )
 
-const CommandEmpty = (
-  props: ComponentPropsWithRef<typeof CommandPrimitive.Empty>,
-) => <CommandPrimitive.Empty className="py-6 text-center text-sm" {...props} />
+const CommandEmpty = (props: ComponentPropsWithRef<typeof CommandPrimitive.Empty>) => (
+  <CommandPrimitive.Empty className="py-6 text-center text-sm" {...props} />
+)
 
 const CommandGroup = ({
   className,
@@ -130,10 +112,7 @@ const CommandSeparator = ({
   className,
   ...props
 }: ComponentPropsWithRef<typeof CommandPrimitive.Separator>) => (
-  <CommandPrimitive.Separator
-    className={cn("-mx-1 h-px bg-border", className)}
-    {...props}
-  />
+  <CommandPrimitive.Separator className={cn("-mx-1 h-px bg-border", className)} {...props} />
 )
 
 const CommandItem = ({
@@ -155,16 +134,10 @@ const CommandItem = ({
   />
 )
 
-const CommandShortcut = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"span">) => {
+const CommandShortcut = ({ className, ...props }: ComponentPropsWithRef<"span">) => {
   return (
     <span
-      className={cn(
-        "ml-auto text-xs tracking-widest text-muted-foreground",
-        className,
-      )}
+      className={cn("ml-auto text-xs tracking-widest text-muted-foreground", className)}
       {...props}
     />
   )

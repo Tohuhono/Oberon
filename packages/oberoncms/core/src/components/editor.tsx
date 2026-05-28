@@ -1,15 +1,15 @@
 "use client"
 
 import "@puckeditor/core/puck.css"
-
 import { Config, Data, Puck } from "@puckeditor/core"
 import { useMemo, useState, type PropsWithChildren } from "react"
 
 import { useLocalData } from "../hooks/use-local-data"
-import { INITIAL_DATA } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
-import { Preview, PreviewHeading, useViewPort } from "./editor/preview"
+import { INITIAL_DATA } from "../lib/dtd"
 import { Header } from "./editor/header"
+import { Preview, PreviewHeading, useViewPort } from "./editor/preview"
+import { PreviewIframe, type PreviewMode } from "./editor/preview-iframe"
 import {
   Drawer,
   DrawerItem,
@@ -18,7 +18,6 @@ import {
   SidebarTabs,
   useSidebarTab,
 } from "./editor/sidebar"
-import { PreviewIframe, type PreviewMode } from "./editor/preview-iframe"
 
 export function Editor({
   path,
@@ -44,10 +43,7 @@ export function Editor({
         children,
         document: iframeDocument,
       }: PropsWithChildren<{ document?: Document }>) => (
-        <PreviewIframe
-          iframeDocument={iframeDocument}
-          previewMode={previewMode}
-        >
+        <PreviewIframe iframeDocument={iframeDocument} previewMode={previewMode}>
           {children}
         </PreviewIframe>
       ),

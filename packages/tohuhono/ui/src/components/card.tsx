@@ -1,13 +1,9 @@
-import { type ComponentPropsWithRef } from "react"
-
 import { cn } from "@tohuhono/utils"
+import { type ComponentPropsWithRef } from "react"
 
 const Card = ({ className, ...props }: ComponentPropsWithRef<"div">) => (
   <div
-    className={cn(
-      "rounded-xl border bg-card text-card-foreground shadow-sm",
-      className,
-    )}
+    className={cn("rounded-xl border bg-card text-card-foreground shadow-sm", className)}
     {...props}
   />
 )
@@ -17,16 +13,10 @@ const CardHeader = ({ className, ...props }: ComponentPropsWithRef<"div">) => (
 )
 
 const CardTitle = ({ className, ...props }: ComponentPropsWithRef<"h3">) => (
-  <h3
-    className={cn("leading-none font-semibold tracking-tight", className)}
-    {...props}
-  />
+  <h3 className={cn("leading-none font-semibold tracking-tight", className)} {...props} />
 )
 
-const CardDescription = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"p">) => (
+const CardDescription = ({ className, ...props }: ComponentPropsWithRef<"p">) => (
   <p className={cn("text-sm text-muted-foreground", className)} {...props} />
 )
 

@@ -2,10 +2,9 @@
 
 ## Context
 
-AI in the role of a Senior developer code review of the Oberon CMS monorepo.
-This review identifies critical bugs, architectural flaws, missing edge cases,
-and security vulnerabilities that should be addressed before production
-deployment.
+AI in the role of a Senior developer code review of the Oberon CMS monorepo. This review identifies
+critical bugs, architectural flaws, missing edge cases, and security vulnerabilities that should be
+addressed before production deployment.
 
 ---
 
@@ -27,8 +26,8 @@ while (true) {
 }
 ```
 
-**Impact**: Image upload processing can hang indefinitely if image size cannot
-be determined. No timeout, no exit condition, no max retries.
+**Impact**: Image upload processing can hang indefinitely if image size cannot be determined. No
+timeout, no exit condition, no max retries.
 
 ---
 
@@ -47,9 +46,8 @@ while (true) {
 }
 ```
 
-**Impact**: Uploading a large image causes unbounded memory accumulation. A
-500MB image will attempt to load entirely into memory before determining size.
-**Guaranteed OOM crash** on large uploads.
+**Impact**: Uploading a large image causes unbounded memory accumulation. A 500MB image will attempt
+to load entirely into memory before determining size. **Guaranteed OOM crash** on large uploads.
 
 ---
 
@@ -58,10 +56,7 @@ while (true) {
 **File**: `packages/oberoncms/core/src/adapter/init-plugins.ts:41-42`
 
 ```typescript
-return (
-  permissions[role][action] === permission ||
-  permissions[role][action] === "write"
-)
+return permissions[role][action] === permission || permissions[role][action] === "write"
 ```
 
 **Issues**:
@@ -69,10 +64,10 @@ return (
 - No null checks on nested property access
 - If `action` doesn't exist in `permissions[role]`, returns `undefined`
 - Silent permission check failures
-- Type system allows `AdapterActionGroup` ("all" | "users" | "images" | "pages"
-  | "site") but permissions only defines 3 of 5
-- If plugin adds "users" action but permissions doesn't define it:
-  `undefined === "write"` = silent failure
+- Type system allows `AdapterActionGroup` ("all" | "users" | "images" | "pages" | "site") but
+  permissions only defines 3 of 5
+- If plugin adds "users" action but permissions doesn't define it: `undefined === "write"` = silent
+  failure
 
 **Example**: User thinks they have permission when they don't, or vice versa.
 
@@ -92,8 +87,8 @@ return (
 )
 ```
 
-**Problem**: If `user.role` is something other than "user"/"admin" (due to
-database corruption or bug), `permissions[unknownRole]` is `undefined`, causing
+**Problem**: If `user.role` is something other than "user"/"admin" (due to database corruption or
+bug), `permissions[unknownRole]` is `undefined`, causing
 `TypeError: Cannot read property of undefined`.
 
 **No validation** that user.role is in the allowed set.
@@ -137,8 +132,8 @@ zones: await Object.keys(data.zones || {}).reduce(async (acc, zoneKey) => {
 }, Promise.resolve({}))
 ```
 
-**Bug**: The accumulator is a Promise, but the code spreads `...acc` assuming
-it's an object. This will fail at runtime with type errors.
+**Bug**: The accumulator is a Promise, but the code spreads `...acc` assuming it's an object. This
+will fail at runtime with type errors.
 
 ---
 
@@ -181,8 +176,7 @@ const createRemoteClient = () => {
 export const db = drizzle(createRemoteClient(), { schema })
 ```
 
-**Problem**: Creates a new Pool instance on every call. Multiple pools exhaust
-database connections.
+**Problem**: Creates a new Pool instance on every call. Multiple pools exhaust database connections.
 
 ---
 
@@ -210,13 +204,11 @@ export async function waitUntilIdle() {
 **File**: `packages/oberoncms/core/src/auth/next-auth.ts:46-48`
 
 ```typescript
-const callbackUrl = new URL(
-  withCallback.searchParams.get("callbackUrl") || "/cms",
-)
+const callbackUrl = new URL(withCallback.searchParams.get("callbackUrl") || "/cms")
 ```
 
-**Risk**: User-controlled URL parameter used without validation. Potential open
-redirect attack vector.
+**Risk**: User-controlled URL parameter used without validation. Potential open redirect attack
+vector.
 
 ---
 
@@ -264,8 +256,8 @@ if (!site) {
 }
 ```
 
-**Problem**: Multiple concurrent `getConfig` calls can all see `!site` and
-attempt updateSite simultaneously. Could create duplicate records or conflicts.
+**Problem**: Multiple concurrent `getConfig` calls can all see `!site` and attempt updateSite
+simultaneously. Could create duplicate records or conflicts.
 
 ---
 
@@ -281,8 +273,8 @@ for (const result of results) {
 }
 ```
 
-**Problem**: If 50 pages fail to process, only the first error is shown.
-Misleading about actual scope of failure.
+**Problem**: If 50 pages fail to process, only the first error is shown. Misleading about actual
+scope of failure.
 
 ---
 
@@ -292,8 +284,7 @@ Misleading about actual scope of failure.
 
 **Coverage Analysis**:
 
-- Only **1 test file** in entire monorepo:
-  `packages/tohuhono/ui/src/components/button.spec.tsx`
+- Only **1 test file** in entire monorepo: `packages/tohuhono/ui/src/components/button.spec.tsx`
 - **Zero** unit tests for core business logic
 - **Zero** integration tests
 - **Zero** e2e tests
@@ -315,10 +306,9 @@ Critical TODOs:
 
 - `transforms.ts:1-2` - "Type system fundamentally broken"
 - `uploadthing/file-router.ts:23` - "TODO getUser" (user info not captured)
-- `uploadthing/file-router.ts:34` - "This code is unauthorised" (security
-  comment)
-- `sqlite/database-adapter.ts:117` - "TODO Validate using zod on insertion"
-  (data validation missing)
+- `uploadthing/file-router.ts:34` - "This code is unauthorised" (security comment)
+- `sqlite/database-adapter.ts:117` - "TODO Validate using zod on insertion" (data validation
+  missing)
 
 ---
 
@@ -375,17 +365,14 @@ For 100 pages → 100+ individual database calls instead of batch operations.
 
 1. **Empty database state** - What happens on first run?
 2. **Concurrent modifications** - Two users editing same page
-3. **Network timeouts** - Database, file uploads, auth emails all timeout
-   unhandled
+3. **Network timeouts** - Database, file uploads, auth emails all timeout unhandled
 4. **Malformed data** - Invalid page/image data from database
 5. **Invalid tokens** - Expired, malformed, or tampered verification tokens
-6. **Missing env vars** - Production startup without required environment
-   variables
+6. **Missing env vars** - Production startup without required environment variables
 7. **Large file uploads** - Streaming edge cases, memory limits
 8. **Rapid requests** - Race conditions in async operations
 9. **OAuth provider outages** - Auth flow failures
-10. **Permission boundary cases** - Unknown roles, missing permissions, action
-    conflicts
+10. **Permission boundary cases** - Unknown roles, missing permissions, action conflicts
 
 ### Input Validation Gaps:
 

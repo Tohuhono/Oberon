@@ -1,4 +1,4 @@
-import { defineConfig } from "oxfmt";
+import { defineConfig } from "oxfmt"
 
 export default defineConfig({
   semi: false,
@@ -6,4 +6,4 @@ export default defineConfig({
   proseWrap: "always",
   ignorePatterns: ["*.d.ts", "**/meta/**"],
   sortImports: true,
-});
+})

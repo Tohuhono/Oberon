@@ -1,16 +1,9 @@
 "use client"
 
 import { ChevronDownIcon } from "@radix-ui/react-icons"
-
 import { Avatar, AvatarFallback } from "@tohuhono/ui/avatar"
 import { Button } from "@tohuhono/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@tohuhono/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@tohuhono/ui/card"
 import {
   Command,
   CommandEmpty,
@@ -26,9 +19,7 @@ export function CardsTeamMembers() {
     <Card>
       <CardHeader>
         <CardTitle>Team Members</CardTitle>
-        <CardDescription>
-          Invite your team members to collaborate.
-        </CardDescription>
+        <CardDescription>Invite your team members to collaborate.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <div className="flex items-center justify-between space-x-4">
@@ -44,8 +35,7 @@ export function CardsTeamMembers() {
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="ml-auto">
-                Owner{" "}
-                <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
+                Owner <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="end">
@@ -56,15 +46,11 @@ export function CardsTeamMembers() {
                   <CommandGroup>
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Viewer</p>
-                      <p className="text-sm text-muted-foreground">
-                        Can view and comment.
-                      </p>
+                      <p className="text-sm text-muted-foreground">Can view and comment.</p>
                     </CommandItem>
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Developer</p>
-                      <p className="text-sm text-muted-foreground">
-                        Can view, comment and edit.
-                      </p>
+                      <p className="text-sm text-muted-foreground">Can view, comment and edit.</p>
                     </CommandItem>
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Billing</p>
@@ -97,8 +83,7 @@ export function CardsTeamMembers() {
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="ml-auto">
-                Member{" "}
-                <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
+                Member <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="end">
@@ -109,15 +94,11 @@ export function CardsTeamMembers() {
                   <CommandGroup className="p-1.5">
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Viewer</p>
-                      <p className="text-sm text-muted-foreground">
-                        Can view and comment.
-                      </p>
+                      <p className="text-sm text-muted-foreground">Can view and comment.</p>
                     </CommandItem>
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Developer</p>
-                      <p className="text-sm text-muted-foreground">
-                        Can view, comment and edit.
-                      </p>
+                      <p className="text-sm text-muted-foreground">Can view, comment and edit.</p>
                     </CommandItem>
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Billing</p>
@@ -143,17 +124,14 @@ export function CardsTeamMembers() {
               <AvatarFallback>IN</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm leading-none font-medium">
-                Isabella Nguyen
-              </p>
+              <p className="text-sm leading-none font-medium">Isabella Nguyen</p>
               <p className="text-sm text-muted-foreground">i@example.com</p>
             </div>
           </div>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="ml-auto">
-                Member{" "}
-                <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
+                Member <ChevronDownIcon className="ml-2 size-4 text-muted-foreground" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="end">
@@ -164,15 +142,11 @@ export function CardsTeamMembers() {
                   <CommandGroup className="p-1.5">
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Viewer</p>
-                      <p className="text-sm text-muted-foreground">
-                        Can view and comment.
-                      </p>
+                      <p className="text-sm text-muted-foreground">Can view and comment.</p>
                     </CommandItem>
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Developer</p>
-                      <p className="text-sm text-muted-foreground">
-                        Can view, comment and edit.
-                      </p>
+                      <p className="text-sm text-muted-foreground">Can view, comment and edit.</p>
                     </CommandItem>
                     <CommandItem className="flex flex-col items-start space-y-1 px-4 py-2">
                       <p>Billing</p>

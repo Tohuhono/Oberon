@@ -1,12 +1,12 @@
 import { betterAuth } from "better-auth"
 import { nextCookies } from "better-auth/next-js"
 import { emailOTP } from "better-auth/plugins"
+
 import type { OberonBetterAuthAdapter, OberonSendAdapter } from "../lib/dtd"
 
 export const cmsAuthBasePath = "/cms/api/auth"
 
-const noopSendVerificationRequest: OberonSendAdapter["sendVerificationRequest"] =
-  async () => {}
+const noopSendVerificationRequest: OberonSendAdapter["sendVerificationRequest"] = async () => {}
 
 export function createAuthOptions({
   betterAuth: betterAuthAdapter,

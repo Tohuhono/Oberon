@@ -1,4 +1,5 @@
 "use client"
+import { cn } from "@tohuhono/utils"
 import {
   Children,
   type ComponentProps,
@@ -18,7 +19,6 @@ import {
   useFormContext,
 } from "react-hook-form"
 
-import { cn } from "@tohuhono/utils"
 import { Label } from "./label"
 
 const Form = FormProvider
@@ -30,9 +30,7 @@ type FormFieldContextValue<
   name: TName
 }
 
-const FormFieldContext = createContext<FormFieldContextValue | undefined>(
-  undefined,
-)
+const FormFieldContext = createContext<FormFieldContextValue | undefined>(undefined)
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -77,9 +75,7 @@ type FormItemContextValue = {
   id: string
 }
 
-const FormItemContext = createContext<FormItemContextValue | undefined>(
-  undefined,
-)
+const FormItemContext = createContext<FormItemContextValue | undefined>(undefined)
 
 const FormItem = ({ className, ...props }: ComponentPropsWithRef<"div">) => {
   const id = useId()
@@ -95,11 +91,7 @@ const FormLabel = ({ className, ...props }: ComponentProps<typeof Label>) => {
   const { error, formItemId } = useFormField()
 
   return (
-    <Label
-      className={cn(error && "text-destructive", className)}
-      htmlFor={formItemId}
-      {...props}
-    />
+    <Label className={cn(error && "text-destructive", className)} htmlFor={formItemId} {...props} />
   )
 }
 
@@ -114,17 +106,12 @@ const FormControl = ({ children, ...props }: ComponentPropsWithRef<"div">) => {
   return cloneElement(only, {
     ...props,
     id: formItemId,
-    "aria-describedby": !error
-      ? `${formDescriptionId}`
-      : `${formDescriptionId} ${formMessageId}`,
+    "aria-describedby": !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`,
     "aria-invalid": !!error,
   })
 }
 
-const FormDescription = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"p">) => {
+const FormDescription = ({ className, ...props }: ComponentPropsWithRef<"p">) => {
   const { formDescriptionId } = useFormField()
 
   return (
@@ -136,11 +123,7 @@ const FormDescription = ({
   )
 }
 
-const FormMessage = ({
-  className,
-  children,
-  ...props
-}: ComponentPropsWithRef<"p">) => {
+const FormMessage = ({ className, children, ...props }: ComponentPropsWithRef<"p">) => {
   const { error, formMessageId } = useFormField()
   const body = error ? String(error?.message) : children
 

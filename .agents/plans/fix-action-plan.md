@@ -8,10 +8,9 @@ For each issue:
 
 - Follow plan mode workflow as a senior developer
 - Read architecture, codestyle, and conventions.
-- Review recent github issues, release notes and documentation for imported
-  packages where relevant
-- Verify if the original analysis is correct, do a deep dive on the behaviour
-  because the original reviewer is sometimes wrong. Be critical.
+- Review recent github issues, release notes and documentation for imported packages where relevant
+- Verify if the original analysis is correct, do a deep dive on the behaviour because the original
+  reviewer is sometimes wrong. Be critical.
 
 ---
 
@@ -30,9 +29,8 @@ For each issue:
       `packages/oberoncms/core/src/adapter/init-plugins.ts:41-42`
 
 - [x] **1.4** ~~Validate user role at runtime~~ - **Deferred to 2.1**
-      [Review #4](./critical-code-review.md#4-runtime-crash-on-invalid-user-role)
-      Per Shell-Validation pattern: validate at database read layer (2.1) rather
-      than runtime checks
+      [Review #4](./critical-code-review.md#4-runtime-crash-on-invalid-user-role) Per
+      Shell-Validation pattern: validate at database read layer (2.1) rather than runtime checks
 
 - [x] **1.5** Fix silent data loss in deletions -
       [Review #5](./critical-code-review.md#5-silent-data-loss-in-file-deletion)
@@ -40,40 +38,36 @@ For each issue:
       `packages/plugins/flydrive/src/internal/plugin.ts`
 
 - [x] **1.6** ~~Fix DB connection pool leak~~ - **False positive**
-      [Review #8](./critical-code-review.md#8-database-connection-pool-leak)
-      `createRemoteClient()` is called once at module load; `db` is a singleton
-      via Node.js module caching. No leak exists.
+      [Review #8](./critical-code-review.md#8-database-connection-pool-leak) `createRemoteClient()`
+      is called once at module load; `db` is a singleton via Node.js module caching. No leak exists.
 
 - [x] **1.7** Fix async reduce type error -
-      [Review #6](./critical-code-review.md#6-broken-async-reduce---type-error)
-      Replaced local `transformProps` copy with upstream `@puckeditor/core`
-      export. Local copy had broken async reduce; upstream uses `walkTree`.
+      [Review #6](./critical-code-review.md#6-broken-async-reduce---type-error) Replaced local
+      `transformProps` copy with upstream `@puckeditor/core` export. Local copy had broken async
+      reduce; upstream uses `walkTree`.
 
 - [x] **1.8** Add migration concurrency limits -
-      [Review #7](./critical-code-review.md#7-race-condition-on-migration-execution)
-      Fixed in `25706d7` — `mapConcurrent` with `MAX_CONCURRENCY = 10`
+      [Review #7](./critical-code-review.md#7-race-condition-on-migration-execution) Fixed in
+      `25706d7` — `mapConcurrent` with `MAX_CONCURRENCY = 10`
 
 - [x] **1.9** ~~Fix stack overflow in queue~~ - **False positive**
-      [Review #9](./critical-code-review.md#9-stack-overflow-in-queue-wait)
-      Source file already removed; not exported or imported anywhere. Stale dist
-      artifacts cleaned.
+      [Review #9](./critical-code-review.md#9-stack-overflow-in-queue-wait) Source file already
+      removed; not exported or imported anywhere. Stale dist artifacts cleaned.
 
 ---
 
 ## Phase 2: P1 - High Priority 🟠
 
 - [ ] **2.1** Implement Zod validation for all database reads -
-      [Review #4](./critical-code-review.md#4-runtime-crash-on-invalid-user-role)
-      Validate users, pages, images, site data when reading from database.
-      Ensures data integrity at the gate per Shell-Validation pattern.
-      **Includes deferred issue 1.4** (user role validation).
+      [Review #4](./critical-code-review.md#4-runtime-crash-on-invalid-user-role) Validate users,
+      pages, images, site data when reading from database. Ensures data integrity at the gate per
+      Shell-Validation pattern. **Includes deferred issue 1.4** (user role validation).
       `packages/plugins/pgsql/src/db/database-adapter.ts`
       `packages/oberoncms/sqlite/src/db/database-adapter.ts`
 
 - [x] **2.2** ~~Validate callback URLs~~ - **Already mitigated**
-      [Review #10](./critical-code-review.md#10-open-redirect-vulnerability)
-      `withCallback()` forces `callbackUrl.pathname = "/cms"` — user-supplied
-      path is ignored; no open redirect exists.
+      [Review #10](./critical-code-review.md#10-open-redirect-vulnerability) `withCallback()` forces
+      `callbackUrl.pathname = "/cms"` — user-supplied path is ignored; no open redirect exists.
 
 - [ ] **2.3** Add DB error handling -
       [Review #11](./critical-code-review.md#11-no-input-validation-on-database-operations)
@@ -84,9 +78,9 @@ For each issue:
       `packages/oberoncms/core/src/lib/dtd.ts:78-82`
 
 - [x] **2.5** ~~Fix site config race condition~~ - **False positive**
-      [Review #13](./critical-code-review.md#13-race-condition-on-site-config-creation)
-      Both `pgsql` and `sqlite` `updateSite` use `onConflictDoUpdate` (upsert);
-      concurrent calls converge safely with no duplicates.
+      [Review #13](./critical-code-review.md#13-race-condition-on-site-config-creation) Both `pgsql`
+      and `sqlite` `updateSite` use `onConflictDoUpdate` (upsert); concurrent calls converge safely
+      with no duplicates.
 
 - [ ] **2.6** Improve batch error reporting -
       [Review #14](./critical-code-review.md#14-silent-error-suppression)
@@ -103,20 +97,18 @@ For each issue:
 ## Phase 3: P2 - Quality Improvements 🟡
 
 - [x] **3.1** Set up testing framework -
-      [Review #15](./critical-code-review.md#15-virtually-non-existent-test-suite)
-      Vitest per-package, `TESTING.md` strategy, `pnpm test` turbo task in
-      place.
+      [Review #15](./critical-code-review.md#15-virtually-non-existent-test-suite) Vitest
+      per-package, `TESTING.md` strategy, `pnpm test` turbo task in place.
 
 - [x] **3.2** Write unit tests for core logic -
       [Review #15](./critical-code-review.md#15-virtually-non-existent-test-suite)
-      `transforms.test.ts` covers
-      `getTransforms`/`getComponentTransformVersions`; `map-concurrent.test.ts`
-      covers `mapConcurrent`. `getTitle`/`resolveSlug` skipped (module-level
-      Next.js imports). `create-oberon-app` installer helpers skipped
-      (unexported implementation details — see `TESTING.md`).
+      `transforms.test.ts` covers `getTransforms`/`getComponentTransformVersions`;
+      `map-concurrent.test.ts` covers `mapConcurrent`. `getTitle`/`resolveSlug` skipped
+      (module-level Next.js imports). `create-oberon-app` installer helpers skipped (unexported
+      implementation details — see `TESTING.md`).
 
-- [x] **3.3** Write e2e tests 6 Playwright specs: `cms-edit`, `cms-images`,
-      `cms-pages`, `cms-users`, `cms-routes`, `smoke` (playground + docs).
+- [x] **3.3** Write e2e tests 6 Playwright specs: `cms-edit`, `cms-images`, `cms-pages`,
+      `cms-users`, `cms-routes`, `smoke` (playground + docs).
 
 - [ ] **3.5** Resolve TODO comments -
       [Review #16](./critical-code-review.md#16-23-todo-comments-indicating-incomplete-features)
@@ -124,10 +116,8 @@ For each issue:
 - [ ] **3.6** Replace `any` types -
       [Review #17](./critical-code-review.md#17-type-safety-defeated-by-any)
 
-- [ ] **3.7** Fix N+1 queries -
-      [Review #18](./critical-code-review.md#18-n1-query-pattern)
+- [ ] **3.7** Fix N+1 queries - [Review #18](./critical-code-review.md#18-n1-query-pattern)
 
-- [ ] **3.8** Add input validation -
-      [Review](./critical-code-review.md#input-validation-gaps)
+- [ ] **3.8** Add input validation - [Review](./critical-code-review.md#input-validation-gaps)
 
 **Progress**: 14/24 complete (1 deferred to 2.1, 4 false positives)

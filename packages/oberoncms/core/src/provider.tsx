@@ -1,6 +1,6 @@
+import { redirect } from "next/navigation"
 import { type PropsWithChildren } from "react"
 
-import { redirect } from "next/navigation"
 import { OberonClientProvider } from "./components/provider"
 import type {
   ClientAction,
@@ -11,13 +11,7 @@ import type {
 import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
-  {
-    getPageData,
-    getAllImages,
-    getAllPages,
-    getAllUsers,
-    getConfig,
-  }: OberonAdapter,
+  { getPageData, getAllImages, getAllPages, getAllUsers, getConfig }: OberonAdapter,
   action: ClientAction,
   slug: string,
   searchParams: { [key: string]: string | string[] | undefined },
@@ -28,14 +22,9 @@ async function getContext(
         action,
         slug,
         data: {
-          callbackUrl:
-            typeof searchParams.callbackUrl === "string"
-              ? searchParams.callbackUrl
-              : "",
-          email:
-            typeof searchParams.email === "string" ? searchParams.email : "",
-          token:
-            typeof searchParams.token === "string" ? searchParams.token : "",
+          callbackUrl: typeof searchParams.callbackUrl === "string" ? searchParams.callbackUrl : "",
+          email: typeof searchParams.email === "string" ? searchParams.email : "",
+          token: typeof searchParams.token === "string" ? searchParams.token : "",
         },
       }
     case "edit":

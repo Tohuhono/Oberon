@@ -1,12 +1,5 @@
 import type { TransformVersions } from "@oberoncms/core"
-import {
-  pgTable,
-  jsonb,
-  text,
-  timestamp,
-  uniqueIndex,
-  integer,
-} from "drizzle-orm/pg-core"
+import { pgTable, jsonb, text, timestamp, uniqueIndex, integer } from "drizzle-orm/pg-core"
 
 export const site = pgTable(
   "site",

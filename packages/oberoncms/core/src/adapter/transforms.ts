@@ -93,8 +93,7 @@ export function getTransforms(
   for (const componentKey in components) {
     const transforms = components[componentKey]?.transforms || []
     const latestTransform = transforms.length
-    const previousTransform =
-      currentTransformVersions[componentKey] ?? latestTransform
+    const previousTransform = currentTransformVersions[componentKey] ?? latestTransform
 
     if (previousTransform < latestTransform) {
       componentTransforms[componentKey] = (props: Record<string, unknown>) =>

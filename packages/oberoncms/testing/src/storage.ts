@@ -1,8 +1,9 @@
 import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import { createClient } from "@libsql/client"
+
 import { fromPartial } from "@dev/vitest"
+import { createClient } from "@libsql/client"
 import type { OberonPluginAdapter } from "@oberoncms/core"
 import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 import * as schema from "@oberoncms/sqlite/schema"
@@ -15,11 +16,7 @@ const migrationsFolder = resolve(
   "../../../plugins/development/src/db/migrations",
 )
 
-export function createStorageAdapterFactory({
-  sqliteFile,
-}: {
-  sqliteFile: string
-}) {
+export function createStorageAdapterFactory({ sqliteFile }: { sqliteFile: string }) {
   return async (onCleanup: OnCleanup): Promise<OberonPluginAdapter> => {
     await mkdir(dirname(sqliteFile), { recursive: true })
     await rm(sqliteFile, { force: true })

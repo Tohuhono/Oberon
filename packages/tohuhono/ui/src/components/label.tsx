@@ -1,9 +1,8 @@
 "use client"
 
-import { type ComponentPropsWithRef } from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "@tohuhono/utils"
+import { cva, type VariantProps } from "class-variance-authority"
+import { type ComponentPropsWithRef } from "react"
 
 const labelVariants = cva(
   `

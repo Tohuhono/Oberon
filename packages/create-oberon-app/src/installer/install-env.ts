@@ -1,5 +1,5 @@
-import { writeFile } from "fs/promises"
 import { randomBytes } from "crypto"
+import { writeFile } from "fs/promises"
 import path from "path"
 
 export async function installEnv(appPath: string, email: string) {

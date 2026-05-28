@@ -1,9 +1,11 @@
 import { randomUUID } from "crypto"
-import { eq } from "drizzle-orm"
-import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import type { BetterAuthOptions } from "better-auth"
+
 import { UserSchema, type OberonAuthAdapter } from "@oberoncms/core"
+import type { BetterAuthOptions } from "better-auth"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { eq } from "drizzle-orm"
 import { z } from "zod"
+
 import type { DatabaseClient } from "./client"
 import * as schema from "./schema"
 import { user } from "./schema"
@@ -12,9 +14,7 @@ type SqliteAuthAdapter = OberonAuthAdapter & {
   betterAuth: Pick<BetterAuthOptions, "database">
 }
 
-function createBetterAuthAdapter(
-  db: () => DatabaseClient,
-): Pick<BetterAuthOptions, "database"> {
+function createBetterAuthAdapter(db: () => DatabaseClient): Pick<BetterAuthOptions, "database"> {
   let database: BetterAuthOptions["database"] | undefined
 
   return {
@@ -29,18 +29,13 @@ function createBetterAuthAdapter(
   } satisfies Pick<BetterAuthOptions, "database">
 }
 
-export const getAuthAdapter = (
-  db: () => DatabaseClient,
-): SqliteAuthAdapter => ({
+export const getAuthAdapter = (db: () => DatabaseClient): SqliteAuthAdapter => ({
   betterAuth: createBetterAuthAdapter(db),
   getAllUsers: async () => {
     return z
       .array(UserSchema)
       .parse(
-        await db()
-          .select({ id: user.id, email: user.email, role: user.role })
-          .from(user)
-          .execute(),
+        await db().select({ id: user.id, email: user.email, role: user.role }).from(user).execute(),
       )
   },
   addUser: async ({ email, role }) => {

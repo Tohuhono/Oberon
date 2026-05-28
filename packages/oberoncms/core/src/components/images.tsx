@@ -1,20 +1,18 @@
 "use client"
 
-import { Fragment, startTransition, useOptimistic } from "react"
-
-import { filesize } from "filesize"
 import { Button } from "@tohuhono/ui/button"
 import { LocalDate } from "@tohuhono/ui/date"
-import Image from "next/image"
-
 import { Grid, GridHeading } from "@tohuhono/ui/grid"
+import { filesize } from "filesize"
+import Image from "next/image"
+import { Fragment, startTransition, useOptimistic } from "react"
+
 import { useOberonActions } from "../hooks/use-oberon"
 import type { OberonImage } from "../lib/dtd"
 
 const useOberonImages = (images: OberonImage[]) => {
   const { deleteImage } = useOberonActions()
-  const [optimisticImages, optimisticImageUpdate] =
-    useOptimistic<OberonImage[]>(images)
+  const [optimisticImages, optimisticImageUpdate] = useOptimistic<OberonImage[]>(images)
 
   return {
     images: optimisticImages,

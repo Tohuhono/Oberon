@@ -1,34 +1,34 @@
 {
   "name": "@dev/scripts",
-  "private": true,
   "version": "0.2.0",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
+  "private": true,
   "description": "Shared monorepo scripts used by @tohuhono and @oberoncms packages",
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
     "directory": "dev/scripts"
   },
-  "scripts": {
-    "clean": "odt clean",
-    "lint": "eslint .",
-    "tsc": "tsc --pretty"
+  "bin": {
+    "odt": "./scripts/oberon-developer-tools.ts"
   },
-  "type": "module",
   "files": [
     "scripts",
     "CHANGELOG*",
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "exports": {
     ".": {
       "default": "./scripts/oberon-developer-tools.ts"
     }
   },
-  "bin": {
-    "odt": "./scripts/oberon-developer-tools.ts"
+  "scripts": {
+    "clean": "odt clean",
+    "lint": "eslint .",
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "rimraf": "^6.1.2",

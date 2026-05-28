@@ -1,28 +1,28 @@
 {
   "name": "@dev/typescript",
-  "private": true,
   "version": "0.2.0",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
+  "private": true,
   "description": "Shared TypeScript base config for @tohuhono and @oberoncms packages",
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
     "directory": "dev/typescript"
   },
+  "files": [
+    "base.json"
+  ],
   "type": "module",
-  "scripts": {
-    "clean": "odt clean",
-    "lint": "eslint ."
-  },
   "exports": {
     ".": {
       "default": "./base.json"
     }
   },
-  "files": [
-    "base.json"
-  ],
+  "scripts": {
+    "clean": "odt clean",
+    "lint": "eslint ."
+  },
   "devDependencies": {
     "@dev/eslint": "workspace:*",
     "eslint": "^9.39.2"

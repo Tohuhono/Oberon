@@ -6,8 +6,8 @@ import {
   type OberonHandler,
   type OberonAdapter,
 } from "../lib/dtd"
-import { stubbedAdapter } from "./stubbed-adapter"
 import { getInitialData } from "./get-initial-data"
+import { stubbedAdapter } from "./stubbed-adapter"
 
 type InititalisedPlugins = {
   adapter: OberonPluginAdapter
@@ -52,43 +52,28 @@ const baseAccumulator: InititalisedPlugins = {
 }
 
 export function initPlugins(plugins: OberonPlugin[] = []) {
-  const oberon: InititalisedPlugins = plugins.reduce<InititalisedPlugins>(
-    (accumulator, plugin) => {
-      const {
-        name,
-        version,
-        disabled,
-        adapter,
-        handlers = {},
-      } = plugin(accumulator.adapter)
+  const oberon: InititalisedPlugins = plugins.reduce<InititalisedPlugins>((accumulator, plugin) => {
+    const { name, version, disabled, adapter, handlers = {} } = plugin(accumulator.adapter)
 
-      if (disabled) {
-        return {
-          ...accumulator,
-          versions: [
-            ...accumulator.versions,
-            { name, disabled, version: version || "" },
-          ],
-        }
-      }
-
+    if (disabled) {
       return {
-        versions: [
-          ...accumulator.versions,
-          { name, disabled, version: version || "" },
-        ],
-        handlers: {
-          ...accumulator.handlers,
-          ...handlers,
-        },
-        adapter: {
-          ...accumulator.adapter,
-          ...adapter,
-        },
-      } satisfies InititalisedPlugins
-    },
-    baseAccumulator,
-  )
+        ...accumulator,
+        versions: [...accumulator.versions, { name, disabled, version: version || "" }],
+      }
+    }
+
+    return {
+      versions: [...accumulator.versions, { name, disabled, version: version || "" }],
+      handlers: {
+        ...accumulator.handlers,
+        ...handlers,
+      },
+      adapter: {
+        ...accumulator.adapter,
+        ...adapter,
+      },
+    } satisfies InititalisedPlugins
+  }, baseAccumulator)
 
   return {
     ...oberon,

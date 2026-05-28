@@ -1,8 +1,8 @@
 "use client"
 
+import { useGetPuck, createUsePuck, type Data } from "@puckeditor/core"
 import { Button } from "@tohuhono/ui/button"
 import { useState } from "react"
-import { useGetPuck, createUsePuck, type Data } from "@puckeditor/core"
 
 import { Menu } from "../menu"
 
@@ -28,11 +28,7 @@ export const Header = ({
       >
         Preview
       </Button>
-      <Button
-        onClick={() => window.open(path, "_blank")?.focus()}
-        variant="outline"
-        size="sm"
-      >
+      <Button onClick={() => window.open(path, "_blank")?.focus()} variant="outline" size="sm">
         View
       </Button>
       <Button

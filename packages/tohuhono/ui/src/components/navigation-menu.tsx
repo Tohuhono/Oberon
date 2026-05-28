@@ -1,8 +1,7 @@
-import type { ComponentPropsWithoutRef } from "react"
 import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu"
-import { cva } from "class-variance-authority"
-
 import { cn, type CN } from "@tohuhono/utils"
+import { cva } from "class-variance-authority"
+import type { ComponentPropsWithoutRef } from "react"
 
 const NavigationMenu = ({
   className,
@@ -24,17 +23,11 @@ const NavigationMenu = ({
 const NavigationMenuList = ({
   className,
   ...props
-}: Omit<
-  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>,
-  "className"
-> & {
+}: Omit<ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>, "className"> & {
   className?: string
 }) => (
   <NavigationMenuPrimitive.List
-    className={cn(
-      "group flex flex-1 list-none items-center justify-center gap-1",
-      className,
-    )}
+    className={cn("group flex flex-1 list-none items-center justify-center gap-1", className)}
     {...props}
   />
 )
@@ -87,10 +80,7 @@ const NavigationMenuTrigger = ({
 const NavigationMenuContent = ({
   className,
   ...props
-}: Omit<
-  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>,
-  "className"
-> & {
+}: Omit<ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>, "className"> & {
   className?: string
 }) => (
   <NavigationMenuPrimitive.Content
@@ -116,18 +106,12 @@ const NavigationMenuLink = NavigationMenuPrimitive.Link
 const NavigationMenuViewport = ({
   className,
   ...props
-}: Omit<
-  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Positioner>,
-  "className"
-> & {
+}: Omit<ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Positioner>, "className"> & {
   className?: string
 }) => (
   <NavigationMenuPrimitive.Portal>
     <NavigationMenuPrimitive.Positioner
-      className={cn(
-        "absolute top-full left-0 z-50 flex justify-center",
-        className,
-      )}
+      className={cn("absolute top-full left-0 z-50 flex justify-center", className)}
       side="bottom"
       align="start"
       sideOffset={0}
@@ -154,10 +138,7 @@ const NavigationMenuViewport = ({
 const NavigationMenuIndicator = ({
   className,
   ...props
-}: Omit<
-  ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Icon>,
-  "className"
-> & {
+}: Omit<ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Icon>, "className"> & {
   className?: string
 }) => (
   <NavigationMenuPrimitive.Icon

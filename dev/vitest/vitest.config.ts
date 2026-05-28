@@ -18,8 +18,7 @@ export function initTestConfig() {
         },
         {
           name: "slow",
-          description:
-            "Expensive unit tests that are not ideal for tight red/green loops.",
+          description: "Expensive unit tests that are not ideal for tight red/green loops.",
         },
       ],
     },

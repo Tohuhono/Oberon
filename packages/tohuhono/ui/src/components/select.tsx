@@ -1,7 +1,6 @@
 "use client"
 
 import { Select as SelectPrimitive } from "@base-ui/react/select"
-
 import { cn, type CN } from "@tohuhono/utils"
 
 const Select = SelectPrimitive.Root
@@ -10,11 +9,7 @@ const SelectGroup = SelectPrimitive.Group
 
 const SelectValue = SelectPrimitive.Value
 
-const SelectTrigger = ({
-  className,
-  children,
-  ...props
-}: CN<SelectPrimitive.Trigger.Props>) => (
+const SelectTrigger = ({ className, children, ...props }: CN<SelectPrimitive.Trigger.Props>) => (
   <SelectPrimitive.Trigger
     className={cn(
       `
@@ -91,21 +86,14 @@ const SelectContent = ({
   </SelectPrimitive.Portal>
 )
 
-const SelectLabel = ({
-  className,
-  ...props
-}: CN<SelectPrimitive.GroupLabel.Props>) => (
+const SelectLabel = ({ className, ...props }: CN<SelectPrimitive.GroupLabel.Props>) => (
   <SelectPrimitive.GroupLabel
     className={cn("px-2 py-1.5 text-sm font-semibold", className)}
     {...props}
   />
 )
 
-const SelectItem = ({
-  className,
-  children,
-  ...props
-}: CN<SelectPrimitive.Item.Props>) => (
+const SelectItem = ({ className, children, ...props }: CN<SelectPrimitive.Item.Props>) => (
   <SelectPrimitive.Item
     className={cn(
       `
@@ -136,14 +124,8 @@ const SelectItem = ({
   </SelectPrimitive.Item>
 )
 
-const SelectSeparator = ({
-  className,
-  ...props
-}: CN<SelectPrimitive.Separator.Props>) => (
-  <SelectPrimitive.Separator
-    className={cn("-mx-1 my-1 h-px bg-muted", className)}
-    {...props}
-  />
+const SelectSeparator = ({ className, ...props }: CN<SelectPrimitive.Separator.Props>) => (
+  <SelectPrimitive.Separator className={cn("-mx-1 my-1 h-px bg-muted", className)} {...props} />
 )
 
 export {

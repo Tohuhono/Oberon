@@ -1,10 +1,11 @@
 import { mkdir } from "fs/promises"
-import { drizzle } from "drizzle-orm/libsql"
+
 import { createClient } from "@libsql/client"
 // import type from here as
 import type { Client } from "@libsql/core/api"
-
+import { drizzle } from "drizzle-orm/libsql"
 import { sql } from "drizzle-orm/sql"
+
 import * as schema from "./schema"
 
 declare global {

@@ -2,8 +2,7 @@ import { Callout } from "nextra/components"
 
 # Authentication and Authorization
 
-OberonCMS uses an auth plugin for sign-in, session handling, and role-aware
-access control.
+OberonCMS uses an auth plugin for sign-in, session handling, and role-aware access control.
 
 ## Overview
 
@@ -35,9 +34,8 @@ export const { adapter, handler } = initOberon({
 
 ## Required adapter capabilities
 
-The current auth flow does not require auth-specific database adapter methods.
-It requires a send adapter that implements `sendVerificationRequest` so codes
-can be delivered to users.
+The current auth flow does not require auth-specific database adapter methods. It requires a send
+adapter that implements `sendVerificationRequest` so codes can be delivered to users.
 
 See:
 
@@ -51,8 +49,8 @@ See:
 3. Oberon calls `sendVerificationRequest` on your send adapter
 4. User completes sign-in and receives a session
 
-In development mode, verification details are logged by the development plugin
-instead of being sent.
+In development mode, verification details are logged by the development plugin instead of being
+sent.
 
 ## Routes
 
@@ -75,8 +73,7 @@ Oberon supports two built-in roles:
 - `admin`
 - `user`
 
-Role information is attached to the session user and used by adapter-level
-permission checks.
+Role information is attached to the session user and used by adapter-level permission checks.
 
 ## Master admin email
 
@@ -89,8 +86,7 @@ MASTER_EMAIL=admin@example.com
 When set, this email is treated as an admin override in the auth plugin.
 
 <Callout type="warning">
-  Restrict access to this environment variable and use a secure mailbox for the
-  master admin email.
+  Restrict access to this environment variable and use a secure mailbox for the master admin email.
 </Callout>
 
 ## Environment variables

@@ -1,19 +1,16 @@
 import { getMetaData, actionPaths } from "@oberoncms/core"
 import { OberonProvider } from "@oberoncms/core/provider"
 
-import { Client } from "./client"
 import { actions } from "@/oberon/actions"
 import { adapter } from "@/oberon/adapter"
+
+import { Client } from "./client"
 
 export function generateStaticParams() {
   return actionPaths
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ path?: string[] }>
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
   const { path = [] } = await params
   return await getMetaData(adapter, path.slice(1), path[0])
 }

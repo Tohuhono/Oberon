@@ -1,11 +1,5 @@
 import type { PageData } from "@oberoncms/core"
-import {
-  pgTable,
-  jsonb,
-  text,
-  timestamp,
-  uniqueIndex,
-} from "drizzle-orm/pg-core"
+import { pgTable, jsonb, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
 
 export const pages = pgTable(
   "pages",

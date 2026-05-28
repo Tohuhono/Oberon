@@ -1,12 +1,10 @@
+import { JsonValueSchema, type OberonBaseAdapter } from "@oberoncms/core"
 import { and, eq } from "drizzle-orm"
 
-import { JsonValueSchema, type OberonBaseAdapter } from "@oberoncms/core"
 import { type DatabaseClient } from "./client"
 import { images, kv, pages, site } from "./schema"
 
-export const getDatabaseAdapter: (
-  db: () => DatabaseClient,
-) => OberonBaseAdapter = (db) => ({
+export const getDatabaseAdapter: (db: () => DatabaseClient) => OberonBaseAdapter = (db) => ({
   getSite: async () => {
     const result = await db()
       .select({
@@ -52,10 +50,7 @@ export const getDatabaseAdapter: (
       .execute()
   },
   addPage: async ({ key, data, updatedAt, updatedBy }) => {
-    await db()
-      .insert(pages)
-      .values({ key, data, updatedAt, updatedBy })
-      .execute()
+    await db().insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
   },
   deletePage: async (key) => {
     await db().delete(pages).where(eq(pages.key, key)).execute()

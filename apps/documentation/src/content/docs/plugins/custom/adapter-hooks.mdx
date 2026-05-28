@@ -19,17 +19,15 @@ type OberonInitAdapter = {
 }
 ```
 
-Use `prebuild` for work that must happen before build output is produced, such
-as migrations or initialisation.
+Use `prebuild` for work that must happen before build output is produced, such as migrations or
+initialisation.
 
 ## OberonDatabaseAdapter
 
 Database plugins own the main persistence surface. In code this is:
 
 ```tsx
-type OberonDatabaseAdapter = Partial<OberonInitAdapter> &
-  OberonBaseAdapter &
-  OberonAuthAdapter
+type OberonDatabaseAdapter = Partial<OberonInitAdapter> & OberonBaseAdapter & OberonAuthAdapter
 ```
 
 ### Content and media methods
@@ -67,8 +65,7 @@ Permission and session helpers:
 - `signIn`
 - `signOut`
 
-`hasPermission` receives `user`, `action`, and `permission`, and returns a
-boolean synchronously.
+`hasPermission` receives `user`, `action`, and `permission`, and returns a boolean synchronously.
 
 ## OberonSendAdapter
 
@@ -78,11 +75,7 @@ Send plugins provide verification delivery:
 
 ```tsx
 type OberonSendAdapter = {
-  sendVerificationRequest: (props: {
-    email: string
-    token: string
-    url: string
-  }) => Promise<void>
+  sendVerificationRequest: (props: { email: string; token: string; url: string }) => Promise<void>
 }
 ```
 

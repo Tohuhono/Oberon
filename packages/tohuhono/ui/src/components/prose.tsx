@@ -1,10 +1,7 @@
 import { cn } from "@tohuhono/utils"
 import type { PropsWithChildren } from "react"
 
-export const Prose = ({
-  children,
-  className,
-}: PropsWithChildren<{ className?: string }>) => (
+export const Prose = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
   <div
     className={cn(
       `

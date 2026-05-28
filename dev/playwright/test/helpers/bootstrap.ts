@@ -1,6 +1,7 @@
-import path from "node:path"
 import { mkdir } from "node:fs/promises"
+import path from "node:path"
 import { stripVTControlCharacters } from "node:util"
+
 import { expect, type Page } from "@playwright/test"
 
 const LOGIN_PATH = "/cms/login"
@@ -8,10 +9,7 @@ const CALLBACK_PATH = "/cms/pages"
 
 function parseDevelopmentOtpEntry(logs: string): string | null {
   const strippedLog = stripVTControlCharacters(logs)
-  const tokenPatterns = [
-    /token:\s*["']?(\d{6})["']?/g,
-    /Sign in with code\s+(\d{6})/g,
-  ]
+  const tokenPatterns = [/token:\s*["']?(\d{6})["']?/g, /Sign in with code\s+(\d{6})/g]
 
   let lastMatch: string | null = null
 

@@ -1,11 +1,10 @@
 import "server-cli-only"
-
-import { Resend } from "resend"
 import {
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonPlugin,
   type OberonSendAdapter,
 } from "@oberoncms/core"
+import { Resend } from "resend"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
 const RESEND_SECRET = process.env.RESEND_SECRET || process.env.SEND_SECRET

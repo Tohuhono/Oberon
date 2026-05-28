@@ -1,55 +1,36 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@tohuhono/ui/button"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@tohuhono/ui/form"
+import { Grid, GridHeading } from "@tohuhono/ui/grid"
+import { Input } from "@tohuhono/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tohuhono/ui/select"
+import { Fragment, startTransition, useOptimistic } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Fragment, startTransition, useOptimistic } from "react"
 
-import { Button } from "@tohuhono/ui/button"
-import { Input } from "@tohuhono/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@tohuhono/ui/select"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@tohuhono/ui/form"
-
-import { Grid, GridHeading } from "@tohuhono/ui/grid"
-import { AddUserSchema, OberonUser, roles } from "../lib/dtd"
 import { useOberonActions } from "../hooks/use-oberon"
+import { AddUserSchema, OberonUser, roles } from "../lib/dtd"
 
 type OptimisticUser = OberonUser & { pending?: boolean }
 
 const useOberonUsers = (users: OberonUser[]) => {
   const { addUser, changeRole, deleteUser } = useOberonActions()
-  const [optimisticUsers, optimisticUserUpdate] =
-    useOptimistic<OptimisticUser[]>(users)
+  const [optimisticUsers, optimisticUserUpdate] = useOptimistic<OptimisticUser[]>(users)
 
   return {
     users: optimisticUsers,
     addUser: (user: Pick<OberonUser, "email" | "role">) => {
       startTransition(() => {
-        optimisticUserUpdate([
-          ...optimisticUsers,
-          { ...user, id: user.email, pending: true },
-        ])
+        optimisticUserUpdate([...optimisticUsers, { ...user, id: user.email, pending: true }])
       })
       return addUser(user)
     },
     deleteUser: async (id: OberonUser["id"]) => {
       startTransition(() =>
         optimisticUserUpdate(
-          optimisticUsers.map((user) =>
-            user.id === id ? { ...user, pending: true } : user,
-          ),
+          optimisticUsers.map((user) => (user.id === id ? { ...user, pending: true } : user)),
         ),
       )
       return deleteUser({ id })
@@ -57,9 +38,7 @@ const useOberonUsers = (users: OberonUser[]) => {
     changeRole: async (id: OberonUser["id"], role: OberonUser["role"]) => {
       startTransition(() =>
         optimisticUserUpdate(
-          optimisticUsers.map((user) =>
-            user.id === id ? { ...user, role, pending: true } : user,
-          ),
+          optimisticUsers.map((user) => (user.id === id ? { ...user, role, pending: true } : user)),
         ),
       )
       return changeRole({ id, role })
@@ -99,9 +78,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
                 <FormControl>
                   <Input aria-label="User email" placeholder="" {...field} />
                 </FormControl>
-                <FormMessage>
-                  {form.formState.errors.email?.message}
-                </FormMessage>
+                <FormMessage>{form.formState.errors.email?.message}</FormMessage>
               </FormItem>
             )}
           />
@@ -110,10 +87,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
             name="role"
             render={({ field }) => (
               <FormItem className="row-span-2">
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value.toString()}
-                >
+                <Select onValueChange={field.onChange} value={field.value.toString()}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue />
@@ -148,10 +122,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
                 }
               }}
             >
-              <SelectTrigger
-                aria-label={`Role ${email}`}
-                className="h-6 text-xs"
-              >
+              <SelectTrigger aria-label={`Role ${email}`} className="h-6 text-xs">
                 <SelectValue placeholder={role} />
               </SelectTrigger>
               <SelectContent>

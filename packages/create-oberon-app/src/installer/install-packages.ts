@@ -1,6 +1,7 @@
 import { execSync } from "child_process"
 import { readFile, writeFile } from "fs/promises"
 import path from "path"
+
 import { Plugin } from "./install-adapter"
 
 export const packageManagers = ["npm", "pnpm", "yarn"] as const
@@ -103,17 +104,12 @@ export async function installPackages({
   /*
    * Adjust package.json
    */
-  const { workspaceDeps, workspaceDevDeps } = await updatePackageJson(
-    appName,
-    appPath,
-  )
+  const { workspaceDeps, workspaceDevDeps } = await updatePackageJson(appName, appPath)
 
-  const pluginDependencies = plugins.flatMap(
-    ({ packageName, dependencies = [] }) => [
-      ...dependencies,
-      ...(packageName ? [packageName] : []),
-    ],
-  )
+  const pluginDependencies = plugins.flatMap(({ packageName, dependencies = [] }) => [
+    ...dependencies,
+    ...(packageName ? [packageName] : []),
+  ])
 
   const dependencies = [...workspaceDeps, ...pluginDependencies]
   const devDependencies = workspaceDevDeps
@@ -142,12 +138,9 @@ shamefully-hoist=true
   }
 
   if (devDependencies.length) {
-    execSync(
-      `${packageManager} install --save-dev ${devDependencies.join(" ")}`,
-      {
-        cwd: appPath,
-        stdio: "inherit",
-      },
-    )
+    execSync(`${packageManager} install --save-dev ${devDependencies.join(" ")}`, {
+      cwd: appPath,
+      stdio: "inherit",
+    })
   }
 }

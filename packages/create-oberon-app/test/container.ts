@@ -1,5 +1,6 @@
-import path from "node:path"
 import { mkdir, readdir, rm } from "node:fs/promises"
+import path from "node:path"
+
 import { execAsync } from "@tohuhono/utils/exec-async"
 
 const MONOREPO_ROOT = path.resolve(import.meta.dirname, "../../../")

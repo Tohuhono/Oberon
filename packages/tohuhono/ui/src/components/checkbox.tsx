@@ -1,13 +1,9 @@
 "use client"
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
-
 import { cn, type CN } from "@tohuhono/utils"
 
-const Checkbox = ({
-  className,
-  ...props
-}: CN<CheckboxPrimitive.Root.Props>) => (
+const Checkbox = ({ className, ...props }: CN<CheckboxPrimitive.Root.Props>) => (
   <CheckboxPrimitive.Root
     className={cn(
       `
@@ -20,9 +16,7 @@ const Checkbox = ({
     )}
     {...props}
   >
-    <CheckboxPrimitive.Indicator
-      className={cn("flex items-center justify-center text-current")}
-    >
+    <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current")}>
       <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
         <path
           d="M20 6 9 17l-5-5"

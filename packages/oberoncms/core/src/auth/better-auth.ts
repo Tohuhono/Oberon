@@ -1,5 +1,5 @@
-import { headers } from "next/headers"
 import { toNextJsHandler } from "better-auth/next-js"
+import { headers } from "next/headers"
 
 import { name, version } from "../../package.json" with { type: "json" }
 import { type OberonPlugin, type OberonPluginAdapter } from "../lib/dtd"
@@ -25,9 +25,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
 
     const normalizedMasterEmail = normalizeEmail(masterEmail)
     const users = await adapter.getAllUsers()
-    const hasMasterUser = users.some(
-      (user) => normalizeEmail(user.email) === normalizedMasterEmail,
-    )
+    const hasMasterUser = users.some((user) => normalizeEmail(user.email) === normalizedMasterEmail)
 
     if (!hasMasterUser) {
       await adapter.addUser({

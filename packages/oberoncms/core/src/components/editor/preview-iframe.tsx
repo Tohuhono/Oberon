@@ -1,7 +1,6 @@
 "use client"
 
 import "@puckeditor/core/puck.css"
-
 import { useEffect, type PropsWithChildren } from "react"
 
 export type PreviewMode = "light" | "dark" | "follow"
@@ -33,8 +32,7 @@ export const PreviewIframe = ({
     const syncPreviewTheme = () => {
       const shouldUseDarkMode =
         previewMode === "dark" ||
-        (previewMode === "follow" &&
-          document.documentElement.classList.contains("dark"))
+        (previewMode === "follow" && document.documentElement.classList.contains("dark"))
 
       iframeDocument.documentElement.classList.toggle("dark", shouldUseDarkMode)
     }
@@ -47,10 +45,7 @@ export const PreviewIframe = ({
 
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (
-          mutation.type === "attributes" &&
-          mutation.attributeName === "class"
-        ) {
+        if (mutation.type === "attributes" && mutation.attributeName === "class") {
           syncPreviewTheme()
         }
       }
