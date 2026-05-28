@@ -16,12 +16,7 @@
     "files.eol": "\n",
     "typescript.preferences.preferTypeOnlyAutoImports": true,
     "typescript.tsdk": "node_modules/typescript/lib",
-    "eslint.validate": [
-      "javascript",
-      "javascriptreact",
-      "typescript",
-      "typescriptreact",
-    ],
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
     "eslint.useFlatConfig": true,
     "eslint.workingDirectories": [{ "mode": "auto" }],
     "eslint.format.enable": true,
@@ -34,7 +29,7 @@
     "editor.detectIndentation": false,
     "chat.agent.maxRequests": 50,
     "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "chat.useNestedAgentsMdFiles": true,
     "chat.tools.terminal.autoApprove": {
@@ -84,7 +79,8 @@
     },
     "tailwindCSS.experimental.configFile": "packages/oberoncms/core/tailwind.css",
     "nix.formatterPath": "nixfmt",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "oxc.fmt.configPath": "oxfmt.config.ts",
     "github.copilot.nextEditSuggestions.enabled": false,
     "github.copilot.enable": {
       "*": false,
