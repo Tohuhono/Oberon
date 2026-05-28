@@ -1,0 +1,43 @@
+{
+  "name": "@dev/oxlint",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Shared oxlint library config for @tohuhono and @oberoncms packages",
+  "license": "MIT",
+  "author": "Tohuhono ltd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon.git",
+    "directory": "dev/oxlint"
+  },
+  "files": [
+    "base.config.ts",
+    "react.config.ts",
+    "nextjs.config.ts",
+    "tanstack.config.ts"
+  ],
+  "type": "module",
+  "exports": {
+    "base": "./base.config.ts",
+    "react": "./react.config.ts",
+    "nextjs": "./nextjs.config.ts",
+    "tanstack": "./tanstack.config.ts"
+  },
+  "scripts": {
+    "clean": "odt clean",
+    "lint": "oxlint .",
+    "tsc": "tsc --pretty"
+  },
+  "dependencies": {
+    "@tanstack/eslint-config": "^0.4.0",
+    "@tanstack/eslint-plugin-query": "^5.100.14",
+    "@tanstack/eslint-plugin-router": "^1.162.0",
+    "eslint-plugin-better-tailwindcss": "^4.5.0",
+    "oxlint": "^1.67.0"
+  },
+  "devDependencies": {
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
+    "typescript": "5.9.3"
+  }
+}
