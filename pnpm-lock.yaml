@@ -527,6 +527,46 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
+  packages/oberoncms/nextjs:
+    dependencies:
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@dev/oxlint':
+        specifier: workspace:*
+        version: link:../../../dev/oxlint
+      '@dev/scripts':
+        specifier: workspace:*
+        version: link:../../../dev/scripts
+      '@dev/typescript':
+        specifier: workspace:*
+        version: link:../../../dev/typescript
+      '@dev/vite':
+        specifier: workspace:*
+        version: link:../../../dev/vite
+      '@dev/vitest':
+        specifier: workspace:*
+        version: link:../../../dev/vitest
+      '@types/node':
+        specifier: 24.10.1
+        version: 24.10.1
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      react:
+        specifier: ^19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.4
+        version: 19.2.4(react@19.2.4)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
   packages/oberoncms/sqlite:
     dependencies:
       '@libsql/client':
@@ -1093,9 +1133,6 @@ importers:
       input-otp:
         specifier: ^1.4.2
         version: 1.4.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      next:
-        specifier: ^16.1.6
-        version: 16.1.6(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react-day-picker:
         specifier: ^9.13.2
         version: 9.13.2(react@19.2.4)

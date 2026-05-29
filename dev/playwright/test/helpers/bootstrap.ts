@@ -1,11 +1,8 @@
 import { mkdir } from "node:fs/promises"
 import path from "node:path"
-import { stripVTControlCharacters } from "node:util"
-<<<<<<< HEAD
-
-=======
 import { setTimeout } from "node:timers/promises"
->>>>>>> 9fbc90e (add initial tanstack recipe)
+import { stripVTControlCharacters } from "node:util"
+
 import { expect, type Page } from "@playwright/test"
 
 const LOGIN_PATH = "/cms/login"

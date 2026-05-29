@@ -1,26 +1,14 @@
 import path from "node:path"
-import { base, defineConfig } from "@dev/playwright"
-<<<<<<< HEAD
-import { authProject, authenticatedProject, loginProject } from "@dev/playwright/projects"
 
-import { COA_NEXTJS_PORT, readNextjsLogs } from "./test/container"
-=======
-import {
-  authProject,
-  authenticatedProject,
-  smokeProject,
-} from "@dev/playwright/projects"
-import {
-  NEXTJS_APP_PORT,
-  readNextjsServerLogs,
-  TANSTACK_APP_PORT,
-} from "./test/container"
+import { base, defineConfig } from "@dev/playwright"
+import { authProject, authenticatedProject, smokeProject } from "@dev/playwright/projects"
+
+import { NEXTJS_APP_PORT, readNextjsServerLogs, TANSTACK_APP_PORT } from "./test/container"
 
 const PLAYWRIGHT_CONTAINER_STATE_PATH = path.resolve(
   process.cwd(),
   ".playwright/container-state.json",
 )
->>>>>>> 9fbc90e (add initial tanstack recipe)
 
 export default defineConfig({
   ...base,
