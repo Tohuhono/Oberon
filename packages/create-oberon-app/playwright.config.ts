@@ -1,9 +1,6 @@
 import { base, defineConfig } from "@dev/playwright"
-import {
-  authProject,
-  authenticatedProject,
-  loginProject,
-} from "@dev/playwright/projects"
+import { authProject, authenticatedProject, loginProject } from "@dev/playwright/projects"
+
 import { COA_NEXTJS_PORT, readNextjsLogs } from "./test/container"
 
 export default defineConfig({

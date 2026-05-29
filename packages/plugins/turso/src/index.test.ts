@@ -1,17 +1,16 @@
 import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import { createClient, type Client } from "@libsql/client"
+
 import { fromPartial, test, vi } from "@dev/vitest"
+import { createClient, type Client } from "@libsql/client"
 import type { OberonPluginAdapter } from "@oberoncms/core"
 import { createAdapterTests } from "@oberoncms/testing"
 import { drizzle } from "drizzle-orm/libsql"
+
 import * as schema from "./db/schema"
 
-const rootDirectory = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../..",
-)
+const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..")
 
 const sqliteFile = resolve(rootDirectory, ".tmp/turso-plugin-unit-tests.db")
 
@@ -32,8 +31,7 @@ async function getTursoAdapter(
 
   const { plugin } = await import("./index")
 
-  const adapter =
-    plugin(fromPartial({ prebuild: async () => {} })).adapter ?? {}
+  const adapter = plugin(fromPartial({ prebuild: async () => {} })).adapter ?? {}
 
   await adapter.prebuild?.()
 

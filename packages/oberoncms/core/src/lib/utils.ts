@@ -1,6 +1,6 @@
+import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { notFound, redirect } from "next/navigation"
 
-import { isRedirectError } from "next/dist/client/components/redirect-error"
 import {
   NotImplementedError,
   ResponseError,
@@ -53,20 +53,13 @@ const resolveDevEnv = (value?: string) => {
     case "false":
       return false
     default:
-      return (
-        !process.env.CI &&
-        (!process.env.NODE_ENV || process.env.NODE_ENV === "development")
-      )
+      return !process.env.CI && (!process.env.NODE_ENV || process.env.NODE_ENV === "development")
   }
 }
 
-export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(
-  process.env.USE_DEVELOPMENT_DATABASE,
-)
+export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(process.env.USE_DEVELOPMENT_DATABASE)
 
-export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(
-  process.env.USE_DEVELOPMENT_SEND,
-)
+export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(process.env.USE_DEVELOPMENT_SEND)
 
 export async function isNotImplemented(
   adapter: Partial<OberonPluginAdapter>,
@@ -116,9 +109,6 @@ export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
   }
 }
 
-export function isValidKey<TObj extends object>(
-  key: PropertyKey,
-  obj: TObj,
-): key is keyof TObj {
+export function isValidKey<TObj extends object>(key: PropertyKey, obj: TObj): key is keyof TObj {
   return key in obj
 }

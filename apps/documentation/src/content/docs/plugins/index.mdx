@@ -24,9 +24,8 @@ export const { adapter, handler } = initOberon({
 
 ## Order matters
 
-Plugins are initialised in array order. Their `adapter` methods and `handlers`
-are merged from left to right, so later plugins can override keys provided by
-earlier plugins.
+Plugins are initialised in array order. Their `adapter` methods and `handlers` are merged from left
+to right, so later plugins can override keys provided by earlier plugins.
 
 Generated apps therefore put:
 
@@ -66,8 +65,7 @@ Plugins can contribute two kinds of extension points.
 `adapter` hooks:
 
 - lifecycle: `prebuild`
-- content: `addPage`, `deletePage`, `getAllPages`, `getPageData`,
-  `updatePageData`
+- content: `addPage`, `deletePage`, `getAllPages`, `getPageData`, `updatePageData`
 - media: `addImage`, `deleteImage`, `getAllImages`
 - users: `addUser`, `deleteUser`, `getAllUsers`, `changeRole`, `getCurrentUser`
 - auth/session: `signIn`, `signOut`, `hasPermission`
@@ -77,5 +75,4 @@ Plugins can contribute two kinds of extension points.
 
 - route handlers keyed by path segment, merged into the CMS handler tree
 
-Use the section pages in this Plugins area for concrete examples of each plugin
-type.
+Use the section pages in this Plugins area for concrete examples of each plugin type.

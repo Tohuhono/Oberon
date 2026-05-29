@@ -13,25 +13,24 @@
 ### Minor Changes
 
 - 1858e24: Fix mocked better auth
-- 20820f4: Promote the repo to the Better Auth model across core packages,
-  plugins, docs, recipes, and app scaffolds.
+- 20820f4: Promote the repo to the Better Auth model across core packages, plugins, docs, recipes,
+  and app scaffolds.
 
-  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth
-  adapter expectations, and aligns setup guidance around Better Auth as the
-  supported path.
+  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth adapter
+  expectations, and aligns setup guidance around Better Auth as the supported path.
 
   Risks and implications:
-  - Integrations still relying on Auth.js/NextAuth-specific behavior may require
-    configuration and implementation updates.
-  - Auth adapter implementations must match the updated user-table/auth contract
-    expectations across sqlite and pgsql paths.
-  - Existing user schemas with provider-specific fields may need to be reduced
-    or remapped to the active Better Auth model.
-  - Environment variables, callback handling, and session/user lifecycle
-    behavior should be reviewed during upgrade to avoid auth regressions.
+  - Integrations still relying on Auth.js/NextAuth-specific behavior may require configuration and
+    implementation updates.
+  - Auth adapter implementations must match the updated user-table/auth contract expectations across
+    sqlite and pgsql paths.
+  - Existing user schemas with provider-specific fields may need to be reduced or remapped to the
+    active Better Auth model.
+  - Environment variables, callback handling, and session/user lifecycle behavior should be reviewed
+    during upgrade to avoid auth regressions.
 
-  Treat this as a coordinated upgrade across core, plugins, recipes, and app
-  scaffolds rather than a piecemeal patch.
+  Treat this as a coordinated upgrade across core, plugins, recipes, and app scaffolds rather than a
+  piecemeal patch.
 
 - 65abaa0: Refactor ui component and tailwind exports
 - 65abaa0: Change tailwind linting
@@ -39,10 +38,9 @@
 ### Patch Changes
 
 - 65abaa0: Fix conflicting prettier and eslint commands
-- fb4d240: Remove remaining Auth.js/NextAuth coupling from core and database
-  plugins, standardize user-table methods under auth adapters for sqlite and
-  pgsql, and align docs with the current auth model, including reducing auth
-  user schemas to active columns only.
+- fb4d240: Remove remaining Auth.js/NextAuth coupling from core and database plugins, standardize
+  user-table methods under auth adapters for sqlite and pgsql, and align docs with the current auth
+  model, including reducing auth user schemas to active columns only.
 - Updated dependencies [20820f4]
 - Updated dependencies [65abaa0]
 - Updated dependencies [65abaa0]
@@ -54,13 +52,12 @@
 
 ### Patch Changes
 
-- ad993d0: Align CMS editor accessibility contracts and migrate Playwright CMS
-  coverage to the shared test fixture layout, including playground-only
-  className assertions.
-- 0e72818: Add editor preview follow or override theme controls and migrate
-  iframe mode sync to the editor iframe override path.
-- 6e8ba23: Infer Oberon component render props from field definitions and adopt
-  the helper in shared puck blocks.
+- ad993d0: Align CMS editor accessibility contracts and migrate Playwright CMS coverage to the
+  shared test fixture layout, including playground-only className assertions.
+- 0e72818: Add editor preview follow or override theme controls and migrate iframe mode sync to the
+  editor iframe override path.
+- 6e8ba23: Infer Oberon component render props from field definitions and adopt the helper in shared
+  puck blocks.
 - Updated dependencies [ad993d0]
 - Updated dependencies [0e72818]
   - @tohuhono/ui@0.14.7
@@ -70,44 +67,40 @@
 
 ### Minor Changes
 
-- 8109ea8: Add a dynamic Tailwind plugin, expose public plugin settings through
-  the core adapter, and scaffold the Tailwind plugin into new apps.
+- 8109ea8: Add a dynamic Tailwind plugin, expose public plugin settings through the core adapter,
+  and scaffold the Tailwind plugin into new apps.
 
 ### Patch Changes
 
-- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead
-  of failing repo-wide test runs.
-- b654991: Implement issue #294 E2E auth lane workflow with shared Playwright
-  auth helpers, add COA login/provenance lane coverage and UI test commands, and
-  fix email callback/session handling required for deterministic UI sign-in
-  completion.
-- 8109ea8: Fix Tailwind compiler loading, seed the welcome block on initial
-  pages, and make Playwright smoke report uploads rerun-safe.
-- a4578f6: Respect gitignore during shared Playwright test discovery, simplify
-  shared auth redirect handling, and align the create-oberon-app test container
-  with the shared Playwright defaults used across the repo.
-- a011a89: Separate generated Tailwind artifacts into `.oberon/tailwind`, move
-  the development SQLite database into `.oberon/db`, align the recipe and
-  scaffold test container with the new paths, and tighten shared Turbo and
-  Vitest defaults for more stable local and CI runs.
-- 28aa7e5: Add aria-labels to pages and users components for E2E testability;
-  fix LocalDate hydration using useClientState; remove debug console logs from
-  development and turso plugins; add useClientState hook to utils.
-- 48de893: Add the key value store contract slice and sqlite persistence path,
-  including the sqlite KV table, adapter get/put support, shared adapter KV test
-  scaffolding, development-plugin coverage via prebuild, and migration path
-  resolution updates for database plugins.
-- aa5371a: Replace `usePuck` with `createUsePuck` and targeted selectors in the
-  editor Header component to reduce unnecessary re-renders.
-- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for
-  focused AI and baseline unit-test slices.
-- 237d393: Simplify local e2e publishing by using root recursive workspace
-  publish to Verdaccio and removing extra setup complexity. Also remove
-  package-level provenance defaults from publish configs so local recursive
-  publish works in non-CI environments, while release provenance remains
-  controlled by CI environment settings. Modernize GitHub Actions Node setup to
-  use setup-node + Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio`
-  while keeping the create-oberon-app scaffold runtime in `/opt/coa`.
+- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead of failing
+  repo-wide test runs.
+- b654991: Implement issue #294 E2E auth lane workflow with shared Playwright auth helpers, add COA
+  login/provenance lane coverage and UI test commands, and fix email callback/session handling
+  required for deterministic UI sign-in completion.
+- 8109ea8: Fix Tailwind compiler loading, seed the welcome block on initial pages, and make
+  Playwright smoke report uploads rerun-safe.
+- a4578f6: Respect gitignore during shared Playwright test discovery, simplify shared auth redirect
+  handling, and align the create-oberon-app test container with the shared Playwright defaults used
+  across the repo.
+- a011a89: Separate generated Tailwind artifacts into `.oberon/tailwind`, move the development
+  SQLite database into `.oberon/db`, align the recipe and scaffold test container with the new
+  paths, and tighten shared Turbo and Vitest defaults for more stable local and CI runs.
+- 28aa7e5: Add aria-labels to pages and users components for E2E testability; fix LocalDate
+  hydration using useClientState; remove debug console logs from development and turso plugins; add
+  useClientState hook to utils.
+- 48de893: Add the key value store contract slice and sqlite persistence path, including the sqlite
+  KV table, adapter get/put support, shared adapter KV test scaffolding, development-plugin coverage
+  via prebuild, and migration path resolution updates for database plugins.
+- aa5371a: Replace `usePuck` with `createUsePuck` and targeted selectors in the editor Header
+  component to reduce unnecessary re-renders.
+- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for focused AI and baseline
+  unit-test slices.
+- 237d393: Simplify local e2e publishing by using root recursive workspace publish to Verdaccio and
+  removing extra setup complexity. Also remove package-level provenance defaults from publish
+  configs so local recursive publish works in non-CI environments, while release provenance remains
+  controlled by CI environment settings. Modernize GitHub Actions Node setup to use setup-node +
+  Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio` while keeping the create-oberon-app
+  scaffold runtime in `/opt/coa`.
 - Updated dependencies [a73560b]
 - Updated dependencies [237d393]
 - Updated dependencies [28aa7e5]
@@ -139,31 +132,27 @@
   - `@dev/vitest` shared package with `initTestConfig()` helper
   - `vitest.config.ts` + `test` script added to all packages and apps
   - `tsconfig.test.json` at root for standalone type-checking of test files
-  - Relaxed ESLint rules for `*.test.ts` files (`no-explicit-any`,
-    `no-non-null-assertion`, type assertions)
+  - Relaxed ESLint rules for `*.test.ts` files (`no-explicit-any`, `no-non-null-assertion`, type
+    assertions)
   - Replace Jest CI workflow with Vitest (`pnpm test`)
   - `agents/TESTING.md` documents testing strategy and scope
-  - First test: `packages/oberoncms/core/src/adapter/transforms.test.ts` (9
-    tests)
+  - First test: `packages/oberoncms/core/src/adapter/transforms.test.ts` (9 tests)
 
-- d383641: Fix broken async reduce in zone transformations by replacing local
-  transformProps copy with upstream @puckeditor/core export. The local copy had
-  a bug where spreading an unawaited Promise accumulator silently dropped all
-  but the last zone's data during prop transforms.
-- bcf3676: Fix unsafe permission dictionary access in hasPermission() that
-  caused silent failures when actions are undefined for a role. The function now
-  explicitly checks for undefined actions and returns false (deny permission)
-  instead of allowing undefined comparisons.
-- 25706d7: Add concurrency limit to migration transforms to prevent database
-  connection pool exhaustion on large sites
-- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub
-  repository URL used in npm provenance validation.
-- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making
-  `test` call `test:unit`.
+- d383641: Fix broken async reduce in zone transformations by replacing local transformProps copy
+  with upstream @puckeditor/core export. The local copy had a bug where spreading an unawaited
+  Promise accumulator silently dropped all but the last zone's data during prop transforms.
+- bcf3676: Fix unsafe permission dictionary access in hasPermission() that caused silent failures
+  when actions are undefined for a role. The function now explicitly checks for undefined actions
+  and returns false (deny permission) instead of allowing undefined comparisons.
+- 25706d7: Add concurrency limit to migration transforms to prevent database connection pool
+  exhaustion on large sites
+- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub repository URL used
+  in npm provenance validation.
+- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making `test` call
+  `test:unit`.
   - rename direct unit test command from `test` to `test:unit`
   - keep `test` as the entrypoint by delegating to `pnpm test:unit`
-  - add root `test:unit` orchestration for consistent workspace-level unit-test
-    invocation
+  - add root `test:unit` orchestration for consistent workspace-level unit-test invocation
   - preserve existing e2e-oriented test scripts
 
 - Updated dependencies [25706d7]
@@ -176,8 +165,8 @@
 
 ### Patch Changes
 
-- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub
-  repository URL used in npm provenance validation.
+- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub repository URL used
+  in npm provenance validation.
 - Updated dependencies [35b86e7]
   - @tohuhono/ui@0.14.2
   - @tohuhono/utils@0.13.2
@@ -186,8 +175,7 @@
 
 ### Patch Changes
 
-- 53f1409: Refresh workspace dependencies to latest available versions with pnpm
-  recursive update.
+- 53f1409: Refresh workspace dependencies to latest available versions with pnpm recursive update.
 
   Notable upgrades requiring follow-up migration work:
   - `flydrive` to v2
@@ -198,8 +186,7 @@
   - `eslint`/`@eslint/js` pinned to v9 for plugin compatibility
   - `@types/node` pinned to `24.10.1` for current Node 24 usage
 
-- d78a3de: Migrate package publishing to npm trusted publishing with GitHub
-  OIDC.
+- d78a3de: Migrate package publishing to npm trusted publishing with GitHub OIDC.
   - update release workflow permissions for OIDC token exchange
   - remove static `NPM_TOKEN` usage from publish job
   - enable npm provenance in CI and package publish metadata
@@ -218,66 +205,56 @@
 
 ### Patch Changes
 
-- 8774704: Add a monorepo assertion-safety lint rule and remove type assertion
-  usage across non-UI packages.
-  - Added `@typescript-eslint/consistent-type-assertions` to shared ESLint
-    config to discourage `as`/angle-bracket assertions.
-  - Replaced non-UI assertion sites with structural typing, runtime guards, and
-    typed locals in core, sqlite, flydrive, puck-blocks, puck-rich-text, and
-    create-oberon-app.
-  - Kept behavior consistent while improving type correctness around server
-    action unwrapping, JSON parsing, and runtime value narrowing.
+- 8774704: Add a monorepo assertion-safety lint rule and remove type assertion usage across non-UI
+  packages.
+  - Added `@typescript-eslint/consistent-type-assertions` to shared ESLint config to discourage
+    `as`/angle-bracket assertions.
+  - Replaced non-UI assertion sites with structural typing, runtime guards, and typed locals in
+    core, sqlite, flydrive, puck-blocks, puck-rich-text, and create-oberon-app.
+  - Kept behavior consistent while improving type correctness around server action unwrapping, JSON
+    parsing, and runtime value narrowing.
 
-- 10e7219: Migrate shared shadcn-based UI primitives from Radix component
-  packages to Base UI.
-  - Ported `avatar`, `button`, `checkbox`, `dialog`, `dropdown-menu`, `form`,
-    `input-otp`, `label`, `navigation-menu`, `popover`, `radio-group`,
-    `scroll-area`, `select`, `separator`, `switch`, `toast`, `tooltip`, and
-    related integrations to Base UI while preserving local styling/structure.
-  - Added compatibility shims for legacy `asChild` and `delayDuration` usage in
-    existing consumers.
-  - Updated UI package dependencies and applied a small core typing
-    compatibility update for select change handlers.
-  - Migrated the rich text toolbar dropdown menu internals from Radix to Base UI
-    while preserving the existing local styling pattern.
+- 10e7219: Migrate shared shadcn-based UI primitives from Radix component packages to Base UI.
+  - Ported `avatar`, `button`, `checkbox`, `dialog`, `dropdown-menu`, `form`, `input-otp`, `label`,
+    `navigation-menu`, `popover`, `radio-group`, `scroll-area`, `select`, `separator`, `switch`,
+    `toast`, `tooltip`, and related integrations to Base UI while preserving local
+    styling/structure.
+  - Added compatibility shims for legacy `asChild` and `delayDuration` usage in existing consumers.
+  - Updated UI package dependencies and applied a small core typing compatibility update for select
+    change handlers.
+  - Migrated the rich text toolbar dropdown menu internals from Radix to Base UI while preserving
+    the existing local styling pattern.
 
-- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
-  versions
-- 0054a4f: Cache `useLocalData` snapshots to prevent `useSyncExternalStore`
-  warnings.
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed versions
+- 0054a4f: Cache `useLocalData` snapshots to prevent `useSyncExternalStore` warnings.
 - a7653c1: Add package-level Tailwind source entrypoints and a published
-  `@oberoncms/core/tailwind.css` entrypoint for app-level composition without
-  optional package import failures.
-- 38b6272: Fix Next.js error handling helpers and align storage adapters with
-  updated driver contracts.
-- 3fc23f9: Migrate Puck dependencies and imports from `@measured/puck` to
-  `@puckeditor/core` and bump to the `0.21.x` line.
+  `@oberoncms/core/tailwind.css` entrypoint for app-level composition without optional package
+  import failures.
+- 38b6272: Fix Next.js error handling helpers and align storage adapters with updated driver
+  contracts.
+- 3fc23f9: Migrate Puck dependencies and imports from `@measured/puck` to `@puckeditor/core` and
+  bump to the `0.21.x` line.
 
-  Aligned CSS and import paths with the new package namespace and validated
-  workspace check/build after migration.
+  Aligned CSS and import paths with the new package namespace and validated workspace check/build
+  after migration.
 
-- 1dfe98b: Silence dotenv loading output in the core adapter and tidy the pgsql
-  init script.
-- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package
-  devDependencies. Also includes related fixes:
-  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground,
-    rich-text-demo and recipe-nextjs.
+- 1dfe98b: Silence dotenv loading output in the core adapter and tidy the pgsql init script.
+- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package devDependencies. Also
+  includes related fixes:
+  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground, rich-text-demo and
+    recipe-nextjs.
   - Remove `autoprefixer` devDependency entries from the affected packages.
   - ESLint flat-config fixes (avoid spreading plugin exports; add
     `settings.react.version = "detect"`).
-  - Tailwind/PostCSS adjustments and replacement of unsupported
-    `@apply border-border` with explicit `border-color` CSS.
+  - Tailwind/PostCSS adjustments and replacement of unsupported `@apply border-border` with explicit
+    `border-color` CSS.
 
-  This is a small, non-breaking patch to clean up CSS build-time config and
-  linter config.
+  This is a small, non-breaking patch to clean up CSS build-time config and linter config.
 
-- d51da69: Split shared repo configs into dedicated internal packages and
-  migrate all consumers:
+- d51da69: Split shared repo configs into dedicated internal packages and migrate all consumers:
   - add `@dev/eslint`, `@dev/typescript`, and `@dev/vite`
-  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
-    those packages
-  - replace `@tohuhono/dev` with `@dev/scripts` and keep only the `odt` tooling
-    export
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to those packages
+  - replace `@tohuhono/dev` with `@dev/scripts` and keep only the `odt` tooling export
   - modernize package `exports` maps with explicit `types`/`default` conditions
   - simplify `@dev/vite` to source export + typecheck-only workflow
 
@@ -356,9 +333,8 @@
 
 ### Minor Changes
 
-- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
-  now returns an object with the intitialised adapter and handlers Clarified
-  types - OberonActions is now OberonAdapter
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon now returns an object
+  with the intitialised adapter and handlers Clarified types - OberonActions is now OberonAdapter
 - a8d2554: BREAKING CHANGE move all auth including login to Oberon Client
 
 ### Patch Changes
@@ -382,8 +358,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production Add
-  Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add Toaster component to
+  surface action errors
 - 19e0f04: Move signOut to adapter
 - 85f2f55: Create a development plugin
 
@@ -400,8 +376,7 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers Move local sqlite to separate
-  plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate plugin
 
 ## 0.10.3
 
@@ -493,9 +468,8 @@
 
 - 4767eb7: Moved plugins and renamed packages
 - d13cecf: Change all adapters to be plugins
-- e1761a0: Removed database adapters and implemented as plugins instead.
-  Improved plugin system to better support database and other chaining plugins.
-  Implemented auth as plugins.
+- e1761a0: Removed database adapters and implemented as plugins instead. Improved plugin system to
+  better support database and other chaining plugins. Implemented auth as plugins.
 
 ### Patch Changes
 
@@ -510,8 +484,7 @@
 
 - 26d9c91: Updated adapter-vercel-postgres for site config and version support
 - 26d9c91: Added site manager page and page data migration functionality
-- 26d9c91: BREAKING CHANGE changed sqlite columns storing json data to use new
-  mode
+- 26d9c91: BREAKING CHANGE changed sqlite columns storing json data to use new mode
 
 ### Patch Changes
 
@@ -524,15 +497,13 @@
 
 ### Minor Changes
 
-- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for
-  uploadthing image removal
-- 2deb902: Added updatedAt and updatedBy to images Resolved uploadingthing type
-  declaration error
-- eae691f: CAUTION BREAKING CHANGE databases created before this patch will need
-  to be manually updated added updatedAt and updatedBy cloumns reset the drizzle
-  database migrations
-- 4e6430b: Reverted to relative imports because typescript team refuses to
-  transpile declaration files
+- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for uploadthing image
+  removal
+- 2deb902: Added updatedAt and updatedBy to images Resolved uploadingthing type declaration error
+- eae691f: CAUTION BREAKING CHANGE databases created before this patch will need to be manually
+  updated added updatedAt and updatedBy cloumns reset the drizzle database migrations
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration
+  files
 
 ### Patch Changes
 
@@ -595,9 +566,8 @@
 
 - dd9dc69: Implement optimistic pages
 - 39b03d3: Optimistically update the ui for oberon users
-- 5a0a961: Update theme Propogate theme to preview iframe Correctly invalidate
-  server side cache on page mutate Add createPage oberon action Add example
-  dashboard to recipe (maybe remvoe later?)
+- 5a0a961: Update theme Propogate theme to preview iframe Correctly invalidate server side cache on
+  page mutate Add createPage oberon action Add example dashboard to recipe (maybe remvoe later?)
 - e10807b: Impliment role based authorization
 
 ### Patch Changes
@@ -611,10 +581,9 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo
-  dev to correctly build dependencies. Changed from assets to images - this is a
-  breaking change for oberon adapaters. Fixed dynamic tailwind to target preview
-  iframe.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo dev to correctly build
+  dependencies. Changed from assets to images - this is a breaking change for oberon adapaters.
+  Fixed dynamic tailwind to target preview iframe.
 
 ### Patch Changes
 

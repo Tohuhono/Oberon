@@ -9,17 +9,15 @@ export function Home() {
       >
         <h1>OberonCMS</h1>
         <p>
-          An extensible content management system for developers, designers and
-          content creators.
+          An extensible content management system for developers, designers and content creators.
         </p>
         <p>
-          Get started quickly, for free on the platform of your choice. Use our
-          plugins or build your own to customise the OberonCMS to your needs.
+          Get started quickly, for free on the platform of your choice. Use our plugins or build
+          your own to customise the OberonCMS to your needs.
         </p>
         <p>
-          We're still building out the core capabilities and
-          [documentation](/docs/about), but we're excited to see what you can do
-          with it.
+          We're still building out the core capabilities and [documentation](/docs/about), but we're
+          excited to see what you can do with it.
         </p>
       </div>
     </div>

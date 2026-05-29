@@ -1,4 +1,5 @@
 import { NotImplementedError } from "@oberoncms/core"
+
 import type { AdapterTestAPI } from "../adapter"
 
 export function testKV(test: AdapterTestAPI) {
@@ -30,9 +31,7 @@ export function testKV(test: AdapterTestAPI) {
       await adapter.putKV("tailwind", "state", firstValue)
       await adapter.putKV("tailwind", "state", secondValue)
 
-      await expect(adapter.getKV("tailwind", "state")).resolves.toEqual(
-        secondValue,
-      )
+      await expect(adapter.getKV("tailwind", "state")).resolves.toEqual(secondValue)
     })
 
     test("persists large string payloads", async ({ adapter, expect }) => {

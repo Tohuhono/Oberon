@@ -18,9 +18,7 @@ async function deleteUserByEmail(page: Page, email: string) {
 
   await expect(deleteButton).toBeEnabled()
   await deleteButton.click()
-  await expect(
-    page.getByRole("button", { name: `Delete ${email}` }),
-  ).toHaveCount(0)
+  await expect(page.getByRole("button", { name: `Delete ${email}` })).toHaveCount(0)
 }
 
 const test = base.extend<{

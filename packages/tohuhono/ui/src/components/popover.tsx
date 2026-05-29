@@ -1,9 +1,8 @@
 "use client"
 
-import { Children, isValidElement } from "react"
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
-
 import { cn, type CN } from "@tohuhono/utils"
+import { Children, isValidElement } from "react"
 
 const Popover = PopoverPrimitive.Root
 
@@ -18,9 +17,7 @@ const PopoverTrigger = ({
     return <PopoverPrimitive.Trigger render={onlyChild} {...props} />
   }
 
-  return (
-    <PopoverPrimitive.Trigger {...props}>{children}</PopoverPrimitive.Trigger>
-  )
+  return <PopoverPrimitive.Trigger {...props}>{children}</PopoverPrimitive.Trigger>
 }
 
 const PopoverAnchor = PopoverPrimitive.Trigger
@@ -33,10 +30,7 @@ const PopoverContent = ({
   sideOffset = 4,
   ...props
 }: CN<PopoverPrimitive.Popup.Props> &
-  Pick<
-    PopoverPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) => (
+  Pick<PopoverPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) => (
   <PopoverPrimitive.Portal>
     <PopoverPrimitive.Positioner
       align={align}

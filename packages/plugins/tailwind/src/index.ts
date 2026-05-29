@@ -1,13 +1,10 @@
 import "server-cli-only"
-
 import { createHash } from "crypto"
-import {
-  type OberonPlugin,
-  type OberonPluginAdapter,
-  ResponseError,
-} from "@oberoncms/core"
+
+import { type OberonPlugin, type OberonPluginAdapter, ResponseError } from "@oberoncms/core"
 import { walkAsyncStep } from "walkjs"
 import { z } from "zod"
+
 import { name, version } from "../package.json" with { type: "json" }
 import { buildCss } from "./compiler"
 
@@ -35,9 +32,7 @@ export async function extractTailwindClasses(data: unknown) {
 }
 
 async function getState(adapter: Pick<OberonPluginAdapter, "getKV">) {
-  const parsed = tailwindStateSchema.safeParse(
-    await adapter.getKV(name, "state"),
-  )
+  const parsed = tailwindStateSchema.safeParse(await adapter.getKV(name, "state"))
 
   return parsed.success ? parsed.data : { activeHash: null, classes: [] }
 }
@@ -80,10 +75,7 @@ async function getAllPublishedClasses(
 }
 
 async function syncStyles(
-  adapter: Pick<
-    OberonPluginAdapter,
-    "getAllPages" | "getKV" | "getPageData" | "putKV"
-  >,
+  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getKV" | "getPageData" | "putKV">,
 ) {
   const classes = await getAllPublishedClasses(adapter)
   const state = await getState(adapter)
@@ -118,9 +110,7 @@ export const plugin: OberonPlugin = (adapter) => ({
         try {
           const pathname = new URL(request.url).pathname
           const filename = pathname.split("/").pop()
-          const hash = filename?.endsWith(".css")
-            ? filename.slice(0, -4)
-            : undefined
+          const hash = filename?.endsWith(".css") ? filename.slice(0, -4) : undefined
           const css = await getAsset(adapter, hash)
 
           if (!css) {

@@ -73,8 +73,8 @@ jobs:
           key: ${{ runner.os }}-turbo-validate-${{ github.sha }}
       - name: Install
         run: pnpm i
-      - name: Prettier
-        run: pnpm prettier
+      - name: Format
+        run: pnpm format:check
       - name: Check
         run: pnpm check
 
@@ -158,9 +158,7 @@ jobs:
   deploy_docs:
     name: Oberon Docs
     needs: [changed-packages]
-    if:
-      ${{ always() && contains(needs.changed-packages.outputs.changed_packages,
-      '@oberon/docs') }}
+    if: ${{ always() && contains(needs.changed-packages.outputs.changed_packages, '@oberon/docs') }}
     uses: ./.github/workflows/call-deploy.yml
     with:
       environment: ${{ inputs.environment }}
@@ -236,8 +234,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS:
-        "${{ contains(needs.*.result, 'failure') && 'failed' ||
-        contains(needs.*.result, 'cancelled') || 'passed' }}"
+        "${{ contains(needs.*.result, 'failure') && 'failed' || contains(needs.*.result,
+        'cancelled') || 'passed' }}"
       MESSAGE: |
         Latest deployments available at: 
         ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}

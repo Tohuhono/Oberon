@@ -1,20 +1,14 @@
 {
   "name": "@dev/vite",
-  "private": true,
   "version": "0.2.0",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
+  "private": true,
   "description": "Shared Vite library config for @tohuhono and @oberoncms packages",
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon.git",
     "directory": "dev/vite"
-  },
-  "type": "module",
-  "scripts": {
-    "clean": "odt clean",
-    "lint": "eslint .",
-    "tsc": "tsc --pretty"
   },
   "files": [
     "vite.config.ts",
@@ -22,10 +16,15 @@
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "exports": {
     ".": {
       "default": "./vite.config.ts"
     }
+  },
+  "scripts": {
+    "clean": "odt clean",
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "fast-glob": "^3.3.3",
@@ -34,11 +33,10 @@
     "vite-plugin-externalize-deps": "^0.10.0"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@types/node": "24.10.1",
-    "eslint": "^9.39.2",
     "typescript": "5.9.3"
   }
 }

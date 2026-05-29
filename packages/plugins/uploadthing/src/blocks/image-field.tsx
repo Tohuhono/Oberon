@@ -1,18 +1,14 @@
+import type { OberonImage } from "@oberoncms/core"
+import { useOberonImages } from "@oberoncms/core/editor"
 import { FieldLabel } from "@puckeditor/core"
 import { useEffect, useState } from "react"
-import { useOberonImages } from "@oberoncms/core/editor"
-import type { OberonImage } from "@oberoncms/core"
+
 import { UploadDropzone } from "../uploadthing/components"
 
-const useImages = (
-  value: OberonImage | null,
-  onChange: (value: OberonImage | null) => void,
-) => {
+const useImages = (value: OberonImage | null, onChange: (value: OberonImage | null) => void) => {
   const { images, loading, addImage } = useOberonImages()
 
-  const [imageKey, setImageKey] = useState<OberonImage["key"] | "">(
-    value?.key || "",
-  )
+  const [imageKey, setImageKey] = useState<OberonImage["key"] | "">(value?.key || "")
 
   useEffect(() => {
     if (!imageKey) {
@@ -38,18 +34,13 @@ export const ImageField = ({
   value: OberonImage | null
   onChange: (value: OberonImage | null) => void
 }) => {
-  const { images, loading, imageKey, setImageKey, addImage } = useImages(
-    value,
-    onChange,
-  )
+  const { images, loading, imageKey, setImageKey, addImage } = useImages(value, onChange)
 
   return (
     <>
       <FieldLabel label="Image">
         <select value={imageKey} onChange={(e) => setImageKey(e.target.value)}>
-          <option value="">
-            {loading ? "Loading Images" : "Select an image"}
-          </option>
+          <option value="">{loading ? "Loading Images" : "Select an image"}</option>
           {images?.map(({ key, alt }) => (
             <option key={key} value={key}>
               {alt}

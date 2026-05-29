@@ -1,20 +1,13 @@
-import { type ComponentPropsWithRef } from "react"
-
 import { cn } from "@tohuhono/utils"
+import { type ComponentPropsWithRef } from "react"
 
 const Table = ({ className, ...props }: ComponentPropsWithRef<"table">) => (
   <div className="relative w-full overflow-auto">
-    <table
-      className={cn("w-full caption-bottom text-sm", className)}
-      {...props}
-    />
+    <table className={cn("w-full caption-bottom text-sm", className)} {...props} />
   </div>
 )
 
-const TableHeader = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"thead">) => (
+const TableHeader = ({ className, ...props }: ComponentPropsWithRef<"thead">) => (
   <thead className={cn("[&_tr]:border-b", className)} {...props} />
 )
 
@@ -22,10 +15,7 @@ const TableBody = ({ className, ...props }: ComponentPropsWithRef<"tbody">) => (
   <tbody className={cn("[&_tr:last-child]:border-0", className)} {...props} />
 )
 
-const TableFooter = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"tfoot">) => (
+const TableFooter = ({ className, ...props }: ComponentPropsWithRef<"tfoot">) => (
   <tfoot
     className={cn(
       `
@@ -80,23 +70,8 @@ const TableCell = ({ className, ...props }: ComponentPropsWithRef<"td">) => (
   />
 )
 
-const TableCaption = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"caption">) => (
-  <caption
-    className={cn("mt-4 text-sm text-muted-foreground", className)}
-    {...props}
-  />
+const TableCaption = ({ className, ...props }: ComponentPropsWithRef<"caption">) => (
+  <caption className={cn("mt-4 text-sm text-muted-foreground", className)} {...props} />
 )
 
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-}
+export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption }

@@ -1,16 +1,15 @@
 {
   "name": "create-oberon-app",
   "version": "0.11.0",
+  "homepage": "https://tohuhono.com/oberon",
+  "bugs": "https://github.com/tohuhono/oberon",
+  "license": "MIT",
   "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/create-oberon-app"
   },
-  "bugs": "https://github.com/tohuhono/oberon",
-  "homepage": "https://tohuhono.com/oberon",
-  "license": "MIT",
-  "type": "module",
   "bin": {
     "create-oberon-app": "./dist/index.js"
   },
@@ -22,19 +21,18 @@
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:coa": "playwright test --config playwright.config.ts",
     "test:coa:ui": "playwright test --config playwright.config.ts --ui",
     "tsc": "tsc --pretty"
-  },
-  "engines": {
-    "node": ">=22.0.0"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^14.0.0",
@@ -45,7 +43,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
@@ -69,5 +67,8 @@
     "server-cli-only": "^0.3.2",
     "typescript": "5.9.3",
     "verdaccio": "^6.0.5"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }

@@ -1,8 +1,8 @@
 {
   "name": "@dev/final",
-  "description": "typescript config with all other packages as deps",
   "version": "0.1.0",
   "private": true,
+  "description": "typescript config with all other packages as deps",
   "type": "module",
   "scripts": {
     "clean": "odt clean",
@@ -23,7 +23,6 @@
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "create-oberon-app": "workspace:*",
-    "eslint": "^9.39.2",
     "typescript": "5.9.3"
   }
 }

@@ -24,10 +24,4 @@ const toast = ({ title, description, variant = "default" }: ToastInput) => {
   })
 }
 
-export {
-  type ToastVariant,
-  type ToastData,
-  type ToastInput,
-  toast,
-  toastManager,
-}
+export { type ToastVariant, type ToastData, type ToastInput, toast, toastManager }

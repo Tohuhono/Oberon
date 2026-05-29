@@ -11,25 +11,24 @@
 
 ### Minor Changes
 
-- 20820f4: Promote the repo to the Better Auth model across core packages, plugins, docs,
-  recipes, and app scaffolds.
+- 20820f4: Promote the repo to the Better Auth model across core packages, plugins, docs, recipes,
+  and app scaffolds.
 
-  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth
-  adapter expectations, and aligns setup guidance around Better Auth as the
-  supported path.
+  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth adapter
+  expectations, and aligns setup guidance around Better Auth as the supported path.
 
   Risks and implications:
-  - Integrations still relying on Auth.js/NextAuth-specific behavior may require
-    configuration and implementation updates.
-  - Auth adapter implementations must match the updated user-table/auth contract
-    expectations across sqlite and pgsql paths.
-  - Existing user schemas with provider-specific fields may need to be reduced or
-    remapped to the active Better Auth model.
-  - Environment variables, callback handling, and session/user lifecycle behavior
-    should be reviewed during upgrade to avoid auth regressions.
+  - Integrations still relying on Auth.js/NextAuth-specific behavior may require configuration and
+    implementation updates.
+  - Auth adapter implementations must match the updated user-table/auth contract expectations across
+    sqlite and pgsql paths.
+  - Existing user schemas with provider-specific fields may need to be reduced or remapped to the
+    active Better Auth model.
+  - Environment variables, callback handling, and session/user lifecycle behavior should be reviewed
+    during upgrade to avoid auth regressions.
 
-  Treat this as a coordinated upgrade across core, plugins, recipes, and app
-  scaffolds rather than a piecemeal patch.
+  Treat this as a coordinated upgrade across core, plugins, recipes, and app scaffolds rather than a
+  piecemeal patch.
 
 ### Patch Changes
 
@@ -88,9 +87,9 @@
 
 ### Patch Changes
 
-- d680fc0: Remove dead code: unused legacy Pages Router file, unused Welcome component
-  duplicate, and unused import. Add noUnusedLocals/noUnusedParameters to recipe
-  tsconfig to prevent future unused imports.
+- d680fc0: Remove dead code: unused legacy Pages Router file, unused Welcome component duplicate,
+  and unused import. Add noUnusedLocals/noUnusedParameters to recipe tsconfig to prevent future
+  unused imports.
 - Updated dependencies [fbad025]
 - Updated dependencies [d383641]
 - Updated dependencies [bcf3676]
@@ -126,27 +125,25 @@
 ### Patch Changes
 
 - 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed versions
-- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route prop
-  helpers.
-- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package devDependencies.
-  Also includes related fixes:
-  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground,
-    rich-text-demo and recipe-nextjs.
+- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route prop helpers.
+- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package devDependencies. Also
+  includes related fixes:
+  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground, rich-text-demo and
+    recipe-nextjs.
   - Remove `autoprefixer` devDependency entries from the affected packages.
   - ESLint flat-config fixes (avoid spreading plugin exports; add
     `settings.react.version = "detect"`).
-  - Tailwind/PostCSS adjustments and replacement of unsupported
-    `@apply border-border` with explicit `border-color` CSS.
+  - Tailwind/PostCSS adjustments and replacement of unsupported `@apply border-border` with explicit
+    `border-color` CSS.
 
-  This is a small, non-breaking patch to clean up CSS build-time config and linter
-  config.
+  This is a small, non-breaking patch to clean up CSS build-time config and linter config.
 
-- 1a4ce67: Remove the deprecated `@tohuhono/puck-rich-text` package and the
-  `rich-text-demo` app from the monorepo.
+- 1a4ce67: Remove the deprecated `@tohuhono/puck-rich-text` package and the `rich-text-demo` app
+  from the monorepo.
 
-  Also remove direct runtime/dependency references and switch `puck-blocks`
-  example text rendering to native `richtext` fields. Also remove stale CI
-  deploy/promote workflow jobs and quick-start references for the removed demo.
+  Also remove direct runtime/dependency references and switch `puck-blocks` example text rendering
+  to native `richtext` fields. Also remove stale CI deploy/promote workflow jobs and quick-start
+  references for the removed demo.
 
 - Updated dependencies [8774704]
 - Updated dependencies [10e7219]
@@ -229,9 +226,8 @@
 
 ### Minor Changes
 
-- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon now returns
-  an object with the intitialised adapter and handlers Clarified types -
-  OberonActions is now OberonAdapter
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon now returns an object
+  with the intitialised adapter and handlers Clarified types - OberonActions is now OberonAdapter
 - a8d2554: BREAKING CHANGE move all auth including login to Oberon Client
 
 ### Patch Changes
@@ -253,8 +249,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production
-  Add Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add Toaster component to
+  surface action errors
 - 19e0f04: Move signOut to adapter
 - 85f2f55: Create a development plugin
 
@@ -288,8 +284,7 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers
-  Move local sqlite to separate plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate plugin
 - Updated dependencies [e28293f]
 - Updated dependencies [01fde22]
 - Updated dependencies [e8c2c24]
@@ -400,9 +395,8 @@
 
 - 4767eb7: Moved plugins and renamed packages
 - d13cecf: Change all adapters to be plugins
-- e1761a0: Removed database adapters and implemented as plugins instead.
-  Improved plugin system to better support database and other chaining plugins.
-  Implemented auth as plugins.
+- e1761a0: Removed database adapters and implemented as plugins instead. Improved plugin system to
+  better support database and other chaining plugins. Implemented auth as plugins.
 
 ### Patch Changes
 
@@ -439,13 +433,10 @@
 
 ### Minor Changes
 
-- c6960f3: Implement Adapter Plugins
-  Refactor OberonProvider
-  Add cleanup for uploadthing image removal
-- eae691f: CAUTION BREAKING CHANGE
-  databases created before this patch will need to be manually updated
-  added updatedAt and updatedBy cloumns
-  reset the drizzle database migrations
+- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for uploadthing image
+  removal
+- eae691f: CAUTION BREAKING CHANGE databases created before this patch will need to be manually
+  updated added updatedAt and updatedBy cloumns reset the drizzle database migrations
 
 ### Patch Changes
 
@@ -529,11 +520,8 @@
 
 ### Minor Changes
 
-- 5a0a961: Update theme
-  Propogate theme to preview iframe
-  Correctly invalidate server side cache on page mutate
-  Add createPage oberon action
-  Add example dashboard to recipe (maybe remvoe later?)
+- 5a0a961: Update theme Propogate theme to preview iframe Correctly invalidate server side cache on
+  page mutate Add createPage oberon action Add example dashboard to recipe (maybe remvoe later?)
 - e10807b: Impliment role based authorization
 
 ### Patch Changes
@@ -552,10 +540,8 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component.
-  Next -> 14.2.
-  Fixed turbo dev to correctly build dependencies.
-  Changed from assets to images - this is a breaking change for oberon adapaters.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo dev to correctly build
+  dependencies. Changed from assets to images - this is a breaking change for oberon adapaters.
   Fixed dynamic tailwind to target preview iframe.
 
 ### Patch Changes

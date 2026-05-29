@@ -1,25 +1,24 @@
 {
   "name": "@tohuhono/puck-blocks",
   "version": "0.14.1",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
   "description": "A collection of puck components for building pages in OberonCMS",
   "keywords": [
-    "oberon",
-    "oberoncms",
-    "cms",
-    "puck",
     "block",
+    "cms",
     "component",
     "nextjs",
+    "oberon",
+    "oberoncms",
+    "puck",
     "react"
   ],
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/tohuhono/puck-blocks"
   },
-  "type": "module",
   "files": [
     "dist",
     "src",
@@ -28,11 +27,15 @@
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "exports": {
     "./div": "./dist/div.js",
     "./example": "./dist/example.js",
     "./prose": "./dist/prose.js",
     "./source.css": "./source.css"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "vite build",
@@ -40,13 +43,11 @@
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
@@ -55,21 +56,20 @@
     "next": "^16.1.6",
     "recharts": "^3.7.0"
   },
-  "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
-  },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "^9.39.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

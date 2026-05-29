@@ -1,32 +1,35 @@
 {
   "name": "@oberoncms/plugin-flydrive",
   "version": "0.9.1",
-  "author": "Ahmed Rowaihi @sudorw",
-  "license": "MIT",
   "description": "a fullstack image component for puck editor OberonCMS, flydrive based to store manage in the cloud, aws, gcp, cloudfare, s3, vercel, filesystem, etc.",
   "keywords": [
+    "aws",
+    "block",
+    "cloudfare",
+    "cms",
+    "component",
+    "filesystem",
+    "flydrive",
+    "gcp",
+    "nextjs",
     "oberon",
     "oberoncms",
-    "cms",
     "puck",
-    "block",
-    "component",
-    "nextjs",
     "react",
-    "flydrive",
-    "aws",
-    "cloudfare",
-    "gcp",
     "s3",
-    "filesystem",
-    "vercel",
-    "storage"
+    "storage",
+    "vercel"
   ],
+  "license": "MIT",
+  "author": "Ahmed Rowaihi @sudorw",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/plugins/flydrive"
   },
+  "files": [
+    "./dist"
+  ],
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -38,22 +41,20 @@
     "./vercel": "./dist/extentions/vercel.js",
     "./plugin": "./dist/plugin.js"
   },
-  "files": [
-    "./dist"
-  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
@@ -62,6 +63,21 @@
     "image-size": "2.0.2",
     "react-dropzone": "^15.0.0",
     "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@dev/oxlint": "workspace:*",
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
+    "@dev/vite": "workspace:*",
+    "@dev/vitest": "workspace:*",
+    "@puckeditor/core": "^0.21.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vercel/blob": "^2.2.0",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "@vercel/blob": ">=0.23.3",
@@ -73,21 +89,5 @@
     "@vercel/blob": {
       "optional": true
     }
-  },
-  "devDependencies": {
-    "@dev/eslint": "workspace:*",
-    "@dev/scripts": "workspace:*",
-    "@dev/typescript": "workspace:*",
-    "@dev/vite": "workspace:*",
-    "@dev/vitest": "workspace:*",
-    "@puckeditor/core": "^0.21.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "@vercel/blob": "^2.2.0",
-    "eslint": "^9.39.2",
-    "next": "^16.1.6",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "typescript": "5.9.3"
   }
 }

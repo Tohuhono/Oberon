@@ -3,7 +3,6 @@
   "display": "Next.js",
   "extends": "@dev/typescript",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
     "allowJs": true,
     "checkJs": true,
@@ -22,12 +21,6 @@
     },
     "strictNullChecks": true
   },
-  "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.js",
-    "src/**/*.jsx"
-  ],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
   "exclude": ["node_modules"]
 }

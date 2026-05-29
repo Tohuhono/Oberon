@@ -1,9 +1,8 @@
 "use client"
 
-import { type ComponentPropsWithRef, useContext } from "react"
-import { OTPInput, OTPInputContext } from "input-otp"
-
 import { cn } from "@tohuhono/utils"
+import { OTPInput, OTPInputContext } from "input-otp"
+import { type ComponentPropsWithRef, useContext } from "react"
 
 const InputOTP = ({
   className,
@@ -23,10 +22,7 @@ const InputOTP = ({
   />
 )
 
-const InputOTPGroup = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"div">) => (
+const InputOTPGroup = ({ className, ...props }: ComponentPropsWithRef<"div">) => (
   <div className={cn("flex items-center", className)} {...props} />
 )
 
@@ -70,13 +66,7 @@ const InputOTPSlot = ({
 const InputOTPSeparator = (props: ComponentPropsWithRef<"div">) => (
   <div role="separator" {...props}>
     <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-      <path
-        d="M6 12h12"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
+      <path d="M6 12h12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   </div>
 )

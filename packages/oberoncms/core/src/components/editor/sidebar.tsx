@@ -1,19 +1,16 @@
 "use client"
 
 import "@puckeditor/core/puck.css"
-
-import { Button } from "@tohuhono/ui/button"
-import { cn, isValidKey } from "@tohuhono/utils"
-
+import { createUsePuck, Puck } from "@puckeditor/core"
 import {
   CardStackPlusIcon,
   ListBulletIcon,
   MixerHorizontalIcon,
   DragHandleDots2Icon,
 } from "@radix-ui/react-icons"
-
+import { Button } from "@tohuhono/ui/button"
+import { cn, isValidKey } from "@tohuhono/utils"
 import { useState, type PropsWithChildren } from "react"
-import { createUsePuck, Puck } from "@puckeditor/core"
 
 const usePuck = createUsePuck()
 
@@ -62,9 +59,7 @@ export const SidebarTabs = ({
         title={label}
         variant="tab"
         size="icon"
-        onClick={() =>
-          isValidKey(tabValue, sidebarTabs) && setActiveTab(tabValue)
-        }
+        onClick={() => isValidKey(tabValue, sidebarTabs) && setActiveTab(tabValue)}
       >
         <Icon className="size-4" />
         <span className="sr-only">{label}</span>
@@ -86,12 +81,9 @@ export const SidebarHeading = ({
   activeTab: SidebarTab
   className?: string
 }) => {
-  const selectedComponent = usePuck(
-    (s) => s.selectedItem?.type || sidebarTabs["fields"].label,
-  )
+  const selectedComponent = usePuck((s) => s.selectedItem?.type || sidebarTabs["fields"].label)
 
-  const tabLabel =
-    activeTab === "fields" ? selectedComponent : sidebarTabs[activeTab].label
+  const tabLabel = activeTab === "fields" ? selectedComponent : sidebarTabs[activeTab].label
 
   return <h3 className={cn(className, "p-2 pl-4")}>{tabLabel}</h3>
 }

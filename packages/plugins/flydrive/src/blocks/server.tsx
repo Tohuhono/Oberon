@@ -1,6 +1,6 @@
-import NextImage from "next/image"
-import { ImageIcon } from "@radix-ui/react-icons"
 import type { OberonComponent, OberonImage } from "@oberoncms/core"
+import { ImageIcon } from "@radix-ui/react-icons"
+import NextImage from "next/image"
 
 export const Image = {
   fields: {

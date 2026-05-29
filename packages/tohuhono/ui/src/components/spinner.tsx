@@ -1,16 +1,11 @@
 import { cn } from "@tohuhono/utils"
 import type { PropsWithChildren } from "react"
 
-export const Spinner = ({
-  className,
-}: PropsWithChildren<{ className?: string }>) => {
+export const Spinner = ({ className }: PropsWithChildren<{ className?: string }>) => {
   return (
     <div
       role="status"
-      className={cn(
-        "absolute right-1/2 bottom-1/2 translate-1/2 transform",
-        className,
-      )}
+      className={cn("absolute right-1/2 bottom-1/2 translate-1/2 transform", className)}
     >
       <div
         className="

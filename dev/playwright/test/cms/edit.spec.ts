@@ -25,21 +25,12 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
   }) => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
-    await expect(
-      cms.getByRole("button", { name: "Preview", exact: true }),
-    ).toBeVisible()
-    await expect(
-      cms.getByRole("button", { name: "View", exact: true }),
-    ).toBeVisible()
-    await expect(
-      cms.getByRole("button", { name: "Publish", exact: true }),
-    ).toBeVisible()
+    await expect(cms.getByRole("button", { name: "Preview", exact: true })).toBeVisible()
+    await expect(cms.getByRole("button", { name: "View", exact: true })).toBeVisible()
+    await expect(cms.getByRole("button", { name: "Publish", exact: true })).toBeVisible()
   })
 
-  test("provides viewport controls for the preview", async ({
-    cms,
-    cmsSeededPageKey,
-  }) => {
+  test("provides viewport controls for the preview", async ({ cms, cmsSeededPageKey }) => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     const viewportControls = cms.getByRole("group", {
@@ -53,13 +44,9 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
     await expect(frame).toBeVisible()
     const fullWidth = (await frame.boundingBox())?.width ?? 0
 
-    await viewportControls
-      .getByRole("button", { name: "Small", exact: true })
-      .click()
+    await viewportControls.getByRole("button", { name: "Small", exact: true }).click()
 
-    await expect
-      .poll(async () => (await frame.boundingBox())?.width ?? 0)
-      .toBeLessThan(fullWidth)
+    await expect.poll(async () => (await frame.boundingBox())?.width ?? 0).toBeLessThan(fullWidth)
   })
 
   test(
@@ -74,9 +61,7 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
         .first()
 
       const previewFrame = cms.frameLocator("iframe#preview-frame")
-      const previewDropzone = previewFrame
-        .locator("[data-puck-dropzone]")
-        .first()
+      const previewDropzone = previewFrame.locator("[data-puck-dropzone]").first()
 
       await expect(insertTextButton).toBeVisible()
       await expect(previewDropzone).toBeVisible()
@@ -101,9 +86,7 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
       await expect(textInput).toBeVisible()
       await textInput.fill("Welcome to OberonCMS")
 
-      const classNameInput = inspectorPanel
-        .locator('input[name="className"]')
-        .first()
+      const classNameInput = inspectorPanel.locator('input[name="className"]').first()
       await expect(classNameInput).toBeVisible()
       await classNameInput.fill("p-1")
 
@@ -123,9 +106,7 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
       await cms.goto(cmsSeededPageKey)
       await expect(cms).toHaveURL(cmsSeededPageKey)
       await expect(cms.getByText("Welcome to OberonCMS")).toBeVisible()
-      await expect(
-        cms.locator(".p-1", { hasText: "Welcome to OberonCMS" }),
-      ).toBeVisible()
+      await expect(cms.locator(".p-1", { hasText: "Welcome to OberonCMS" })).toBeVisible()
       expect(errorCapture.browserErrors).toEqual([])
     },
   )
@@ -155,22 +136,15 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     await cms.getByRole("menuitem", { name: "Follow", exact: true }).click()
 
     await editorThemeToggle.click()
-    await editorThemeMenu
-      .getByRole("menuitem", { name: "Light", exact: true })
-      .click()
+    await editorThemeMenu.getByRole("menuitem", { name: "Light", exact: true }).click()
     await expect(frameHtml).not.toHaveClass(/dark/)
 
     await editorThemeToggle.click()
-    await editorThemeMenu
-      .getByRole("menuitem", { name: "Dark", exact: true })
-      .click()
+    await editorThemeMenu.getByRole("menuitem", { name: "Dark", exact: true }).click()
     await expect(frameHtml).toHaveClass(/dark/)
   })
 
-  test("applies explicit preview light and dark modes", async ({
-    cms,
-    cmsSeededPageKey,
-  }) => {
+  test("applies explicit preview light and dark modes", async ({ cms, cmsSeededPageKey }) => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
@@ -191,9 +165,7 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     }
 
     await openThemeMenu()
-    await previewModeMenu
-      .getByRole("menuitem", { name: "Dark", exact: true })
-      .click()
+    await previewModeMenu.getByRole("menuitem", { name: "Dark", exact: true }).click()
     await expect(frameHtml).toHaveClass(/dark/)
 
     await openPreviewModeMenu()
@@ -208,15 +180,10 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
   test("hides preview mode controls outside editor pages", async ({ cms }) => {
     await cms.goto("/cms/pages")
 
-    await expect(
-      cms.getByRole("button", { name: "Preview mode", exact: true }),
-    ).toHaveCount(0)
+    await expect(cms.getByRole("button", { name: "Preview mode", exact: true })).toHaveCount(0)
   })
 
-  test("resets preview mode to follow on editor remount", async ({
-    cms,
-    cmsSeededPageKey,
-  }) => {
+  test("resets preview mode to follow on editor remount", async ({ cms, cmsSeededPageKey }) => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     const frameHtml = cms.frameLocator("iframe#preview-frame").locator("html")
@@ -244,9 +211,7 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
     await openThemeMenu()
-    await previewModeMenu
-      .getByRole("menuitem", { name: "Light", exact: true })
-      .click()
+    await previewModeMenu.getByRole("menuitem", { name: "Light", exact: true }).click()
 
     await expect(frameHtml).not.toHaveClass(/dark/)
   })

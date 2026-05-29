@@ -7,9 +7,7 @@ export type DatabaseClient = NodePgDatabase<typeof schema>
 
 const createRemoteClient = () => {
   if (!process.env.DATABASE_URL) {
-    throw new Error(
-      "No remote database credentials supplied: have you set database credentials?",
-    )
+    throw new Error("No remote database credentials supplied: have you set database credentials?")
   }
 
   return new Pool({

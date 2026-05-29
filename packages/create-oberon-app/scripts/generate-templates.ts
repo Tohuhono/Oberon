@@ -1,8 +1,9 @@
-import { mkdir, copyFile, rm } from "fs/promises"
 import { existsSync } from "fs"
+import { mkdir, copyFile, rm } from "fs/promises"
 import path from "path"
-import walk from "ignore-walk"
+
 import fg from "fast-glob"
+import walk from "ignore-walk"
 
 export const generateTemplates = async () => {
   // Copy template files to the new directory
@@ -13,24 +14,14 @@ export const generateTemplates = async () => {
   }
 
   const pluginsPath = path.join(import.meta.dirname, "..", "plugins")
-  const pluginsTargetPath = path.join(
-    import.meta.dirname,
-    "..",
-    "dist",
-    "plugins",
-  )
+  const pluginsTargetPath = path.join(import.meta.dirname, "..", "dist", "plugins")
   if (!existsSync(pluginsPath)) {
     console.error(`No plugins directory could be found at ${pluginsPath}.`)
     return
   }
 
   const templatePath = path.join(import.meta.dirname, "..", "templates")
-  const templateTargetPath = path.join(
-    import.meta.dirname,
-    "..",
-    "dist",
-    "templates",
-  )
+  const templateTargetPath = path.join(import.meta.dirname, "..", "dist", "templates")
 
   await rm(pluginsTargetPath, { recursive: true, force: true })
   await rm(templateTargetPath, { recursive: true, force: true })
@@ -38,9 +29,7 @@ export const generateTemplates = async () => {
   await mkdir(templatePath, { recursive: true })
 
   if (!existsSync(templatePath)) {
-    console.error(
-      `No template directory could be found at ${templateTargetPath}.`,
-    )
+    console.error(`No template directory could be found at ${templateTargetPath}.`)
     return
   }
 

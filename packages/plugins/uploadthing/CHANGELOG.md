@@ -10,25 +10,24 @@
 
 ### Minor Changes
 
-- 20820f4: Promote the repo to the Better Auth model across core packages,
-  plugins, docs, recipes, and app scaffolds.
+- 20820f4: Promote the repo to the Better Auth model across core packages, plugins, docs, recipes,
+  and app scaffolds.
 
-  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth
-  adapter expectations, and aligns setup guidance around Better Auth as the
-  supported path.
+  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth adapter
+  expectations, and aligns setup guidance around Better Auth as the supported path.
 
   Risks and implications:
-  - Integrations still relying on Auth.js/NextAuth-specific behavior may require
-    configuration and implementation updates.
-  - Auth adapter implementations must match the updated user-table/auth contract
-    expectations across sqlite and pgsql paths.
-  - Existing user schemas with provider-specific fields may need to be reduced
-    or remapped to the active Better Auth model.
-  - Environment variables, callback handling, and session/user lifecycle
-    behavior should be reviewed during upgrade to avoid auth regressions.
+  - Integrations still relying on Auth.js/NextAuth-specific behavior may require configuration and
+    implementation updates.
+  - Auth adapter implementations must match the updated user-table/auth contract expectations across
+    sqlite and pgsql paths.
+  - Existing user schemas with provider-specific fields may need to be reduced or remapped to the
+    active Better Auth model.
+  - Environment variables, callback handling, and session/user lifecycle behavior should be reviewed
+    during upgrade to avoid auth regressions.
 
-  Treat this as a coordinated upgrade across core, plugins, recipes, and app
-  scaffolds rather than a piecemeal patch.
+  Treat this as a coordinated upgrade across core, plugins, recipes, and app scaffolds rather than a
+  piecemeal patch.
 
 ### Patch Changes
 
@@ -53,17 +52,16 @@
 
 ### Patch Changes
 
-- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead
-  of failing repo-wide test runs.
-- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for
-  focused AI and baseline unit-test slices.
-- 237d393: Simplify local e2e publishing by using root recursive workspace
-  publish to Verdaccio and removing extra setup complexity. Also remove
-  package-level provenance defaults from publish configs so local recursive
-  publish works in non-CI environments, while release provenance remains
-  controlled by CI environment settings. Modernize GitHub Actions Node setup to
-  use setup-node + Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio`
-  while keeping the create-oberon-app scaffold runtime in `/opt/coa`.
+- a73560b: Patch Vitest tag filtering so dynamic issue tags skip cleanly instead of failing
+  repo-wide test runs.
+- 36a3b7e: Add a package unit watch lane and tagged Vitest test workflow for focused AI and baseline
+  unit-test slices.
+- 237d393: Simplify local e2e publishing by using root recursive workspace publish to Verdaccio and
+  removing extra setup complexity. Also remove package-level provenance defaults from publish
+  configs so local recursive publish works in non-CI environments, while release provenance remains
+  controlled by CI environment settings. Modernize GitHub Actions Node setup to use setup-node +
+  Corepack pnpm caching, and run Verdaccio in `/opt/verdaccio` while keeping the create-oberon-app
+  scaffold runtime in `/opt/coa`.
 - Updated dependencies [a73560b]
 - Updated dependencies [8109ea8]
 - Updated dependencies [b654991]
@@ -93,23 +91,20 @@
 
 ### Patch Changes
 
-- 01fa4b5: Fix silent data loss in deleteImage operations. Previously,
-  Promise.allSettled silently swallowed errors from both storage and database
-  deletions, causing users to see success even when operations failed. Now
-  properly handles errors by collecting failures and throwing an AggregateError,
-  ensuring users are aware of partial failures that require admin intervention.
-- f06f0b5: Add memory limit (128KB) to stream processing in getImageSize() to
-  prevent unbounded memory consumption. Large image uploads now abort gracefully
-  after reading sufficient data for header detection, preventing OOM crashes
-  while maintaining backward compatibility.
-- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub
-  repository URL used in npm provenance validation.
-- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making
-  `test` call `test:unit`.
+- 01fa4b5: Fix silent data loss in deleteImage operations. Previously, Promise.allSettled silently
+  swallowed errors from both storage and database deletions, causing users to see success even when
+  operations failed. Now properly handles errors by collecting failures and throwing an
+  AggregateError, ensuring users are aware of partial failures that require admin intervention.
+- f06f0b5: Add memory limit (128KB) to stream processing in getImageSize() to prevent unbounded
+  memory consumption. Large image uploads now abort gracefully after reading sufficient data for
+  header detection, preventing OOM crashes while maintaining backward compatibility.
+- 8265abe: Normalize package `repository.url` metadata to the canonical GitHub repository URL used
+  in npm provenance validation.
+- 4a4ab91: Standardize unit test scripts by introducing `test:unit` and making `test` call
+  `test:unit`.
   - rename direct unit test command from `test` to `test:unit`
   - keep `test` as the entrypoint by delegating to `pnpm test:unit`
-  - add root `test:unit` orchestration for consistent workspace-level unit-test
-    invocation
+  - add root `test:unit` orchestration for consistent workspace-level unit-test invocation
   - preserve existing e2e-oriented test scripts
 
 - Updated dependencies [fbad025]
@@ -124,8 +119,8 @@
 
 ### Patch Changes
 
-- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub
-  repository URL used in npm provenance validation.
+- 35b86e7: Normalize package `repository.url` metadata to the canonical GitHub repository URL used
+  in npm provenance validation.
 - Updated dependencies [35b86e7]
   - @oberoncms/core@0.17.2
 
@@ -133,8 +128,7 @@
 
 ### Patch Changes
 
-- 53f1409: Refresh workspace dependencies to latest available versions with pnpm
-  recursive update.
+- 53f1409: Refresh workspace dependencies to latest available versions with pnpm recursive update.
 
   Notable upgrades requiring follow-up migration work:
   - `flydrive` to v2
@@ -145,8 +139,7 @@
   - `eslint`/`@eslint/js` pinned to v9 for plugin compatibility
   - `@types/node` pinned to `24.10.1` for current Node 24 usage
 
-- d78a3de: Migrate package publishing to npm trusted publishing with GitHub
-  OIDC.
+- d78a3de: Migrate package publishing to npm trusted publishing with GitHub OIDC.
   - update release workflow permissions for OIDC token exchange
   - remove static `NPM_TOKEN` usage from publish job
   - enable npm provenance in CI and package publish metadata
@@ -163,24 +156,20 @@
 
 ### Patch Changes
 
-- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
-  versions
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed versions
 - a7653c1: Add package-level Tailwind source entrypoints and a published
-  `@oberoncms/core/tailwind.css` entrypoint for app-level composition without
-  optional package import failures.
-- 3fc23f9: Migrate Puck dependencies and imports from `@measured/puck` to
-  `@puckeditor/core` and bump to the `0.21.x` line.
+  `@oberoncms/core/tailwind.css` entrypoint for app-level composition without optional package
+  import failures.
+- 3fc23f9: Migrate Puck dependencies and imports from `@measured/puck` to `@puckeditor/core` and
+  bump to the `0.21.x` line.
 
-  Aligned CSS and import paths with the new package namespace and validated
-  workspace check/build after migration.
+  Aligned CSS and import paths with the new package namespace and validated workspace check/build
+  after migration.
 
-- d51da69: Split shared repo configs into dedicated internal packages and
-  migrate all consumers:
+- d51da69: Split shared repo configs into dedicated internal packages and migrate all consumers:
   - add `@dev/eslint`, `@dev/typescript`, and `@dev/vite`
-  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to
-    those packages
-  - replace `@tohuhono/dev` with `@dev/scripts` and keep only the `odt` tooling
-    export
+  - move workspace `eslint`, `tsconfig`, `tailwind`, and `vite` references to those packages
+  - replace `@tohuhono/dev` with `@dev/scripts` and keep only the `odt` tooling export
   - modernize package `exports` maps with explicit `types`/`default` conditions
   - simplify `@dev/vite` to source export + typecheck-only workflow
 
@@ -261,9 +250,8 @@
 
 ### Minor Changes
 
-- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
-  now returns an object with the intitialised adapter and handlers Clarified
-  types - OberonActions is now OberonAdapter
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon now returns an object
+  with the intitialised adapter and handlers Clarified types - OberonActions is now OberonAdapter
 
 ### Patch Changes
 
@@ -390,9 +378,8 @@
 
 - 4767eb7: Moved plugins and renamed packages
 - d13cecf: Change all adapters to be plugins
-- e1761a0: Removed database adapters and implemented as plugins instead.
-  Improved plugin system to better support database and other chaining plugins.
-  Implemented auth as plugins.
+- e1761a0: Removed database adapters and implemented as plugins instead. Improved plugin system to
+  better support database and other chaining plugins. Implemented auth as plugins.
 
 ### Patch Changes
 
@@ -425,12 +412,11 @@
 
 ### Minor Changes
 
-- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for
-  uploadthing image removal
-- 2deb902: Added updatedAt and updatedBy to images Resolved uploadingthing type
-  declaration error
-- 4e6430b: Reverted to relative imports because typescript team refuses to
-  transpile declaration files
+- c6960f3: Implement Adapter Plugins Refactor OberonProvider Add cleanup for uploadthing image
+  removal
+- 2deb902: Added updatedAt and updatedBy to images Resolved uploadingthing type declaration error
+- 4e6430b: Reverted to relative imports because typescript team refuses to transpile declaration
+  files
 
 ### Patch Changes
 
@@ -501,10 +487,9 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo
-  dev to correctly build dependencies. Changed from assets to images - this is a
-  breaking change for oberon adapaters. Fixed dynamic tailwind to target preview
-  iframe.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo dev to correctly build
+  dependencies. Changed from assets to images - this is a breaking change for oberon adapaters.
+  Fixed dynamic tailwind to target preview iframe.
 
 ### Patch Changes
 

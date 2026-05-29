@@ -20,8 +20,7 @@ That means a plugin can:
 
 - inspect capabilities already provided by earlier plugins
 - wrap or replace existing adapter methods
-- return handler factories that will later receive the final runtime
-  `OberonAdapter`
+- return handler factories that will later receive the final runtime `OberonAdapter`
 
 ## Return value
 
@@ -35,18 +34,17 @@ Optional. Included in plugin version metadata.
 
 ### `disabled`
 
-Optional. When `true`, the plugin is recorded in plugin metadata but its
-`adapter` and `handlers` are not merged.
+Optional. When `true`, the plugin is recorded in plugin metadata but its `adapter` and `handlers`
+are not merged.
 
 ### `adapter`
 
-Optional. A partial `OberonPluginAdapter`. Only provide the methods your plugin
-owns or overrides.
+Optional. A partial `OberonPluginAdapter`. Only provide the methods your plugin owns or overrides.
 
 ### `handlers`
 
-Optional. A map of route segment to handler factory. These are merged into the
-CMS handler tree and dispatched by the first path segment.
+Optional. A map of route segment to handler factory. These are merged into the CMS handler tree and
+dispatched by the first path segment.
 
 ## Merge behavior
 
@@ -81,5 +79,5 @@ export const plugin: OberonPlugin = () => ({
 })
 ```
 
-Use [Adapter Hooks](/docs/plugins/custom/adapter-hooks) for the adapter surface
-and [Handler Hooks](/docs/plugins/custom/handler-hooks) for route handlers.
+Use [Adapter Hooks](/docs/plugins/custom/adapter-hooks) for the adapter surface and
+[Handler Hooks](/docs/plugins/custom/handler-hooks) for route handlers.

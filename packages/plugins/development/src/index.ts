@@ -1,8 +1,7 @@
 import "server-cli-only"
-
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import { migrate } from "drizzle-orm/libsql/migrator"
+
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   USE_DEVELOPMENT_SEND_PLUGIN,
@@ -12,14 +11,12 @@ import {
   type OberonSendAdapter,
 } from "@oberoncms/core"
 import { getAdapter } from "@oberoncms/sqlite/adapter"
-import { name, version } from "../package.json" with { type: "json" }
+import { migrate } from "drizzle-orm/libsql/migrator"
 
+import { name, version } from "../package.json" with { type: "json" }
 import { getClient, initialise } from "./db/client"
 
-const migrationsFolder = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../src/db/migrations",
-)
+const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,

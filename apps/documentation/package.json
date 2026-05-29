@@ -8,7 +8,8 @@
     "clean": "odt clean",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:e2e": "playwright test",
     "tsc": "tsc --pretty"
   },
@@ -23,15 +24,13 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "^9.39.2",
-    "eslint-config-next": "16.1.6",
     "postcss": "^8.5.6",
     "tsx": "^4.21.0",
     "typescript": "5.9.3"

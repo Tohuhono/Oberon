@@ -1,26 +1,25 @@
 {
   "name": "@oberoncms/plugin-uploadthing",
   "version": "0.17.1",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
   "description": "An Puck component and OberonCMS plugin for embeding uploadthing images",
   "keywords": [
-    "oberon",
-    "oberoncms",
-    "cms",
-    "puck",
     "block",
+    "cms",
     "component",
     "nextjs",
+    "oberon",
+    "oberoncms",
+    "puck",
     "react",
     "uploadthing"
   ],
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/plugins/uploadthing"
   },
-  "type": "module",
   "files": [
     "dist",
     "src",
@@ -29,6 +28,7 @@
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -39,19 +39,20 @@
     "./plugin": "./dist/plugin.js",
     "./source.css": "./source.css"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
@@ -63,12 +64,8 @@
     "server-cli-only": "^0.3.2",
     "uploadthing": "^7.7.4"
   },
-  "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
-  },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
@@ -76,9 +73,12 @@
     "@puckeditor/core": "^0.21.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "^9.39.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

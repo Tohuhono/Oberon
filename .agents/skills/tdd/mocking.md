@@ -36,8 +36,8 @@ function processPayment(order) {
 
 **2. Prefer SDK-style interfaces over generic fetchers**
 
-Create specific functions for each external operation instead of one generic
-function with conditional logic:
+Create specific functions for each external operation instead of one generic function with
+conditional logic:
 
 ```typescript
 // GOOD: Each function is independently mockable

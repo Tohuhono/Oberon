@@ -1,24 +1,19 @@
 "use client"
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
-import { useMemo, useState } from "react"
 import { cn } from "@tohuhono/utils"
 import { useMode } from "@tohuhono/utils/use-mode"
+import { useMemo, useState } from "react"
+
 import { Button } from "../button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../dropdown-menu"
 import { ApplyTheme } from "./theme-editor"
 import { fallbackTheme, themePresets } from "./themes"
 
 export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
   const [mode, setMode] = useMode()
 
-  const [selectedThemeId, setSelectedThemeId] = useState(
-    themePresets[0]?.id ?? "",
-  )
+  const [selectedThemeId, setSelectedThemeId] = useState(themePresets[0]?.id ?? "")
 
   const selectedTheme = useMemo(
     () => themePresets.find((preset) => preset.id === selectedThemeId)?.theme,
@@ -88,8 +83,7 @@ export const ThemeSwitcherMenu = ({ className }: { className?: string }) => {
               size="sm"
               className={cn(
                 "col-span-3 justify-self-stretch",
-                selectedThemeId === preset.id &&
-                  "bg-accent text-accent-foreground",
+                selectedThemeId === preset.id && "bg-accent text-accent-foreground",
               )}
               onClick={() => setSelectedThemeId(preset.id)}
             >

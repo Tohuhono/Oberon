@@ -1,6 +1,7 @@
-import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
 import { type Data } from "@puckeditor/core"
 import { streamResponse } from "@tohuhono/utils"
+import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
+
 import { version } from "../../package.json" with { type: "json" }
 import {
   AddImageSchema,
@@ -24,11 +25,7 @@ import {
   type OberonPluginAdapter,
   type PluginVersion,
 } from "../lib/dtd"
-import {
-  applyTransforms,
-  getComponentTransformVersions,
-  getTransforms,
-} from "./transforms"
+import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
 
 export function initAdapter({
   config,
@@ -40,12 +37,7 @@ export function initAdapter({
   versions: PluginVersion[]
 }): OberonAdapter {
   const isPageData = (value: unknown): value is PageData => {
-    return (
-      typeof value === "object" &&
-      value !== null &&
-      "content" in value &&
-      "root" in value
-    )
+    return typeof value === "object" && value !== null && "content" in value && "root" in value
   }
 
   const can: OberonAdapter["can"] = async (action, permission = "read") => {
@@ -59,20 +51,14 @@ export function initAdapter({
     return adapter.hasPermission({ user, action, permission })
   }
 
-  const will = async (
-    action: AdapterActionGroup,
-    permission: AdapterPermission,
-  ) => {
+  const will = async (action: AdapterActionGroup, permission: AdapterPermission) => {
     if (await can(action, permission)) {
       return
     }
     throw new ResponseError("You do not have permission to perform this action")
   }
 
-  const whoWill = async (
-    action: AdapterActionGroup,
-    permission: AdapterPermission,
-  ) => {
+  const whoWill = async (action: AdapterActionGroup, permission: AdapterPermission) => {
     const user = await adapter.getCurrentUser()
 
     if (user && adapter.hasPermission({ user, action, permission })) {
@@ -187,10 +173,9 @@ export function initAdapter({
     },
   )
 
-  const migrate = streamResponse<
-    TransformResult | MigrationResult,
-    [OberonUser]
-  >(async function* (user: OberonUser) {
+  const migrate = streamResponse<TransformResult | MigrationResult, [OberonUser]>(async function* (
+    user: OberonUser,
+  ) {
     const summary: MigrationResult = {
       type: "summary",
       error: [],

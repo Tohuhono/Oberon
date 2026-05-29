@@ -1,2 +1,0 @@
-declare const _default: import("eslint").Config
-export default _default

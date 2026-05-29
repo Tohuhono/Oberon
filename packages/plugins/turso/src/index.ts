@@ -1,20 +1,18 @@
 import "server-cli-only"
-
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
+
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   type OberonDatabaseAdapter,
   type OberonPlugin,
 } from "@oberoncms/core"
+import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
+
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
 
-const migrationsFolder = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../src/db/migrations",
-)
+const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
 export const plugin: OberonPlugin = (adapter) => ({
   name,

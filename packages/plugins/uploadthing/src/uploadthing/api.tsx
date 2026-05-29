@@ -1,5 +1,4 @@
 import "server-cli-only"
-
 import { UTApi } from "uploadthing/server"
 
 export const deleteImage = (key: string) => {

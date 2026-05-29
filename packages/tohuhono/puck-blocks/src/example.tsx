@@ -1,7 +1,7 @@
 import { defineOberonComponent } from "@oberoncms/core"
 import type { OberonConfig } from "@oberoncms/core"
+
 import { Container } from "./blocks/container"
-import { Dashboard } from "./dynamic/dashboard"
 import { Welcome } from "./blocks/welcome"
 import {
   CardsActivityGoal,
@@ -17,6 +17,7 @@ import {
   CardsStats,
   CardsTeamMembers,
 } from "./dynamic/cards"
+import { Dashboard } from "./dynamic/dashboard"
 
 const cards = {
   "Activity Goal": {

@@ -12,25 +12,24 @@
 ### Minor Changes
 
 - 1858e24: Fix mocked better auth
-- 20820f4: Promote the repo to the Better Auth model across core packages,
-  plugins, docs, recipes, and app scaffolds.
+- 20820f4: Promote the repo to the Better Auth model across core packages, plugins, docs, recipes,
+  and app scaffolds.
 
-  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth
-  adapter expectations, and aligns setup guidance around Better Auth as the
-  supported path.
+  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth adapter
+  expectations, and aligns setup guidance around Better Auth as the supported path.
 
   Risks and implications:
-  - Integrations still relying on Auth.js/NextAuth-specific behavior may require
-    configuration and implementation updates.
-  - Auth adapter implementations must match the updated user-table/auth contract
-    expectations across sqlite and pgsql paths.
-  - Existing user schemas with provider-specific fields may need to be reduced
-    or remapped to the active Better Auth model.
-  - Environment variables, callback handling, and session/user lifecycle
-    behavior should be reviewed during upgrade to avoid auth regressions.
+  - Integrations still relying on Auth.js/NextAuth-specific behavior may require configuration and
+    implementation updates.
+  - Auth adapter implementations must match the updated user-table/auth contract expectations across
+    sqlite and pgsql paths.
+  - Existing user schemas with provider-specific fields may need to be reduced or remapped to the
+    active Better Auth model.
+  - Environment variables, callback handling, and session/user lifecycle behavior should be reviewed
+    during upgrade to avoid auth regressions.
 
-  Treat this as a coordinated upgrade across core, plugins, recipes, and app
-  scaffolds rather than a piecemeal patch.
+  Treat this as a coordinated upgrade across core, plugins, recipes, and app scaffolds rather than a
+  piecemeal patch.
 
 - 65abaa0: Refactor ui component and tailwind exports
 - 65abaa0: Change tailwind linting
@@ -38,10 +37,9 @@
 ### Patch Changes
 
 - 65abaa0: Fix conflicting prettier and eslint commands
-- fb4d240: Remove remaining Auth.js/NextAuth coupling from core and database
-  plugins, standardize user-table methods under auth adapters for sqlite and
-  pgsql, and align docs with the current auth model, including reducing auth
-  user schemas to active columns only.
+- fb4d240: Remove remaining Auth.js/NextAuth coupling from core and database plugins, standardize
+  user-table methods under auth adapters for sqlite and pgsql, and align docs with the current auth
+  model, including reducing auth user schemas to active columns only.
 - Updated dependencies [1858e24]
 - Updated dependencies [20820f4]
 - Updated dependencies [65abaa0]
@@ -108,19 +106,17 @@
   - Add CI workflow (`call-playwright-e2e.yml`) wired into the CI pipeline
   - New scripts: `pnpm e2e` and `pnpm e2e:ui`
 
-- d680fc0: Remove dead code: unused legacy Pages Router file, unused Welcome
-  component duplicate, and unused import. Add noUnusedLocals/noUnusedParameters
-  to recipe tsconfig to prevent future unused imports.
-- fed3aa0: Switch Turbo from loose to strict env handling and explicitly model
-  runtime env dependencies.
+- d680fc0: Remove dead code: unused legacy Pages Router file, unused Welcome component duplicate,
+  and unused import. Add noUnusedLocals/noUnusedParameters to recipe tsconfig to prevent future
+  unused imports.
+- fed3aa0: Switch Turbo from loose to strict env handling and explicitly model runtime env
+  dependencies.
   - set `envMode` to `strict`
-  - scope task `env` allowlists to app packages only (`apps/playground`,
-    `apps/documentation`)
-  - keep root turbo tasks env-agnostic so non-app packages are not invalidated
-    by app env changes
+  - scope task `env` allowlists to app packages only (`apps/playground`, `apps/documentation`)
+  - keep root turbo tasks env-agnostic so non-app packages are not invalidated by app env changes
   - remove redundant task-level `CI` declarations (covered by root `globalEnv`)
-  - narrow app `build` env hashing to currently wired env dependencies to reduce
-    unnecessary cache misses
+  - narrow app `build` env hashing to currently wired env dependencies to reduce unnecessary cache
+    misses
   - keep test task env minimal while allowing required Playwright vars
   - expand env file hashing for app build inputs with package-local `.env*`
 
@@ -157,16 +153,15 @@
 - cb8481e: Add agent workflow and repository documentation notes.
 - 47984d0: Update agent workflow and repository guidance.
 - 2694e84: Handle non-MDX paths in the docs route to avoid Nextra import errors.
-- 2694e84: Avoid noisy module-not-found errors by short-circuiting Nextra page
-  imports when a route has no mapped MDX file.
-- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route
-  prop helpers.
-- 1a4ce67: Remove the deprecated `@tohuhono/puck-rich-text` package and the
-  `rich-text-demo` app from the monorepo.
+- 2694e84: Avoid noisy module-not-found errors by short-circuiting Nextra page imports when a route
+  has no mapped MDX file.
+- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route prop helpers.
+- 1a4ce67: Remove the deprecated `@tohuhono/puck-rich-text` package and the `rich-text-demo` app
+  from the monorepo.
 
-  Also remove direct runtime/dependency references and switch `puck-blocks`
-  example text rendering to native `richtext` fields. Also remove stale CI
-  deploy/promote workflow jobs and quick-start references for the removed demo.
+  Also remove direct runtime/dependency references and switch `puck-blocks` example text rendering
+  to native `richtext` fields. Also remove stale CI deploy/promote workflow jobs and quick-start
+  references for the removed demo.
 
 - Updated dependencies [8774704]
 - Updated dependencies [10e7219]
@@ -264,9 +259,8 @@
 
 ### Minor Changes
 
-- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
-  now returns an object with the intitialised adapter and handlers Clarified
-  types - OberonActions is now OberonAdapter
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon now returns an object
+  with the intitialised adapter and handlers Clarified types - OberonActions is now OberonAdapter
 - a8d2554: BREAKING CHANGE move all auth including login to Oberon Client
 
 ### Patch Changes
@@ -293,8 +287,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production Add
-  Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add Toaster component to
+  surface action errors
 - 19e0f04: Move signOut to adapter
 
 ### Patch Changes
@@ -312,8 +306,7 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers Move local sqlite to separate
-  plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate plugin
 
 ## 0.6.1
 
@@ -355,7 +348,6 @@
 
 ### Minor Changes
 
-- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo
-  dev to correctly build dependencies. Changed from assets to images - this is a
-  breaking change for oberon adapaters. Fixed dynamic tailwind to target preview
-  iframe.
+- 63a21a9: Implemented Uploadthing Image Component. Next -> 14.2. Fixed turbo dev to correctly build
+  dependencies. Changed from assets to images - this is a breaking change for oberon adapaters.
+  Fixed dynamic tailwind to target preview iframe.

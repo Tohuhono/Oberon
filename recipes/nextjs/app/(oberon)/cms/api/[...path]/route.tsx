@@ -1,3 +1,3 @@
-import { handler } from "@/oberon/adapter";
+import { handler } from "@/oberon/adapter"
 
-export const { GET, POST, PUT, PATCH, DELETE } = handler;
+export const { GET, POST, PUT, PATCH, DELETE } = handler

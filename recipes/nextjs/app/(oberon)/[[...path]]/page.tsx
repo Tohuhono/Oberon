@@ -1,27 +1,19 @@
-import { Render } from "@oberoncms/core/render";
-import { getMetaData } from "@oberoncms/core";
+import { getMetaData } from "@oberoncms/core"
+import { Render } from "@oberoncms/core/render"
 
-import { config } from "@/oberon/config";
-import { adapter } from "@/oberon/adapter";
+import { adapter } from "@/oberon/adapter"
+import { config } from "@/oberon/config"
 
 export async function generateStaticParams() {
-  return await adapter.getAllPaths();
+  return await adapter.getAllPaths()
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ path?: string[] }>;
-}) {
-  const { path = [] } = await params;
-  return getMetaData(adapter, path);
+export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
+  const { path = [] } = await params
+  return getMetaData(adapter, path)
 }
 
-export default async function OberonRender({
-  params,
-}: {
-  params: Promise<{ path?: string[] }>;
-}) {
-  const { path = [] } = await params;
-  return <Render path={path} adapter={adapter} config={config} />;
+export default async function OberonRender({ params }: { params: Promise<{ path?: string[] }> }) {
+  const { path = [] } = await params
+  return <Render path={path} adapter={adapter} config={config} />
 }

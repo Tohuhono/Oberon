@@ -1,20 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from "@radix-ui/react-icons"
-
+import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Button } from "@tohuhono/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@tohuhono/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@tohuhono/ui/card"
 import { Checkbox } from "@tohuhono/ui/checkbox"
 import {
   DropdownMenu,
@@ -26,14 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@tohuhono/ui/dropdown-menu"
 import { Input } from "@tohuhono/ui/input"
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@tohuhono/ui/table"
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@tohuhono/ui/table"
+import { useState } from "react"
+
 import {
   flexRender,
   getCoreRowModel,
@@ -110,9 +93,7 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    cell: ({ row }) => <div className="capitalize">{row.getValue("status")}</div>,
   },
   {
     accessorKey: "email",
@@ -160,18 +141,12 @@ export const columns: ColumnDef<Payment>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => {}}>
-              View customer
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>
-              View payment details
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>View customer</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -217,9 +192,7 @@ export function CardsDataTable() {
           <Input
             placeholder="Filter emails..."
             value={emailFilterValue}
-            onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
-            }
+            onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
             className="max-w-sm"
           />
           <DropdownMenu>
@@ -238,9 +211,7 @@ export function CardsDataTable() {
                       key={column.id}
                       className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
+                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
@@ -256,16 +227,10 @@ export function CardsDataTable() {
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead
-                        key={header.id}
-                        className="[&:has([role=checkbox])]:pl-3"
-                      >
+                      <TableHead key={header.id} className="[&:has([role=checkbox])]:pl-3">
                         {header.isPlaceholder
                           ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
+                          : flexRender(header.column.columnDef.header, header.getContext())}
                       </TableHead>
                     )
                   })}
@@ -275,29 +240,17 @@ export function CardsDataTable() {
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="[&:has([role=checkbox])]:pl-3"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
+                      <TableCell key={cell.id} className="[&:has([role=checkbox])]:pl-3">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
                     No results.
                   </TableCell>
                 </TableRow>

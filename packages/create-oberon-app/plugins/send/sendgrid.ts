@@ -1,11 +1,10 @@
 import "server-cli-only"
-
-import { setApiKey, send, ResponseError } from "@sendgrid/mail"
 import {
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonPlugin,
   type OberonSendAdapter,
 } from "@oberoncms/core"
+import { setApiKey, send, ResponseError } from "@sendgrid/mail"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || process.env.SEND_SECRET

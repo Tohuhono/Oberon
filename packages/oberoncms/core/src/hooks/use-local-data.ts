@@ -1,7 +1,7 @@
-import { useCallback, useRef } from "react"
 import { Config, Data } from "@puckeditor/core"
-import { useLocalStorage } from "@tohuhono/utils/use-local-storage"
 import { encode } from "@tohuhono/utils"
+import { useLocalStorage } from "@tohuhono/utils/use-local-storage"
+import { useCallback, useRef } from "react"
 
 function isData(value: unknown): value is Data {
   return (

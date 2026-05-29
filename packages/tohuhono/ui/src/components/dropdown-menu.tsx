@@ -1,9 +1,8 @@
 "use client"
 
-import { Children, HTMLAttributes, isValidElement } from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
-
 import { cn, type CN } from "@tohuhono/utils"
+import { Children, HTMLAttributes, isValidElement } from "react"
 
 const DropdownMenu = MenuPrimitive.Root
 
@@ -75,10 +74,7 @@ const DropdownMenuSubContent = ({
   sideOffset = 0,
   ...props
 }: CN<MenuPrimitive.Popup.Props> &
-  Pick<
-    MenuPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) => (
+  Pick<MenuPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) => (
   <DropdownMenuContent
     className={cn(
       `
@@ -108,10 +104,7 @@ const DropdownMenuContent = ({
   alignOffset = 0,
   ...props
 }: CN<MenuPrimitive.Popup.Props> &
-  Pick<
-    MenuPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) => (
+  Pick<MenuPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) => (
   <MenuPrimitive.Portal>
     <MenuPrimitive.Positioner
       align={align}
@@ -223,11 +216,7 @@ const DropdownMenuRadioItem = ({
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <MenuPrimitive.RadioItemIndicator>
-        <svg
-          viewBox="0 0 24 24"
-          className="size-3 fill-current"
-          aria-hidden="true"
-        >
+        <svg viewBox="0 0 24 24" className="size-3 fill-current" aria-hidden="true">
           <circle cx="12" cy="12" r="8" />
         </svg>
       </MenuPrimitive.RadioItemIndicator>
@@ -245,35 +234,17 @@ const DropdownMenuLabel = ({
   inset?: boolean
 }) => (
   <MenuPrimitive.GroupLabel
-    className={cn(
-      "px-2 py-1.5 text-sm font-semibold",
-      inset && "pl-8",
-      className,
-    )}
+    className={cn("px-2 py-1.5 text-sm font-semibold", inset && "pl-8", className)}
     {...props}
   />
 )
 
-const DropdownMenuSeparator = ({
-  className,
-  ...props
-}: CN<MenuPrimitive.Separator.Props>) => (
-  <MenuPrimitive.Separator
-    className={cn("-mx-1 my-1 h-px bg-muted", className)}
-    {...props}
-  />
+const DropdownMenuSeparator = ({ className, ...props }: CN<MenuPrimitive.Separator.Props>) => (
+  <MenuPrimitive.Separator className={cn("-mx-1 my-1 h-px bg-muted", className)} {...props} />
 )
 
-const DropdownMenuShortcut = ({
-  className,
-  ...props
-}: HTMLAttributes<HTMLSpanElement>) => {
-  return (
-    <span
-      className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
-      {...props}
-    />
-  )
+const DropdownMenuShortcut = ({ className, ...props }: HTMLAttributes<HTMLSpanElement>) => {
+  return <span className={cn("ml-auto text-xs tracking-widest opacity-60", className)} {...props} />
 }
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
 

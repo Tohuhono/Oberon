@@ -1,29 +1,20 @@
 "use client"
 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button, buttonVariants } from "@tohuhono/ui/button"
+import { LocalDate } from "@tohuhono/ui/date"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@tohuhono/ui/form"
+import { Grid, GridHeading } from "@tohuhono/ui/grid"
+import { Input } from "@tohuhono/ui/input"
 import Link from "next/link"
 import { Fragment, startTransition, useOptimistic } from "react"
-import { Button, buttonVariants } from "@tohuhono/ui/button"
-import { Input } from "@tohuhono/ui/input"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@tohuhono/ui/form"
 import { z } from "zod"
-import { LocalDate } from "@tohuhono/ui/date"
 
-import { Grid, GridHeading } from "@tohuhono/ui/grid"
 import { useOberonActions } from "../hooks/use-oberon"
 import { AddPageSchema, type OberonPageMeta } from "../lib/dtd"
 
-function copyKey(
-  optimisticPages: OberonPageMeta[],
-  key: OberonPageMeta["key"],
-) {
+function copyKey(optimisticPages: OberonPageMeta[], key: OberonPageMeta["key"]) {
   let iterator = 0
   let newKey = `${key}_copy`
 
@@ -35,10 +26,8 @@ function copyKey(
 }
 
 const useOberonPages = (pages: OberonPageMeta[]) => {
-  const { deletePage, addPage, publishPageData, getPageData } =
-    useOberonActions()
-  const [optimisticPages, optimisticPageUpdate] =
-    useOptimistic<OberonPageMeta[]>(pages)
+  const { deletePage, addPage, publishPageData, getPageData } = useOberonActions()
+  const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonPageMeta[]>(pages)
 
   return {
     pages: optimisticPages,
@@ -68,9 +57,7 @@ const useOberonPages = (pages: OberonPageMeta[]) => {
     deletePage: async (key: OberonPageMeta["key"]) => {
       startTransition(() =>
         optimisticPageUpdate(
-          optimisticPages.map((page) =>
-            page.key === key ? { ...page, pending: true } : page,
-          ),
+          optimisticPages.map((page) => (page.key === key ? { ...page, pending: true } : page)),
         ),
       )
       return deletePage({ key })

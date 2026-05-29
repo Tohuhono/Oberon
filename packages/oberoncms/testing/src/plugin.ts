@@ -1,5 +1,6 @@
 import { type test as vitest } from "@dev/vitest"
 import type { OberonPlugin } from "@oberoncms/core"
+
 import { createAdapterTest } from "./adapter"
 
 type InitialisedPlugin = ReturnType<OberonPlugin>

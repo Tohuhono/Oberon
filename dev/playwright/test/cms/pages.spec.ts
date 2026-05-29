@@ -17,28 +17,20 @@ test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
     await expect(addPageButton).toBeEnabled()
     await addPageButton.click()
 
-    await expect(
-      cms.getByRole("link", { name: key, exact: true }),
-    ).toBeVisible()
-    await expect(
-      cms.getByLabel(`${key} updated by`, { exact: true }),
-    ).toHaveText("test@tohuhono.com")
+    await expect(cms.getByRole("link", { name: key, exact: true })).toBeVisible()
+    await expect(cms.getByLabel(`${key} updated by`, { exact: true })).toHaveText(
+      "test@tohuhono.com",
+    )
 
     await cms.goto("/cms/pages")
-    await cms
-      .getByRole("button", { name: `Delete ${key}`, exact: true })
-      .click()
-    await expect(cms.getByRole("link", { name: key, exact: true })).toHaveCount(
-      0,
-    )
+    await cms.getByRole("button", { name: `Delete ${key}`, exact: true }).click()
+    await expect(cms.getByRole("link", { name: key, exact: true })).toHaveCount(0)
   })
 
   test("copies a page", async ({ cms, cmsSeededPageKey }) => {
     await cms.goto("/cms/pages")
 
-    await cms
-      .getByRole("button", { name: `Copy ${cmsSeededPageKey}`, exact: true })
-      .click()
+    await cms.getByRole("button", { name: `Copy ${cmsSeededPageKey}`, exact: true }).click()
 
     await expect(
       cms.getByRole("link", { name: `${cmsSeededPageKey}_copy`, exact: true }),
@@ -52,12 +44,8 @@ test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
   test("deletes a page", async ({ cms, cmsSeededPageKey }) => {
     await cms.goto("/cms/pages")
 
-    await cms
-      .getByRole("button", { name: `Delete ${cmsSeededPageKey}`, exact: true })
-      .click()
+    await cms.getByRole("button", { name: `Delete ${cmsSeededPageKey}`, exact: true }).click()
 
-    await expect(
-      cms.getByRole("link", { name: cmsSeededPageKey, exact: true }),
-    ).not.toBeVisible()
+    await expect(cms.getByRole("link", { name: cmsSeededPageKey, exact: true })).not.toBeVisible()
   })
 })

@@ -1,15 +1,13 @@
 import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
+
 import { expect, test, fromPartial, vi } from "@dev/vitest"
-import { eq } from "drizzle-orm"
 import { INITIAL_DATA, type OberonPluginAdapter } from "@oberoncms/core"
 import { createAdapterTest, createAdapterTests } from "@oberoncms/testing"
+import { eq } from "drizzle-orm"
 
-const rootDirectory = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../../",
-)
+const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../../../")
 
 async function closeDevelopmentClient() {
   const client = Reflect.get(globalThis, "oberonDb")
@@ -26,10 +24,7 @@ async function closeDevelopmentClient() {
   Reflect.deleteProperty(globalThis, "oberonDb")
 }
 
-const sqliteFile = resolve(
-  rootDirectory,
-  ".tmp/development-plugin-unit-tests.db",
-)
+const sqliteFile = resolve(rootDirectory, ".tmp/development-plugin-unit-tests.db")
 const sqliteUrl = `file:${sqliteFile}`
 
 async function getDevelopmentAdapter(
@@ -71,7 +66,7 @@ createAdapterTests({
 const developmentAdapterTest = createAdapterTest(test).extend(
   "adapter",
   { scope: "worker" },
-  // eslint-disable-next-line no-empty-pattern
+  // oxlint-disable-next-line no-empty-pattern
   async ({}, { onCleanup }) => getDevelopmentAdapter(onCleanup),
 )
 
@@ -79,59 +74,47 @@ developmentAdapterTest.describe(
   "development plugin auth adapter",
   { tags: ["ai", "feature-better-auth-migration"] },
   () => {
-    developmentAdapterTest(
-      "persists and manages the core user lifecycle",
-      async ({ adapter }) => {
-        if (
-          !adapter.addUser ||
-          !adapter.getAllUsers ||
-          !adapter.changeRole ||
-          !adapter.deleteUser
-        ) {
-          throw new Error(
-            "Development plugin adapter is missing user lifecycle methods",
-          )
-        }
+    developmentAdapterTest("persists and manages the core user lifecycle", async ({ adapter }) => {
+      if (!adapter.addUser || !adapter.getAllUsers || !adapter.changeRole || !adapter.deleteUser) {
+        throw new Error("Development plugin adapter is missing user lifecycle methods")
+      }
 
-        const added = await adapter.addUser({
+      const added = await adapter.addUser({
+        email: "phase5-user@example.com",
+        role: "user",
+      })
+
+      expect(added.email).toBe("phase5-user@example.com")
+      expect(added.role).toBe("user")
+
+      await expect(adapter.getAllUsers()).resolves.toEqual([
+        {
+          id: added.id,
           email: "phase5-user@example.com",
           role: "user",
-        })
+        },
+      ])
 
-        expect(added.email).toBe("phase5-user@example.com")
-        expect(added.role).toBe("user")
+      await adapter.changeRole({ id: added.id, role: "admin" })
 
-        await expect(adapter.getAllUsers()).resolves.toEqual([
-          {
-            id: added.id,
-            email: "phase5-user@example.com",
-            role: "user",
-          },
-        ])
+      await expect(adapter.getAllUsers()).resolves.toEqual([
+        {
+          id: added.id,
+          email: "phase5-user@example.com",
+          role: "admin",
+        },
+      ])
 
-        await adapter.changeRole({ id: added.id, role: "admin" })
+      await adapter.deleteUser(added.id)
 
-        await expect(adapter.getAllUsers()).resolves.toEqual([
-          {
-            id: added.id,
-            email: "phase5-user@example.com",
-            role: "admin",
-          },
-        ])
-
-        await adapter.deleteUser(added.id)
-
-        await expect(adapter.getAllUsers()).resolves.toEqual([])
-      },
-    )
+      await expect(adapter.getAllUsers()).resolves.toEqual([])
+    })
 
     developmentAdapterTest(
       "keeps page updatedBy as a write-time snapshot after auth user changes",
       async ({ adapter }) => {
         if (!adapter.addUser || !adapter.addPage || !adapter.getAllPages) {
-          throw new Error(
-            "Development plugin adapter is missing page or user methods",
-          )
+          throw new Error("Development plugin adapter is missing page or user methods")
         }
 
         const added = await adapter.addUser({
@@ -149,8 +132,7 @@ developmentAdapterTest.describe(
         const readUpdatedBy = async () => {
           const pages = await adapter.getAllPages()
 
-          return pages.find((page) => page.key === "/write-time-snapshot")
-            ?.updatedBy
+          return pages.find((page) => page.key === "/write-time-snapshot")?.updatedBy
         }
 
         expect(await readUpdatedBy()).toBe("snapshot@example.com")

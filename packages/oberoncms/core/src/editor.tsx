@@ -1,17 +1,18 @@
 import { DynamicTailwind } from "@tohuhono/ui/theme"
 import { notFound } from "next/navigation"
 import type { PropsWithChildren } from "react"
-import type { OberonConfig } from "./lib/dtd"
-import { getTitle } from "./lib/utils"
-import { useOberonClientContext } from "./hooks/use-oberon"
+
 import { Editor } from "./components/editor"
-import { Preview } from "./components/preview"
+import { Images } from "./components/images"
+import { Login } from "./components/login"
 import { Menu } from "./components/menu"
 import { Pages } from "./components/pages"
-import { Images } from "./components/images"
-import { Users } from "./components/users"
+import { Preview } from "./components/preview"
 import { Site } from "./components/site"
-import { Login } from "./components/login"
+import { Users } from "./components/users"
+import { useOberonClientContext } from "./hooks/use-oberon"
+import type { OberonConfig } from "./lib/dtd"
+import { getTitle } from "./lib/utils"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
 
@@ -38,13 +39,7 @@ export function OberonClient({ config }: { config: OberonConfig }) {
   }
 
   if (action === "preview") {
-    return (
-      <Preview
-        path={slug}
-        data={data}
-        config={{ ...previewConfig, ...config }}
-      />
-    )
+    return <Preview path={slug} data={data} config={{ ...previewConfig, ...config }} />
   }
 
   if (["users", "images", "pages", "site"].includes("pages")) {

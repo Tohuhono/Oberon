@@ -1,17 +1,12 @@
-import { FieldLabel } from "@puckeditor/core"
 import type { OberonImage } from "@oberoncms/core"
 import { useOberonImages } from "@oberoncms/core/editor"
+import { FieldLabel } from "@puckeditor/core"
 import { useCallback, useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
-const useImages = (
-  value: OberonImage | null,
-  onChange: (value: OberonImage | null) => void,
-) => {
+const useImages = (value: OberonImage | null, onChange: (value: OberonImage | null) => void) => {
   const { images, loading, addImage } = useOberonImages()
 
-  const [imageKey, setImageKey] = useState<OberonImage["key"] | "">(
-    value?.key || "",
-  )
+  const [imageKey, setImageKey] = useState<OberonImage["key"] | "">(value?.key || "")
 
   useEffect(() => {
     if (!imageKey) {
@@ -139,12 +134,8 @@ export const ImageField = ({
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 ></path>
               </svg>
-              <span className="text-muted-foreground">
-                Drag and drop your image here
-              </span>
-              <span className="text-sm text-muted-foreground">
-                (or click to select)
-              </span>
+              <span className="text-muted-foreground">Drag and drop your image here</span>
+              <span className="text-sm text-muted-foreground">(or click to select)</span>
             </span>
           </div>
         </div>

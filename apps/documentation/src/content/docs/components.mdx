@@ -2,8 +2,8 @@ import { Callout } from "nextra/components"
 
 # Components and Blocks
 
-OberonCMS uses Puck's component model. Components (called "blocks") are defined
-in your `oberon/config.tsx` and rendered by the visual editor.
+OberonCMS uses Puck's component model. Components (called "blocks") are defined in your
+`oberon/config.tsx` and rendered by the visual editor.
 
 `create-oberon-app` scaffolds a minimal `Text` component as a starting point:
 
@@ -20,9 +20,7 @@ export const config: OberonConfig = {
       defaultProps: {
         text: "Welcome to OberonCMS",
       },
-      render: ({ text }) => (
-        <div className="prose dark:prose-invert lg:prose-lg">{text}</div>
-      ),
+      render: ({ text }) => <div className="prose dark:prose-invert lg:prose-lg">{text}</div>,
     },
   },
 }
@@ -30,8 +28,8 @@ export const config: OberonConfig = {
 
 ## Creating Custom Components
 
-Components implement the `OberonComponent` interface, which wraps the Puck
-`ComponentConfig` type. Define your fields and render function:
+Components implement the `OberonComponent` interface, which wraps the Puck `ComponentConfig` type.
+Define your fields and render function:
 
 ```tsx
 import type { OberonComponent } from "@oberoncms/core"
@@ -65,7 +63,7 @@ export const config: OberonConfig = {
 ```
 
 <Callout type="info">
-  OberonCMS uses the Puck editor API for all component configuration — fields,
-  drop zones, categorisation, and the root component. Refer to the [Puck
+  OberonCMS uses the Puck editor API for all component configuration — fields, drop zones,
+  categorisation, and the root component. Refer to the [Puck
   documentation](https://puckeditor.com/docs) for the full reference.
 </Callout>

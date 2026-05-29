@@ -1,10 +1,4 @@
-import {
-  pgTable,
-  text,
-  integer,
-  uniqueIndex,
-  timestamp,
-} from "drizzle-orm/pg-core"
+import { pgTable, text, integer, uniqueIndex, timestamp } from "drizzle-orm/pg-core"
 
 export const images = pgTable(
   "images",

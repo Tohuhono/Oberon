@@ -1,13 +1,6 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@tohuhono/ui/card"
 import { type CSSProperties } from "react"
 import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts"
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@tohuhono/ui/card"
 
 const data = [
   {
@@ -99,9 +92,7 @@ export function CardsMetric() {
                             >
                               Today
                             </span>
-                            <span className="font-bold">
-                              {payload[1]?.value}
-                            </span>
+                            <span className="font-bold">{payload[1]?.value}</span>
                           </div>
                         </div>
                       </div>

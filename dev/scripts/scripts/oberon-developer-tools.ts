@@ -1,6 +1,7 @@
 #!/usr/bin/env tsx
 
 import { resolve } from "path"
+
 import { rimraf } from "rimraf"
 
 const action = globalThis.process.argv[2]

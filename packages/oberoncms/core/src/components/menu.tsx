@@ -1,9 +1,10 @@
-import Link from "next/link"
-import { PropsWithChildren } from "react"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
 import { ModeToggle } from "@tohuhono/ui/mode-toggle"
-import useSWR from "swr"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { PropsWithChildren } from "react"
+import useSWR from "swr"
+
 import { useOberonActions } from "../hooks/use-oberon"
 
 export const Menu = ({
@@ -39,31 +40,19 @@ export const Menu = ({
         )}
       </div>
       <div className="flex justify-end gap-1">
-        <Link
-          className={buttonVariants({ variant: "outline", size: "sm" })}
-          href="/cms/site"
-        >
+        <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/site">
           Site
         </Link>
-        <Link
-          className={buttonVariants({ variant: "outline", size: "sm" })}
-          href="/cms/pages"
-        >
+        <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/pages">
           Pages
         </Link>
         {showImages && (
-          <Link
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-            href="/cms/images"
-          >
+          <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/images">
             Images
           </Link>
         )}
         {showUsers && (
-          <Link
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-            href="/cms/users"
-          >
+          <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/users">
             Users
           </Link>
         )}

@@ -1,4 +1,5 @@
 import { Render, type Config, type Data } from "@puckeditor/core"
+
 import { useLocalData } from "../hooks/use-local-data"
 
 export function Preview({

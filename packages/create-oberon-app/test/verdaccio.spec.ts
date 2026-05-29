@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test"
+
 import { readVerdaccioLogs, execInContainer, COA_NEXTJS_DIR } from "./container"
 
 const NEGATIVE_PROVENANCE_PACKAGE = "next"
@@ -117,8 +118,8 @@ async function readInstalledPackages() {
 test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
   test("installs @oberoncms packages via verdaccio without npmjs fallback", async () => {
     const installedPackages = await readInstalledPackages()
-    const provenancePackages = Object.entries(installedPackages).filter(
-      ([packageName]) => packageName.startsWith("@oberoncms/"),
+    const provenancePackages = Object.entries(installedPackages).filter(([packageName]) =>
+      packageName.startsWith("@oberoncms/"),
     )
 
     expect(provenancePackages.length).toBeGreaterThan(0)
@@ -131,8 +132,7 @@ test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
       const tarballPath = `${metadataPath}/-/${getTarballName(packageName, installedVersion)}`
 
       const metadataRequestPattern = createRequestPattern(metadataPath)
-      const npmjsMetadataFallbackPattern =
-        createNpmjsRequestPattern(metadataPath)
+      const npmjsMetadataFallbackPattern = createNpmjsRequestPattern(metadataPath)
       const npmjsTarballFallbackPattern = createNpmjsRequestPattern(tarballPath)
 
       expect(
@@ -157,9 +157,7 @@ test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
 
     const nextVersion = installedPackages[NEGATIVE_PROVENANCE_PACKAGE]
     if (!nextVersion) {
-      throw new Error(
-        `Expected ${NEGATIVE_PROVENANCE_PACKAGE} to be installed in scaffold app`,
-      )
+      throw new Error(`Expected ${NEGATIVE_PROVENANCE_PACKAGE} to be installed in scaffold app`)
     }
 
     const metadataPath = getVerdaccioPackagePath(NEGATIVE_PROVENANCE_PACKAGE)

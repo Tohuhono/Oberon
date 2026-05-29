@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@dev/vitest"
+
 import { mapConcurrent } from "./map-concurrent"
 
 async function collect<T>(gen: AsyncGenerator<T>): Promise<T[]> {
@@ -11,9 +12,7 @@ async function collect<T>(gen: AsyncGenerator<T>): Promise<T[]> {
 
 describe("mapConcurrent", { tags: ["baseline"] }, () => {
   it("processes all items and returns all results", async () => {
-    const results = await collect(
-      mapConcurrent([1, 2, 3, 4], async (n) => n * 2, 2),
-    )
+    const results = await collect(mapConcurrent([1, 2, 3, 4], async (n) => n * 2, 2))
     expect(results.sort((a, b) => a - b)).toEqual([2, 4, 6, 8])
   })
 

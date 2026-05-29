@@ -1,9 +1,6 @@
 "use client"
 
-import { useState, type CSSProperties } from "react"
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons"
-import { Bar, BarChart, ResponsiveContainer } from "recharts"
-
 import { Button } from "@tohuhono/ui/button"
 import {
   Card,
@@ -13,6 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@tohuhono/ui/card"
+import { useState, type CSSProperties } from "react"
+import { Bar, BarChart, ResponsiveContainer } from "recharts"
 
 const data = [
   {
@@ -87,9 +86,7 @@ export function CardsActivityGoal() {
           </Button>
           <div className="flex-1 text-center">
             <div className="text-5xl font-bold tracking-tighter">{goal}</div>
-            <div className="text-[0.70rem] text-muted-foreground uppercase">
-              Calories/day
-            </div>
+            <div className="text-[0.70rem] text-muted-foreground uppercase">Calories/day</div>
           </div>
           <Button
             variant="outline"

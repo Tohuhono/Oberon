@@ -1,5 +1,4 @@
 import { describe, expect, it } from "@dev/vitest"
-
 import { memoryAdapter } from "better-auth/adapters/memory"
 
 import { authPlugin } from "../auth"
@@ -16,9 +15,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
         "No oberon plugin provided for getKV action, please check your oberon adapter configuration.",
       ),
     )
-    expect(() =>
-      adapter.putKV("tailwind", "state", { activeHash: "abc123" }),
-    ).toThrow(
+    expect(() => adapter.putKV("tailwind", "state", { activeHash: "abc123" })).toThrow(
       new NotImplementedError(
         "No oberon plugin provided for putKV action, please check your oberon adapter configuration.",
       ),
@@ -36,9 +33,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     expect(() => adapter.getKV("mock-plugin", "state")).toThrow(
       new NotImplementedError("This action is not available in the demo"),
     )
-    expect(() =>
-      adapter.putKV("mock-plugin", "state", { activeHash: "abc123" }),
-    ).toThrow(
+    expect(() => adapter.putKV("mock-plugin", "state", { activeHash: "abc123" })).toThrow(
       new NotImplementedError("This action is not available in the demo"),
     )
     expect(() => adapter.deleteKV("mock-plugin", "state")).toThrow(
@@ -65,19 +60,11 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     })
 
     expect(() =>
-      initPlugins([
-        missingAuthCapabilityPlugin,
-        validAuthCapabilityPlugin,
-        authPlugin,
-      ]),
+      initPlugins([missingAuthCapabilityPlugin, validAuthCapabilityPlugin, authPlugin]),
     ).not.toThrow()
 
     expect(() =>
-      initPlugins([
-        validAuthCapabilityPlugin,
-        missingAuthCapabilityPlugin,
-        authPlugin,
-      ]),
+      initPlugins([validAuthCapabilityPlugin, missingAuthCapabilityPlugin, authPlugin]),
     ).not.toThrow()
   })
 })

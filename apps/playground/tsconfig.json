@@ -3,7 +3,6 @@
   "display": "Next.js",
   "extends": "@dev/typescript",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
     "allowJs": true,
     "checkJs": true,
@@ -20,5 +19,5 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["app", "oberon", "next-env.d.ts"]
+  "include": ["app", "oberon", "*.ts"]
 }

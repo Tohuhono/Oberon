@@ -1,24 +1,23 @@
 {
   "name": "@oberoncms/plugin-development",
   "version": "0.8.1",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
   "description": "A development plugin for OberonCMS",
   "keywords": [
-    "oberon",
-    "oberoncms",
+    "adapter",
     "cms",
     "nextjs",
-    "react",
-    "adapter",
-    "plugin"
+    "oberon",
+    "oberoncms",
+    "plugin",
+    "react"
   ],
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/plugins/development"
   },
-  "type": "module",
   "files": [
     "dist",
     "src",
@@ -26,23 +25,25 @@
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "exports": {
     ".": "./dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
     "generate:migrations": "drizzle-kit generate",
     "dev": "vite build --watch",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",
@@ -53,12 +54,8 @@
     "next": "^16.1.6",
     "server-cli-only": "^0.3.2"
   },
-  "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
-  },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
@@ -72,5 +69,9 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

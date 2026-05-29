@@ -1,11 +1,9 @@
 // Required for theme styles, previously was imported under the hood
 import "nextra-theme-docs/style.css"
-
+import Image from "next/image"
 import { Layout, Navbar } from "nextra-theme-docs"
 import { Head } from "nextra/components"
 import { getPageMap } from "nextra/page-map"
-import Image from "next/image"
-
 import type { PropsWithChildren } from "react"
 export const metadata = {
   // ... your metadata API

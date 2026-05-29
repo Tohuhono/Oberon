@@ -16,27 +16,25 @@
 ### Minor Changes
 
 - 1858e24: Fix mocked better auth
-- ffd5ddf: Moved postgres db client to lazy instation to avoid errors
-  development mode
-- 20820f4: Promote the repo to the Better Auth model across core packages,
-  plugins, docs, recipes, and app scaffolds.
+- ffd5ddf: Moved postgres db client to lazy instation to avoid errors development mode
+- 20820f4: Promote the repo to the Better Auth model across core packages, plugins, docs, recipes,
+  and app scaffolds.
 
-  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth
-  adapter expectations, and aligns setup guidance around Better Auth as the
-  supported path.
+  This release removes remaining Auth.js/NextAuth assumptions, standardizes auth adapter
+  expectations, and aligns setup guidance around Better Auth as the supported path.
 
   Risks and implications:
-  - Integrations still relying on Auth.js/NextAuth-specific behavior may require
-    configuration and implementation updates.
-  - Auth adapter implementations must match the updated user-table/auth contract
-    expectations across sqlite and pgsql paths.
-  - Existing user schemas with provider-specific fields may need to be reduced
-    or remapped to the active Better Auth model.
-  - Environment variables, callback handling, and session/user lifecycle
-    behavior should be reviewed during upgrade to avoid auth regressions.
+  - Integrations still relying on Auth.js/NextAuth-specific behavior may require configuration and
+    implementation updates.
+  - Auth adapter implementations must match the updated user-table/auth contract expectations across
+    sqlite and pgsql paths.
+  - Existing user schemas with provider-specific fields may need to be reduced or remapped to the
+    active Better Auth model.
+  - Environment variables, callback handling, and session/user lifecycle behavior should be reviewed
+    during upgrade to avoid auth regressions.
 
-  Treat this as a coordinated upgrade across core, plugins, recipes, and app
-  scaffolds rather than a piecemeal patch.
+  Treat this as a coordinated upgrade across core, plugins, recipes, and app scaffolds rather than a
+  piecemeal patch.
 
 ### Patch Changes
 
@@ -73,8 +71,8 @@
 
 ### Patch Changes
 
-- 138dc59: Refine Playwright CMS E2E fixture architecture and route Next/React
-  lint rules away from Playwright spec files.
+- 138dc59: Refine Playwright CMS E2E fixture architecture and route Next/React lint rules away from
+  Playwright spec files.
 - Updated dependencies [a73560b]
 - Updated dependencies [8109ea8]
 - Updated dependencies [b654991]
@@ -127,16 +125,14 @@
   - Add CI workflow (`call-playwright-e2e.yml`) wired into the CI pipeline
   - New scripts: `pnpm e2e` and `pnpm e2e:ui`
 
-- fed3aa0: Switch Turbo from loose to strict env handling and explicitly model
-  runtime env dependencies.
+- fed3aa0: Switch Turbo from loose to strict env handling and explicitly model runtime env
+  dependencies.
   - set `envMode` to `strict`
-  - scope task `env` allowlists to app packages only (`apps/playground`,
-    `apps/documentation`)
-  - keep root turbo tasks env-agnostic so non-app packages are not invalidated
-    by app env changes
+  - scope task `env` allowlists to app packages only (`apps/playground`, `apps/documentation`)
+  - keep root turbo tasks env-agnostic so non-app packages are not invalidated by app env changes
   - remove redundant task-level `CI` declarations (covered by root `globalEnv`)
-  - narrow app `build` env hashing to currently wired env dependencies to reduce
-    unnecessary cache misses
+  - narrow app `build` env hashing to currently wired env dependencies to reduce unnecessary cache
+    misses
   - keep test task env minimal while allowing required Playwright vars
   - expand env file hashing for app build inputs with package-local `.env*`
 
@@ -186,25 +182,22 @@
 
 ### Patch Changes
 
-- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed
-  versions
-- 1daa573: Migrate playground global stylesheet to Tailwind CSS v4 entry
-  directives (`@import "tailwindcss"` + `@config`) so theme token utilities
-  continue to resolve and runtime theme variable updates apply correctly.
-- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route
-  prop helpers.
-- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package
-  devDependencies. Also includes related fixes:
-  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground,
-    rich-text-demo and recipe-nextjs.
+- 62ead8b: chore: align Node runtime and CI to Node 24 with pnpm-managed versions
+- 1daa573: Migrate playground global stylesheet to Tailwind CSS v4 entry directives
+  (`@import "tailwindcss"` + `@config`) so theme token utilities continue to resolve and runtime
+  theme variable updates apply correctly.
+- 8b774a8: Run Next.js typegen before TypeScript checks and restore global route prop helpers.
+- 8b774a8: Remove usage of autoprefixer from PostCSS configs and package devDependencies. Also
+  includes related fixes:
+  - Remove `autoprefixer` plugin entries from PostCSS configs in the playground, rich-text-demo and
+    recipe-nextjs.
   - Remove `autoprefixer` devDependency entries from the affected packages.
   - ESLint flat-config fixes (avoid spreading plugin exports; add
     `settings.react.version = "detect"`).
-  - Tailwind/PostCSS adjustments and replacement of unsupported
-    `@apply border-border` with explicit `border-color` CSS.
+  - Tailwind/PostCSS adjustments and replacement of unsupported `@apply border-border` with explicit
+    `border-color` CSS.
 
-  This is a small, non-breaking patch to clean up CSS build-time config and
-  linter config.
+  This is a small, non-breaking patch to clean up CSS build-time config and linter config.
 
 - Updated dependencies [8774704]
 - Updated dependencies [10e7219]
@@ -308,9 +301,8 @@
 
 ### Minor Changes
 
-- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon
-  now returns an object with the intitialised adapter and handlers Clarified
-  types - OberonActions is now OberonAdapter
+- a8d2554: BREAKING CHANGE Removed initActions Removed initAdapter initOberon now returns an object
+  with the intitialised adapter and handlers Clarified types - OberonActions is now OberonAdapter
 - a8d2554: BREAKING CHANGE move all auth including login to Oberon Client
 
 ### Patch Changes
@@ -337,8 +329,8 @@
 
 ### Minor Changes
 
-- d233d9a: Wrap server actions to retain error messages in production Add
-  Toaster component to surface action errors
+- d233d9a: Wrap server actions to retain error messages in production Add Toaster component to
+  surface action errors
 - 19e0f04: Move signOut to adapter
 - 85f2f55: Create a development plugin
 
@@ -370,8 +362,7 @@
 ### Patch Changes
 
 - e28293f: Fix create-oberon-app with development fallbacks
-- 01fde22: Move development fallback to wrappers Move local sqlite to separate
-  plugin
+- 01fde22: Move development fallback to wrappers Move local sqlite to separate plugin
 - Updated dependencies [e28293f]
 - Updated dependencies [01fde22]
 - Updated dependencies [e8c2c24]
@@ -501,9 +492,8 @@
 
 - 4767eb7: Moved plugins and renamed packages
 - d13cecf: Change all adapters to be plugins
-- e1761a0: Removed database adapters and implemented as plugins instead.
-  Improved plugin system to better support database and other chaining plugins.
-  Implemented auth as plugins.
+- e1761a0: Removed database adapters and implemented as plugins instead. Improved plugin system to
+  better support database and other chaining plugins. Implemented auth as plugins.
 
 ### Patch Changes
 

@@ -1,23 +1,22 @@
 {
   "name": "@oberoncms/core",
   "version": "0.19.1",
-  "author": "Tohuhono ltd",
-  "license": "MIT",
   "description": "OberonCMS is a cloud deployable CMS written in typescript based on the Puck visual editor",
   "keywords": [
+    "cms",
+    "nextjs",
     "oberon",
     "oberoncms",
-    "cms",
     "puck",
-    "nextjs",
     "react"
   ],
+  "license": "MIT",
+  "author": "Tohuhono ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Tohuhono/Oberon",
     "directory": "packages/oberoncms/core"
   },
-  "type": "module",
   "files": [
     "dist",
     "src",
@@ -26,6 +25,7 @@
     "README*",
     "LICENSE*"
   ],
+  "type": "module",
   "exports": {
     ".": "./dist/index.js",
     "./auth": "./dist/auth.js",
@@ -37,19 +37,20 @@
     "./provider": "./dist/provider.js",
     "./tailwind.css": "./tailwind.css"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -66,12 +67,8 @@
     "walkjs": "^6.0.1",
     "zod": "^4.3.6"
   },
-  "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
-  },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
@@ -82,5 +79,9 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

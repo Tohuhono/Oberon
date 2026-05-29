@@ -2,13 +2,13 @@
   "name": "@dev/playwright",
   "version": "0.1.0",
   "private": true,
+  "files": [
+    "base.config.ts",
+    "projects.ts",
+    "playwright.config.ts",
+    "test"
+  ],
   "type": "module",
-  "scripts": {
-    "clean": "odt clean",
-    "test:smoke": "playwright test --grep '@smoke'",
-    "lint": "eslint .",
-    "tsc": "tsc --pretty"
-  },
   "exports": {
     ".": {
       "default": "./base.config.ts"
@@ -23,13 +23,15 @@
       "default": "./test/helpers/fixtures.ts"
     }
   },
-  "files": [
-    "base.config.ts",
-    "projects.ts",
-    "playwright.config.ts",
-    "test"
-  ],
+  "scripts": {
+    "clean": "odt clean",
+    "test:smoke": "playwright test --grep '@smoke'",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "tsc": "tsc --pretty"
+  },
   "devDependencies": {
+    "@oberoncms/core": "workspace:*",
     "@playwright/test": "^1.52.0",
     "typescript": "5.9.3"
   }

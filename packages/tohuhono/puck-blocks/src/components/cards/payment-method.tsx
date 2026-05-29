@@ -1,6 +1,5 @@
 "use client"
 
-import { Icons } from "@tohuhono/ui/icons"
 import { Button } from "@tohuhono/ui/button"
 import {
   Card,
@@ -10,35 +9,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@tohuhono/ui/card"
+import { Icons } from "@tohuhono/ui/icons"
 import { Input } from "@tohuhono/ui/input"
 import { Label } from "@tohuhono/ui/label"
 import { RadioGroup, RadioGroupItem } from "@tohuhono/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@tohuhono/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tohuhono/ui/select"
 
 export function CardsPaymentMethod() {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Payment Method</CardTitle>
-        <CardDescription>
-          Add a new payment method to your account.
-        </CardDescription>
+        <CardDescription>Add a new payment method to your account.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <RadioGroup defaultValue="card" className="grid grid-cols-3 gap-4">
           <div>
-            <RadioGroupItem
-              value="card"
-              id="card"
-              className="peer sr-only"
-              aria-label="Card"
-            />
+            <RadioGroupItem value="card" id="card" className="peer sr-only" aria-label="Card" />
             <Label
               htmlFor="card"
               className="
@@ -87,12 +74,7 @@ export function CardsPaymentMethod() {
             </Label>
           </div>
           <div>
-            <RadioGroupItem
-              value="apple"
-              id="apple"
-              className="peer sr-only"
-              aria-label="Apple"
-            />
+            <RadioGroupItem value="apple" id="apple" className="peer sr-only" aria-label="Apple" />
             <Label
               htmlFor="apple"
               className="

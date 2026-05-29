@@ -1,6 +1,5 @@
-import { Render } from "@oberoncms/core/render"
-
 import { getMetaData } from "@oberoncms/core"
+import { Render } from "@oberoncms/core/render"
 
 import { adapter } from "@/oberon/adapter"
 import { config } from "@/oberon/config"
@@ -21,10 +20,8 @@ async function getDynamicStylesheets() {
     )
 
     return activeHash &&
-      typeof (await adapter.getSetting(
-        "@oberoncms/plugin-tailwind",
-        `asset:${activeHash}`,
-      )) === "string"
+      typeof (await adapter.getSetting("@oberoncms/plugin-tailwind", `asset:${activeHash}`)) ===
+        "string"
       ? [`/cms/api/tailwind/${encodeURIComponent(activeHash)}.css`]
       : []
   } catch {
@@ -36,32 +33,19 @@ export async function generateStaticParams() {
   return await adapter.getAllPaths()
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ path?: string[] }>
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
   const { path = [] } = await params
   return getMetaData(adapter, path)
 }
 
-export default async function OberonRender({
-  params,
-}: {
-  params: Promise<{ path?: [] }>
-}) {
+export default async function OberonRender({ params }: { params: Promise<{ path?: [] }> }) {
   const { path = [] } = await params
   const stylesheets = await getDynamicStylesheets()
 
   return (
     <>
       {stylesheets.map((href) => (
-        <link
-          key={href}
-          rel="stylesheet"
-          href={href}
-          precedence="oberon-dynamic"
-        />
+        <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
       ))}
       <Render path={path} adapter={adapter} config={config} />
     </>

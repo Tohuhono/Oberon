@@ -1,6 +1,7 @@
-import path from "node:path"
 import { readFile } from "node:fs/promises"
+import path from "node:path"
 import { fileURLToPath } from "node:url"
+
 import { base, defineConfig } from "@dev/playwright"
 import {
   authProject,
@@ -10,10 +11,7 @@ import {
   smokeProject,
 } from "@dev/playwright/projects"
 
-const PLAYWRIGHT_DIR = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  ".playwright",
-)
+const PLAYWRIGHT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".playwright")
 
 const APP_LOG_PATH = path.resolve(PLAYWRIGHT_DIR, "logs/app.log")
 const APP_DB_PATH = path.resolve(PLAYWRIGHT_DIR, "db/oberon.db")
@@ -60,11 +58,5 @@ export default defineConfig({
       read: readNextjsLogs,
     },
   },
-  projects: [
-    authProject,
-    authenticatedProject,
-    tddProject,
-    loginProject,
-    smokeProject,
-  ],
+  projects: [authProject, authenticatedProject, tddProject, loginProject, smokeProject],
 })

@@ -1,13 +1,12 @@
 import { describe, expect, it } from "@dev/vitest"
+
 import { getComponentTransformVersions, getTransforms } from "./transforms"
 
 function config(
   components: Record<
     string,
     {
-      transforms?: Array<
-        (props: Record<string, unknown>) => Record<string, unknown>
-      >
+      transforms?: Array<(props: Record<string, unknown>) => Record<string, unknown>>
     }
   >,
 ) {
@@ -50,10 +49,7 @@ describe("getTransforms", { tags: ["baseline"] }, () => {
   })
 
   it("returns false for transforms when all versions are current", () => {
-    const result = getTransforms(
-      { Hero: 1 },
-      config({ Hero: { transforms: [addTitle] } }),
-    )
+    const result = getTransforms({ Hero: 1 }, config({ Hero: { transforms: [addTitle] } }))
     expect(result.transforms).toBe(false)
     expect(result.components).toEqual({ Hero: 1 })
   })
@@ -79,16 +75,12 @@ describe("getTransforms", { tags: ["baseline"] }, () => {
     expect(result.transforms).toBeTruthy()
 
     // Only uppercase should run (index 1), not addTitle (index 0)
-    const transformed =
-      result.transforms && result.transforms.Hero?.({ title: "hello" })
+    const transformed = result.transforms && result.transforms.Hero?.({ title: "hello" })
     expect(transformed).toEqual({ title: "HELLO" })
   })
 
   it("treats missing version as latest (no migration needed for new components)", () => {
-    const result = getTransforms(
-      {},
-      config({ Hero: { transforms: [addTitle] } }),
-    )
+    const result = getTransforms({}, config({ Hero: { transforms: [addTitle] } }))
     expect(result.transforms).toBe(false)
     expect(result.components).toEqual({ Hero: 1 })
   })

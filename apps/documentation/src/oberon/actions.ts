@@ -1,8 +1,5 @@
-import {
-  wrap,
-  type AdapterPermission,
-  type OberonServerActions,
-} from "@oberoncms/core"
+import { wrap, type AdapterPermission, type OberonServerActions } from "@oberoncms/core"
+
 import { adapter } from "./adapter"
 
 export const actions = {

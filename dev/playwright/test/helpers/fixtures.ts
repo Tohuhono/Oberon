@@ -5,6 +5,7 @@ import {
   type Page,
   type TestInfo,
 } from "@playwright/test"
+
 import { test as base } from "../../base.config"
 
 function sanitizeKeyPart(value: string) {
@@ -34,9 +35,9 @@ async function createCmsPage(page: Page, key: string) {
   await expect(addPageButton).toBeEnabled()
   await addPageButton.click()
   await expect(page.getByRole("link", { name: key, exact: true })).toBeVisible()
-  await expect(
-    page.getByLabel(`${key} updated by`, { exact: true }),
-  ).toHaveText("test@tohuhono.com")
+  await expect(page.getByLabel(`${key} updated by`, { exact: true })).toHaveText(
+    "test@tohuhono.com",
+  )
 }
 
 async function deleteCmsPages(page: Page, key: string) {
@@ -47,12 +48,8 @@ async function deleteCmsPages(page: Page, key: string) {
   for (const _ of Array(await links.count())) {
     const pageKey = await links.first().innerText()
     expect(pageKey).toMatch(/.+/)
-    await page
-      .getByRole("button", { name: `Delete ${pageKey}`, exact: true })
-      .click()
-    await expect(
-      page.getByRole("link", { name: pageKey, exact: true }),
-    ).not.toBeVisible()
+    await page.getByRole("button", { name: `Delete ${pageKey}`, exact: true }).click()
+    await expect(page.getByRole("link", { name: pageKey, exact: true })).not.toBeVisible()
   }
 
   expect(await links.count()).toBe(0)

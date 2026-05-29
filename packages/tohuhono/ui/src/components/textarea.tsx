@@ -1,11 +1,7 @@
+import { cn } from "@tohuhono/utils"
 import { type ComponentPropsWithRef } from "react"
 
-import { cn } from "@tohuhono/utils"
-
-const Textarea = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<"textarea">) => {
+const Textarea = ({ className, ...props }: ComponentPropsWithRef<"textarea">) => {
   return (
     <textarea
       className={cn(

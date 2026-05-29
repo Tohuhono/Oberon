@@ -1,6 +1,7 @@
 import type { OberonComponent, OberonImage } from "@oberoncms/core"
-import { Image as Base } from "./server"
+
 import { ImageField } from "./image-field"
+import { Image as Base } from "./server"
 
 export const Image = {
   ...Base,

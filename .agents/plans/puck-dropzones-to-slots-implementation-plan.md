@@ -2,8 +2,8 @@
 
 ## Goal
 
-Replace the deprecated Puck DropZone pattern in shared Oberon blocks with slot
-fields and current source-level Puck configuration.
+Replace the deprecated Puck DropZone pattern in shared Oberon blocks with slot fields and current
+source-level Puck configuration.
 
 ## Scope
 
@@ -18,8 +18,8 @@ It does not include:
 ## Settled Decisions
 
 - deprecated DropZone usage should be removed outright
-- source should move to current slot patterns even if existing stored content is
-  not migrated in this plan
+- source should move to current slot patterns even if existing stored content is not migrated in
+  this plan
 - only the actual DropZone users found in source are in scope
 
 ## Recommended Slice Order
@@ -32,8 +32,8 @@ It does not include:
 
 ### What to build
 
-Replace the `Container` block's `renderDropZone` usage with a slot field and the
-slot render function.
+Replace the `Container` block's `renderDropZone` usage with a slot field and the slot render
+function.
 
 ### Acceptance criteria
 
@@ -49,8 +49,8 @@ slot render function.
 
 ### What to build
 
-Replace the `Prose` block's DropZone usage with the same slot-based pattern so
-shared nested-content blocks are consistent.
+Replace the `Prose` block's DropZone usage with the same slot-based pattern so shared nested-content
+blocks are consistent.
 
 ### Acceptance criteria
 
@@ -66,14 +66,14 @@ shared nested-content blocks are consistent.
 
 ### What to build
 
-Remove any remaining source-level DropZone usage in the repo surface covered by
-the review and validate the repo from root.
+Remove any remaining source-level DropZone usage in the repo surface covered by the review and
+validate the repo from root.
 
 ### Acceptance criteria
 
 - no source files under `packages/**/src` still use `renderDropZone`
-- no source files under `packages/**/src` still render Puck `DropZone` for the
-  covered Oberon block patterns
+- no source files under `packages/**/src` still render Puck `DropZone` for the covered Oberon block
+  patterns
 - `pnpm validate` passes from repo root after the change
 
 ### Candidate files
@@ -83,14 +83,12 @@ the review and validate the repo from root.
 
 ## Risks and Mitigations
 
-1. Risk: source changes break rendering for stored legacy content Mitigation:
-   treat that as an explicit out-of-scope consequence of this plan, not a hidden
-   compatibility promise
-2. Risk: slot conversion changes block ergonomics unexpectedly Mitigation: keep
-   each conversion narrow and validate both editor and render behavior before
-   moving on
+1. Risk: source changes break rendering for stored legacy content Mitigation: treat that as an
+   explicit out-of-scope consequence of this plan, not a hidden compatibility promise
+2. Risk: slot conversion changes block ergonomics unexpectedly Mitigation: keep each conversion
+   narrow and validate both editor and render behavior before moving on
 
 ## Completion Condition
 
-This plan is complete when the shared Oberon blocks no longer use DropZones in
-source and the repo validates cleanly from root.
+This plan is complete when the shared Oberon blocks no longer use DropZones in source and the repo
+validates cleanly from root.

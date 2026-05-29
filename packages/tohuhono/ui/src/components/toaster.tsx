@@ -1,8 +1,8 @@
 "use client"
 
 import { Toast as ToastPrimitive } from "@base-ui/react/toast"
-import { cva } from "class-variance-authority"
 import { cn } from "@tohuhono/utils"
+import { cva } from "class-variance-authority"
 
 import { toastManager, type ToastData } from "./toast"
 
@@ -20,8 +20,7 @@ const toastVariants = cva(
     variants: {
       variant: {
         default: "border bg-background text-foreground",
-        destructive:
-          "group border-destructive bg-destructive text-destructive-foreground",
+        destructive: "group border-destructive bg-destructive text-destructive-foreground",
       },
     },
     defaultVariants: {
@@ -56,9 +55,7 @@ function ToastItems() {
             key={toast.id}
             toast={toast}
             swipeDirection="right"
-            className={cn(
-              toastVariants({ variant: data.variant ?? "default" }),
-            )}
+            className={cn(toastVariants({ variant: data.variant ?? "default" }))}
           >
             <ToastPrimitive.Content
               className="

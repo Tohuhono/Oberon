@@ -1,15 +1,11 @@
+import { exec } from "child_process"
 // @ts-check
 // vite.config.js
 import { writeFile, mkdir } from "fs/promises"
-import { exec } from "child_process"
-import {
-  type ResolveOptions,
-  createLogger,
-  defineConfig,
-  type Plugin as VitePlugin,
-} from "vite"
-import preserveDirectives from "rollup-preserve-directives"
+
 import fg from "fast-glob"
+import preserveDirectives from "rollup-preserve-directives"
+import { type ResolveOptions, createLogger, defineConfig, type Plugin as VitePlugin } from "vite"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
 
 function dts(): VitePlugin {
@@ -57,9 +53,7 @@ function parseEntryPoints(entryPoints: string[] = ["src/*.ts"]) {
   // Searches for files that match the patterns defined in the array of input points.
   // Returns an array of absolute file paths.
   const files = fg.sync(entryPoints, { absolute: true })
-  const sourceFiles = files.filter(
-    (file) => !/\.(test|spec)\.[cm]?[jt]sx?$/.test(file),
-  )
+  const sourceFiles = files.filter((file) => !/\.(test|spec)\.[cm]?[jt]sx?$/.test(file))
 
   // Maps the file paths in the "files" array to an array of key-value pair.
   const entities = sourceFiles.map((file) => {
@@ -98,7 +92,7 @@ export function initConfig(
     resolve,
     plugins: [
       externalizeDeps(),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // oxlint-disable-next-line @typescript/ban-ts-comment
       // @ts-ignore sometimes fails so can't use expect error
       preserveDirectives(),
       dts(),

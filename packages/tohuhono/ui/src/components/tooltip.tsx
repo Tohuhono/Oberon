@@ -1,9 +1,8 @@
 "use client"
 
-import { Children, isValidElement } from "react"
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
-
 import { cn, type CN } from "@tohuhono/utils"
+import { Children, isValidElement } from "react"
 
 const TooltipProvider = ({
   delay,
@@ -12,9 +11,7 @@ const TooltipProvider = ({
 }: TooltipPrimitive.Provider.Props & {
   delayDuration?: number
 }) => {
-  return (
-    <TooltipPrimitive.Provider delay={delayDuration ?? delay ?? 0} {...props} />
-  )
+  return <TooltipPrimitive.Provider delay={delayDuration ?? delay ?? 0} {...props} />
 }
 
 const Tooltip = TooltipPrimitive.Root
@@ -30,9 +27,7 @@ const TooltipTrigger = ({
     return <TooltipPrimitive.Trigger render={onlyChild} {...props} />
   }
 
-  return (
-    <TooltipPrimitive.Trigger {...props}>{children}</TooltipPrimitive.Trigger>
-  )
+  return <TooltipPrimitive.Trigger {...props}>{children}</TooltipPrimitive.Trigger>
 }
 
 const TooltipContent = ({
@@ -43,10 +38,7 @@ const TooltipContent = ({
   alignOffset = 0,
   ...props
 }: CN<TooltipPrimitive.Popup.Props> &
-  Pick<
-    TooltipPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) => (
+  Pick<TooltipPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) => (
   <TooltipPrimitive.Portal>
     <TooltipPrimitive.Positioner
       align={align}

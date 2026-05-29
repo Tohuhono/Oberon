@@ -1,6 +1,5 @@
-import { Noto_Sans } from "next/font/google"
-
 import { Antifouc, cn } from "@oberoncms/core"
+import { Noto_Sans } from "next/font/google"
 const font = Noto_Sans({ subsets: ["latin"] })
 
 export const metadata = {
@@ -14,9 +13,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
       <head>
         <Antifouc />
       </head>
-      <body className={cn(font.className, "bg-background text-foreground")}>
-        {children}
-      </body>
+      <body className={cn(font.className, "bg-background text-foreground")}>{children}</body>
     </>
   )
 }

@@ -1,4 +1,5 @@
 import { resolve } from "path"
+
 import type { Project } from "@playwright/test"
 
 type SharedProject = Project

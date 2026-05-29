@@ -1,20 +1,11 @@
+import { cn } from "@tohuhono/utils"
 import type { PropsWithChildren } from "react"
 
-import { cn } from "@tohuhono/utils"
-
-export const Grid = ({
-  children,
-  className,
-}: PropsWithChildren<{ className?: string }>) => (
-  <div className={cn("grid w-full items-baseline gap-2", className)}>
-    {children}
-  </div>
+export const Grid = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
+  <div className={cn("grid w-full items-baseline gap-2", className)}>{children}</div>
 )
 
-export const GridHeading = ({
-  children,
-  className,
-}: PropsWithChildren<{ className?: string }>) => (
+export const GridHeading = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
   <h4
     className={cn(
       `

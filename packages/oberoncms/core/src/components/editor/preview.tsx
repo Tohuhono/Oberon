@@ -1,11 +1,15 @@
 "use client"
 
 import "@puckeditor/core/puck.css"
-
 import { Puck } from "@puckeditor/core"
-
-import { useState } from "react"
-
+import {
+  MobileIcon,
+  LaptopIcon,
+  DesktopIcon,
+  WidthIcon,
+  SunIcon,
+  MoonIcon,
+} from "@radix-ui/react-icons"
 import { Button } from "@tohuhono/ui/button"
 import {
   DropdownMenu,
@@ -15,14 +19,8 @@ import {
   DropdownMenuTrigger,
 } from "@tohuhono/ui/dropdown-menu"
 import { cn, isValidKey } from "@tohuhono/utils"
-import {
-  MobileIcon,
-  LaptopIcon,
-  DesktopIcon,
-  WidthIcon,
-  SunIcon,
-  MoonIcon,
-} from "@radix-ui/react-icons"
+import { useState } from "react"
+
 import { useFitZoom } from "../../hooks/use-fit-zoom"
 import { type PreviewMode } from "./preview-iframe"
 
@@ -111,12 +109,7 @@ const PreviewModeSwitcher = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="align-middle"
-          aria-label="Preview mode"
-        >
+        <Button variant="outline" size="sm" className="align-middle" aria-label="Preview mode">
           <SunIcon
             className={cn(
               "scale-100 rotate-0 transition-all",
@@ -181,14 +174,8 @@ export const PreviewHeading = ({
 }) => {
   return (
     <div className={className}>
-      <ViewPortSwitcher
-        currentViewport={currentViewport}
-        setCurrentViewport={setCurrentViewport}
-      />
-      <PreviewModeSwitcher
-        previewMode={previewMode}
-        setPreviewMode={setPreviewMode}
-      />
+      <ViewPortSwitcher currentViewport={currentViewport} setCurrentViewport={setCurrentViewport} />
+      <PreviewModeSwitcher previewMode={previewMode} setPreviewMode={setPreviewMode} />
     </div>
   )
 }

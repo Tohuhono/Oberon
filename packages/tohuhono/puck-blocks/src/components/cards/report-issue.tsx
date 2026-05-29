@@ -1,7 +1,5 @@
 "use client"
 
-import * as React from "react"
-
 import { Button } from "@tohuhono/ui/button"
 import {
   Card,
@@ -13,14 +11,9 @@ import {
 } from "@tohuhono/ui/card"
 import { Input } from "@tohuhono/ui/input"
 import { Label } from "@tohuhono/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@tohuhono/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tohuhono/ui/select"
 import { Textarea } from "@tohuhono/ui/textarea"
+import * as React from "react"
 
 export function CardsReportIssue() {
   const id = React.useId()
@@ -29,9 +22,7 @@ export function CardsReportIssue() {
     <Card>
       <CardHeader>
         <CardTitle>Report an issue</CardTitle>
-        <CardDescription>
-          What area are you having problems with?
-        </CardDescription>
+        <CardDescription>What area are you having problems with?</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <div

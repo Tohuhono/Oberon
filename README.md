@@ -8,8 +8,7 @@ A monorepo for OberonCMS and the related packages and tooling.
 
 ## Quick start
 
-We use [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm
-or yarn ymmv.
+We use [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm or yarn ymmv.
 
 ```sh
 pnpm install
@@ -45,8 +44,7 @@ pnpm change # Add a changset entry
 
 ## What's inside?
 
-This [Turborepo](https://turbo.build/repo/) that includes the following packages
-and apps:
+This [Turborepo](https://turbo.build/repo/) that includes the following packages and apps:
 
 ### Apps
 
@@ -60,9 +58,8 @@ and apps:
 
   A playground for developers to test OberonCMS.
 
-  Mostly used for local development, there is also a
-  [deployment](https://playground.tohuhono.com) with access limited to core
-  contributors.
+  Mostly used for local development, there is also a [deployment](https://playground.tohuhono.com)
+  with access limited to core contributors.
 
 ### Packages
 
@@ -73,13 +70,11 @@ and apps:
 
   A command line tool for creating new projects with OberonCMS.
 
-- `packages/oberoncms/core` -
-  [@oberoncms/core](https://www.npmjs.com/package/@oberoncms/core)
+- `packages/oberoncms/core` - [@oberoncms/core](https://www.npmjs.com/package/@oberoncms/core)
 
   The core package for OberonCMS.
 
-- `packages/oberoncms/sqlite` -
-  [@oberoncms/sqlite](https://www.npmjs.com/package/@oberoncms/sqlite)
+- `packages/oberoncms/sqlite` - [@oberoncms/sqlite](https://www.npmjs.com/package/@oberoncms/sqlite)
 
   Sqlite adapter for OberonCMS.
 
@@ -129,32 +124,28 @@ and apps:
 
   Shared [Vite](https://vitejs.dev/) library build config.
 
-- `packages/tohuhono/utils` -
-  [@tohuhono/utils](https://www.npmjs.com/package/@tohuhono/utils)
+- `packages/tohuhono/utils` - [@tohuhono/utils](https://www.npmjs.com/package/@tohuhono/utils)
 
-  A collection of utility functions shared across the monorepo. Particularly
-  useful for testing.
+  A collection of utility functions shared across the monorepo. Particularly useful for testing.
 
-- `packages/tohuhono/ui` -
-  [@tohuhono/ui](https://www.npmjs.com/package/@tohuhono/ui)
+- `packages/tohuhono/ui` - [@tohuhono/ui](https://www.npmjs.com/package/@tohuhono/ui)
 
-  Shared UI components using [Shadcn/ui](https://ui.shadcn.com/) and utilities
-  including a [tailwindcss](https://tailwindcss.com/) theme and components for
-  dynamicaly loading and adjusting it.
+  Shared UI components using [Shadcn/ui](https://ui.shadcn.com/) and utilities including a
+  [tailwindcss](https://tailwindcss.com/) theme and components for dynamicaly loading and adjusting
+  it.
 
 #### Puck components
 
 - `packages/tohuhono/puck-blocks` -
   [@tohuhono/puck-blocks](https://www.npmjs.com/package/@tohuhono/puck-blocks)
 
-  A collection of puck components for building pages in OberonCMS, including a
-  collection of example Puck components.
+  A collection of puck components for building pages in OberonCMS, including a collection of example
+  Puck components.
 
 ### Recipes
 
-Used by the [create-oberon-app](https://www.npmjs.com/package/create-oberon-app)
-command. If you would like to support other frameworks, please get in touch as
-we would love to help.
+Used by the [create-oberon-app](https://www.npmjs.com/package/create-oberon-app) command. If you
+would like to support other frameworks, please get in touch as we would love to help.
 
 - `recipes/nextjs`
 
@@ -162,17 +153,15 @@ we would love to help.
 
 ## Contributing
 
-OberonCMS is an open source project and we welcome contributions from the
-community. You can
-[raise an issue](https://github.com/Tohuhono/Oberon/issues/new) or submit a pull
-request to help us improve.
+OberonCMS is an open source project and we welcome contributions from the community. You can
+[raise an issue](https://github.com/Tohuhono/Oberon/issues/new) or submit a pull request to help us
+improve.
 
 1. Fork and clone the repository
-2. Ensure you have the LTS version of Node.js installed, as well as the latest
-   version of [pnpm](https://pnpm.io).
+2. Ensure you have the LTS version of Node.js installed, as well as the latest version of
+   [pnpm](https://pnpm.io).
 3. Install the project dependencies by running `pnpm install`.
-4. Implement your changes, as well as any documentation or tests that are
-   required.
+4. Implement your changes, as well as any documentation or tests that are required.
 5. Create a changeset for your changes by running `pnpm changeset`.
 6. Open a pull request with your changes and changeset.
 

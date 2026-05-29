@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+
 import type { OberonAdapter } from "./dtd"
 import { getTitle, parseClientAction, resolveSlug } from "./utils"
 

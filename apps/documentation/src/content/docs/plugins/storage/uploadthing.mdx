@@ -2,8 +2,8 @@ import { Callout } from "nextra/components"
 
 # Uploadthing
 
-A plugin that provides image storage and upload functionality for OberonCMS
-using [Uploadthing](https://uploadthing.com/).
+A plugin that provides image storage and upload functionality for OberonCMS using
+[Uploadthing](https://uploadthing.com/).
 
 ## Installation
 
@@ -15,8 +15,7 @@ npm install @oberoncms/plugin-uploadthing uploadthing
 
 ### 1. Set up Uploadthing
 
-First, create an [Uploadthing](https://uploadthing.com/) account and get your
-API keys.
+First, create an [Uploadthing](https://uploadthing.com/) account and get your API keys.
 
 Set your environment variables:
 
@@ -65,14 +64,14 @@ export const config: OberonConfig = {
 ```
 
 <Callout type="info">
-  The Uploadthing plugin ships the file router and route handler internally. You
-  only need to include the plugin and wire your Oberon API route.
+  The Uploadthing plugin ships the file router and route handler internally. You only need to
+  include the plugin and wire your Oberon API route.
 </Callout>
 
 ## Image deletion
 
-The Uploadthing plugin automatically handles image deletion. When you delete an
-image in the CMS, it:
+The Uploadthing plugin automatically handles image deletion. When you delete an image in the CMS,
+it:
 
 1. Removes the image metadata from your database
 2. Deletes the image from Uploadthing storage

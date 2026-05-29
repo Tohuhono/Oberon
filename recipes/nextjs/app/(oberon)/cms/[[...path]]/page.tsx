@@ -1,26 +1,24 @@
-import { getMetaData } from "@oberoncms/core";
-import { OberonProvider } from "@oberoncms/core/provider";
-import { Client } from "./client";
-import { actions } from "@/oberon/actions";
-import { adapter } from "@/oberon/adapter";
+import { getMetaData } from "@oberoncms/core"
+import { OberonProvider } from "@oberoncms/core/provider"
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ path?: string[] }>;
-}) {
-  const { path = [] } = await params;
-  return await getMetaData(adapter, path.slice(1), path[0]);
+import { actions } from "@/oberon/actions"
+import { adapter } from "@/oberon/adapter"
+
+import { Client } from "./client"
+
+export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
+  const { path = [] } = await params
+  return await getMetaData(adapter, path.slice(1), path[0])
 }
 
 export default async function Oberon({
   params,
   searchParams,
 }: {
-  params: Promise<{ path?: string[] }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: Promise<{ path?: string[] }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const { path = [] } = await params;
+  const { path = [] } = await params
   return (
     <OberonProvider
       actions={actions}
@@ -30,5 +28,5 @@ export default async function Oberon({
     >
       <Client />
     </OberonProvider>
-  );
+  )
 }
