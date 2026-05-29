@@ -28,7 +28,8 @@
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:coa": "playwright test --config playwright.config.ts",
     "test:coa:ui": "playwright test --config playwright.config.ts --ui",
     "tsc": "tsc --pretty"
@@ -42,7 +43,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",

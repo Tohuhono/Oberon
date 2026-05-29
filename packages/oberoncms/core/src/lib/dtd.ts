@@ -20,7 +20,7 @@ export class ResponseError extends Error {}
 export class NotImplementedError extends ResponseError {}
 
 // TODO fix types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line @typescript/no-explicit-any
 type Transforms = Array<(props: any) => any>
 
 export type PageData = Data

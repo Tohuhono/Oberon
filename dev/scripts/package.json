@@ -27,7 +27,8 @@
   },
   "scripts": {
     "clean": "odt clean",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "tsc": "tsc --pretty"
   },
   "dependencies": {
@@ -35,10 +36,9 @@
     "tsx": "^4.21.0"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@types/node": "24.10.1",
-    "eslint": "^9.39.2",
     "typescript": "5.9.3"
   }
 }

@@ -24,7 +24,6 @@
   },
   "scripts": {
     "clean": "odt clean",
-    "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
   "dependencies": {

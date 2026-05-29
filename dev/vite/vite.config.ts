@@ -92,7 +92,7 @@ export function initConfig(
     resolve,
     plugins: [
       externalizeDeps(),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // oxlint-disable-next-line @typescript/ban-ts-comment
       // @ts-ignore sometimes fails so can't use expect error
       preserveDirectives(),
       dts(),

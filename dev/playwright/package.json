@@ -26,10 +26,12 @@
   "scripts": {
     "clean": "odt clean",
     "test:smoke": "playwright test --grep '@smoke'",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "tsc": "tsc --pretty"
   },
   "devDependencies": {
+    "@oberoncms/core": "workspace:*",
     "@playwright/test": "^1.52.0",
     "typescript": "5.9.3"
   }

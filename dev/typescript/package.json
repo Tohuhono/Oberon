@@ -20,11 +20,6 @@
     }
   },
   "scripts": {
-    "clean": "odt clean",
-    "lint": "eslint ."
-  },
-  "devDependencies": {
-    "@dev/eslint": "workspace:*",
-    "eslint": "^9.39.2"
+    "clean": "odt clean"
   }
 }

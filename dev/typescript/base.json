@@ -17,6 +17,7 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
+    "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

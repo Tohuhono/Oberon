@@ -18,7 +18,8 @@
     "build": "vite build",
     "clean": "odt clean",
     "dev": "vite build --watch",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty",
@@ -33,7 +34,7 @@
     "drizzle-orm": "^0.45.1"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",

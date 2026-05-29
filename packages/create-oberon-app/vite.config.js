@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [
     ...(base.plugins || []),
     {
-      name: "prebuild-lugin",
+      name: "prebuild-plugin",
       async buildStart() {
         await generateTemplates()
       },

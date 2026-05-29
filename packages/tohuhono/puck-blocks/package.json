@@ -43,7 +43,8 @@
     "dev": "vite build --watch",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty"
@@ -56,14 +57,13 @@
     "recharts": "^3.7.0"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "^9.39.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"

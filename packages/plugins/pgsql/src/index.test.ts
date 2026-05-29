@@ -29,7 +29,7 @@ const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "./db/
   const test = baseTest.extend(
     "adapter",
     { scope: "worker" },
-    // eslint-disable-next-line no-empty-pattern
+    // oxlint-disable-next-line no-empty-pattern
     async ({}, { onCleanup }): Promise<OberonPluginAdapter> => {
       onCleanup(async () => {
         await pool.end()

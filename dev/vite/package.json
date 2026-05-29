@@ -24,7 +24,6 @@
   },
   "scripts": {
     "clean": "odt clean",
-    "lint": "eslint .",
     "tsc": "tsc --pretty"
   },
   "dependencies": {
@@ -34,11 +33,10 @@
     "vite-plugin-externalize-deps": "^0.10.0"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@types/node": "24.10.1",
-    "eslint": "^9.39.2",
     "typescript": "5.9.3"
   }
 }

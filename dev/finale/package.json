@@ -23,7 +23,6 @@
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "create-oberon-app": "workspace:*",
-    "eslint": "^9.39.2",
     "typescript": "5.9.3"
   }
 }

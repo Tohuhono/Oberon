@@ -23,7 +23,7 @@ export function createAdapterTests({
   const extendedTest = test.extend(
     "adapter",
     { scope: "worker" },
-    // eslint-disable-next-line no-empty-pattern
+    // oxlint-disable-next-line no-empty-pattern
     async ({}, { onCleanup }) => getAdapter(onCleanup),
   )
 

@@ -66,7 +66,7 @@ createAdapterTests({
 const developmentAdapterTest = createAdapterTest(test).extend(
   "adapter",
   { scope: "worker" },
-  // eslint-disable-next-line no-empty-pattern
+  // oxlint-disable-next-line no-empty-pattern
   async ({}, { onCleanup }) => getDevelopmentAdapter(onCleanup),
 )
 

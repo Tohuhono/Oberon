@@ -51,7 +51,8 @@
     "clean": "odt clean",
     "generate:migrations": "drizzle-kit generate",
     "dev": "vite build --watch",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "tsc": "tsc --pretty",
@@ -67,7 +68,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@dev/eslint": "workspace:*",
+    "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",

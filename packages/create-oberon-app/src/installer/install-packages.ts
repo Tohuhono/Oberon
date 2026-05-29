@@ -56,23 +56,23 @@ async function updatePackageJson(appName: string, appPath: string) {
   const packageJson = parsePackageJson(await readFile(packageFilePath, "utf-8"))
 
   const workspaceDeps: string[] = []
-  const dependencies = { ...(packageJson.dependencies ?? {}) }
+  const dependencies = { ...packageJson.dependencies }
 
   for (const dependancy in dependencies) {
     if (dependencies[dependancy]?.startsWith("workspace")) {
       workspaceDeps.push(dependancy)
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      // oxlint-disable-next-line @typescript/no-dynamic-delete
       delete dependencies[dependancy]
     }
   }
 
-  const devDependencies = { ...(packageJson.devDependencies ?? {}) }
+  const devDependencies = { ...packageJson.devDependencies }
   const workspaceDevDeps: string[] = []
 
   for (const dependancy in devDependencies) {
     if (devDependencies[dependancy]?.startsWith("workspace")) {
       workspaceDevDeps.push(dependancy)
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      // oxlint-disable-next-line @typescript/no-dynamic-delete
       delete devDependencies[dependancy]
     }
   }

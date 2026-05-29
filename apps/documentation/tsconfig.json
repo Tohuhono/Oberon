@@ -3,7 +3,6 @@
   "display": "Next.js",
   "extends": "@dev/typescript",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
     "allowJs": true,
     "checkJs": true,
