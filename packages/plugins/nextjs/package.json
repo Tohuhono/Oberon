@@ -1,7 +1,23 @@
 {
-  "name": "@oberoncms/nextjs",
-  "version": "0.1.1",
-  "private": true,
+  "name": "@oberoncms/plugin-nextjs",
+  "version": "0.1.0",
+  "description": "A Nextjs plugin for OberonCMS",
+  "keywords": [
+    "adapter",
+    "cms",
+    "nextjs",
+    "oberon",
+    "oberoncms",
+    "plugin",
+    "react"
+  ],
+  "license": "MIT",
+  "author": "Tohuhono ltd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon",
+    "directory": "packages/plugins/development"
+  },
   "files": [
     "dist",
     "src",
@@ -12,6 +28,9 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "vite build",
@@ -26,7 +45,8 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@oberoncms/core": "workspace:*"
+    "@oberoncms/core": "workspace:*",
+    "next": "^16.1.6"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -34,11 +54,16 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
+    "@oberoncms/testing": "workspace:*",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

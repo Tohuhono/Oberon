@@ -1,6 +1,5 @@
 "use client"
 
-import Script from "next/script"
 import { Config } from "tailwindcss"
 
 declare global {
@@ -12,12 +11,6 @@ declare global {
 
 export function DynamicTailwind() {
   return (
-    <>
-      <Script
-        id="dynamic-tailwind"
-        strategy="afterInteractive"
-        src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
-      />
-    </>
+    <script id="dynamic-tailwind" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" async />
   )
 }

@@ -35,6 +35,7 @@
     "postinstall": "pnpm manypkg",
     "prepare": "husky",
     "release": "pnpm build:packages && changeset publish",
+    "start:nextjs": "turbo start --concurrency 50 --filter=@oberon/recipe-nextjs",
     "start:oberon": "turbo start --concurrency 50 --filter=@oberon/playground",
     "start:docs": "turbo start --concurrency 50 --filter=@oberon/docs",
     "tsc": "turbo run tsc --concurrency 50 --continue",

@@ -2,6 +2,7 @@ import "server-cli-only"
 import { initOberon } from "@oberoncms/core/adapter"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
+import { plugin as nextjsPlugin } from "@oberoncms/plugin-nextjs"
 import { plugin as pgsqlPlugin } from "@oberoncms/plugin-pgsql"
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
 
@@ -10,5 +11,5 @@ import { plugin as resendPlugin } from "./send"
 
 export const { adapter, handler } = initOberon({
   config,
-  plugins: [developmentPlugin, pgsqlPlugin, resendPlugin, tailwindPlugin, authPlugin],
+  plugins: [developmentPlugin, pgsqlPlugin, resendPlugin, tailwindPlugin, authPlugin, nextjsPlugin],
 })

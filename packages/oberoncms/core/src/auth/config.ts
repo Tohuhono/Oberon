@@ -14,13 +14,13 @@ export function createAuthOptions({
 }: Pick<OberonSendAdapter, "sendVerificationRequest"> & {
   betterAuth?: OberonBetterAuthAdapter
 }) {
-  const baseURL = process.env.BETTER_AUTH_URL
+  const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
   const secret = process.env.AUTH_SECRET
 
   return {
     ...(betterAuthAdapter ? { database: betterAuthAdapter.database } : {}),
-    ...(baseURL && { baseURL }),
     basePath: cmsAuthBasePath,
+    baseURL,
     secret,
     user: {
       additionalFields: {
