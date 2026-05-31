@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto"
 
 import { UserSchema, type OberonAuthAdapter } from "@oberoncms/core"
-import type { BetterAuthOptions } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import type { BetterAuthOptions } from "better-auth/minimal"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 

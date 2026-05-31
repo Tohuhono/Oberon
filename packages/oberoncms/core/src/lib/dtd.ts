@@ -7,7 +7,7 @@ import type {
   SlotComponent,
 } from "@puckeditor/core"
 import type { StreamResponseChunk } from "@tohuhono/utils"
-import type { BetterAuthOptions } from "better-auth"
+import type { BetterAuthOptions } from "better-auth/minimal"
 import { Route } from "next"
 import type { NextRequest } from "next/server"
 import type { ReactNode } from "react"
