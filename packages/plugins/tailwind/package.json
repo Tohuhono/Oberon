@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-tailwind",
-  "version": "0.19.1",
+  "version": "0.19.2",
   "description": "A dynamic Tailwind utilities plugin for OberonCMS",
   "keywords": [
     "adapter",

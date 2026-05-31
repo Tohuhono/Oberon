@@ -1,5 +1,12 @@
 # create-oberon-app
 
+## 0.11.1
+
+### Patch Changes
+
+- 6d9ef5d: Add ubiquitous language and update skills and documentation
+- 929bc33: Moved from prettier and eslint to oxc
+
 ## 0.11.0
 
 ### Minor Changes

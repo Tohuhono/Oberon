@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-pgsql",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "A PostgreSQL database plugin for OberonCMS",
   "keywords": [
     "adapter",

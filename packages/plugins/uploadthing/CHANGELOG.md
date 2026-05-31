@@ -1,5 +1,13 @@
 # @oberoncms/plugin-upload-thing
 
+## 0.17.2
+
+### Patch Changes
+
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [929bc33]
+  - @oberoncms/core@0.19.2
+
 ## 0.17.1
 
 ### Patch Changes

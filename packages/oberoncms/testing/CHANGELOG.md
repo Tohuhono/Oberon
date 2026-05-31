@@ -1,5 +1,15 @@
 # @oberoncms/testing
 
+## 0.2.2
+
+### Patch Changes
+
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [929bc33]
+  - @oberoncms/sqlite@0.8.2
+  - @oberoncms/core@0.19.2
+  - @dev/vitest@0.2.1
+
 ## 0.2.1
 
 ### Patch Changes

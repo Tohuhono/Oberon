@@ -1,5 +1,13 @@
 # @oberon/ui
 
+## 0.16.1
+
+### Patch Changes
+
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [929bc33]
+  - @tohuhono/utils@0.16.1
+
 ## 0.16.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # @oberoncms/plugin-pgsql
 
+## 0.10.2
+
+### Patch Changes
+
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [929bc33]
+  - @oberoncms/core@0.19.2
+
 ## 0.10.1
 
 ### Patch Changes

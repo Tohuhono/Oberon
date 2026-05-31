@@ -1,5 +1,14 @@
 # @oberoncms/plugin-flydrive
 
+## 0.9.2
+
+### Patch Changes
+
+- 6d9ef5d: Add ubiquitous language and update skills and documentation
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [929bc33]
+  - @oberoncms/core@0.19.2
+
 ## 0.9.1
 
 ### Patch Changes
