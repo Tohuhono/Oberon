@@ -1,5 +1,18 @@
 # @oberon/playground
 
+## 0.11.2
+
+### Patch Changes
+
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [929bc33]
+  - @tohuhono/puck-blocks@0.14.2
+  - @oberoncms/plugin-development@0.8.2
+  - @oberoncms/plugin-uploadthing@0.17.2
+  - @oberoncms/plugin-tailwind@0.19.2
+  - @oberoncms/core@0.19.2
+  - @oberoncms/plugin-pgsql@0.10.2
+
 ## 0.11.1
 
 ### Patch Changes

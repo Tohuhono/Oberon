@@ -1,5 +1,15 @@
 # @oberon/docs
 
+## 0.12.2
+
+### Patch Changes
+
+- 6d9ef5d: Add ubiquitous language and update skills and documentation
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [929bc33]
+  - @tohuhono/puck-blocks@0.14.2
+  - @oberoncms/core@0.19.2
+
 ## 0.12.1
 
 ### Patch Changes
