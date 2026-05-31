@@ -10,7 +10,7 @@ layer that allows you to easily interact with files systems of different cloud s
   - [Table of Contents](#table-of-contents)
   - [Setup](#setup)
   - [prepare API](#prepare-api)
-  - [Editor configuration](#editor-configuration)
+  - [Runtime config](#runtime-config)
   - [Want to discuss this plugin?](#want-to-discuss-this-plugin)
 
 ```bash
@@ -73,14 +73,14 @@ import { initFlyDriveRouter } from "./adapter" // <where you placed your adapter
 export const { GET, POST } = initFlyDriveRouter()
 ```
 
-## Editor configuration
+## Runtime config
 
 ```typescript
 // config.ts
 import { Image } from "@oberoncms/plugin-flydrive"
 
-export const editorConfig = {
-  // other configurations
+export const config = {
+  // other runtime config
   components: {
     Image, // <- add the Image component
 

@@ -29,7 +29,7 @@ create-oberon-app script
 # Potential Follow-up docs
 
 - [coding style rules and guidelines](.agents/CODESTYLE.md)
-- [common patterns and conventions](.agents/CONVENTIONS.md)
 - [testing strategy and scope](.agents/TESTING.md)
 - [design and architecture](.agents/ARCHITECTURE.md)
 - [git and github metadata](.agents/METADATA.md)
+- [Ubiquitous Language and glossary of terms](.agents/UBIQUITOUS_LANGUAGE.md)
