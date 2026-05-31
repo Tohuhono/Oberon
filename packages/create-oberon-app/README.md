@@ -1,6 +1,7 @@
 # create-oberon-app
 
-`create-oberon-app` generates recipes. For a full list of recipes, please see the monorepo README.
+`create-oberon-app` scaffolds starter apps from the recipes in this monorepo. For a full list of
+available recipes, please see the monorepo README.
 
 ## Usage
 

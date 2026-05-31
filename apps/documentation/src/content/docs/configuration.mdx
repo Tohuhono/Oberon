@@ -2,10 +2,10 @@ import { Callout } from "nextra/components"
 
 # Configuration
 
-OberonCMS generated apps are configured in two files under `oberon/`:
+OberonCMS starter apps are configured in two files under `oberon/`:
 
-- `adapter.ts` for runtime/plugin composition
-- `config.tsx` for editor component configuration
+- `adapter.ts` for Oberon runtime composition
+- `config.tsx` for runtime config and Puck component configuration
 
 ## File Structure
 
@@ -19,7 +19,7 @@ oberon/
 
 ## adapter.ts
 
-`adapter.ts` initializes Oberon with selected plugins and exports both:
+`adapter.ts` composes the Oberon runtime from your selected plugins and exports both:
 
 - `adapter` for server-side operations
 - `handler` for CMS/auth route handling
@@ -44,7 +44,7 @@ export const { adapter, handler } = initOberon({
 
 ### Plugin Order
 
-Plugin order is significant. Generated apps place:
+Plugin order is significant. Generated starter apps place:
 
 - `developmentPlugin` first
 - database plugin after development
@@ -55,10 +55,10 @@ Plugin order is significant. Generated apps place:
 
 ## config.tsx
 
-`config.tsx` is mostly Puck configuration. Keep Oberon docs brief and use Puck as the primary
-reference for overlapping API surface.
+`config.tsx` is the runtime config for your Puck components. Keep Oberon docs brief and use Puck as
+the primary reference for overlapping API surface.
 
-Use the Puck docs for component fields, blocks, root configuration, and layout:
+Use the Puck docs for component fields, Puck components, root configuration, and layout:
 [https://puckeditor.com/docs](https://puckeditor.com/docs)
 
 ### Oberon-specific divergences from Puck
@@ -96,7 +96,7 @@ export const config: OberonConfig = {
 ## Environment Variables
 
 Required keys depend on selected plugins. See plugin pages for exact variables. At minimum,
-generated apps include:
+generated starter apps include:
 
 ```sh
 OBERON_SITE_URL=http://localhost:3000

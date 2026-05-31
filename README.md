@@ -13,7 +13,7 @@ We use [pNpm](https://pnpm.io/) for workspace support - if you choose to use npm
 ```sh
 pnpm install
 
-pnpm dev:oberon # Develop OberonCMS and all dependencies using the playground.
+pnpm dev:oberon # Develop OberonCMS and all dependencies using the Playground.
 
 pnpm dev:docs # Develop the documentation.
 
@@ -33,7 +33,7 @@ pnpm test:coa # Run create-oberon-app containerized smoke e2e (Podman, Linux)
 
 pnpm test:smoke # Run e2e smoke tests (CI subset)
 
-pnpm test:tdd # Run the opt-in CMS red/green lane in playground
+pnpm test:tdd # Run the opt-in CMS red/green lane in the Playground
 
 pnpm test:tdd:ui # Open the opt-in CMS red/green lane in Playwright UI
 
@@ -52,11 +52,11 @@ This [Turborepo](https://turbo.build/repo/) that includes the following packages
 
   Landing page and documentation for OberonCMS.
 
-  Includes a [demo app](https://oberoncms.com/demo).
+  Includes the public [Demo](https://oberoncms.com/demo).
 
 - `apps/playground`
 
-  A playground for developers to test OberonCMS.
+  The repo-owned Playground for exercising OberonCMS during development.
 
   Mostly used for local development, there is also a [deployment](https://playground.tohuhono.com)
   with access limited to core contributors.
@@ -68,7 +68,7 @@ This [Turborepo](https://turbo.build/repo/) that includes the following packages
 - `packages/create-oberon-app` -
   [create-oberon-app](https://www.npmjs.com/package/create-oberon-app)
 
-  A command line tool for creating new projects with OberonCMS.
+  A command line tool for scaffolding starter apps with OberonCMS.
 
 - `packages/oberoncms/core` - [@oberoncms/core](https://www.npmjs.com/package/@oberoncms/core)
 
@@ -106,7 +106,7 @@ This [Turborepo](https://turbo.build/repo/) that includes the following packages
   A plugin that provides an Image component and storage using
   [flydrive](https://flydrive.dev/docs/introduction).
 
-#### Utilities and Config
+#### Utilities and Tooling
 
 - `dev/scripts` - `@dev/scripts` (private workspace package)
 
@@ -144,12 +144,13 @@ This [Turborepo](https://turbo.build/repo/) that includes the following packages
 
 ### Recipes
 
-Used by the [create-oberon-app](https://www.npmjs.com/package/create-oberon-app) command. If you
-would like to support other frameworks, please get in touch as we would love to help.
+Used by the [create-oberon-app](https://www.npmjs.com/package/create-oberon-app) command to scaffold
+starter apps. If you would like to support other frameworks, please get in touch as we would love to
+help.
 
 - `recipes/nextjs`
 
-  A Next.js starter app.
+  A Next.js recipe for scaffolding a starter app.
 
 ## Contributing
 

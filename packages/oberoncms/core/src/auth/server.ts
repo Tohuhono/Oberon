@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth"
+import { betterAuth } from "better-auth/minimal"
 
 import type { OberonBetterAuthAdapter, OberonSendAdapter } from "../lib/dtd"
 import { createAuthOptions } from "./config"

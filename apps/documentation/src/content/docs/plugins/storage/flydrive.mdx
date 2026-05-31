@@ -71,14 +71,14 @@ export const { adapter, handler } = initOberon({
 
 ## Prepare API
 
-## Editor configuration
+## Runtime config
 
 ```typescript
 // config.ts
 import { Image } from "@oberoncms/plugin-flydrive" // <- import the Image component
 
-export const editorConfig = {
-  // other configurations
+export const config = {
+  // other runtime config
   components: {
     Image, // <- add the Image component
 
@@ -145,4 +145,4 @@ export const { adapter, handler } = initOberon({
 })
 ```
 
-for API and Editor configuration, follow the same steps as shown in the S3 example.
+For API and runtime config, follow the same steps as shown in the S3 example.

@@ -14,16 +14,16 @@ npx create-oberon-app my-app
 
 Answer the prompts:
 
-- **App name** - Valid npm package name
+- **App name** - Valid npm package name for the starter app
 - **Package manager** - npm, pnpm, or yarn
-- **Recipe** - Application recipe (currently `nextjs`)
+- **Recipe** - Starter app recipe (currently `nextjs`)
 - **Database** - Turso, PostgreSQL, or custom
 - **Email service** - Resend, SendGrid, or custom
 - **Admin email** - Initial account email
 
 The installer then:
 
-- Copies the selected recipe into your target directory
+- Scaffolds a starter app from the selected recipe into your target directory
 - Generates `oberon/adapter.ts` from selected plugins
 - Creates `.env.local` with the provided admin email
 - Installs dependencies and runs recipe prebuild
@@ -46,11 +46,10 @@ npx create-oberon-app my-app --use pnpm --recipe nextjs --database turso --send 
 ```
 
 <Callout type="info">
-	Use `--dir <directory>` to scaffold into a directory different from the app
-	name.
+  Use `--dir <directory>` to scaffold into a directory different from the starter app name.
 </Callout>
 
 ## See Also
 
-- [Configuration](/docs/configuration) - Adapter and `oberon/config`
+- [Configuration](/docs/configuration) - Oberon runtime composition and runtime config
 - [Plugins](/docs/plugins) - Database and email adapters
