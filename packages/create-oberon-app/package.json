@@ -49,6 +49,7 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@oberon/recipe-nextjs": "workspace:*",
+    "@oberon/recipe-tanstack": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-flydrive": "workspace:*",

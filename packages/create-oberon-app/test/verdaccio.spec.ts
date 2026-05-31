@@ -1,8 +1,20 @@
 import { expect, test } from "@playwright/test"
+import { execAsync } from "@tohuhono/utils/exec-async"
 
-import { readVerdaccioLogs, execInContainer, COA_NEXTJS_DIR } from "./container"
+import {
+  execInContainer,
+  LOCAL_LOG_PATH,
+  NEXTJS_CONTAINER_NAME,
+  type ContainerName,
+} from "./container"
 
 const NEGATIVE_PROVENANCE_PACKAGE = "next"
+
+async function readVerdaccioLogs() {
+  return execAsync("cat", ["verdaccio.log"], {
+    cwd: LOCAL_LOG_PATH,
+  })
+}
 
 function getVerdaccioPackagePath(packageName: string) {
   return packageName.replace(/\//g, "%2F")
@@ -74,8 +86,10 @@ function isObjectRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null
 }
 
-async function readInstalledDependencies(cwd: string) {
-  const output = await execInContainer("pnpm list --json --depth=0", { cwd })
+async function readInstalledPackages(container: ContainerName) {
+  const output = await execInContainer("pnpm list --json --depth=0", {
+    container,
+  })
 
   const parsed = parseJsonOutput(output)
   const results = Array.isArray(parsed) ? parsed : [parsed]
@@ -99,11 +113,6 @@ async function readInstalledDependencies(cwd: string) {
     }
   }
 
-  return dependencies
-}
-
-async function readInstalledPackages() {
-  const dependencies = await readInstalledDependencies(COA_NEXTJS_DIR)
   const installedPackages: Record<string, string> = {}
 
   for (const [packageName, dependency] of Object.entries(dependencies)) {
@@ -117,7 +126,7 @@ async function readInstalledPackages() {
 
 test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
   test("installs @oberoncms packages via verdaccio without npmjs fallback", async () => {
-    const installedPackages = await readInstalledPackages()
+    const installedPackages = await readInstalledPackages(NEXTJS_CONTAINER_NAME)
     const provenancePackages = Object.entries(installedPackages).filter(([packageName]) =>
       packageName.startsWith("@oberoncms/"),
     )
@@ -153,7 +162,7 @@ test.describe("COA package provenance", { tag: "@verdaccio" }, () => {
   })
 
   test("proxies next metadata from npmjs via verdaccio", async () => {
-    const installedPackages = await readInstalledPackages()
+    const installedPackages = await readInstalledPackages(NEXTJS_CONTAINER_NAME)
 
     const nextVersion = installedPackages[NEGATIVE_PROVENANCE_PACKAGE]
     if (!nextVersion) {

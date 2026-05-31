@@ -11,6 +11,8 @@
     "format:check": "oxfmt --check \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
+    "prettier": "prettier",
+    "prettier:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,css,md,json}\"",
     "prebuild": "tsx ./oberon/prebuild.ts",
     "start": "next start",
     "tsc": "tsc --pretty"

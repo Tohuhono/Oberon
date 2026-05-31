@@ -2,7 +2,7 @@
   "extends": "@dev/typescript",
   "compilerOptions": {
     "noEmit": true,
-    "rootDir": "."
-  },
-  "include": ["*.config.*"]
+    "rootDir": ".",
+    "allowJs": true
+  }
 }

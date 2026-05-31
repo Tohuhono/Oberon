@@ -3,13 +3,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { base, defineConfig } from "@dev/playwright"
-import {
-  authProject,
-  authenticatedProject,
-  loginProject,
-  tddProject,
-  smokeProject,
-} from "@dev/playwright/projects"
+import { authProject, authenticatedProject } from "@dev/playwright/projects"
 
 const PLAYWRIGHT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".playwright")
 
@@ -58,5 +52,8 @@ export default defineConfig({
       read: readNextjsLogs,
     },
   },
-  projects: [authProject, authenticatedProject, tddProject, loginProject, smokeProject],
+  projects: [
+    { ...authProject, grepInvert: /@docs/ },
+    { ...authenticatedProject, grepInvert: /@docs/ },
+  ],
 })
