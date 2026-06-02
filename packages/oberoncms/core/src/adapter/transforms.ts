@@ -4,7 +4,7 @@ import { mapConcurrent } from "@tohuhono/utils/map-concurrent"
 type PropTransform = Parameters<typeof transformProps>[1]
 
 import type {
-  OberonConfig,
+  OberonClientConfig,
   OberonPage,
   OberonPageMeta,
   TransformResult,
@@ -70,7 +70,7 @@ export async function* applyTransforms({
   )
 }
 
-export function getComponentTransformVersions({ components }: OberonConfig) {
+export function getComponentTransformVersions({ components }: OberonClientConfig) {
   const versions: Record<string, number> = {}
 
   for (const key in components) {
@@ -84,7 +84,7 @@ export function getComponentTransformVersions({ components }: OberonConfig) {
 
 export function getTransforms(
   currentTransformVersions: TransformVersions = {},
-  { components }: OberonConfig,
+  { components }: OberonClientConfig,
 ) {
   const componentTransforms: PropTransform = {}
 

@@ -59,9 +59,9 @@ const s3Driver = new S3Driver({ // <- create the s3 driver
     generateURL() // mandatory
   },
 })
-// add the plugin to the oberon adapter
-export const { adapter, handler } = initOberon({
-  config,
+// add the plugin to the server-side Oberon config in adapter.ts
+export const config = defineConfig({
+  client: clientConfig,
   plugins: [
     // other plugins || order doesn't matter
     getFlyDrivePlugin(s3Driver), // <- generate and add the plugin
@@ -71,14 +71,14 @@ export const { adapter, handler } = initOberon({
 
 ## Prepare API
 
-## Runtime config
+## Oberon client config
 
 ```typescript
-// config.ts
+// client.config.tsx
 import { Image } from "@oberoncms/plugin-flydrive" // <- import the Image component
 
-export const config = {
-  // other runtime config
+export const clientConfig = {
+  // other client config
   components: {
     Image, // <- add the Image component
 
@@ -136,8 +136,8 @@ import { VercelBlobDriver } from "@oberoncms/plugin-flydrive/vercel"
 
 const vercelBlobDriver = new VercelBlobDriver() // <- create the driver, it will consume token from the environment
 
-export const { adapter, handler } = initOberon({
-  config,
+export const config = defineConfig({
+  client: clientConfig,
   plugins: [
     // other plugins || order doesn't matter
     getFlyDrivePlugin(vercelBlobDriver),

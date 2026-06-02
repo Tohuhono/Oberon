@@ -5,12 +5,16 @@ import {
   type PluginVersion,
   type OberonHandler,
   type OberonAdapter,
+  type OberonPluginPhase,
+  type OberonClientConfig,
 } from "../lib/dtd"
 import { getInitialData } from "./get-initial-data"
 import { stubbedAdapter } from "./stubbed-adapter"
+import { getComponentTransformVersions } from "./transforms"
 
 type InititalisedPlugins = {
   adapter: OberonPluginAdapter
+  bootstrap: () => Promise<void>
   handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>
   versions: PluginVersion[]
 }
@@ -18,6 +22,7 @@ type InititalisedPlugins = {
 const baseAccumulator: InititalisedPlugins = {
   handlers: {},
   versions: [],
+  bootstrap: async () => {},
   adapter: {
     ...stubbedAdapter,
     hasPermission: ({ user, action, permission }) => {
@@ -51,9 +56,21 @@ const baseAccumulator: InititalisedPlugins = {
   } satisfies OberonPluginAdapter,
 }
 
-export function initPlugins(plugins: OberonPlugin[] = []) {
+export function initPlugins(
+  plugins: OberonPlugin[] = [],
+  { config, phase = "runtime" }: { config?: OberonClientConfig; phase?: OberonPluginPhase } = {},
+) {
   const oberon: InititalisedPlugins = plugins.reduce<InititalisedPlugins>((accumulator, plugin) => {
-    const { name, version, disabled, adapter, handlers = {} } = plugin(accumulator.adapter)
+    const {
+      name,
+      version,
+      disabled,
+      adapter,
+      handlers = {},
+      bootstrap,
+    } = plugin(accumulator.adapter, {
+      phase,
+    })
 
     if (disabled) {
       return {
@@ -66,8 +83,9 @@ export function initPlugins(plugins: OberonPlugin[] = []) {
       versions: [...accumulator.versions, { name, disabled, version: version || "" }],
       handlers: {
         ...accumulator.handlers,
-        ...handlers,
+        ...(phase === "runtime" ? handlers : {}),
       },
+      bootstrap: bootstrap ? () => bootstrap(accumulator.bootstrap) : accumulator.bootstrap,
       adapter: {
         ...accumulator.adapter,
         ...adapter,
@@ -77,16 +95,23 @@ export function initPlugins(plugins: OberonPlugin[] = []) {
 
   return {
     ...oberon,
-    adapter: {
-      ...oberon.adapter,
-      prebuild: async () => {
-        await oberon.adapter.prebuild()
-        const allPages = await oberon.adapter.getAllPages()
-        if (!allPages.length) {
-          console.log("Initialising welcome page")
-          await oberon.adapter.updatePageData(getInitialData())
-        }
-      },
+    bootstrap: async () => {
+      await oberon.bootstrap()
+      const allPages = await oberon.adapter.getAllPages()
+      if (!allPages.length) {
+        console.log("Initialising welcome page")
+        await oberon.adapter.updatePageData(getInitialData())
+      }
+
+      const site = await oberon.adapter.getSite()
+      if (!site && config) {
+        await oberon.adapter.updateSite({
+          version: config.version,
+          components: getComponentTransformVersions(config),
+          updatedAt: new Date(),
+          updatedBy: "system",
+        })
+      }
     },
   } satisfies InititalisedPlugins
 }

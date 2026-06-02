@@ -1,9 +1,11 @@
-import { beforeEach, describe, expect, it } from "@dev/vitest"
+import { beforeEach, describe, expect, fromPartial, it } from "@dev/vitest"
 import { memoryAdapter } from "better-auth/adapters/memory"
 import { vi } from "vitest"
 
+import { bootstrapOberon } from "./adapter/bootstrap-oberon"
 import { stubbedAdapter } from "./adapter/stubbed-adapter"
 import { authPlugin } from "./auth"
+import { type OberonClientConfig, type OberonPlugin } from "./lib/dtd"
 
 function createMemoryDbUser(email: string, id: string) {
   const now = new Date()
@@ -107,7 +109,7 @@ describe("authPlugin", { tags: ["ai", "feature-better-auth-migration"] }, () => 
     )
   })
 
-  it("creates MASTER_EMAIL admin during prebuild when no users remain", async () => {
+  it("creates MASTER_EMAIL admin during bootstrap when no users remain", async () => {
     vi.stubEnv("MASTER_EMAIL", "rescue@example.com")
 
     const addUser = vi.fn(async () => ({
@@ -116,26 +118,30 @@ describe("authPlugin", { tags: ["ai", "feature-better-auth-migration"] }, () => 
       role: "admin" as const,
     }))
 
-    const adapter = {
-      ...stubbedAdapter,
-      betterAuth: {
-        database: memoryAdapter({
-          user: [],
-          verification: [],
-        }),
-      },
-      getAllUsers: async () => [],
-      addUser,
-      sendVerificationRequest: vi.fn(async () => {}),
+    const storagePlugin: OberonPlugin = () => {
+      return {
+        name: "storage-plugin",
+        adapter: {
+          betterAuth: {
+            database: memoryAdapter({
+              user: [],
+              verification: [],
+            }),
+          },
+          getAllUsers: async () => [],
+          addUser,
+          sendVerificationRequest: vi.fn(async () => {}),
+          getAllPages: async () => [{ key: "/", updatedAt: new Date(), updatedBy: "system" }],
+          getSite: async () => undefined,
+          updateSite: async () => {},
+        },
+      }
     }
 
-    const plugin = authPlugin(adapter)
-
-    if (!plugin.adapter?.prebuild) {
-      throw new Error("Expected auth plugin to expose prebuild")
-    }
-
-    await plugin.adapter.prebuild()
+    await bootstrapOberon({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [storagePlugin, authPlugin],
+    })
 
     expect(addUser).toHaveBeenCalledTimes(1)
     expect(addUser).toHaveBeenCalledWith({

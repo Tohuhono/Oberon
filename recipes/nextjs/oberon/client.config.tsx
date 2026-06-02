@@ -1,6 +1,6 @@
-import { type OberonConfig } from "@oberoncms/core"
+import { type OberonClientConfig } from "@oberoncms/core"
 
-export const config: OberonConfig = {
+export const clientConfig: OberonClientConfig = {
   version: 1,
   components: {
     Text: {

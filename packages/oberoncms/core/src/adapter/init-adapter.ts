@@ -15,7 +15,7 @@ import {
   type AdapterPermission,
   type OberonAdapter,
   type OberonUser,
-  type OberonConfig,
+  type OberonClientConfig,
   type MigrationResult,
   type TransformResult,
   type OberonPage,
@@ -30,7 +30,7 @@ export function initAdapter({
   versions,
   pluginAdapter: adapter,
 }: {
-  config: OberonConfig
+  config: OberonClientConfig
   pluginAdapter: OberonPluginAdapter
   versions: PluginVersion[]
 }): OberonAdapter {
@@ -126,15 +126,6 @@ export function initAdapter({
       pendingMigrations: transforms && Object.keys(transforms),
     }
 
-    if (!site) {
-      await adapter.updateSite({
-        version: config.version,
-        components: getComponentTransformVersions(config),
-        updatedAt: new Date(),
-        updatedBy: "system",
-      })
-    }
-
     return siteConfig
   }
 
@@ -183,11 +174,6 @@ export function initAdapter({
   return {
     getSetting: async (namespace, key) => {
       return adapter.getKV(namespace, key)
-    },
-    prebuild: async () => {
-      console.log("adapter prebuild")
-      await adapter.prebuild()
-      console.log("prebuild done")
     },
     /*
      * Auth

@@ -28,6 +28,23 @@ import {
 
 const MONOREPO_ROOT = path.resolve(import.meta.dirname, "../../../")
 
+async function expectGeneratedAdapterConfig(
+  container: typeof NEXTJS_CONTAINER_NAME | typeof TANSTACK_CONTAINER_NAME,
+) {
+  await expect(
+    execInContainer(
+      [
+        `test -f ${COA_APP_DIR}/oberon/client.config.tsx`,
+        `test ! -f ${COA_APP_DIR}/oberon/config.ts`,
+        `grep -q 'defineConfig' ${COA_APP_DIR}/oberon/adapter.ts`,
+        `grep -q 'clientConfig' ${COA_APP_DIR}/oberon/adapter.ts`,
+        `grep -q 'initOberon(config)' ${COA_APP_DIR}/oberon/adapter.ts`,
+      ].join(" && "),
+      { container },
+    ),
+  ).resolves.not.toThrow()
+}
+
 test.describe.serial("Initialise Pod", { tag: "@initialise-pod" }, () => {
   test("Build Container Images", async () => {
     await expect(buildContainerImages()).resolves.not.toThrow()
@@ -89,6 +106,8 @@ test.describe.serial("Initialise Tanstack", { tag: "@initialise-tanstack" }, () 
         { container: TANSTACK_CONTAINER_NAME, cwd: "/" },
       ),
     ).resolves.not.toThrow()
+
+    await expectGeneratedAdapterConfig(TANSTACK_CONTAINER_NAME)
   })
 
   test("Build Oberon App", async () => {
@@ -134,6 +153,13 @@ test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
         ].join(" "),
         { container: NEXTJS_CONTAINER_NAME, cwd: "/" },
       ),
+    ).resolves.not.toThrow()
+
+    await expectGeneratedAdapterConfig(NEXTJS_CONTAINER_NAME)
+    await expect(
+      execInContainer(`grep -q '@oberoncms/plugin-nextjs' ${COA_APP_DIR}/oberon/adapter.ts`, {
+        container: NEXTJS_CONTAINER_NAME,
+      }),
     ).resolves.not.toThrow()
   })
 

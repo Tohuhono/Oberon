@@ -236,8 +236,9 @@ Tailwind plugin not generating or serving CSS correctly.
 ```tsx
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
 
-export const { adapter, handler } = initOberon({
-  plugins: [, /* ... */ tailwindPlugin],
+export const config = defineConfig({
+  client: clientConfig,
+  plugins: [/* ... */ tailwindPlugin],
 })
 ```
 

@@ -7,8 +7,13 @@ import { authProject, authenticatedProject } from "@dev/playwright/projects"
 
 const PLAYWRIGHT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".playwright")
 
-const APP_LOG_PATH = path.resolve(PLAYWRIGHT_DIR, "logs/app.log")
-const APP_DB_PATH = path.resolve(PLAYWRIGHT_DIR, "db/oberon.db")
+const APP_DB_DIR = path.resolve(PLAYWRIGHT_DIR, "db")
+const APP_LOG_DIR = path.resolve(PLAYWRIGHT_DIR, "logs")
+
+const APP_LOG_PATH = path.resolve(APP_LOG_DIR, "app.log")
+const PREBUILD_LOG_PATH = path.resolve(APP_LOG_DIR, "prebuild.log")
+
+const APP_DB_PATH = path.resolve(APP_DB_DIR, "oberon.db")
 
 const AUTH_SECRET = "playwright-test-auth-secret"
 
@@ -24,12 +29,12 @@ export default defineConfig({
   ...base,
   webServer: {
     command: [
-      `rm -f '${APP_LOG_PATH}'`,
-      `rm -f '${APP_DB_PATH}*'`,
-      `mkdir -p '${path.dirname(APP_LOG_PATH)}'`,
-      `mkdir -p '${path.dirname(APP_DB_PATH)}'`,
-      `pnpm prebuild`,
-      `pnpm start > '${APP_LOG_PATH}' 2>&1`,
+      `rm -rf '${APP_LOG_DIR}'`,
+      `rm -rf '${APP_DB_DIR}'`,
+      `mkdir -p '${APP_LOG_DIR}'`,
+      `mkdir -p '${APP_DB_DIR}'`,
+      `pnpm prebuild > '${PREBUILD_LOG_PATH}' 2>&1`,
+      `pnpm dev > '${APP_LOG_PATH}' 2>&1`,
     ].join(" && "),
     url: "http://localhost:3210",
     reuseExistingServer: false,

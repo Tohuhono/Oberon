@@ -42,7 +42,13 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
 
     const frame = cms.locator("iframe#preview-frame")
     await expect(frame).toBeVisible()
-    const fullWidth = (await frame.boundingBox())?.width ?? 0
+    let fullWidth = 0
+    await expect
+      .poll(async () => {
+        fullWidth = (await frame.boundingBox())?.width ?? 0
+        return fullWidth
+      })
+      .toBeGreaterThan(0)
 
     await viewportControls.getByRole("button", { name: "Small", exact: true }).click()
 
@@ -66,10 +72,28 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
       await expect(insertTextButton).toBeVisible()
       await expect(previewDropzone).toBeVisible()
 
-      const box = await previewDropzone.boundingBox()
-      if (!box) throw new Error("Dropzone not visible")
+      const frame = cms.locator("iframe#preview-frame")
+      await expect.poll(async () => (await frame.boundingBox())?.width ?? 0).toBeGreaterThan(0)
 
-      await insertTextButton.hover()
+      let insertBox = await insertTextButton.boundingBox()
+      await expect
+        .poll(async () => {
+          insertBox = await insertTextButton.boundingBox()
+          return insertBox?.width ?? 0
+        })
+        .toBeGreaterThan(0)
+
+      let box = await previewDropzone.boundingBox()
+      await expect
+        .poll(async () => {
+          box = await previewDropzone.boundingBox()
+          return box?.width ?? 0
+        })
+        .toBeGreaterThan(0)
+
+      if (!insertBox || !box) throw new Error("Drag target not visible")
+
+      await cms.mouse.move(insertBox.x + insertBox.width / 2, insertBox.y + insertBox.height / 2)
       await cms.mouse.down()
 
       await cms.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
@@ -105,8 +129,8 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
       errorCapture.clear()
       await cms.goto(cmsSeededPageKey)
       await expect(cms).toHaveURL(cmsSeededPageKey)
-      await expect(cms.getByText("Welcome to OberonCMS")).toBeVisible()
-      await expect(cms.locator(".p-1", { hasText: "Welcome to OberonCMS" })).toBeVisible()
+      await expect(cms.getByText("Welcome to OberonCMS").first()).toBeVisible()
+      await expect(cms.locator(".p-1", { hasText: "Welcome to OberonCMS" }).first()).toBeVisible()
       expect(errorCapture.browserErrors).toEqual([])
     },
   )
@@ -124,6 +148,9 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
       name: "Preview mode",
       exact: true,
     })
+    const previewModeMenu = cms.getByRole("menu").filter({
+      has: cms.getByRole("menuitem", { name: "Follow", exact: true }),
+    })
     const editorThemeToggle = cms.getByRole("button", {
       name: "Toggle theme",
       exact: true,
@@ -133,7 +160,8 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     })
 
     await previewModeButton.click()
-    await cms.getByRole("menuitem", { name: "Follow", exact: true }).click()
+    await expect(previewModeMenu).toBeVisible()
+    await previewModeMenu.getByRole("menuitem", { name: "Follow", exact: true }).click()
 
     await editorThemeToggle.click()
     await editorThemeMenu.getByRole("menuitem", { name: "Light", exact: true }).click()

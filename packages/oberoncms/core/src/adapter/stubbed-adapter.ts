@@ -2,7 +2,6 @@ import { notImplemented } from "../adapter"
 import { type OberonPluginAdapter } from "../lib/dtd"
 
 export const stubbedAdapter = {
-  prebuild: async () => {},
   getCurrentUser: notImplemented("getCurrentUser"),
   hasPermission: notImplemented("hasPermission"),
   signIn: notImplemented("signIn"),

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-import { adapter } from "./adapter"
+import { bootstrapOberon } from "@oberoncms/core/adapter"
+
+import { config } from "./adapter"
 
 // Script runs before a build
-adapter.prebuild()
+bootstrapOberon(config)
