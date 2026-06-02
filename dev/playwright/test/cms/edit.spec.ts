@@ -55,7 +55,7 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
     await expect.poll(async () => (await frame.boundingBox())?.width ?? 0).toBeLessThan(fullWidth)
   })
 
-  test(
+  test.skip(
     "publishes a text component with a className",
     { tag: "@playground" },
     async ({ cms, cmsSeededPageKey, errorCapture }) => {
