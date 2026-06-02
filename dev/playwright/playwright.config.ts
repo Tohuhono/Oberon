@@ -1,4 +1,5 @@
 import { base, defineConfig } from "./base.config"
+import { smokeProject } from "./projects"
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL
 const vercelProtectionBypass = process.env.VERCEL_PROTECTION_BYPASS || ""
@@ -20,16 +21,14 @@ export default defineConfig({
   },
   projects: [
     {
+      ...smokeProject,
       name: "playground",
-      testDir: "../../apps/playground/test",
-      grep: /@smoke/,
-      use: { baseURL },
+      grepInvert: /@docs/,
     },
     {
+      ...smokeProject,
       name: "docs",
-      testDir: "../../apps/documentation/test",
-      grep: /@smoke/,
-      use: { baseURL },
+      grepInvert: /@playground/,
     },
   ],
 })
