@@ -8,6 +8,7 @@ type AuthSetupOptions = {
   }
   authEmail?: string
   authStorageStatePath?: string
+  containerStatePath?: string
 }
 
 const PLAYWRIGHT_AUTH_EMAIL = "test@tohuhono.com"

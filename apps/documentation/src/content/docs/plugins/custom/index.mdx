@@ -10,18 +10,18 @@ import { Callout } from "nextra/components"
 Use a custom plugin when the built-in providers do not match your runtime, storage, delivery, or
 routing requirements.
 
-Custom plugins are configured in `oberon/adapter.ts` like any other plugin:
+Custom plugins are configured in `oberon/config.ts` like any other plugin:
 
-```tsx filename="oberon/adapter.ts"
-import { initOberon } from "@oberoncms/core/adapter"
+```tsx filename="oberon/config.ts"
+import { defineConfig } from "@oberoncms/core"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 import { plugin as myPlugin } from "./my-plugin"
 
-import { config } from "./config"
+import { clientConfig } from "./client.config"
 
-export const { adapter, handler } = initOberon({
-  config,
+export const config = defineConfig({
+  client: clientConfig,
   plugins: [developmentPlugin, myPlugin, authPlugin],
 })
 ```

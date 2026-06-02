@@ -1,6 +1,8 @@
 import { copyFile, writeFile } from "fs/promises"
 import path from "path"
 
+import { type Recipe } from "./config"
+
 export type Plugin = {
   id: string
   type: string
@@ -34,12 +36,26 @@ export const sendPlugins = {
 export type SendPlugin = keyof typeof sendPlugins
 export const sendIds = Object.keys(sendPlugins) as SendPlugin[]
 
-const createAdapter = (plugins: Plugin[]) => {
+function getAliasedPlugins(plugins: Plugin[], recipe: Recipe) {
   const aliasedPlugins = plugins.map(({ packageName, type }) => ({
     packageName,
     type,
     alias: `${type}Plugin`,
   }))
+
+  if (recipe === "nextjs") {
+    aliasedPlugins.push({
+      packageName: "@oberoncms/plugin-nextjs",
+      type: "nextjs",
+      alias: "nextjsPlugin",
+    })
+  }
+
+  return aliasedPlugins
+}
+
+const createConfig = (plugins: Plugin[], recipe: Recipe) => {
+  const aliasedPlugins = getAliasedPlugins(plugins, recipe)
 
   const pluginImports = aliasedPlugins
     .map(({ packageName, type, alias }) => {
