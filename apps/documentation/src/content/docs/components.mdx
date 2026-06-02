@@ -2,15 +2,15 @@ import { Callout } from "nextra/components"
 
 # Puck Components
 
-OberonCMS uses Puck's component model. Puck components are defined in the runtime config at
-`oberon/config.tsx` and rendered by the visual editor.
+OberonCMS uses Puck's component model. Puck components are defined in the client-safe config at
+`oberon/client.config.tsx` and rendered by the visual editor.
 
 `create-oberon-app` scaffolds starter apps with a minimal `Text` component as a starting point:
 
-```tsx filename="oberon/config.tsx"
-import { type OberonConfig } from "@oberoncms/core"
+```tsx filename="oberon/client.config.tsx"
+import { type OberonClientConfig } from "@oberoncms/core"
 
-export const config: OberonConfig = {
+export const clientConfig: OberonClientConfig = {
   version: 1,
   components: {
     Text: {
@@ -48,13 +48,13 @@ export const MyCustomBlock = {
 } satisfies OberonComponent
 ```
 
-Then register it in your runtime config:
+Then register it in your Oberon client config:
 
-```tsx filename="oberon/config.ts"
+```tsx filename="oberon/client.config.tsx"
 import { MyCustomBlock } from "@/components/blocks"
-import { type OberonConfig } from "@oberoncms/core"
+import { type OberonClientConfig } from "@oberoncms/core"
 
-export const config: OberonConfig = {
+export const clientConfig: OberonClientConfig = {
   version: 1,
   components: {
     MyCustomBlock,

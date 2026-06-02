@@ -1,23 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@dev/typescript",
   "compilerOptions": {
-    "rootDir": "../../",
-    "noEmit": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es2022",
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "rootDir": "../../"
   },
   "include": [
+    "../../**/base.config.ts",
+    "../../**/playwright.config.ts",
     "../../**/test/**/*.ts",
     "../../**/*.spec.ts",
     "../../**/*.spec.tsx",

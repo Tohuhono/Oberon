@@ -15,7 +15,7 @@ import { z } from "zod"
 import { useOberonActions } from "../hooks/use-oberon"
 
 const LoginSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   token: z.string().max(6).optional(),
 })
 

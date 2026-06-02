@@ -32,4 +32,4 @@ create-oberon-app script
 - [testing strategy and scope](.agents/TESTING.md)
 - [design and architecture](.agents/ARCHITECTURE.md)
 - [git and github metadata](.agents/METADATA.md)
-- [Ubiquitous Language and glossary of terms](.agents/UBIQUITOUS_LANGUAGE.md)
+- [Ubiquitous Language and glossary of terms](.agents/CONTEXT.md)

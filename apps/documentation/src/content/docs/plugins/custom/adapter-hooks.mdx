@@ -1,33 +1,32 @@
 # Adapter Hooks
 
-`OberonPluginAdapter` is composed from four parts:
+`OberonPluginAdapter` is composed from three parts:
 
 ```tsx
-type OberonPluginAdapter = OberonInitAdapter &
-  OberonDatabaseAdapter &
-  OberonCanAdapter &
-  OberonSendAdapter
+type OberonPluginAdapter = OberonDatabaseAdapter & OberonCanAdapter & OberonSendAdapter
 ```
 
-## OberonInitAdapter
+## Bootstrap hooks
 
-Lifecycle hooks used during setup and build.
+Lifecycle work used during setup and build is exposed as a top-level plugin `bootstrap(next)` hook,
+not as an adapter method.
 
 ```tsx
-type OberonInitAdapter = {
-  prebuild: () => Promise<void>
+type OberonPlugin = (adapter: OberonPluginAdapter) => {
+  bootstrap?: (next: () => Promise<void>) => Promise<void>
 }
 ```
 
-Use `prebuild` for work that must happen before build output is produced, such as migrations or
-initialisation.
+Use `bootstrap(next)` for work that must happen before build output is produced, such as migrations
+or initialisation. Call `next()` before or after your own work depending on whether later bootstrap
+work should run first.
 
 ## OberonDatabaseAdapter
 
 Database plugins own the main persistence surface. In code this is:
 
 ```tsx
-type OberonDatabaseAdapter = Partial<OberonInitAdapter> & OberonBaseAdapter & OberonAuthAdapter
+type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
 ```
 
 ### Content and media methods
@@ -88,15 +87,16 @@ import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   notImplemented,
   type OberonDatabaseAdapter,
-  type OberonInitAdapter,
   type OberonPlugin,
 } from "@oberoncms/core"
 
 export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
   disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
+  bootstrap: async (next) => {
+    await next()
+  },
   adapter: {
-    prebuild: notImplemented("prebuild"),
     addPage: notImplemented("addPage"),
     addImage: notImplemented("addImage"),
     addUser: notImplemented("addUser"),
@@ -114,7 +114,7 @@ export const databasePlugin: OberonPlugin = () => ({
     putKV: notImplemented("putKV"),
     updatePageData: notImplemented("updatePageData"),
     updateSite: notImplemented("updateSite"),
-  } satisfies OberonInitAdapter & OberonDatabaseAdapter,
+  } satisfies OberonDatabaseAdapter,
 })
 ```
 

@@ -8,10 +8,12 @@ import type {
 } from "@puckeditor/core"
 import type { StreamResponseChunk } from "@tohuhono/utils"
 import type { BetterAuthOptions } from "better-auth/minimal"
-import { Route } from "next"
 import type { NextRequest } from "next/server"
 import type { ReactNode } from "react"
 import { z } from "zod"
+
+// Compatible with Nextjs
+type OberonRoute = string & {}
 
 export class OberonError extends Error {}
 
@@ -156,13 +158,13 @@ export const PageMetaSchema = PageSchema.pick({
 
 export type OberonPage = z.infer<typeof PageSchema> & {
   data: PageData
-  key: Route
+  key: OberonRoute
 }
 
 // Cannot infer from zod because we need nextjs to understand key is a valid Route
 export type OberonPageMeta = MaybeOptimistic<
   z.infer<typeof PageMetaSchema> & {
-    key: Route
+    key: OberonRoute
   }
 >
 

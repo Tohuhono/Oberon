@@ -137,9 +137,6 @@
     "generate:migrations": {
       "cache": false
     },
-    "generate:recipes": {
-      "cache": false
-    },
     "test:unit": {
       "dependsOn": ["^build"],
       "inputs": [
