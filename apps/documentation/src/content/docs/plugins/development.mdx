@@ -13,17 +13,17 @@ during local development.
 npm install @oberoncms/plugin-development
 ```
 
-```tsx filename="oberon/adapter.ts"
-import { initOberon } from "@oberoncms/core/adapter"
+```tsx filename="oberon/config.ts"
+import { defineConfig } from "@oberoncms/core"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
 import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
 
-import { config } from "./config"
+import { clientConfig } from "./client.config"
 
-export const { adapter, handler } = initOberon({
-  config,
+export const config = defineConfig({
+  client: clientConfig,
   plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
 })
 ```
@@ -34,7 +34,7 @@ When enabled, the plugin can provide:
 
 - A local development database adapter
 - A development email sender that logs verification details instead of sending real emails
-- Database migrations during prebuild
+- Database migrations during Oberon bootstrap
 
 ## Environment-based behavior
 

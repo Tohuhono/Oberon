@@ -61,7 +61,7 @@ complexity, or just move it? A "yes, concentrates" is the signal you want.
 ### 2. Present candidates as an HTML report
 
 Write a self-contained HTML file to the OS temp directory so nothing lands in the repo. Resolve the
-temp dir from `$TMPDIR`, falling back to `/tmp` (or `%TEMP%` on Windows), and write to
+temp dir from `.tmp` (or `%TEMP%` on Windows), and write to
 `<tmpdir>/architecture-review-<timestamp>.html` so each run gets a fresh file. Open it for the user
 — `xdg-open <path>` on Linux, `open <path>` on macOS, `start <path>` on Windows — and tell them the
 absolute path.

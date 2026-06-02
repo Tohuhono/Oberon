@@ -31,9 +31,10 @@ async function getTursoAdapter(
 
   const { plugin } = await import("./index")
 
-  const adapter = plugin(fromPartial({ prebuild: async () => {} })).adapter ?? {}
+  const tursoPlugin = plugin(fromPartial({}))
+  const adapter = tursoPlugin.adapter ?? {}
 
-  await adapter.prebuild?.()
+  await tursoPlugin.bootstrap?.(async () => {})
 
   onCleanup(async () => {
     vi.doUnmock("./db/client")

@@ -1,0 +1,55 @@
+{
+  "name": "@oberon/recipe-tanstack",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "build": "vite build",
+    "clean": "odt clean",
+    "dev": "vite dev --port 3000",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "prebuild": "tsx ./oberon/prebuild.ts",
+    "preview": "vite preview --host 127.0.0.1 --port 3000 --strictPort",
+    "start": "vite preview --strictPort",
+    "tsc": "tsc --pretty"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@oberoncms/core": "workspace:*",
+    "@oberoncms/plugin-development": "workspace:*",
+    "@tanstack/react-devtools": "^0.10.5",
+    "@tanstack/react-router": "^1.170.8",
+    "@tanstack/react-router-devtools": "^1.167.0",
+    "@tanstack/react-router-ssr-query": "^1.167.0",
+    "@tanstack/react-start": "^1.168.11",
+    "@tanstack/router-plugin": "^1.168.11",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "@tanstack/devtools-vite": "^0.7.0",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "oxfmt": "^0.51.0",
+    "oxlint": "^1.67.0",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
+    "typescript": "5.9.3",
+    "vite": "^8.0.14"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "lightningcss",
+      "sharp"
+    ]
+  }
+}

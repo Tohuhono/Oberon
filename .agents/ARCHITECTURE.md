@@ -1,11 +1,12 @@
 # OberonCMS architecture
 
 This document records the current wiring of the monorepo. Canonical terms live in
-`.agents/UBIQUITOUS_LANGUAGE.md`; this file focuses on composition, flow, and workspace boundaries.
+`.agents/CONTEXT.md`; this file focuses on composition, flow, and workspace boundaries.
 
 ## Boundaries
 
-- Applications own routes, server actions, and the ordered plugin list passed to `initOberon`.
+- Applications own routes, server actions, and the server-side Oberon config passed to `initOberon`
+  and `bootstrapOberon`.
 - `packages/oberoncms/core` owns runtime composition, permissions, schema parsing, and component
   transform migration.
 - `packages/plugins/*` add persistence, auth, storage, send, caching, and HTTP integrations.
@@ -13,7 +14,8 @@ This document records the current wiring of the monorepo. Canonical terms live i
 
 ## Composition model
 
-`initOberon({ config, plugins })` is the composition root and returns `{ adapter, handler }`.
+`initOberon(config)` is the Runtime composition root and returns `{ adapter, handler }`.
+`bootstrapOberon(config)` is the Bootstrap composition root used by package `prebuild` scripts.
 
 1. `initPlugins` reduces the ordered plugin list into merged adapter methods, a handler map, and
    version metadata.
@@ -45,10 +47,10 @@ Later plugin fields override earlier ones, so plugin order is part of the runtim
 
 ### Build lifecycle
 
-- App `prebuild` scripts call `adapter.prebuild()`.
-- Database plugins currently use `prebuild` to run migrations before builds.
+- App `prebuild` scripts call `bootstrapOberon(config)`.
+- Database plugins use top-level `bootstrap(next)` hooks to run migrations before builds.
 - `@oberoncms/plugin-nextjs` adds cache tagging and revalidation around adapter reads and mutations;
-  this behavior is not in core itself.
+  this behavior is skipped during Bootstrap composition.
 
 ## Current repo wiring
 

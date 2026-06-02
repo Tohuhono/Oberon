@@ -6,6 +6,7 @@ import path from "path"
 import { program, Option, InvalidArgumentError } from "@commander-js/extra-typings"
 import validateName from "validate-npm-package-name"
 
+import { recipes } from "./installer/config"
 import { initGit } from "./installer/init-git"
 import {
   databaseIds,
@@ -18,7 +19,7 @@ import {
 import { installEnv } from "./installer/install-env"
 import { installPackages, packageManagers } from "./installer/install-packages"
 import { installTemplate } from "./installer/install-template"
-import { promptOptions, recipes } from "./installer/prompt-options"
+import { promptOptions } from "./installer/prompt-options"
 
 program
   .command("create")
@@ -67,7 +68,7 @@ program
 
     await installTemplate(appName, appPath, templatePath)
 
-    await installAdapter(oberonPath, pluginPath, plugins)
+    await installAdapter(oberonPath, pluginPath, plugins, recipe)
 
     await installEnv(appPath, email)
 

@@ -33,6 +33,7 @@
   "devDependencies": {
     "@oberoncms/core": "workspace:*",
     "@playwright/test": "^1.52.0",
+    "@types/node": "24.10.1",
     "typescript": "5.9.3"
   }
 }

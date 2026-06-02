@@ -32,7 +32,6 @@ export function createStorageAdapterFactory({ sqliteFile }: { sqliteFile: string
     })
 
     return fromPartial({
-      prebuild: async () => {},
       ...getAdapter(() => db),
     })
   }

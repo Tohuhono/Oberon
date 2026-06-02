@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server"
 import {
   type OberonAdapter,
   type OberonConfig,
-  type OberonPlugin,
   type OberonHandler,
   type OberonMethod,
 } from "../lib/dtd"
@@ -12,8 +11,7 @@ import { initPlugins } from "./init-plugins"
 
 function handle<TMethod extends OberonMethod = OberonMethod>(
   method: TMethod,
-  handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>,
-  adapter: OberonAdapter,
+  handlers: Record<string, OberonHandler>,
 ): OberonHandler<{ path: string[] }>[TMethod] {
   return async (request: NextRequest, { params }) => {
     const { path = [] } = await params
@@ -23,7 +21,7 @@ function handle<TMethod extends OberonMethod = OberonMethod>(
       return new Response("", { status: 404 })
     }
 
-    const handler = handlers[action]?.(adapter)[method]
+    const handler = handlers[action]?.[method]
 
     if (!handler) {
       return new Response("", { status: 405 })
@@ -33,32 +31,41 @@ function handle<TMethod extends OberonMethod = OberonMethod>(
   }
 }
 
-export function initOberon({
-  config,
-  plugins,
-}: {
-  config: OberonConfig
-  plugins: OberonPlugin[]
-}): {
+function initHandlers(
+  handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>,
+  adapter: OberonAdapter,
+) {
+  return Object.entries(handlers).reduce<Record<string, OberonHandler>>(
+    (accumulator, [action, initHandler]) => {
+      accumulator[action] = initHandler(adapter)
+      return accumulator
+    },
+    {},
+  )
+}
+
+export function initOberon({ client, plugins }: OberonConfig): {
   handler: OberonHandler<{ path: string[] }>
   adapter: OberonAdapter
 } {
   console.info("Initialise Oberon")
 
-  const { versions, handlers, adapter: pluginAdapter } = initPlugins(plugins)
+  const { versions, handlers, adapter: pluginAdapter } = initPlugins(plugins, { phase: "runtime" })
 
   const adapter = initAdapter({
-    config,
+    config: client,
     versions,
     pluginAdapter,
   })
 
+  const compiledHandlers = initHandlers(handlers, adapter)
+
   const handler = {
-    GET: handle("GET", handlers, adapter),
-    PUT: handle("PUT", handlers, adapter),
-    PATCH: handle("PATCH", handlers, adapter),
-    POST: handle("POST", handlers, adapter),
-    DELETE: handle("DELETE", handlers, adapter),
+    GET: handle("GET", compiledHandlers),
+    PUT: handle("PUT", compiledHandlers),
+    PATCH: handle("PATCH", compiledHandlers),
+    POST: handle("POST", compiledHandlers),
+    DELETE: handle("DELETE", compiledHandlers),
   }
 
   return {
