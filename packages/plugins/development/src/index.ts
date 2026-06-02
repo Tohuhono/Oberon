@@ -6,7 +6,6 @@ import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonDatabaseAdapter,
-  type OberonInitAdapter,
   type OberonPlugin,
   type OberonSendAdapter,
 } from "@oberoncms/core"
@@ -18,10 +17,33 @@ import { getClient, initialise } from "./db/client"
 
 const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
-export const plugin: OberonPlugin = (adapter) => ({
+export const plugin: OberonPlugin = () => ({
   name,
   version,
   disabled: !USE_DEVELOPMENT_SEND_PLUGIN && !USE_DEVELOPMENT_DATABASE_PLUGIN,
+  bootstrap: async (next) => {
+    if (USE_DEVELOPMENT_DATABASE_PLUGIN) {
+      console.log(`Migrating database`)
+
+      await initialise()
+
+      const db = getClient()
+
+      if (!db) {
+        console.log("Prepare: No Database Connection Configured")
+        await next()
+        return
+      }
+
+      await migrate(db, {
+        migrationsFolder,
+      })
+
+      console.log(`Database migration complete`)
+    }
+
+    await next()
+  },
   adapter: {
     ...(USE_DEVELOPMENT_SEND_PLUGIN &&
       ({
@@ -37,25 +59,6 @@ export const plugin: OberonPlugin = (adapter) => ({
     ...(USE_DEVELOPMENT_DATABASE_PLUGIN &&
       ({
         ...getAdapter(getClient),
-        prebuild: async () => {
-          console.log(`Migrating database`)
-
-          await initialise()
-
-          const db = getClient()
-
-          if (!db) {
-            console.log("Prepare: No Database Connection Configured")
-            return
-          }
-
-          await migrate(db, {
-            migrationsFolder,
-          })
-
-          console.log(`Database migration complete`)
-          await adapter.prebuild()
-        },
-      } satisfies OberonDatabaseAdapter & OberonInitAdapter)),
+      } satisfies OberonDatabaseAdapter)),
   },
 })

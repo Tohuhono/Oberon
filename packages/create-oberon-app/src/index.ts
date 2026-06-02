@@ -68,7 +68,7 @@ program
 
     await installTemplate(appName, appPath, templatePath)
 
-    await installAdapter(oberonPath, pluginPath, plugins)
+    await installAdapter(oberonPath, pluginPath, plugins, recipe)
 
     await installEnv(appPath, email)
 

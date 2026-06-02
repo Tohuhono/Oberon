@@ -4,7 +4,7 @@ import prompts from "prompts"
 import validateName from "validate-npm-package-name"
 import { z } from "zod"
 
-import { recipeChoices } from "./config"
+import { recipeChoices, type Recipe } from "./config"
 import {
   databaseIds,
   databasePlugins,
@@ -49,7 +49,7 @@ export async function promptOptions(
   }>,
 ): Promise<{
   appName: string
-  recipe: string
+  recipe: Recipe
   database: DatabasePlugin
   email: string
   send: SendPlugin

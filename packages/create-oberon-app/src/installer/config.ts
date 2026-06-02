@@ -1,4 +1,5 @@
 export const recipes = ["nextjs", "tanstack"] as const
+export type Recipe = (typeof recipes)[number]
 export const recipeChoices = [
   { title: "Next js", value: "nextjs" },
   { title: "Tanstack", value: "tanstack" },

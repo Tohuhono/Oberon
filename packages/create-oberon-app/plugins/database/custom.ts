@@ -2,7 +2,6 @@ import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   notImplemented,
   type OberonDatabaseAdapter,
-  type OberonInitAdapter,
   type OberonPlugin,
 } from "@oberoncms/core"
 
@@ -10,8 +9,6 @@ export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
   disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
   adapter: {
-    // Prebuild hook
-    prebuild: notImplemented("prebuild"),
     // OberonBaseAdapter
     addImage: notImplemented("addImage"),
     addPage: notImplemented("addPage"),
@@ -31,5 +28,5 @@ export const databasePlugin: OberonPlugin = () => ({
     changeRole: notImplemented("changeRole"),
     deleteUser: notImplemented("deleteUser"),
     getAllUsers: notImplemented("getAllUsers"),
-  } satisfies OberonInitAdapter & OberonDatabaseAdapter,
+  } satisfies OberonDatabaseAdapter,
 })
