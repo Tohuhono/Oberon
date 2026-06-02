@@ -36,20 +36,12 @@ export const sendPlugins = {
 export type SendPlugin = keyof typeof sendPlugins
 export const sendIds = Object.keys(sendPlugins) as SendPlugin[]
 
-function getAliasedPlugins(plugins: Plugin[], recipe: Recipe) {
+function getAliasedPlugins(plugins: Plugin[], _recipe: Recipe) {
   const aliasedPlugins = plugins.map(({ packageName, type }) => ({
     packageName,
     type,
     alias: `${type}Plugin`,
   }))
-
-  if (recipe === "nextjs") {
-    aliasedPlugins.push({
-      packageName: "@oberoncms/plugin-nextjs",
-      type: "nextjs",
-      alias: "nextjsPlugin",
-    })
-  }
 
   return aliasedPlugins
 }
@@ -95,7 +87,12 @@ export const { adapter, handler } = initOberon({
 `
 }
 
-export async function installAdapter(oberonPath: string, pluginPath: string, plugins: Plugin[]) {
+export async function installAdapter(
+  oberonPath: string,
+  pluginPath: string,
+  plugins: Plugin[],
+  recipe: Recipe,
+) {
   for (const { packageName, type, id } of plugins) {
     if (packageName) {
       continue
@@ -103,7 +100,7 @@ export async function installAdapter(oberonPath: string, pluginPath: string, plu
     await copyFile(path.join(pluginPath, type, `${id}.ts`), path.join(oberonPath, `${type}.ts`))
   }
 
-  const adapter = createAdapter(plugins)
+  const adapter = createConfig(plugins, recipe)
 
   await writeFile(path.join(oberonPath, "adapter.ts"), adapter)
 }
