@@ -1,6 +1,4 @@
-import { type Data } from "@puckeditor/core"
 import { streamResponse } from "@tohuhono/utils"
-import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
 
 import { version } from "../../package.json" with { type: "json" }
 import {
@@ -17,7 +15,7 @@ import {
   type AdapterPermission,
   type OberonAdapter,
   type OberonUser,
-  type OberonConfig,
+  type OberonClientConfig,
   type MigrationResult,
   type TransformResult,
   type OberonPage,
@@ -32,7 +30,7 @@ export function initAdapter({
   versions,
   pluginAdapter: adapter,
 }: {
-  config: OberonConfig
+  config: OberonClientConfig
   pluginAdapter: OberonPluginAdapter
   versions: PluginVersion[]
 }): OberonAdapter {
@@ -67,111 +65,69 @@ export function initAdapter({
     throw new ResponseError("You do not have permission to perform this action")
   }
 
-  const getAllPagesCached = cache(
-    async () => {
-      const sortPages = (a: { key: string }, b: { key: string }) => {
-        if (a.key < b.key) {
-          return -1
-        }
-        if (a.key > b.key) {
-          return 1
-        }
-        return 0
+  const getAllPages = async () => {
+    const sortPages = (a: { key: string }, b: { key: string }) => {
+      if (a.key < b.key) {
+        return -1
       }
-      const result = await adapter.getAllPages()
+      if (a.key > b.key) {
+        return 1
+      }
+      return 0
+    }
+    const result = await adapter.getAllPages()
 
-      const data = result.sort(sortPages)
-      return data
-    },
-    undefined,
-    { tags: ["oberon-pages"] },
-  )
-
-  const getAllPathsCached = cache(
-    async () => {
-      const result = await adapter.getAllPages()
-      const data = result.map((row) => ({
-        path: row["key"].split("/").slice(1),
-      }))
-      return data
-    },
-    undefined,
-    { tags: ["oberon-pages"] },
-  )
-
-  // TODO zod ; maybeGet
-  const getPageDataCached = async (key: string): Promise<Data | null> => {
-    const dataString = await adapter.getPageData(key)
-
-    return dataString
+    const data = result.sort(sortPages)
+    return data
   }
 
-  const getAllUsersCached = cache(
-    async () => {
-      const allUsers = await adapter.getAllUsers()
-      return allUsers || []
-    },
-    undefined,
-    {
-      tags: ["oberon-users"],
-    },
-  )
+  const getAllPaths = async () => {
+    const result = await adapter.getAllPages()
+    const data = result.map((row) => ({
+      path: row["key"].split("/").slice(1),
+    }))
+    return data
+  }
 
-  const getAllImagesCached = cache(
-    async () => {
-      const allImages = await adapter.getAllImages()
-      return allImages || []
-    },
-    undefined,
-    {
-      tags: ["oberon-images"],
-    },
-  )
+  // TODO zod ; maybeGet
+  const getPageData = (key: string) => adapter.getPageData(key)
 
-  const updatePageData = async ({
+  const getAllUsers = async () => {
+    const allUsers = await adapter.getAllUsers()
+    return allUsers || []
+  }
+
+  const getAllImages = async () => {
+    const allImages = await adapter.getAllImages()
+    return allImages || []
+  }
+
+  const updatePageData = ({
     key,
     data,
     updatedBy,
-  }: Pick<OberonPage, "key" | "data" | "updatedBy">) => {
-    await adapter.updatePageData({
+  }: Pick<OberonPage, "key" | "data" | "updatedBy">) =>
+    adapter.updatePageData({
       key,
       data,
       updatedAt: new Date(),
       updatedBy,
     })
-    revalidatePath(key)
-    updateTag("oberon-pages")
+
+  const getConfig = async () => {
+    const site = await adapter.getSite()
+
+    const { components, transforms } = getTransforms(site?.components, config)
+
+    const siteConfig = {
+      version,
+      plugins: versions,
+      components,
+      pendingMigrations: transforms && Object.keys(transforms),
+    }
+
+    return siteConfig
   }
-
-  const getConfigCached = cache(
-    async () => {
-      const site = await adapter.getSite()
-
-      const { components, transforms } = getTransforms(site?.components, config)
-
-      const siteConfig = {
-        version,
-        plugins: versions,
-        components,
-        pendingMigrations: transforms && Object.keys(transforms),
-      }
-
-      if (!site) {
-        await adapter.updateSite({
-          version: config.version,
-          components: getComponentTransformVersions(config),
-          updatedAt: new Date(),
-          updatedBy: "system",
-        })
-      }
-
-      return siteConfig
-    },
-    undefined,
-    {
-      tags: ["oberon-config"],
-    },
-  )
 
   const migrate = streamResponse<TransformResult | MigrationResult, [OberonUser]>(async function* (
     user: OberonUser,
@@ -191,12 +147,12 @@ export function initAdapter({
       return summary
     }
 
-    const pages = await getAllPagesCached()
+    const pages = await getAllPages()
 
     const results = applyTransforms({
       transforms,
       pages,
-      getPageData: getPageDataCached,
+      getPageData,
       updatePageData,
     })
 
@@ -212,19 +168,12 @@ export function initAdapter({
       updatedBy: user.email,
     })
 
-    updateTag("oberon-config")
-
     yield { ...summary, total: pages.length }
   })
 
   return {
     getSetting: async (namespace, key) => {
       return adapter.getKV(namespace, key)
-    },
-    prebuild: async () => {
-      console.log("adapter prebuild")
-      await adapter.prebuild()
-      console.log("prebuild done")
     },
     /*
      * Auth
@@ -237,7 +186,7 @@ export function initAdapter({
      */
     getConfig: async () => {
       await will("site", "read")
-      return await getConfigCached()
+      return await getConfig()
     },
     migrateData: async () => {
       const user = await whoWill("site", "write")
@@ -249,15 +198,15 @@ export function initAdapter({
      */
     getAllPaths: async function () {
       await will("pages", "read")
-      return getAllPathsCached()
+      return getAllPaths()
     },
     getAllPages: async function () {
       await will("pages", "read")
-      return getAllPagesCached()
+      return getAllPages()
     },
     getPageData: async function (key) {
       await will("pages", "read")
-      return getPageDataCached(key)
+      return getPageData(key)
     },
     // TODO return value
     addPage: async function (data: unknown) {
@@ -269,16 +218,12 @@ export function initAdapter({
         updatedAt: new Date(),
         updatedBy: user.email,
       })
-      revalidatePath(key)
-      updateTag("oberon-pages")
     },
     // TODO return value
     deletePage: async function (data: unknown) {
       await will("pages", "write")
       const { key } = DeletePageSchema.parse(data)
       await adapter.deletePage(key)
-      revalidatePath(key)
-      updateTag("oberon-pages")
     },
     publishPageData: async function (data: unknown) {
       const user = await whoWill("pages", "write")
@@ -301,20 +246,18 @@ export function initAdapter({
      */
     getAllImages: async function () {
       await will("images", "read")
-      return getAllImagesCached()
+      return getAllImages()
     },
     addImage: async function (data: unknown) {
       await will("images", "write")
 
       const image = AddImageSchema.parse(data)
       await adapter.addImage(image)
-      updateTag("oberon-images")
       return adapter.getAllImages()
     },
     // TODO uploadthing
     deleteImage: async function (data) {
       await will("images", "write")
-      updateTag("oberon-images")
       return adapter.deleteImage(data)
     },
 
@@ -323,7 +266,7 @@ export function initAdapter({
      */
     getAllUsers: async function () {
       await will("users", "read")
-      return getAllUsersCached()
+      return getAllUsers()
     },
     addUser: async function (data: unknown) {
       await will("users", "write")
@@ -332,21 +275,18 @@ export function initAdapter({
         email,
         role,
       })
-      updateTag("oberon-users")
       return { id, email, role }
     },
     deleteUser: async function (data: unknown) {
       await will("users", "write")
       const { id } = DeleteUserSchema.parse(data)
       await adapter.deleteUser(id)
-      updateTag("oberon-users")
       return { id }
     },
     changeRole: async function (data: unknown) {
       await will("users", "write")
       const { role, id } = ChangeRoleSchema.parse(data)
       await adapter.changeRole({ role, id })
-      updateTag("oberon-users")
       return { role, id }
     },
   }

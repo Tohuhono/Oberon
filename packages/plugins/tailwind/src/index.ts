@@ -142,23 +142,23 @@ export const plugin: OberonPlugin = (adapter) => ({
       },
     }),
   },
-  adapter: {
-    prebuild: async () => {
-      try {
-        await adapter.prebuild()
-        await syncStyles(adapter)
-      } catch (error) {
-        if (error instanceof ResponseError) {
-          throw error
-        }
-
-        throw new ResponseError(
-          error instanceof Error && error.message
-            ? `Failed to prepare Tailwind styles: ${error.message}`
-            : "Failed to prepare Tailwind styles",
-        )
+  bootstrap: async (next) => {
+    try {
+      await next()
+      await syncStyles(adapter)
+    } catch (error) {
+      if (error instanceof ResponseError) {
+        throw error
       }
-    },
+
+      throw new ResponseError(
+        error instanceof Error && error.message
+          ? `Failed to prepare Tailwind styles: ${error.message}`
+          : "Failed to prepare Tailwind styles",
+      )
+    }
+  },
+  adapter: {
     updatePageData: async (page) => {
       try {
         await adapter.updatePageData(page)

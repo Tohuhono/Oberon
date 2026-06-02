@@ -2,8 +2,8 @@
 
 import { OberonClient } from "@oberoncms/core/editor"
 
-import { config } from "@/oberon/config"
+import { clientConfig } from "@/oberon/client.config"
 
 export function Client() {
-  return <OberonClient config={config} />
+  return <OberonClient config={clientConfig} />
 }

@@ -19,6 +19,7 @@
   "dependencies": {
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
+    "@oberoncms/plugin-nextjs": "workspace:*",
     "@oberoncms/plugin-pgsql": "workspace:*",
     "@oberoncms/plugin-tailwind": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",

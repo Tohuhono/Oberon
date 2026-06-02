@@ -2,7 +2,7 @@ import { getMetaData } from "@oberoncms/core"
 import { Render } from "@oberoncms/core/render"
 
 import { adapter } from "@/oberon/adapter"
-import { config } from "@/oberon/config"
+import { clientConfig } from "@/oberon/client.config"
 
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
@@ -47,7 +47,7 @@ export default async function OberonRender({ params }: { params: Promise<{ path?
       {stylesheets.map((href) => (
         <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
       ))}
-      <Render path={path} adapter={adapter} config={config} />
+      <Render path={path} adapter={adapter} config={clientConfig} />
     </>
   )
 }

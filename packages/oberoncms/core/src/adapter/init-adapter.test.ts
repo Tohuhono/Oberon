@@ -1,6 +1,6 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
-import type { OberonConfig, OberonPlugin } from "../lib/dtd"
+import type { OberonClientConfig, OberonPlugin } from "../lib/dtd"
 import { initOberon } from "./init-oberon"
 
 describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migration"] }, () => {
@@ -18,7 +18,6 @@ describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migratio
     const plugin: OberonPlugin = () => ({
       name: "test-plugin",
       adapter: {
-        prebuild: async () => {},
         getCurrentUser,
         hasPermission,
         signIn: async () => {},
@@ -28,7 +27,7 @@ describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migratio
     })
 
     const oberon = initOberon({
-      config: fromPartial<OberonConfig>({ version: 1, components: {} }),
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
       plugins: [plugin],
     })
 

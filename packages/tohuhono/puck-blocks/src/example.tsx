@@ -1,5 +1,5 @@
 import { defineOberonComponent } from "@oberoncms/core"
-import type { OberonConfig } from "@oberoncms/core"
+import type { OberonClientConfig } from "@oberoncms/core"
 
 import { Container } from "./blocks/container"
 import { Welcome } from "./blocks/welcome"
@@ -74,7 +74,7 @@ const Text = defineOberonComponent({
   render: ({ text, className }) => <div className={className}>{text}</div>,
 })
 
-export function withExamples(config: Partial<OberonConfig>) {
+export function withExamples(config: Partial<OberonClientConfig>) {
   return {
     version: 1,
     ...config,
@@ -100,5 +100,5 @@ export function withExamples(config: Partial<OberonConfig>) {
       },
       ...cards,
     },
-  } satisfies OberonConfig
+  } satisfies OberonClientConfig
 }

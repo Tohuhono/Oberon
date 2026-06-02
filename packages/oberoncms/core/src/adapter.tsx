@@ -12,4 +12,5 @@ export function notImplemented(action: string) {
 
 export { mockPlugin } from "./adapter/mock-plugin"
 
+export { bootstrapOberon } from "./adapter/bootstrap-oberon"
 export { initOberon } from "./adapter/init-oberon"

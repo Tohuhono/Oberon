@@ -11,7 +11,7 @@ import { Preview } from "./components/preview"
 import { Site } from "./components/site"
 import { Users } from "./components/users"
 import { useOberonClientContext } from "./hooks/use-oberon"
-import type { OberonConfig } from "./lib/dtd"
+import type { OberonClientConfig } from "./lib/dtd"
 import { getTitle } from "./lib/utils"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
@@ -27,7 +27,7 @@ const previewConfig = {
   },
 }
 
-export function OberonClient({ config }: { config: OberonConfig }) {
+export function OberonClient({ config }: { config: OberonClientConfig }) {
   const { action, data, slug } = useOberonClientContext()
 
   if (action === "login") {
