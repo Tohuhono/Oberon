@@ -152,7 +152,7 @@ separate from server-only plugin config.
   participate.
 - Keep package and Turbo task names such as `prebuild` unchanged; only the Oberon API changes.
 - Update repo-owned apps, Recipes, and create-oberon-app generated output to use `client.config.tsx`
-  for `OberonClientConfig` and server-only `adapter.ts` for full `OberonConfig`.
+  for `OberonClientConfig` and server-only `config.ts` for full `OberonConfig`.
 - Ensure the server-only config module imports plugin implementations and is not used by client-only
   code.
 - Update app prebuild scripts to call `bootstrapOberon(config)` instead of importing the runtime

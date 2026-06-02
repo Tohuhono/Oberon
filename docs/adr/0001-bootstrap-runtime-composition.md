@@ -19,8 +19,8 @@ storage without executing runtime-only decorators such as Next.js cache wrappers
 - Apps use one phase-neutral Oberon config for both `initOberon` and `bootstrapOberon`.
 - `OberonConfig` is the full server-side config containing `{ client, plugins }`; the existing
   component/editor config becomes `OberonClientConfig`.
-- Generated apps keep `client.config.tsx` for `OberonClientConfig` and define the server-only
-  `defineConfig({ client, plugins })` result in `adapter.ts`.
+- Generated apps keep `client.config.tsx` for `OberonClientConfig` and `config.ts` for the
+  server-only `defineConfig({ client, plugins })` result.
 - Plugin context includes `phase: "bootstrap" | "runtime"` so plugins can skip phase-specific
   contributions.
 - Plugin bootstrap behavior is a top-level middleware-style `bootstrap(next)` hook, not an Adapter

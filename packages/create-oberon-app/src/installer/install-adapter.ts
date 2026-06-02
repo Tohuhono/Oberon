@@ -54,7 +54,7 @@ function getAliasedPlugins(plugins: Plugin[], recipe: Recipe) {
   return aliasedPlugins
 }
 
-const createAdapter = (plugins: Plugin[], recipe: Recipe) => {
+const createConfig = (plugins: Plugin[], recipe: Recipe) => {
   const aliasedPlugins = getAliasedPlugins(plugins, recipe)
 
   const pluginImports = aliasedPlugins
@@ -79,7 +79,6 @@ const createAdapter = (plugins: Plugin[], recipe: Recipe) => {
 import "server-cli-only"
 
 import { defineConfig } from "@oberoncms/core"
-import { initOberon } from "@oberoncms/core/adapter"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 
@@ -93,6 +92,16 @@ export const config = defineConfig({
     ${pluginAliasNames.join(", ")}
   ],
 })
+`
+}
+
+const createAdapter = () => {
+  return `
+import "server-cli-only"
+
+import { initOberon } from "@oberoncms/core/adapter"
+
+import { config } from "./config"
 
 export const { adapter, handler } = initOberon(config)
 `
@@ -111,7 +120,9 @@ export async function installAdapter(
     await copyFile(path.join(pluginPath, type, `${id}.ts`), path.join(oberonPath, `${type}.ts`))
   }
 
-  const adapter = createAdapter(plugins, recipe)
+  const config = createConfig(plugins, recipe)
+  const adapter = createAdapter()
 
+  await writeFile(path.join(oberonPath, "config.ts"), config)
   await writeFile(path.join(oberonPath, "adapter.ts"), adapter)
 }

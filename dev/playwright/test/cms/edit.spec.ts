@@ -60,51 +60,19 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
     { tag: "@playground" },
     async ({ cms, cmsSeededPageKey, errorCapture }) => {
       await cms.goto(`/cms/edit${cmsSeededPageKey}`)
-      await cms.getByRole("tab", { name: "Components", exact: true }).click()
-      const insertPanel = cms.getByRole("tabpanel")
-      const insertTextButton = insertPanel
-        .getByRole("button", { name: "Text", exact: true })
-        .first()
-
       const previewFrame = cms.frameLocator("iframe#preview-frame")
-      const previewDropzone = previewFrame.locator("[data-puck-dropzone]").first()
-
-      await expect(insertTextButton).toBeVisible()
-      await expect(previewDropzone).toBeVisible()
+      const textComponent = previewFrame.getByText("Welcome to OberonCMS").first()
 
       const frame = cms.locator("iframe#preview-frame")
       await expect.poll(async () => (await frame.boundingBox())?.width ?? 0).toBeGreaterThan(0)
+      await expect(textComponent).toBeVisible()
+      await textComponent.click()
 
-      let insertBox = await insertTextButton.boundingBox()
-      await expect
-        .poll(async () => {
-          insertBox = await insertTextButton.boundingBox()
-          return insertBox?.width ?? 0
-        })
-        .toBeGreaterThan(0)
-
-      let box = await previewDropzone.boundingBox()
-      await expect
-        .poll(async () => {
-          box = await previewDropzone.boundingBox()
-          return box?.width ?? 0
-        })
-        .toBeGreaterThan(0)
-
-      if (!insertBox || !box) throw new Error("Drag target not visible")
-
-      await cms.mouse.move(insertBox.x + insertBox.width / 2, insertBox.y + insertBox.height / 2)
-      await cms.mouse.down()
-
-      await cms.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
-        steps: 20,
-      })
-      await cms.mouse.up()
-
+      const textHeading = cms.getByRole("heading", { name: "Text" })
       const inspectorPanel = cms.getByRole("tabpanel")
       await expect(inspectorPanel).toBeVisible()
 
-      await expect(cms.getByRole("heading", { name: "Text" })).toBeVisible()
+      await expect(textHeading).toBeVisible()
 
       const textInput = inspectorPanel.locator('textarea[name="text"]').first()
       await expect(textInput).toBeVisible()

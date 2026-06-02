@@ -5,8 +5,8 @@ This document records the current wiring of the monorepo. Canonical terms live i
 
 ## Boundaries
 
-- Applications own routes, server actions, and the `adapter.ts` server-side Oberon config passed to
-  `initOberon` and `bootstrapOberon`.
+- Applications own routes, server actions, and the server-side Oberon config passed to `initOberon`
+  and `bootstrapOberon`.
 - `packages/oberoncms/core` owns runtime composition, permissions, schema parsing, and component
   transform migration.
 - `packages/plugins/*` add persistence, auth, storage, send, caching, and HTTP integrations.
@@ -47,7 +47,7 @@ Later plugin fields override earlier ones, so plugin order is part of the runtim
 
 ### Build lifecycle
 
-- App `prebuild` scripts import `config` from `adapter.ts` and call `bootstrapOberon(config)`.
+- App `prebuild` scripts call `bootstrapOberon(config)`.
 - Database plugins use top-level `bootstrap(next)` hooks to run migrations before builds.
 - `@oberoncms/plugin-nextjs` adds cache tagging and revalidation around adapter reads and mutations;
   this behavior is skipped during Bootstrap composition.
