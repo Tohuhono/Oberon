@@ -36,12 +36,20 @@ export const sendPlugins = {
 export type SendPlugin = keyof typeof sendPlugins
 export const sendIds = Object.keys(sendPlugins) as SendPlugin[]
 
-function getAliasedPlugins(plugins: Plugin[], _recipe: Recipe) {
+function getAliasedPlugins(plugins: Plugin[], recipe: Recipe) {
   const aliasedPlugins = plugins.map(({ packageName, type }) => ({
     packageName,
     type,
     alias: `${type}Plugin`,
   }))
+
+  if (recipe === "nextjs") {
+    aliasedPlugins.push({
+      packageName: "@oberoncms/plugin-nextjs",
+      type: "nextjs",
+      alias: "nextjsPlugin",
+    })
+  }
 
   return aliasedPlugins
 }
