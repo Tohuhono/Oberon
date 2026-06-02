@@ -24,11 +24,13 @@ export default defineConfig({
       ...smokeProject,
       name: "playground",
       grepInvert: /@docs/,
+      use: { baseURL },
     },
     {
       ...smokeProject,
       name: "docs",
       grepInvert: /@playground/,
+      use: { baseURL },
     },
   ],
 })
