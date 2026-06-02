@@ -146,21 +146,24 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     },
   )
 
-  tailwindTest("reconciles missing assets during prebuild", async ({ expect, adapter, plugin }) => {
-    await plugin.adapter?.updatePageData?.(createPage("underline"))
+  tailwindTest(
+    "reconciles missing assets during bootstrap",
+    async ({ expect, adapter, plugin }) => {
+      await plugin.adapter?.updatePageData?.(createPage("underline"))
 
-    await plugin.adapter?.prebuild?.()
+      await plugin.bootstrap?.(async () => {})
 
-    const firstState = await getState(adapter)
+      const firstState = await getState(adapter)
 
-    await adapter.deleteKV(pluginName, `asset:${firstState!.activeHash}`)
+      await adapter.deleteKV(pluginName, `asset:${firstState!.activeHash}`)
 
-    await expect(getStylesheets(adapter)).resolves.toEqual([])
+      await expect(getStylesheets(adapter)).resolves.toEqual([])
 
-    await plugin.adapter?.prebuild?.()
+      await plugin.bootstrap?.(async () => {})
 
-    await expect(getAsset(adapter, firstState!.activeHash!)).resolves.toContain(".underline")
-  })
+      await expect(getAsset(adapter, firstState!.activeHash!)).resolves.toContain(".underline")
+    },
+  )
 
   tailwindTest(
     "degrades when no dynamic asset is available",
@@ -176,11 +179,10 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   )
 
   tailwindTest(
-    "fails loudly during prebuild when KV storage is unavailable",
+    "fails loudly during bootstrap when KV storage is unavailable",
     async ({ expect }) => {
       const plugin = tailwindPlugin(
         fromPartial({
-          prebuild: async () => {},
           getAllPages: async () => [{ key: "/" }],
           getPageData: async () => createPage("underline").data,
           getKV: async () => {
@@ -192,7 +194,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
         }),
       )
 
-      await expect(plugin.adapter?.prebuild?.()).rejects.toThrow(
+      await expect(plugin.bootstrap?.(async () => {})).rejects.toThrow(
         new NotImplementedError("This action is not available in the demo"),
       )
 

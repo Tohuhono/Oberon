@@ -70,20 +70,32 @@ const createConfig = (plugins: Plugin[], recipe: Recipe) => {
   return `
 import "server-cli-only"
 
-import { initOberon } from "@oberoncms/core/adapter"
+import { defineConfig } from "@oberoncms/core"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 
 ${pluginImports}
 
-import { config } from "./config"
+import { clientConfig } from "./client.config"
 
-export const { adapter, handler } = initOberon({
-  config,
+export const config = defineConfig({
+  client: clientConfig,
   plugins: [
     ${pluginAliasNames.join(", ")}
   ],
 })
+`
+}
+
+const createAdapter = () => {
+  return `
+import "server-cli-only"
+
+import { initOberon } from "@oberoncms/core/adapter"
+
+import { config } from "./config"
+
+export const { adapter, handler } = initOberon(config)
 `
 }
 
@@ -100,7 +112,9 @@ export async function installAdapter(
     await copyFile(path.join(pluginPath, type, `${id}.ts`), path.join(oberonPath, `${type}.ts`))
   }
 
-  const adapter = createConfig(plugins, recipe)
+  const config = createConfig(plugins, recipe)
+  const adapter = createAdapter()
 
+  await writeFile(path.join(oberonPath, "config.ts"), config)
   await writeFile(path.join(oberonPath, "adapter.ts"), adapter)
 }

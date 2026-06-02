@@ -41,11 +41,11 @@ export const authPlugin: OberonPlugin = (adapter) => {
     handlers: {
       auth: () => toNextJsHandler(authServer()),
     },
+    bootstrap: async (next) => {
+      await next()
+      await ensureMasterUser()
+    },
     adapter: {
-      prebuild: async () => {
-        await adapter.prebuild()
-        await ensureMasterUser()
-      },
       getCurrentUser: async () => {
         try {
           const session = await authServer().api.getSession({

@@ -27,7 +27,7 @@ type Transforms = Array<(props: any) => any>
 
 export type PageData = Data
 
-export type OberonConfig<Components extends DefaultComponents = DefaultComponents> = Config<{
+export type OberonClientConfig<Components extends DefaultComponents = DefaultComponents> = Config<{
   components: Components
 }> & {
   version: 1
@@ -37,6 +37,15 @@ export type OberonConfig<Components extends DefaultComponents = DefaultComponent
       transforms?: Transforms
     }
   >
+}
+
+export type OberonConfig = {
+  client: OberonClientConfig
+  plugins: OberonPlugin[]
+}
+
+export function defineConfig(config: OberonConfig): OberonConfig {
+  return config
 }
 
 export type OberonComponent<Props extends DefaultComponentProps = DefaultComponentProps> =
@@ -310,18 +319,9 @@ export type OberonSendAdapter = {
   sendVerificationRequest: (props: { email: string; token: string; url: string }) => Promise<void>
 }
 
-export type OberonInitAdapter = {
-  prebuild: () => Promise<void>
-}
+export type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
 
-export type OberonDatabaseAdapter = Partial<OberonInitAdapter> &
-  OberonBaseAdapter &
-  OberonAuthAdapter
-
-export type OberonPluginAdapter = OberonInitAdapter &
-  OberonDatabaseAdapter &
-  OberonCanAdapter &
-  OberonSendAdapter
+export type OberonPluginAdapter = OberonDatabaseAdapter & OberonCanAdapter & OberonSendAdapter
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
@@ -337,7 +337,6 @@ export type OberonHandler<Params = undefined> = Params extends undefined
     }
 
 export type OberonAdapter = {
-  prebuild: () => Promise<void>
   getSetting: (namespace: string, key: string) => Promise<JsonValue | null>
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
@@ -361,12 +360,18 @@ export type OberonAdapter = {
   signIn: (data: { email: string }) => Promise<void>
 }
 
-export type OberonPlugin = (adapter: OberonPluginAdapter) => {
+export type OberonPluginPhase = "bootstrap" | "runtime"
+
+export type OberonPlugin = (
+  adapter: OberonPluginAdapter,
+  context?: { phase: OberonPluginPhase },
+) => {
   name: string
   version?: string
   disabled?: boolean
   handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
   adapter?: Partial<OberonPluginAdapter>
+  bootstrap?: (next: () => Promise<void>) => Promise<void>
 }
 
 export type OberonResponse<T = unknown> = Promise<
