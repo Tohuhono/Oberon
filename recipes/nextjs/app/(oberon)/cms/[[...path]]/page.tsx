@@ -1,7 +1,7 @@
 import { getMetaData } from "@oberoncms/core"
 import { OberonProvider } from "@oberoncms/core/provider"
 
-import * as actions from "@/oberon/actions"
+import { actions } from "@/oberon/actions"
 import { adapter } from "@/oberon/adapter"
 
 import { Client } from "./client"

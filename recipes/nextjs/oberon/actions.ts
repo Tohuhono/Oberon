@@ -1,75 +1,78 @@
-"use server"
+import type { OberonServerActions } from "@oberoncms/core"
 
 import { actions as oberonActions } from "./adapter"
 
-export async function addImage(...props: Parameters<typeof oberonActions.addImage>) {
-  return oberonActions.addImage(...props)
-}
-
-export async function addPage(...props: Parameters<typeof oberonActions.addPage>) {
-  return oberonActions.addPage(...props)
-}
-
-export async function addUser(...props: Parameters<typeof oberonActions.addUser>) {
-  return oberonActions.addUser(...props)
-}
-
-export async function can(...props: Parameters<typeof oberonActions.can>) {
-  return oberonActions.can(...props)
-}
-
-export async function changeRole(...props: Parameters<typeof oberonActions.changeRole>) {
-  return oberonActions.changeRole(...props)
-}
-
-export async function deleteImage(...props: Parameters<typeof oberonActions.deleteImage>) {
-  return oberonActions.deleteImage(...props)
-}
-
-export async function deletePage(...props: Parameters<typeof oberonActions.deletePage>) {
-  return oberonActions.deletePage(...props)
-}
-
-export async function deleteUser(...props: Parameters<typeof oberonActions.deleteUser>) {
-  return oberonActions.deleteUser(...props)
-}
-
-export async function getAllImages(...props: Parameters<typeof oberonActions.getAllImages>) {
-  return oberonActions.getAllImages(...props)
-}
-
-export async function getAllPages(...props: Parameters<typeof oberonActions.getAllPages>) {
-  return oberonActions.getAllPages(...props)
-}
-
-export async function getAllPaths(...props: Parameters<typeof oberonActions.getAllPaths>) {
-  return oberonActions.getAllPaths(...props)
-}
-
-export async function getAllUsers(...props: Parameters<typeof oberonActions.getAllUsers>) {
-  return oberonActions.getAllUsers(...props)
-}
-
-export async function getConfig(...props: Parameters<typeof oberonActions.getConfig>) {
-  return oberonActions.getConfig(...props)
-}
-
-export async function getPageData(...props: Parameters<typeof oberonActions.getPageData>) {
-  return oberonActions.getPageData(...props)
-}
-
-export async function migrateData(...props: Parameters<typeof oberonActions.migrateData>) {
-  return oberonActions.migrateData(...props)
-}
-
-export async function publishPageData(...props: Parameters<typeof oberonActions.publishPageData>) {
-  return oberonActions.publishPageData(...props)
-}
-
-export async function signIn(...props: Parameters<typeof oberonActions.signIn>) {
-  return oberonActions.signIn(...props)
-}
-
-export async function signOut(...props: Parameters<typeof oberonActions.signOut>) {
-  return oberonActions.signOut(...props)
-}
+export const actions = {
+  addImage: async (...props) => {
+    "use server"
+    return oberonActions.addImage(...props)
+  },
+  addPage: async (...props) => {
+    "use server"
+    return oberonActions.addPage(...props)
+  },
+  addUser: async (...props) => {
+    "use server"
+    return oberonActions.addUser(...props)
+  },
+  can: async (...props) => {
+    "use server"
+    return oberonActions.can(...props)
+  },
+  changeRole: async (...props) => {
+    "use server"
+    return oberonActions.changeRole(...props)
+  },
+  deleteImage: async (...props) => {
+    "use server"
+    return oberonActions.deleteImage(...props)
+  },
+  deletePage: async (...props) => {
+    "use server"
+    return oberonActions.deletePage(...props)
+  },
+  deleteUser: async (...props) => {
+    "use server"
+    return oberonActions.deleteUser(...props)
+  },
+  getAllImages: async (...props) => {
+    "use server"
+    return oberonActions.getAllImages(...props)
+  },
+  getAllPages: async (...props) => {
+    "use server"
+    return oberonActions.getAllPages(...props)
+  },
+  getAllPaths: async (...props) => {
+    "use server"
+    return oberonActions.getAllPaths(...props)
+  },
+  getAllUsers: async (...props) => {
+    "use server"
+    return oberonActions.getAllUsers(...props)
+  },
+  getConfig: async (...props) => {
+    "use server"
+    return oberonActions.getConfig(...props)
+  },
+  getPageData: async (...props) => {
+    "use server"
+    return oberonActions.getPageData(...props)
+  },
+  migrateData: async (...props) => {
+    "use server"
+    return oberonActions.migrateData(...props)
+  },
+  publishPageData: async (...props) => {
+    "use server"
+    return oberonActions.publishPageData(...props)
+  },
+  signIn: async (...props) => {
+    "use server"
+    return oberonActions.signIn(...props)
+  },
+  signOut: async (...props) => {
+    "use server"
+    return oberonActions.signOut(...props)
+  },
+} satisfies OberonServerActions

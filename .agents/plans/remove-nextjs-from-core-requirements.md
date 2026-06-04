@@ -126,11 +126,16 @@ context, but the decisions below supersede it where they differ.
   success/error envelope.
 - The Next Framework integration owns Next-aware action transport behavior, including public
   `unstable_rethrow(error)` handling so Next control-flow exceptions are not swallowed.
-- Next apps still need explicit compiler-visible action entry files:
-  - use top-level `"use server"`;
-  - export one async function per Oberon action;
-  - delegate to composed `actions` from the runtime module;
+- Next apps still need explicit compiler-visible action entry files, but those files are
+  user-maintained integration files and should remain contract-checked against core releases:
+  - export an `actions` object that `satisfies OberonServerActions`;
+  - mark each object action with inline `"use server"` so Next treats it as a Server Function;
+  - delegate each object action to the composed `actions` from the runtime module;
   - do not reimplement action behavior with `wrap(adapter.method(...))` in app files.
+- Prefer this object export over top-level `"use server"` named exports for Oberon action entry
+  files. Oberon consumes actions as an object passed through a Server Component boundary, and the
+  object shape lets user-maintained files fail type-checking when `OberonServerActions` changes in a
+  future `@oberoncms/core` release.
 
 ## Package-Specific Scope
 
