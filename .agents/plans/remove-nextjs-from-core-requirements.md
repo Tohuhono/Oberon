@@ -130,12 +130,15 @@ context, but the decisions below supersede it where they differ.
   user-maintained integration files and should remain contract-checked against core releases:
   - export an `actions` object that `satisfies OberonServerActions`;
   - mark each object action with inline `"use server"` so Next treats it as a Server Function;
-  - delegate each object action to the composed `actions` from the runtime module;
+  - delegate each object action to the composed action handlers from the runtime module;
   - do not reimplement action behavior with `wrap(adapter.method(...))` in app files.
 - Prefer this object export over top-level `"use server"` named exports for Oberon action entry
   files. Oberon consumes actions as an object passed through a Server Component boundary, and the
   object shape lets user-maintained files fail type-checking when `OberonServerActions` changes in a
   future `@oberoncms/core` release.
+- App runtime modules should avoid exporting those composed action handlers as `actions`; use a name
+  such as `actionsHandlers` so the framework entrypoint `actions` object is not accidentally
+  confused with the lower-level handlers it delegates to.
 
 ## Package-Specific Scope
 
