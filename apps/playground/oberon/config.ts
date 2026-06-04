@@ -11,5 +11,5 @@ import { plugin as resendPlugin } from "./send"
 
 export const config = defineConfig({
   client: clientConfig,
-  plugins: [developmentPlugin, pgsqlPlugin, resendPlugin, tailwindPlugin, authPlugin, nextjsPlugin],
+  plugins: [developmentPlugin, pgsqlPlugin, resendPlugin, tailwindPlugin, nextjsPlugin, authPlugin],
 })

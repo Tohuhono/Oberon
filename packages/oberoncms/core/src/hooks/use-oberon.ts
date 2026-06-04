@@ -1,6 +1,6 @@
 import { useContext } from "react"
 
-import { ActionsContext, ClientContext } from "../components/provider"
+import { ActionsContext, ClientContext, NavigationContext } from "../components/provider"
 
 export const useOberonActions = () => {
   const context = useContext(ActionsContext)
@@ -21,3 +21,5 @@ export const useOberonClientContext = () => {
 
   return context
 }
+
+export const useOberonNavigation = () => useContext(NavigationContext)

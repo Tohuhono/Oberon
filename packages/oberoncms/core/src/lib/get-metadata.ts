@@ -9,8 +9,10 @@ export async function getMetaData(
   const slug = resolveSlug(path)
 
   if (action) {
+    const clientAction = parseClientAction(action)
+
     return {
-      title: getTitle(parseClientAction(action), slug),
+      title: clientAction ? getTitle(clientAction, slug) : "Oberon CMS",
     }
   }
 

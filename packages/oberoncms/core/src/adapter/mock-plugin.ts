@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation"
-
 import {
   NotImplementedError,
   type OberonCanAdapter,
@@ -58,6 +56,6 @@ export const mockPlugin: OberonPlugin = () => ({
     updatePageData: notAvailable,
     updateSite: notAvailable,
     signIn: notAvailable,
-    signOut: async () => redirect("/"),
+    signOut: async () => {},
   } satisfies OberonDatabaseAdapter & OberonCanAdapter,
 })

@@ -3,8 +3,8 @@
 import { Button } from "@tohuhono/ui/button"
 import { LocalDate } from "@tohuhono/ui/date"
 import { Grid, GridHeading } from "@tohuhono/ui/grid"
+import { Image } from "@tohuhono/ui/image"
 import { filesize } from "filesize"
-import Image from "next/image"
 import { Fragment, startTransition, useOptimistic } from "react"
 
 import { useOberonActions } from "../hooks/use-oberon"

@@ -6,9 +6,9 @@ import type {
   DefaultComponents,
   SlotComponent,
 } from "@puckeditor/core"
+import type { ImageTransform } from "@tohuhono/ui/image"
 import type { StreamResponseChunk } from "@tohuhono/utils"
 import type { BetterAuthOptions } from "better-auth/minimal"
-import type { NextRequest } from "next/server"
 import type { ReactNode } from "react"
 import { z } from "zod"
 
@@ -236,6 +236,18 @@ export type OberonClientContext = DescriminatedContext & {
   slug: string
 }
 
+export type OberonNavigation = {
+  navigate: (href: string) => void
+  refresh: () => void
+}
+
+export type OberonImageTransform = ImageTransform
+
+export type OberonRouting = {
+  redirect: (href: string) => never
+  notFound: () => never
+}
+
 /*
  * Site
  */
@@ -291,6 +303,18 @@ export type OberonCanAdapter = {
 
 export type OberonBetterAuthAdapter = Pick<BetterAuthOptions, "database">
 
+export type OberonBetterAuthPlugin = NonNullable<BetterAuthOptions["plugins"]>[number]
+
+export type OberonFrameworkAuthAdapter = {
+  getRequestHeaders: () => Promise<Headers>
+  getAuthPlugins: () => OberonBetterAuthPlugin[]
+}
+
+export type OberonFrameworkRoutingAdapter = {
+  redirect: (href: string) => never
+  notFound: () => never
+}
+
 export type OberonAuthAdapter = {
   betterAuth?: OberonBetterAuthAdapter
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
@@ -321,22 +345,30 @@ export type OberonSendAdapter = {
 
 export type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
 
-export type OberonPluginAdapter = OberonDatabaseAdapter & OberonCanAdapter & OberonSendAdapter
+export type OberonPluginAdapter = OberonDatabaseAdapter &
+  OberonCanAdapter &
+  OberonSendAdapter &
+  OberonFrameworkAuthAdapter &
+  OberonFrameworkRoutingAdapter
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
 export type OberonHandler<Params = undefined> = Params extends undefined
   ? {
-      [key in OberonMethod]?: (req: NextRequest) => Promise<Response> | Response
+      [key in OberonMethod]?: (req: Request) => Promise<Response> | Response
     }
   : {
       [key in OberonMethod]: (
-        req: NextRequest,
+        req: Request,
         context: { params: Promise<Params> },
       ) => Promise<Response>
     }
 
 export type OberonAdapter = {
+  redirect: (href: string) => never
+  notFound: () => never
+  getRequestHeaders: () => Promise<Headers>
+  getAuthPlugins: () => OberonBetterAuthPlugin[]
   getSetting: (namespace: string, key: string) => Promise<JsonValue | null>
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
@@ -370,6 +402,7 @@ export type OberonPlugin = (
   version?: string
   disabled?: boolean
   handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
+  actions?: OberonPluginActionProvider
   adapter?: Partial<OberonPluginAdapter>
   bootstrap?: (next: () => Promise<void>) => Promise<void>
 }
@@ -411,3 +444,18 @@ export type OberonServerActions = {
   signIn: (data: { email: string }) => OberonResponse
   signOut: () => OberonResponse
 }
+
+export type OberonAction<TProps extends unknown[] = never[], TResult = unknown> = (
+  ...props: TProps
+) => OberonResponse<TResult>
+
+export type OberonActionSurface = OberonServerActions & Record<string, OberonAction>
+
+export type OberonActionContribution = Record<string, OberonAction>
+
+export type OberonActionTransport = <T>(promise: Promise<T>) => OberonResponse<T>
+
+export type OberonPluginActionProvider = (
+  actions: OberonActionSurface,
+  adapter: OberonAdapter,
+) => OberonActionContribution

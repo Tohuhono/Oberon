@@ -71,7 +71,6 @@ const createConfig = (plugins: Plugin[], recipe: Recipe) => {
     // Development plugin should be first
     "developmentPlugin",
     ...aliasedPlugins.map(({ alias }) => alias),
-    // Auth plugin should be last
     "authPlugin",
   ]
 
@@ -103,7 +102,7 @@ import { initOberon } from "@oberoncms/core/adapter"
 
 import { config } from "./config"
 
-export const { adapter, handler } = initOberon(config)
+export const { actions, adapter, handler } = initOberon(config)
 `
 }
 

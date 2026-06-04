@@ -1,11 +1,11 @@
-import type { NextRequest } from "next/server"
-
 import {
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
   type OberonMethod,
+  type OberonActionSurface,
 } from "../lib/dtd"
+import { initActions } from "./init-actions"
 import { initAdapter } from "./init-adapter"
 import { initPlugins } from "./init-plugins"
 
@@ -13,7 +13,7 @@ function handle<TMethod extends OberonMethod = OberonMethod>(
   method: TMethod,
   handlers: Record<string, OberonHandler>,
 ): OberonHandler<{ path: string[] }>[TMethod] {
-  return async (request: NextRequest, { params }) => {
+  return async (request: Request, { params }) => {
     const { path = [] } = await params
     const action = path?.[0]
 
@@ -47,10 +47,16 @@ function initHandlers(
 export function initOberon({ client, plugins }: OberonConfig): {
   handler: OberonHandler<{ path: string[] }>
   adapter: OberonAdapter
+  actions: OberonActionSurface
 } {
   console.info("Initialise Oberon")
 
-  const { versions, handlers, adapter: pluginAdapter } = initPlugins(plugins, { phase: "runtime" })
+  const {
+    actionProviders,
+    versions,
+    handlers,
+    adapter: pluginAdapter,
+  } = initPlugins(plugins, { phase: "runtime" })
 
   const adapter = initAdapter({
     config: client,
@@ -71,5 +77,6 @@ export function initOberon({ client, plugins }: OberonConfig): {
   return {
     handler,
     adapter,
+    actions: initActions(adapter, actionProviders),
   }
 }

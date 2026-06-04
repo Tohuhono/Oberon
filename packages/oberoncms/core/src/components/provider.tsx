@@ -1,9 +1,16 @@
 "use client"
 
+import { ImageTransformProvider } from "@tohuhono/ui/image"
 import { Toaster, toast } from "@tohuhono/ui/toast"
 import { createContext, useMemo, type PropsWithChildren } from "react"
 
-import type { OberonClientContext, OberonResponse, OberonServerActions } from "../lib/dtd"
+import type {
+  OberonClientContext,
+  OberonImageTransform,
+  OberonNavigation,
+  OberonResponse,
+  OberonServerActions,
+} from "../lib/dtd"
 
 export const ClientContext = createContext<OberonClientContext | null>(null)
 
@@ -21,6 +28,13 @@ type OberonClientActions = {
 }
 
 export const ActionsContext = createContext<OberonClientActions | null>(null)
+
+const defaultNavigation: OberonNavigation = {
+  navigate: (href) => window.location.assign(href),
+  refresh: () => window.location.reload(),
+}
+
+export const NavigationContext = createContext<OberonNavigation>(defaultNavigation)
 
 function hasMessage(value: unknown): value is { message: string } {
   return (
@@ -62,9 +76,13 @@ function unwrapServerAction<TProps extends unknown[], TResult>(
 
 export const OberonClientProvider = ({
   children,
+  imageTransform,
+  navigation = defaultNavigation,
   serverActions,
   context,
 }: PropsWithChildren<{
+  imageTransform?: OberonImageTransform
+  navigation?: OberonNavigation
   serverActions: OberonServerActions
   context: OberonClientContext
 }>) => {
@@ -95,10 +113,29 @@ export const OberonClientProvider = ({
 
   return (
     <ActionsContext.Provider value={actions}>
-      <ClientContext.Provider value={context}>
-        {children}
-        <Toaster />
-      </ClientContext.Provider>
+      <NavigationContext.Provider value={navigation}>
+        <ImageTransformProvider imageTransform={imageTransform}>
+          <ClientContext.Provider value={context}>
+            {children}
+            <Toaster />
+          </ClientContext.Provider>
+        </ImageTransformProvider>
+      </NavigationContext.Provider>
     </ActionsContext.Provider>
+  )
+}
+
+export const OberonClientFrameworkProvider = ({
+  children,
+  imageTransform,
+  navigation,
+}: PropsWithChildren<{
+  imageTransform?: OberonImageTransform
+  navigation: OberonNavigation
+}>) => {
+  return (
+    <NavigationContext.Provider value={navigation}>
+      <ImageTransformProvider imageTransform={imageTransform}>{children}</ImageTransformProvider>
+    </NavigationContext.Provider>
   )
 }

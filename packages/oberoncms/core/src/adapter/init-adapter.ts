@@ -172,6 +172,10 @@ export function initAdapter({
   })
 
   return {
+    redirect: adapter.redirect,
+    notFound: adapter.notFound,
+    getRequestHeaders: adapter.getRequestHeaders,
+    getAuthPlugins: adapter.getAuthPlugins,
     getSetting: async (namespace, key) => {
       return adapter.getKV(namespace, key)
     },

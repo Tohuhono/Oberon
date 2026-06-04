@@ -27,7 +27,8 @@
   ],
   "type": "module",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./client": "./dist/client.js"
   },
   "publishConfig": {
     "access": "public"
@@ -38,12 +39,14 @@
     "dev": "vite build --watch",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
+    "test:unit": "vitest run",
     "tsc": "tsc --pretty",
     "wait": "wait-on ./dist/version && echo done",
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
+    "better-auth": "^1.6.3",
     "next": "^16.1.6"
   },
   "devDependencies": {

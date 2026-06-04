@@ -1,10 +1,9 @@
-import { exec } from "child_process"
 // @ts-check
 // vite.config.js
+import { exec } from "child_process"
 import { writeFile, mkdir } from "fs/promises"
 
 import fg from "fast-glob"
-import preserveDirectives from "rollup-preserve-directives"
 import { type ResolveOptions, createLogger, defineConfig, type Plugin as VitePlugin } from "vite"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
 
@@ -90,14 +89,7 @@ export function initConfig(
       },
     },
     resolve,
-    plugins: [
-      externalizeDeps(),
-      // oxlint-disable-next-line @typescript/ban-ts-comment
-      // @ts-ignore sometimes fails so can't use expect error
-      preserveDirectives(),
-      dts(),
-      watchFile(),
-    ],
+    plugins: [externalizeDeps(), dts(), watchFile()],
     build: {
       minify: false,
       lib: {
@@ -106,7 +98,7 @@ export function initConfig(
         formats: ["es"],
       },
       emptyOutDir: false,
-      rollupOptions: {
+      rolldownOptions: {
         output: {
           preserveModules: true,
           preserveModulesRoot: "src",

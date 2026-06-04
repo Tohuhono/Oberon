@@ -5,6 +5,7 @@ import { vi } from "vitest"
 import { bootstrapOberon } from "./adapter/bootstrap-oberon"
 import { stubbedAdapter } from "./adapter/stubbed-adapter"
 import { authPlugin } from "./auth"
+import { createAuthOptions } from "./auth/config"
 import { type OberonClientConfig, type OberonPlugin } from "./lib/dtd"
 
 function createMemoryDbUser(email: string, id: string) {
@@ -170,5 +171,44 @@ describe("authPlugin", { tags: ["ai", "feature-better-auth-migration"] }, () => 
     const response = await handler.GET(new Request("http://localhost/cms/api/auth/verify") as never)
 
     expect(response.status).toBe(404)
+  })
+
+  it("includes framework-provided Better Auth plugins", async () => {
+    const frameworkPlugin = fromPartial<
+      NonNullable<ReturnType<typeof createAuthOptions>["plugins"]>[number]
+    >({
+      id: "framework-auth-plugin",
+    })
+
+    const options = createAuthOptions({
+      betterAuthPlugins: [frameworkPlugin],
+      sendVerificationRequest: async () => {},
+    })
+
+    expect(options.plugins).toContain(frameworkPlugin)
+  })
+
+  it("uses framework request headers and auth plugins from the adapter contract", async () => {
+    const frameworkPlugin = fromPartial<
+      NonNullable<ReturnType<typeof createAuthOptions>["plugins"]>[number]
+    >({
+      id: "framework-auth-plugin",
+    })
+    const getRequestHeaders = vi.fn(async () => new Headers({ cookie: "oberon=1" }))
+    const getAuthPlugins = vi.fn(() => [frameworkPlugin])
+    const plugin = authPlugin({
+      ...stubbedAdapter,
+      betterAuth: {
+        database: memoryAdapter({}),
+      },
+      getRequestHeaders,
+      getAuthPlugins,
+      sendVerificationRequest: vi.fn(async () => {}),
+    })
+
+    await expect(plugin.adapter?.getCurrentUser?.()).resolves.toBeNull()
+
+    expect(getRequestHeaders).toHaveBeenCalledOnce()
+    expect(getAuthPlugins).toHaveBeenCalled()
   })
 })

@@ -1,8 +1,5 @@
-import { toNextJsHandler } from "better-auth/next-js"
-import { headers } from "next/headers"
-
 import { name, version } from "../../package.json" with { type: "json" }
-import { type OberonPlugin, type OberonPluginAdapter } from "../lib/dtd"
+import { NotImplementedError, type OberonPlugin, type OberonPluginAdapter } from "../lib/dtd"
 import { createAuthServer } from "./server"
 
 function normalizeEmail(email: string): string {
@@ -10,11 +7,28 @@ function normalizeEmail(email: string): string {
 }
 
 export const authPlugin: OberonPlugin = (adapter) => {
+  const getAuthPlugins = () => {
+    try {
+      return adapter.getAuthPlugins()
+    } catch (error) {
+      if (error instanceof NotImplementedError) {
+        return []
+      }
+
+      throw error
+    }
+  }
+
   const authServer = () =>
     createAuthServer({
       betterAuth: adapter.betterAuth,
+      betterAuthPlugins: getAuthPlugins(),
       sendVerificationRequest: adapter.sendVerificationRequest,
     })
+
+  const getRequestHeaders = () => adapter.getRequestHeaders()
+
+  const handleAuthRequest = async (request: Request) => authServer().handler(request)
 
   const ensureMasterUser = async () => {
     const masterEmail = process.env.MASTER_EMAIL
@@ -39,7 +53,13 @@ export const authPlugin: OberonPlugin = (adapter) => {
     name: `${name}/auth`,
     version,
     handlers: {
-      auth: () => toNextJsHandler(authServer()),
+      auth: () => ({
+        GET: handleAuthRequest,
+        POST: handleAuthRequest,
+        PATCH: handleAuthRequest,
+        PUT: handleAuthRequest,
+        DELETE: handleAuthRequest,
+      }),
     },
     bootstrap: async (next) => {
       await next()
@@ -49,7 +69,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
       getCurrentUser: async () => {
         try {
           const session = await authServer().api.getSession({
-            headers: await headers(),
+            headers: await getRequestHeaders(),
           })
 
           if (!session?.user?.id || !session.user.email || !session.user.role) {
@@ -67,7 +87,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
       },
       signOut: async () => {
         await authServer().api.signOut({
-          headers: await headers(),
+          headers: await getRequestHeaders(),
         })
       },
       signIn: async ({ email }) => {

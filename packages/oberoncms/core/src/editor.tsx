@@ -1,5 +1,4 @@
 import { DynamicTailwind } from "@tohuhono/ui/theme"
-import { notFound } from "next/navigation"
 import type { PropsWithChildren } from "react"
 
 import { Editor } from "./components/editor"
@@ -42,7 +41,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
     return <Preview path={slug} data={data} config={{ ...previewConfig, ...config }} />
   }
 
-  if (["users", "images", "pages", "site"].includes("pages")) {
+  if (["users", "images", "pages", "site"].includes(action)) {
     return (
       <>
         {/* TODO fix path to be dynamic */}
@@ -65,5 +64,5 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
     )
   }
 
-  notFound()
+  throw new Error(`Unknown Oberon client action: ${String(action)}`)
 }

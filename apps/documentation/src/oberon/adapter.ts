@@ -3,4 +3,4 @@ import { initOberon } from "@oberoncms/core/adapter"
 
 import { config } from "./config"
 
-export const { adapter } = initOberon(config)
+export const { actions, adapter } = initOberon(config)

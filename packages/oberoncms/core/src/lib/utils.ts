@@ -1,6 +1,3 @@
-import { isRedirectError } from "next/dist/client/components/redirect-error"
-import { notFound, redirect } from "next/navigation"
-
 import {
   NotImplementedError,
   ResponseError,
@@ -27,7 +24,7 @@ export function getTitle(action: ClientAction, slug?: string) {
   }
 }
 
-export const parseClientAction = (action: unknown): ClientAction => {
+export const parseClientAction = (action: unknown): ClientAction | undefined => {
   switch (action) {
     case "edit":
     case "images":
@@ -37,10 +34,8 @@ export const parseClientAction = (action: unknown): ClientAction => {
     case "site":
     case "users":
       return action
-    case undefined:
-      return redirect("/cms/pages")
     default:
-      return notFound()
+      return undefined
   }
 }
 
@@ -94,9 +89,6 @@ export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
       result: await promise,
     }
   } catch (error) {
-    if (isRedirectError(error)) {
-      throw error
-    }
     if (error instanceof ResponseError) {
       return {
         status: "error",

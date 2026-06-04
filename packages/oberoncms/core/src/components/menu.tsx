@@ -1,11 +1,10 @@
 import { Button, buttonVariants } from "@tohuhono/ui/button"
+import { Link } from "@tohuhono/ui/link"
 import { ModeToggle } from "@tohuhono/ui/mode-toggle"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { PropsWithChildren } from "react"
 import useSWR from "swr"
 
-import { useOberonActions } from "../hooks/use-oberon"
+import { useOberonActions, useOberonNavigation } from "../hooks/use-oberon"
 
 export const Menu = ({
   title,
@@ -17,7 +16,7 @@ export const Menu = ({
 }>) => {
   const { can, signOut } = useOberonActions()
 
-  const router = useRouter()
+  const navigation = useOberonNavigation()
 
   const { data: showImages } = useSWR("/can/images", () => can("images"))
   const { data: showUsers } = useSWR("/can/users", () => can("users"))
@@ -61,7 +60,7 @@ export const Menu = ({
           size="sm"
           onClick={async () => {
             await signOut()
-            router.refresh()
+            navigation.refresh()
           }}
         >
           Sign Out

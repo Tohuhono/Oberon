@@ -1,8 +1,7 @@
 import { betterAuth } from "better-auth/minimal"
-import { nextCookies } from "better-auth/next-js"
 import { emailOTP } from "better-auth/plugins"
 
-import type { OberonBetterAuthAdapter, OberonSendAdapter } from "../lib/dtd"
+import type { OberonBetterAuthAdapter, OberonBetterAuthPlugin, OberonSendAdapter } from "../lib/dtd"
 
 export const cmsAuthBasePath = "/cms/api/auth"
 
@@ -10,9 +9,11 @@ const noopSendVerificationRequest: OberonSendAdapter["sendVerificationRequest"] 
 
 export function createAuthOptions({
   betterAuth: betterAuthAdapter,
+  betterAuthPlugins = [],
   sendVerificationRequest,
 }: Pick<OberonSendAdapter, "sendVerificationRequest"> & {
   betterAuth?: OberonBetterAuthAdapter
+  betterAuthPlugins?: OberonBetterAuthPlugin[]
 }) {
   const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
   const secret = process.env.AUTH_SECRET
@@ -49,7 +50,7 @@ export function createAuthOptions({
           })
         },
       }),
-      nextCookies(),
+      ...betterAuthPlugins,
     ],
   }
 }

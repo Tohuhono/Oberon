@@ -2,7 +2,7 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cn } from "@tohuhono/utils"
 import { cva, type VariantProps } from "class-variance-authority"
-import { type ComponentPropsWithRef, type ReactElement, type ReactNode } from "react"
+import { type ComponentPropsWithRef, type ReactNode } from "react"
 
 const buttonVariants = cva(
   `
@@ -73,19 +73,18 @@ const Button = ({
   className: classNameProp,
   variant,
   size,
-  asChild,
   children,
   ref,
   ...props
 }: Omit<ComponentPropsWithRef<typeof ButtonPrimitive>, "children" | "className" | "render"> &
   VariantProps<typeof buttonVariants> & {
     className?: string
-  } & ({ asChild: true; children: ReactElement } | { asChild?: false; children?: ReactNode })) => {
+  } & { asChild?: false; children?: ReactNode }) => {
   const className = cn(buttonVariants({ variant, size, className: classNameProp }))
 
-  if (asChild) {
+  /*if (asChild) {
     return <ButtonPrimitive ref={ref} className={className} render={children} {...props} />
-  }
+  }*/
 
   return (
     <ButtonPrimitive ref={ref} className={className} {...props}>
