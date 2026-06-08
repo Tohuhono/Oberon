@@ -1,38 +1,63 @@
+import type { BetterAuthOptions } from "better-auth"
+import { betterAuth } from "better-auth/minimal"
+import { emailOTP } from "better-auth/plugins/email-otp"
+
 import { name, version } from "../../package.json" with { type: "json" }
-import { NotImplementedError, type OberonPlugin, type OberonPluginAdapter } from "../lib/dtd"
-import { createAuthServer } from "./server"
+import { type OberonPlugin, type OberonPluginAdapter } from "../lib/dtd"
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase()
 }
 
+const cmsAuthBasePath = "/cms/api/auth"
+const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
+const secret = process.env.AUTH_SECRET
+
 export const authPlugin: OberonPlugin = (adapter) => {
-  const getAuthPlugins = () => {
-    try {
-      return adapter.getAuthPlugins()
-    } catch (error) {
-      if (error instanceof NotImplementedError) {
-        return []
-      }
+  const options = {
+    ...(adapter.betterAuth && { database: adapter.betterAuth.database }),
+    basePath: cmsAuthBasePath,
+    baseURL,
+    secret,
+    user: {
+      additionalFields: {
+        role: {
+          type: "string" as const,
+          required: true,
+          input: false,
+        },
+      },
+    },
+    plugins: [
+      emailOTP({
+        disableSignUp: true,
 
-      throw error
-    }
-  }
+        sendVerificationOTP: async ({ email, otp, type }) => {
+          if (type !== "sign-in") {
+            return
+          }
 
-  const authServer = () =>
-    createAuthServer({
-      betterAuth: adapter.betterAuth,
-      betterAuthPlugins: getAuthPlugins(),
-      sendVerificationRequest: adapter.sendVerificationRequest,
-    })
+          const loginUrl = new URL("/cms/login", "http://localhost")
+          loginUrl.searchParams.set("email", email)
+
+          await adapter.sendVerificationRequest({
+            email,
+            token: otp,
+            url: `${loginUrl.pathname}${loginUrl.search}`,
+          })
+        },
+      }),
+    ],
+  } satisfies BetterAuthOptions
+
+  const authServer = betterAuth(options)
 
   const getRequestHeaders = () => adapter.getRequestHeaders()
 
-  const handleAuthRequest = async (request: Request) => authServer().handler(request)
+  const handleAuthRequest = async (request: Request) => authServer.handler(request)
 
   const ensureMasterUser = async () => {
     const masterEmail = process.env.MASTER_EMAIL
-
     if (!masterEmail) {
       return
     }
@@ -68,7 +93,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
     adapter: {
       getCurrentUser: async () => {
         try {
-          const session = await authServer().api.getSession({
+          const session = await authServer.api.getSession({
             headers: await getRequestHeaders(),
           })
 
@@ -86,12 +111,12 @@ export const authPlugin: OberonPlugin = (adapter) => {
         }
       },
       signOut: async () => {
-        await authServer().api.signOut({
+        await authServer.api.signOut({
           headers: await getRequestHeaders(),
         })
       },
       signIn: async ({ email }) => {
-        await authServer().api.sendVerificationOTP({
+        await authServer.api.sendVerificationOTP({
           body: { email, type: "sign-in" },
         })
       },
