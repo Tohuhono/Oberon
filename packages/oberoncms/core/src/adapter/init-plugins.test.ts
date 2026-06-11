@@ -2,7 +2,7 @@ import { describe, expect, it } from "@dev/vitest"
 import { memoryAdapter } from "better-auth/adapters/memory"
 
 import { authPlugin } from "../auth"
-import { NotImplementedError } from "../lib/dtd"
+import { NotImplementedError, type OberonPlugin } from "../lib/dtd"
 import { initPlugins } from "./init-plugins"
 import { mockPlugin } from "./mock-plugin"
 
@@ -41,22 +41,18 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     )
   })
 
-  it("uses deterministic plugin order when multiple plugins provide betterAuth", async () => {
-    const validAuthCapabilityPlugin = () => ({
+  it("uses deterministic plugin order when plugins provide auth storage", async () => {
+    const validAuthCapabilityPlugin: OberonPlugin = () => ({
       name: "valid-better-auth-plugin",
       adapter: {
-        betterAuth: {
-          database: memoryAdapter({}),
-        },
+        getAuthDB: () => memoryAdapter({}),
         sendVerificationRequest: async () => {},
       },
     })
 
-    const missingAuthCapabilityPlugin = () => ({
+    const missingAuthCapabilityPlugin: OberonPlugin = () => ({
       name: "missing-better-auth-plugin",
-      adapter: {
-        betterAuth: undefined,
-      },
+      adapter: {},
     })
 
     expect(() =>

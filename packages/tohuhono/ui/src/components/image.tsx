@@ -1,7 +1,7 @@
 "use client"
 
 import { Image as UnpicImage, Source } from "@unpic/react"
-import { createContext, useContext, type PropsWithChildren } from "react"
+import { createContext, useContext } from "react"
 
 export type { ImageProps, SourceProps } from "@unpic/react"
 import type { ImageProps } from "@unpic/react"
@@ -21,20 +21,9 @@ export type ImageTransform = Partial<
   >
 >
 
-const ImageTransformContext = createContext<ImageTransform | undefined>(undefined)
+export const ImageContext = createContext<ImageTransform | undefined>(undefined)
 
-export function ImageTransformProvider({
-  children,
-  imageTransform,
-}: PropsWithChildren<{ imageTransform?: ImageTransform }>) {
-  return (
-    <ImageTransformContext.Provider value={imageTransform}>
-      {children}
-    </ImageTransformContext.Provider>
-  )
-}
-
-export const useImageTransform = () => useContext(ImageTransformContext)
+const useImageTransform = () => useContext(ImageContext)
 
 export function Image(props: ImageProps) {
   const imageTransform = useImageTransform()

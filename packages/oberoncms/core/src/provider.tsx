@@ -1,7 +1,6 @@
 import { type PropsWithChildren } from "react"
 
 import { OberonClientProvider } from "./components/provider"
-export { OberonClientFrameworkProvider } from "./components/provider"
 import type {
   ClientAction,
   OberonAdapter,
@@ -67,11 +66,13 @@ export async function OberonProvider({
   actions,
   path,
   searchParams,
+  ClientProvider = OberonClientProvider,
 }: PropsWithChildren<{
   adapter: OberonAdapter
   actions: OberonServerActions
   path: string[]
   searchParams: { [key: string]: string | string[] | undefined }
+  ClientProvider?: typeof OberonClientProvider
 }>) {
   const action = parseClientAction(path[0])
 
@@ -94,8 +95,8 @@ export async function OberonProvider({
   const context = await getContext(adapter, action, slug, searchParams)
 
   return (
-    <OberonClientProvider serverActions={actions} context={context}>
+    <ClientProvider serverActions={actions} context={context}>
       {children}
-    </OberonClientProvider>
+    </ClientProvider>
   )
 }

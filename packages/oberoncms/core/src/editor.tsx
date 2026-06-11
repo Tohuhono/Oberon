@@ -9,7 +9,7 @@ import { Pages } from "./components/pages"
 import { Preview } from "./components/preview"
 import { Site } from "./components/site"
 import { Users } from "./components/users"
-import { useOberonClientContext } from "./hooks/use-oberon"
+import { useOberonClient, useOberonNavigation } from "./hooks/use-oberon"
 import type { OberonClientConfig } from "./lib/dtd"
 import { getTitle } from "./lib/utils"
 
@@ -27,7 +27,8 @@ const previewConfig = {
 }
 
 export function OberonClient({ config }: { config: OberonClientConfig }) {
-  const { action, data, slug } = useOberonClientContext()
+  const { action, data, slug } = useOberonClient()
+  const { notFound } = useOberonNavigation()
 
   if (action === "login") {
     return <Login {...data} />
@@ -64,5 +65,5 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
     )
   }
 
-  throw new Error(`Unknown Oberon client action: ${String(action)}`)
+  return notFound()
 }

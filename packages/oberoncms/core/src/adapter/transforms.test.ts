@@ -1,4 +1,4 @@
-import { describe, expect, it } from "@dev/vitest"
+import { describe, expect, fromPartial, it } from "@dev/vitest"
 
 import { getComponentTransformVersions, getTransforms } from "./transforms"
 
@@ -10,7 +10,7 @@ function config(
     }
   >,
 ) {
-  return { components } as Parameters<typeof getComponentTransformVersions>[0]
+  return fromPartial<Parameters<typeof getComponentTransformVersions>[0]>({ components })
 }
 
 describe("getComponentTransformVersions", { tags: ["baseline"] }, () => {

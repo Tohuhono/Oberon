@@ -2,6 +2,7 @@ import { notImplemented } from "../adapter"
 import { type OberonPluginAdapter } from "../lib/dtd"
 
 export const stubbedAdapter = {
+  getAuthDB: notImplemented("getAuthDB"),
   getCurrentUser: notImplemented("getCurrentUser"),
   hasPermission: notImplemented("hasPermission"),
   signIn: notImplemented("signIn"),
@@ -9,7 +10,6 @@ export const stubbedAdapter = {
   redirect: notImplemented("redirect"),
   notFound: notImplemented("notFound"),
   getRequestHeaders: notImplemented("getRequestHeaders"),
-  getAuthPlugins: notImplemented("getAuthPlugins"),
   sendVerificationRequest: notImplemented("sendVerificationRequest"),
   addImage: notImplemented("addImage"),
   addPage: notImplemented("addPage"),

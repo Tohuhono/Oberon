@@ -1,44 +1,14 @@
-import {
-  createOberonActions,
-  ResponseError,
-  type OberonPlugin,
-  type OberonResponse,
-} from "@oberoncms/core"
+import { type OberonPlugin } from "@oberoncms/core"
 import { nextCookies } from "better-auth/next-js"
 import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
 import { headers } from "next/headers"
-import { notFound, redirect, unstable_rethrow } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 import { name, version } from "../package.json" with { type: "json" }
-
-export async function nextActionTransport<T>(promise: Promise<T>): OberonResponse<T> {
-  try {
-    return {
-      status: "success",
-      result: await promise,
-    }
-  } catch (error) {
-    unstable_rethrow(error)
-
-    if (error instanceof ResponseError) {
-      return {
-        status: "error",
-        message: error.message,
-      }
-    }
-    return {
-      status: "error",
-    }
-  }
-}
 
 export const plugin: OberonPlugin = (adapter, { phase } = { phase: "runtime" }) => ({
   name,
   version,
-  actions:
-    phase === "runtime"
-      ? (_actions, adapter) => createOberonActions(adapter, nextActionTransport)
-      : undefined,
   adapter:
     phase === "runtime"
       ? {

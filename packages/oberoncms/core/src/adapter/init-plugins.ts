@@ -7,14 +7,13 @@ import {
   type OberonAdapter,
   type OberonPluginPhase,
   type OberonClientConfig,
-  type OberonPluginActionProvider,
 } from "../lib/dtd"
 import { getInitialData } from "./get-initial-data"
 import { stubbedAdapter } from "./stubbed-adapter"
 import { getComponentTransformVersions } from "./transforms"
 
 type InititalisedPlugins = {
-  actionProviders: OberonPluginActionProvider[]
+  actions: Partial<OberonAdapter>
   adapter: OberonPluginAdapter
   bootstrap: () => Promise<void>
   handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>
@@ -22,7 +21,7 @@ type InititalisedPlugins = {
 }
 
 const baseAccumulator: InititalisedPlugins = {
-  actionProviders: [],
+  actions: {},
   handlers: {},
   versions: [],
   bootstrap: async () => {},
@@ -84,9 +83,6 @@ export function initPlugins(
     }
 
     return {
-      actionProviders: actions
-        ? [...accumulator.actionProviders, actions]
-        : accumulator.actionProviders,
       versions: [...accumulator.versions, { name, disabled, version: version || "" }],
       handlers: {
         ...accumulator.handlers,
@@ -96,6 +92,10 @@ export function initPlugins(
       adapter: {
         ...accumulator.adapter,
         ...adapter,
+      },
+      actions: {
+        ...accumulator.actions,
+        ...(phase === "runtime" ? actions : {}),
       },
     } satisfies InititalisedPlugins
   }, baseAccumulator)

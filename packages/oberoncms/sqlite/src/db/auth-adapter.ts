@@ -2,7 +2,6 @@ import { randomUUID } from "crypto"
 
 import { UserSchema, type OberonAuthAdapter } from "@oberoncms/core"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import type { BetterAuthOptions } from "better-auth/minimal"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 
@@ -10,27 +9,12 @@ import type { DatabaseClient } from "./client"
 import * as schema from "./schema"
 import { user } from "./schema"
 
-type SqliteAuthAdapter = OberonAuthAdapter & {
-  betterAuth: Pick<BetterAuthOptions, "database">
-}
-
-function createBetterAuthAdapter(db: () => DatabaseClient): Pick<BetterAuthOptions, "database"> {
-  let database: BetterAuthOptions["database"] | undefined
-
-  return {
-    get database() {
-      database ??= drizzleAdapter(db(), {
-        provider: "sqlite",
-        schema,
-      })
-
-      return database
-    },
-  } satisfies Pick<BetterAuthOptions, "database">
-}
-
-export const getAuthAdapter = (db: () => DatabaseClient): SqliteAuthAdapter => ({
-  betterAuth: createBetterAuthAdapter(db),
+export const getAuthAdapter = (db: () => DatabaseClient): OberonAuthAdapter => ({
+  getAuthDB: () =>
+    drizzleAdapter(db(), {
+      provider: "sqlite",
+      schema,
+    }),
   getAllUsers: async () => {
     return z
       .array(UserSchema)

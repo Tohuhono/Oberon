@@ -92,6 +92,7 @@ context, but the decisions below supersede it where they differ.
 - Client route effects are a small provider-backed capability, not a full framework router
   abstraction:
   - `navigate(href: string): void`
+  - `notFound(): never`
   - `refresh(): void`
 - Recipes, the Playground, and the Documentation app should install the framework client provider.
   Graceful fallback remains acceptable for custom or non-framework setups.
@@ -99,9 +100,9 @@ context, but the decisions below supersede it where they differ.
   not a replacement for server routing decisions that happen before Oberon UI renders.
 - Invalid or unknown CMS actions should be handled by server routing through the flat Adapter
   `redirect()` / `notFound()` methods before an `OberonClientContext` is created.
-- If `OberonClient` receives an impossible action after context creation, treat it as an invariant
-  violation and throw an ordinary client error instead of silently rendering `null` or navigating
-  away.
+- If `OberonClient` receives an impossible action after context creation, preserve the previous 404
+  behaviour by calling the provider-backed `notFound()` route effect. It must not echo the invalid
+  action value because route and context values are attacker-controlled at the boundary.
 
 ## Image Rendering
 

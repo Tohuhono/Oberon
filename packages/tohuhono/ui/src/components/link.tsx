@@ -12,20 +12,13 @@ export type LinkProps = PropsWithChildren<
 
 export type LinkComponent = ComponentType<LinkProps>
 
-const LinkContext = createContext<LinkComponent | undefined>(undefined)
+export const LinkContext = createContext<LinkComponent | undefined>(undefined)
 
 function AnchorLink({ children, prefetch: _prefetch, ...props }: LinkProps) {
   return <a {...props}>{children}</a>
 }
 
-export function LinkProvider({
-  children,
-  component,
-}: PropsWithChildren<{ component: LinkComponent }>) {
-  return <LinkContext.Provider value={component}>{children}</LinkContext.Provider>
-}
-
-export const useLinkComponent = () => useContext(LinkContext)
+const useLinkComponent = () => useContext(LinkContext)
 
 export function Link(props: LinkProps) {
   const Component = useLinkComponent() ?? AnchorLink

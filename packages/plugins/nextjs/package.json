@@ -28,7 +28,7 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./client": "./dist/client.js"
+    "./provider": "./dist/provider.js"
   },
   "publishConfig": {
     "access": "public"

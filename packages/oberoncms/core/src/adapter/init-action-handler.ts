@@ -1,14 +1,39 @@
 import {
+  OberonError,
+  ResponseError,
   type OberonActionSurface,
   type OberonActionTransport,
   type OberonAdapter,
-  type OberonPluginActionProvider,
+  type OberonResponse,
 } from "../lib/dtd"
-import { wrap } from "../lib/utils"
+
+export async function defaultTransport<T>(promise: Promise<T>): OberonResponse<T> {
+  try {
+    return {
+      status: "success",
+      result: await promise,
+    }
+  } catch (error) {
+    if (error instanceof ResponseError) {
+      return {
+        status: "error",
+        message: error.message,
+      }
+    }
+    if (error instanceof OberonError) {
+      console.error(error)
+      return {
+        status: "error",
+        message: "An unexpected error occured",
+      }
+    }
+    throw error
+  }
+}
 
 export function createOberonActions(
   adapter: OberonAdapter,
-  transport: OberonActionTransport = wrap,
+  transport: OberonActionTransport = defaultTransport,
 ): OberonActionSurface {
   return {
     addPage: (page) => transport(adapter.addPage(page)),
@@ -32,16 +57,12 @@ export function createOberonActions(
   }
 }
 
-export function initActions(
+export function initActionHandler(
   adapter: OberonAdapter,
-  actionProviders: OberonPluginActionProvider[],
+  // TODO: implement actions
+  _pluginActions: Partial<OberonAdapter>,
 ): OberonActionSurface {
   const actions = createOberonActions(adapter)
 
-  return actionProviders.reduce<OberonActionSurface>((accumulator, provider) => {
-    return {
-      ...accumulator,
-      ...provider(accumulator, adapter),
-    }
-  }, actions)
+  return actions
 }

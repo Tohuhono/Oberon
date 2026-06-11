@@ -22,10 +22,10 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
       plugins: [plugin],
     })
 
-    await handler.GET(new Request("http://localhost/cms/api/test") as never, {
+    await handler.GET(new Request("http://localhost/cms/api/test"), {
       params: Promise.resolve({ path: ["test"] }),
     })
-    await handler.GET(new Request("http://localhost/cms/api/test") as never, {
+    await handler.GET(new Request("http://localhost/cms/api/test"), {
       params: Promise.resolve({ path: ["test"] }),
     })
 
@@ -34,7 +34,7 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
     expect(get).toHaveBeenCalledTimes(2)
   })
 
-  it("returns plugin-composed actions from runtime composition", async () => {
+  it("returns action handlers backed by runtime adapter composition", async () => {
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
@@ -42,50 +42,14 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
       },
     })
 
-    const actionPlugin: OberonPlugin = () => ({
-      name: "action-plugin",
-      actions: (_actions, adapter) => ({
-        describeSite: async () => ({
-          status: "success",
-          result: (await adapter.getAllPaths()).at(0)?.path.join("/") ?? "missing",
-        }),
-      }),
-    })
-
-    const decoratorPlugin: OberonPlugin = () => ({
-      name: "decorator-plugin",
-      actions: (actions, adapter) => ({
-        describeSite: async () => {
-          const describeSite = actions.describeSite
-
-          if (!describeSite) {
-            throw new Error("Expected describeSite action to be composed")
-          }
-
-          const response = await describeSite()
-
-          return {
-            status: "success",
-            result: `${response.status}:${response.result}:${(await adapter.getAllPaths()).length}`,
-          }
-        },
-      }),
-    })
-
-    const { actions } = initOberon({
+    const { actionHandler } = initOberon({
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-      plugins: [databasePlugin, actionPlugin, decoratorPlugin],
+      plugins: [databasePlugin],
     })
 
-    const describeSite = actions.describeSite
-
-    if (!describeSite) {
-      throw new Error("Expected describeSite action to be composed")
-    }
-
-    await expect(describeSite()).resolves.toEqual({
+    await expect(actionHandler.getAllPaths()).resolves.toEqual({
       status: "success",
-      result: "success:database:1",
+      result: [{ path: ["database"] }],
     })
   })
 

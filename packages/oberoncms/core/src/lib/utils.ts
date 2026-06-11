@@ -1,10 +1,4 @@
-import {
-  NotImplementedError,
-  ResponseError,
-  type ClientAction,
-  type OberonPluginAdapter,
-  type OberonResponse,
-} from "./dtd"
+import { NotImplementedError, type ClientAction, type OberonPluginAdapter } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
   switch (action) {
@@ -79,25 +73,6 @@ export function notImplemented(action: string) {
     throw new NotImplementedError(
       `No oberon plugin provided for ${action} action, please check your oberon adapter configuration.`,
     )
-  }
-}
-
-export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
-  try {
-    return {
-      status: "success",
-      result: await promise,
-    }
-  } catch (error) {
-    if (error instanceof ResponseError) {
-      return {
-        status: "error",
-        message: error.message,
-      }
-    }
-    return {
-      status: "error",
-    }
   }
 }
 

@@ -1,25 +1,31 @@
 import { useContext } from "react"
 
-import { ActionsContext, ClientContext, NavigationContext } from "../components/provider"
+import { OberonClient } from "../components/provider"
 
-export const useOberonActions = () => {
-  const context = useContext(ActionsContext)
+const useOberon = () => {
+  const oberon = useContext(OberonClient)
 
-  if (!context) {
-    throw new Error("No Oberon Server Actions provided")
-  }
-
-  return context
-}
-
-export const useOberonClientContext = () => {
-  const context = useContext(ClientContext)
-
-  if (!context) {
+  if (!oberon) {
     throw new Error("No Oberon Client Context provided")
   }
 
+  return oberon
+}
+
+export const useOberonActions = () => {
+  const { actions } = useOberon()
+
+  return actions
+}
+
+export const useOberonClient = () => {
+  const { context } = useOberon()
+
   return context
 }
 
-export const useOberonNavigation = () => useContext(NavigationContext)
+export const useOberonNavigation = () => {
+  const { navigation } = useOberon()
+
+  return navigation
+}

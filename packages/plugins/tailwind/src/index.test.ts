@@ -123,9 +123,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))
-        .GET?.(
-          new Request(`https://oberon.invalid/cms/api/tailwind/${state!.activeHash}.css`) as never,
-        )
+        .GET?.(new Request(`https://oberon.invalid/cms/api/tailwind/${state!.activeHash}.css`))
 
       expect(response?.status).toBe(200)
       await expect(response?.text()).resolves.toContain(".md\\:grid")
@@ -172,7 +170,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))
-        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind") as never)
+        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
     },
@@ -200,7 +198,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))
-        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind") as never)
+        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
     },
@@ -229,7 +227,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       const response = await plugin.handlers
         ?.tailwind?.(fromPartial({}))
-        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind") as never)
+        .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
     },
