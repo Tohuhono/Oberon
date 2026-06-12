@@ -79,6 +79,9 @@ importers:
       '@oberoncms/core':
         specifier: workspace:*
         version: link:../../packages/oberoncms/core
+      '@oberoncms/plugin-nextjs':
+        specifier: workspace:*
+        version: link:../../packages/plugins/nextjs
       '@tohuhono/puck-blocks':
         specifier: workspace:*
         version: link:../../packages/tohuhono/puck-blocks
