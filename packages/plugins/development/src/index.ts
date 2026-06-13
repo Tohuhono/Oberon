@@ -18,7 +18,6 @@ import { getClient, initialise } from "./db/client"
 const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => {
-  console.log("USE_DEVELOPMENT_SEND_PLUGIN", USE_DEVELOPMENT_SEND_PLUGIN)
   return {
     name,
     version,
