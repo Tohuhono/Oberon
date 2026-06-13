@@ -1,5 +1,4 @@
 import { DynamicTailwind } from "@tohuhono/ui/theme"
-import { notFound } from "next/navigation"
 import type { PropsWithChildren } from "react"
 
 import { Editor } from "./components/editor"
@@ -10,7 +9,7 @@ import { Pages } from "./components/pages"
 import { Preview } from "./components/preview"
 import { Site } from "./components/site"
 import { Users } from "./components/users"
-import { useOberonClientContext } from "./hooks/use-oberon"
+import { useOberonClient, useOberonNavigation } from "./hooks/use-oberon"
 import type { OberonClientConfig } from "./lib/dtd"
 import { getTitle } from "./lib/utils"
 
@@ -28,7 +27,8 @@ const previewConfig = {
 }
 
 export function OberonClient({ config }: { config: OberonClientConfig }) {
-  const { action, data, slug } = useOberonClientContext()
+  const { action, data, slug } = useOberonClient()
+  const { notFound } = useOberonNavigation()
 
   if (action === "login") {
     return <Login {...data} />
@@ -42,7 +42,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
     return <Preview path={slug} data={data} config={{ ...previewConfig, ...config }} />
   }
 
-  if (["users", "images", "pages", "site"].includes("pages")) {
+  if (["users", "images", "pages", "site"].includes(action)) {
     return (
       <>
         {/* TODO fix path to be dynamic */}
@@ -65,5 +65,5 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
     )
   }
 
-  notFound()
+  return notFound()
 }

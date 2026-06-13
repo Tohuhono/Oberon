@@ -1,5 +1,8 @@
 import { type OberonPlugin } from "@oberoncms/core"
+import { nextCookies } from "better-auth/next-js"
 import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
+import { headers } from "next/headers"
+import { notFound, redirect } from "next/navigation"
 
 import { name, version } from "../package.json" with { type: "json" }
 
@@ -9,6 +12,10 @@ export const plugin: OberonPlugin = (adapter, { phase } = { phase: "runtime" }) 
   adapter:
     phase === "runtime"
       ? {
+          redirect,
+          notFound,
+          getRequestHeaders: async () => new Headers(await headers()),
+          getAuthPlugins: () => [...adapter.getAuthPlugins(), nextCookies()],
           updatePageData: async (data) => {
             await adapter.updatePageData(data)
             revalidatePath(data.key)

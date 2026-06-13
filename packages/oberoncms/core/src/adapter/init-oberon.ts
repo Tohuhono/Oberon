@@ -1,52 +1,18 @@
-import type { NextRequest } from "next/server"
-
 import {
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
-  type OberonMethod,
+  type OberonActionSurface,
 } from "../lib/dtd"
+import { initActionHandler } from "./init-action-handler"
 import { initAdapter } from "./init-adapter"
+import { initHandler } from "./init-handler"
 import { initPlugins } from "./init-plugins"
-
-function handle<TMethod extends OberonMethod = OberonMethod>(
-  method: TMethod,
-  handlers: Record<string, OberonHandler>,
-): OberonHandler<{ path: string[] }>[TMethod] {
-  return async (request: NextRequest, { params }) => {
-    const { path = [] } = await params
-    const action = path?.[0]
-
-    if (!action) {
-      return new Response("", { status: 404 })
-    }
-
-    const handler = handlers[action]?.[method]
-
-    if (!handler) {
-      return new Response("", { status: 405 })
-    }
-
-    return handler(request)
-  }
-}
-
-function initHandlers(
-  handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>,
-  adapter: OberonAdapter,
-) {
-  return Object.entries(handlers).reduce<Record<string, OberonHandler>>(
-    (accumulator, [action, initHandler]) => {
-      accumulator[action] = initHandler(adapter)
-      return accumulator
-    },
-    {},
-  )
-}
 
 export function initOberon({ client, plugins }: OberonConfig): {
   handler: OberonHandler<{ path: string[] }>
   adapter: OberonAdapter
+  actionHandler: OberonActionSurface
 } {
   console.info("Initialise Oberon")
 
@@ -58,18 +24,13 @@ export function initOberon({ client, plugins }: OberonConfig): {
     pluginAdapter,
   })
 
-  const compiledHandlers = initHandlers(handlers, adapter)
+  const handler = initHandler(adapter, handlers)
 
-  const handler = {
-    GET: handle("GET", compiledHandlers),
-    PUT: handle("PUT", compiledHandlers),
-    PATCH: handle("PATCH", compiledHandlers),
-    POST: handle("POST", compiledHandlers),
-    DELETE: handle("DELETE", compiledHandlers),
-  }
+  const actionHandler = initActionHandler(adapter)
 
   return {
     handler,
     adapter,
+    actionHandler,
   }
 }

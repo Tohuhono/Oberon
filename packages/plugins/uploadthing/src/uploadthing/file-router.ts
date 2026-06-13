@@ -1,8 +1,12 @@
-import type { OberonAdapter } from "@oberoncms/core"
+import type { OberonAdapter, OberonHandler } from "@oberoncms/core"
 // TODO https://github.com/pingdotgg/uploadthing/issues/790
 import type {} from "@uploadthing/shared"
-import { createUploadthing, createRouteHandler, FileRouter } from "uploadthing/next"
-import { UploadThingError } from "uploadthing/server"
+import {
+  createUploadthing,
+  createRouteHandler,
+  FileRouter,
+  UploadThingError,
+} from "uploadthing/server"
 
 import { getImageSize } from "./get-image-size"
 
@@ -47,10 +51,12 @@ const initFileRouter = ({ can }: OberonAdapter) => {
 }
 
 export function initRouteHandler(adapter: OberonAdapter) {
-  return createRouteHandler({
+  const handler = createRouteHandler({
     router: initFileRouter(adapter),
     config: { callbackUrl: "/cms/api/uploadthing" },
   })
+
+  return { POST: handler, GET: handler } satisfies OberonHandler
 }
 
 export type OurFileRouter = ReturnType<typeof initFileRouter>

@@ -1,13 +1,4 @@
-import { isRedirectError } from "next/dist/client/components/redirect-error"
-import { notFound, redirect } from "next/navigation"
-
-import {
-  NotImplementedError,
-  ResponseError,
-  type ClientAction,
-  type OberonPluginAdapter,
-  type OberonResponse,
-} from "./dtd"
+import { NotImplementedError, type ClientAction } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
   switch (action) {
@@ -27,7 +18,7 @@ export function getTitle(action: ClientAction, slug?: string) {
   }
 }
 
-export const parseClientAction = (action: unknown): ClientAction => {
+export const parseClientAction = (action: unknown): ClientAction | undefined => {
   switch (action) {
     case "edit":
     case "images":
@@ -37,10 +28,8 @@ export const parseClientAction = (action: unknown): ClientAction => {
     case "site":
     case "users":
       return action
-    case undefined:
-      return redirect("/cms/pages")
     default:
-      return notFound()
+      return undefined
   }
 }
 
@@ -61,51 +50,11 @@ export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(process.env.USE_DEV
 
 export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(process.env.USE_DEVELOPMENT_SEND)
 
-export async function isNotImplemented(
-  adapter: Partial<OberonPluginAdapter>,
-  methodName: keyof OberonPluginAdapter,
-): Promise<boolean> {
-  const method = adapter[methodName]
-
-  if (typeof method !== "function") {
-    return false
-  }
-
-  try {
-    await Promise.resolve(Reflect.apply(method, adapter, []))
-    return false
-  } catch (error) {
-    return error instanceof NotImplementedError
-  }
-}
-
 export function notImplemented(action: string) {
   return (): never => {
     throw new NotImplementedError(
       `No oberon plugin provided for ${action} action, please check your oberon adapter configuration.`,
     )
-  }
-}
-
-export async function wrap<T>(promise: Promise<T>): OberonResponse<T> {
-  try {
-    return {
-      status: "success",
-      result: await promise,
-    }
-  } catch (error) {
-    if (isRedirectError(error)) {
-      throw error
-    }
-    if (error instanceof ResponseError) {
-      return {
-        status: "error",
-        message: error.message,
-      }
-    }
-    return {
-      status: "error",
-    }
   }
 }
 

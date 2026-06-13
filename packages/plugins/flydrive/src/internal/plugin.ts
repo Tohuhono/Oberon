@@ -1,4 +1,4 @@
-import type { OberonBaseAdapter, OberonPlugin } from "@oberoncms/core"
+import type { OberonPlugin } from "@oberoncms/core"
 import { Disk } from "flydrive"
 import type { DriverContract } from "flydrive/types"
 
@@ -24,6 +24,6 @@ export const getFlyDrivePlugin = (diskDriver: DriverContract): OberonPlugin => {
           throw new AggregateError(errors, "Image deletion failed")
         }
       },
-    } satisfies Partial<OberonBaseAdapter>,
+    },
   })
 }

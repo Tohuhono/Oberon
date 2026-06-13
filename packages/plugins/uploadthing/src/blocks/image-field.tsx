@@ -12,7 +12,8 @@ const useImages = (value: OberonImage | null, onChange: (value: OberonImage | nu
 
   useEffect(() => {
     if (!imageKey) {
-      return onChange(null)
+      onChange(null)
+      return
     }
 
     onChange(images?.find((image) => image.key === imageKey) || null)

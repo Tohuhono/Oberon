@@ -1,26 +1,19 @@
 "use client"
 
+import { ImageContext } from "@tohuhono/ui/image"
+import { LinkContext, type LinkComponent } from "@tohuhono/ui/link"
 import { Toaster, toast } from "@tohuhono/ui/toast"
 import { createContext, useMemo, type PropsWithChildren } from "react"
 
-import type { OberonClientContext, OberonResponse, OberonServerActions } from "../lib/dtd"
-
-export const ClientContext = createContext<OberonClientContext | null>(null)
-
-type UnwrappedResult<TResponse> =
-  Awaited<TResponse> extends {
-    result?: infer TResult
-  }
-    ? TResult
-    : never
-
-type OberonClientActions = {
-  [Key in keyof OberonServerActions]: (
-    ...props: Parameters<OberonServerActions[Key]>
-  ) => Promise<UnwrappedResult<ReturnType<OberonServerActions[Key]>>>
-}
-
-export const ActionsContext = createContext<OberonClientActions | null>(null)
+import type {
+  OberonClientContext,
+  OberonImageTransform,
+  OberonNavigation,
+  OberonResponse,
+  OberonServerActions,
+  OberonClientActions,
+  OberonContext,
+} from "../lib/dtd"
 
 function hasMessage(value: unknown): value is { message: string } {
   return (
@@ -37,6 +30,11 @@ function unwrapServerAction<TProps extends unknown[], TResult>(
 ): (...props: TProps) => Promise<TResult> {
   return async (...props) => {
     const response = await action(...props)
+
+    console.log(
+      // oxlint-disable-next-line tohuhono/no-type-assertion-except-object-keys typescript/no-explicit-any TODO: debug response message
+      `** TODO ** | reponse.message:"${response.message}" | response.result.message:"${(response.result as any)?.message}"`,
+    )
 
     if (response?.message) {
       toast({
@@ -60,14 +58,27 @@ function unwrapServerAction<TProps extends unknown[], TResult>(
   }
 }
 
+export const OberonClient = createContext<OberonContext | undefined>(undefined)
+
 export const OberonClientProvider = ({
   children,
+  imageTransform,
+  linkComponent,
+  navigate = (href) => window.location.assign(href),
+  notFound = () => {
+    window.location.assign("/404")
+    throw new Error("Oberon route not found")
+  },
+  refresh = () => window.location.reload(),
   serverActions,
   context,
 }: PropsWithChildren<{
+  imageTransform?: OberonImageTransform
+  linkComponent?: LinkComponent
   serverActions: OberonServerActions
   context: OberonClientContext
-}>) => {
+}> &
+  Partial<OberonNavigation>) => {
   const actions = useMemo(() => {
     const unwrappedActions: OberonClientActions = {
       addPage: unwrapServerAction("addPage", serverActions.addPage),
@@ -93,12 +104,21 @@ export const OberonClientProvider = ({
     return unwrappedActions
   }, [serverActions])
 
+  const navigation = useMemo(() => ({ navigate, notFound, refresh }), [navigate, notFound, refresh])
+
+  const oberonContext = useMemo(
+    () => ({ context, actions, navigation }),
+    [context, actions, navigation],
+  )
+
   return (
-    <ActionsContext.Provider value={actions}>
-      <ClientContext.Provider value={context}>
-        {children}
-        <Toaster />
-      </ClientContext.Provider>
-    </ActionsContext.Provider>
+    <OberonClient.Provider value={oberonContext}>
+      <ImageContext.Provider value={imageTransform}>
+        <LinkContext.Provider value={linkComponent}>
+          {children}
+          <Toaster />
+        </LinkContext.Provider>
+      </ImageContext.Provider>
+    </OberonClient.Provider>
   )
 }

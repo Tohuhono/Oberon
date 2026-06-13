@@ -6,13 +6,12 @@ import { Input } from "@tohuhono/ui/input"
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@tohuhono/ui/input-otp"
 import { toast } from "@tohuhono/ui/toast"
 import { cn } from "@tohuhono/utils"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useDebouncedCallback } from "use-debounce"
 import { z } from "zod"
 
-import { useOberonActions } from "../hooks/use-oberon"
+import { useOberonActions, useOberonNavigation } from "../hooks/use-oberon"
 
 const LoginSchema = z.object({
   email: z.email(),
@@ -30,7 +29,7 @@ export function Login({
 }) {
   const { signIn } = useOberonActions()
 
-  const router = useRouter()
+  const navigation = useOberonNavigation()
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -78,7 +77,7 @@ export function Login({
       }),
     })
     if (response.ok) {
-      router.push(callbackUrl || "/cms/pages")
+      navigation.navigate(callbackUrl || "/cms/pages")
     }
     if (!response.ok) {
       toast({

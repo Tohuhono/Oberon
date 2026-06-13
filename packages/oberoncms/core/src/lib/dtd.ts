@@ -6,9 +6,9 @@ import type {
   DefaultComponents,
   SlotComponent,
 } from "@puckeditor/core"
+import type { ImageTransform } from "@tohuhono/ui/image"
 import type { StreamResponseChunk } from "@tohuhono/utils"
 import type { BetterAuthOptions } from "better-auth/minimal"
-import type { NextRequest } from "next/server"
 import type { ReactNode } from "react"
 import { z } from "zod"
 
@@ -218,25 +218,6 @@ export type OberonUser = MaybeOptimistic<z.infer<typeof UserSchema>> & {
 export const roles: OberonRole[] = ["user", "admin"] as const
 
 /*
- * Context
- */
-
-type DescriminatedContext =
-  | { action: "edit" | "preview"; data: Data | null }
-  | { action: "users"; data: OberonUser[] }
-  | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: OberonPageMeta[] }
-  | { action: "site"; data: OberonSiteConfig }
-  | {
-      action: "login"
-      data: { callbackUrl: string; email: string; token: string }
-    }
-
-export type OberonClientContext = DescriminatedContext & {
-  slug: string
-}
-
-/*
  * Site
  */
 type TransformStatus = "error" | "success"
@@ -289,17 +270,18 @@ export type OberonCanAdapter = {
   signOut: () => Promise<void>
 }
 
-export type OberonBetterAuthAdapter = Pick<BetterAuthOptions, "database">
-
-export type OberonAuthAdapter = {
-  betterAuth?: OberonBetterAuthAdapter
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
-  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
-  getAllUsers: () => Promise<OberonUser[]>
+export type OberonRoutingAdapter = {
+  redirect: (href: string) => never
+  notFound: () => never
+  getRequestHeaders: () => Promise<Headers>
 }
 
-export type OberonBaseAdapter = {
+export type OberonAuthAdapter = {
+  getAuthDatabase: () => BetterAuthOptions["database"]
+  getAuthPlugins: () => NonNullable<BetterAuthOptions["plugins"]>
+}
+
+export type OberonDatabaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   deletePage: (key: OberonPageMeta["key"]) => Promise<void>
@@ -313,31 +295,39 @@ export type OberonBaseAdapter = {
   putKV: (namespace: string, key: string, value: JsonValue) => Promise<void>
   updatePageData: (data: OberonPage) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
+  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
+  getAllUsers: () => Promise<OberonUser[]>
 }
 
 export type OberonSendAdapter = {
   sendVerificationRequest: (props: { email: string; token: string; url: string }) => Promise<void>
 }
 
-export type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
-
-export type OberonPluginAdapter = OberonDatabaseAdapter & OberonCanAdapter & OberonSendAdapter
+export type OberonPluginAdapter = OberonDatabaseAdapter &
+  OberonCanAdapter &
+  OberonSendAdapter &
+  OberonAuthAdapter &
+  OberonRoutingAdapter
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
 export type OberonHandler<Params = undefined> = Params extends undefined
   ? {
-      [key in OberonMethod]?: (req: NextRequest) => Promise<Response> | Response
+      [key in OberonMethod]?: (req: Request) => Promise<Response> | Response
     }
   : {
       [key in OberonMethod]: (
-        req: NextRequest,
+        req: Request,
         context: { params: Promise<Params> },
       ) => Promise<Response>
     }
 
 export type OberonAdapter = {
-  getSetting: (namespace: string, key: string) => Promise<JsonValue | null>
+  redirect: (href: string) => never
+  notFound: () => never
+  getValue: (namespace: string, key: string) => Promise<JsonValue | null>
   addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
   addImage: (data: OberonImage) => Promise<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
@@ -410,4 +400,65 @@ export type OberonServerActions = {
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse
   signIn: (data: { email: string }) => OberonResponse
   signOut: () => OberonResponse
+}
+
+export type OberonAction<TProps extends unknown[] = never[], TResult = unknown> = (
+  ...props: TProps
+) => OberonResponse<TResult>
+
+export type OberonActionSurface = OberonServerActions & Record<string, OberonAction>
+
+export type OberonActionContribution = Record<string, OberonAction>
+
+export type OberonActionTransport = <T>(promise: Promise<T>) => OberonResponse<T>
+
+export type OberonPluginActionProvider = (
+  actions: OberonActionSurface,
+  adapter: OberonAdapter,
+) => OberonActionContribution
+
+/*
+ * Context
+ */
+
+type DescriminatedContext =
+  | { action: "edit" | "preview"; data: Data | null }
+  | { action: "users"; data: OberonUser[] }
+  | { action: "images"; data: OberonImage[] }
+  | { action: "pages"; data: OberonPageMeta[] }
+  | { action: "site"; data: OberonSiteConfig }
+  | {
+      action: "login"
+      data: { callbackUrl: string; email: string; token: string }
+    }
+
+export type OberonClientContext = DescriminatedContext & {
+  slug: string
+}
+
+export type OberonImageTransform = ImageTransform
+
+export type OberonNavigation = {
+  navigate: (href: string) => void
+  notFound: () => never
+  refresh: () => void
+}
+
+type UnwrappedResult<TResponse> =
+  Awaited<TResponse> extends {
+    result?: infer TResult
+  }
+    ? TResult
+    : never
+
+export type OberonClientActions = {
+  [Key in keyof OberonServerActions]: (
+    ...props: Parameters<OberonServerActions[Key]>
+  ) => Promise<UnwrappedResult<ReturnType<OberonServerActions[Key]>>>
+}
+
+export type OberonContext = {
+  actions: OberonClientActions
+  context: OberonClientContext
+  navigation: OberonNavigation
 }

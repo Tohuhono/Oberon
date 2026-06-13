@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation"
 import { type PropsWithChildren } from "react"
 
 import { OberonClientProvider } from "./components/provider"
@@ -67,27 +66,37 @@ export async function OberonProvider({
   actions,
   path,
   searchParams,
+  ClientProvider = OberonClientProvider,
 }: PropsWithChildren<{
   adapter: OberonAdapter
   actions: OberonServerActions
   path: string[]
   searchParams: { [key: string]: string | string[] | undefined }
+  ClientProvider?: typeof OberonClientProvider
 }>) {
   const action = parseClientAction(path[0])
+
+  if (!action) {
+    if (path[0] === undefined) {
+      return adapter.redirect("/cms/pages")
+    }
+
+    return adapter.notFound()
+  }
 
   const slug = resolveSlug(path.slice(1))
 
   const loggedIn = await adapter.can("site")
 
   if (!loggedIn && action !== "login") {
-    redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
+    adapter.redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
   }
 
   const context = await getContext(adapter, action, slug, searchParams)
 
   return (
-    <OberonClientProvider serverActions={actions} context={context}>
+    <ClientProvider serverActions={actions} context={context}>
       {children}
-    </OberonClientProvider>
+    </ClientProvider>
   )
 }

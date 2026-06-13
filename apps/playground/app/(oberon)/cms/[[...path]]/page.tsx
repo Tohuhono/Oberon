@@ -1,5 +1,5 @@
 import { getMetaData } from "@oberoncms/core"
-import { OberonProvider } from "@oberoncms/core/provider"
+import { NextOberonProvider } from "@oberoncms/plugin-nextjs/provider"
 
 import { actions } from "@/oberon/actions"
 import { adapter } from "@/oberon/adapter"
@@ -20,13 +20,13 @@ export default async function Oberon({
 }) {
   const { path = [] } = await params
   return (
-    <OberonProvider
+    <NextOberonProvider
       adapter={adapter}
       actions={actions}
       path={path}
       searchParams={await searchParams}
     >
       <Client />
-    </OberonProvider>
+    </NextOberonProvider>
   )
 }

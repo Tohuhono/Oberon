@@ -35,6 +35,7 @@
     "./render": "./dist/render.js",
     "./editor": "./dist/editor.js",
     "./provider": "./dist/provider.js",
+    "./provider/client": "./dist/provider.client.js",
     "./tailwind.css": "./tailwind.css"
   },
   "publishConfig": {
@@ -60,7 +61,6 @@
     "better-auth": "^1.6.3",
     "dotenv": "^17.3.1",
     "filesize": "^11.0.13",
-    "next": "^16.1.6",
     "react-hook-form": "^7.71.1",
     "swr": "^2.4.0",
     "use-debounce": "^10.1.0",

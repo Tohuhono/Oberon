@@ -16,6 +16,7 @@
   "dependencies": {
     "@datacom-digital/ui-sample-components": "^0.3.3",
     "@oberoncms/core": "workspace:*",
+    "@oberoncms/plugin-nextjs": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
     "next": "^16.1.6",
     "nextra": "4.6.1",

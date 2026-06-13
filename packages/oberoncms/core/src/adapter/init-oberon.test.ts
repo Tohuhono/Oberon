@@ -1,7 +1,7 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
 import { defineConfig } from "../index"
-import type { OberonClientConfig, OberonPlugin } from "../lib/dtd"
+import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from "../lib/dtd"
 import { bootstrapOberon } from "./bootstrap-oberon"
 import { initOberon } from "./init-oberon"
 
@@ -22,16 +22,45 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
       plugins: [plugin],
     })
 
-    await handler.GET(new Request("http://localhost/cms/api/test") as never, {
+    await handler.GET(new Request("http://localhost/cms/api/test"), {
       params: Promise.resolve({ path: ["test"] }),
     })
-    await handler.GET(new Request("http://localhost/cms/api/test") as never, {
+    await handler.GET(new Request("http://localhost/cms/api/test"), {
       params: Promise.resolve({ path: ["test"] }),
     })
 
     expect(initHandler).toHaveBeenCalledOnce()
     expect(initHandler).toHaveBeenCalledWith(adapter)
     expect(get).toHaveBeenCalledTimes(2)
+  })
+
+  it("returns action handlers backed by runtime adapter composition", async () => {
+    const databasePlugin: OberonPlugin = () => ({
+      name: "database-plugin",
+      adapter: {
+        getAllPages: async () => [{ key: "/database", updatedAt: new Date(), updatedBy: "system" }],
+      },
+    })
+
+    const { actionHandler } = initOberon({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [databasePlugin],
+    })
+
+    await expect(actionHandler.getAllPaths()).resolves.toEqual({
+      status: "success",
+      result: [{ path: ["database"] }],
+    })
+  })
+
+  it("exposes missing routing capabilities as NotImplementedError adapter methods", () => {
+    const { adapter } = initOberon({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [],
+    })
+
+    expect(() => adapter.redirect("/cms/pages")).toThrow(NotImplementedError)
+    expect(() => adapter.notFound()).toThrow(NotImplementedError)
   })
 })
 

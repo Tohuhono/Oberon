@@ -1,84 +1,78 @@
-import { wrap, type AdapterPermission, type OberonServerActions } from "@oberoncms/core"
+import type { OberonServerActions } from "@oberoncms/core"
 
-import { adapter } from "./adapter"
+import { actionHandler } from "./adapter"
 
 export const actions = {
-  addImage: async (data) => {
+  addImage: async (...props) => {
     "use server"
-    return wrap(adapter.addImage(data))
+    return actionHandler.addImage(...props)
   },
-  addPage: async (data) => {
+  addPage: async (...props) => {
     "use server"
-    return wrap(adapter.addPage(data))
+    return actionHandler.addPage(...props)
   },
-
-  addUser: async (data) => {
+  addUser: async (...props) => {
     "use server"
-    return wrap(adapter.addUser(data))
+    return actionHandler.addUser(...props)
   },
-
-  can: async (action, permission?: AdapterPermission) => {
+  can: async (...props) => {
     "use server"
-    return wrap(adapter.can(action, permission))
+    return actionHandler.can(...props)
   },
-  changeRole: async (data) => {
+  changeRole: async (...props) => {
     "use server"
-    return wrap(adapter.changeRole(data))
+    return actionHandler.changeRole(...props)
   },
-  deleteImage: async (key) => {
+  deleteImage: async (...props) => {
     "use server"
-    return wrap(adapter.deleteImage(key))
+    return actionHandler.deleteImage(...props)
   },
-  deletePage: async (data) => {
+  deletePage: async (...props) => {
     "use server"
-    return wrap(adapter.deletePage(data))
+    return actionHandler.deletePage(...props)
   },
-  deleteUser: async (data) => {
+  deleteUser: async (...props) => {
     "use server"
-    return wrap(adapter.deleteUser(data))
+    return actionHandler.deleteUser(...props)
   },
-  getAllImages: async () => {
+  getAllImages: async (...props) => {
     "use server"
-    return wrap(adapter.getAllImages())
+    return actionHandler.getAllImages(...props)
   },
-
-  getAllPages: async () => {
+  getAllPages: async (...props) => {
     "use server"
-    return wrap(adapter.getAllPages())
+    return actionHandler.getAllPages(...props)
   },
-  getAllPaths: async () => {
+  getAllPaths: async (...props) => {
     "use server"
-    return wrap(adapter.getAllPaths())
+    return actionHandler.getAllPaths(...props)
   },
-
-  getAllUsers: async () => {
+  getAllUsers: async (...props) => {
     "use server"
-    return wrap(adapter.getAllUsers())
+    return actionHandler.getAllUsers(...props)
   },
-  getConfig: async () => {
+  getConfig: async (...props) => {
     "use server"
-    return wrap(adapter.getConfig())
+    return actionHandler.getConfig(...props)
   },
-
-  getPageData: async (key) => {
+  getPageData: async (...props) => {
     "use server"
-    return wrap(adapter.getPageData(key))
+    return actionHandler.getPageData(...props)
   },
-  migrateData: async () => {
+  migrateData: async (...props) => {
     "use server"
-    return wrap(adapter.migrateData())
+    return actionHandler.migrateData(...props)
   },
-
-  publishPageData: async (data) => {
+  publishPageData: async (...props) => {
     "use server"
-    return wrap(adapter.publishPageData(data))
+    return actionHandler.publishPageData(...props)
   },
-  signIn: async (data) => {
+  signIn: async (...props) => {
     "use server"
-    return wrap(adapter.signIn(data))
+    return actionHandler.signIn(...props)
   },
-  signOut: async () => {
+  signOut: async (...props) => {
     "use server"
-    return wrap(adapter.signOut())
+    return actionHandler.signOut(...props)
   },
 } satisfies OberonServerActions

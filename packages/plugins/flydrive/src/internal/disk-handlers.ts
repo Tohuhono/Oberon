@@ -3,7 +3,6 @@ import path from "path"
 
 import { OberonAdapter, OberonError, ResponseError } from "@oberoncms/core"
 import type { Disk } from "flydrive"
-import { NextRequest } from "next/server"
 
 import { getImageSize } from "./get-image-size"
 
@@ -11,10 +10,10 @@ export function initRouteHandler(
   { can }: OberonAdapter,
   disk: Disk,
 ): {
-  POST: (req: NextRequest) => Promise<Response>
-  GET: (req: NextRequest) => Promise<Response>
+  POST: (req: Request) => Promise<Response>
+  GET: () => Promise<Response>
 } {
-  const POST: (req: NextRequest) => Promise<Response> = async (req) => {
+  const POST: (req: Request) => Promise<Response> = async (req) => {
     if (!(await can("images", "write"))) {
       throw new ResponseError("Not Allowed")
     }
@@ -48,7 +47,7 @@ export function initRouteHandler(
     })
   }
 
-  const GET: (req: NextRequest) => Promise<Response> = async () => {
+  const GET = async () => {
     // could be used to get presigned URLs
     return new Response("GET request handled", { status: 200 })
   }

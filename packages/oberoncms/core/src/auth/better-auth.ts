@@ -1,24 +1,64 @@
-import { toNextJsHandler } from "better-auth/next-js"
-import { headers } from "next/headers"
+import type { BetterAuthOptions } from "better-auth"
+import { betterAuth } from "better-auth/minimal"
+import { emailOTP } from "better-auth/plugins/email-otp"
 
 import { name, version } from "../../package.json" with { type: "json" }
 import { type OberonPlugin, type OberonPluginAdapter } from "../lib/dtd"
-import { createAuthServer } from "./server"
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase()
 }
 
+const cmsAuthBasePath = "/cms/api/auth"
+const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
+const secret = process.env.AUTH_SECRET
+
+const getAuth = (adapter: OberonPluginAdapter) =>
+  betterAuth({
+    database: adapter.getAuthDatabase(),
+    basePath: cmsAuthBasePath,
+    baseURL,
+    secret,
+    user: {
+      additionalFields: {
+        role: {
+          type: "string" as const,
+          required: true,
+          input: false,
+        },
+      },
+    },
+    plugins: [
+      emailOTP({
+        disableSignUp: true,
+
+        sendVerificationOTP: async ({ email, otp, type }, ctx) => {
+          if (type !== "sign-in") {
+            return
+          }
+
+          const loginUrl = new URL("/cms/login", ctx?.context.baseURL)
+          loginUrl.searchParams.set("email", email)
+          loginUrl.searchParams.set("token", otp)
+
+          await adapter.sendVerificationRequest({
+            email,
+            token: otp,
+            url: loginUrl.toString(),
+          })
+        },
+      }),
+      ...adapter.getAuthPlugins(),
+    ],
+  } satisfies BetterAuthOptions)
+
 export const authPlugin: OberonPlugin = (adapter) => {
-  const authServer = () =>
-    createAuthServer({
-      betterAuth: adapter.betterAuth,
-      sendVerificationRequest: adapter.sendVerificationRequest,
-    })
+  const authServer = () => getAuth(adapter)
+
+  const handleAuthRequest = async (request: Request) => authServer().handler(request)
 
   const ensureMasterUser = async () => {
     const masterEmail = process.env.MASTER_EMAIL
-
     if (!masterEmail) {
       return
     }
@@ -39,7 +79,13 @@ export const authPlugin: OberonPlugin = (adapter) => {
     name: `${name}/auth`,
     version,
     handlers: {
-      auth: () => toNextJsHandler(authServer()),
+      auth: () => ({
+        GET: handleAuthRequest,
+        POST: handleAuthRequest,
+        PATCH: handleAuthRequest,
+        PUT: handleAuthRequest,
+        DELETE: handleAuthRequest,
+      }),
     },
     bootstrap: async (next) => {
       await next()
@@ -49,7 +95,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
       getCurrentUser: async () => {
         try {
           const session = await authServer().api.getSession({
-            headers: await headers(),
+            headers: await adapter.getRequestHeaders(),
           })
 
           if (!session?.user?.id || !session.user.email || !session.user.role) {
@@ -67,7 +113,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
       },
       signOut: async () => {
         await authServer().api.signOut({
-          headers: await headers(),
+          headers: await adapter.getRequestHeaders(),
         })
       },
       signIn: async ({ email }) => {

@@ -1,15 +1,17 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
-import type { OberonClientConfig, OberonPlugin } from "../lib/dtd"
+import type { OberonClientConfig, OberonPlugin, OberonUser } from "../lib/dtd"
 import { initOberon } from "./init-oberon"
 
 describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migration"] }, () => {
   it("uses the current session user when anonymous access is denied", async () => {
-    const getCurrentUser = vi.fn(async () => ({
-      id: "user-1",
-      email: "editor@example.com",
-      role: "admin" as const,
-    }))
+    const getCurrentUser = vi.fn(
+      async (): Promise<OberonUser> => ({
+        id: "user-1",
+        email: "editor@example.com",
+        role: "admin",
+      }),
+    )
 
     const hasPermission = vi.fn(({ user }: { user?: { role: string } | null }) => {
       return user?.role === "admin"

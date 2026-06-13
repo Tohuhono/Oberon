@@ -172,7 +172,9 @@ export function initAdapter({
   })
 
   return {
-    getSetting: async (namespace, key) => {
+    redirect: adapter.redirect,
+    notFound: adapter.notFound,
+    getValue: async (namespace, key) => {
       return adapter.getKV(namespace, key)
     },
     /*

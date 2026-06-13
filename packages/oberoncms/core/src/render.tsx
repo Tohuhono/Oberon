@@ -1,5 +1,4 @@
 import { Render as PuckRender } from "@puckeditor/core/rsc"
-import { notFound } from "next/navigation"
 
 import { type OberonAdapter, type OberonClientConfig } from "./lib/dtd"
 import { resolveSlug } from "./lib/utils"
@@ -7,7 +6,7 @@ import { resolveSlug } from "./lib/utils"
 export async function Render({
   path = [],
   config: { components },
-  adapter: { getPageData },
+  adapter: { getPageData, notFound },
 }: {
   path?: string[]
   config: OberonClientConfig

@@ -5,16 +5,15 @@ import { Grid, GridHeading } from "@tohuhono/ui/grid"
 import { ScrollArea } from "@tohuhono/ui/scroll-area"
 import { Table } from "@tohuhono/ui/table"
 import { iterateStreamResponse } from "@tohuhono/utils"
-import { useRouter } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
 
-import { useOberonActions } from "../hooks/use-oberon"
+import { useOberonActions, useOberonNavigation } from "../hooks/use-oberon"
 import { type MigrationResult, type OberonSiteConfig, type TransformResult } from "../lib/dtd"
 
 function useMigration() {
   const { migrateData } = useOberonActions()
 
-  const router = useRouter()
+  const navigation = useOberonNavigation()
 
   const [results, setResults] = useState<TransformResult[]>()
   const [summary, setSummary] = useState<MigrationResult>()
@@ -46,7 +45,7 @@ function useMigration() {
             setSummary(result)
           }
 
-          router.refresh()
+          navigation.refresh()
         }
       } catch (error) {
         console.error(error)
