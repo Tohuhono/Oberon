@@ -3,7 +3,7 @@ import { type OberonPluginAdapter } from "../lib/dtd"
 
 export const stubbedAdapter = {
   getAuthDatabase: notImplemented("getAuthDatabase"),
-  getAuthPlugins: notImplemented("getAuthOptions"),
+  getAuthPlugins: notImplemented("getAuthPlugins"),
   getCurrentUser: notImplemented("getCurrentUser"),
   hasPermission: notImplemented("hasPermission"),
   signIn: notImplemented("signIn"),

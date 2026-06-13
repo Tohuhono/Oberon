@@ -21,7 +21,6 @@ export const plugin: OberonPlugin = () => ({
       token: string
       url: string
     }) => {
-      console.log("sending? resend")
       if (!process.env.RESEND_SECRET) {
         throw new Error("No RESEND_SECRET configured")
       }
