@@ -361,7 +361,6 @@ export type OberonPlugin = (
   version?: string
   disabled?: boolean
   handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
-  actions?: Partial<OberonAdapter>
   adapter?: Partial<OberonPluginAdapter>
   bootstrap?: (next: () => Promise<void>) => Promise<void>
 }

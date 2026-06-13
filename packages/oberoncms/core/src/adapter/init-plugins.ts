@@ -13,7 +13,6 @@ import { stubbedAdapter } from "./stubbed-adapter"
 import { getComponentTransformVersions } from "./transforms"
 
 type InititalisedPlugins = {
-  actions: Partial<OberonAdapter>
   adapter: OberonPluginAdapter
   bootstrap: () => Promise<void>
   handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>
@@ -21,7 +20,6 @@ type InititalisedPlugins = {
 }
 
 const baseAccumulator: InititalisedPlugins = {
-  actions: {},
   handlers: {},
   versions: [],
   bootstrap: async () => {},
@@ -68,7 +66,6 @@ export function initPlugins(
       version,
       disabled,
       adapter,
-      actions,
       handlers = {},
       bootstrap,
     } = plugin(accumulator.adapter, {
@@ -92,10 +89,6 @@ export function initPlugins(
       adapter: {
         ...accumulator.adapter,
         ...adapter,
-      },
-      actions: {
-        ...accumulator.actions,
-        ...(phase === "runtime" ? actions : {}),
       },
     } satisfies InititalisedPlugins
   }, baseAccumulator)

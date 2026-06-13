@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import { bootstrapOberon } from "@oberoncms/core/adapter"
 
 import { config } from "./config"

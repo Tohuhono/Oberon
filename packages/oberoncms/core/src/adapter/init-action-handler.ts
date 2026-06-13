@@ -57,11 +57,7 @@ export function createOberonActions(
   }
 }
 
-export function initActionHandler(
-  adapter: OberonAdapter,
-  // TODO: implement actions
-  _pluginActions: Partial<OberonAdapter>,
-): OberonActionSurface {
+export function initActionHandler(adapter: OberonAdapter): OberonActionSurface {
   const actions = createOberonActions(adapter)
 
   return actions
