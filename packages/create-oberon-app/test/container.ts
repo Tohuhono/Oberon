@@ -15,7 +15,10 @@ const CONTAINER_LOG_PATH = "/logs"
 const CONTAINER_PNPM_STORE_VOLUME = "oberon-coa-pnpm-store"
 const CONTAINER_PNPM_STORE_PATH = "/pnpm/store"
 
-export type ContainerName = typeof VERDACCIO_CONTAINER_NAME | typeof NEXTJS_CONTAINER_NAME
+export type ContainerName =
+  | typeof VERDACCIO_CONTAINER_NAME
+  | typeof NEXTJS_CONTAINER_NAME
+  | typeof TANSTACK_CONTAINER_NAME
 
 const VERDACCIO_CONTAINER_IMAGE = "oberon-coa-verdaccio:local"
 export const VERDACCIO_CONTAINER_NAME = "oberon-coa-verdaccio"
@@ -29,6 +32,12 @@ export const NEXTJS_APP_PORT = 3030
 export const NEXTJS_BUILD_LOG_PATH = `${CONTAINER_LOG_PATH}/nextjs-build.log`
 export const NEXTJS_SERVER_LOG_PATH = `${CONTAINER_LOG_PATH}/nextjs-server.log`
 export const NEXTJS_COA_LOG_PATH = `${CONTAINER_LOG_PATH}/nextjs-coa.log`
+
+export const TANSTACK_CONTAINER_NAME = "oberon-coa-tanstack"
+export const TANSTACK_APP_PORT = 3031
+export const TANSTACK_BUILD_LOG_PATH = `${CONTAINER_LOG_PATH}/tanstack-build.log`
+export const TANSTACK_SERVER_LOG_PATH = `${CONTAINER_LOG_PATH}/tanstack-server.log`
+export const TANSTACK_COA_LOG_PATH = `${CONTAINER_LOG_PATH}/tanstack-coa.log`
 
 const PODMAN_BASE_ARGS = ["--storage-opt", "ignore_chown_errors=true"]
 
@@ -107,6 +116,8 @@ export async function startPod() {
       `${VERDACCIO_PORT}:${VERDACCIO_PORT}`,
       "--publish",
       `${NEXTJS_APP_PORT}:${NEXTJS_APP_PORT}`,
+      "--publish",
+      `${TANSTACK_APP_PORT}:${TANSTACK_APP_PORT}`,
     ],
     { cwd: MONOREPO_ROOT },
   )
@@ -138,6 +149,25 @@ export async function startPod() {
       POD_NAME,
       "--name",
       NEXTJS_CONTAINER_NAME,
+      "--volume",
+      `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`, // Safe to share cache volume
+      "--volume",
+      `${LOCAL_LOG_PATH}:${CONTAINER_LOG_PATH}`, // Isolated logs
+      APP_CONTAINER_IMAGE,
+    ],
+    { cwd: MONOREPO_ROOT },
+  )
+
+  await execAsync(
+    "podman",
+    [
+      ...PODMAN_BASE_ARGS,
+      "run",
+      "--detach",
+      "--pod",
+      POD_NAME,
+      "--name",
+      TANSTACK_CONTAINER_NAME,
       "--volume",
       `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`, // Safe to share cache volume
       "--volume",
