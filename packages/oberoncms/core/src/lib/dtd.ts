@@ -277,14 +277,11 @@ export type OberonRoutingAdapter = {
 }
 
 export type OberonAuthAdapter = {
-  getAuthDB: () => BetterAuthOptions["database"]
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
-  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
-  getAllUsers: () => Promise<OberonUser[]>
+  getAuthDatabase: () => BetterAuthOptions["database"]
+  getAuthPlugins: () => NonNullable<BetterAuthOptions["plugins"]>
 }
 
-export type OberonBaseAdapter = {
+export type OberonDatabaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   deletePage: (key: OberonPageMeta["key"]) => Promise<void>
@@ -298,13 +295,15 @@ export type OberonBaseAdapter = {
   putKV: (namespace: string, key: string, value: JsonValue) => Promise<void>
   updatePageData: (data: OberonPage) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
+  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
+  deleteUser: (id: OberonUser["id"]) => Promise<void>
+  changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
+  getAllUsers: () => Promise<OberonUser[]>
 }
 
 export type OberonSendAdapter = {
   sendVerificationRequest: (props: { email: string; token: string; url: string }) => Promise<void>
 }
-
-export type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
 
 export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &

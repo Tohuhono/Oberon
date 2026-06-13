@@ -24,7 +24,6 @@ export const databasePlugin: OberonPlugin = () => ({
     updatePageData: notImplemented("updatePageData"),
     updateSite: notImplemented("updateSite"),
     // OberonAuthAdapter
-    getAuthDB: notImplemented("getAuthDB"),
     addUser: notImplemented("addUser"),
     changeRole: notImplemented("changeRole"),
     deleteUser: notImplemented("deleteUser"),

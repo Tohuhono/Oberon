@@ -15,7 +15,7 @@ export const plugin: OberonPlugin = (adapter, { phase } = { phase: "runtime" }) 
           redirect,
           notFound,
           getRequestHeaders: async () => new Headers(await headers()),
-          getAuthPlugins: () => [nextCookies()],
+          getAuthPlugins: () => [...adapter.getAuthPlugins(), nextCookies()],
           updatePageData: async (data) => {
             await adapter.updatePageData(data)
             revalidatePath(data.key)

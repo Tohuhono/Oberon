@@ -15,7 +15,7 @@ const secret = process.env.AUTH_SECRET
 
 const getAuth = (adapter: OberonPluginAdapter) =>
   betterAuth({
-    database: adapter.getAuthDB(),
+    database: adapter.getAuthDatabase(),
     basePath: cmsAuthBasePath,
     baseURL,
     secret,
@@ -48,6 +48,7 @@ const getAuth = (adapter: OberonPluginAdapter) =>
           })
         },
       }),
+      ...adapter.getAuthPlugins(),
     ],
   } satisfies BetterAuthOptions)
 

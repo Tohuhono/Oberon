@@ -45,7 +45,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     const validAuthCapabilityPlugin: OberonPlugin = () => ({
       name: "valid-better-auth-plugin",
       adapter: {
-        getAuthDB: () => memoryAdapter({}),
+        getAuthOptions: () => ({ database: memoryAdapter({}) }),
         sendVerificationRequest: async () => {},
       },
     })

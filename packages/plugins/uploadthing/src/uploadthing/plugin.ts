@@ -1,4 +1,4 @@
-import type { OberonBaseAdapter, OberonPlugin } from "@oberoncms/core"
+import type { OberonPlugin } from "@oberoncms/core"
 
 import { name, version } from "../../package.json" with { type: "json" }
 import { deleteImage } from "./api"
@@ -20,5 +20,5 @@ export const plugin: OberonPlugin = (adapter) => ({
         throw new AggregateError(errors, "Image deletion failed")
       }
     },
-  } satisfies Partial<OberonBaseAdapter>,
+  },
 })

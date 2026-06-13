@@ -1,14 +1,19 @@
-import { JsonValueSchema, type OberonBaseAdapter, type PageData } from "@oberoncms/core"
+import { randomUUID } from "crypto"
+
+import { JsonValueSchema, type OberonDatabaseAdapter, type PageData } from "@oberoncms/core"
+import { UserSchema } from "@oberoncms/core"
 import { and, eq } from "drizzle-orm"
+import { z } from "zod"
 
 import type { DatabaseClient } from "./client"
+import { user } from "./schema"
 import { images, kv, pages, site } from "./schema"
 
 function isPageData(value: unknown): value is PageData {
   return typeof value === "object" && value !== null && "content" in value && "root" in value
 }
 
-export const getDatabaseAdapter = (db: () => DatabaseClient): OberonBaseAdapter => ({
+export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdapter => ({
   getSite: async () => {
     const result = await db()
       .select({
@@ -115,5 +120,32 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonBaseAdapter 
       })
       .from(pages)
       .execute()
+  },
+  getAllUsers: async () => {
+    return z
+      .array(UserSchema)
+      .parse(
+        await db().select({ id: user.id, email: user.email, role: user.role }).from(user).execute(),
+      )
+  },
+  addUser: async ({ email, role }) => {
+    return UserSchema.parse(
+      await db()
+        .insert(user)
+        .values({
+          id: randomUUID(),
+          name: email,
+          email,
+          role,
+        })
+        .returning()
+        .get(),
+    )
+  },
+  deleteUser: async (id) => {
+    await db().delete(user).where(eq(user.id, id)).returning().get()
+  },
+  changeRole: async ({ role, id }) => {
+    await db().update(user).set({ role }).where(eq(user.id, id)).execute()
   },
 })
