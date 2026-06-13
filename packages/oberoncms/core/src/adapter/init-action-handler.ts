@@ -1,5 +1,4 @@
 import {
-  OberonError,
   ResponseError,
   type OberonActionSurface,
   type OberonActionTransport,
