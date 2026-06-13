@@ -50,24 +50,6 @@ export const USE_DEVELOPMENT_DATABASE_PLUGIN = resolveDevEnv(process.env.USE_DEV
 
 export const USE_DEVELOPMENT_SEND_PLUGIN = resolveDevEnv(process.env.USE_DEVELOPMENT_SEND)
 
-export async function isNotImplemented(
-  adapter: Partial<OberonPluginAdapter>,
-  methodName: keyof OberonPluginAdapter,
-): Promise<boolean> {
-  const method = adapter[methodName]
-
-  if (typeof method !== "function") {
-    return false
-  }
-
-  try {
-    await Promise.resolve(Reflect.apply(method, adapter, []))
-    return false
-  } catch (error) {
-    return error instanceof NotImplementedError
-  }
-}
-
 export function notImplemented(action: string) {
   return (): never => {
     throw new NotImplementedError(
