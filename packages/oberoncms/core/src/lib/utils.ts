@@ -1,4 +1,4 @@
-import { NotImplementedError, type ClientAction, type OberonPluginAdapter } from "./dtd"
+import { NotImplementedError, type ClientAction } from "./dtd"
 
 export function getTitle(action: ClientAction, slug?: string) {
   switch (action) {
