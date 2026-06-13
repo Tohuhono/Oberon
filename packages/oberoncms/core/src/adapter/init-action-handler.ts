@@ -31,7 +31,7 @@ export async function defaultTransport<T>(promise: Promise<T>): OberonResponse<T
   }
 }
 
-export function createOberonActions(
+function createOberonActions(
   adapter: OberonAdapter,
   transport: OberonActionTransport = defaultTransport,
 ): OberonActionSurface {
