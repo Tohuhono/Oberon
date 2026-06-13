@@ -1,5 +1,4 @@
 import { describe, expect, it } from "@dev/vitest"
-import { memoryAdapter } from "better-auth/adapters/memory"
 
 import { authPlugin } from "../auth"
 import { NotImplementedError, type OberonPlugin } from "../lib/dtd"
@@ -45,7 +44,6 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     const validAuthCapabilityPlugin: OberonPlugin = () => ({
       name: "valid-better-auth-plugin",
       adapter: {
-        getAuthOptions: () => ({ database: memoryAdapter({}) }),
         sendVerificationRequest: async () => {},
       },
     })

@@ -20,14 +20,11 @@ export async function defaultTransport<T>(promise: Promise<T>): OberonResponse<T
         message: error.message,
       }
     }
-    if (error instanceof OberonError) {
-      console.error(error)
-      return {
-        status: "error",
-        message: "An unexpected error occurred",
-      }
+    console.error(error)
+    return {
+      status: "error",
+      message: "An unexpected error occured",
     }
-    throw error
   }
 }
 
