@@ -7,15 +7,13 @@
   - Shared config + typed test helper: `@dev/vitest`
 - **E2E tests**: Playwright, `@dev/playwright` package (`dev/playwright/`)
   - Run locally (full): `pnpm test:e2e`
-  - Run playground `@tdd` lane locally: `pnpm test:tdd`
+  - Run playground authenticated CMS and `@tdd` coverage through the full e2e lane: `pnpm test:e2e`
   - Run full PR validation from repo root: `pnpm validate`
   - Run locally/CI (deployed smoke):
     `PLAYWRIGHT_BASE_URL=<deployment-url> pnpm test:smoke -- --project <docs|playground>`
   - Shared config: `dev/playwright/base.config.ts`
   - Deployed smoke config: `dev/playwright/playwright.config.ts`
-  - Playground TDD config: `apps/playground/playwright.tdd.config.ts`
   - Shared CMS happy path specs: `dev/playwright/cms/**/*.spec.ts`
-  - Shared TDD specs: `dev/playwright/tdd/**/*.spec.ts`
   - Host smoke specs: `apps/{documentation,playground}/test/**/*.spec.ts`
 
 ## Unit test scope
@@ -85,10 +83,10 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 
 - Shared Playwright lane constants live in `@dev/playwright/projects`
 - Directory split is part of the contract
-  - `dev/playwright/cms/**/*.spec.ts` is for shared `@cms` contract coverage
-  - `dev/playwright/tdd/**/*.spec.ts` is for opt-in `@tdd` red/green coverage
-  - do not place `@tdd` specs under `dev/playwright/cms`
-  - do not place shared `@cms` contract specs under `dev/playwright/tdd`
+  - `dev/playwright/cms/**/*.spec.ts` is for shared authenticated CMS contract coverage, including
+    current `@tdd` red/green coverage
+  - create a dedicated `dev/playwright/tdd/**/*.spec.ts` lane only when the package scripts and app
+    Playwright config are wired to execute it
 - Treat lane constants as fixed canonical defaults
   - consumers compose from shared constants in app/package configs
   - do not mutate shared constant values directly
@@ -114,7 +112,6 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
   commit/review, `pnpm validate` is the completion gate
 - The only narrower routine exceptions are from repo root only:
   - `pnpm install`
-  - `pnpm test:tdd --grep '...'`
   - `pnpm test:unit ...`
   - `pnpm test:coa`
 - Reproduction must stay inside the approved test-script allowlist
@@ -125,19 +122,21 @@ If a function needs Next.js or React to run, it is not a unit test candidate.
 - If creating or extending that test path is not possible within the current repo workflow, stop and
   ask before doing anything else
 
-## TDD grep workflow
+## TDD e2e workflow
 
-Use the root playground TDD commands and add grep filters after `--`:
+Current `@tdd` Playwright coverage runs through the normal playground authenticated e2e lane.
 
-- Run all TDD coverage: `pnpm test:tdd`
-- Run all current `@tdd` specs: `pnpm test:tdd -- --grep '@tdd'`
-- Run a feature slice: `pnpm test:tdd -- --grep '@tdd.*@pages'`
-- Run a feature slice for one issue: `pnpm test:tdd -- --grep '@tdd.*@pages.*@issue-308'`
-- Open the same feature slice in UI mode: `pnpm test:tdd:ui -- --grep '@tdd.*@pages'`
+- Run current browser coverage: `pnpm test:e2e`
+- Bypass Turbo cache when investigating flakes: `pnpm test:e2e --force`
+- Stress a suspected flake with Playwright repeats: `pnpm test:e2e --force -- --repeat-each=2`
 
-Current repo examples:
+Do not use root `pnpm test:e2e -- --grep '...'` as a narrow workflow while the root e2e script
+targets both documentation and playground apps: the grep is forwarded to documentation too, and
+Playwright fails that package with "No tests found" when the match only exists in playground.
 
-- `@tdd @pages @issue-308` in `dev/playwright/tdd/tdd-pages.spec.ts`
+If narrow playground-only TDD execution is needed again, first add the missing package script/config
+so the approved root `pnpm test:tdd` command executes Playwright tests rather than only building the
+playground.
 
 ## Current candidates
 

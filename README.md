@@ -33,10 +33,6 @@ pnpm test:coa # Run create-oberon-app containerized smoke e2e (Podman, Linux)
 
 pnpm test:smoke # Run e2e smoke tests (CI subset)
 
-pnpm test:tdd # Run the opt-in CMS red/green lane in the Playground
-
-pnpm test:tdd:ui # Open the opt-in CMS red/green lane in Playwright UI
-
 pnpm validate # Run the full root validation surface for PR work
 
 pnpm change # Add a changset entry
