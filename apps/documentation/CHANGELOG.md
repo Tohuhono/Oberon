@@ -1,5 +1,27 @@
 # @oberon/docs
 
+## 0.13.0
+
+### Minor Changes
+
+- 4b794ca: Moved nextjs caching into the new nextjs plugin
+
+### Patch Changes
+
+- 7e48e64: Add follow-up updates for the Next.js decoupling work across docs and playground
+  examples, and align SQLite/PostgreSQL adapters and plugin integration tests with the new core
+  handler boundaries.
+- 6d9ef5d: Add ubiquitous language and update skills and documentation
+- 929bc33: Moved from prettier and eslint to oxc
+- 5ff8413: Adds support for multiple recipes in create-oberon-app
+- Updated dependencies [4b794ca]
+- Updated dependencies [7e48e64]
+- Updated dependencies [929bc33]
+- Updated dependencies [5ff8413]
+  - @tohuhono/puck-blocks@0.15.0
+  - @oberoncms/core@0.20.0
+  - @oberoncms/plugin-nextjs@0.2.0
+
 ## 0.12.1
 
 ### Patch Changes

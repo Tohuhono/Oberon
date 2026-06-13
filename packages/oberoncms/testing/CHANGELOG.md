@@ -1,5 +1,23 @@
 # @oberoncms/testing
 
+## 0.3.0
+
+### Minor Changes
+
+- 4b794ca: Moved nextjs caching into the new nextjs plugin
+
+### Patch Changes
+
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [4b794ca]
+- Updated dependencies [7e48e64]
+- Updated dependencies [7e48e64]
+- Updated dependencies [929bc33]
+- Updated dependencies [5ff8413]
+  - @oberoncms/core@0.20.0
+  - @oberoncms/sqlite@0.8.2
+  - @dev/vitest@0.2.1
+
 ## 0.2.1
 
 ### Patch Changes

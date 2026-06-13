@@ -1,6 +1,6 @@
 {
   "name": "@tohuhono/ui",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "A UI library used by @tohuhono and @oberoncms packages",
   "license": "MIT",
   "author": "Tohuhono ltd",

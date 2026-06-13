@@ -1,5 +1,27 @@
 # oberon-cms-example
 
+## 0.18.0
+
+### Minor Changes
+
+- 4b794ca: Moved nextjs caching into the new nextjs plugin
+
+### Patch Changes
+
+- 7e48e64: Remove Next.js from `@oberoncms/core`. The Next.js integration now provides the
+  Next-specific server and client framework capabilities, while shared UI Link and Image providers
+  keep core rendering framework-neutral. Updated the Next recipe and create-oberon-app wiring for
+  the new runtime shape, and moved handler boundaries to standard `Request` types where needed.
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [4b794ca]
+- Updated dependencies [7e48e64]
+- Updated dependencies [7e48e64]
+- Updated dependencies [929bc33]
+- Updated dependencies [5ff8413]
+  - @oberoncms/plugin-development@0.9.0
+  - @oberoncms/core@0.20.0
+  - @oberoncms/plugin-nextjs@0.2.0
+
 ## 0.17.1
 
 ### Patch Changes
