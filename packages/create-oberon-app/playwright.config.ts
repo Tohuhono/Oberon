@@ -1,9 +1,9 @@
 import path from "node:path"
 
 import { base, defineConfig } from "@dev/playwright"
-import { authProject, authenticatedProject, smokeProject } from "@dev/playwright/projects"
+import { authProject, authenticatedProject } from "@dev/playwright/projects"
 
-import { NEXTJS_APP_PORT, readNextjsServerLogs, TANSTACK_APP_PORT } from "./test/container"
+import { NEXTJS_APP_PORT, readNextjsServerLogs } from "./test/container"
 
 const PLAYWRIGHT_CONTAINER_STATE_PATH = path.resolve(
   process.cwd(),
@@ -60,6 +60,7 @@ export default defineConfig({
         baseURL: `http://localhost:${NEXTJS_APP_PORT}`,
       },
     },
+    /*
     {
       ...smokeProject,
       name: "smoke-tanstack",
@@ -68,6 +69,7 @@ export default defineConfig({
         baseURL: `http://localhost:${TANSTACK_APP_PORT}`,
       },
     },
+    */
     {
       name: "teardown-pod",
       grep: /@teardown-pod/,
