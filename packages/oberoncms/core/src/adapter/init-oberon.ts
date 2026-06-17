@@ -10,7 +10,7 @@ import { initHandler } from "./init-handler"
 import { initPlugins } from "./init-plugins"
 
 export function initOberon({ client, plugins }: OberonConfig): {
-  handler: OberonHandler<{ path: string[] }>
+  handler: OberonHandler<{ path?: string[] | string }>
   adapter: OberonAdapter
   actionHandler: OberonActionSurface
 } {

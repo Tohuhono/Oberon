@@ -212,3 +212,9 @@ export async function readNextjsServerLogs() {
     cwd: LOCAL_LOG_PATH,
   })
 }
+
+export async function readTanstackServerLogs() {
+  return execAsync("cat", ["tanstack-server.log"], {
+    cwd: LOCAL_LOG_PATH,
+  })
+}
