@@ -51,6 +51,14 @@ function getAliasedPlugins(plugins: Plugin[], recipe: Recipe) {
     })
   }
 
+  if (recipe === "tanstack") {
+    aliasedPlugins.push({
+      packageName: "@oberoncms/plugin-tanstack",
+      type: "tanstack",
+      alias: "tanstackPlugin",
+    })
+  }
+
   return aliasedPlugins
 }
 

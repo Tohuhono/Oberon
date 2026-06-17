@@ -178,6 +178,30 @@
       ],
       "outputs": [".playwright"]
     },
+    "test:coa:nextjs": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
+      "outputs": [".playwright"]
+    },
+    "test:coa:tanstack": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
+      "outputs": [".playwright"]
+    },
     "test:coa:ui": {
       "cache": false,
       "persistent": true,
