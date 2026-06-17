@@ -8,19 +8,19 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { Route as SplatRouteImport } from "./routes/$"
 import { Route as rootRouteImport } from "./routes/__root"
 import { Route as CmsRouteImport } from "./routes/cms"
 import { Route as CmsApiSplatRouteImport } from "./routes/cms/api/$"
-import { Route as IndexRouteImport } from "./routes/index"
 
 const CmsRoute = CmsRouteImport.update({
   id: "/cms",
   path: "/cms",
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+const SplatRoute = SplatRouteImport.update({
+  id: "/$",
+  path: "/$",
   getParentRoute: () => rootRouteImport,
 } as any)
 const CmsApiSplatRoute = CmsApiSplatRouteImport.update({
@@ -30,31 +30,31 @@ const CmsApiSplatRoute = CmsApiSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute
+  "/$": typeof SplatRoute
   "/cms": typeof CmsRouteWithChildren
   "/cms/api/$": typeof CmsApiSplatRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute
+  "/$": typeof SplatRoute
   "/cms": typeof CmsRouteWithChildren
   "/cms/api/$": typeof CmsApiSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  "/": typeof IndexRoute
+  "/$": typeof SplatRoute
   "/cms": typeof CmsRouteWithChildren
   "/cms/api/$": typeof CmsApiSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/cms" | "/cms/api/$"
+  fullPaths: "/$" | "/cms" | "/cms/api/$"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/cms" | "/cms/api/$"
-  id: "__root__" | "/" | "/cms" | "/cms/api/$"
+  to: "/$" | "/cms" | "/cms/api/$"
+  id: "__root__" | "/$" | "/cms" | "/cms/api/$"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
   CmsRoute: typeof CmsRouteWithChildren
 }
 
@@ -67,11 +67,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof CmsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    "/": {
-      id: "/"
-      path: "/"
-      fullPath: "/"
-      preLoaderRoute: typeof IndexRouteImport
+    "/$": {
+      id: "/$"
+      path: "/$"
+      fullPath: "/$"
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     "/cms/api/$": {
@@ -95,7 +95,7 @@ const CmsRouteChildren: CmsRouteChildren = {
 const CmsRouteWithChildren = CmsRoute._addFileChildren(CmsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
   CmsRoute: CmsRouteWithChildren,
 }
 export const routeTree = rootRouteImport

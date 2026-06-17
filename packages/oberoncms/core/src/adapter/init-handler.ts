@@ -3,19 +3,20 @@ import type { OberonMethod, OberonHandler, OberonAdapter } from "../lib/dtd"
 function handle<TMethod extends OberonMethod = OberonMethod>(
   method: TMethod,
   handlers: Record<string, OberonHandler>,
-): OberonHandler<{ path: string[] }>[TMethod] {
+): OberonHandler<{ path?: string[] | string }>[TMethod] {
   return async (request: Request, { params }) => {
     const { path = [] } = await params
-    const action = path?.[0]
+
+    const action = typeof path === "string" ? path.split("/")[0] : path?.[0]
 
     if (!action) {
-      return new Response("", { status: 404 })
+      return Response.json({}, { status: 404 })
     }
 
     const handler = handlers[action]?.[method]
 
     if (!handler) {
-      return new Response("", { status: 405 })
+      return Response.json({}, { status: 405 })
     }
 
     return handler(request)

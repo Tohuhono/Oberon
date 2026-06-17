@@ -19,7 +19,8 @@ test.describe("TanStack Playground Smoke Tests", { tag: "@smoke" }, () => {
   })
 
   test("unknown public route returns not found", async ({ page }) => {
-    await page.goto("/nonexistent-page-xyz")
+    const response = await page.goto("/nonexistent-page-xyz")
+    expect(response?.status()).toBe(404)
     await expect(page.getByText("404 - page not found")).toBeVisible()
   })
 })

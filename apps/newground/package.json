@@ -14,7 +14,7 @@
     "format:check": "oxfmt --check .",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "prebuild": "tsx ./oberon/prebuild.ts",
+    "prebuild": "tsx ./src/oberon/prebuild.ts",
     "preview": "vite preview --host localhost --strictPort",
     "start": "vite preview --strictPort",
     "test:e2e": "playwright test",

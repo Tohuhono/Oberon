@@ -17,12 +17,8 @@ const APP_DB_PATH = path.resolve(APP_DB_DIR, "oberon.db")
 
 const AUTH_SECRET = "playwright-test-auth-secret"
 
-async function readNextjsLogs() {
-  try {
-    return await readFile(APP_LOG_PATH, "utf8")
-  } catch {
-    return ""
-  }
+async function readTanstackLogs() {
+  return await readFile(APP_LOG_PATH, "utf8")
 }
 
 export default defineConfig({
@@ -56,7 +52,7 @@ export default defineConfig({
     ...base.use,
     baseURL: "http://localhost:3220",
     serverLog: {
-      read: readNextjsLogs,
+      read: readTanstackLogs,
     },
   },
   projects: [

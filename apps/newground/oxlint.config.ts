@@ -1,1 +1,1 @@
-export { default } from "@dev/oxlint/nextjs"
+export { default } from "@dev/oxlint/tanstack"
