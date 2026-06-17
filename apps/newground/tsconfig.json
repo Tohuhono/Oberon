@@ -1,0 +1,13 @@
+{
+  "extends": "@dev/typescript",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "rootDir": ".",
+    "paths": {
+      "#/*": ["./src/*"]
+    },
+    "types": ["vite/client"]
+  },
+  "include": ["src", "test", "*.ts"],
+  "exclude": ["node_modules"]
+}

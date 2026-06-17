@@ -1,6 +1,6 @@
 "use client"
 
-import dynamic from "next/dynamic"
+import { dynamic } from "@tohuhono/ui/dynamic"
 
 export const CardsActivityGoal = dynamic(
   () => import("../components/cards/activity-goal").then((m) => m.CardsActivityGoal),

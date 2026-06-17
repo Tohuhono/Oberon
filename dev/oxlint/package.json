@@ -14,6 +14,7 @@
     "base.config.ts",
     "react.config.ts",
     "nextjs.config.ts",
+    "tanstack.config.ts",
     "oxlints.custom.mjs"
   ],
   "type": "module",
@@ -27,6 +28,9 @@
     "./nextjs": {
       "default": "./nextjs.config.ts"
     },
+    "./tanstack": {
+      "default": "./nextjs.config.ts"
+    },
     "./plugin": {
       "default": "./oxlint.custom.mjs"
     }
@@ -36,6 +40,7 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
+    "@tanstack/eslint-config": "^0.4.0",
     "eslint-plugin-better-tailwindcss": "^4.5.0",
     "oxlint": "^1.67.0"
   },

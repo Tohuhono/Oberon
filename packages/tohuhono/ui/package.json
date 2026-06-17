@@ -30,6 +30,7 @@
     "./date": "./dist/date.js",
     "./dropdown-menu": "./dist/dropdown-menu.js",
     "./dialog": "./dist/dialog.js",
+    "./dynamic": "./dist/dynamic.js",
     "./form": "./dist/form.js",
     "./grid": "./dist/grid.js",
     "./image": "./dist/image.js",

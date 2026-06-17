@@ -51,6 +51,14 @@ function getAliasedPlugins(plugins: Plugin[], recipe: Recipe) {
     })
   }
 
+  if (recipe === "tanstack") {
+    aliasedPlugins.push({
+      packageName: "@oberoncms/plugin-tanstack",
+      type: "tanstack",
+      alias: "tanstackPlugin",
+    })
+  }
+
   return aliasedPlugins
 }
 
@@ -71,6 +79,7 @@ const createConfig = (plugins: Plugin[], recipe: Recipe) => {
     // Development plugin should be first
     "developmentPlugin",
     ...aliasedPlugins.map(({ alias }) => alias),
+    // Auth plugin should be last
     "authPlugin",
   ]
 

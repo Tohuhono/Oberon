@@ -1,5 +1,5 @@
 import type { OberonComponent } from "@oberoncms/core"
-import Link from "next/link"
+import { Link } from "@tohuhono/ui/link"
 
 export const Welcome = {
   render: () => {

@@ -4,7 +4,13 @@ import { exec } from "child_process"
 import { writeFile, mkdir } from "fs/promises"
 
 import fg from "fast-glob"
-import { type ResolveOptions, createLogger, defineConfig, type Plugin as VitePlugin } from "vite"
+import {
+  type ResolveOptions,
+  type Rolldown,
+  createLogger,
+  defineConfig,
+  type Plugin as VitePlugin,
+} from "vite"
 import { externalizeDeps } from "vite-plugin-externalize-deps"
 
 function dts(): VitePlugin {
@@ -70,10 +76,17 @@ function parseEntryPoints(entryPoints: string[] = ["src/*.ts"]) {
   return Object.fromEntries(entities)
 }
 
-export function initConfig(
-  entryPoints: string[] = ["src/*.ts", "src/*.tsx"],
-  resolve?: ResolveOptions,
-) {
+export function initConfig({
+  entryPoints = ["src/*.ts", "src/*.tsx"],
+  plugins = [],
+  external,
+  resolve,
+}: {
+  entryPoints?: string[]
+  plugins?: VitePlugin[]
+  external?: Rolldown.ExternalOption
+  resolve?: ResolveOptions
+} = {}) {
   const logger = createLogger()
 
   return defineConfig({
@@ -89,7 +102,7 @@ export function initConfig(
       },
     },
     resolve,
-    plugins: [externalizeDeps(), dts(), watchFile()],
+    plugins: [...plugins, externalizeDeps(), dts(), watchFile()],
     build: {
       minify: false,
       lib: {
@@ -99,6 +112,7 @@ export function initConfig(
       },
       emptyOutDir: false,
       rolldownOptions: {
+        external,
         output: {
           preserveModules: true,
           preserveModulesRoot: "src",
