@@ -28,7 +28,8 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./provider": "./dist/provider.js"
+    "./provider": "./dist/provider.js",
+    "./provider/client": "./dist/provider.client.js"
   },
   "publishConfig": {
     "access": "public"
@@ -46,6 +47,7 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
+    "@tanstack/start-server-core": "1.169.14",
     "better-auth": "^1.6.3"
   },
   "devDependencies": {

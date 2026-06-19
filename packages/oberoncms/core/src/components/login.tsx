@@ -6,7 +6,7 @@ import { Input } from "@tohuhono/ui/input"
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@tohuhono/ui/input-otp"
 import { toast } from "@tohuhono/ui/toast"
 import { cn } from "@tohuhono/utils"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useDebouncedCallback } from "use-debounce"
 import { z } from "zod"
@@ -42,6 +42,15 @@ export function Login({
   const [sending, setSending] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [sent, setSent] = useState(!!email && !!token)
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
+    setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    setSent(!!email && !!token)
+  }, [email, token])
 
   const debouncedSetSending = useDebouncedCallback((loading: boolean) => setSending(loading), 3000)
 
@@ -101,7 +110,7 @@ export function Login({
               <FormItem>
                 <FormLabel>{form.formState.errors.email?.message ?? "Email adress"}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={!hydrated} />
                 </FormControl>
               </FormItem>
             )}
@@ -129,13 +138,13 @@ export function Login({
             )}
           />
           {!sent && (
-            <Button disabled={sending} variant="default" onClick={sendOnCLick}>
+            <Button disabled={!hydrated || sending} variant="default" onClick={sendOnCLick}>
               Sign in
             </Button>
           )}
 
           <Button
-            disabled={submitting}
+            disabled={!hydrated || submitting}
             className={cn(
               "pt-2",
               sent ? "visible animate-fade-in" : "collapse",
@@ -147,7 +156,7 @@ export function Login({
           </Button>
 
           <Button
-            disabled={sending}
+            disabled={!hydrated || sending}
             className={cn(
               "animate-fade-in-half duration-1000",
               sent ? "visible" : "collapse",

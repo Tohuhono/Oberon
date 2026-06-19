@@ -3,7 +3,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { base, defineConfig } from "@dev/playwright"
-import { smokeProject } from "@dev/playwright/projects"
+import { authProject, authenticatedProject, smokeProject } from "@dev/playwright/projects"
 
 const PLAYWRIGHT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".playwright")
 
@@ -57,9 +57,7 @@ export default defineConfig({
   },
   projects: [
     { ...smokeProject, testDir: "./test" },
-    /*
     { ...authProject, grepInvert: /@docs/ },
-    { ...authenticatedProject, grepInvert: /@docs/ },
-     */
+    { ...authenticatedProject, grep: /@login/, grepInvert: /@docs/ },
   ],
 })

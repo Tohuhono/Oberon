@@ -74,6 +74,24 @@ export async function OberonProvider({
   searchParams: { [key: string]: string | string[] | undefined }
   ClientProvider?: typeof OberonClientProvider
 }>) {
+  const context = await resolveOberonClientContext({ adapter, path, searchParams })
+
+  return (
+    <ClientProvider serverActions={actions} context={context}>
+      {children}
+    </ClientProvider>
+  )
+}
+
+export async function resolveOberonClientContext({
+  adapter,
+  path,
+  searchParams,
+}: {
+  adapter: OberonAdapter
+  path: string[]
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   const action = parseClientAction(path[0])
 
   if (!action) {
@@ -92,11 +110,5 @@ export async function OberonProvider({
     adapter.redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
   }
 
-  const context = await getContext(adapter, action, slug, searchParams)
-
-  return (
-    <ClientProvider serverActions={actions} context={context}>
-      {children}
-    </ClientProvider>
-  )
+  return await getContext(adapter, action, slug, searchParams)
 }

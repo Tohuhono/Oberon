@@ -1,9 +1,17 @@
-import { resolveSlug } from "@oberoncms/core"
 import { Render } from "@puckeditor/core"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, notFound } from "@tanstack/react-router"
+import { createServerFn } from "@tanstack/react-start"
 
-import { adapter } from "#/oberon/adapter"
 import { clientConfig } from "#/oberon/client.config"
+
+const getPageData = createServerFn({ method: "GET" })
+  .validator((data: { path: string | undefined }) => data)
+  .handler(async ({ data }) => {
+    const { resolveSlug } = await import("@oberoncms/core")
+    const { adapter } = await import("#/oberon/adapter")
+
+    return await adapter.getPageData(resolveSlug(data.path))
+  })
 
 function Oberon() {
   const data = Route.useLoaderData()
@@ -13,12 +21,10 @@ function Oberon() {
 
 export const Route = createFileRoute("/$")({
   loader: async ({ params }) => {
-    const path = params._splat
-    const slug = resolveSlug(path)
-    const data = await adapter.getPageData(slug)
+    const data = await getPageData({ data: { path: params._splat } })
 
     if (!data) {
-      return adapter.notFound()
+      throw notFound()
     }
 
     return data

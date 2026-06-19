@@ -13,6 +13,7 @@ const config = defineConfig({
       prerender: {
         enabled: true,
         crawlLinks: true,
+        filter: (page) => !page.path.startsWith("/cms"),
       },
     }),
     viteReact(),

@@ -1,18 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router"
 
-import { handler } from "#/oberon/adapter"
-
 export const Route = createFileRoute("/cms/api/$")({
   server: {
     handlers: {
-      GET: ({ params: { _splat }, request }) => handler.GET(request, { params: { path: _splat } }),
-      POST: ({ params: { _splat }, request }) =>
-        handler.POST(request, { params: { path: _splat } }),
-      PUT: ({ params: { _splat }, request }) => handler.PUT(request, { params: { path: _splat } }),
-      PATCH: ({ params: { _splat }, request }) =>
-        handler.PATCH(request, { params: { path: _splat } }),
-      DELETE: ({ params: { _splat }, request }) =>
-        handler.DELETE(request, { params: { path: _splat } }),
+      GET: async ({ params: { _splat }, request }) => {
+        const { handler } = await import("#/oberon/adapter")
+        return handler.GET(request, { params: { path: _splat } })
+      },
+      POST: async ({ params: { _splat }, request }) => {
+        const { handler } = await import("#/oberon/adapter")
+        return handler.POST(request, { params: { path: _splat } })
+      },
+      PUT: async ({ params: { _splat }, request }) => {
+        const { handler } = await import("#/oberon/adapter")
+        return handler.PUT(request, { params: { path: _splat } })
+      },
+      PATCH: async ({ params: { _splat }, request }) => {
+        const { handler } = await import("#/oberon/adapter")
+        return handler.PATCH(request, { params: { path: _splat } })
+      },
+      DELETE: async ({ params: { _splat }, request }) => {
+        const { handler } = await import("#/oberon/adapter")
+        return handler.DELETE(request, { params: { path: _splat } })
+      },
     },
   },
 })

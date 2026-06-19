@@ -1,11 +1,52 @@
 import { type OberonPlugin } from "@oberoncms/core"
 import { redirect, notFound } from "@tanstack/react-router"
 import { getRequest } from "@tanstack/react-start/server"
-import { tanstackStartCookies } from "better-auth/tanstack-start"
+import { createAuthMiddleware } from "better-auth/api"
+import { parseSetCookieHeader } from "better-auth/cookies"
 
 import { name, version } from "../package.json" with { type: "json" }
 
 const cache = <TProps, T>(f: (...props: TProps[]) => T, ..._rest: unknown[]) => f
+
+const tanstackStartCookies = () => ({
+  id: "tanstack-start-cookies",
+  version,
+  hooks: {
+    after: [
+      {
+        matcher: () => true,
+        handler: createAuthMiddleware(async (ctx) => {
+          const returned = ctx.context.responseHeaders
+          if ("_flag" in ctx && ctx._flag === "router") return
+          if (!(returned instanceof Headers)) return
+
+          const setCookies = returned.get("set-cookie")
+          if (!setCookies) return
+
+          const parsed = parseSetCookieHeader(setCookies)
+          const { setCookie } = await import(
+            /* @vite-ignore */ "@tanstack/start-server-core/request-response"
+          )
+          parsed.forEach((value, key) => {
+            if (!key) return
+            try {
+              setCookie(key, value.value, {
+                sameSite: value.samesite,
+                secure: value.secure,
+                maxAge: value["max-age"],
+                httpOnly: value.httponly,
+                domain: value.domain,
+                path: value.path,
+              })
+            } catch {
+              return
+            }
+          })
+        }),
+      },
+    ],
+  },
+})
 
 export const plugin: OberonPlugin = (adapter, { phase } = { phase: "runtime" }) => ({
   name,

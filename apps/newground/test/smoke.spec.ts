@@ -7,10 +7,11 @@ test.describe("TanStack Playground Smoke Tests", { tag: "@smoke" }, () => {
     await expect(page.getByRole("heading", { name: "Welcome to OberonCMS" })).toBeVisible()
   })
 
-  test("CMS route returns not found until the provider slice", async ({ page }) => {
+  test("CMS route reaches the login flow", async ({ page }) => {
     const response = await page.goto("/cms")
-    expect(response?.status()).toBe(404)
-    await expect(page.getByText("404 - page not found")).toBeVisible()
+    expect(response?.status()).toBe(200)
+    await expect.poll(() => new URL(page.url()).pathname).toBe("/cms/login")
+    expect(new URL(page.url()).searchParams.get("callbackUrl")).toBe("/cms/pages")
   })
 
   test("CMS API route reaches the Oberon handler", async ({ request }) => {

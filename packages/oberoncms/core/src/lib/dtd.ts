@@ -381,8 +381,8 @@ export type OberonServerActions = {
   addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse
-  deleteImage: (key: OberonImage["key"]) => OberonResponse
+  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<void>
+  deleteImage: (key: OberonImage["key"]) => OberonResponse<void>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
   ) => OberonResponse<Pick<OberonUser, "id"> | null>
@@ -397,9 +397,9 @@ export type OberonServerActions = {
   getConfig: () => OberonResponse<OberonSiteConfig>
   getPageData: (key: OberonPageMeta["key"]) => OberonResponse<Data | null>
   migrateData: () => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse
-  signIn: (data: { email: string }) => OberonResponse
-  signOut: () => OberonResponse
+  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ message: string }>
+  signIn: (data: { email: string }) => OberonResponse<void>
+  signOut: () => OberonResponse<void>
 }
 
 export type OberonAction<TProps extends unknown[] = never[], TResult = unknown> = (

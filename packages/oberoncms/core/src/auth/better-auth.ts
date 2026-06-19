@@ -119,6 +119,7 @@ export const authPlugin: OberonPlugin = (adapter) => {
       signIn: async ({ email }) => {
         await authServer().api.sendVerificationOTP({
           body: { email, type: "sign-in" },
+          headers: await adapter.getRequestHeaders(),
         })
       },
     } satisfies Partial<OberonPluginAdapter>,
