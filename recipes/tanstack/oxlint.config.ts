@@ -4,9 +4,6 @@ import { defineConfig } from "oxlint"
 export default defineConfig({
   plugins: ["typescript", "unicorn"],
   jsPlugins: ["./oxlint.custom.mjs", "eslint-plugin-better-tailwindcss"],
-  categories: {
-    correctness: "off",
-  },
   env: {
     builtin: true,
     node: true,

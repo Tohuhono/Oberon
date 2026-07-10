@@ -6,7 +6,7 @@
   "scripts": {
     "build": "next build",
     "clean": "odt clean",
-    "dev": "next dev --turbo",
+    "dev": "next dev --turbo --port 3030",
     "format": "oxfmt \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
     "format:check": "oxfmt --check \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
     "lint": "oxlint",

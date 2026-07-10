@@ -10,7 +10,7 @@ function normalizeEmail(email: string): string {
 }
 
 const cmsAuthBasePath = "/cms/api/auth"
-const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000"
+const baseURL = process.env.BETTER_AUTH_URL || process.env.BASE_URL
 const secret = process.env.AUTH_SECRET
 
 const getAuth = (adapter: OberonPluginAdapter) =>
@@ -37,7 +37,7 @@ const getAuth = (adapter: OberonPluginAdapter) =>
             return
           }
 
-          const loginUrl = new URL("/cms/login", ctx?.context.baseURL)
+          const loginUrl = new URL("/cms/login", ctx?.context.baseURL || "")
           loginUrl.searchParams.set("email", email)
           loginUrl.searchParams.set("token", otp)
 

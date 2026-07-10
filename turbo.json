@@ -22,7 +22,7 @@
   "globalDependencies": [".github/workflows/**"],
   "futureFlags": {
     "watchUsingTaskInputs": true,
-    "errorsOnlyShowHash": true
+    "errorsOnlyShowHash": false
   },
   "tasks": {
     "prebuild": {
@@ -250,8 +250,6 @@
         "!.oberon/**",
         "!.turbo/**",
         "!.next/**",
-        ".next/types/**",
-        "next-env.d.ts",
         "!.playwright/**"
       ],
       "outputs": []

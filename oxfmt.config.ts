@@ -4,6 +4,6 @@ export default defineConfig({
   semi: false,
   trailingComma: "all",
   proseWrap: "always",
-  ignorePatterns: ["*.d.ts", "**/meta/**"],
+  ignorePatterns: ["*.d.ts", "*.gen.ts", "**/meta/**"],
   sortImports: true,
 })

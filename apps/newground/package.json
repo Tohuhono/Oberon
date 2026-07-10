@@ -39,6 +39,7 @@
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
+    "@dev/oxlint": "workspace:*",
     "@dev/playwright": "workspace:*",
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/devtools-vite": "^0.7.0",
@@ -46,8 +47,7 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "oxfmt": "^0.51.0",
-    "oxlint": "^1.67.0",
+    "eslint-plugin-better-tailwindcss": "^4.5.0",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "5.9.3",

@@ -10,6 +10,7 @@ import {
   COA_APP_DIR,
   execInContainer,
   NEXTJS_APP_PORT,
+  NEXTJS_BASE_URL,
   NEXTJS_BUILD_LOG_PATH,
   NEXTJS_COA_LOG_PATH,
   NEXTJS_CONTAINER_NAME,
@@ -17,6 +18,7 @@ import {
   startPod,
   stopPod,
   TANSTACK_APP_PORT,
+  TANSTACK_BASE_URL,
   TANSTACK_BUILD_LOG_PATH,
   TANSTACK_COA_LOG_PATH,
   TANSTACK_CONTAINER_NAME,
@@ -110,7 +112,7 @@ test.describe.serial("Initialise Tanstack", { tag: "@initialise-tanstack" }, () 
       ),
     ).resolves.not.toThrow()
 
-    await expect(waitForServer(`http://127.0.0.1:${TANSTACK_APP_PORT}`)).resolves.toBeTruthy()
+    await expect(waitForServer(TANSTACK_BASE_URL)).resolves.toBeTruthy()
   })
 })
 
@@ -159,7 +161,7 @@ test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
       }),
     ).resolves.not.toThrow()
 
-    await expect(waitForServer(`http://localhost:${NEXTJS_APP_PORT}`)).resolves.toBeTruthy()
+    await expect(waitForServer(NEXTJS_BASE_URL)).resolves.toBeTruthy()
   })
 })
 

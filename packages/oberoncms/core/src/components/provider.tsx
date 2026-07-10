@@ -15,15 +15,6 @@ import type {
   OberonContext,
 } from "../lib/dtd"
 
-function hasMessage(value: unknown): value is { message: string } {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "message" in value &&
-    typeof value.message === "string"
-  )
-}
-
 function unwrapServerAction<TProps extends unknown[], TResult>(
   key: keyof OberonServerActions,
   action: (...props: TProps) => OberonResponse<TResult>,
@@ -31,30 +22,20 @@ function unwrapServerAction<TProps extends unknown[], TResult>(
   return async (...props) => {
     const response = await action(...props)
 
-    console.log(
-      // oxlint-disable-next-line tohuhono/no-type-assertion-except-object-keys typescript/no-explicit-any TODO: debug response message
-      `** TODO ** | reponse.message:"${response.message}" | response.result.message:"${(response.result as any)?.message}"`,
-    )
-
-    if (response?.message) {
-      toast({
-        variant: response.status === "error" ? "destructive" : "default",
-        title: response.message,
-      })
-    }
-
-    if (response?.status === "success") {
-      if (hasMessage(response.result)) {
-        toast({ title: response.result.message })
+    switch (response?.status) {
+      case "success": {
+        if (response.message) {
+          toast({ title: response.message })
+        }
+        return response.result
       }
-      return response.result
+      case "error": {
+        toast({ variant: "destructive", title: response.message })
+        throw new Error(response.message)
+      }
+      default:
+        throw new Error(`${String(key)}: Invalid action response`)
     }
-
-    if (response?.status === "error") {
-      throw new Error(response.message || `${String(key)}: An unknown error has occured`)
-    }
-
-    throw new Error(`${String(key)}: Invalid action response`)
   }
 }
 

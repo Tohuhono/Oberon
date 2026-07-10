@@ -4,7 +4,7 @@ import { ModeToggle } from "@tohuhono/ui/mode-toggle"
 import { PropsWithChildren } from "react"
 import useSWR from "swr"
 
-import { useOberonActions, useOberonNavigation } from "../hooks/use-oberon"
+import { useOberonActions } from "../hooks/use-oberon"
 
 export const Menu = ({
   title,
@@ -15,8 +15,6 @@ export const Menu = ({
   path?: string
 }>) => {
   const { can, signOut } = useOberonActions()
-
-  const navigation = useOberonNavigation()
 
   const { data: showImages } = useSWR("/can/images", () => can("images"))
   const { data: showUsers } = useSWR("/can/users", () => can("users"))
@@ -56,13 +54,7 @@ export const Menu = ({
           </Link>
         )}
         <ModeToggle className="h-6" />
-        <Button
-          size="sm"
-          onClick={async () => {
-            await signOut()
-            navigation.refresh()
-          }}
-        >
+        <Button size="sm" onClick={signOut}>
           Sign Out
         </Button>
       </div>

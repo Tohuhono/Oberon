@@ -29,7 +29,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./provider": "./dist/provider.js",
-    "./provider/client": "./dist/provider.client.js"
+    "./provider/client": "./dist/provider.client.js",
+    "./search": "./dist/search.js"
   },
   "publishConfig": {
     "access": "public"

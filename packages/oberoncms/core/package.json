@@ -32,6 +32,7 @@
     "./auth/client": "./dist/auth/client.js",
     "./auth/server": "./dist/auth/server.js",
     "./adapter": "./dist/adapter.js",
+    "./schemas": "./dist/lib/dtd.js",
     "./render": "./dist/render.js",
     "./editor": "./dist/editor.js",
     "./provider": "./dist/provider.js",

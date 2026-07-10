@@ -14,8 +14,6 @@
       "*.css": "tailwindcss",
     },
     "files.eol": "\n",
-    "typescript.preferences.preferTypeOnlyAutoImports": true,
-    "typescript.tsdk": "node_modules/typescript/lib",
     "editor.quickSuggestions": {
       "strings": "on",
     },
@@ -25,7 +23,7 @@
     "editor.detectIndentation": false,
     "chat.agent.maxRequests": 50,
     "[json]": {
-      "editor.defaultFormatter": "oxc.oxc-vscode",
+      "editor.defaultFormatter": "vscode.json-language-features",
     },
     "chat.useNestedAgentsMdFiles": true,
     "chat.tools.terminal.autoApprove": {
@@ -83,6 +81,20 @@
       "plaintext": false,
       "markdown": false,
       "scminput": false,
+      "typescript": false
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "oxc.path.oxfmt": "node_modules/oxfmt/bin/oxfmt",
+    "oxc.path.oxlint": "node_modules/oxlint/bin/oxlint",
+    "oxc.path.node": "/run/current-system/sw/bin/node",
+    "oxc.useExecPath": false,
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "vscode.json-language-features"
     },
   },
 }

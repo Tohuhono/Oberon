@@ -240,7 +240,7 @@ export function initAdapter({
         data: pageData,
         updatedBy: user.email,
       })
-      return { message: `Successfully published ${key}` }
+      return { key }
     },
 
     /*

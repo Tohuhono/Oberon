@@ -29,7 +29,7 @@
       "default": "./nextjs.config.ts"
     },
     "./tanstack": {
-      "default": "./nextjs.config.ts"
+      "default": "./tanstack.config.ts"
     },
     "./plugin": {
       "default": "./oxlint.custom.mjs"

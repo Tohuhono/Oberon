@@ -15,6 +15,17 @@ function passThrough<T>(data: T) {
   return data
 }
 
+/*
+       addImage: invalidateAfter(serverActions.addImage),
+        addPage: invalidateAfter(serverActions.addPage),
+        addUser: invalidateAfter(serverActions.addUser),
+        changeRole: invalidateAfter(serverActions.changeRole),
+        deleteImage: invalidateAfter(serverActions.deleteImage),
+        deletePage: invalidateAfter(serverActions.deletePage),
+        deleteUser: invalidateAfter(serverActions.deleteUser),
+        publishPageData: invalidateAfter(serverActions.publishPageData),
+*/
+
 const addImage = createServerFn({ method: "POST" })
   .validator(passThrough<ActionInput<"addImage">>)
   .handler(({ data }) => actionHandler.addImage(data))

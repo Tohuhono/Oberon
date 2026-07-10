@@ -1,6 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { OberonQueryParamsSchema } from "@oberoncms/core"
+import { ClientOnly, createFileRoute } from "@tanstack/react-router"
+import { lazy, Suspense } from "react"
 
-import { Cms, getCmsContext, validateCmsSearch } from "#/oberon/cms"
+import { getCmsContext } from "#/oberon/cms-context"
+
+const CmsClient = lazy(() =>
+  import("#/oberon/cms.client").then((module) => ({ default: module.CmsClient })),
+)
 
 function getCmsPath(path: string | undefined) {
   return path?.split("/").filter(Boolean) ?? []
@@ -9,11 +15,17 @@ function getCmsPath(path: string | undefined) {
 function CmsSplatRoute() {
   const context = Route.useLoaderData()
 
-  return <Cms context={context} />
+  return (
+    <ClientOnly fallback={null}>
+      <Suspense fallback={null}>
+        <CmsClient context={context} />
+      </Suspense>
+    </ClientOnly>
+  )
 }
 
 export const Route = createFileRoute("/cms/$")({
-  validateSearch: validateCmsSearch,
+  validateSearch: OberonQueryParamsSchema.parse,
   loaderDeps: ({ search }) => ({ searchParams: search }),
   loader: ({ deps, params }) =>
     getCmsContext({ data: { path: getCmsPath(params._splat), ...deps } }),

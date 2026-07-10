@@ -1,5 +1,3 @@
-"use client"
-
 import type { OberonClientContext } from "@oberoncms/core"
 import { OberonClient } from "@oberoncms/core/editor"
 import { TanstackOberonClientProvider } from "@oberoncms/plugin-tanstack/provider/client"

@@ -29,12 +29,14 @@ export const VERDACCIO_AUTH_KEY = `npm_config_//localhost:${VERDACCIO_PORT}/:_au
 
 export const NEXTJS_CONTAINER_NAME = "oberon-coa-nextjs"
 export const NEXTJS_APP_PORT = 3030
+export const NEXTJS_BASE_URL = `http://localhost:${NEXTJS_APP_PORT}`
 export const NEXTJS_BUILD_LOG_PATH = `${CONTAINER_LOG_PATH}/nextjs-build.log`
 export const NEXTJS_SERVER_LOG_PATH = `${CONTAINER_LOG_PATH}/nextjs-server.log`
 export const NEXTJS_COA_LOG_PATH = `${CONTAINER_LOG_PATH}/nextjs-coa.log`
 
 export const TANSTACK_CONTAINER_NAME = "oberon-coa-tanstack"
 export const TANSTACK_APP_PORT = 3031
+export const TANSTACK_BASE_URL = `http://127.0.0.1:${TANSTACK_APP_PORT}`
 export const TANSTACK_BUILD_LOG_PATH = `${CONTAINER_LOG_PATH}/tanstack-build.log`
 export const TANSTACK_SERVER_LOG_PATH = `${CONTAINER_LOG_PATH}/tanstack-server.log`
 export const TANSTACK_COA_LOG_PATH = `${CONTAINER_LOG_PATH}/tanstack-coa.log`
@@ -149,6 +151,8 @@ export async function startPod() {
       POD_NAME,
       "--name",
       NEXTJS_CONTAINER_NAME,
+      "--env",
+      `BASE_URL=${NEXTJS_BASE_URL}`,
       "--volume",
       `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`, // Safe to share cache volume
       "--volume",
@@ -168,6 +172,8 @@ export async function startPod() {
       POD_NAME,
       "--name",
       TANSTACK_CONTAINER_NAME,
+      "--env",
+      `BASE_URL=${TANSTACK_BASE_URL}`,
       "--volume",
       `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`, // Safe to share cache volume
       "--volume",
