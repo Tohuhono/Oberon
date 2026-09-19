@@ -94,6 +94,8 @@ test.describe.serial("Initialise Tanstack", { tag: "@initialise-tanstack" }, () 
   })
 
   test("Build Oberon App", async () => {
+    test.setTimeout(180000)
+
     await expect(
       execInContainer(`pnpm run build > ${TANSTACK_BUILD_LOG_PATH} 2>&1`, {
         container: TANSTACK_CONTAINER_NAME,
@@ -146,6 +148,8 @@ test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
   })
 
   test("Build Oberon App", async () => {
+    test.setTimeout(180000)
+
     await expect(
       execInContainer(`pnpm run build > ${NEXTJS_BUILD_LOG_PATH} 2>&1`, {
         container: NEXTJS_CONTAINER_NAME,

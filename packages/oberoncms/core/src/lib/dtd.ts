@@ -420,9 +420,13 @@ export type OberonClientContext = DescriminatedContext & {
   slug: string
 }
 
+const OberonQueryParamValueSchema = z
+  .union([z.string(), z.number(), z.boolean()])
+  .transform((value) => String(value))
+
 export const OberonQueryParamsSchema = z.record(
   z.string(),
-  z.union([z.string(), z.array(z.string()), z.undefined()]),
+  z.union([OberonQueryParamValueSchema, z.array(OberonQueryParamValueSchema), z.undefined()]),
 )
 
 export type OberonQueryParams = z.infer<typeof OberonQueryParamsSchema>

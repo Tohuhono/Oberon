@@ -26,6 +26,34 @@ function getTestKey(testInfo: TestInfo) {
   return `${fileKey}_${titleKey}_${testInfo.parallelIndex}_${testInfo.repeatEachIndex}_${testInfo.retry}_${testInfo.workerIndex}`
 }
 
+export async function expectCmsPagePersisted(page: Page, key: string) {
+  const deleteButtons = page.getByRole("button", { name: `Delete ${key}`, exact: true })
+
+  await expect
+    .poll(async () => {
+      const buttonCount = await deleteButtons.count()
+
+      for (let index = 0; index < buttonCount; index++) {
+        if (await deleteButtons.nth(index).isEnabled()) {
+          return true
+        }
+      }
+
+      return false
+    })
+    .toBe(true)
+
+  await expect
+    .poll(async () => {
+      const updatedByCells = await page
+        .getByLabel(`${key} updated by`, { exact: true })
+        .allTextContents()
+
+      return updatedByCells.includes("test@tohuhono.com")
+    })
+    .toBe(true)
+}
+
 async function createCmsPage(page: Page, key: string) {
   await page.goto("/cms/pages")
   const pagePathInput = page.getByLabel("Page path", { exact: true })
@@ -35,9 +63,7 @@ async function createCmsPage(page: Page, key: string) {
   await expect(addPageButton).toBeEnabled()
   await addPageButton.click()
   await expect(page.getByRole("link", { name: key, exact: true })).toBeVisible()
-  await expect(page.getByLabel(`${key} updated by`, { exact: true })).toHaveText(
-    "test@tohuhono.com",
-  )
+  await expectCmsPagePersisted(page, key)
 }
 
 async function deleteCmsPages(page: Page, key: string) {

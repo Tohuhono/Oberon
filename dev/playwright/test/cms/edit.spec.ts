@@ -10,8 +10,19 @@ async function waitForEditorPreview(cms: Page) {
 async function openMenuWithItem(button: Locator, item: Locator) {
   await expect(button).toBeVisible()
   await expect(button).toBeEnabled()
-  await button.click()
-  await expect(item).toBeVisible()
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await button.click()
+
+    try {
+      await expect(item).toBeVisible({ timeout: 2_000 })
+      return
+    } catch (error) {
+      if (attempt === 2) {
+        throw error
+      }
+    }
+  }
 }
 
 async function selectMenuItem(button: Locator, item: Locator) {

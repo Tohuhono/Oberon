@@ -6,6 +6,8 @@ import { defineConfig, loadEnv } from "vite"
 
 const config = defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "")
+  Object.assign(process.env, env)
+
   return {
     resolve: { tsconfigPaths: true },
     server: { port: parseInt(env.PORT || "5173") },

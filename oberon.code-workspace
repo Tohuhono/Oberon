@@ -81,7 +81,8 @@
       "plaintext": false,
       "markdown": false,
       "scminput": false,
-      "typescript": false
+      "typescript": false,
+      "dotenv": false
     },
     "[typescript]": {
       "editor.defaultFormatter": "vscode.typescript-language-features"

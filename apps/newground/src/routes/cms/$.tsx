@@ -12,12 +12,16 @@ function getCmsPath(path: string | undefined) {
   return path?.split("/").filter(Boolean) ?? []
 }
 
+function CmsRouteFallback() {
+  return <div className="grid h-screen place-content-center">Loading CMS</div>
+}
+
 function CmsSplatRoute() {
   const context = Route.useLoaderData()
 
   return (
-    <ClientOnly fallback={null}>
-      <Suspense fallback={null}>
+    <ClientOnly fallback={<CmsRouteFallback />}>
+      <Suspense fallback={<CmsRouteFallback />}>
         <CmsClient context={context} />
       </Suspense>
     </ClientOnly>
