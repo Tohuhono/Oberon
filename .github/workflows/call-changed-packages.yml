@@ -88,8 +88,9 @@ jobs:
         # 2. The multi line json string is wrapped in EOF delimeters to make the GHA happy: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
         # 3. We specify the .github/ folder as a dependency here. Just to be safe, if workflows changed, we use that to mean everything has changes pending... to force redeploys
         run: |
+          RESULT=$(pnpm exec tsx ./dev/scripts/scripts/changed.ts "${{ steps.detect-recovery.outputs.base_ref }}")
           echo 'result<<CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
-          echo "$(pnpm exec tsx ./dev/scripts/scripts/changed.ts "${{ steps.detect-recovery.outputs.base_ref }}")" >> $GITHUB_OUTPUT
+          echo "$RESULT" >> $GITHUB_OUTPUT
           echo 'CHANGESET_DELIMITER' >> $GITHUB_OUTPUT
 
       - name: skip

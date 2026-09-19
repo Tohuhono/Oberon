@@ -32,5 +32,10 @@ export default defineConfig({
       grepInvert: /@playground/,
       use: { baseURL },
     },
+    {
+      ...smokeProject,
+      name: "newground",
+      use: { baseURL },
+    },
   ],
 })

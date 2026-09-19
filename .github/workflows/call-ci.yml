@@ -224,6 +224,26 @@ jobs:
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
 
+  deploy_newground:
+    name: TanStack Playground
+    needs: [changed-packages]
+    if:
+      ${{ always() && contains(needs.changed-packages.outputs.changed_packages, '@oberon/new') }}
+    uses: ./.github/workflows/call-deploy.yml
+    with:
+      environment: ${{ inputs.environment }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: newground
+      db_branch: ${{ inputs.db_branch }}
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+
   smoke_docs:
     name: Smoke Test Docs
     needs: [changed-packages, deploy_docs]
@@ -250,6 +270,19 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
 
+  smoke_newground:
+    name: Smoke Test TanStack Playground
+    needs: [changed-packages, deploy_newground]
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: newground
+      base_url: ${{ needs.deploy_newground.outputs.url }}
+    secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+
   test-status:
     name: Test Status
     needs:
@@ -260,8 +293,10 @@ jobs:
         coa,
         deploy_docs,
         deploy_playground,
+        deploy_newground,
         smoke_docs,
         smoke_playground,
+        smoke_newground,
       ]
     if: always()
     runs-on: ubuntu-latest
@@ -273,6 +308,7 @@ jobs:
         Latest deployments available at: 
         ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
         ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
+        ${{ needs.deploy_newground.outputs.url && format('[tanstack playground]({0}) ', needs.deploy_newground.outputs.url) }}
     steps:
       - name: Add preview URL to job summary
         run: |
@@ -311,6 +347,21 @@ jobs:
       staging_url: ${{ needs.deploy_playground.outputs.url }}
       production_url: playground.tohuhono.com
 
+  promote_newground:
+    name: TanStack Playground
+    needs: [test-status, deploy_newground]
+    if: inputs.environment == 'production'
+    uses: ./.github/workflows/call-promote.yml
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    with:
+      environment: ${{ inputs.environment }}
+      project: newground
+      staging_url: ${{ needs.deploy_newground.outputs.url }}
+      production_url: newground.tohuhono.com
+
   smoke-docs-production:
     name: Smoke Test Promoted Docs
     needs: [promote_docs]
@@ -334,5 +385,18 @@ jobs:
       ref: ${{ inputs.ref }}
       project: playground
       base_url: https://playground.tohuhono.com
+    secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+
+  smoke-newground-production:
+    name: Smoke Test Promoted TanStack Playground
+    needs: [promote_newground]
+    if: inputs.environment == 'production'
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: newground
+      base_url: https://newground.tohuhono.com
     secrets:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
