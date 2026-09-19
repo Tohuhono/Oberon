@@ -32,7 +32,7 @@ jobs:
         ${{ steps.output-changed-packages.outputs.changed_packages }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           # see `fetch-depth` in README: https://github.com/actions/checkout#checkout-v3,
           # we set to `0` so the referenced commits are available for the command below
@@ -41,14 +41,14 @@ jobs:
           fetch-depth: 0
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "24.x"
           package-manager-cache: false
       - name: Corepack
         run: corepack enable pnpm
       - name: Enable pnpm cache
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           cache: pnpm
 
