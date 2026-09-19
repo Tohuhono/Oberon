@@ -92,3 +92,11 @@ jobs:
         run: |
           pnpm run deploy
           echo "url=$(tail .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
+      - name: Upload deployment log
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: deployment-log-${{ inputs.project }}
+          path: .vercel/DEPLOY_LOG
+          if-no-files-found: warn
+          include-hidden-files: true
