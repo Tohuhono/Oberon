@@ -45,14 +45,14 @@ runs:
           exit 0
         fi
 
-        pnpm exec vercel link \
+        npx --yes vercel@59.23.2 link \
           --yes \
           --project "oberon-playwright-report" \
           --scope "tohuhono" \
           --cwd "${{ inputs.report_dir }}" \
           --token "${{ inputs.vercel_token }}"
 
-        url=$(pnpm exec vercel deploy \
+        url=$(npx --yes vercel@59.23.2 deploy \
           --yes \
           --scope "tohuhono" \
           --target "preview" \
