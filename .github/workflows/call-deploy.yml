@@ -91,7 +91,7 @@ jobs:
         id: deploy
         run: |
           pnpm run deploy
-          echo "url=$(tail .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
+          echo "url=$(tail -n 1 .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
       - name: Upload deployment log
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
