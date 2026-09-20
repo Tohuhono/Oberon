@@ -28,3 +28,4 @@ jobs:
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      E2E_AUTH_SECRET: ${{ secrets.E2E_AUTH_SECRET }}

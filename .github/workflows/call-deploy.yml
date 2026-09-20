@@ -57,6 +57,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      MASTER_EMAIL: ${{ vars.MASTER_EMAIL }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest

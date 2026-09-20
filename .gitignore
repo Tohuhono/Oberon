@@ -47,6 +47,7 @@ vite.config.*.timestamp-*
 
 # Temp / agent scratch
 .tmp/
+/deploylog
 
 # Vercel adds this if it's not last
 .vercel/
