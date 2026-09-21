@@ -21,7 +21,7 @@ const config = defineConfig(({ mode }) => {
           crawlLinks: false,
         },
       }),
-      nitro({ preset: "vercel" }),
+      nitro(),
       viteReact(),
     ],
   }
