@@ -37,6 +37,7 @@ yarn-error.log*
 
 # Oberon
 .oberon/
+.output/
 
 # vite doesn't know how to clean up after itself
 vite.config.*.timestamp-*
