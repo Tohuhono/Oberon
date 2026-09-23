@@ -63,6 +63,6 @@ else
 DB_RUN_FLAG=
 fi
 
-pnpm exec vercel pull --no-env --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
+pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel deploy --archive=tgz --prebuilt $SKIP_FLAG $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG $DB_RUN_FLAG | tee .vercel/DEPLOY_LOG
