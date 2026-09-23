@@ -10,7 +10,9 @@ function normalizeEmail(email: string): string {
 }
 
 const cmsAuthBasePath = "/cms/api/auth"
-const baseURL = process.env.BETTER_AUTH_URL || process.env.BASE_URL
+const baseURL =
+  process.env.BETTER_AUTH_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.BASE_URL)
 const secret = process.env.AUTH_SECRET
 
 const getAuth = (adapter: OberonPluginAdapter) =>

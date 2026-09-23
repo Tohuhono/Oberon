@@ -10,6 +10,7 @@ const PLAYWRIGHT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url))
 const APP_LOG_DIR = path.resolve(PLAYWRIGHT_DIR, "logs")
 
 const APP_LOG_PATH = path.resolve(APP_LOG_DIR, "app.log")
+const baseURL = "http://localhost:3210"
 
 async function readNextjsLogs() {
   try {
@@ -27,14 +28,17 @@ export default defineConfig({
       `mkdir -p '${APP_LOG_DIR}'`,
       `pnpm start -p 3210 > '${APP_LOG_PATH}' 2>&1`,
     ].join(" && "),
-    url: "http://localhost:3210",
+    url: baseURL,
     reuseExistingServer: false,
     stderr: "pipe",
     stdout: "pipe",
+    env: {
+      BETTER_AUTH_URL: baseURL,
+    },
   },
   use: {
     ...base.use,
-    baseURL: "http://localhost:3210",
+    baseURL,
     serverLog: {
       read: readNextjsLogs,
     },
