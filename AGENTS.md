@@ -2,8 +2,10 @@ This is the OberonCMS monorepo for the CMS core, plugins, documentation, website
 create-oberon-app script
 
 - CRITICAL: Read [CODESTYLE](.agents/CODESTYLE.md) before any edits
-- CRITICAL: - Lint, Typecheck, Build and test always use `pnpm validate` it is dependency checked,
-  and optimally cached.
+- CRITICAL: Lint, Typecheck, Build and test always use `pnpm validate` it is dependency checked, and
+  optimally cached.
+- CRITICAL: Format always use `pnpm format` from root to format files. Do not filter, just run on
+  all.
 
 ## Constraints
 

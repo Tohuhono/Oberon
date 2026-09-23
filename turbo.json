@@ -10,7 +10,6 @@
     "AUTH_*",
     "BASE_URL",
     "BETTER_AUTH_URL",
-    "NEXTAUTH_*",
     "PORT",
     "USE_DEVELOPMENT_*",
     "SQLITE_FILE",
@@ -31,11 +30,11 @@
     "errorsOnlyShowHash": false
   },
   "tasks": {
-    "//#clean:e2e": {
+    "//#clean:db": {
       "cache": false
     },
     "prebuild": {
-      "dependsOn": ["^build", "//#clean:e2e"],
+      "dependsOn": ["^build", "//#clean:db"],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
@@ -44,24 +43,7 @@
         "!.next/**",
         "!.playwright/**"
       ],
-      "outputs": [".oberon/**"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "outputs": [".oberon/**"]
     },
     "build": {
       "dependsOn": ["^build", "prebuild"],
@@ -69,74 +51,23 @@
         "$TURBO_DEFAULT$",
         ".env*",
         ".oberon/**",
-        "!.oberon/db/e2e.db*",
+        "!.oberon/db/oberon.db*",
         "plugins/**",
         "!.turbo/**",
         "!.next/**",
         "!.playwright/**"
       ],
-      "outputs": [".next/**", "dist/**", "!.next/cache/**", "next-env.d.ts"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "outputs": [".next/**", ".vercel/output/**", "dist/**", "!.next/cache/**", "next-env.d.ts"]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["wait:clean", "^wait", "prebuild"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "dependsOn": ["wait:clean", "^wait", "prebuild"]
     },
     "start": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "dependsOn": ["build"]
     },
     "check": {
       "dependsOn": ["lint", "tsc", "test:unit"]

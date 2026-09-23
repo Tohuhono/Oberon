@@ -17,7 +17,7 @@
     "clean": "turbo clean --continue && odt clean",
     "clean:next": "turbo clean --continue -- --only ./.next",
     "clean:node": "pnpm clean && rimraf --glob ./**/node_modules",
-    "clean:e2e": "rimraf --glob './apps/*/.oberon/db/e2e.db*'",
+    "clean:db": "rimraf --glob './apps/*/.oberon/db/oberon.db*'",
     "deploy": "bash ./dev/scripts/scripts/deploy.sh",
     "dev": "turbo dev --concurrency 50",
     "dev:docs": "turbo dev --concurrency 50 --filter=@oberon/docs...",
