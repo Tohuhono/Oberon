@@ -378,6 +378,7 @@ jobs:
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: docs
@@ -391,6 +392,7 @@ jobs:
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: playground
@@ -404,6 +406,7 @@ jobs:
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: newground
