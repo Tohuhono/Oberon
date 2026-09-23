@@ -2,7 +2,7 @@ import {
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
-  type OberonActionSurface,
+  type OberonServerActions,
 } from "../lib/dtd"
 import { initActionHandler } from "./init-action-handler"
 import { initAdapter } from "./init-adapter"
@@ -10,9 +10,9 @@ import { initHandler } from "./init-handler"
 import { initPlugins } from "./init-plugins"
 
 export function initOberon({ client, plugins }: OberonConfig): {
-  handler: OberonHandler<{ path: string[] }>
+  handler: OberonHandler<{ path?: string[] | string }>
   adapter: OberonAdapter
-  actionHandler: OberonActionSurface
+  actionHandler: OberonServerActions
 } {
   console.info("Initialise Oberon")
 

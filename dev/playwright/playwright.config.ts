@@ -28,8 +28,13 @@ export default defineConfig({
     },
     {
       ...smokeProject,
-      name: "docs",
+      name: "oberon-docs",
       grepInvert: /@playground/,
+      use: { baseURL },
+    },
+    {
+      ...smokeProject,
+      name: "newground",
       use: { baseURL },
     },
   ],

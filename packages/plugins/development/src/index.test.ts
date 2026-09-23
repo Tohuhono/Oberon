@@ -1,4 +1,4 @@
-import { mkdir, rm } from "fs/promises"
+import { rm } from "fs/promises"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 
@@ -24,7 +24,8 @@ async function closeDevelopmentClient() {
   Reflect.deleteProperty(globalThis, "oberonDb")
 }
 
-const sqliteFile = resolve(rootDirectory, ".tmp/development-plugin-unit-tests.db")
+const sqliteDirectory = resolve(rootDirectory, ".tmp/development-plugin-unit-tests")
+const sqliteFile = resolve(sqliteDirectory, "oberon.db")
 const sqliteUrl = `file:${sqliteFile}`
 
 async function getDevelopmentAdapter(
@@ -34,8 +35,7 @@ async function getDevelopmentAdapter(
   vi.stubEnv("USE_DEVELOPMENT_DATABASE", "true")
   vi.stubEnv("SQLITE_FILE", sqliteUrl)
 
-  await mkdir(dirname(sqliteFile), { recursive: true })
-  await rm(sqliteFile, { force: true })
+  await rm(sqliteDirectory, { recursive: true, force: true })
   await closeDevelopmentClient()
 
   vi.resetModules()
@@ -52,7 +52,7 @@ async function getDevelopmentAdapter(
     delete process.env.USE_DEVELOPMENT_DATABASE
     delete process.env.USE_DEVELOPMENT_SEND
     await closeDevelopmentClient()
-    await rm(sqliteFile, { force: true })
+    await rm(sqliteDirectory, { recursive: true, force: true })
   })
 
   return fromPartial(adapter)

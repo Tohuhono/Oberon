@@ -1,12 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "envMode": "strict",
-  "remoteCache": { "enabled": false },
+  "remoteCache": {
+    "enabled": false
+  },
   "globalEnv": [
     "CI",
     "NODE_ENV",
     "AUTH_*",
-    "NEXTAUTH_*",
+    "BASE_URL",
+    "BETTER_AUTH_URL",
+    "PORT",
     "USE_DEVELOPMENT_*",
     "SQLITE_FILE",
     "DATABASE_URL",
@@ -16,17 +20,21 @@
     "EMAIL_FROM",
     "RESEND_SECRET",
     "UPLOADTHING_SECRET",
+    "VERCEL_URL",
     "VERCEL_BLOB_API_URL",
     "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
   ],
   "globalDependencies": [".github/workflows/**"],
   "futureFlags": {
     "watchUsingTaskInputs": true,
-    "errorsOnlyShowHash": true
+    "errorsOnlyShowHash": false
   },
   "tasks": {
+    "//#clean:db": {
+      "cache": false
+    },
     "prebuild": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "//#clean:db"],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
@@ -35,24 +43,7 @@
         "!.next/**",
         "!.playwright/**"
       ],
-      "outputs": [".oberon/**"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "outputs": [".oberon/**"]
     },
     "build": {
       "dependsOn": ["^build", "prebuild"],
@@ -60,73 +51,23 @@
         "$TURBO_DEFAULT$",
         ".env*",
         ".oberon/**",
+        "!.oberon/db/oberon.db*",
         "plugins/**",
         "!.turbo/**",
         "!.next/**",
         "!.playwright/**"
       ],
-      "outputs": [".next/**", "dist/**", "!.next/cache/**", "next-env.d.ts"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "outputs": [".next/**", ".vercel/output/**", "dist/**", "!.next/cache/**", "next-env.d.ts"]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["wait:clean", "^wait", "prebuild"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "dependsOn": ["wait:clean", "^wait", "prebuild"]
     },
     "start": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "AUTH_*",
-        "NEXTAUTH_*",
-        "USE_DEVELOPMENT_DATABASE",
-        "USE_DEVELOPMENT_SEND",
-        "SQLITE_FILE",
-        "DATABASE_URL",
-        "TURSO_URL",
-        "TURSO_TOKEN",
-        "MASTER_EMAIL",
-        "EMAIL_FROM",
-        "RESEND_SECRET",
-        "UPLOADTHING_SECRET",
-        "VERCEL_BLOB_API_URL",
-        "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
-      ]
+      "dependsOn": ["build"]
     },
     "check": {
       "dependsOn": ["lint", "tsc", "test:unit"]
@@ -158,7 +99,7 @@
         "!.next/**",
         "!.playwright/**"
       ],
-      "outputs": [".playwright"]
+      "outputs": [".playwright/**"]
     },
     "test:e2e:ui": {
       "cache": false,
@@ -167,6 +108,30 @@
       "outputs": []
     },
     "test:coa": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
+      "outputs": [".playwright"]
+    },
+    "test:coa:nextjs": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "!.oberon/**",
+        "!.turbo/**",
+        "!.next/**",
+        "!.playwright/**"
+      ],
+      "outputs": [".playwright"]
+    },
+    "test:coa:tanstack": {
       "dependsOn": ["build"],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -226,8 +191,6 @@
         "!.oberon/**",
         "!.turbo/**",
         "!.next/**",
-        ".next/types/**",
-        "next-env.d.ts",
         "!.playwright/**"
       ],
       "outputs": []

@@ -320,7 +320,7 @@ export type OberonHandler<Params = undefined> = Params extends undefined
   : {
       [key in OberonMethod]: (
         req: Request,
-        context: { params: Promise<Params> },
+        context: { params: Promise<Params> | Params },
       ) => Promise<Response>
     }
 
@@ -345,7 +345,7 @@ export type OberonAdapter = {
   getConfig: () => Promise<OberonSiteConfig>
   getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
   migrateData: () => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<{ message: string }>
+  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<{ key: string }>
   signOut: () => Promise<void>
   signIn: (data: { email: string }) => Promise<void>
 }
@@ -372,8 +372,7 @@ export type OberonResponse<T = unknown> = Promise<
     }
   | {
       status: "error"
-      result?: T
-      message?: string
+      message: string
     }
 >
 
@@ -381,8 +380,8 @@ export type OberonServerActions = {
   addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse
-  deleteImage: (key: OberonImage["key"]) => OberonResponse
+  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<void>
+  deleteImage: (key: OberonImage["key"]) => OberonResponse<void>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
   ) => OberonResponse<Pick<OberonUser, "id"> | null>
@@ -397,25 +396,10 @@ export type OberonServerActions = {
   getConfig: () => OberonResponse<OberonSiteConfig>
   getPageData: (key: OberonPageMeta["key"]) => OberonResponse<Data | null>
   migrateData: () => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse
-  signIn: (data: { email: string }) => OberonResponse
-  signOut: () => OberonResponse
+  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ key: string }>
+  signIn: (data: { email: string }) => OberonResponse<void>
+  signOut: () => OberonResponse<void>
 }
-
-export type OberonAction<TProps extends unknown[] = never[], TResult = unknown> = (
-  ...props: TProps
-) => OberonResponse<TResult>
-
-export type OberonActionSurface = OberonServerActions & Record<string, OberonAction>
-
-export type OberonActionContribution = Record<string, OberonAction>
-
-export type OberonActionTransport = <T>(promise: Promise<T>) => OberonResponse<T>
-
-export type OberonPluginActionProvider = (
-  actions: OberonActionSurface,
-  adapter: OberonAdapter,
-) => OberonActionContribution
 
 /*
  * Context
@@ -436,6 +420,24 @@ export type OberonClientContext = DescriminatedContext & {
   slug: string
 }
 
+const OberonQueryParamValueSchema = z
+  .union([z.string(), z.number(), z.boolean()])
+  .transform((value) => String(value))
+
+export const OberonQueryParamsSchema = z.record(
+  z.string(),
+  z.union([OberonQueryParamValueSchema, z.array(OberonQueryParamValueSchema), z.undefined()]),
+)
+
+export type OberonQueryParams = z.infer<typeof OberonQueryParamsSchema>
+
+export const OberonClientContextRequestSchema = z.object({
+  path: z.array(z.string()),
+  searchParams: OberonQueryParamsSchema,
+})
+
+export type OberonClientContextRequest = z.infer<typeof OberonClientContextRequestSchema>
+
 export type OberonImageTransform = ImageTransform
 
 export type OberonNavigation = {
@@ -445,9 +447,7 @@ export type OberonNavigation = {
 }
 
 type UnwrappedResult<TResponse> =
-  Awaited<TResponse> extends {
-    result?: infer TResult
-  }
+  Extract<Awaited<TResponse>, { status: "success" }> extends { result: infer TResult }
     ? TResult
     : never
 

@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Neon CLI
-        run: npm install -g neonctl@latest
+        run: npm install -g neonctl@2.22.0
 
       - name: Delete Branch
         env:

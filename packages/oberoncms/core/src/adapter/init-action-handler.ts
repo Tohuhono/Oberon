@@ -1,16 +1,25 @@
 import {
   ResponseError,
-  type OberonActionSurface,
-  type OberonActionTransport,
   type OberonAdapter,
   type OberonResponse,
+  type OberonServerActions,
 } from "../lib/dtd"
 
-export async function defaultTransport<T>(promise: Promise<T>): OberonResponse<T> {
+export async function transport<T>(
+  promise: Promise<T>,
+  options: { successMessage?: string | ((result: T) => string | undefined) } = {},
+): OberonResponse<T> {
   try {
+    const result = await promise
+    const message =
+      typeof options.successMessage === "function"
+        ? options.successMessage(result)
+        : options.successMessage
+
     return {
       status: "success",
-      result: await promise,
+      message,
+      result,
     }
   } catch (error) {
     if (error instanceof ResponseError) {
@@ -27,10 +36,7 @@ export async function defaultTransport<T>(promise: Promise<T>): OberonResponse<T
   }
 }
 
-function createOberonActions(
-  adapter: OberonAdapter,
-  transport: OberonActionTransport = defaultTransport,
-): OberonActionSurface {
+export function initActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
     addPage: (page) => transport(adapter.addPage(page)),
     addImage: (data) => transport(adapter.addImage(data)),
@@ -47,14 +53,11 @@ function createOberonActions(
     getConfig: () => transport(adapter.getConfig()),
     getPageData: (key) => transport(adapter.getPageData(key)),
     migrateData: () => transport(adapter.migrateData()),
-    publishPageData: (data) => transport(adapter.publishPageData(data)),
+    publishPageData: (data) =>
+      transport(adapter.publishPageData(data), {
+        successMessage: ({ key }) => `Successfully published ${key}`,
+      }),
     signIn: (data) => transport(adapter.signIn(data)),
     signOut: () => transport(adapter.signOut()),
   }
-}
-
-export function initActionHandler(adapter: OberonAdapter): OberonActionSurface {
-  const actions = createOberonActions(adapter)
-
-  return actions
 }

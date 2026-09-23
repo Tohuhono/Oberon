@@ -1,4 +1,4 @@
-import { expect, test } from "@dev/playwright/helpers/fixtures"
+import { expect, expectCmsPagePersisted, test } from "@dev/playwright/helpers/fixtures"
 
 test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
   test("shows add page button", async ({ cms }) => {
@@ -18,9 +18,7 @@ test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
     await addPageButton.click()
 
     await expect(cms.getByRole("link", { name: key, exact: true })).toBeVisible()
-    await expect(cms.getByLabel(`${key} updated by`, { exact: true })).toHaveText(
-      "test@tohuhono.com",
-    )
+    await expectCmsPagePersisted(cms, key)
 
     await cms.goto("/cms/pages")
     await cms.getByRole("button", { name: `Delete ${key}`, exact: true }).click()

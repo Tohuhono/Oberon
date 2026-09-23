@@ -1,0 +1,63 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies and package manager artifacts
+/node_modules/
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# IDE and editor settings
+/.idea/*
+!/.idea/runConfigurations
+
+# Environment and local-only files
+.env
+.env.*
+.env*.local
+*.local
+.local
+*.pem
+
+# Logs and debug output
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build and framework output
+/build/
+/dist/
+/dist-ssr/
+/.next/
+/out/
+.nitro
+.output
+.open-next
+.tanstack
+.vinxi
+__unconfig*
+
+# Deployment tooling
+.vercel
+.wrangler
+.dev*
+
+# TypeScript and generated metadata
+*.tsbuildinfo
+next-env.d.ts
+
+# Test artifacts and coverage
+/coverage/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/test/results/
+/test/playwright-report/
+
+# Project-specific temporary files
+/media/
+todos.json
+.tmp
+
+# OS files
+.DS_Store

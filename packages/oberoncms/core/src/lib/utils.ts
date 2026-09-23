@@ -33,7 +33,10 @@ export const parseClientAction = (action: unknown): ClientAction | undefined => 
   }
 }
 
-export const resolveSlug = (path: string[] = []) => `/${path.join("/")}`
+export const resolveSlug = (path: string | string[] = "") => {
+  const slug = typeof path === "string" ? path : path.join("/")
+  return slug.startsWith("/") ? slug : `/${slug}`
+}
 
 const resolveDevEnv = (value?: string) => {
   switch (value) {

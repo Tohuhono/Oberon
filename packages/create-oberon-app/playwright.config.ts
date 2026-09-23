@@ -1,9 +1,14 @@
 import path from "node:path"
 
 import { base, defineConfig } from "@dev/playwright"
-import { authProject, authenticatedProject } from "@dev/playwright/projects"
+import { authProject, authenticatedProject, smokeProject } from "@dev/playwright/projects"
 
-import { NEXTJS_APP_PORT, readNextjsServerLogs } from "./test/container"
+import {
+  NEXTJS_BASE_URL,
+  readNextjsServerLogs,
+  readTanstackServerLogs,
+  TANSTACK_BASE_URL,
+} from "./test/container"
 
 const PLAYWRIGHT_CONTAINER_STATE_PATH = path.resolve(
   process.cwd(),
@@ -49,7 +54,7 @@ export default defineConfig({
       name: "auth-nextjs",
       dependencies: ["initialise-nextjs"],
       use: {
-        baseURL: `http://localhost:${NEXTJS_APP_PORT}`,
+        baseURL: NEXTJS_BASE_URL,
       },
     },
     {
@@ -57,7 +62,18 @@ export default defineConfig({
       name: "nextjs",
       dependencies: ["auth-nextjs"],
       use: {
-        baseURL: `http://localhost:${NEXTJS_APP_PORT}`,
+        baseURL: NEXTJS_BASE_URL,
+      },
+    },
+    {
+      ...smokeProject,
+      name: "smoke-tanstack",
+      dependencies: ["initialise-tanstack"],
+      use: {
+        baseURL: TANSTACK_BASE_URL,
+        serverLog: {
+          read: () => readTanstackServerLogs(),
+        },
       },
     },
     {

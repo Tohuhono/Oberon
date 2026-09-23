@@ -31,6 +31,8 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "test:coa": "playwright test --config playwright.config.ts",
+    "test:coa:nextjs": "playwright test --config playwright.config.ts --project verdaccio-nextjs --project nextjs",
+    "test:coa:tanstack": "playwright test --config playwright.config.ts --project smoke-tanstack",
     "test:coa:ui": "playwright test --config playwright.config.ts --ui",
     "tsc": "tsc --pretty"
   },
@@ -49,6 +51,7 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@oberon/recipe-nextjs": "workspace:*",
+    "@oberon/recipe-tanstack": "workspace:*",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-flydrive": "workspace:*",

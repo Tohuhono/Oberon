@@ -1,4 +1,3 @@
-import "dotenv/config"
 import { type OberonConfig } from "../lib/dtd"
 import { initPlugins } from "./init-plugins"
 

@@ -3,6 +3,9 @@ import { defineConfig } from "oxlint"
 export default defineConfig({
   plugins: ["typescript", "unicorn"],
   jsPlugins: ["@dev/oxlint/plugin"],
+  categories: {
+    correctness: "error",
+  },
   env: {
     builtin: true,
     node: true,
@@ -17,6 +20,8 @@ export default defineConfig({
     "dist/**/*",
     ".rollup.cache/**/*",
     ".playwright/e2e-runtime/**",
+    "**/*.gen.ts",
+    "**/*.d.ts",
   ],
   rules: {
     "no-case-declarations": "error",

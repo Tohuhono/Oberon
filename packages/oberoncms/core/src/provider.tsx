@@ -5,6 +5,8 @@ import type {
   ClientAction,
   OberonAdapter,
   OberonClientContext,
+  OberonClientContextRequest,
+  OberonQueryParams,
   OberonServerActions,
 } from "./lib/dtd"
 import { parseClientAction, resolveSlug } from "./lib/utils"
@@ -13,7 +15,7 @@ async function getContext(
   { getPageData, getAllImages, getAllPages, getAllUsers, getConfig }: OberonAdapter,
   action: ClientAction,
   slug: string,
-  searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: OberonQueryParams,
 ): Promise<OberonClientContext> {
   switch (action) {
     case "login":
@@ -71,9 +73,23 @@ export async function OberonProvider({
   adapter: OberonAdapter
   actions: OberonServerActions
   path: string[]
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: OberonQueryParams
   ClientProvider?: typeof OberonClientProvider
 }>) {
+  const context = await getOberonClientContext({ adapter, path, searchParams })
+
+  return (
+    <ClientProvider serverActions={actions} context={context}>
+      {children}
+    </ClientProvider>
+  )
+}
+
+export async function getOberonClientContext({
+  adapter,
+  path,
+  searchParams,
+}: OberonClientContextRequest & { adapter: OberonAdapter }) {
   const action = parseClientAction(path[0])
 
   if (!action) {
@@ -89,14 +105,8 @@ export async function OberonProvider({
   const loggedIn = await adapter.can("site")
 
   if (!loggedIn && action !== "login") {
-    adapter.redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
+    return adapter.redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
   }
 
-  const context = await getContext(adapter, action, slug, searchParams)
-
-  return (
-    <ClientProvider serverActions={actions} context={context}>
-      {children}
-    </ClientProvider>
-  )
+  return await getContext(adapter, action, slug, searchParams)
 }

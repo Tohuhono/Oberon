@@ -1,5 +1,5 @@
 #! /bin/bash
-set -e
+set -eo pipefail
 
 export ENABLE_EXPERIMENTAL_COREPACK="1"
 export NODE_OPTIONS="--experimental-require-module"
@@ -42,14 +42,15 @@ fi
 if [[ -n $DATABASE_BRANCH ]]
 then
 
-EXISTING_BRANCH=$(pnpm exec neonctl branches list --project-id $NEON_PROJECT_ID --output json | jq -r --arg NAME "$DATABASE_BRANCH" '.[] | select(.name == $NAME)')
+EXISTING_BRANCH=$(neonctl branches list --project-id "$NEON_PROJECT_ID" --output json | jq -r --arg NAME "$DATABASE_BRANCH" '.[] | select(.name == $NAME)')
 
-if [ -z "$EXISTING_BRANCH" ]; then
+if [[ -z "$EXISTING_BRANCH" ]]
+then
   echo "Creating new branch: $DATABASE_BRANCH"
-  DATABASE_URL="$(pnpm exec neonctl branches create --name $DATABASE_BRANCH --project-id $NEON_PROJECT_ID --output json | jq -r '.connection_uris[0].connection_uri')"
+  DATABASE_URL="$(neonctl branches create --name "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID" --output json | jq -r '.connection_uris[0].connection_uri')"
 else
   echo "Branch $DATABASE_BRANCH already exists, fetching connection string..."
-  DATABASE_URL="$(pnpm exec neonctl connection-string $DATABASE_BRANCH --project-id $NEON_PROJECT_ID)"
+  DATABASE_URL="$(neonctl connection-string "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID")"
 fi
 
 fi
@@ -64,4 +65,4 @@ fi
 
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
-pnpm exec vercel deploy --archive=tgz --prebuilt $SKIP_FLAG $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG $DB_RUN_FLAG > .vercel/DEPLOY_LOG
+pnpm exec vercel deploy --archive=tgz --prebuilt $SKIP_FLAG $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG $DB_RUN_FLAG | tee .vercel/DEPLOY_LOG

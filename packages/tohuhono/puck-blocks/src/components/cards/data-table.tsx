@@ -227,7 +227,7 @@ export function CardsDataTable() {
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} className="[&:has([role=checkbox])]:pl-3">
+                      <TableHead key={header.id} className="has-[[role=checkbox]]:pl-3">
                         {header.isPlaceholder
                           ? null
                           : flexRender(header.column.columnDef.header, header.getContext())}
@@ -242,7 +242,7 @@ export function CardsDataTable() {
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="[&:has([role=checkbox])]:pl-3">
+                      <TableCell key={cell.id} className="has-[[role=checkbox]]:pl-3">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}

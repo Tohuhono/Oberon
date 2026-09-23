@@ -57,29 +57,30 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      MASTER_EMAIL: ${{ vars.MASTER_EMAIL }}
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
           fetch-depth: 0
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "24.x"
           package-manager-cache: false
       - name: Corepack
         run: corepack enable pnpm
       - name: Enable pnpm cache
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           cache: pnpm
       - name: Cache turbo build setup
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
@@ -91,4 +92,12 @@ jobs:
         id: deploy
         run: |
           pnpm run deploy
-          echo "url=$(tail .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
+          echo "url=$(tail -n 1 .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
+      - name: Upload deployment log
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: deployment-log-${{ inputs.project }}
+          path: .vercel/DEPLOY_LOG
+          if-no-files-found: warn
+          include-hidden-files: true

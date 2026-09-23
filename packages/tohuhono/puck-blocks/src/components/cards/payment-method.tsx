@@ -33,7 +33,7 @@ export function CardsPaymentMethod() {
                 border-muted bg-transparent p-4
                 peer-data-[state=checked]:border-primary
                 hover:bg-accent hover:text-accent-foreground
-                [&:has([data-state=checked])]:border-primary
+                has-data-[state=checked]:border-primary
               "
             >
               <svg
@@ -66,7 +66,7 @@ export function CardsPaymentMethod() {
                 border-muted bg-transparent p-4
                 peer-data-[state=checked]:border-primary
                 hover:bg-accent hover:text-accent-foreground
-                [&:has([data-state=checked])]:border-primary
+                has-data-[state=checked]:border-primary
               "
             >
               <Icons.paypal className="mb-3 size-6" />
@@ -82,7 +82,7 @@ export function CardsPaymentMethod() {
                 border-muted bg-transparent p-4
                 peer-data-[state=checked]:border-primary
                 hover:bg-accent hover:text-accent-foreground
-                [&:has([data-state=checked])]:border-primary
+                has-data-[state=checked]:border-primary
               "
             >
               <Icons.apple className="mb-3 size-6" />

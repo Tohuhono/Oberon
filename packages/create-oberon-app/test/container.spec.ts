@@ -10,12 +10,19 @@ import {
   COA_APP_DIR,
   execInContainer,
   NEXTJS_APP_PORT,
+  NEXTJS_BASE_URL,
   NEXTJS_BUILD_LOG_PATH,
   NEXTJS_COA_LOG_PATH,
   NEXTJS_CONTAINER_NAME,
   NEXTJS_SERVER_LOG_PATH,
   startPod,
   stopPod,
+  TANSTACK_APP_PORT,
+  TANSTACK_BASE_URL,
+  TANSTACK_BUILD_LOG_PATH,
+  TANSTACK_COA_LOG_PATH,
+  TANSTACK_CONTAINER_NAME,
+  TANSTACK_SERVER_LOG_PATH,
   VERDACCIO_AUTH_KEY,
   VERDACCIO_PING_PATH,
   VERDACCIO_PORT,
@@ -63,6 +70,54 @@ test.describe.serial("Initialise Pod", { tag: "@initialise-pod" }, () => {
   })
 })
 
+test.describe.serial("Initialise Tanstack", { tag: "@initialise-tanstack" }, () => {
+  test("Create Oberon App", async ({ authEmail }) => {
+    test.setTimeout(180000)
+
+    expect(authEmail).toBeDefined()
+
+    await expect(
+      execInContainer(
+        [
+          "pnpm dlx create-oberon-app test-app",
+          "--database turso",
+          "--send resend",
+          "--recipe tanstack",
+          "--use pnpm",
+          `--email ${authEmail}`,
+          `--dir ${COA_APP_DIR}`,
+          `> ${TANSTACK_COA_LOG_PATH} 2>&1`,
+        ].join(" "),
+        { container: TANSTACK_CONTAINER_NAME, cwd: "/" },
+      ),
+    ).resolves.not.toThrow()
+  })
+
+  test("Build Oberon App", async () => {
+    test.setTimeout(180000)
+
+    await expect(
+      execInContainer(`pnpm run build > ${TANSTACK_BUILD_LOG_PATH} 2>&1`, {
+        container: TANSTACK_CONTAINER_NAME,
+      }),
+    ).resolves.not.toThrow()
+  })
+
+  test("Start Oberon App", async () => {
+    await expect(
+      execInContainer(
+        `pnpm run start --host 0.0.0.0 --port ${TANSTACK_APP_PORT} > ${TANSTACK_SERVER_LOG_PATH} 2>&1`,
+        {
+          container: TANSTACK_CONTAINER_NAME,
+          detached: true,
+        },
+      ),
+    ).resolves.not.toThrow()
+
+    await expect(waitForServer(TANSTACK_BASE_URL)).resolves.toBeTruthy()
+  })
+})
+
 test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
   test("Create Oberon App", async ({ authEmail }) => {
     test.setTimeout(180000)
@@ -84,9 +139,17 @@ test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
         { container: NEXTJS_CONTAINER_NAME, cwd: "/" },
       ),
     ).resolves.not.toThrow()
+
+    await expect(
+      execInContainer(`grep -q '@oberoncms/plugin-nextjs' ${COA_APP_DIR}/oberon/config.ts`, {
+        container: NEXTJS_CONTAINER_NAME,
+      }),
+    ).resolves.not.toThrow()
   })
 
   test("Build Oberon App", async () => {
+    test.setTimeout(180000)
+
     await expect(
       execInContainer(`pnpm run build > ${NEXTJS_BUILD_LOG_PATH} 2>&1`, {
         container: NEXTJS_CONTAINER_NAME,
@@ -102,7 +165,7 @@ test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
       }),
     ).resolves.not.toThrow()
 
-    await expect(waitForServer(`http://localhost:${NEXTJS_APP_PORT}`)).resolves.toBeTruthy()
+    await expect(waitForServer(NEXTJS_BASE_URL)).resolves.toBeTruthy()
   })
 })
 

@@ -1,4 +1,5 @@
-import { mkdir } from "fs/promises"
+import { mkdir } from "node:fs/promises"
+import { dirname } from "node:path"
 
 import { createClient } from "@libsql/client"
 // import type from here as
@@ -13,6 +14,7 @@ declare global {
 }
 
 const url = process.env.SQLITE_FILE || "file:.oberon/db/oberon.db"
+const databasePath = url.startsWith("file:") ? url.slice("file:".length) : undefined
 
 // ensure there is only one database client
 const getGlobalClient: () => Client = () =>
@@ -24,6 +26,9 @@ export const getClient = () =>
   })
 
 export async function initialise() {
-  await mkdir(".oberon/db", { recursive: true })
+  if (databasePath) {
+    await mkdir(dirname(databasePath), { recursive: true })
+  }
+
   await getClient().run(sql`PRAGMA journal_mode=WAL;`)
 }

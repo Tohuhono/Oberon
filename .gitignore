@@ -7,11 +7,7 @@ node_modules/
 .pnpm-store/
 
 # Local env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
 
 # Testing
 coverage
@@ -41,6 +37,7 @@ yarn-error.log*
 
 # Oberon
 .oberon/
+.output/
 
 # vite doesn't know how to clean up after itself
 vite.config.*.timestamp-*
@@ -51,6 +48,9 @@ vite.config.*.timestamp-*
 
 # Temp / agent scratch
 .tmp/
+/deploylog
 
 # Vercel adds this if it's not last
 .vercel/
+.vercel
+.env*

@@ -5,30 +5,31 @@ reuse these terms instead of redefining them.
 
 ## Runtime composition
 
-| Term                        | Definition                                                                                                                                                                  | Aliases to avoid                      |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| **Oberon config**           | A server-side configuration object containing Oberon client config and an ordered Plugin list.                                                                              | definition, runtime config            |
-| **Oberon client config**    | The client-safe component and editor configuration included in an Oberon config.                                                                                            | config, site config                   |
-| **Oberon runtime**          | A configured OberonCMS instance built from an Oberon config.                                                                                                                | app, core, CMS instance               |
-| **Framework integration**   | A package that adapts an Oberon runtime to a host web framework's routing, rendering, caching, auth, and navigation conventions.                                            | framework plugin, app adapter         |
-| **Framework contribution**  | A framework capability supplied by a Framework integration to an Oberon runtime, such as routing, navigation, request authority, image transformation, or action transport. | route prop, adapter smuggling         |
-| **Plugin**                  | An integration that contributes runtime capabilities such as adapter methods, HTTP handlers, framework entrypoints, or bootstrap behavior to an Oberon runtime.             | extension, addon, adapter             |
-| **Auth Plugin**             | A Plugin that contributes authentication behavior to an Oberon runtime and produces Users for authorization flows.                                                          | framework auth integration            |
-| **Request authority**       | A Framework integration capability that reads request-scoped auth state from the host framework for an Oberon runtime.                                                      | caller-provided headers               |
-| **Plugin adapter**          | A plugin-provided implementation of a runtime capability such as storage, auth, or send.                                                                                    | plugin, provider                      |
-| **Plugin action**           | An Oberon action contributed by a Plugin to the Oberon runtime action surface.                                                                                              | action hook, action middleware        |
-| **Router adapter**          | A client-safe framework integration capability that gives Oberon UI a framework Link component.                                                                             | navigation adapter, hand-rolled Link  |
-| **Oberon Link component**   | A UI component that renders navigation links through framework-provided routing behavior.                                                                                   | anchor wrapper, Next Link             |
-| **Routing adapter**         | A server-side framework integration capability that maps Oberon routing decisions to host routing behavior.                                                                 | redirect helper, not-found helper     |
-| **Oberon action**           | A framework-neutral CMS operation exposed to Oberon UI, including reads and mutations.                                                                                      | server action, client action          |
-| **Client route effects**    | Client-side framework behavior used by Oberon UI after workflows complete, such as navigating to a route or refreshing visible route data.                                  | router abstraction, action effects    |
-| **Oberon action transport** | A framework integration capability that exposes Oberon actions across the client/server boundary.                                                                           | server action, action wrapper         |
-| **Oberon action response**  | The framework-neutral success or error result returned by an Oberon action to Oberon UI.                                                                                    | server action response                |
-| **Oberon bootstrap**        | The lifecycle step that prepares an Oberon runtime before serving requests or building app output.                                                                          | prepare, prebuild, setup              |
-| **Bootstrap composition**   | Private plugin composition used during Oberon bootstrap.                                                                                                                    | prebuild adapter, setup adapter       |
-| **Runtime composition**     | Plugin composition used to create the public Adapter and Handler returned by an Oberon runtime.                                                                             | final composition, live adapter       |
-| **Adapter**                 | The composed programmatic CMS interface returned by an Oberon runtime, not limited to data or persistence methods.                                                          | data adapter, plugin, service, client |
-| **Handler**                 | The composed HTTP entrypoint returned by an Oberon runtime.                                                                                                                 | route, endpoint, API                  |
+| Term                        | Definition                                                                                                                                                                                         | Aliases to avoid                      |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| **Oberon config**           | A server-side configuration object containing Oberon client config and an ordered Plugin list.                                                                                                     | definition, runtime config            |
+| **Oberon client config**    | The client-safe component and editor configuration included in an Oberon config.                                                                                                                   | config, site config                   |
+| **Oberon runtime**          | A configured OberonCMS instance built from an Oberon config.                                                                                                                                       | app, core, CMS instance               |
+| **Plugin**                  | An integration that may contribute any combination of runtime capabilities, such as adapter behavior, HTTP handlers, framework entrypoints, actions, bootstrap behavior, caching, or revalidation. | extension, addon, adapter             |
+| **Adapter capability**      | A composable runtime capability commonly fulfilled by a Plugin, such as persistence, authorization, send, auth plumbing, or routing behavior.                                                      | plugin type, feature group            |
+| **Framework integration**   | A Plugin that adapts an Oberon runtime to a host web framework's routing, rendering, auth, and navigation conventions.                                                                             | framework plugin, app adapter         |
+| **Framework contribution**  | A framework or platform capability supplied by a Plugin to an Oberon runtime, such as routing, navigation, request authority, image transformation, action transport, caching, or revalidation.    | route prop, adapter smuggling         |
+| **Auth Plugin**             | A Plugin that contributes authentication behavior to an Oberon runtime and produces Users for authorization flows.                                                                                 | framework auth integration            |
+| **Request authority**       | A Framework integration capability that reads request-scoped auth state from the host framework for an Oberon runtime.                                                                             | caller-provided headers               |
+| **Plugin adapter**          | A plugin-provided implementation of a runtime capability such as storage, auth, or send.                                                                                                           | plugin, provider                      |
+| **Plugin action**           | An Oberon action contributed by a Plugin to the Oberon runtime action surface.                                                                                                                     | action hook, action middleware        |
+| **Router adapter**          | A client-safe framework integration capability that gives Oberon UI a framework Link component.                                                                                                    | navigation adapter, hand-rolled Link  |
+| **Oberon Link component**   | A UI component that renders navigation links through framework-provided routing behavior.                                                                                                          | anchor wrapper, Next Link             |
+| **Routing adapter**         | A server-side framework integration capability that maps Oberon routing decisions to host routing behavior.                                                                                        | redirect helper, not-found helper     |
+| **Oberon action**           | A framework-neutral CMS operation exposed to Oberon UI, including reads and mutations.                                                                                                             | server action, client action          |
+| **Client route effects**    | Client-side framework behavior used by Oberon UI after workflows complete, such as navigating to a route or refreshing visible route data.                                                         | router abstraction, action effects    |
+| **Oberon action transport** | A framework integration capability that exposes Oberon actions across the client/server boundary.                                                                                                  | server action, action wrapper         |
+| **Oberon action response**  | The framework-neutral success or error result returned by an Oberon action to Oberon UI.                                                                                                           | server action response                |
+| **Oberon bootstrap**        | The lifecycle step that prepares an Oberon runtime before serving requests or building app output.                                                                                                 | prepare, prebuild, setup              |
+| **Bootstrap composition**   | Private plugin composition used during Oberon bootstrap.                                                                                                                                           | prebuild adapter, setup adapter       |
+| **Runtime composition**     | Plugin composition used to create the public Adapter and Handler returned by an Oberon runtime.                                                                                                    | final composition, live adapter       |
+| **Adapter**                 | The composed programmatic CMS interface returned by an Oberon runtime, not limited to data or persistence methods.                                                                                 | data adapter, plugin, service, client |
+| **Handler**                 | The composed HTTP entrypoint returned by an Oberon runtime.                                                                                                                                        | route, endpoint, API                  |
 
 ## Content model
 
@@ -44,21 +45,28 @@ reuse these terms instead of redefining them.
 
 ## Project surfaces
 
-| Term                  | Definition                                                                        | Aliases to avoid                         |
-| --------------------- | --------------------------------------------------------------------------------- | ---------------------------------------- |
-| **create-oberon-app** | The CLI that scaffolds a new OberonCMS project from a recipe.                     | generator, starter, bootstrap script     |
-| **Recipe**            | A framework-specific starter definition consumed by `create-oberon-app`.          | template, example app, boilerplate       |
-| **Starter app**       | A generated application created by `create-oberon-app` from a recipe.             | app, recipe, playground                  |
-| **Playground**        | The repo-owned development app used to exercise OberonCMS locally.                | demo, starter app, sample project        |
-| **Documentation app** | The repo-owned site that publishes OberonCMS documentation and mounts the CMS UI. | docs, website, landing page              |
-| **Demo**              | The user-facing OberonCMS example exposed from the documentation app.             | playground, starter app, example project |
+| Term                    | Definition                                                                                                                                                             | Aliases to avoid                         |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| **create-oberon-app**   | The CLI that scaffolds a new OberonCMS project from a recipe.                                                                                                          | generator, starter, bootstrap script     |
+| **Recipe**              | A framework-specific starter definition consumed by `create-oberon-app`.                                                                                               | template, example app, boilerplate       |
+| **Starter app**         | A generated application created by `create-oberon-app` from a recipe.                                                                                                  | app, recipe, playground                  |
+| **Playground**          | A repo-owned development app used to exercise OberonCMS locally.                                                                                                       | demo, starter app, sample project        |
+| **TanStack Playground** | The repo-owned TanStack development Playground intended to become the canonical Playground once feature parity is reached.                                             | newground, demo, starter app             |
+| **Next.js Playground**  | The repo-owned Next.js development Playground retained during the TanStack migration as a comparison surface, then primarily as compatibility and regression coverage. | legacy app, demo, starter app            |
+| **CMS parity**          | A migration milestone where the TanStack Playground supports the CMS workflows currently exercised through the Next.js Playground.                                     | feature complete, replacement            |
+| **Documentation app**   | The repo-owned site that publishes OberonCMS documentation and mounts the CMS UI.                                                                                      | docs, website, landing page              |
+| **Demo**                | The user-facing OberonCMS example exposed from the documentation app.                                                                                                  | playground, starter app, example project |
 
 ## Relationships
 
 - An **Oberon runtime** exposes exactly one public **Adapter** and one public **Handler** from
   **Runtime composition**.
-- A **Framework integration** exposes framework-specific entrypoints for an **Oberon runtime**.
-- A **Framework integration** supplies **Framework contributions** through the ordered **Plugin**
+- A **Plugin** can contribute any combination of capabilities; its category does not fully prescribe
+  what it can or cannot contribute.
+- A **Plugin** commonly fulfills one or more **Adapter capabilities**, but it is not limited to
+  those capabilities.
+- A **Framework integration** may expose framework-specific entrypoints for an **Oberon runtime**.
+- A **Framework integration** may supply **Framework contributions** through the ordered **Plugin**
   list in an **Oberon config**.
 - An **Oberon config** supplies the **Oberon client config** and ordered **Plugin** list used by
   both **Bootstrap composition** and **Runtime composition**.
@@ -109,6 +117,11 @@ reuse these terms instead of redefining them.
 - `create-oberon-app` materializes exactly one **Starter app** from exactly one **Recipe** per run.
 - The **Playground**, **Documentation app**, and **Demo** are repo-owned surfaces and are not
   **Starter apps**.
+- The **TanStack Playground** and **Next.js Playground** may run side by side while the TanStack
+  surface reaches feature parity.
+- After feature parity, the **TanStack Playground** is expected to become the canonical
+  **Playground** while the **Next.js Playground** remains primarily as compatibility and regression
+  coverage.
 
 ## Example dialogue
 

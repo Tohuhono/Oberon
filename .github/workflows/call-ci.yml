@@ -34,6 +34,8 @@ on:
         required: false
       AUTH_SECRET:
         required: false
+      E2E_AUTH_SECRET:
+        required: true
 
 jobs:
   changed-packages:
@@ -51,23 +53,23 @@ jobs:
       USE_DEVELOPMENT_DATABASE: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "24.x"
           package-manager-cache: false
       - name: Corepack
         run: corepack enable pnpm
       - name: Enable pnpm cache
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           cache: pnpm
       - name: Cache turbo build setup
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-validate-${{ github.sha }}
@@ -83,25 +85,29 @@ jobs:
     runs-on: ubuntu-latest
     env:
       USE_DEVELOPMENT_DATABASE: "true"
+      USE_DEVELOPMENT_SEND: "true"
+      AUTH_TRUST_HOST: "true"
+      AUTH_SECRET: ${{ secrets.E2E_AUTH_SECRET }}
+      MASTER_EMAIL: ${{ vars.E2E_MASTER_EMAIL }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "24.x"
           package-manager-cache: false
       - name: Corepack
         run: corepack enable pnpm
       - name: Enable pnpm cache
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           cache: pnpm
       - name: Cache turbo build setup
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-e2e-${{ github.sha }}
@@ -111,16 +117,38 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: E2E Tests
         run: pnpm test:e2e
-      - name: Publish Playwright report
+      - name: Publish documentation Playwright report
         if: ${{ failure() }}
         uses: ./.github/actions/deploy-playwright-report
         with:
-          artifact_name: playwright-report
+          artifact_name: playwright-report-documentation
+          artifact_path: |
+            apps/documentation/.playwright/report/**
+            apps/documentation/.playwright/logs/**
+          report_dir: apps/documentation/.playwright/report
+          summary_label: View documentation report
+          vercel_token: ${{ secrets.VERCEL_API_TOKEN }}
+      - name: Publish playground Playwright report
+        if: ${{ failure() }}
+        uses: ./.github/actions/deploy-playwright-report
+        with:
+          artifact_name: playwright-report-playground
           artifact_path: |
             apps/playground/.playwright/report/**
             apps/playground/.playwright/logs/**
           report_dir: apps/playground/.playwright/report
-          summary_label: View report
+          summary_label: View playground report
+          vercel_token: ${{ secrets.VERCEL_API_TOKEN }}
+      - name: Publish newground Playwright report
+        if: ${{ failure() }}
+        uses: ./.github/actions/deploy-playwright-report
+        with:
+          artifact_name: playwright-report-newground
+          artifact_path: |
+            apps/newground/.playwright/report/**
+            apps/newground/.playwright/logs/**
+          report_dir: apps/newground/.playwright/report
+          summary_label: View newground report
           vercel_token: ${{ secrets.VERCEL_API_TOKEN }}
 
   coa:
@@ -128,23 +156,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "24.x"
           package-manager-cache: false
       - name: Corepack
         run: corepack enable pnpm
       - name: Enable pnpm cache
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           cache: pnpm
       - name: Cache turbo build setup
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-coa-${{ github.sha }}
@@ -154,6 +182,17 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: COA Tests
         run: pnpm test:coa
+      - name: Publish Create Oberon App Playwright report
+        if: ${{ failure() }}
+        uses: ./.github/actions/deploy-playwright-report
+        with:
+          artifact_name: playwright-report-create-oberon-app
+          artifact_path: |
+            packages/create-oberon-app/.playwright/report/**
+            packages/create-oberon-app/.playwright/logs/**
+          report_dir: packages/create-oberon-app/.playwright/report
+          summary_label: View Create Oberon App report
+          vercel_token: ${{ secrets.VERCEL_API_TOKEN }}
 
   deploy_docs:
     name: Oberon Docs
@@ -191,14 +230,36 @@ jobs:
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
 
+  deploy_newground:
+    name: TanStack Playground
+    needs: [changed-packages]
+    if:
+      ${{ always() && contains(needs.changed-packages.outputs.changed_packages,
+      '@oberon/newground') }}
+    uses: ./.github/workflows/call-deploy.yml
+    with:
+      environment: ${{ inputs.environment }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: newground
+      db_branch: ${{ inputs.db_branch }}
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+
   smoke_docs:
     name: Smoke Test Docs
     needs: [changed-packages, deploy_docs]
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
-      project: docs
+      project: oberon-docs
       base_url: ${{ needs.deploy_docs.outputs.url }}
     secrets:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
@@ -209,10 +270,25 @@ jobs:
     needs: [changed-packages, deploy_playground]
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: playground
       base_url: ${{ needs.deploy_playground.outputs.url }}
+    secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+
+  smoke_newground:
+    name: Smoke Test TanStack Playground
+    needs: [changed-packages, deploy_newground]
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      environment: ${{ inputs.environment }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: newground
+      base_url: ${{ needs.deploy_newground.outputs.url }}
     secrets:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
@@ -227,8 +303,10 @@ jobs:
         coa,
         deploy_docs,
         deploy_playground,
+        deploy_newground,
         smoke_docs,
         smoke_playground,
+        smoke_newground,
       ]
     if: always()
     runs-on: ubuntu-latest
@@ -240,6 +318,7 @@ jobs:
         Latest deployments available at: 
         ${{ needs.deploy_docs.outputs.url && format('[docs]({0}) ', needs.deploy_docs.outputs.url) }}
         ${{ needs.deploy_playground.outputs.url && format('[developer playground]({0}) ', needs.deploy_playground.outputs.url) }}
+        ${{ needs.deploy_newground.outputs.url && format('[tanstack playground]({0}) ', needs.deploy_newground.outputs.url) }}
     steps:
       - name: Add preview URL to job summary
         run: |
@@ -278,15 +357,31 @@ jobs:
       staging_url: ${{ needs.deploy_playground.outputs.url }}
       production_url: playground.tohuhono.com
 
+  promote_newground:
+    name: TanStack Playground
+    needs: [test-status, deploy_newground]
+    if: inputs.environment == 'production'
+    uses: ./.github/workflows/call-promote.yml
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    with:
+      environment: ${{ inputs.environment }}
+      project: newground
+      staging_url: ${{ needs.deploy_newground.outputs.url }}
+      production_url: newground.tohuhono.com
+
   smoke-docs-production:
     name: Smoke Test Promoted Docs
     needs: [promote_docs]
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
-      project: docs
+      project: oberon-docs
       base_url: https://www.oberoncms.com
     secrets:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
@@ -297,9 +392,24 @@ jobs:
     if: inputs.environment == 'production'
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: playground
       base_url: https://playground.tohuhono.com
+    secrets:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+
+  smoke-newground-production:
+    name: Smoke Test Promoted TanStack Playground
+    needs: [promote_newground]
+    if: inputs.environment == 'production'
+    uses: ./.github/workflows/call-smoke.yml
+    with:
+      environment: ${{ inputs.environment }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      project: newground
+      base_url: https://newground.tohuhono.com
     secrets:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
