@@ -1,5 +1,31 @@
 # @oberoncms/core
 
+## 0.20.0
+
+### Minor Changes
+
+- 4b794ca: Moved nextjs caching into the new nextjs plugin
+- 7e48e64: Remove Next.js from `@oberoncms/core`. The Next.js integration now provides the
+  Next-specific server and client framework capabilities, while shared UI Link and Image providers
+  keep core rendering framework-neutral. Updated the Next recipe and create-oberon-app wiring for
+  the new runtime shape, and moved handler boundaries to standard `Request` types where needed.
+
+### Patch Changes
+
+- 2f7a0c2: Run app E2E tests against production builds with deterministic seeded SQLite state, load
+  shared and local environment files consistently, keep credentials out of committed app defaults,
+  normalize framework query parameters, and make shared CMS persistence assertions resilient.
+- 2f7a0c2: Resolve Better Auth URLs from Vercel deployment hostnames while preserving explicit
+  production and local development overrides.
+- 929bc33: Moved from prettier and eslint to oxc
+- 5ff8413: Adds support for multiple recipes in create-oberon-app
+- Updated dependencies [4b794ca]
+- Updated dependencies [7e48e64]
+- Updated dependencies [929bc33]
+- Updated dependencies [5ff8413]
+  - @tohuhono/ui@0.17.0
+  - @tohuhono/utils@0.16.1
+
 ## 0.19.1
 
 ### Patch Changes

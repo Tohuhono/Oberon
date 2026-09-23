@@ -1,5 +1,19 @@
 # @oberoncms/plugin-development
 
+## 0.1.1
+
+### Patch Changes
+
+- 2f7a0c2: Invalidate active TanStack Start route loaders after successful CMS mutations so client
+  state settles with persisted data.
+- Updated dependencies [4b794ca]
+- Updated dependencies [2f7a0c2]
+- Updated dependencies [2f7a0c2]
+- Updated dependencies [7e48e64]
+- Updated dependencies [929bc33]
+- Updated dependencies [5ff8413]
+  - @oberoncms/core@0.20.0
+
 ## 0.8.1
 
 ### Patch Changes

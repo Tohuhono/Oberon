@@ -1,5 +1,15 @@
 # @dev/playwright
 
+## 0.1.1
+
+### Patch Changes
+
+- 2f7a0c2: Run app E2E tests against production builds with deterministic seeded SQLite state, load
+  shared and local environment files consistently, keep credentials out of committed app defaults,
+  normalize framework query parameters, and make shared CMS persistence assertions resilient.
+- 929bc33: Moved from prettier and eslint to oxc
+- 5ff8413: Adds support for multiple recipes in create-oberon-app
+
 ## 0.1.0
 
 ### Minor Changes
