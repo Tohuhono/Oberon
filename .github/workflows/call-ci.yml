@@ -259,7 +259,7 @@ jobs:
       environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
-      project: docs
+      project: oberon-docs
       base_url: ${{ needs.deploy_docs.outputs.url }}
     secrets:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
@@ -381,7 +381,7 @@ jobs:
       environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
-      project: docs
+      project: oberon-docs
       base_url: https://www.oberoncms.com
     secrets:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
