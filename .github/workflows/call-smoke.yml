@@ -3,15 +3,17 @@ name: Smoke Tests
 on:
   workflow_call:
     inputs:
+      environment:
+        required: true
+        type: string
+      project:
+        required: true
+        type: string
       repository:
         required: true
         type: string
       ref:
         required: true
-        type: string
-      project:
-        required: false
-        default: ""
         type: string
       base_url:
         required: false
@@ -25,6 +27,8 @@ on:
 jobs:
   smoke:
     name: Smoke Test
+    environment:
+      name: ${{ format('{0}-{1}', inputs.environment, inputs.project) }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

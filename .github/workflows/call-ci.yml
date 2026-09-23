@@ -256,6 +256,7 @@ jobs:
     needs: [changed-packages, deploy_docs]
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: docs
@@ -269,6 +270,7 @@ jobs:
     needs: [changed-packages, deploy_playground]
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: playground
@@ -282,6 +284,7 @@ jobs:
     needs: [changed-packages, deploy_newground]
     uses: ./.github/workflows/call-smoke.yml
     with:
+      environment: ${{ inputs.environment }}
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       project: newground
