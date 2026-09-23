@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-tanstack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Tanstack plugin for OberonCMS",
   "keywords": [
     "adapter",

@@ -1,5 +1,11 @@
 # @dev/typescript
 
+## 0.2.1
+
+### Patch Changes
+
+- 929bc33: Moved from prettier and eslint to oxc
+
 ## 0.2.0
 
 ### Minor Changes

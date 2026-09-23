@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-nextjs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Nextjs plugin for OberonCMS",
   "keywords": [
     "adapter",

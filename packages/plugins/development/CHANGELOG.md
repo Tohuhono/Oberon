@@ -1,5 +1,30 @@
 # @oberoncms/plugin-development
 
+## 0.9.0
+
+### Minor Changes
+
+- 4b794ca: Moved nextjs caching into the new nextjs plugin
+
+### Patch Changes
+
+- 2f7a0c2: Run app E2E tests against production builds with deterministic seeded SQLite state, load
+  shared and local environment files consistently, keep credentials out of committed app defaults,
+  normalize framework query parameters, and make shared CMS persistence assertions resilient.
+- 7e48e64: Add follow-up updates for the Next.js decoupling work across docs and playground
+  examples, and align SQLite/PostgreSQL adapters and plugin integration tests with the new core
+  handler boundaries.
+- 929bc33: Moved from prettier and eslint to oxc
+- Updated dependencies [4b794ca]
+- Updated dependencies [2f7a0c2]
+- Updated dependencies [7e48e64]
+- Updated dependencies [2f7a0c2]
+- Updated dependencies [7e48e64]
+- Updated dependencies [929bc33]
+- Updated dependencies [5ff8413]
+  - @oberoncms/core@0.20.0
+  - @oberoncms/sqlite@0.8.2
+
 ## 0.8.1
 
 ### Patch Changes
