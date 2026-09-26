@@ -30,7 +30,7 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
     })
 
     expect(initHandler).toHaveBeenCalledOnce()
-    expect(initHandler).toHaveBeenCalledWith(adapter)
+    expect(initHandler).toHaveBeenCalledWith({ adapter, pluginAdapter: expect.any(Object) })
     expect(get).toHaveBeenCalledTimes(2)
   })
 
@@ -68,7 +68,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
   it("uses one Oberon config for runtime and bootstrap composition", async () => {
     const phases: string[] = []
 
-    const plugin: OberonPlugin = (_adapter, { phase } = { phase: "runtime" }) => {
+    const plugin: OberonPlugin = ({ phase }) => {
       phases.push(phase)
 
       return {
@@ -96,7 +96,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
   it("passes runtime and bootstrap phase context to plugins", async () => {
     const phases: string[] = []
 
-    const plugin: OberonPlugin = (_adapter, { phase } = { phase: "runtime" }) => {
+    const plugin: OberonPlugin = ({ phase }) => {
       phases.push(phase)
 
       return {
@@ -131,7 +131,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     expect(phases).toEqual(["runtime", "bootstrap"])
   })
 
-  it("runs bootstrap hooks in middleware order before welcome page initialisation", async () => {
+  it("runs bootstrap hooks sequentially before welcome page initialisation", async () => {
     const events: string[] = []
 
     const firstPlugin: OberonPlugin = () => ({
@@ -146,19 +146,15 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
           events.push("site")
         },
       },
-      bootstrap: async (next) => {
-        events.push("first before")
-        await next()
-        events.push("first after")
+      bootstrap: async () => {
+        events.push("first")
       },
     })
 
     const secondPlugin: OberonPlugin = () => ({
       name: "second-plugin",
-      bootstrap: async (next) => {
-        events.push("second before")
-        await next()
-        events.push("second after")
+      bootstrap: async () => {
+        events.push("second")
       },
     })
 
@@ -167,13 +163,6 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       plugins: [firstPlugin, secondPlugin],
     })
 
-    expect(events).toEqual([
-      "second before",
-      "first before",
-      "first after",
-      "second after",
-      "welcome",
-      "site",
-    ])
+    expect(events).toEqual(["first", "second", "welcome", "site"])
   })
 })

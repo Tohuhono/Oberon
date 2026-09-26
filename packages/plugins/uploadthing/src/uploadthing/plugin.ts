@@ -4,15 +4,15 @@ import { name, version } from "../../package.json" with { type: "json" }
 import { deleteImage } from "./api"
 import { initRouteHandler } from "./file-router"
 
-export const plugin: OberonPlugin = (adapter) => ({
+export const plugin: OberonPlugin = () => ({
   name,
   version,
   handlers: {
-    uploadthing: (adapter) => initRouteHandler(adapter),
+    uploadthing: ({ adapter }) => initRouteHandler(adapter),
   },
   adapter: {
-    deleteImage: async (key) => {
-      const results = await Promise.allSettled([adapter.deleteImage(key), deleteImage(key)])
+    deleteImage: async ({ next, payload: { key } }) => {
+      const results = await Promise.allSettled([next({ key }), deleteImage(key)])
 
       const errors = results.filter((r) => r.status === "rejected").map((r) => r.reason)
 

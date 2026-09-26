@@ -17,14 +17,16 @@ This document records the current wiring of the monorepo. Canonical terms live i
 `initOberon(config)` is the Runtime composition root and returns `{ adapter, handler }`.
 `bootstrapOberon(config)` is the Bootstrap composition root used by package `prebuild` scripts.
 
-1. `initPlugins` reduces the ordered plugin list into merged adapter methods, a handler map, and
-   version metadata.
+1. `initPlugins` collects declarative plugin definitions, composes adapter middleware around one
+   final internal adapter, and collects handlers, Bootstrap tasks, and version metadata.
 2. `initAdapter` wraps the merged adapter with permission checks, zod parsing, and transform
    migration support.
 3. `initOberon` builds a single HTTP handler that dispatches by first path segment to plugin
    handlers.
 
-Later plugin fields override earlier ones, so plugin order is part of the runtime contract.
+Later adapter hooks are outermost and use `next` to continue earlier implementations. Every
+executable hook sees the final internal adapter regardless of plugin position. Plugin order controls
+middleware nesting, replacement precedence, and sequential Bootstrap order.
 
 ## Runtime flows
 
@@ -48,7 +50,8 @@ Later plugin fields override earlier ones, so plugin order is part of the runtim
 ### Build lifecycle
 
 - App `prebuild` scripts call `bootstrapOberon(config)`.
-- Database plugins use top-level `bootstrap(next)` hooks to run migrations before builds.
+- Database plugins use top-level `bootstrap({ adapter })` tasks to run migrations before builds.
+- Bootstrap tasks are awaited in configured order before core initializes Page and Site state.
 - `@oberoncms/plugin-nextjs` adds cache tagging and revalidation around adapter reads and mutations;
   this behavior is skipped during Bootstrap composition.
 

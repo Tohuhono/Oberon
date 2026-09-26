@@ -1,9 +1,4 @@
-import {
-  USE_DEVELOPMENT_DATABASE_PLUGIN,
-  notImplemented,
-  type OberonDatabaseAdapter,
-  type OberonPlugin,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_DATABASE_PLUGIN, notImplemented, type OberonPlugin } from "@oberoncms/core"
 
 export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
@@ -28,5 +23,5 @@ export const databasePlugin: OberonPlugin = () => ({
     changeRole: notImplemented("changeRole"),
     deleteUser: notImplemented("deleteUser"),
     getAllUsers: notImplemented("getAllUsers"),
-  } satisfies OberonDatabaseAdapter,
+  },
 })

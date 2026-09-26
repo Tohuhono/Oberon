@@ -89,30 +89,53 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
     await expect.poll(async () => (await frame.boundingBox())?.width ?? 0).toBeLessThan(fullWidth)
   })
 
-  test.skip(
+  test(
     "publishes a text component with a className",
     { tag: "@playground" },
     async ({ cms, cmsSeededPageKey, errorCapture }) => {
       await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+      await waitForEditorPreview(cms)
+
+      await cms.getByRole("tab", { name: "Components", exact: true }).click()
+
       const previewFrame = cms.frameLocator("iframe#preview-frame")
-      const textComponent = previewFrame.getByText("Welcome to OberonCMS").first()
+      const rootDropZone = previewFrame.getByTestId("dropzone:root:default-zone")
+      await expect(rootDropZone).toBeVisible()
 
-      const frame = cms.locator("iframe#preview-frame")
-      await expect.poll(async () => (await frame.boundingBox())?.width ?? 0).toBeGreaterThan(0)
-      await expect(textComponent).toBeVisible()
-      await textComponent.click()
+      const drawerItemBox = await cms.getByTestId("drawer-item:Text").boundingBox()
+      const rootDropZoneBox = await rootDropZone.boundingBox()
 
-      const textHeading = cms.getByRole("heading", { name: "Text" })
+      if (!drawerItemBox || !rootDropZoneBox) {
+        throw new Error("Text drawer item and root drop zone must have bounding boxes")
+      }
+
+      await cms.mouse.move(
+        drawerItemBox.x + drawerItemBox.width / 2,
+        drawerItemBox.y + drawerItemBox.height / 2,
+      )
+      await cms.mouse.down()
+      await cms.waitForTimeout(250)
+      await cms.mouse.move(
+        drawerItemBox.x + drawerItemBox.width / 2 + 10,
+        drawerItemBox.y + drawerItemBox.height / 2,
+        { steps: 5 },
+      )
+      await cms.mouse.move(
+        rootDropZoneBox.x + rootDropZoneBox.width / 2,
+        rootDropZoneBox.y + rootDropZoneBox.height / 2,
+        { steps: 20 },
+      )
+      await cms.mouse.up()
+
+      const pageSettingsTab = cms.getByRole("tab", { name: "Page Settings", exact: true })
+      await expect(pageSettingsTab).toHaveAttribute("aria-selected", "true")
+
       const inspectorPanel = cms.getByRole("tabpanel")
-      await expect(inspectorPanel).toBeVisible()
-
-      await expect(textHeading).toBeVisible()
-
-      const textInput = inspectorPanel.locator('textarea[name="text"]').first()
+      const textInput = inspectorPanel.locator('textarea[name="text"]')
       await expect(textInput).toBeVisible()
       await textInput.fill("Welcome to OberonCMS")
 
-      const classNameInput = inspectorPanel.locator('input[name="className"]').first()
+      const classNameInput = inspectorPanel.locator('input[name="className"]')
       await expect(classNameInput).toBeVisible()
       await classNameInput.fill("p-1")
 
@@ -131,8 +154,9 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
       errorCapture.clear()
       await cms.goto(cmsSeededPageKey)
       await expect(cms).toHaveURL(cmsSeededPageKey)
-      await expect(cms.getByText("Welcome to OberonCMS").first()).toBeVisible()
-      await expect(cms.locator(".p-1", { hasText: "Welcome to OberonCMS" }).first()).toBeVisible()
+      const publishedText = cms.locator(".p-1", { hasText: "Welcome to OberonCMS" }).first()
+      await expect(publishedText).toBeVisible()
+      await expect(publishedText).toHaveCSS("padding", "4px")
       expect(errorCapture.browserErrors).toEqual([])
     },
   )

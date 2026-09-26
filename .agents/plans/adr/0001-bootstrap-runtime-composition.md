@@ -1,5 +1,8 @@
 # Bootstrap and Runtime Plugin Composition
 
+> The middleware-style Bootstrap decision below was superseded by issue #362. Bootstrap hooks now
+> run sequentially in configured Plugin order and receive the final Bootstrap-composed adapter.
+
 Oberon uses separate Bootstrap composition and Runtime composition for the same Oberon config.
 Runtime composition creates the public Adapter and Handler used while serving requests; Bootstrap
 composition is used only by `bootstrapOberon` so build-time initialization can use plugin-provided
@@ -23,6 +26,6 @@ storage without executing runtime-only decorators such as Next.js cache wrappers
   server-only `defineConfig({ client, plugins })` result.
 - Plugin context includes `phase: "bootstrap" | "runtime"` so plugins can skip phase-specific
   contributions.
-- Plugin bootstrap behavior is a top-level middleware-style `bootstrap(next)` hook, not an Adapter
+- Plugin bootstrap behavior is a top-level sequential `bootstrap({ adapter })` hook, not an Adapter
   method.
 - `prebuild` remains a package task name only; it is not part of the Adapter contract.

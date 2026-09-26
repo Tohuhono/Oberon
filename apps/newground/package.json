@@ -26,6 +26,7 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-pgsql": "workspace:*",
+    "@oberoncms/plugin-tailwind": "workspace:*",
     "@oberoncms/plugin-tanstack": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@tanstack/react-devtools": "^0.10.5",

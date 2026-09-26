@@ -3,24 +3,29 @@
 Custom plugins implement `OberonPlugin`:
 
 ```tsx
-export type OberonPlugin = (adapter: OberonPluginAdapter) => {
+export type OberonPlugin = ({ phase }: { phase: "bootstrap" | "runtime" }) => {
   name: string
   version?: string
   disabled?: boolean
-  handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
-  adapter?: Partial<OberonPluginAdapter>
+  adapter?: OberonPluginAdapterHooks
+  handlers?: Record<
+    string,
+    (context: { adapter: OberonAdapter; pluginAdapter: OberonPluginAdapter }) => OberonHandler
+  >
+  bootstrap?: (context: { adapter: OberonPluginAdapter }) => Promise<void>
 }
 ```
 
 ## Input
 
-The plugin function receives the current accumulated `OberonPluginAdapter`.
+The plugin function receives the current `phase`. It returns a declarative definition; executable
+hooks receive adapters only after composition is complete.
 
 That means a plugin can:
 
-- inspect capabilities already provided by earlier plugins
-- wrap or replace existing adapter methods
-- return handler factories that will later receive the final runtime `OberonAdapter`
+- contribute different definitions during Runtime and Bootstrap composition
+- wrap an adapter method through `next` without losing later capabilities
+- use the final internal adapter from adapter, Bootstrap, and Handler hooks
 
 ## Return value
 
@@ -39,20 +44,27 @@ are not merged.
 
 ### `adapter`
 
-Optional. A partial `OberonPluginAdapter`. Only provide the methods your plugin owns or overrides.
+Optional. Adapter hooks receive `{ adapter, next, payload }`. Only provide methods your plugin owns
+or wraps.
 
 ### `handlers`
 
-Optional. A map of route segment to handler factory. These are merged into the CMS handler tree and
-dispatched by the first path segment.
+Optional. A map of route segment to handler factory. Each factory receives the public `adapter` and
+final internal `pluginAdapter`, and is invoked once during Runtime composition.
+
+### `bootstrap`
+
+Optional. An ordered lifecycle task receiving the final Bootstrap-composed internal adapter.
 
 ## Merge behavior
 
-Plugins are initialised left to right by `initPlugins`.
+Plugin definitions are collected in configured order before executable hooks run.
 
 - returned `handlers` are merged into the accumulated handler map
-- returned `adapter` methods are merged into the accumulated adapter
-- later keys overwrite earlier keys
+- later adapter hooks are outermost and call `next` to continue the earlier chain
+- omitting `next` replaces every earlier implementation for that method
+- every hook sees the same final internal adapter, regardless of plugin position
+- Bootstrap hooks run sequentially in configured order
 - disabled plugins contribute version metadata only
 
 ## Minimal shape
@@ -73,7 +85,9 @@ import type { OberonPlugin } from "@oberoncms/core"
 export const plugin: OberonPlugin = () => ({
   name: "my-plugin",
   adapter: {
-    signOut: async () => {},
+    signOut: async ({ next, payload }) => {
+      await next(payload)
+    },
   },
   handlers: {},
 })

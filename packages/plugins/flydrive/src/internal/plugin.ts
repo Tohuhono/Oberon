@@ -8,15 +8,15 @@ import { initRouteHandler } from "./disk-handlers"
 export const getFlyDrivePlugin = (diskDriver: DriverContract): OberonPlugin => {
   const driver = new Disk(diskDriver)
 
-  return (adapter) => ({
+  return () => ({
     name,
     version,
     handlers: {
-      flydrive: (adapter) => initRouteHandler(adapter, driver),
+      flydrive: ({ adapter }) => initRouteHandler(adapter, driver),
     },
     adapter: {
-      deleteImage: async (key) => {
-        const results = await Promise.allSettled([adapter.deleteImage(key), driver.delete(key)])
+      deleteImage: async ({ next, payload: { key } }) => {
+        const results = await Promise.allSettled([next({ key }), driver.delete(key)])
 
         const errors = results.filter((r) => r.status === "rejected").map((r) => r.reason)
 

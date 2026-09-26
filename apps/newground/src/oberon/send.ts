@@ -1,9 +1,5 @@
 import "server-cli-only"
-import {
-  USE_DEVELOPMENT_SEND_PLUGIN,
-  type OberonPlugin,
-  type OberonSendAdapter,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_SEND_PLUGIN, type OberonPlugin } from "@oberoncms/core"
 import { Resend } from "resend"
 
 const emailFrom = process.env.EMAIL_FROM || "noreply@tohuhono.com"
@@ -12,15 +8,7 @@ export const plugin: OberonPlugin = () => ({
   name: "Resend",
   disabled: USE_DEVELOPMENT_SEND_PLUGIN,
   adapter: {
-    sendVerificationRequest: async ({
-      email,
-      token,
-      url,
-    }: {
-      email: string
-      token: string
-      url: string
-    }) => {
+    sendVerificationRequest: async ({ payload: { email, token, url } }) => {
       if (!process.env.RESEND_SECRET) {
         throw new Error("No RESEND_SECRET configured")
       }
@@ -45,5 +33,5 @@ export const plugin: OberonPlugin = () => ({
         console.error("Signin email failed to send")
       }
     },
-  } satisfies Partial<OberonSendAdapter>,
+  },
 })

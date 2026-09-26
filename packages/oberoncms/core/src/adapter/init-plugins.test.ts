@@ -62,3 +62,53 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     ).not.toThrow()
   })
 })
+
+describe("initPlugins adapter hooks", { tags: ["ai", "issue-362"] }, () => {
+  it("gives earlier hooks later capabilities while preserving middleware order", async () => {
+    const events: string[] = []
+
+    const provider: OberonPlugin = () => ({
+      name: "provider",
+      adapter: {
+        addUser: async ({ payload: { user } }) => {
+          events.push(`provider ${user.email}`)
+          return { id: "user-1", ...user }
+        },
+      },
+    })
+    const middleware: OberonPlugin = () => ({
+      name: "middleware",
+      adapter: {
+        addUser: async ({ adapter, next, payload: { user } }) => {
+          events.push(String(await adapter.getKV("test", "suffix")))
+          const result = await next({ user: { ...user, email: `${user.email}.forwarded` } })
+          events.push(`returned ${result.id}`)
+          return result
+        },
+      },
+    })
+    const laterCapability: OberonPlugin = () => ({
+      name: "later-capability",
+      adapter: {
+        getKV: async ({ payload: { namespace, key } }) => {
+          events.push(`${namespace}/${key}`)
+          return "later capability"
+        },
+      },
+    })
+
+    const { adapter } = initPlugins([provider, middleware, laterCapability])
+
+    await expect(adapter.addUser({ email: "user@example.com", role: "user" })).resolves.toEqual({
+      id: "user-1",
+      email: "user@example.com.forwarded",
+      role: "user",
+    })
+    expect(events).toEqual([
+      "test/suffix",
+      "later capability",
+      "provider user@example.com.forwarded",
+      "returned user-1",
+    ])
+  })
+})

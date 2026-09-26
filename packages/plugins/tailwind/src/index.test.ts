@@ -83,8 +83,8 @@ const tailwindTest = createPluginTest(test)
       return await createAdapter(onCleanup)
     },
   )
-  .extend("plugin", { scope: "worker" }, async ({ adapter }) => {
-    return tailwindPlugin(adapter)
+  .extend("plugin", { scope: "worker" }, async () => {
+    return tailwindPlugin({ phase: "runtime" })
   })
 
 tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
@@ -109,7 +109,11 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("text-red-500 md:grid text-red-500")
 
-      await plugin.adapter?.updatePageData?.(page)
+      await plugin.adapter?.updatePageData?.({
+        adapter,
+        next: ({ page }) => adapter.updatePageData(page),
+        payload: { page },
+      })
 
       const state = await getState(adapter)
 
@@ -122,7 +126,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       ])
 
       const response = await plugin.handlers
-        ?.tailwind?.(fromPartial({}))
+        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
         .GET?.(new Request(`https://oberon.invalid/cms/api/tailwind/${state!.activeHash}.css`))
 
       expect(response?.status).toBe(200)
@@ -135,7 +139,13 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("prose dark:prose-invert lg:prose-lg p-1")
 
-      await expect(plugin.adapter?.updatePageData?.(page)).resolves.toBeUndefined()
+      await expect(
+        plugin.adapter?.updatePageData?.({
+          adapter,
+          next: ({ page }) => adapter.updatePageData(page),
+          payload: { page },
+        }),
+      ).resolves.toBeUndefined()
 
       const state = await getState(adapter)
 
@@ -147,9 +157,14 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   tailwindTest(
     "reconciles missing assets during bootstrap",
     async ({ expect, adapter, plugin }) => {
-      await plugin.adapter?.updatePageData?.(createPage("underline"))
+      const page = createPage("underline")
+      await plugin.adapter?.updatePageData?.({
+        adapter,
+        next: ({ page }) => adapter.updatePageData(page),
+        payload: { page },
+      })
 
-      await plugin.bootstrap?.(async () => {})
+      await plugin.bootstrap?.({ adapter })
 
       const firstState = await getState(adapter)
 
@@ -157,7 +172,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       await expect(getStylesheets(adapter)).resolves.toEqual([])
 
-      await plugin.bootstrap?.(async () => {})
+      await plugin.bootstrap?.({ adapter })
 
       await expect(getAsset(adapter, firstState!.activeHash!)).resolves.toContain(".underline")
     },
@@ -169,7 +184,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       await expect(getStylesheets(adapter)).resolves.toEqual([])
 
       const response = await plugin.handlers
-        ?.tailwind?.(fromPartial({}))
+        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
         .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
@@ -179,25 +194,24 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   tailwindTest(
     "fails loudly during bootstrap when KV storage is unavailable",
     async ({ expect }) => {
-      const plugin = tailwindPlugin(
-        fromPartial({
-          getAllPages: async () => [{ key: "/" }],
-          getPageData: async () => createPage("underline").data,
-          getKV: async () => {
-            throw new NotImplementedError("This action is not available in the demo")
-          },
-          putKV: async () => {
-            throw new NotImplementedError("This action is not available in the demo")
-          },
-        }),
-      )
+      const adapter = fromPartial<OberonPluginAdapter>({
+        getAllPages: async () => [{ key: "/" }],
+        getPageData: async () => createPage("underline").data,
+        getKV: async () => {
+          throw new NotImplementedError("This action is not available in the demo")
+        },
+        putKV: async () => {
+          throw new NotImplementedError("This action is not available in the demo")
+        },
+      })
+      const plugin = tailwindPlugin({ phase: "bootstrap" })
 
-      await expect(plugin.bootstrap?.(async () => {})).rejects.toThrow(
+      await expect(plugin.bootstrap?.({ adapter })).rejects.toThrow(
         new NotImplementedError("This action is not available in the demo"),
       )
 
       const response = await plugin.handlers
-        ?.tailwind?.(fromPartial({}))
+        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
         .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
@@ -207,26 +221,30 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   tailwindTest(
     "fails loudly during page updates when KV storage is unavailable",
     async ({ expect }) => {
-      const plugin = tailwindPlugin(
-        fromPartial({
-          updatePageData: async () => {},
-          getAllPages: async () => [{ key: "/" }],
-          getPageData: async () => createPage("underline").data,
-          getKV: async () => {
-            throw new NotImplementedError("This action is not available in the demo")
-          },
-          putKV: async () => {
-            throw new NotImplementedError("This action is not available in the demo")
-          },
-        }),
-      )
+      const adapter = fromPartial<OberonPluginAdapter>({
+        updatePageData: async () => {},
+        getAllPages: async () => [{ key: "/" }],
+        getPageData: async () => createPage("underline").data,
+        getKV: async () => {
+          throw new NotImplementedError("This action is not available in the demo")
+        },
+        putKV: async () => {
+          throw new NotImplementedError("This action is not available in the demo")
+        },
+      })
+      const plugin = tailwindPlugin({ phase: "runtime" })
+      const page = createPage("underline")
 
-      await expect(plugin.adapter?.updatePageData?.(createPage("underline"))).rejects.toThrow(
-        new NotImplementedError("This action is not available in the demo"),
-      )
+      await expect(
+        plugin.adapter?.updatePageData?.({
+          adapter,
+          next: ({ page }) => adapter.updatePageData(page),
+          payload: { page },
+        }),
+      ).rejects.toThrow(new NotImplementedError("This action is not available in the demo"))
 
       const response = await plugin.handlers
-        ?.tailwind?.(fromPartial({}))
+        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
         .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
@@ -236,21 +254,25 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   tailwindTest(
     "surfaces generic Tailwind update failures as response errors",
     async ({ expect }) => {
-      const plugin = tailwindPlugin(
-        fromPartial({
-          updatePageData: async () => {},
-          getAllPages: async () => [{ key: "/" }],
-          getPageData: async () => createPage("underline").data,
-          getKV: async () => null,
-          putKV: async () => {
-            throw new Error("boom")
-          },
-        }),
-      )
+      const adapter = fromPartial<OberonPluginAdapter>({
+        updatePageData: async () => {},
+        getAllPages: async () => [{ key: "/" }],
+        getPageData: async () => createPage("underline").data,
+        getKV: async () => null,
+        putKV: async () => {
+          throw new Error("boom")
+        },
+      })
+      const plugin = tailwindPlugin({ phase: "runtime" })
+      const page = createPage("underline")
 
-      await expect(plugin.adapter?.updatePageData?.(createPage("underline"))).rejects.toThrow(
-        new ResponseError("Failed to update Tailwind styles: boom"),
-      )
+      await expect(
+        plugin.adapter?.updatePageData?.({
+          adapter,
+          next: ({ page }) => adapter.updatePageData(page),
+          payload: { page },
+        }),
+      ).rejects.toThrow(new ResponseError("Failed to update Tailwind styles: boom"))
     },
   )
 })

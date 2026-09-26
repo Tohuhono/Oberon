@@ -1,9 +1,5 @@
 import "server-cli-only"
-import {
-  USE_DEVELOPMENT_SEND_PLUGIN,
-  type OberonPlugin,
-  type OberonSendAdapter,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_SEND_PLUGIN, type OberonPlugin } from "@oberoncms/core"
 import { setApiKey, send, ResponseError } from "@sendgrid/mail"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
@@ -13,15 +9,7 @@ export const plugin: OberonPlugin = () => ({
   name: "Sendgrid",
   disabled: USE_DEVELOPMENT_SEND_PLUGIN,
   adapter: {
-    sendVerificationRequest: async ({
-      email,
-      token,
-      url,
-    }: {
-      email: string
-      token: string
-      url: string
-    }) => {
+    sendVerificationRequest: async ({ payload: { email, token, url } }) => {
       if (!SENDGRID_API_KEY) {
         throw new Error("No SENDGRID_API_KEY configured")
       }
@@ -49,5 +37,5 @@ export const plugin: OberonPlugin = () => ({
         }
       }
     },
-  } satisfies OberonSendAdapter,
+  },
 })

@@ -6,8 +6,6 @@ import { parseSetCookieHeader } from "better-auth/cookies"
 
 import { name, version } from "../package.json" with { type: "json" }
 
-const cache = <TProps, T>(f: (...props: TProps[]) => T, ..._rest: unknown[]) => f
-
 const tanstackStartCookies = () => ({
   id: "tanstack-start-cookies",
   version,
@@ -48,67 +46,65 @@ const tanstackStartCookies = () => ({
   },
 })
 
-export const plugin: OberonPlugin = (adapter, { phase } = { phase: "runtime" }) => ({
+export const plugin: OberonPlugin = ({ phase }) => ({
   name,
   version,
   adapter:
     phase === "runtime"
       ? {
-          redirect: (url) => {
-            throw redirect({ to: url })
+          redirect: ({ payload: { href } }) => {
+            throw redirect({ to: href })
           },
           notFound: () => {
             throw notFound()
           },
           getRequestHeaders: async () => getRequest().headers,
-          getAuthPlugins: () => [...adapter.getAuthPlugins(), tanstackStartCookies()],
-          updatePageData: async (data) => {
-            await adapter.updatePageData(data)
-            // revalidatePath(data.key)
+          getAuthPlugins: ({ next }) => [...next({}), tanstackStartCookies()],
+          updatePageData: async ({ next, payload: { page } }) => {
+            await next({ page })
+            // revalidatePath(page.key)
             // updateTag("oberon-pages")
           },
-          addPage: async (data) => {
-            await adapter.addPage(data)
-            // revalidatePath(data.key)
+          addPage: async ({ next, payload: { page } }) => {
+            await next({ page })
+            // revalidatePath(page.key)
             // updateTag("oberon-pages")
           },
-          deletePage: async (key) => {
-            await adapter.deletePage(key)
+          deletePage: async ({ next, payload: { key } }) => {
+            await next({ key })
             // revalidatePath(key)
             // updateTag("oberon-pages")
           },
-          updateSite: async (data) => {
-            await adapter.updateSite(data)
+          updateSite: async ({ next, payload: { site } }) => {
+            await next({ site })
             // updateTag("oberon-config")
           },
-          addImage: async (data) => {
-            await adapter.addImage(data)
+          addImage: async ({ next, payload: { image } }) => {
+            await next({ image })
             // updateTag("oberon-images")
           },
-          deleteImage: async (data) => {
-            await adapter.deleteImage(data)
+          deleteImage: async ({ next, payload: { key } }) => {
+            await next({ key })
             // updateTag("oberon-images")
           },
-          addUser: async (data) => {
-            const user = await adapter.addUser(data)
+          addUser: async ({ next, payload: { user } }) => {
+            const createdUser = await next({ user })
             // updateTag("oberon-users")
-            return user
+            return createdUser
           },
-          deleteUser: async (data) => {
-            await adapter.deleteUser(data)
-            // updateTag("oberon-users")
-          },
-          changeRole: async (data) => {
-            await adapter.changeRole(data)
+          deleteUser: async ({ next, payload: { id } }) => {
+            await next({ id })
             // updateTag("oberon-users")
           },
-          getPageData: cache(adapter.getPageData),
-          getAllPages: cache(adapter.getAllPages, undefined, { tags: ["oberon-pages"] }),
-          getAllUsers: cache(adapter.getAllUsers, undefined, {
-            tags: ["oberon-users"],
-          }),
-          getAllImages: cache(adapter.getAllImages, undefined, { tags: ["oberon-images"] }),
-          getSite: cache(adapter.getSite, undefined, { tags: ["oberon-config"] }),
+          changeRole: async ({ next, payload }) => {
+            await next(payload)
+            // updateTag("oberon-users")
+          },
+          getPageData: ({ next, payload }) => next(payload),
+          getAllPages: ({ next, payload }) => next(payload),
+          getAllUsers: ({ next, payload }) => next(payload),
+          getAllImages: ({ next, payload }) => next(payload),
+          getSite: ({ next, payload }) => next(payload),
         }
       : {},
 })

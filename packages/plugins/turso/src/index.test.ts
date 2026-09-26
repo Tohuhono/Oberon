@@ -5,6 +5,7 @@ import { fileURLToPath } from "url"
 import { fromPartial, test, vi } from "@dev/vitest"
 import { createClient, type Client } from "@libsql/client"
 import type { OberonPluginAdapter } from "@oberoncms/core"
+import { getAdapter } from "@oberoncms/sqlite/adapter"
 import { createAdapterTests } from "@oberoncms/testing"
 import { drizzle } from "drizzle-orm/libsql"
 
@@ -31,10 +32,9 @@ async function getTursoAdapter(
 
   const { plugin } = await import("./index")
 
-  const tursoPlugin = plugin(fromPartial({}))
-  const adapter = tursoPlugin.adapter ?? {}
+  const tursoPlugin = plugin({ phase: "bootstrap" })
 
-  await tursoPlugin.bootstrap?.(async () => {})
+  await tursoPlugin.bootstrap?.({ adapter: fromPartial({}) })
 
   onCleanup(async () => {
     vi.doUnmock("./db/client")
@@ -42,7 +42,7 @@ async function getTursoAdapter(
     await rm(sqliteFile, { force: true })
   })
 
-  return fromPartial(adapter)
+  return fromPartial(getAdapter(() => db))
 }
 
 createAdapterTests({

@@ -24,8 +24,9 @@ export const config = defineConfig({
 
 ## Order matters
 
-Plugins are initialised in array order. Their `adapter` methods and `handlers` are merged from left
-to right, so later plugins can override keys provided by earlier plugins.
+Plugin definitions are collected in array order. Later adapter hooks wrap earlier implementations,
+while every executable hook receives the final internal adapter and can use capabilities from any
+position. Bootstrap tasks run sequentially in configured order.
 
 Generated starter apps therefore put:
 
@@ -49,30 +50,31 @@ A custom plugin returns an object with:
 ```tsx
 import type { OberonPlugin } from "@oberoncms/core"
 
-export const plugin: OberonPlugin = (adapter) => ({
+export const plugin: OberonPlugin = ({ phase }) => ({
   name: "my-plugin",
-  adapter: {
-    ...adapter,
-  },
+  disabled: phase === "bootstrap",
   handlers: {},
 })
 ```
 
 ## Available hooks
 
-Plugins can contribute two kinds of extension points.
+Plugins can contribute three kinds of extension points.
 
 `adapter` hooks:
 
-- lifecycle: `prebuild`
 - content: `addPage`, `deletePage`, `getAllPages`, `getPageData`, `updatePageData`
 - media: `addImage`, `deleteImage`, `getAllImages`
 - users: `addUser`, `deleteUser`, `getAllUsers`, `changeRole`, `getCurrentUser`
 - auth/session: `signIn`, `signOut`, `hasPermission`
 - site and kv: `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`
 
+`bootstrap` hooks:
+
+- ordered lifecycle tasks receiving the final Bootstrap-composed internal adapter
+
 `handlers` hooks:
 
-- route handlers keyed by path segment, merged into the CMS handler tree
+- route factories keyed by path segment, receiving public and internal final adapters
 
 Use the section pages in this Plugins area for concrete examples of each plugin type.

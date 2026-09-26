@@ -8,17 +8,18 @@ import { type OberonUser } from "./lib/dtd"
 function createAuthPlugin(users: OberonUser[] = []) {
   const addUser = vi.fn(async ({ email, role }) => ({ id: "created-user", email, role }))
   const getAllUsers = vi.fn(async () => users)
-  const plugin = authPlugin({
+  const adapter = {
     ...stubbedAdapter,
     addUser,
     getAllUsers,
-  })
+  }
+  const plugin = authPlugin({ phase: "bootstrap" })
 
   if (!plugin.bootstrap) {
     throw new Error("Expected auth plugin to expose bootstrap")
   }
 
-  return { addUser, getAllUsers, bootstrap: plugin.bootstrap }
+  return { adapter, addUser, getAllUsers, bootstrap: plugin.bootstrap }
 }
 
 describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"] }, () => {
@@ -29,7 +30,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
   it("creates a normalized MASTER_EMAIL admin after earlier bootstrap work", async () => {
     vi.stubEnv("MASTER_EMAIL", " Rescue@Example.com ")
     const events: string[] = []
-    const { addUser, getAllUsers, bootstrap } = createAuthPlugin()
+    const { adapter, addUser, getAllUsers, bootstrap } = createAuthPlugin()
 
     getAllUsers.mockImplementation(async () => {
       events.push("check users")
@@ -40,9 +41,8 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
       return { id: "created-user", email, role }
     })
 
-    await bootstrap(async () => {
-      events.push("previous bootstrap")
-    })
+    events.push("previous bootstrap")
+    await bootstrap({ adapter })
 
     expect(events).toEqual(["previous bootstrap", "check users", "add user"])
     expect(addUser).toHaveBeenCalledWith({
@@ -52,9 +52,9 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
   })
 
   it("does not read users when MASTER_EMAIL is missing", async () => {
-    const { addUser, getAllUsers, bootstrap } = createAuthPlugin()
+    const { adapter, addUser, getAllUsers, bootstrap } = createAuthPlugin()
 
-    await bootstrap(async () => {})
+    await bootstrap({ adapter })
 
     expect(getAllUsers).not.toHaveBeenCalled()
     expect(addUser).not.toHaveBeenCalled()
@@ -62,7 +62,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
 
   it("does not duplicate an existing MASTER_EMAIL user", async () => {
     vi.stubEnv("MASTER_EMAIL", "RESCUE@example.com")
-    const { addUser, bootstrap } = createAuthPlugin([
+    const { adapter, addUser, bootstrap } = createAuthPlugin([
       {
         id: "existing-user",
         email: "rescue@example.com",
@@ -70,7 +70,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
       },
     ])
 
-    await bootstrap(async () => {})
+    await bootstrap({ adapter })
 
     expect(addUser).not.toHaveBeenCalled()
   })

@@ -21,7 +21,7 @@ describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migratio
       name: "test-plugin",
       adapter: {
         getCurrentUser,
-        hasPermission,
+        hasPermission: ({ payload }) => hasPermission(payload),
         signIn: async () => {},
         signOut: async () => {},
         sendVerificationRequest: async () => {},

@@ -24,7 +24,7 @@ export function initOberon({ client, plugins }: OberonConfig): {
     pluginAdapter,
   })
 
-  const handler = initHandler(adapter, handlers)
+  const handler = initHandler(adapter, pluginAdapter, handlers)
 
   const actionHandler = initActionHandler(adapter)
 

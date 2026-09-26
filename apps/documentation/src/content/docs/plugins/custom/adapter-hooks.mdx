@@ -1,33 +1,47 @@
 # Adapter Hooks
 
-`OberonPluginAdapter` is composed from three parts:
+`OberonPluginAdapter` is the callable internal adapter. Plugins contribute hooks through
+`OberonPluginAdapterHooks`:
 
 ```tsx
-type OberonPluginAdapter = OberonDatabaseAdapter & OberonCanAdapter & OberonSendAdapter
+type OberonPluginAdapterHook<Key extends keyof OberonPluginAdapter> = (context: {
+  adapter: Omit<OberonPluginAdapter, Key>
+  next: (payload: OberonPluginAdapterPayloads[Key]) => ReturnType<OberonPluginAdapter[Key]>
+  payload: OberonPluginAdapterPayloads[Key]
+}) => ReturnType<OberonPluginAdapter[Key]>
 ```
+
+`payload` is a semantic object: page updates use `{ page }`, page deletion uses `{ key }`, key-value
+operations use `{ namespace, key }`, and zero-argument methods use `{}`. `next` accepts the same
+payload, so middleware can forward or replace it. The public adapter keeps its positional calling
+signatures.
+
+The `adapter` is the same final internal adapter for every hook, independent of plugin order. Its
+current method is omitted only from the static type to prevent accidental self-recursion; the
+runtime object is not cloned or filtered.
+
+Later plugins are outermost. For `[storage, tailwind, seo, framework]`, `updatePageData` enters
+`framework`, `seo`, `tailwind`, then `storage`, and unwinds in reverse. A direct provider ignores
+`next`; middleware calls it before or after its own behavior.
 
 ## Bootstrap hooks
 
-Lifecycle work used during setup and build is exposed as a top-level plugin `bootstrap(next)` hook,
-not as an adapter method.
+Lifecycle work used during setup and build is exposed as a top-level `bootstrap` hook, not as
+adapter middleware.
 
 ```tsx
-type OberonPlugin = (adapter: OberonPluginAdapter) => {
-  bootstrap?: (next: () => Promise<void>) => Promise<void>
+type OberonPlugin = ({ phase }: { phase: OberonPluginPhase }) => {
+  bootstrap?: (context: { adapter: OberonPluginAdapter }) => Promise<void>
 }
 ```
 
-Use `bootstrap(next)` for work that must happen before build output is produced, such as migrations
-or initialisation. Call `next()` before or after your own work depending on whether later bootstrap
-work should run first.
+Use `bootstrap` for migrations or initialization required before build output. Enabled hooks are
+awaited once in configured plugin order. If one throws, later hooks and core Page/Site
+initialization do not run.
 
 ## OberonDatabaseAdapter
 
-Database plugins own the main persistence surface. In code this is:
-
-```tsx
-type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
-```
+Database plugins own the persistence surface.
 
 ### Content and media methods
 
@@ -48,7 +62,7 @@ type OberonDatabaseAdapter = OberonBaseAdapter & OberonAuthAdapter
 - `putKV`
 - `deleteKV`
 
-### Auth and user methods (`OberonAuthAdapter`)
+### User methods
 
 - `addUser`
 - `deleteUser`
@@ -65,6 +79,21 @@ Permission and session helpers:
 - `signOut`
 
 `hasPermission` receives `user`, `action`, and `permission`, and returns a boolean synchronously.
+
+## OberonAuthAdapter
+
+Auth storage and extensions:
+
+- `getAuthDatabase`
+- `getAuthPlugins`
+
+## OberonRoutingAdapter
+
+Framework integrations provide request and navigation behavior:
+
+- `redirect`
+- `notFound`
+- `getRequestHeaders`
 
 ## OberonSendAdapter
 
@@ -83,18 +112,14 @@ type OberonSendAdapter = {
 Database-oriented custom plugin:
 
 ```tsx
-import {
-  USE_DEVELOPMENT_DATABASE_PLUGIN,
-  notImplemented,
-  type OberonDatabaseAdapter,
-  type OberonPlugin,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_DATABASE_PLUGIN, notImplemented, type OberonPlugin } from "@oberoncms/core"
+import { migrate } from "./database"
 
 export const databasePlugin: OberonPlugin = () => ({
   name: "Custom Database Plugin",
   disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
-  bootstrap: async (next) => {
-    await next()
+  bootstrap: async ({ adapter }) => {
+    await migrate(adapter)
   },
   adapter: {
     addPage: notImplemented("addPage"),
@@ -114,7 +139,7 @@ export const databasePlugin: OberonPlugin = () => ({
     putKV: notImplemented("putKV"),
     updatePageData: notImplemented("updatePageData"),
     updateSite: notImplemented("updateSite"),
-  } satisfies OberonDatabaseAdapter,
+  },
 })
 ```
 
@@ -123,11 +148,7 @@ Send-oriented custom plugin:
 ```tsx
 import "server-cli-only"
 
-import {
-  USE_DEVELOPMENT_SEND_PLUGIN,
-  type OberonPlugin,
-  type OberonSendAdapter,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_SEND_PLUGIN, type OberonPlugin } from "@oberoncms/core"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
 const SEND_SECRET = process.env.SEND_SECRET
@@ -150,7 +171,7 @@ export const sendPlugin: OberonPlugin = () => ({
   name: "Custom Send",
   disabled: USE_DEVELOPMENT_SEND_PLUGIN,
   adapter: {
-    sendVerificationRequest: async ({ email, token, url }) => {
+    sendVerificationRequest: async ({ payload: { email, token, url } }) => {
       if (!SEND_SECRET) throw new Error("No SEND_SECRET configured")
       if (!EMAIL_FROM) throw new Error("No EMAIL_FROM configured")
 
@@ -164,6 +185,6 @@ export const sendPlugin: OberonPlugin = () => ({
         SEND_SECRET,
       )
     },
-  } satisfies OberonSendAdapter,
+  },
 })
 ```

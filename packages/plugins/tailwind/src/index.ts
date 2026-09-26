@@ -101,17 +101,17 @@ async function syncStyles(
   await adapter.putKV(name, "state", { activeHash: hash, classes })
 }
 
-export const plugin: OberonPlugin = (adapter) => ({
+export const plugin: OberonPlugin = () => ({
   name,
   version,
   handlers: {
-    tailwind: () => ({
+    tailwind: ({ pluginAdapter }) => ({
       GET: async (request) => {
         try {
           const pathname = new URL(request.url).pathname
           const filename = pathname.split("/").pop()
           const hash = filename?.endsWith(".css") ? filename.slice(0, -4) : undefined
-          const css = await getAsset(adapter, hash)
+          const css = await getAsset(pluginAdapter, hash)
 
           if (!css) {
             return new Response("", {
@@ -142,9 +142,8 @@ export const plugin: OberonPlugin = (adapter) => ({
       },
     }),
   },
-  bootstrap: async (next) => {
+  bootstrap: async ({ adapter }) => {
     try {
-      await next()
       await syncStyles(adapter)
     } catch (error) {
       if (error instanceof ResponseError) {
@@ -159,9 +158,9 @@ export const plugin: OberonPlugin = (adapter) => ({
     }
   },
   adapter: {
-    updatePageData: async (page) => {
+    updatePageData: async ({ adapter, next, payload: { page } }) => {
       try {
-        await adapter.updatePageData(page)
+        await next({ page })
         await syncStyles(adapter)
       } catch (error) {
         if (error instanceof ResponseError) {

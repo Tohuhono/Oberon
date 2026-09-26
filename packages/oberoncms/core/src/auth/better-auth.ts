@@ -15,7 +15,12 @@ const baseURL =
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.BASE_URL)
 const secret = process.env.AUTH_SECRET
 
-const getAuth = (adapter: OberonPluginAdapter) =>
+const getAuth = (
+  adapter: Pick<
+    OberonPluginAdapter,
+    "getAuthDatabase" | "getAuthPlugins" | "sendVerificationRequest"
+  >,
+) =>
   betterAuth({
     database: adapter.getAuthDatabase(),
     basePath: cmsAuthBasePath,
@@ -54,76 +59,73 @@ const getAuth = (adapter: OberonPluginAdapter) =>
     ],
   } satisfies BetterAuthOptions)
 
-export const authPlugin: OberonPlugin = (adapter) => {
-  const authServer = () => getAuth(adapter)
-
-  const handleAuthRequest = async (request: Request) => authServer().handler(request)
-
-  const ensureMasterUser = async () => {
-    const masterEmail = process.env.MASTER_EMAIL
-    if (!masterEmail) {
-      return
-    }
-
-    const normalizedMasterEmail = normalizeEmail(masterEmail)
-    const users = await adapter.getAllUsers()
-    const hasMasterUser = users.some((user) => normalizeEmail(user.email) === normalizedMasterEmail)
-
-    if (!hasMasterUser) {
-      await adapter.addUser({
-        email: normalizedMasterEmail,
-        role: "admin",
-      })
-    }
+async function ensureMasterUser(adapter: OberonPluginAdapter) {
+  const masterEmail = process.env.MASTER_EMAIL
+  if (!masterEmail) {
+    return
   }
 
-  return {
-    name: `${name}/auth`,
-    version,
-    handlers: {
-      auth: () => ({
+  const normalizedMasterEmail = normalizeEmail(masterEmail)
+  const users = await adapter.getAllUsers()
+  const hasMasterUser = users.some((user) => normalizeEmail(user.email) === normalizedMasterEmail)
+
+  if (!hasMasterUser) {
+    await adapter.addUser({
+      email: normalizedMasterEmail,
+      role: "admin",
+    })
+  }
+}
+
+export const authPlugin: OberonPlugin = () => ({
+  name: `${name}/auth`,
+  version,
+  handlers: {
+    auth: ({ pluginAdapter }) => {
+      const handleAuthRequest = async (request: Request) => getAuth(pluginAdapter).handler(request)
+
+      return {
         GET: handleAuthRequest,
         POST: handleAuthRequest,
         PATCH: handleAuthRequest,
         PUT: handleAuthRequest,
         DELETE: handleAuthRequest,
-      }),
+      }
     },
-    bootstrap: async (next) => {
-      await next()
-      await ensureMasterUser()
-    },
-    adapter: {
-      getCurrentUser: async () => {
-        try {
-          const session = await authServer().api.getSession({
-            headers: await adapter.getRequestHeaders(),
-          })
+  },
+  bootstrap: async ({ adapter }) => {
+    await ensureMasterUser(adapter)
+  },
+  adapter: {
+    getCurrentUser: async ({ adapter }) => {
+      try {
+        const session = await getAuth(adapter).api.getSession({
+          headers: await adapter.getRequestHeaders(),
+        })
 
-          if (!session?.user?.id || !session.user.email || !session.user.role) {
-            return null
-          }
-
-          return {
-            id: session.user.id,
-            email: session.user.email,
-            role: session.user.role,
-          }
-        } catch {
+        if (!session?.user?.id || !session.user.email || !session.user.role) {
           return null
         }
-      },
-      signOut: async () => {
-        await authServer().api.signOut({
-          headers: await adapter.getRequestHeaders(),
-        })
-      },
-      signIn: async ({ email }) => {
-        await authServer().api.sendVerificationOTP({
-          body: { email, type: "sign-in" },
-          headers: await adapter.getRequestHeaders(),
-        })
-      },
-    } satisfies Partial<OberonPluginAdapter>,
-  }
-}
+
+        return {
+          id: session.user.id,
+          email: session.user.email,
+          role: session.user.role,
+        }
+      } catch {
+        return null
+      }
+    },
+    signOut: async ({ adapter }) => {
+      await getAuth(adapter).api.signOut({
+        headers: await adapter.getRequestHeaders(),
+      })
+    },
+    signIn: async ({ adapter, payload: { email } }) => {
+      await getAuth(adapter).api.sendVerificationOTP({
+        body: { email, type: "sign-in" },
+        headers: await adapter.getRequestHeaders(),
+      })
+    },
+  },
+})
