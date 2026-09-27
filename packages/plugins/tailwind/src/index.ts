@@ -158,21 +158,23 @@ export const plugin: OberonPlugin = () => ({
     }
   },
   adapter: {
-    updatePageData: async ({ adapter, next, payload: { page } }) => {
-      try {
-        await next({ page })
-        await syncStyles(adapter)
-      } catch (error) {
-        if (error instanceof ResponseError) {
-          throw error
-        }
+    updatePageData:
+      ({ adapter, next }) =>
+      async (page) => {
+        try {
+          await next(page)
+          await syncStyles(adapter)
+        } catch (error) {
+          if (error instanceof ResponseError) {
+            throw error
+          }
 
-        throw new ResponseError(
-          error instanceof Error && error.message
-            ? `Failed to update Tailwind styles: ${error.message}`
-            : "Failed to update Tailwind styles",
-        )
-      }
-    },
+          throw new ResponseError(
+            error instanceof Error && error.message
+              ? `Failed to update Tailwind styles: ${error.message}`
+              : "Failed to update Tailwind styles",
+          )
+        }
+      },
   },
 })

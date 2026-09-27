@@ -109,11 +109,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("text-red-500 md:grid text-red-500")
 
-      await plugin.adapter?.updatePageData?.({
-        adapter,
-        next: ({ page }) => adapter.updatePageData(page),
-        payload: { page },
-      })
+      await plugin.adapter?.updatePageData?.({ adapter, next: adapter.updatePageData })(page)
 
       const state = await getState(adapter)
 
@@ -140,11 +136,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       const page = createPage("prose dark:prose-invert lg:prose-lg p-1")
 
       await expect(
-        plugin.adapter?.updatePageData?.({
-          adapter,
-          next: ({ page }) => adapter.updatePageData(page),
-          payload: { page },
-        }),
+        plugin.adapter?.updatePageData?.({ adapter, next: adapter.updatePageData })(page),
       ).resolves.toBeUndefined()
 
       const state = await getState(adapter)
@@ -158,11 +150,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "reconciles missing assets during bootstrap",
     async ({ expect, adapter, plugin }) => {
       const page = createPage("underline")
-      await plugin.adapter?.updatePageData?.({
-        adapter,
-        next: ({ page }) => adapter.updatePageData(page),
-        payload: { page },
-      })
+      await plugin.adapter?.updatePageData?.({ adapter, next: adapter.updatePageData })(page)
 
       await plugin.bootstrap?.({ adapter })
 
@@ -236,11 +224,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       const page = createPage("underline")
 
       await expect(
-        plugin.adapter?.updatePageData?.({
-          adapter,
-          next: ({ page }) => adapter.updatePageData(page),
-          payload: { page },
-        }),
+        plugin.adapter?.updatePageData?.({ adapter, next: adapter.updatePageData })(page),
       ).rejects.toThrow(new NotImplementedError("This action is not available in the demo"))
 
       const response = await plugin.handlers
@@ -267,11 +251,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       const page = createPage("underline")
 
       await expect(
-        plugin.adapter?.updatePageData?.({
-          adapter,
-          next: ({ page }) => adapter.updatePageData(page),
-          payload: { page },
-        }),
+        plugin.adapter?.updatePageData?.({ adapter, next: adapter.updatePageData })(page),
       ).rejects.toThrow(new ResponseError("Failed to update Tailwind styles: boom"))
     },
   )

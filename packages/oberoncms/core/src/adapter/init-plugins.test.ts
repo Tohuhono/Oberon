@@ -44,7 +44,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     const validAuthCapabilityPlugin: OberonPlugin = () => ({
       name: "valid-better-auth-plugin",
       adapter: {
-        sendVerificationRequest: async () => {},
+        sendVerificationRequest: () => async () => {},
       },
     })
 
@@ -70,7 +70,7 @@ describe("initPlugins adapter hooks", { tags: ["ai", "issue-362"] }, () => {
     const provider: OberonPlugin = () => ({
       name: "provider",
       adapter: {
-        addUser: async ({ payload: { user } }) => {
+        addUser: () => async (user) => {
           events.push(`provider ${user.email}`)
           return { id: "user-1", ...user }
         },
@@ -79,18 +79,20 @@ describe("initPlugins adapter hooks", { tags: ["ai", "issue-362"] }, () => {
     const middleware: OberonPlugin = () => ({
       name: "middleware",
       adapter: {
-        addUser: async ({ adapter, next, payload: { user } }) => {
-          events.push(String(await adapter.getKV("test", "suffix")))
-          const result = await next({ user: { ...user, email: `${user.email}.forwarded` } })
-          events.push(`returned ${result.id}`)
-          return result
-        },
+        addUser:
+          ({ adapter, next }) =>
+          async (user) => {
+            events.push(String(await adapter.getKV("test", "suffix")))
+            const result = await next({ ...user, email: `${user.email}.forwarded` })
+            events.push(`returned ${result.id}`)
+            return result
+          },
       },
     })
     const laterCapability: OberonPlugin = () => ({
       name: "later-capability",
       adapter: {
-        getKV: async ({ payload: { namespace, key } }) => {
+        getKV: () => async (namespace, key) => {
           events.push(`${namespace}/${key}`)
           return "later capability"
         },

@@ -38,7 +38,9 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
-        getAllPages: async () => [{ key: "/database", updatedAt: new Date(), updatedBy: "system" }],
+        getAllPages: () => async () => [
+          { key: "/database", updatedAt: new Date(), updatedBy: "system" },
+        ],
       },
     })
 
@@ -74,10 +76,10 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       return {
         name: "shared-config-plugin",
         adapter: {
-          getAllPages: async () => [],
-          getSite: async () => undefined,
-          updatePageData: async () => {},
-          updateSite: async () => {},
+          getAllPages: () => async () => [],
+          getSite: () => async () => undefined,
+          updatePageData: () => async () => {},
+          updateSite: () => async () => {},
         },
       }
     }
@@ -104,15 +106,15 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter:
           phase === "runtime"
             ? {
-                getAllPages: async () => [
+                getAllPages: () => async () => [
                   { key: "/runtime", updatedAt: new Date(), updatedBy: "system" },
                 ],
               }
             : {
-                getAllPages: async () => [],
-                getSite: async () => undefined,
-                updatePageData: async () => {},
-                updateSite: async () => {},
+                getAllPages: () => async () => [],
+                getSite: () => async () => undefined,
+                updatePageData: () => async () => {},
+                updateSite: () => async () => {},
               },
       }
     }
@@ -137,12 +139,12 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const firstPlugin: OberonPlugin = () => ({
       name: "first-plugin",
       adapter: {
-        getAllPages: async () => [],
-        getSite: async () => undefined,
-        updatePageData: async () => {
+        getAllPages: () => async () => [],
+        getSite: () => async () => undefined,
+        updatePageData: () => async () => {
           events.push("welcome")
         },
-        updateSite: async () => {
+        updateSite: () => async () => {
           events.push("site")
         },
       },

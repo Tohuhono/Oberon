@@ -44,8 +44,8 @@ are not merged.
 
 ### `adapter`
 
-Optional. Adapter hooks receive `{ adapter, next, payload }`. Only provide methods your plugin owns
-or wraps.
+Optional. Adapter hooks are factories that receive `{ adapter, next }` once and return a method with
+the corresponding `OberonPluginAdapter` signature. Only provide methods your plugin owns or wraps.
 
 ### `handlers`
 
@@ -85,9 +85,11 @@ import type { OberonPlugin } from "@oberoncms/core"
 export const plugin: OberonPlugin = () => ({
   name: "my-plugin",
   adapter: {
-    signOut: async ({ next, payload }) => {
-      await next(payload)
-    },
+    signOut:
+      ({ next }) =>
+      async () => {
+        await next()
+      },
   },
   handlers: {},
 })

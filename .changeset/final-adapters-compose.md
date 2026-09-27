@@ -11,6 +11,7 @@
 "create-oberon-app": minor
 ---
 
-Migrate Plugins to declarative phase-based definitions. Adapter hooks now receive semantic
-`{ adapter, next, payload }` context with the final internal adapter, Bootstrap hooks run
-sequentially with `{ adapter }`, and Handler factories receive `{ adapter, pluginAdapter }`.
+Migrate Plugins to declarative phase-based definitions. Adapter hooks now initialize with the final
+internal adapter and preceding implementation, then receive the original method arguments. Bootstrap
+hooks run sequentially with `{ adapter }`, and Handler factories receive
+`{ adapter, pluginAdapter }`.

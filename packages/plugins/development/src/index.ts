@@ -44,34 +44,36 @@ export const plugin: OberonPlugin = () => {
     },
     adapter: {
       ...(USE_DEVELOPMENT_SEND_PLUGIN && {
-        sendVerificationRequest: async ({ payload: { email, url, token } }) => {
-          console.log(`sendVerificationRequest not sent in development`, {
-            email,
-            url,
-            token,
-          })
-        },
+        sendVerificationRequest:
+          () =>
+          async ({ email, url, token }) => {
+            console.log(`sendVerificationRequest not sent in development`, {
+              email,
+              url,
+              token,
+            })
+          },
       }),
       ...(USE_DEVELOPMENT_DATABASE_PLUGIN && {
-        getAuthDatabase: () => adapter.getAuthDatabase(),
-        getAuthPlugins: () => adapter.getAuthPlugins(),
-        addPage: ({ payload: { page } }) => adapter.addPage(page),
-        addImage: ({ payload: { image } }) => adapter.addImage(image),
-        deletePage: ({ payload: { key } }) => adapter.deletePage(key),
-        deleteImage: ({ payload: { key } }) => adapter.deleteImage(key),
-        deleteKV: ({ payload: { namespace, key } }) => adapter.deleteKV(namespace, key),
-        getAllImages: () => adapter.getAllImages(),
-        getAllPages: () => adapter.getAllPages(),
-        getPageData: ({ payload: { key } }) => adapter.getPageData(key),
-        getKV: ({ payload: { namespace, key } }) => adapter.getKV(namespace, key),
-        getSite: () => adapter.getSite(),
-        putKV: ({ payload: { namespace, key, value } }) => adapter.putKV(namespace, key, value),
-        updatePageData: ({ payload: { page } }) => adapter.updatePageData(page),
-        updateSite: ({ payload: { site } }) => adapter.updateSite(site),
-        addUser: ({ payload: { user } }) => adapter.addUser(user),
-        deleteUser: ({ payload: { id } }) => adapter.deleteUser(id),
-        changeRole: ({ payload }) => adapter.changeRole(payload),
-        getAllUsers: () => adapter.getAllUsers(),
+        getAuthDatabase: () => adapter.getAuthDatabase,
+        getAuthPlugins: () => adapter.getAuthPlugins,
+        addPage: () => adapter.addPage,
+        addImage: () => adapter.addImage,
+        deletePage: () => adapter.deletePage,
+        deleteImage: () => adapter.deleteImage,
+        deleteKV: () => adapter.deleteKV,
+        getAllImages: () => adapter.getAllImages,
+        getAllPages: () => adapter.getAllPages,
+        getPageData: () => adapter.getPageData,
+        getKV: () => adapter.getKV,
+        getSite: () => adapter.getSite,
+        putKV: () => adapter.putKV,
+        updatePageData: () => adapter.updatePageData,
+        updateSite: () => adapter.updateSite,
+        addUser: () => adapter.addUser,
+        deleteUser: () => adapter.deleteUser,
+        changeRole: () => adapter.changeRole,
+        getAllUsers: () => adapter.getAllUsers,
       }),
     },
   }

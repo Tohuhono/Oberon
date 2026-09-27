@@ -52,59 +52,79 @@ export const plugin: OberonPlugin = ({ phase }) => ({
   adapter:
     phase === "runtime"
       ? {
-          redirect: ({ payload: { href } }) => {
+          redirect: () => (href) => {
             throw redirect({ to: href })
           },
-          notFound: () => {
+          notFound: () => () => {
             throw notFound()
           },
-          getRequestHeaders: async () => getRequest().headers,
-          getAuthPlugins: ({ next }) => [...next({}), tanstackStartCookies()],
-          updatePageData: async ({ next, payload: { page } }) => {
-            await next({ page })
-            // revalidatePath(page.key)
-            // updateTag("oberon-pages")
-          },
-          addPage: async ({ next, payload: { page } }) => {
-            await next({ page })
-            // revalidatePath(page.key)
-            // updateTag("oberon-pages")
-          },
-          deletePage: async ({ next, payload: { key } }) => {
-            await next({ key })
-            // revalidatePath(key)
-            // updateTag("oberon-pages")
-          },
-          updateSite: async ({ next, payload: { site } }) => {
-            await next({ site })
-            // updateTag("oberon-config")
-          },
-          addImage: async ({ next, payload: { image } }) => {
-            await next({ image })
-            // updateTag("oberon-images")
-          },
-          deleteImage: async ({ next, payload: { key } }) => {
-            await next({ key })
-            // updateTag("oberon-images")
-          },
-          addUser: async ({ next, payload: { user } }) => {
-            const createdUser = await next({ user })
-            // updateTag("oberon-users")
-            return createdUser
-          },
-          deleteUser: async ({ next, payload: { id } }) => {
-            await next({ id })
-            // updateTag("oberon-users")
-          },
-          changeRole: async ({ next, payload }) => {
-            await next(payload)
-            // updateTag("oberon-users")
-          },
-          getPageData: ({ next, payload }) => next(payload),
-          getAllPages: ({ next, payload }) => next(payload),
-          getAllUsers: ({ next, payload }) => next(payload),
-          getAllImages: ({ next, payload }) => next(payload),
-          getSite: ({ next, payload }) => next(payload),
+          getRequestHeaders: () => async () => getRequest().headers,
+          getAuthPlugins:
+            ({ next }) =>
+            () => [...next(), tanstackStartCookies()],
+          updatePageData:
+            ({ next }) =>
+            async (page) => {
+              await next(page)
+              // revalidatePath(page.key)
+              // updateTag("oberon-pages")
+            },
+          addPage:
+            ({ next }) =>
+            async (page) => {
+              await next(page)
+              // revalidatePath(page.key)
+              // updateTag("oberon-pages")
+            },
+          deletePage:
+            ({ next }) =>
+            async (key) => {
+              await next(key)
+              // revalidatePath(key)
+              // updateTag("oberon-pages")
+            },
+          updateSite:
+            ({ next }) =>
+            async (site) => {
+              await next(site)
+              // updateTag("oberon-config")
+            },
+          addImage:
+            ({ next }) =>
+            async (image) => {
+              await next(image)
+              // updateTag("oberon-images")
+            },
+          deleteImage:
+            ({ next }) =>
+            async (key) => {
+              await next(key)
+              // updateTag("oberon-images")
+            },
+          addUser:
+            ({ next }) =>
+            async (user) => {
+              const createdUser = await next(user)
+              // updateTag("oberon-users")
+              return createdUser
+            },
+          deleteUser:
+            ({ next }) =>
+            async (id) => {
+              await next(id)
+              // updateTag("oberon-users")
+            },
+          changeRole:
+            ({ next }) =>
+            async (data) => {
+              await next(data)
+              // updateTag("oberon-users")
+            },
+          getPageData: ({ next }) => next,
+          getAllPages: ({ next }) => next,
+          getAllUsers: ({ next }) => next,
+          getAllImages: ({ next }) => next,
+          getSite: ({ next }) => next,
         }
       : {},
 })

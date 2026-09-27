@@ -24,9 +24,10 @@ This document records the current wiring of the monorepo. Canonical terms live i
 3. `initOberon` builds a single HTTP handler that dispatches by first path segment to plugin
    handlers.
 
-Later adapter hooks are outermost and use `next` to continue earlier implementations. Every
-executable hook sees the final internal adapter regardless of plugin position. Plugin order controls
-middleware nesting, replacement precedence, and sequential Bootstrap order.
+Adapter hooks are initialized once with the final internal adapter and the preceding implementation,
+then return a method with the original adapter signature. Later hooks are outermost and use `next`
+to continue earlier implementations. Plugin order controls middleware nesting, replacement
+precedence, and sequential Bootstrap order.
 
 ## Runtime flows
 

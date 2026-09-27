@@ -6,15 +6,15 @@
 ```tsx
 type OberonPluginAdapterHook<Key extends keyof OberonPluginAdapter> = (context: {
   adapter: Omit<OberonPluginAdapter, Key>
-  next: (payload: OberonPluginAdapterPayloads[Key]) => ReturnType<OberonPluginAdapter[Key]>
-  payload: OberonPluginAdapterPayloads[Key]
-}) => ReturnType<OberonPluginAdapter[Key]>
+  next: OberonPluginAdapter[Key]
+}) => OberonPluginAdapter[Key]
 ```
 
-`payload` is a semantic object: page updates use `{ page }`, page deletion uses `{ key }`, key-value
-operations use `{ namespace, key }`, and zero-argument methods use `{}`. `next` accepts the same
-payload, so middleware can forward or replace it. The public adapter keeps its positional calling
-signatures.
+Each hook is initialized once with the final `adapter` and the preceding `next` implementation, then
+returns an adapter method with the original positional signature. For example, `updatePageData`
+returns `(page) => Promise<void>`, while `putKV` returns `(namespace, key, value) => Promise<void>`.
+Middleware can forward or replace those arguments through `next` without converting them to another
+shape.
 
 The `adapter` is the same final internal adapter for every hook, independent of plugin order. Its
 current method is omitted only from the static type to prevent accidental self-recursion; the
@@ -22,7 +22,8 @@ runtime object is not cloned or filtered.
 
 Later plugins are outermost. For `[storage, tailwind, seo, framework]`, `updatePageData` enters
 `framework`, `seo`, `tailwind`, then `storage`, and unwinds in reverse. A direct provider ignores
-`next`; middleware calls it before or after its own behavior.
+`next` and returns its implementation; middleware returns a function that calls `next` before or
+after its own behavior.
 
 ## Bootstrap hooks
 
@@ -122,23 +123,23 @@ export const databasePlugin: OberonPlugin = () => ({
     await migrate(adapter)
   },
   adapter: {
-    addPage: notImplemented("addPage"),
-    addImage: notImplemented("addImage"),
-    addUser: notImplemented("addUser"),
-    deletePage: notImplemented("deletePage"),
-    deleteImage: notImplemented("deleteImage"),
-    deleteKV: notImplemented("deleteKV"),
-    deleteUser: notImplemented("deleteUser"),
-    changeRole: notImplemented("changeRole"),
-    getAllImages: notImplemented("getAllImages"),
-    getAllPages: notImplemented("getAllPages"),
-    getAllUsers: notImplemented("getAllUsers"),
-    getKV: notImplemented("getKV"),
-    getPageData: notImplemented("getPageData"),
-    getSite: notImplemented("getSite"),
-    putKV: notImplemented("putKV"),
-    updatePageData: notImplemented("updatePageData"),
-    updateSite: notImplemented("updateSite"),
+    addPage: () => notImplemented("addPage"),
+    addImage: () => notImplemented("addImage"),
+    addUser: () => notImplemented("addUser"),
+    deletePage: () => notImplemented("deletePage"),
+    deleteImage: () => notImplemented("deleteImage"),
+    deleteKV: () => notImplemented("deleteKV"),
+    deleteUser: () => notImplemented("deleteUser"),
+    changeRole: () => notImplemented("changeRole"),
+    getAllImages: () => notImplemented("getAllImages"),
+    getAllPages: () => notImplemented("getAllPages"),
+    getAllUsers: () => notImplemented("getAllUsers"),
+    getKV: () => notImplemented("getKV"),
+    getPageData: () => notImplemented("getPageData"),
+    getSite: () => notImplemented("getSite"),
+    putKV: () => notImplemented("putKV"),
+    updatePageData: () => notImplemented("updatePageData"),
+    updateSite: () => notImplemented("updateSite"),
   },
 })
 ```
@@ -171,20 +172,22 @@ export const sendPlugin: OberonPlugin = () => ({
   name: "Custom Send",
   disabled: USE_DEVELOPMENT_SEND_PLUGIN,
   adapter: {
-    sendVerificationRequest: async ({ payload: { email, token, url } }) => {
-      if (!SEND_SECRET) throw new Error("No SEND_SECRET configured")
-      if (!EMAIL_FROM) throw new Error("No EMAIL_FROM configured")
+    sendVerificationRequest:
+      () =>
+      async ({ email, token, url }) => {
+        if (!SEND_SECRET) throw new Error("No SEND_SECRET configured")
+        if (!EMAIL_FROM) throw new Error("No EMAIL_FROM configured")
 
-      await sendEmail(
-        {
-          from: EMAIL_FROM,
-          subject: "One time login to Oberon CMS",
-          text: `Sign in with code\n\n${token}\n\n${url}\n\n`,
-          to: email,
-        },
-        SEND_SECRET,
-      )
-    },
+        await sendEmail(
+          {
+            from: EMAIL_FROM,
+            subject: "One time login to Oberon CMS",
+            text: `Sign in with code\n\n${token}\n\n${url}\n\n`,
+            to: email,
+          },
+          SEND_SECRET,
+        )
+      },
   },
 })
 ```

@@ -52,8 +52,8 @@ This is not yet canonical replacement readiness. The remaining gaps are:
   `handler` used by app routes.
 - `bootstrapOberon(config)` is called by app `prebuild` scripts and seeds the welcome Page when no
   Pages exist.
-- Plugin order is semantic. Plugins receive the accumulated Plugin adapter and may return any subset
-  of behavior that overrides prior behavior.
+- Plugin order controls adapter middleware nesting. Hook factories receive the final Plugin adapter
+  and the preceding implementation, then return a method with the original adapter signature.
 - `@oberoncms/plugin-tanstack` currently provides TanStack routing/request/auth plumbing, but the
   Playground route files still decide which Oberon surfaces are mounted.
 - The Next.js Playground reference routes are:

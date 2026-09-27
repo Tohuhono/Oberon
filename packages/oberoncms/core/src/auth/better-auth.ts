@@ -97,35 +97,41 @@ export const authPlugin: OberonPlugin = () => ({
     await ensureMasterUser(adapter)
   },
   adapter: {
-    getCurrentUser: async ({ adapter }) => {
-      try {
-        const session = await getAuth(adapter).api.getSession({
-          headers: await adapter.getRequestHeaders(),
-        })
+    getCurrentUser:
+      ({ adapter }) =>
+      async () => {
+        try {
+          const session = await getAuth(adapter).api.getSession({
+            headers: await adapter.getRequestHeaders(),
+          })
 
-        if (!session?.user?.id || !session.user.email || !session.user.role) {
+          if (!session?.user?.id || !session.user.email || !session.user.role) {
+            return null
+          }
+
+          return {
+            id: session.user.id,
+            email: session.user.email,
+            role: session.user.role,
+          }
+        } catch {
           return null
         }
-
-        return {
-          id: session.user.id,
-          email: session.user.email,
-          role: session.user.role,
-        }
-      } catch {
-        return null
-      }
-    },
-    signOut: async ({ adapter }) => {
-      await getAuth(adapter).api.signOut({
-        headers: await adapter.getRequestHeaders(),
-      })
-    },
-    signIn: async ({ adapter, payload: { email } }) => {
-      await getAuth(adapter).api.sendVerificationOTP({
-        body: { email, type: "sign-in" },
-        headers: await adapter.getRequestHeaders(),
-      })
-    },
+      },
+    signOut:
+      ({ adapter }) =>
+      async () => {
+        await getAuth(adapter).api.signOut({
+          headers: await adapter.getRequestHeaders(),
+        })
+      },
+    signIn:
+      ({ adapter }) =>
+      async ({ email }) => {
+        await getAuth(adapter).api.sendVerificationOTP({
+          body: { email, type: "sign-in" },
+          headers: await adapter.getRequestHeaders(),
+        })
+      },
   },
 })

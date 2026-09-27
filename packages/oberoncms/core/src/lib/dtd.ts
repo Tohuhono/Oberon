@@ -352,51 +352,10 @@ export type OberonAdapter = {
 
 export type OberonPluginPhase = "bootstrap" | "runtime"
 
-export type OberonPluginAdapterPayloads = {
-  getCurrentUser: {}
-  hasPermission: Parameters<OberonPluginAdapter["hasPermission"]>[0]
-  signIn: Parameters<OberonPluginAdapter["signIn"]>[0]
-  signOut: {}
-  redirect: { href: Parameters<OberonPluginAdapter["redirect"]>[0] }
-  notFound: {}
-  getRequestHeaders: {}
-  getAuthDatabase: {}
-  getAuthPlugins: {}
-  addPage: { page: Parameters<OberonPluginAdapter["addPage"]>[0] }
-  addImage: { image: Parameters<OberonPluginAdapter["addImage"]>[0] }
-  deletePage: { key: Parameters<OberonPluginAdapter["deletePage"]>[0] }
-  deleteImage: { key: Parameters<OberonPluginAdapter["deleteImage"]>[0] }
-  deleteKV: {
-    namespace: Parameters<OberonPluginAdapter["deleteKV"]>[0]
-    key: Parameters<OberonPluginAdapter["deleteKV"]>[1]
-  }
-  getAllImages: {}
-  getAllPages: {}
-  getPageData: { key: Parameters<OberonPluginAdapter["getPageData"]>[0] }
-  getKV: {
-    namespace: Parameters<OberonPluginAdapter["getKV"]>[0]
-    key: Parameters<OberonPluginAdapter["getKV"]>[1]
-  }
-  getSite: {}
-  putKV: {
-    namespace: Parameters<OberonPluginAdapter["putKV"]>[0]
-    key: Parameters<OberonPluginAdapter["putKV"]>[1]
-    value: Parameters<OberonPluginAdapter["putKV"]>[2]
-  }
-  updatePageData: { page: Parameters<OberonPluginAdapter["updatePageData"]>[0] }
-  updateSite: { site: Parameters<OberonPluginAdapter["updateSite"]>[0] }
-  addUser: { user: Parameters<OberonPluginAdapter["addUser"]>[0] }
-  deleteUser: { id: Parameters<OberonPluginAdapter["deleteUser"]>[0] }
-  changeRole: Parameters<OberonPluginAdapter["changeRole"]>[0]
-  getAllUsers: {}
-  sendVerificationRequest: Parameters<OberonPluginAdapter["sendVerificationRequest"]>[0]
-}
-
 export type OberonPluginAdapterHook<Key extends keyof OberonPluginAdapter> = (context: {
   adapter: Omit<OberonPluginAdapter, Key>
-  next: (payload: OberonPluginAdapterPayloads[Key]) => ReturnType<OberonPluginAdapter[Key]>
-  payload: OberonPluginAdapterPayloads[Key]
-}) => ReturnType<OberonPluginAdapter[Key]>
+  next: OberonPluginAdapter[Key]
+}) => OberonPluginAdapter[Key]
 
 export type OberonPluginAdapterHooks = {
   [Key in keyof OberonPluginAdapter]?: OberonPluginAdapterHook<Key>

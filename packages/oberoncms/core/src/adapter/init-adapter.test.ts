@@ -20,11 +20,11 @@ describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migratio
     const plugin: OberonPlugin = () => ({
       name: "test-plugin",
       adapter: {
-        getCurrentUser,
-        hasPermission: ({ payload }) => hasPermission(payload),
-        signIn: async () => {},
-        signOut: async () => {},
-        sendVerificationRequest: async () => {},
+        getCurrentUser: () => getCurrentUser,
+        hasPermission: () => (props) => hasPermission(props),
+        signIn: () => async () => {},
+        signOut: () => async () => {},
+        sendVerificationRequest: () => async () => {},
       },
     })
 

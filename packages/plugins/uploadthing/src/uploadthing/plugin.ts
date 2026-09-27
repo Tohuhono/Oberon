@@ -11,14 +11,16 @@ export const plugin: OberonPlugin = () => ({
     uploadthing: ({ adapter }) => initRouteHandler(adapter),
   },
   adapter: {
-    deleteImage: async ({ next, payload: { key } }) => {
-      const results = await Promise.allSettled([next({ key }), deleteImage(key)])
+    deleteImage:
+      ({ next }) =>
+      async (key) => {
+        const results = await Promise.allSettled([next(key), deleteImage(key)])
 
-      const errors = results.filter((r) => r.status === "rejected").map((r) => r.reason)
+        const errors = results.filter((r) => r.status === "rejected").map((r) => r.reason)
 
-      if (errors.length > 0) {
-        throw new AggregateError(errors, "Image deletion failed")
-      }
-    },
+        if (errors.length > 0) {
+          throw new AggregateError(errors, "Image deletion failed")
+        }
+      },
   },
 })
