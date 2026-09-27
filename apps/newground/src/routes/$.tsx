@@ -21,12 +21,7 @@ const getPageData = createServerFn({ method: "GET" })
 
     const pageData = await adapter.getPageData(resolveSlug(data.path))
     const activeHash = getActiveHash(await adapter.getValue("@oberoncms/plugin-tailwind", "state"))
-    const stylesheet =
-      activeHash &&
-      typeof (await adapter.getValue("@oberoncms/plugin-tailwind", `asset:${activeHash}`)) ===
-        "string"
-        ? `/cms/api/tailwind/${encodeURIComponent(activeHash)}.css`
-        : null
+    const stylesheet = activeHash ? `/cms/api/tailwind/${encodeURIComponent(activeHash)}.css` : null
 
     return { pageData, stylesheet }
   })

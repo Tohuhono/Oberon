@@ -41,7 +41,6 @@ suite passed 29 tests and intentionally skipped 2 tests.
 This is not yet canonical replacement readiness. The remaining gaps are:
 
 - a documented and implemented TanStack caching/revalidation Plugin story
-- dynamic Tailwind asset support; the shared class-name publishing assertion remains skipped
 - concrete Image provider/upload/delete parity; the shared Image deletion assertion remains skipped
 - public and CMS metadata plus static params/prerender parity
 
