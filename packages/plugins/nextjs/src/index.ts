@@ -1,4 +1,4 @@
-import { type OberonPlugin, type OberonPluginAdapter } from "@oberoncms/core"
+import { type OberonPlugin } from "@oberoncms/core"
 import { nextCookies } from "better-auth/next-js"
 import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
 import { headers } from "next/headers"
@@ -7,12 +7,6 @@ import { notFound, redirect } from "next/navigation"
 import { name, version } from "../package.json" with { type: "json" }
 
 export const plugin: OberonPlugin = ({ phase }) => {
-  let getAllImages: OberonPluginAdapter["getAllImages"] | undefined
-  let getAllPages: OberonPluginAdapter["getAllPages"] | undefined
-  let getAllUsers: OberonPluginAdapter["getAllUsers"] | undefined
-  let getPageData: OberonPluginAdapter["getPageData"] | undefined
-  let getSite: OberonPluginAdapter["getSite"] | undefined
-
   return {
     name,
     version,
@@ -83,44 +77,23 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 await next(data)
                 updateTag("oberon-users")
               },
-            getPageData:
-              ({ next }) =>
-              (key) => {
-                getPageData ??= cache((key) => next(key), ["oberon-get-page-data"])
-                return getPageData(key)
-              },
-            getAllPages:
-              ({ next }) =>
-              () => {
-                getAllPages ??= cache(() => next(), ["oberon-get-all-pages"], {
-                  tags: ["oberon-pages"],
-                })
-                return getAllPages()
-              },
-            getAllUsers:
-              ({ next }) =>
-              () => {
-                getAllUsers ??= cache(() => next(), ["oberon-get-all-users"], {
-                  tags: ["oberon-users"],
-                })
-                return getAllUsers()
-              },
-            getAllImages:
-              ({ next }) =>
-              () => {
-                getAllImages ??= cache(() => next(), ["oberon-get-all-images"], {
-                  tags: ["oberon-images"],
-                })
-                return getAllImages()
-              },
-            getSite:
-              ({ next }) =>
-              () => {
-                getSite ??= cache(() => next(), ["oberon-get-site"], {
-                  tags: ["oberon-config"],
-                })
-                return getSite()
-              },
+            getPageData: ({ next }) => cache(next, ["oberon-get-page-data"]),
+            getAllPages: ({ next }) =>
+              cache(next, ["oberon-get-all-pages"], {
+                tags: ["oberon-pages"],
+              }),
+            getAllUsers: ({ next }) =>
+              cache(next, ["oberon-get-all-users"], {
+                tags: ["oberon-users"],
+              }),
+            getAllImages: ({ next }) =>
+              cache(next, ["oberon-get-all-images"], {
+                tags: ["oberon-images"],
+              }),
+            getSite: ({ next }) =>
+              cache(next, ["oberon-get-site"], {
+                tags: ["oberon-config"],
+              }),
           }
         : {},
   }
