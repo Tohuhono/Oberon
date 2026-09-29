@@ -12,13 +12,13 @@ export async function Render({
   config: OberonClientConfig
   adapter: OberonAdapter
 }) {
-  if (!(await adapter.can("pages", "read"))) {
+  if (!(await adapter.can({ action: "pages", permission: "read" }))) {
     throw new ResponseError("You do not have permission to perform this action")
   }
 
   const slug = resolveSlug(path)
 
-  const data = await adapter.getPageData(slug)
+  const data = await adapter.getPageData({ key: slug })
 
   if (!data) {
     return adapter.notFound()

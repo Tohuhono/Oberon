@@ -2,7 +2,9 @@ import {
   AddImageSchema,
   AddPageSchema,
   AddUserSchema,
+  CanSchema,
   ChangeRoleSchema,
+  DeleteImageSchema,
   DeletePageSchema,
   DeleteUserSchema,
   PublishPageSchema,
@@ -26,7 +28,7 @@ export const actions = {
   },
   can: async (...props) => {
     "use server"
-    return actionHandler.can(...props)
+    return actionHandler.can(CanSchema.parse(props[0]))
   },
   changeRole: async (...props) => {
     "use server"
@@ -34,7 +36,7 @@ export const actions = {
   },
   deleteImage: async (...props) => {
     "use server"
-    return actionHandler.deleteImage(...props)
+    return actionHandler.deleteImage(DeleteImageSchema.parse(props[0]))
   },
   deletePage: async (...props) => {
     "use server"
@@ -66,7 +68,7 @@ export const actions = {
   },
   getPageData: async (...props) => {
     "use server"
-    return actionHandler.getPageData(...props)
+    return actionHandler.getPageData(DeletePageSchema.parse(props[0]))
   },
   migrateData: async (...props) => {
     "use server"

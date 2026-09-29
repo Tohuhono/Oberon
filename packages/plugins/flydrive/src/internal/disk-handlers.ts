@@ -14,7 +14,7 @@ export function initRouteHandler(
   GET: () => Promise<Response>
 } {
   const POST: (req: Request) => Promise<Response> = async (req) => {
-    if (!(await can("images", "write"))) {
+    if (!(await can({ action: "images", permission: "write" }))) {
       throw new ResponseError("Not Allowed")
     }
 

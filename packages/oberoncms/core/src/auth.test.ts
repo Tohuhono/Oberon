@@ -1,18 +1,18 @@
-import { beforeEach, describe, expect, it } from "@dev/vitest"
+import { beforeEach, describe, expect, fromPartial, it } from "@dev/vitest"
 import { vi } from "vitest"
 
 import { stubbedAdapter } from "./adapter/stubbed-adapter"
 import { authPlugin } from "./auth"
-import { type OberonUser } from "./lib/dtd"
+import { type OberonAdapter, type OberonUser } from "./lib/dtd"
 
 function createAuthPlugin(users: OberonUser[] = []) {
   const addUser = vi.fn(async ({ email, role }) => ({ id: "created-user", email, role }))
   const getAllUsers = vi.fn(async () => users)
-  const adapter = {
+  const adapter = fromPartial<OberonAdapter>({
     ...stubbedAdapter,
     addUser,
     getAllUsers,
-  }
+  })
   const plugin = authPlugin({ phase: "bootstrap" })
 
   if (!plugin.bootstrap) {

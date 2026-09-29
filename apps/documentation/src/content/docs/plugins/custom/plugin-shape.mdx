@@ -9,7 +9,7 @@ export type OberonPlugin = ({ phase }: { phase: "bootstrap" | "runtime" }) => {
   disabled?: boolean
   adapter?: OberonPluginAdapterHooks
   handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
-  bootstrap?: (context: { adapter: OberonPluginAdapter }) => Promise<void>
+  bootstrap?: (context: { adapter: OberonAdapter }) => Promise<void>
 }
 ```
 
@@ -21,8 +21,8 @@ hooks receive adapters only after composition is complete.
 That means a plugin can:
 
 - contribute different definitions during Runtime and Bootstrap composition
-- wrap an adapter method through `next` without losing later capabilities
-- use the final composed Adapter from Handler hooks
+- wrap an Adapter method through `next` without losing later capabilities
+- use the final composed Adapter from Adapter hooks, Bootstrap hooks, and Handler hooks
 
 ## Return value
 
@@ -41,8 +41,10 @@ are not merged.
 
 ### `adapter`
 
-Optional. Adapter hooks are factories that receive `{ adapter, next }` once and return a method with
-the corresponding `OberonPluginAdapter` signature. Only provide methods your plugin owns or wraps.
+Optional. Adapter hooks are factories that receive `{ getAdapter, next }` once and return a method
+with the corresponding `OberonPluginAdapter` signature. Call `getAdapter()` only from the returned
+method; it throws while factories are still composing. Only provide methods your plugin owns or
+wraps.
 
 ### `handlers`
 
@@ -51,7 +53,7 @@ is invoked once during Runtime composition.
 
 ### `bootstrap`
 
-Optional. An ordered lifecycle task receiving the final Bootstrap-composed internal adapter.
+Optional. An ordered lifecycle task receiving the final Bootstrap Adapter.
 
 ## Merge behavior
 
@@ -60,7 +62,7 @@ Plugin definitions are collected in configured order before executable hooks run
 - returned `handlers` are merged into the accumulated handler map
 - later adapter hooks are outermost and call `next` to continue the earlier chain
 - omitting `next` replaces every earlier implementation for that method
-- every hook sees the same final internal adapter, regardless of plugin position
+- every executing hook resolves the same final augmented Adapter, regardless of Plugin position
 - Bootstrap hooks run sequentially in configured order
 - disabled plugins contribute version metadata only
 

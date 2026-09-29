@@ -33,7 +33,7 @@ describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migratio
       plugins: [plugin],
     })
 
-    await expect(oberon.adapter.can("pages", "write")).resolves.toBe(true)
+    await expect(oberon.adapter.can({ action: "pages", permission: "write" })).resolves.toBe(true)
     expect(hasPermission).toHaveBeenNthCalledWith(1, {
       action: "pages",
       permission: "write",

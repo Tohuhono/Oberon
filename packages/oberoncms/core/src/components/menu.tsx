@@ -16,8 +16,8 @@ export const Menu = ({
 }>) => {
   const { can, signOut } = useOberonActions()
 
-  const { data: showImages } = useSWR("/can/images", () => can("images"))
-  const { data: showUsers } = useSWR("/can/users", () => can("users"))
+  const { data: showImages } = useSWR("/can/images", () => can({ action: "images" }))
+  const { data: showUsers } = useSWR("/can/users", () => can({ action: "users" }))
 
   return (
     <div

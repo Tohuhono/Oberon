@@ -1,24 +1,24 @@
 # Adapter Hooks
 
-`OberonPluginAdapter` is the callable internal adapter. Plugins contribute hooks through
-`OberonPluginAdapterHooks`:
+Plugins contribute Adapter hooks through `OberonPluginAdapterHooks`:
 
 ```tsx
 type OberonPluginAdapterHook<Key extends keyof OberonPluginAdapter> = (context: {
-  adapter: Omit<OberonPluginAdapter, Key>
+  getAdapter: () => Omit<OberonAdapter, Key>
   next: OberonPluginAdapter[Key]
 }) => OberonPluginAdapter[Key]
 ```
 
-Each hook is initialized once with the final `adapter` and the preceding `next` implementation, then
-returns an adapter method with the original positional signature. For example, `updatePageData`
-returns `(page) => Promise<void>`, while `putKV` returns `(namespace, key, value) => Promise<void>`.
-Middleware can forward or replace those arguments through `next` without converting them to another
-shape.
+Each hook is initialized once with the final Adapter getter and the preceding `next` implementation,
+then returns an Adapter method with its original signature. Methods with input receive one object:
+`updatePageData` receives a Page, while `putKV` receives `{ namespace, key, value }`. Methods
+without input remain zero-argument functions.
 
-The `adapter` is the same final internal adapter for every hook, independent of plugin order. Its
-current method is omitted only from the static type to prevent accidental self-recursion; the
-runtime object is not cloned or filtered.
+Call `getAdapter()` from the returned method when it executes, not while the hook factory
+initializes. The getter throws until composition is complete, then returns the same final augmented
+Adapter used by Handlers and actions. Its current method is omitted from the getter's static return
+type to prevent accidental self-recursion. Use `next` to continue the current method's middleware
+chain.
 
 Later plugins are outermost. For `[storage, tailwind, seo, framework]`, `updatePageData` enters
 `framework`, `seo`, `tailwind`, then `storage`, and unwinds in reverse. A direct provider ignores
@@ -32,7 +32,7 @@ adapter middleware.
 
 ```tsx
 type OberonPlugin = ({ phase }: { phase: OberonPluginPhase }) => {
-  bootstrap?: (context: { adapter: OberonPluginAdapter }) => Promise<void>
+  bootstrap?: (context: { adapter: OberonAdapter }) => Promise<void>
 }
 ```
 
@@ -80,6 +80,8 @@ Permission and session helpers:
 - `signOut`
 
 `hasPermission` receives `user`, `action`, and `permission`, and returns a boolean synchronously.
+The final Adapter also provides `can`, `will`, and `whoWill`. Actions use these helpers to enforce
+permissions without making persistence methods authorize themselves.
 
 ## OberonAuthAdapter
 

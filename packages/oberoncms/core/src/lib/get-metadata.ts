@@ -16,7 +16,7 @@ export async function getMetaData(
     }
   }
 
-  const data = await getPageData(slug)
+  const data = await getPageData({ key: slug })
 
   return {
     title: data?.root.title || "Oberon CMS",

@@ -122,6 +122,11 @@ export type AdapterActionGroup = "all" | "users" | "images" | "pages" | "site"
 export type AdapterPermission = "unauthenticated" | "read" | "write"
 export type OberonRole = "user" | "admin" | "unauthenticated" | (string & {})
 
+export const CanSchema = z.object({
+  action: z.enum(["all", "users", "images", "pages", "site"]),
+  permission: z.enum(["unauthenticated", "read", "write"]).optional(),
+})
+
 export type OberonPermissions = Record<
   OberonRole,
   Partial<Record<AdapterActionGroup, AdapterPermission>>
@@ -271,7 +276,7 @@ export type OberonCanAdapter = {
 }
 
 export type OberonRoutingAdapter = {
-  redirect: (href: string) => never
+  redirect: (data: { href: string }) => never
   notFound: () => never
   getRequestHeaders: () => Promise<Headers>
 }
@@ -284,19 +289,19 @@ export type OberonAuthAdapter = {
 export type OberonDatabaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  deletePage: (key: OberonPageMeta["key"]) => Promise<void>
-  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
-  deleteKV: (namespace: string, key: string) => Promise<void>
+  deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
+  deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void> // TODO uploadthing
+  deleteKV: (data: { namespace: string; key: string }) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
-  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
-  getKV: (namespace: string, key: string) => Promise<JsonValue | null>
+  getPageData: (data: z.infer<typeof DeletePageSchema>) => Promise<Data | null>
+  getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
-  putKV: (namespace: string, key: string, value: JsonValue) => Promise<void>
+  putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
   updatePageData: (data: OberonPage) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
-  deleteUser: (id: OberonUser["id"]) => Promise<void>
+  deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
   changeRole: (data: z.infer<typeof ChangeRoleSchema>) => Promise<void>
   getAllUsers: () => Promise<OberonUser[]>
 }
@@ -325,7 +330,12 @@ export type OberonHandler<Params = undefined> = Params extends undefined
     }
 
 export type OberonAdapter = OberonPluginAdapter & {
-  can: (action: AdapterActionGroup, permission?: AdapterPermission) => Promise<boolean>
+  can: (data: z.infer<typeof CanSchema>) => Promise<boolean>
+  will: (data: { action: AdapterActionGroup; permission: AdapterPermission }) => Promise<void>
+  whoWill: (data: {
+    action: AdapterActionGroup
+    permission: AdapterPermission
+  }) => Promise<OberonUser>
   getAllPaths: () => Promise<Array<{ path: string[] }>>
   getConfig: () => Promise<OberonSiteConfig>
   migrateData: (user: OberonUser) => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
@@ -334,7 +344,7 @@ export type OberonAdapter = OberonPluginAdapter & {
 export type OberonPluginPhase = "bootstrap" | "runtime"
 
 export type OberonPluginAdapterHook<Key extends keyof OberonPluginAdapter> = (context: {
-  adapter: Omit<OberonPluginAdapter, Key>
+  getAdapter: () => Omit<OberonAdapter, Key>
   next: OberonPluginAdapter[Key]
 }) => OberonPluginAdapter[Key]
 
@@ -348,7 +358,7 @@ export type OberonPlugin = ({ phase }: { phase: OberonPluginPhase }) => {
   disabled?: boolean
   handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
   adapter?: OberonPluginAdapterHooks
-  bootstrap?: (context: { adapter: OberonPluginAdapter }) => Promise<void>
+  bootstrap?: (context: { adapter: OberonAdapter }) => Promise<void>
 }
 
 export type OberonResponse<T = unknown> = Promise<
@@ -368,11 +378,11 @@ export type OberonServerActions = {
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<void>
-  deleteImage: (key: OberonImage["key"]) => OberonResponse<void>
+  deleteImage: (data: z.infer<typeof DeleteImageSchema>) => OberonResponse<void>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
   ) => OberonResponse<Pick<OberonUser, "id"> | null>
-  can: (action: AdapterActionGroup, permission?: AdapterPermission) => OberonResponse<boolean>
+  can: (data: z.infer<typeof CanSchema>) => OberonResponse<boolean>
   changeRole: (
     data: z.infer<typeof ChangeRoleSchema>,
   ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
@@ -381,7 +391,7 @@ export type OberonServerActions = {
   getAllPaths: () => OberonResponse<Array<{ path: string[] }>>
   getAllUsers: () => OberonResponse<OberonUser[]>
   getConfig: () => OberonResponse<OberonSiteConfig>
-  getPageData: (key: OberonPageMeta["key"]) => OberonResponse<Data | null>
+  getPageData: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<Data | null>
   migrateData: () => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ key: string }>
   signIn: (data: { email: string }) => OberonResponse<void>

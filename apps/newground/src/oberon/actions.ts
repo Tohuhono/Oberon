@@ -2,7 +2,9 @@ import {
   AddImageSchema,
   AddPageSchema,
   AddUserSchema,
+  CanSchema,
   ChangeRoleSchema,
+  DeleteImageSchema,
   DeletePageSchema,
   DeleteUserSchema,
   PublishPageSchema,
@@ -15,10 +17,6 @@ import { actionHandler } from "./adapter"
 type ActionInput<TAction extends keyof OberonServerActions> = Parameters<
   OberonServerActions[TAction]
 >[0]
-
-type ActionArgs<TAction extends keyof OberonServerActions> = Parameters<
-  OberonServerActions[TAction]
->
 
 function passThrough<T>(data: T) {
   return data
@@ -48,15 +46,15 @@ const addUser = createServerFn({ method: "POST" })
   .handler(({ data }) => actionHandler.addUser(data))
 
 const can = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionArgs<"can">>)
-  .handler(({ data }) => actionHandler.can(...data))
+  .validator(CanSchema)
+  .handler(({ data }) => actionHandler.can(data))
 
 const changeRole = createServerFn({ method: "POST" })
   .validator(ChangeRoleSchema)
   .handler(({ data }) => actionHandler.changeRole(data))
 
 const deleteImage = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"deleteImage">>)
+  .validator(DeleteImageSchema)
   .handler(({ data }) => actionHandler.deleteImage(data))
 
 const deletePage = createServerFn({ method: "POST" })
@@ -78,7 +76,7 @@ const getAllUsers = createServerFn({ method: "GET" }).handler(actionHandler.getA
 const getConfig = createServerFn({ method: "GET" }).handler(actionHandler.getConfig)
 
 const getPageData = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"getPageData">>)
+  .validator(DeletePageSchema)
   .handler(({ data }) => actionHandler.getPageData(data))
 
 const migrateData = createServerFn({ method: "POST" }).handler(actionHandler.migrateData)
@@ -97,7 +95,7 @@ export const actions = {
   addImage: (data) => addImage({ data }),
   addPage: (data) => addPage({ data }),
   addUser: (data) => addUser({ data }),
-  can: (...data) => can({ data }),
+  can: (data) => can({ data }),
   changeRole: (data) => changeRole({ data }),
   deleteImage: (data) => deleteImage({ data }),
   deletePage: (data) => deletePage({ data }),
