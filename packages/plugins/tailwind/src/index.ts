@@ -105,13 +105,13 @@ export const plugin: OberonPlugin = () => ({
   name,
   version,
   handlers: {
-    tailwind: ({ pluginAdapter }) => ({
+    tailwind: (adapter) => ({
       GET: async (request) => {
         try {
           const pathname = new URL(request.url).pathname
           const filename = pathname.split("/").pop()
           const hash = filename?.endsWith(".css") ? filename.slice(0, -4) : undefined
-          const css = await getAsset(pluginAdapter, hash)
+          const css = await getAsset(adapter, hash)
 
           if (!css) {
             return new Response("", {

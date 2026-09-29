@@ -15,11 +15,10 @@ function getActiveHash(value: unknown) {
 
 async function getDynamicStylesheets() {
   try {
-    const activeHash = getActiveHash(await adapter.getValue("@oberoncms/plugin-tailwind", "state"))
+    const activeHash = getActiveHash(await adapter.getKV("@oberoncms/plugin-tailwind", "state"))
 
     return activeHash &&
-      typeof (await adapter.getValue("@oberoncms/plugin-tailwind", `asset:${activeHash}`)) ===
-        "string"
+      typeof (await adapter.getKV("@oberoncms/plugin-tailwind", `asset:${activeHash}`)) === "string"
       ? [`/cms/api/tailwind/${encodeURIComponent(activeHash)}.css`]
       : []
   } catch {

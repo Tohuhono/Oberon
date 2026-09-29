@@ -81,8 +81,8 @@ export const authPlugin: OberonPlugin = () => ({
   name: `${name}/auth`,
   version,
   handlers: {
-    auth: ({ pluginAdapter }) => {
-      const handleAuthRequest = async (request: Request) => getAuth(pluginAdapter).handler(request)
+    auth: (adapter) => {
+      const handleAuthRequest = async (request: Request) => getAuth(adapter).handler(request)
 
       return {
         GET: handleAuthRequest,

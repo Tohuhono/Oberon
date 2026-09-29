@@ -1,4 +1,13 @@
-import type { OberonServerActions } from "@oberoncms/core"
+import {
+  AddImageSchema,
+  AddPageSchema,
+  AddUserSchema,
+  ChangeRoleSchema,
+  DeletePageSchema,
+  DeleteUserSchema,
+  PublishPageSchema,
+  type OberonServerActions,
+} from "@oberoncms/core"
 import { createServerFn } from "@tanstack/react-start"
 
 import { actionHandler } from "./adapter"
@@ -27,15 +36,15 @@ function passThrough<T>(data: T) {
 */
 
 const addImage = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"addImage">>)
+  .validator(AddImageSchema)
   .handler(({ data }) => actionHandler.addImage(data))
 
 const addPage = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"addPage">>)
+  .validator(AddPageSchema)
   .handler(({ data }) => actionHandler.addPage(data))
 
 const addUser = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"addUser">>)
+  .validator(AddUserSchema)
   .handler(({ data }) => actionHandler.addUser(data))
 
 const can = createServerFn({ method: "POST" })
@@ -43,7 +52,7 @@ const can = createServerFn({ method: "POST" })
   .handler(({ data }) => actionHandler.can(...data))
 
 const changeRole = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"changeRole">>)
+  .validator(ChangeRoleSchema)
   .handler(({ data }) => actionHandler.changeRole(data))
 
 const deleteImage = createServerFn({ method: "POST" })
@@ -51,11 +60,11 @@ const deleteImage = createServerFn({ method: "POST" })
   .handler(({ data }) => actionHandler.deleteImage(data))
 
 const deletePage = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"deletePage">>)
+  .validator(DeletePageSchema)
   .handler(({ data }) => actionHandler.deletePage(data))
 
 const deleteUser = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"deleteUser">>)
+  .validator(DeleteUserSchema)
   .handler(({ data }) => actionHandler.deleteUser(data))
 
 const getAllImages = createServerFn({ method: "GET" }).handler(actionHandler.getAllImages)
@@ -75,7 +84,7 @@ const getPageData = createServerFn({ method: "POST" })
 const migrateData = createServerFn({ method: "POST" }).handler(actionHandler.migrateData)
 
 const publishPageData = createServerFn({ method: "POST" })
-  .validator(passThrough<ActionInput<"publishPageData">>)
+  .validator(PublishPageSchema)
   .handler(({ data }) => actionHandler.publishPageData(data))
 
 const signIn = createServerFn({ method: "POST" })

@@ -5,10 +5,7 @@ Custom route handlers are provided through the `handlers` field on `OberonPlugin
 ```tsx
 handlers?: Record<
   string,
-  (context: {
-    adapter: OberonAdapter
-    pluginAdapter: OberonPluginAdapter
-  }) => OberonHandler
+  (adapter: OberonAdapter) => OberonHandler
 >
 ```
 
@@ -65,17 +62,15 @@ export const plugin: OberonPlugin = () => ({
 That handler is mounted under the `health` action key and is reached through the CMS catch-all route
 when the first path segment is `health`.
 
-## Adapter context passed to handler factories
+## Adapter passed to handler factories
 
-Each factory is invoked once after both adapters exist. Runtime requests reuse the returned Handler.
-
-- `adapter` is the final public, permission-checked `OberonAdapter`.
-- `pluginAdapter` is the final internal `OberonPluginAdapter` for plugin-owned capabilities.
+Each factory is invoked once with the final `OberonAdapter`. It contains the composed Plugin
+capabilities and core-derived helpers such as `can`. Runtime requests reuse the returned Handler.
 
 ```tsx
 handlers: {
-  asset: ({ pluginAdapter }) => ({
-    GET: async () => Response.json(await pluginAdapter.getKV("my-plugin", "asset")),
+  asset: (adapter) => ({
+    GET: async () => Response.json(await adapter.getKV("my-plugin", "asset")),
   }),
 }
 ```

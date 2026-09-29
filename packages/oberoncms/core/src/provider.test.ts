@@ -51,6 +51,7 @@ describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-c
         path: ["missing"],
         config: fromPartial<OberonClientConfig>({ components: {} }),
         adapter: fromPartial<OberonAdapter>({
+          can: async () => true,
           getPageData: async () => null,
           notFound,
         }),
@@ -58,5 +59,22 @@ describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-c
     ).rejects.toThrow("not-found")
 
     expect(notFound).toHaveBeenCalledOnce()
+  })
+
+  it("checks page permission before reading public page data", async () => {
+    const getPageData = vi.fn(async () => null)
+
+    await expect(
+      Render({
+        path: ["private"],
+        config: fromPartial<OberonClientConfig>({ components: {} }),
+        adapter: fromPartial<OberonAdapter>({
+          can: async () => false,
+          getPageData,
+        }),
+      }),
+    ).rejects.toThrow("You do not have permission to perform this action")
+
+    expect(getPageData).not.toHaveBeenCalled()
   })
 })

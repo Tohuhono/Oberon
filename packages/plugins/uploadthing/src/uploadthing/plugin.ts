@@ -8,7 +8,7 @@ export const plugin: OberonPlugin = () => ({
   name,
   version,
   handlers: {
-    uploadthing: ({ adapter }) => initRouteHandler(adapter),
+    uploadthing: (adapter) => initRouteHandler(adapter),
   },
   adapter: {
     deleteImage:

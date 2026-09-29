@@ -16,15 +16,21 @@ export function initOberon({ client, plugins }: OberonConfig): {
 } {
   console.info("Initialise Oberon")
 
-  const { versions, handlers, adapter: pluginAdapter } = initPlugins(plugins, { phase: "runtime" })
-
-  const adapter = initAdapter({
-    config: client,
+  const {
     versions,
-    pluginAdapter,
+    handlers,
+    adapter: composedAdapter,
+  } = initPlugins(plugins, {
+    phase: "runtime",
   })
 
-  const handler = initHandler(adapter, pluginAdapter, handlers)
+  const adapter = initAdapter({
+    adapter: composedAdapter,
+    config: client,
+    versions,
+  })
+
+  const handler = initHandler(adapter, handlers)
 
   const actionHandler = initActionHandler(adapter)
 

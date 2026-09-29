@@ -7,8 +7,8 @@ This document records the current wiring of the monorepo. Canonical terms live i
 
 - Applications own routes, server actions, and the server-side Oberon config passed to `initOberon`
   and `bootstrapOberon`.
-- `packages/oberoncms/core` owns runtime composition, permissions, schema parsing, and component
-  transform migration.
+- `packages/oberoncms/core` owns runtime composition, authorization, action orchestration, and
+  component transform migration.
 - `packages/plugins/*` add persistence, auth, storage, send, caching, and HTTP integrations.
 - `packages/create-oberon-app` plus `recipes/*` define generated project shapes.
 
@@ -17,11 +17,13 @@ This document records the current wiring of the monorepo. Canonical terms live i
 `initOberon(config)` is the Runtime composition root and returns `{ adapter, handler }`.
 `bootstrapOberon(config)` is the Bootstrap composition root used by package `prebuild` scripts.
 
-1. `initPlugins` collects declarative plugin definitions, composes adapter middleware around one
-   final internal adapter, and collects handlers, Bootstrap tasks, and version metadata.
-2. `initAdapter` wraps the merged adapter with permission checks, zod parsing, and transform
-   migration support.
-3. `initOberon` builds a single HTTP handler that dispatches by first path segment to plugin
+1. `initPlugins` collects declarative Plugin definitions, composes Adapter middleware, and collects
+   handlers, Bootstrap tasks, and version metadata.
+2. `initAdapter` augments that same Adapter with core capabilities such as `can`, paths, Site
+   config, and transform migration.
+3. `initActionHandler` builds authorized Oberon actions from the Adapter. Framework entrypoints
+   validate external input and expose those actions to clients.
+4. `initOberon` builds a single HTTP handler that dispatches by first path segment to Plugin
    handlers.
 
 Adapter hooks are initialized once with the final internal adapter and the preceding implementation,
@@ -36,7 +38,8 @@ precedence, and sequential Bootstrap order.
 - The app's `/cms/[[...path]]` page renders `OberonProvider`.
 - `OberonProvider` reads CMS state through the adapter and exposes wrapped server actions to the
   client.
-- Server actions call adapter methods, which delegate to plugin-provided implementations.
+- Server actions authorize calls before delegating to Adapter methods. Next.js parses action input
+  inside Server Functions; TanStack parses it through `createServerFn().validator()`.
 
 ### Public rendering
 

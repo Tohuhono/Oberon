@@ -1,4 +1,4 @@
-import type { OberonAdapter, OberonHandler, OberonMethod, OberonPluginAdapter } from "../lib/dtd"
+import type { OberonAdapter, OberonHandler, OberonMethod } from "../lib/dtd"
 
 function handle<TMethod extends OberonMethod = OberonMethod>(
   method: TMethod,
@@ -25,15 +25,11 @@ function handle<TMethod extends OberonMethod = OberonMethod>(
 
 export function initHandler(
   adapter: OberonAdapter,
-  pluginAdapter: OberonPluginAdapter,
-  handlers: Record<
-    string,
-    (context: { adapter: OberonAdapter; pluginAdapter: OberonPluginAdapter }) => OberonHandler
-  >,
+  handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>,
 ) {
   const compiledHandlers = Object.entries(handlers).reduce<Record<string, OberonHandler>>(
     (accumulator, [action, initHandler]) => {
-      accumulator[action] = initHandler({ adapter, pluginAdapter })
+      accumulator[action] = initHandler(adapter)
       return accumulator
     },
     {},
