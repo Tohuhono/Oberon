@@ -6,12 +6,15 @@ import { bootstrapOberon } from "./bootstrap-oberon"
 import { initOberon } from "./init-oberon"
 
 describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] }, () => {
-  it("initialises plugin handlers once during runtime composition", async () => {
+  it("initialises plugin handlers once with the final adapter", async () => {
     const get = vi.fn(() => new Response("ok"))
     const initHandler = vi.fn(() => ({ GET: get }))
 
     const plugin: OberonPlugin = () => ({
       name: "test-plugin",
+      adapter: {
+        getKV: () => async () => "composed capability",
+      },
       handlers: {
         test: initHandler,
       },
@@ -30,7 +33,9 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
     })
 
     expect(initHandler).toHaveBeenCalledOnce()
-    expect(initHandler).toHaveBeenCalledWith({ adapter, pluginAdapter: expect.any(Object) })
+    expect(initHandler).toHaveBeenCalledWith(adapter)
+    await expect(adapter.getKV("test", "key")).resolves.toBe("composed capability")
+    expect(adapter.can).toEqual(expect.any(Function))
     expect(get).toHaveBeenCalledTimes(2)
   })
 
@@ -52,6 +57,27 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
     await expect(actionHandler.getAllPaths()).resolves.toEqual({
       status: "success",
       result: [{ path: ["database"] }],
+    })
+  })
+
+  it("authorizes client actions without restricting the programmatic adapter", async () => {
+    const plugin: OberonPlugin = () => ({
+      name: "database-plugin",
+      adapter: {
+        getCurrentUser: () => async () => null,
+        getAllUsers: () => async () => [{ id: "user-1", email: "user@example.com", role: "user" }],
+      },
+    })
+
+    const { actionHandler, adapter } = initOberon({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+
+    await expect(adapter.getAllUsers()).resolves.toHaveLength(1)
+    await expect(actionHandler.getAllUsers()).resolves.toEqual({
+      status: "error",
+      message: "You do not have permission to perform this action",
     })
   })
 

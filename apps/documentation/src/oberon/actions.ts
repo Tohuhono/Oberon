@@ -1,19 +1,28 @@
-import type { OberonServerActions } from "@oberoncms/core"
+import {
+  AddImageSchema,
+  AddPageSchema,
+  AddUserSchema,
+  ChangeRoleSchema,
+  DeletePageSchema,
+  DeleteUserSchema,
+  PublishPageSchema,
+  type OberonServerActions,
+} from "@oberoncms/core"
 
 import { actionHandler } from "./adapter"
 
 export const actions = {
   addImage: async (...props) => {
     "use server"
-    return actionHandler.addImage(...props)
+    return actionHandler.addImage(AddImageSchema.parse(props[0]))
   },
   addPage: async (...props) => {
     "use server"
-    return actionHandler.addPage(...props)
+    return actionHandler.addPage(AddPageSchema.parse(props[0]))
   },
   addUser: async (...props) => {
     "use server"
-    return actionHandler.addUser(...props)
+    return actionHandler.addUser(AddUserSchema.parse(props[0]))
   },
   can: async (...props) => {
     "use server"
@@ -21,7 +30,7 @@ export const actions = {
   },
   changeRole: async (...props) => {
     "use server"
-    return actionHandler.changeRole(...props)
+    return actionHandler.changeRole(ChangeRoleSchema.parse(props[0]))
   },
   deleteImage: async (...props) => {
     "use server"
@@ -29,11 +38,11 @@ export const actions = {
   },
   deletePage: async (...props) => {
     "use server"
-    return actionHandler.deletePage(...props)
+    return actionHandler.deletePage(DeletePageSchema.parse(props[0]))
   },
   deleteUser: async (...props) => {
     "use server"
-    return actionHandler.deleteUser(...props)
+    return actionHandler.deleteUser(DeleteUserSchema.parse(props[0]))
   },
   getAllImages: async (...props) => {
     "use server"
@@ -65,7 +74,7 @@ export const actions = {
   },
   publishPageData: async (...props) => {
     "use server"
-    return actionHandler.publishPageData(...props)
+    return actionHandler.publishPageData(PublishPageSchema.parse(props[0]))
   },
   signIn: async (...props) => {
     "use server"

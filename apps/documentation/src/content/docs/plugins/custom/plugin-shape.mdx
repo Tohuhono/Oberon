@@ -8,10 +8,7 @@ export type OberonPlugin = ({ phase }: { phase: "bootstrap" | "runtime" }) => {
   version?: string
   disabled?: boolean
   adapter?: OberonPluginAdapterHooks
-  handlers?: Record<
-    string,
-    (context: { adapter: OberonAdapter; pluginAdapter: OberonPluginAdapter }) => OberonHandler
-  >
+  handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
   bootstrap?: (context: { adapter: OberonPluginAdapter }) => Promise<void>
 }
 ```
@@ -25,7 +22,7 @@ That means a plugin can:
 
 - contribute different definitions during Runtime and Bootstrap composition
 - wrap an adapter method through `next` without losing later capabilities
-- use the final internal adapter from adapter, Bootstrap, and Handler hooks
+- use the final composed Adapter from Handler hooks
 
 ## Return value
 
@@ -49,8 +46,8 @@ the corresponding `OberonPluginAdapter` signature. Only provide methods your plu
 
 ### `handlers`
 
-Optional. A map of route segment to handler factory. Each factory receives the public `adapter` and
-final internal `pluginAdapter`, and is invoked once during Runtime composition.
+Optional. A map of route segment to handler factory. Each factory receives the final `adapter` and
+is invoked once during Runtime composition.
 
 ### `bootstrap`
 

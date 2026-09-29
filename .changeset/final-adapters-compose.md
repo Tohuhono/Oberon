@@ -12,6 +12,6 @@
 ---
 
 Migrate Plugins to declarative phase-based definitions. Adapter hooks now initialize with the final
-internal adapter and preceding implementation, then receive the original method arguments. Bootstrap
-hooks run sequentially with `{ adapter }`, and Handler factories receive
-`{ adapter, pluginAdapter }`.
+composed adapter and preceding implementation, then receive the original method arguments. Bootstrap
+hooks run sequentially with `{ adapter }`, Handler factories receive the final augmented Adapter,
+and framework action entrypoints validate input before authorized actions call Adapter methods.

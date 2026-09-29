@@ -2,6 +2,7 @@ import { type PropsWithChildren } from "react"
 
 import { OberonClientProvider } from "./components/provider"
 import type {
+  AdapterActionGroup,
   ClientAction,
   OberonAdapter,
   OberonClientContext,
@@ -9,6 +10,7 @@ import type {
   OberonQueryParams,
   OberonServerActions,
 } from "./lib/dtd"
+import { ResponseError } from "./lib/dtd"
 import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
@@ -62,6 +64,13 @@ async function getContext(
   }
 }
 
+function getActionGroup(action: Exclude<ClientAction, "login">): AdapterActionGroup {
+  if (action === "edit" || action === "preview") {
+    return "pages"
+  }
+  return action
+}
+
 export async function OberonProvider({
   children,
   adapter,
@@ -106,6 +115,10 @@ export async function getOberonClientContext({
 
   if (!loggedIn && action !== "login") {
     return adapter.redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
+  }
+
+  if (action !== "login" && !(await adapter.can(getActionGroup(action)))) {
+    throw new ResponseError("You do not have permission to perform this action")
   }
 
   return await getContext(adapter, action, slug, searchParams)

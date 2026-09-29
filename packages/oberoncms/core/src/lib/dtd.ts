@@ -324,30 +324,11 @@ export type OberonHandler<Params = undefined> = Params extends undefined
       ) => Promise<Response>
     }
 
-export type OberonAdapter = {
-  redirect: (href: string) => never
-  notFound: () => never
-  getValue: (namespace: string, key: string) => Promise<JsonValue | null>
-  addPage: (page: z.infer<typeof AddPageSchema>) => Promise<void>
-  addImage: (data: OberonImage) => Promise<OberonImage[]>
-  addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser | null>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
-  deleteImage: (key: OberonImage["key"]) => Promise<void> // TODO uploadthing
-  deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<Pick<OberonUser, "id"> | null>
+export type OberonAdapter = OberonPluginAdapter & {
   can: (action: AdapterActionGroup, permission?: AdapterPermission) => Promise<boolean>
-  changeRole: (
-    data: z.infer<typeof ChangeRoleSchema>,
-  ) => Promise<Pick<OberonUser, "role" | "id"> | null>
-  getAllImages: () => Promise<OberonImage[]>
-  getAllPages: () => Promise<OberonPageMeta[]>
   getAllPaths: () => Promise<Array<{ path: string[] }>>
-  getAllUsers: () => Promise<OberonUser[]>
   getConfig: () => Promise<OberonSiteConfig>
-  getPageData: (key: OberonPageMeta["key"]) => Promise<Data | null>
-  migrateData: () => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => Promise<{ key: string }>
-  signOut: () => Promise<void>
-  signIn: (data: { email: string }) => Promise<void>
+  migrateData: (user: OberonUser) => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
 }
 
 export type OberonPluginPhase = "bootstrap" | "runtime"
@@ -365,10 +346,7 @@ export type OberonPlugin = ({ phase }: { phase: OberonPluginPhase }) => {
   name: string
   version?: string
   disabled?: boolean
-  handlers?: Record<
-    string,
-    (context: { adapter: OberonAdapter; pluginAdapter: OberonPluginAdapter }) => OberonHandler
-  >
+  handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
   adapter?: OberonPluginAdapterHooks
   bootstrap?: (context: { adapter: OberonPluginAdapter }) => Promise<void>
 }

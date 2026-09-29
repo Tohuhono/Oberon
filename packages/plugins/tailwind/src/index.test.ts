@@ -2,7 +2,7 @@ import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 
 import { fromPartial, test } from "@dev/vitest"
-import type { OberonPluginAdapter } from "@oberoncms/core"
+import type { OberonAdapter, OberonPluginAdapter } from "@oberoncms/core"
 import { NotImplementedError, ResponseError, type OberonPage } from "@oberoncms/core"
 import { createPluginTest, createStorageAdapterFactory } from "@oberoncms/testing"
 import { z } from "zod"
@@ -122,7 +122,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       ])
 
       const response = await plugin.handlers
-        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
+        ?.tailwind?.(fromPartial<OberonAdapter>(adapter))
         .GET?.(new Request(`https://oberon.invalid/cms/api/tailwind/${state!.activeHash}.css`))
 
       expect(response?.status).toBe(200)
@@ -172,7 +172,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       await expect(getStylesheets(adapter)).resolves.toEqual([])
 
       const response = await plugin.handlers
-        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
+        ?.tailwind?.(fromPartial<OberonAdapter>(adapter))
         .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
@@ -182,7 +182,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   tailwindTest(
     "fails loudly during bootstrap when KV storage is unavailable",
     async ({ expect }) => {
-      const adapter = fromPartial<OberonPluginAdapter>({
+      const adapter = fromPartial<OberonAdapter>({
         getAllPages: async () => [{ key: "/" }],
         getPageData: async () => createPage("underline").data,
         getKV: async () => {
@@ -199,7 +199,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       )
 
       const response = await plugin.handlers
-        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
+        ?.tailwind?.(adapter)
         .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
@@ -209,7 +209,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   tailwindTest(
     "fails loudly during page updates when KV storage is unavailable",
     async ({ expect }) => {
-      const adapter = fromPartial<OberonPluginAdapter>({
+      const adapter = fromPartial<OberonAdapter>({
         updatePageData: async () => {},
         getAllPages: async () => [{ key: "/" }],
         getPageData: async () => createPage("underline").data,
@@ -228,7 +228,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       ).rejects.toThrow(new NotImplementedError("This action is not available in the demo"))
 
       const response = await plugin.handlers
-        ?.tailwind?.({ adapter: fromPartial({}), pluginAdapter: adapter })
+        ?.tailwind?.(adapter)
         .GET?.(new Request("https://oberon.invalid/cms/api/tailwind"))
 
       expect(response?.status).toBe(404)
