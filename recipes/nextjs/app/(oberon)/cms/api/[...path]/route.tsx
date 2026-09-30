@@ -1,4 +1,4 @@
-import { createRestHandler } from "@oberoncms/core/adapter"
+import { createRestHandler } from "@oberoncms/plugin-nextjs"
 
 import { adapter } from "@/oberon/adapter"
 
