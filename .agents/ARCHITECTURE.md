@@ -17,14 +17,15 @@ This document records the current wiring of the monorepo. Canonical terms live i
 `initAdapter(config)` is the Runtime composition root and returns the final Adapter.
 `bootstrapOberon(config)` is the Bootstrap composition root used by package `prebuild` scripts.
 
-1. `initAdapter` initializes Plugin composition, creates the late-bound `getAdapter`, and adds core
-   capabilities such as `can`, `will`, `whoWill`, paths, Site config, and transform migration before
-   binding the getter to that final Adapter.
-2. `initPlugins` collects declarative Plugin definitions, composes Adapter middleware, and returns
-   REST Handler factories, Bootstrap tasks, and version metadata to `initAdapter`.
-3. `createActionHandler(adapter)` builds authorized Oberon actions from the Adapter. Framework
+1. The private phase composer initializes Plugins, creates the late-bound `getAdapter`, and adds
+   core capabilities such as `can`, `will`, `whoWill`, paths, Site config, transform migration, and
+   lazy REST dispatch before binding the getter to the final Adapter.
+2. `initAdapter(config)` selects Runtime composition and returns only its final Adapter.
+3. `bootstrapOberon(config)` selects Bootstrap composition, runs closure-bound Plugin Bootstrap
+   tasks sequentially, then initializes Page and Site state.
+4. `createActionHandler(adapter)` builds authorized Oberon actions from the Adapter. Framework
    entrypoints validate external input and expose those actions to clients.
-4. `createRestHandler(adapter)` projects the Adapter's lazy HTTP dispatch capability into
+5. `createRestHandler(adapter)` projects the Adapter's lazy HTTP dispatch capability into
    framework-compatible methods that route by first path segment to Plugin handlers.
 
 Adapter hooks are initialized once with the final Adapter getter and the preceding implementation,
@@ -58,7 +59,8 @@ nesting, replacement precedence, and sequential Bootstrap order.
 ### Build lifecycle
 
 - App `prebuild` scripts call `bootstrapOberon(config)`.
-- Database plugins use top-level `bootstrap({ adapter })` tasks to run migrations before builds.
+- Plugin phase factories receive `getAdapter`; Bootstrap tasks close over it when they need the
+  final Adapter. Database migration tasks need no Adapter access.
 - Bootstrap tasks are awaited in configured order before core initializes Page and Site state.
 - `@oberoncms/plugin-nextjs` adds cache tagging and revalidation around adapter reads and mutations;
   this behavior is skipped during Bootstrap composition.

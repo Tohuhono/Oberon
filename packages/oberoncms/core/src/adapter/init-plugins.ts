@@ -1,6 +1,5 @@
 import {
   type OberonAdapter,
-  type OberonClientConfig,
   type OberonHandler,
   type OberonPlugin,
   type OberonPluginAdapter,
@@ -8,14 +7,12 @@ import {
   type OberonPermissions,
   type PluginVersion,
 } from "../lib/dtd"
-import { getInitialData } from "./get-initial-data"
 import { stubbedAdapter } from "./stubbed-adapter"
-import { getComponentTransformVersions } from "./transforms"
 
 type InitialisedPlugins = {
   adapter: OberonPluginAdapter
-  bootstrap: (adapter: OberonAdapter) => Promise<void>
   handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>
+  plugins: ReturnType<OberonPlugin>[]
   versions: PluginVersion[]
 }
 
@@ -83,16 +80,14 @@ function composeAdapter(
 export function initPlugins(
   plugins: OberonPlugin[] = [],
   {
-    config,
     getAdapter,
     phase = "runtime",
   }: {
-    config?: OberonClientConfig
     getAdapter: () => OberonAdapter
     phase?: OberonPluginPhase
   },
 ) {
-  const definitions = plugins.map((plugin) => plugin({ phase }))
+  const definitions = plugins.map((plugin) => plugin({ getAdapter, phase }))
   const enabledPlugins = definitions.filter(({ disabled }) => !disabled)
   const adapter = composeAdapter(enabledPlugins, getAdapter)
   const handlers = enabledPlugins.reduce<InitialisedPlugins["handlers"]>(
@@ -111,27 +106,7 @@ export function initPlugins(
   return {
     adapter,
     handlers,
+    plugins: enabledPlugins,
     versions,
-    bootstrap: async (adapter) => {
-      for (const plugin of enabledPlugins) {
-        await plugin.bootstrap?.({ adapter })
-      }
-
-      const allPages = await adapter.getAllPages()
-      if (!allPages.length) {
-        console.log("Initialising welcome page")
-        await adapter.updatePageData(getInitialData())
-      }
-
-      const site = await adapter.getSite()
-      if (!site && config) {
-        await adapter.updateSite({
-          version: config.version,
-          components: getComponentTransformVersions(config),
-          updatedAt: new Date(),
-          updatedBy: "system",
-        })
-      }
-    },
   } satisfies InitialisedPlugins
 }

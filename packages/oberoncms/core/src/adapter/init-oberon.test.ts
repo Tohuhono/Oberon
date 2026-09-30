@@ -171,7 +171,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
   it("runs bootstrap hooks sequentially before welcome page initialisation", async () => {
     const events: string[] = []
 
-    const firstPlugin: OberonPlugin = () => ({
+    const firstPlugin: OberonPlugin = ({ getAdapter }) => ({
       name: "first-plugin",
       adapter: {
         getAllPages: () => async () => [],
@@ -184,6 +184,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         },
       },
       bootstrap: async () => {
+        events.push(typeof getAdapter().will)
         events.push("first")
       },
     })
@@ -200,6 +201,6 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       plugins: [firstPlugin, secondPlugin],
     })
 
-    expect(events).toEqual(["first", "second", "welcome", "site"])
+    expect(events).toEqual(["function", "first", "second", "welcome", "site"])
   })
 })

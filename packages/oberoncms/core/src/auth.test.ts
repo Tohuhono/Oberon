@@ -13,7 +13,7 @@ function createAuthPlugin(users: OberonUser[] = []) {
     addUser,
     getAllUsers,
   })
-  const plugin = authPlugin({ phase: "bootstrap" })
+  const plugin = authPlugin({ getAdapter: () => adapter, phase: "bootstrap" })
 
   if (!plugin.bootstrap) {
     throw new Error("Expected auth plugin to expose bootstrap")
@@ -30,7 +30,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
   it("creates a normalized MASTER_EMAIL admin after earlier bootstrap work", async () => {
     vi.stubEnv("MASTER_EMAIL", " Rescue@Example.com ")
     const events: string[] = []
-    const { adapter, addUser, getAllUsers, bootstrap } = createAuthPlugin()
+    const { addUser, getAllUsers, bootstrap } = createAuthPlugin()
 
     getAllUsers.mockImplementation(async () => {
       events.push("check users")
@@ -42,7 +42,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
     })
 
     events.push("previous bootstrap")
-    await bootstrap({ adapter })
+    await bootstrap()
 
     expect(events).toEqual(["previous bootstrap", "check users", "add user"])
     expect(addUser).toHaveBeenCalledWith({
@@ -52,9 +52,9 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
   })
 
   it("does not read users when MASTER_EMAIL is missing", async () => {
-    const { adapter, addUser, getAllUsers, bootstrap } = createAuthPlugin()
+    const { addUser, getAllUsers, bootstrap } = createAuthPlugin()
 
-    await bootstrap({ adapter })
+    await bootstrap()
 
     expect(getAllUsers).not.toHaveBeenCalled()
     expect(addUser).not.toHaveBeenCalled()
@@ -62,7 +62,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
 
   it("does not duplicate an existing MASTER_EMAIL user", async () => {
     vi.stubEnv("MASTER_EMAIL", "RESCUE@example.com")
-    const { adapter, addUser, bootstrap } = createAuthPlugin([
+    const { addUser, bootstrap } = createAuthPlugin([
       {
         id: "existing-user",
         email: "rescue@example.com",
@@ -70,7 +70,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
       },
     ])
 
-    await bootstrap({ adapter })
+    await bootstrap()
 
     expect(addUser).not.toHaveBeenCalled()
   })

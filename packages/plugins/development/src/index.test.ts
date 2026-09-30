@@ -43,9 +43,9 @@ async function getDevelopmentAdapter(
 
   const { plugin } = await import("./index")
 
-  const developmentPlugin = plugin({ phase: "bootstrap" })
+  const developmentPlugin = plugin({ getAdapter: () => fromPartial({}), phase: "bootstrap" })
 
-  await developmentPlugin.bootstrap?.({ adapter: fromPartial({}) })
+  await developmentPlugin.bootstrap?.()
 
   onCleanup(async () => {
     delete process.env.SQLITE_FILE

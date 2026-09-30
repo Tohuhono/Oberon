@@ -360,13 +360,16 @@ export type OberonPluginAdapterHooks = {
   [Key in keyof OberonPluginAdapter]?: OberonPluginAdapterHook<Key>
 }
 
-export type OberonPlugin = ({ phase }: { phase: OberonPluginPhase }) => {
+export type OberonPlugin = (context: {
+  getAdapter: () => OberonAdapter
+  phase: OberonPluginPhase
+}) => {
   name: string
   version?: string
   disabled?: boolean
   handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
   adapter?: OberonPluginAdapterHooks
-  bootstrap?: (context: { adapter: OberonAdapter }) => Promise<void>
+  bootstrap?: () => Promise<void>
 }
 
 export type OberonResponse<T = unknown> = Promise<

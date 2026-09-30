@@ -87,8 +87,8 @@ const tailwindTest = createPluginTest(test)
       return await createAdapter(onCleanup)
     },
   )
-  .extend("plugin", { scope: "worker" }, async () => {
-    return tailwindPlugin({ phase: "runtime" })
+  .extend("plugin", { scope: "worker" }, async ({ adapter }) => {
+    return tailwindPlugin({ getAdapter: () => asFinalAdapter(adapter), phase: "runtime" })
   })
 
 tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
@@ -165,7 +165,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
         next: adapter.updatePageData,
       })(page)
 
-      await plugin.bootstrap?.({ adapter: asFinalAdapter(adapter) })
+      await plugin.bootstrap?.()
 
       const firstState = await getState(adapter)
 
@@ -173,7 +173,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
       await expect(getStylesheets(adapter)).resolves.toEqual([])
 
-      await plugin.bootstrap?.({ adapter: asFinalAdapter(adapter) })
+      await plugin.bootstrap?.()
 
       await expect(getAsset(adapter, firstState!.activeHash!)).resolves.toContain(".underline")
     },
@@ -205,9 +205,9 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
           throw new NotImplementedError("This action is not available in the demo")
         },
       })
-      const plugin = tailwindPlugin({ phase: "bootstrap" })
+      const plugin = tailwindPlugin({ getAdapter: () => adapter, phase: "bootstrap" })
 
-      await expect(plugin.bootstrap?.({ adapter })).rejects.toThrow(
+      await expect(plugin.bootstrap?.()).rejects.toThrow(
         new NotImplementedError("This action is not available in the demo"),
       )
 
@@ -233,7 +233,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
           throw new NotImplementedError("This action is not available in the demo")
         },
       })
-      const plugin = tailwindPlugin({ phase: "runtime" })
+      const plugin = tailwindPlugin({ getAdapter: () => adapter, phase: "runtime" })
       const page = createPage("underline")
 
       await expect(
@@ -263,7 +263,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
           throw new Error("boom")
         },
       })
-      const plugin = tailwindPlugin({ phase: "runtime" })
+      const plugin = tailwindPlugin({ getAdapter: () => adapter, phase: "runtime" })
       const page = createPage("underline")
 
       await expect(
