@@ -103,7 +103,7 @@ async function syncStyles(
   await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
 }
 
-export const plugin: OberonPlugin = () => ({
+export const plugin: OberonPlugin = ({ getAdapter }) => ({
   name,
   version,
   handlers: {
@@ -144,9 +144,9 @@ export const plugin: OberonPlugin = () => ({
       },
     }),
   },
-  bootstrap: async ({ adapter }) => {
+  bootstrap: async () => {
     try {
-      await syncStyles(adapter)
+      await syncStyles(getAdapter())
     } catch (error) {
       if (error instanceof ResponseError) {
         throw error

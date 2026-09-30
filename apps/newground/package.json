@@ -15,8 +15,7 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "prebuild": "tsx ./src/oberon/prebuild.ts",
-    "preview": "vite preview --host localhost --strictPort",
-    "start": "vite preview --strictPort",
+    "start": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "tsc": "tsc --pretty"

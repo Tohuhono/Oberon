@@ -22,7 +22,7 @@ export default defineConfig({
     command: [
       `rm -rf '${APP_LOG_DIR}'`,
       `mkdir -p '${APP_LOG_DIR}'`,
-      `pnpm preview --port 3220 > '${APP_LOG_PATH}' 2>&1`,
+      `pnpm start --port 3220 > '${APP_LOG_PATH}' 2>&1`,
     ].join(" && "),
     url: baseURL,
     reuseExistingServer: false,

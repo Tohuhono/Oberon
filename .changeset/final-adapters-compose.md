@@ -12,6 +12,10 @@
 ---
 
 Migrate Plugins to declarative phase-based definitions. Adapter hooks now initialize with the final
-composed adapter and preceding implementation, then receive the original method arguments. Bootstrap
-hooks run sequentially with `{ adapter }`, Handler factories receive the final augmented Adapter,
-and framework action entrypoints validate input before authorized actions call Adapter methods.
+composed adapter and preceding implementation, then receive the original method arguments. Plugin
+phase factories receive a late-bound Adapter getter, closure-bound Bootstrap hooks run sequentially,
+Handler factories receive the final augmented Adapter, and framework action entrypoints validate
+input before authorized actions call Adapter methods. Runtime setup now returns the Adapter directly
+through `initAdapter(config)`, with explicit `createActionHandler(adapter)` and
+`createRestHandler(adapter)` projections. Bootstrap remains an independent `bootstrapOberon(config)`
+lifecycle.

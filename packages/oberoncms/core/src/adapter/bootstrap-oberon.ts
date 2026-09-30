@@ -1,28 +1,30 @@
-import { type OberonAdapter, type OberonConfig } from "../lib/dtd"
-import { initAdapter } from "./init-adapter"
-import { initPlugins } from "./init-plugins"
+import { type OberonConfig } from "../lib/dtd"
+import { composeAdapter } from "./compose-adapter"
+import { getInitialData } from "./get-initial-data"
+import { getComponentTransformVersions } from "./transforms"
 
-export async function bootstrapOberon({ client, plugins }: OberonConfig) {
+export async function bootstrapOberon(config: OberonConfig) {
   console.info("Bootstrap Oberon")
 
-  const state: { adapter?: OberonAdapter } = {}
-  const getAdapter = () => {
-    if (!state.adapter) {
-      throw new Error("Adapter used before initialization")
-    }
-    return state.adapter
+  const { adapter, plugins } = composeAdapter(config, "bootstrap")
+
+  for (const plugin of plugins) {
+    await plugin.bootstrap?.()
   }
 
-  const {
-    adapter: composedAdapter,
-    bootstrap,
-    versions,
-  } = initPlugins(plugins, {
-    config: client,
-    getAdapter,
-    phase: "bootstrap",
-  })
-  const adapter = initAdapter({ adapter: composedAdapter, config: client, versions })
-  state.adapter = adapter
-  await bootstrap(adapter)
+  const allPages = await adapter.getAllPages()
+  if (!allPages.length) {
+    console.log("Initialising welcome page")
+    await adapter.updatePageData(getInitialData())
+  }
+
+  const site = await adapter.getSite()
+  if (!site) {
+    await adapter.updateSite({
+      version: config.client.version,
+      components: getComponentTransformVersions(config.client),
+      updatedAt: new Date(),
+      updatedBy: "system",
+    })
+  }
 }

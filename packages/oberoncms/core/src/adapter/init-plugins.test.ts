@@ -1,38 +1,20 @@
 import { describe, expect, fromPartial, it } from "@dev/vitest"
 
 import { authPlugin } from "../auth"
-import {
-  NotImplementedError,
-  type OberonAdapter,
-  type OberonClientConfig,
-  type OberonPlugin,
-} from "../lib/dtd"
+import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from "../lib/dtd"
 import { initAdapter } from "./init-adapter"
-import { initPlugins } from "./init-plugins"
 import { mockPlugin } from "./mock-plugin"
 
 function initTestPlugins(plugins: OberonPlugin[] = []) {
-  const state: { adapter?: OberonAdapter } = {}
-  const getAdapter = () => {
-    if (!state.adapter) {
-      throw new Error("Adapter used before initialization")
-    }
-    return state.adapter
-  }
-  const initialisedPlugins = initPlugins(plugins, { getAdapter })
-  const adapter = initAdapter({
-    adapter: initialisedPlugins.adapter,
-    config: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-    versions: initialisedPlugins.versions,
+  return initAdapter({
+    client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+    plugins,
   })
-  state.adapter = adapter
-
-  return { ...initialisedPlugins, adapter }
 }
 
 describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
   it("exposes a fallback KV contract before a database plugin implements it", async () => {
-    const { adapter } = initTestPlugins()
+    const adapter = initTestPlugins()
 
     expect(() => adapter.getKV({ namespace: "tailwind", key: "state" })).toThrow(
       new NotImplementedError(
@@ -54,7 +36,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
   })
 
   it("lets the mock plugin override KV methods with demo-only stubs", async () => {
-    const { adapter } = initTestPlugins([mockPlugin])
+    const adapter = initTestPlugins([mockPlugin])
 
     expect(() => adapter.getKV({ namespace: "mock-plugin", key: "state" })).toThrow(
       new NotImplementedError("This action is not available in the demo"),
@@ -133,7 +115,7 @@ describe("initPlugins adapter hooks", { tags: ["ai", "issue-362"] }, () => {
       },
     })
 
-    const { adapter } = initTestPlugins([provider, middleware, laterCapability])
+    const adapter = initTestPlugins([provider, middleware, laterCapability])
 
     await expect(adapter.addUser({ email: "user@example.com", role: "user" })).resolves.toEqual({
       id: "user-1",

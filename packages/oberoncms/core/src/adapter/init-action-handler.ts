@@ -38,7 +38,7 @@ export async function transport<T>(
   }
 }
 
-export function initActionHandler(adapter: OberonAdapter): OberonServerActions {
+export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
     addPage: (data) =>
       transport(async () => {

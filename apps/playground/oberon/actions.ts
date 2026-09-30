@@ -19,8 +19,11 @@ import {
   SignOutSchema,
   type OberonServerActions,
 } from "@oberoncms/core"
+import { createActionHandler } from "@oberoncms/core/adapter"
 
-import { actionHandler } from "./adapter"
+import { adapter } from "./adapter"
+
+const actionHandler = createActionHandler(adapter)
 
 export const actions = {
   addImage: async (data) => {
