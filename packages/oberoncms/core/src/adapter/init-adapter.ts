@@ -3,6 +3,7 @@ import { streamResponse } from "@tohuhono/utils"
 import { version } from "../../package.json" with { type: "json" }
 import {
   type OberonAdapter,
+  ResponseError,
   type OberonUser,
   type OberonClientConfig,
   type MigrationResult,
@@ -22,7 +23,7 @@ export function initAdapter({
   adapter: OberonPluginAdapter
   versions: PluginVersion[]
 }): OberonAdapter {
-  const can: OberonAdapter["can"] = async (action, permission = "read") => {
+  const can: OberonAdapter["can"] = async ({ action, permission = "read" }) => {
     // Check unauthenticated first so we can do it outside of request context
     if (adapter.hasPermission({ action, permission })) {
       return true
@@ -31,6 +32,21 @@ export function initAdapter({
     const user = await adapter.getCurrentUser()
 
     return adapter.hasPermission({ user, action, permission })
+  }
+
+  const will: OberonAdapter["will"] = async (data) => {
+    if (!(await can(data))) {
+      throw new ResponseError("You do not have permission to perform this action")
+    }
+  }
+
+  const whoWill: OberonAdapter["whoWill"] = async ({ action, permission }) => {
+    const user = await adapter.getCurrentUser()
+
+    if (user && adapter.hasPermission({ user, action, permission })) {
+      return user
+    }
+    throw new ResponseError("You do not have permission to perform this action")
   }
 
   const readAllPages = adapter.getAllPages
@@ -119,7 +135,7 @@ export function initAdapter({
       const results = applyTransforms({
         transforms,
         pages,
-        getPageData: adapter.getPageData,
+        getPageData: (key) => adapter.getPageData({ key }),
         updatePageData,
       })
 
@@ -139,7 +155,8 @@ export function initAdapter({
     },
   )
 
-  return Object.assign(adapter, {
+  return {
+    ...adapter,
     can,
     getAllImages,
     getAllPages,
@@ -147,5 +164,7 @@ export function initAdapter({
     getAllUsers,
     getConfig,
     migrateData,
-  })
+    will,
+    whoWill,
+  }
 }

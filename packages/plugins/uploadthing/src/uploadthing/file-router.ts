@@ -17,7 +17,7 @@ const f = createUploadthing()
 const initFileRouter = ({ can }: OberonAdapter) => {
   const imageMiddleware = async () => {
     // If you throw, the user will not be able to upload
-    if (!(await can("images", "write"))) {
+    if (!(await can({ action: "images", permission: "write" }))) {
       throw new UploadThingError("Unauthorized")
     }
 

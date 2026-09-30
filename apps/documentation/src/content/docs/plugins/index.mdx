@@ -25,8 +25,8 @@ export const config = defineConfig({
 ## Order matters
 
 Plugin definitions are collected in array order. Later adapter hooks wrap earlier implementations,
-while every executable hook receives the final internal adapter and can use capabilities from any
-position. Bootstrap tasks run sequentially in configured order.
+while every executing hook resolves the final Adapter and can use capabilities from any position.
+Bootstrap tasks run sequentially in configured order.
 
 Generated starter apps therefore put:
 
@@ -71,10 +71,10 @@ Plugins can contribute three kinds of extension points.
 
 `bootstrap` hooks:
 
-- ordered lifecycle tasks receiving the final Bootstrap-composed internal adapter
+- ordered lifecycle tasks receiving the final Bootstrap Adapter
 
 `handlers` hooks:
 
-- route factories keyed by path segment, receiving public and internal final adapters
+- route factories keyed by path segment, receiving the final Adapter
 
 Use the section pages in this Plugins area for concrete examples of each plugin type.

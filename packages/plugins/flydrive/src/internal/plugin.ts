@@ -17,8 +17,8 @@ export const getFlyDrivePlugin = (diskDriver: DriverContract): OberonPlugin => {
     adapter: {
       deleteImage:
         ({ next }) =>
-        async (key) => {
-          const results = await Promise.allSettled([next(key), driver.delete(key)])
+        async (data) => {
+          const results = await Promise.allSettled([next(data), driver.delete(data.key)])
 
           const errors = results.filter((r) => r.status === "rejected").map((r) => r.reason)
 

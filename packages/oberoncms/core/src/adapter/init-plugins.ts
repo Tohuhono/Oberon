@@ -14,7 +14,7 @@ import { getComponentTransformVersions } from "./transforms"
 
 type InitialisedPlugins = {
   adapter: OberonPluginAdapter
-  bootstrap: () => Promise<void>
+  bootstrap: (adapter: OberonAdapter) => Promise<void>
   handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>
   versions: PluginVersion[]
 }
@@ -55,32 +55,46 @@ function getBaseAdapter(): OberonPluginAdapter {
 
 function composeAdapterHook<Key extends keyof OberonPluginAdapter>(
   plugins: ReturnType<OberonPlugin>[],
-  adapter: OberonPluginAdapter,
+  getAdapter: () => OberonAdapter,
+  baseAdapter: OberonPluginAdapter,
   key: Key,
 ) {
-  adapter[key] = plugins.reduce<OberonPluginAdapter[Key]>((next, plugin) => {
+  return plugins.reduce<OberonPluginAdapter[Key]>((next, plugin) => {
     const hook = plugin.adapter?.[key]
-    return hook ? hook({ adapter, next }) : next
-  }, adapter[key])
+    return hook ? hook({ getAdapter, next }) : next
+  }, baseAdapter[key])
 }
 
-function composeAdapter(plugins: ReturnType<OberonPlugin>[]): OberonPluginAdapter {
-  const adapter = getBaseAdapter()
+function composeAdapter(
+  plugins: ReturnType<OberonPlugin>[],
+  getAdapter: () => OberonAdapter,
+): OberonPluginAdapter {
+  const baseAdapter = getBaseAdapter()
 
-  for (const key of Object.keys(adapter) as Array<keyof OberonPluginAdapter>) {
-    composeAdapterHook(plugins, adapter, key)
-  }
-
-  return adapter
+  return (Object.keys(baseAdapter) as Array<keyof OberonPluginAdapter>).reduce(
+    (adapter, key) => ({
+      ...adapter,
+      [key]: composeAdapterHook(plugins, getAdapter, baseAdapter, key),
+    }),
+    baseAdapter,
+  )
 }
 
 export function initPlugins(
   plugins: OberonPlugin[] = [],
-  { config, phase = "runtime" }: { config?: OberonClientConfig; phase?: OberonPluginPhase } = {},
+  {
+    config,
+    getAdapter,
+    phase = "runtime",
+  }: {
+    config?: OberonClientConfig
+    getAdapter: () => OberonAdapter
+    phase?: OberonPluginPhase
+  },
 ) {
   const definitions = plugins.map((plugin) => plugin({ phase }))
   const enabledPlugins = definitions.filter(({ disabled }) => !disabled)
-  const adapter = composeAdapter(enabledPlugins)
+  const adapter = composeAdapter(enabledPlugins, getAdapter)
   const handlers = enabledPlugins.reduce<InitialisedPlugins["handlers"]>(
     (accumulator, plugin) => ({
       ...accumulator,
@@ -98,7 +112,7 @@ export function initPlugins(
     adapter,
     handlers,
     versions,
-    bootstrap: async () => {
+    bootstrap: async (adapter) => {
       for (const plugin of enabledPlugins) {
         await plugin.bootstrap?.({ adapter })
       }

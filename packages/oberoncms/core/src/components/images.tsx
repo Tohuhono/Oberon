@@ -24,7 +24,7 @@ const useOberonImages = (images: OberonImage[]) => {
           ),
         ),
       )
-      return deleteImage(key)
+      return deleteImage({ key })
     },
   }
 }

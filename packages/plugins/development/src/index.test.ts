@@ -106,7 +106,7 @@ developmentAdapterTest.describe(
         },
       ])
 
-      await adapter.deleteUser(added.id)
+      await adapter.deleteUser({ id: added.id })
 
       await expect(adapter.getAllUsers()).resolves.toEqual([])
     })
@@ -152,7 +152,7 @@ developmentAdapterTest.describe(
 
         expect(await readUpdatedBy()).toBe("snapshot@example.com")
 
-        await adapter.deleteUser?.(added.id)
+        await adapter.deleteUser?.({ id: added.id })
 
         expect(await readUpdatedBy()).toBe("snapshot@example.com")
       },

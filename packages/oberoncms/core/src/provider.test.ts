@@ -6,7 +6,7 @@ import { Render } from "./render"
 
 describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-core"] }, () => {
   it("redirects through the adapter when no CMS action is provided", async () => {
-    const redirect = vi.fn((href: string): never => {
+    const redirect = vi.fn(({ href }: { href: string }): never => {
       throw new Error(`redirect:${href}`)
     })
 
@@ -20,7 +20,7 @@ describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-c
       }),
     ).rejects.toThrow("redirect:/cms/pages")
 
-    expect(redirect).toHaveBeenCalledWith("/cms/pages")
+    expect(redirect).toHaveBeenCalledWith({ href: "/cms/pages" })
   })
 
   it("not-founds through the adapter when the CMS action is unknown", async () => {

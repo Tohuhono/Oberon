@@ -70,7 +70,8 @@ capabilities and core-derived helpers such as `can`. Runtime requests reuse the 
 ```tsx
 handlers: {
   asset: (adapter) => ({
-    GET: async () => Response.json(await adapter.getKV("my-plugin", "asset")),
+    GET: async () =>
+      Response.json(await adapter.getKV({ namespace: "my-plugin", key: "asset" })),
   }),
 }
 ```
@@ -102,6 +103,8 @@ handlers: {
 - `getAllUsers`
 - `changeRole`
 - `can`
+- `will`
+- `whoWill`
 
 ### Site and migrations
 

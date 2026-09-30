@@ -1,8 +1,6 @@
 import {
   INITIAL_DATA,
   ResponseError,
-  type AdapterActionGroup,
-  type AdapterPermission,
   type OberonAdapter,
   type OberonPage,
   type OberonResponse,
@@ -10,11 +8,11 @@ import {
 } from "../lib/dtd"
 
 export async function transport<T>(
-  promise: Promise<T>,
+  action: () => Promise<T>,
   options: { successMessage?: string | ((result: T) => string | undefined) } = {},
 ): OberonResponse<T> {
   try {
-    const result = await promise
+    const result = await action()
     const message =
       typeof options.successMessage === "function"
         ? options.successMessage(result)
@@ -41,97 +39,95 @@ export async function transport<T>(
 }
 
 export function initActionHandler(adapter: OberonAdapter): OberonServerActions {
-  const will = async (action: AdapterActionGroup, permission: AdapterPermission) => {
-    if (!(await adapter.can(action, permission))) {
-      throw new ResponseError("You do not have permission to perform this action")
-    }
-  }
-
-  const whoWill = async (action: AdapterActionGroup, permission: AdapterPermission) => {
-    const user = await adapter.getCurrentUser()
-
-    if (user && adapter.hasPermission({ user, action, permission })) {
-      return user
-    }
-    throw new ResponseError("You do not have permission to perform this action")
-  }
-
   return {
     addPage: (data) =>
-      transport(
-        (async () => {
-          const user = await whoWill("pages", "write")
-          const { key } = data
-          await adapter.addPage({
-            key,
-            data: INITIAL_DATA,
-            updatedAt: new Date(),
-            updatedBy: user.email,
-          })
-        })(),
-      ),
+      transport(async () => {
+        const user = await adapter.whoWill({ action: "pages", permission: "write" })
+        const { key } = data
+        await adapter.addPage({
+          key,
+          data: INITIAL_DATA,
+          updatedAt: new Date(),
+          updatedBy: user.email,
+        })
+      }),
     addImage: (data) =>
-      transport(
-        (async () => {
-          await will("images", "write")
-          await adapter.addImage(data)
-          return adapter.getAllImages()
-        })(),
-      ),
+      transport(async () => {
+        await adapter.will({ action: "images", permission: "write" })
+        await adapter.addImage(data)
+        return adapter.getAllImages()
+      }),
     addUser: (data) =>
-      transport(
-        (async () => {
-          await will("users", "write")
-          const { email, role } = data
-          const { id } = await adapter.addUser({ email, role })
-          return { id, email, role }
-        })(),
-      ),
+      transport(async () => {
+        await adapter.will({ action: "users", permission: "write" })
+        const { email, role } = data
+        const { id } = await adapter.addUser({ email, role })
+        return { id, email, role }
+      }),
     deletePage: (data) =>
-      transport(
-        (async () => {
-          await will("pages", "write")
-          await adapter.deletePage(data.key)
-        })(),
-      ),
-    deleteImage: (key) =>
-      transport(
-        (async () => {
-          await will("images", "write")
-          await adapter.deleteImage(key)
-        })(),
-      ),
+      transport(async () => {
+        await adapter.will({ action: "pages", permission: "write" })
+        await adapter.deletePage(data)
+      }),
+    deleteImage: (data) =>
+      transport(async () => {
+        await adapter.will({ action: "images", permission: "write" })
+        await adapter.deleteImage(data)
+      }),
     deleteUser: (data) =>
-      transport(
-        (async () => {
-          await will("users", "write")
-          const { id } = data
-          await adapter.deleteUser(id)
-          return { id }
-        })(),
-      ),
-    can: (action, permission) => transport(adapter.can(action, permission)),
+      transport(async () => {
+        await adapter.will({ action: "users", permission: "write" })
+        const { id } = data
+        await adapter.deleteUser(data)
+        return { id }
+      }),
+    can: (data) => transport(() => adapter.can(data)),
     changeRole: (data) =>
-      transport(
-        (async () => {
-          await will("users", "write")
-          const { role, id } = data
-          await adapter.changeRole({ role, id })
-          return { role, id }
-        })(),
-      ),
-    getAllImages: () => transport(will("images", "read").then(() => adapter.getAllImages())),
-    getAllPages: () => transport(will("pages", "read").then(() => adapter.getAllPages())),
-    getAllPaths: () => transport(will("pages", "read").then(() => adapter.getAllPaths())),
-    getAllUsers: () => transport(will("users", "read").then(() => adapter.getAllUsers())),
-    getConfig: () => transport(will("site", "read").then(() => adapter.getConfig())),
-    getPageData: (key) => transport(will("pages", "read").then(() => adapter.getPageData(key))),
+      transport(async () => {
+        await adapter.will({ action: "users", permission: "write" })
+        const { role, id } = data
+        await adapter.changeRole({ role, id })
+        return { role, id }
+      }),
+    getAllImages: () =>
+      transport(async () => {
+        await adapter.will({ action: "images", permission: "read" })
+        return adapter.getAllImages()
+      }),
+    getAllPages: () =>
+      transport(async () => {
+        await adapter.will({ action: "pages", permission: "read" })
+        return adapter.getAllPages()
+      }),
+    getAllPaths: () =>
+      transport(async () => {
+        await adapter.will({ action: "pages", permission: "read" })
+        return adapter.getAllPaths()
+      }),
+    getAllUsers: () =>
+      transport(async () => {
+        await adapter.will({ action: "users", permission: "read" })
+        return adapter.getAllUsers()
+      }),
+    getConfig: () =>
+      transport(async () => {
+        await adapter.will({ action: "site", permission: "read" })
+        return adapter.getConfig()
+      }),
+    getPageData: (data) =>
+      transport(async () => {
+        await adapter.will({ action: "pages", permission: "read" })
+        return adapter.getPageData(data)
+      }),
     migrateData: () =>
-      transport(whoWill("site", "write").then((user) => adapter.migrateData(user))),
+      transport(async () => {
+        const user = await adapter.whoWill({ action: "site", permission: "write" })
+        return adapter.migrateData(user)
+      }),
     publishPageData: (data) =>
       transport(
-        (async () => {
-          const user = await whoWill("pages", "write")
+        async () => {
+          const user = await adapter.whoWill({ action: "pages", permission: "write" })
           const { key, data: pageData } = data
 
           if (!isPageData(pageData)) {
@@ -145,13 +141,13 @@ export function initActionHandler(adapter: OberonAdapter): OberonServerActions {
             updatedBy: user.email,
           })
           return { key }
-        })(),
+        },
         {
           successMessage: ({ key }) => `Successfully published ${key}`,
         },
       ),
-    signIn: (data) => transport(adapter.signIn(data)),
-    signOut: () => transport(adapter.signOut()),
+    signIn: (data) => transport(() => adapter.signIn(data)),
+    signOut: () => transport(() => adapter.signOut()),
   }
 }
 

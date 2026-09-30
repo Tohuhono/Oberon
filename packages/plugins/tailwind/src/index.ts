@@ -32,7 +32,9 @@ export async function extractTailwindClasses(data: unknown) {
 }
 
 async function getState(adapter: Pick<OberonPluginAdapter, "getKV">) {
-  const parsed = tailwindStateSchema.safeParse(await adapter.getKV(name, "state"))
+  const parsed = tailwindStateSchema.safeParse(
+    await adapter.getKV({ namespace: name, key: "state" }),
+  )
 
   return parsed.success ? parsed.data : { activeHash: null, classes: [] }
 }
@@ -45,7 +47,7 @@ async function getAsset(
     return null
   }
 
-  const asset = await adapter.getKV(name, `asset:${hash}`)
+  const asset = await adapter.getKV({ namespace: name, key: `asset:${hash}` })
 
   return typeof asset === "string" ? asset : null
 }
@@ -57,7 +59,7 @@ async function getAllPublishedClasses(
   const pages = await adapter.getAllPages()
 
   for (const { key } of pages) {
-    const data = await adapter.getPageData(key)
+    const data = await adapter.getPageData({ key })
     if (!data) continue
 
     for await (const node of walkAsyncStep(data)) {
@@ -85,7 +87,7 @@ async function syncStyles(
       return
     }
 
-    await adapter.putKV(name, "state", { activeHash: null, classes: [] })
+    await adapter.putKV({ namespace: name, key: "state", value: { activeHash: null, classes: [] } })
     return
   }
 
@@ -96,9 +98,9 @@ async function syncStyles(
   }
 
   const css = await buildCss(classes)
-  await adapter.putKV(name, `asset:${hash}`, css)
+  await adapter.putKV({ namespace: name, key: `asset:${hash}`, value: css })
 
-  await adapter.putKV(name, "state", { activeHash: hash, classes })
+  await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
 }
 
 export const plugin: OberonPlugin = () => ({
@@ -159,11 +161,11 @@ export const plugin: OberonPlugin = () => ({
   },
   adapter: {
     updatePageData:
-      ({ adapter, next }) =>
+      ({ getAdapter, next }) =>
       async (page) => {
         try {
           await next(page)
-          await syncStyles(adapter)
+          await syncStyles(getAdapter())
         } catch (error) {
           if (error instanceof ResponseError) {
             throw error

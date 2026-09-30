@@ -13,7 +13,10 @@ export const plugin: OberonPlugin = ({ phase }) => {
     adapter:
       phase === "runtime"
         ? {
-            redirect: () => (href) => redirect(href),
+            redirect:
+              () =>
+              ({ href }) =>
+                redirect(href),
             notFound: () => () => notFound(),
             getRequestHeaders: () => async () => new Headers(await headers()),
             getAuthPlugins:
@@ -35,8 +38,9 @@ export const plugin: OberonPlugin = ({ phase }) => {
               },
             deletePage:
               ({ next }) =>
-              async (key) => {
-                await next(key)
+              async (data) => {
+                await next(data)
+                const { key } = data
                 revalidatePath(key)
                 updateTag("oberon-pages")
               },
@@ -54,8 +58,8 @@ export const plugin: OberonPlugin = ({ phase }) => {
               },
             deleteImage:
               ({ next }) =>
-              async (key) => {
-                await next(key)
+              async (data) => {
+                await next(data)
                 updateTag("oberon-images")
               },
             addUser:
@@ -67,8 +71,8 @@ export const plugin: OberonPlugin = ({ phase }) => {
               },
             deleteUser:
               ({ next }) =>
-              async (id) => {
-                await next(id)
+              async (data) => {
+                await next(data)
                 updateTag("oberon-users")
               },
             changeRole:

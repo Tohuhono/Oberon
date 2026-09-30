@@ -35,7 +35,7 @@ async function getContext(
       return {
         action,
         slug,
-        data: await getPageData(slug),
+        data: await getPageData({ key: slug }),
       }
     case "users":
       return {
@@ -103,7 +103,7 @@ export async function getOberonClientContext({
 
   if (!action) {
     if (path[0] === undefined) {
-      return adapter.redirect("/cms/pages")
+      return adapter.redirect({ href: "/cms/pages" })
     }
 
     return adapter.notFound()
@@ -111,13 +111,13 @@ export async function getOberonClientContext({
 
   const slug = resolveSlug(path.slice(1))
 
-  const loggedIn = await adapter.can("site")
+  const loggedIn = await adapter.can({ action: "site" })
 
   if (!loggedIn && action !== "login") {
-    return adapter.redirect(`/cms/login?callbackUrl=/cms/${path.join("/")}`)
+    return adapter.redirect({ href: `/cms/login?callbackUrl=/cms/${path.join("/")}` })
   }
 
-  if (action !== "login" && !(await adapter.can(getActionGroup(action)))) {
+  if (action !== "login" && !(await adapter.can({ action: getActionGroup(action) }))) {
     throw new ResponseError("You do not have permission to perform this action")
   }
 

@@ -16,11 +16,20 @@ export function initOberon({ client, plugins }: OberonConfig): {
 } {
   console.info("Initialise Oberon")
 
+  const state: { adapter?: OberonAdapter } = {}
+  const getAdapter = () => {
+    if (!state.adapter) {
+      throw new Error("Adapter used before initialization")
+    }
+    return state.adapter
+  }
+
   const {
     versions,
     handlers,
     adapter: composedAdapter,
   } = initPlugins(plugins, {
+    getAdapter,
     phase: "runtime",
   })
 
@@ -29,6 +38,7 @@ export function initOberon({ client, plugins }: OberonConfig): {
     config: client,
     versions,
   })
+  state.adapter = adapter
 
   const handler = initHandler(adapter, handlers)
 

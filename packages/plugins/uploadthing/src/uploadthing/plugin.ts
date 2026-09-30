@@ -13,8 +13,8 @@ export const plugin: OberonPlugin = () => ({
   adapter: {
     deleteImage:
       ({ next }) =>
-      async (key) => {
-        const results = await Promise.allSettled([next(key), deleteImage(key)])
+      async (data) => {
+        const results = await Promise.allSettled([next(data), deleteImage(data.key)])
 
         const errors = results.filter((r) => r.status === "rejected").map((r) => r.reason)
 

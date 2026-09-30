@@ -34,7 +34,9 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
 
     expect(initHandler).toHaveBeenCalledOnce()
     expect(initHandler).toHaveBeenCalledWith(adapter)
-    await expect(adapter.getKV("test", "key")).resolves.toBe("composed capability")
+    await expect(adapter.getKV({ namespace: "test", key: "key" })).resolves.toBe(
+      "composed capability",
+    )
     expect(adapter.can).toEqual(expect.any(Function))
     expect(get).toHaveBeenCalledTimes(2)
   })
@@ -87,7 +89,7 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
       plugins: [],
     })
 
-    expect(() => adapter.redirect("/cms/pages")).toThrow(NotImplementedError)
+    expect(() => adapter.redirect({ href: "/cms/pages" })).toThrow(NotImplementedError)
     expect(() => adapter.notFound()).toThrow(NotImplementedError)
   })
 })
