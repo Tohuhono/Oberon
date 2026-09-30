@@ -162,6 +162,8 @@ export const AddPageSchema = PageSchema.pick({ key: true })
 
 export const DeletePageSchema = PageSchema.pick({ key: true })
 
+export const GetPageDataSchema = PageSchema.pick({ key: true })
+
 export const PublishPageSchema = PageSchema.pick({ key: true, data: true })
 
 export const PageMetaSchema = PageSchema.pick({
@@ -221,6 +223,8 @@ export type OberonUser = MaybeOptimistic<z.infer<typeof UserSchema>> & {
 }
 
 export const roles: OberonRole[] = ["user", "admin"] as const
+
+export const SignInSchema = z.object({ email: z.string().email() })
 
 /*
  * Site
@@ -373,6 +377,14 @@ export type OberonResponse<T = unknown> = Promise<
     }
 >
 
+export const GetAllImagesSchema = z.undefined()
+export const GetAllPagesSchema = z.undefined()
+export const GetAllPathsSchema = z.undefined()
+export const GetAllUsersSchema = z.undefined()
+export const GetConfigSchema = z.undefined()
+export const MigrateDataSchema = z.undefined()
+export const SignOutSchema = z.undefined()
+
 export type OberonServerActions = {
   addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
@@ -386,16 +398,20 @@ export type OberonServerActions = {
   changeRole: (
     data: z.infer<typeof ChangeRoleSchema>,
   ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
-  getAllImages: () => OberonResponse<OberonImage[]>
-  getAllPages: () => OberonResponse<OberonPageMeta[]>
-  getAllPaths: () => OberonResponse<Array<{ path: string[] }>>
-  getAllUsers: () => OberonResponse<OberonUser[]>
-  getConfig: () => OberonResponse<OberonSiteConfig>
-  getPageData: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<Data | null>
-  migrateData: () => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
+  getAllImages: (data?: z.infer<typeof GetAllImagesSchema>) => OberonResponse<OberonImage[]>
+  getAllPages: (data?: z.infer<typeof GetAllPagesSchema>) => OberonResponse<OberonPageMeta[]>
+  getAllPaths: (
+    data?: z.infer<typeof GetAllPathsSchema>,
+  ) => OberonResponse<Array<{ path: string[] }>>
+  getAllUsers: (data?: z.infer<typeof GetAllUsersSchema>) => OberonResponse<OberonUser[]>
+  getConfig: (data?: z.infer<typeof GetConfigSchema>) => OberonResponse<OberonSiteConfig>
+  getPageData: (data: z.infer<typeof GetPageDataSchema>) => OberonResponse<Data | null>
+  migrateData: (
+    data?: z.infer<typeof MigrateDataSchema>,
+  ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ key: string }>
-  signIn: (data: { email: string }) => OberonResponse<void>
-  signOut: () => OberonResponse<void>
+  signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
+  signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
 
 /*

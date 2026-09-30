@@ -54,7 +54,7 @@ export const Menu = ({
           </Link>
         )}
         <ModeToggle className="h-6" />
-        <Button size="sm" onClick={signOut}>
+        <Button size="sm" onClick={() => signOut()}>
           Sign Out
         </Button>
       </div>

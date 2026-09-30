@@ -7,7 +7,16 @@ import {
   DeleteImageSchema,
   DeletePageSchema,
   DeleteUserSchema,
+  GetAllImagesSchema,
+  GetAllPagesSchema,
+  GetAllPathsSchema,
+  GetAllUsersSchema,
+  GetConfigSchema,
+  GetPageDataSchema,
+  MigrateDataSchema,
   PublishPageSchema,
+  SignInSchema,
+  SignOutSchema,
   type OberonServerActions,
 } from "@oberoncms/core"
 
@@ -46,33 +55,33 @@ export const actions = {
     "use server"
     return actionHandler.deleteUser(DeleteUserSchema.parse(data))
   },
-  getAllImages: async () => {
+  getAllImages: async (data) => {
     "use server"
-    return actionHandler.getAllImages()
+    return actionHandler.getAllImages(GetAllImagesSchema.parse(data))
   },
-  getAllPages: async () => {
+  getAllPages: async (data) => {
     "use server"
-    return actionHandler.getAllPages()
+    return actionHandler.getAllPages(GetAllPagesSchema.parse(data))
   },
-  getAllPaths: async () => {
+  getAllPaths: async (data) => {
     "use server"
-    return actionHandler.getAllPaths()
+    return actionHandler.getAllPaths(GetAllPathsSchema.parse(data))
   },
-  getAllUsers: async () => {
+  getAllUsers: async (data) => {
     "use server"
-    return actionHandler.getAllUsers()
+    return actionHandler.getAllUsers(GetAllUsersSchema.parse(data))
   },
-  getConfig: async () => {
+  getConfig: async (data) => {
     "use server"
-    return actionHandler.getConfig()
+    return actionHandler.getConfig(GetConfigSchema.parse(data))
   },
   getPageData: async (data) => {
     "use server"
-    return actionHandler.getPageData(DeletePageSchema.parse(data))
+    return actionHandler.getPageData(GetPageDataSchema.parse(data))
   },
-  migrateData: async () => {
+  migrateData: async (data) => {
     "use server"
-    return actionHandler.migrateData()
+    return actionHandler.migrateData(MigrateDataSchema.parse(data))
   },
   publishPageData: async (data) => {
     "use server"
@@ -80,10 +89,10 @@ export const actions = {
   },
   signIn: async (data) => {
     "use server"
-    return actionHandler.signIn(data)
+    return actionHandler.signIn(SignInSchema.parse(data))
   },
-  signOut: async () => {
+  signOut: async (data) => {
     "use server"
-    return actionHandler.signOut()
+    return actionHandler.signOut(SignOutSchema.parse(data))
   },
 } satisfies OberonServerActions
