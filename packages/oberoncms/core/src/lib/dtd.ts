@@ -335,6 +335,10 @@ export type OberonHandler<Params = undefined> = Params extends undefined
 
 export type OberonAdapter = OberonPluginAdapter & {
   can: (data: z.infer<typeof CanSchema>) => Promise<boolean>
+  handleRequest: (
+    request: Request,
+    context: { method: OberonMethod; path?: string[] | string },
+  ) => Promise<Response>
   will: (data: { action: AdapterActionGroup; permission: AdapterPermission }) => Promise<void>
   whoWill: (data: {
     action: AdapterActionGroup

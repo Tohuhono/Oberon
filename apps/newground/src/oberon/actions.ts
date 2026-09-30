@@ -19,9 +19,12 @@ import {
   SignOutSchema,
   type OberonServerActions,
 } from "@oberoncms/core"
+import { createActionHandler } from "@oberoncms/core/adapter"
 import { createServerFn } from "@tanstack/react-start"
 
-import { actionHandler } from "./adapter"
+import { adapter } from "./adapter"
+
+const actionHandler = createActionHandler(adapter)
 
 const addImage = createServerFn({ method: "POST" })
   .validator(AddImageSchema)

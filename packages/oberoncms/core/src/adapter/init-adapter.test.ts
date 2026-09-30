@@ -1,7 +1,7 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
 import type { OberonClientConfig, OberonPlugin, OberonUser } from "../lib/dtd"
-import { initOberon } from "./init-oberon"
+import { initAdapter } from "./init-adapter"
 
 describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migration"] }, () => {
   it("uses the current session user when anonymous access is denied", async () => {
@@ -28,12 +28,12 @@ describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migratio
       },
     })
 
-    const oberon = initOberon({
+    const adapter = initAdapter({
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
       plugins: [plugin],
     })
 
-    await expect(oberon.adapter.can({ action: "pages", permission: "write" })).resolves.toBe(true)
+    await expect(adapter.can({ action: "pages", permission: "write" })).resolves.toBe(true)
     expect(hasPermission).toHaveBeenNthCalledWith(1, {
       action: "pages",
       permission: "write",

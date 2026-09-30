@@ -13,4 +13,6 @@ export function notImplemented(action: string) {
 export { mockPlugin } from "./adapter/mock-plugin"
 
 export { bootstrapOberon } from "./adapter/bootstrap-oberon"
-export { initOberon } from "./adapter/init-oberon"
+export { createActionHandler } from "./adapter/init-action-handler"
+export { initAdapter } from "./adapter/init-adapter"
+export { createRestHandler } from "./adapter/init-handler"

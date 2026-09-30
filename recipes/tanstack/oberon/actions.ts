@@ -1,3 +1,5 @@
-import { actionHandler } from "./adapter"
+import { createActionHandler } from "@oberoncms/core/adapter"
 
-export const actions = actionHandler
+import { adapter } from "./adapter"
+
+export const actions = createActionHandler(adapter)

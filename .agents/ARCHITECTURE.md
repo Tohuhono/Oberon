@@ -5,7 +5,7 @@ This document records the current wiring of the monorepo. Canonical terms live i
 
 ## Boundaries
 
-- Applications own routes, server actions, and the server-side Oberon config passed to `initOberon`
+- Applications own routes, server actions, and the server-side Oberon config passed to `initAdapter`
   and `bootstrapOberon`.
 - `packages/oberoncms/core` owns runtime composition, authorization, action orchestration, and
   component transform migration.
@@ -14,19 +14,18 @@ This document records the current wiring of the monorepo. Canonical terms live i
 
 ## Composition model
 
-`initOberon(config)` is the Runtime composition root and returns `{ adapter, handler }`.
+`initAdapter(config)` is the Runtime composition root and returns the final Adapter.
 `bootstrapOberon(config)` is the Bootstrap composition root used by package `prebuild` scripts.
 
-1. `initPlugins` collects declarative Plugin definitions, composes Adapter middleware, and collects
-   handlers, Bootstrap tasks, and version metadata. Hook factories receive a late-bound `getAdapter`
-   function rather than a mutable forwarding Adapter.
-2. `initAdapter` creates the final Adapter by adding core capabilities such as `can`, `will`,
-   `whoWill`, paths, Site config, and transform migration. Runtime or Bootstrap composition then
-   binds `getAdapter` to that final Adapter.
-3. `initActionHandler` builds authorized Oberon actions from the Adapter. Framework entrypoints
-   validate external input and expose those actions to clients.
-4. `initOberon` builds a single HTTP handler that dispatches by first path segment to Plugin
-   handlers.
+1. `initAdapter` initializes Plugin composition, creates the late-bound `getAdapter`, and adds core
+   capabilities such as `can`, `will`, `whoWill`, paths, Site config, and transform migration before
+   binding the getter to that final Adapter.
+2. `initPlugins` collects declarative Plugin definitions, composes Adapter middleware, and returns
+   REST Handler factories, Bootstrap tasks, and version metadata to `initAdapter`.
+3. `createActionHandler(adapter)` builds authorized Oberon actions from the Adapter. Framework
+   entrypoints validate external input and expose those actions to clients.
+4. `createRestHandler(adapter)` projects the Adapter's lazy HTTP dispatch capability into
+   framework-compatible methods that route by first path segment to Plugin handlers.
 
 Adapter hooks are initialized once with the final Adapter getter and the preceding implementation,
 then return a method with the original Adapter signature. The getter throws during hook factory
@@ -52,8 +51,9 @@ nesting, replacement precedence, and sequential Bootstrap order.
 
 ### Plugin HTTP
 
-- Apps that export the composed `handler` from `cms/api/[...path]` get plugin-owned HTTP endpoints
-  routed by first path segment.
+- Apps that export `createRestHandler(adapter)` methods from `cms/api/[...path]` get plugin-owned
+  HTTP endpoints routed by first path segment. Plugin Handler factories initialize once on the first
+  REST request.
 
 ### Build lifecycle
 

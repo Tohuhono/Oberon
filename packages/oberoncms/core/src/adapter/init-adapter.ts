@@ -5,24 +5,30 @@ import {
   type OberonAdapter,
   ResponseError,
   type OberonUser,
-  type OberonClientConfig,
+  type OberonConfig,
+  type OberonHandler,
   type MigrationResult,
   type TransformResult,
   type OberonPage,
-  type OberonPluginAdapter,
-  type PluginVersion,
+  type OberonPluginPhase,
 } from "../lib/dtd"
+import { initPlugins } from "./init-plugins"
 import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
 
-export function initAdapter({
-  config,
-  versions,
-  adapter,
-}: {
-  config: OberonClientConfig
-  adapter: OberonPluginAdapter
-  versions: PluginVersion[]
-}): OberonAdapter {
+function composeAdapter({ client: config, plugins = [] }: OberonConfig, phase: OberonPluginPhase) {
+  const state: { adapter?: OberonAdapter } = {}
+  const getAdapter = () => {
+    if (!state.adapter) {
+      throw new Error("Adapter used before initialization")
+    }
+    return state.adapter
+  }
+  const { adapter, bootstrap, handlers, versions } = initPlugins(plugins, {
+    config,
+    getAdapter,
+    phase,
+  })
+
   const can: OberonAdapter["can"] = async ({ action, permission = "read" }) => {
     // Check unauthenticated first so we can do it outside of request context
     if (adapter.hasPermission({ action, permission })) {
@@ -47,6 +53,31 @@ export function initAdapter({
       return user
     }
     throw new ResponseError("You do not have permission to perform this action")
+  }
+
+  let compiledHandlers: Record<string, OberonHandler> | undefined
+  const handleRequest: OberonAdapter["handleRequest"] = async (request, { method, path = [] }) => {
+    const action = typeof path === "string" ? path.split("/")[0] : path[0]
+
+    if (!action) {
+      return Response.json({}, { status: 404 })
+    }
+
+    compiledHandlers ??= Object.entries(handlers).reduce<Record<string, OberonHandler>>(
+      (accumulator, [key, createHandler]) => {
+        accumulator[key] = createHandler(getAdapter())
+        return accumulator
+      },
+      {},
+    )
+
+    const handler = compiledHandlers[action]?.[method]
+
+    if (!handler) {
+      return Response.json({}, { status: 405 })
+    }
+
+    return handler(request)
   }
 
   const readAllPages = adapter.getAllPages
@@ -155,7 +186,7 @@ export function initAdapter({
     },
   )
 
-  return {
+  const finalAdapter: OberonAdapter = {
     ...adapter,
     can,
     getAllImages,
@@ -163,8 +194,25 @@ export function initAdapter({
     getAllPaths,
     getAllUsers,
     getConfig,
+    handleRequest,
     migrateData,
     will,
     whoWill,
   }
+  state.adapter = finalAdapter
+
+  return {
+    adapter: finalAdapter,
+    bootstrap: () => bootstrap(finalAdapter),
+  }
+}
+
+export function initAdapter(config: OberonConfig): OberonAdapter {
+  console.info("Initialise Oberon adapter")
+  return composeAdapter(config, "runtime").adapter
+}
+
+export async function bootstrapAdapter(config: OberonConfig) {
+  const { bootstrap } = composeAdapter(config, "bootstrap")
+  await bootstrap()
 }
