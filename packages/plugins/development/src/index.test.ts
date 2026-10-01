@@ -4,6 +4,7 @@ import { fileURLToPath } from "url"
 
 import { expect, test, fromPartial, vi } from "@dev/vitest"
 import { INITIAL_DATA, type OberonPluginAdapter } from "@oberoncms/core"
+import { getAdapter } from "@oberoncms/sqlite/adapter"
 import { createAdapterTest, createAdapterTests } from "@oberoncms/testing"
 import { eq } from "drizzle-orm"
 
@@ -42,10 +43,9 @@ async function getDevelopmentAdapter(
 
   const { plugin } = await import("./index")
 
-  const developmentPlugin = plugin(fromPartial({}))
-  const adapter = developmentPlugin.adapter ?? {}
+  const developmentPlugin = plugin({ getAdapter: () => fromPartial({}), phase: "bootstrap" })
 
-  await developmentPlugin.bootstrap?.(async () => {})
+  await developmentPlugin.bootstrap?.()
 
   onCleanup(async () => {
     delete process.env.SQLITE_FILE
@@ -55,7 +55,7 @@ async function getDevelopmentAdapter(
     await rm(sqliteDirectory, { recursive: true, force: true })
   })
 
-  return fromPartial(adapter)
+  return fromPartial(getAdapter((await import("./db/client")).getClient))
 }
 
 createAdapterTests({
@@ -106,7 +106,7 @@ developmentAdapterTest.describe(
         },
       ])
 
-      await adapter.deleteUser(added.id)
+      await adapter.deleteUser({ id: added.id })
 
       await expect(adapter.getAllUsers()).resolves.toEqual([])
     })
@@ -152,7 +152,7 @@ developmentAdapterTest.describe(
 
         expect(await readUpdatedBy()).toBe("snapshot@example.com")
 
-        await adapter.deleteUser?.(added.id)
+        await adapter.deleteUser?.({ id: added.id })
 
         expect(await readUpdatedBy()).toBe("snapshot@example.com")
       },

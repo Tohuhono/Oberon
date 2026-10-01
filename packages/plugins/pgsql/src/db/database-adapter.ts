@@ -35,7 +35,7 @@ export const getDatabaseAdapter: (db: () => DatabaseClient) => OberonDatabaseAda
   addImage: async (image) => {
     await db().insert(images).values(image).execute()
   },
-  deleteImage: async (key) => {
+  deleteImage: async ({ key }) => {
     await db().delete(images).where(eq(images.key, key)).execute()
   },
   getAllImages: async () => {
@@ -56,16 +56,16 @@ export const getDatabaseAdapter: (db: () => DatabaseClient) => OberonDatabaseAda
   addPage: async ({ key, data, updatedAt, updatedBy }) => {
     await db().insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
   },
-  deletePage: async (key) => {
+  deletePage: async ({ key }) => {
     await db().delete(pages).where(eq(pages.key, key)).execute()
   },
-  deleteKV: async (namespace, key) => {
+  deleteKV: async ({ namespace, key }) => {
     await db()
       .delete(kv)
       .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
       .execute()
   },
-  getPageData: async (key) => {
+  getPageData: async ({ key }) => {
     const result = await db()
       .select({
         data: pages.data,
@@ -76,7 +76,7 @@ export const getDatabaseAdapter: (db: () => DatabaseClient) => OberonDatabaseAda
 
     return result[0]?.data || null
   },
-  getKV: async (namespace, key) => {
+  getKV: async ({ namespace, key }) => {
     const result = await db()
       .select({ value: kv.value })
       .from(kv)
@@ -97,7 +97,7 @@ export const getDatabaseAdapter: (db: () => DatabaseClient) => OberonDatabaseAda
       })
       .execute()
   },
-  putKV: async (namespace, key, value) => {
+  putKV: async ({ namespace, key, value }) => {
     await db()
       .insert(kv)
       .values({ namespace, key, value })
@@ -140,7 +140,7 @@ export const getDatabaseAdapter: (db: () => DatabaseClient) => OberonDatabaseAda
 
     return UserSchema.parse(createdUser)
   },
-  deleteUser: async (id) => {
+  deleteUser: async ({ id }) => {
     await db().delete(user).where(eq(user.id, id)).execute()
   },
   changeRole: async ({ role, id }) => {

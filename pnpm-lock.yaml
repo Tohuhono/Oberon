@@ -149,6 +149,9 @@ importers:
       '@oberoncms/plugin-pgsql':
         specifier: workspace:*
         version: link:../../packages/plugins/pgsql
+      '@oberoncms/plugin-tailwind':
+        specifier: workspace:*
+        version: link:../../packages/plugins/tailwind
       '@oberoncms/plugin-tanstack':
         specifier: workspace:*
         version: link:../../packages/plugins/tanstack

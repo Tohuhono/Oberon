@@ -1,9 +1,4 @@
-import {
-  NotImplementedError,
-  type OberonCanAdapter,
-  type OberonDatabaseAdapter,
-  type OberonPlugin,
-} from "../lib/dtd"
+import { NotImplementedError, type OberonPlugin } from "../lib/dtd"
 import { getInitialData } from "./get-initial-data"
 
 const mockUser = {
@@ -36,26 +31,29 @@ function notAvailable(): never {
 export const mockPlugin: OberonPlugin = () => ({
   name: "mock-plugin",
   adapter: {
-    addImage: notAvailable,
-    addPage: notAvailable,
-    addUser: async () => mockUser,
-    changeRole: notAvailable,
-    deleteImage: notAvailable,
-    deletePage: notAvailable,
-    deleteKV: notAvailable,
-    deleteUser: notAvailable,
-    getAllImages: async () => [],
-    getAllPages: async () => mockAllPages,
-    getAllUsers: async () => [mockUser],
-    getCurrentUser: async () => mockUser,
-    getPageData: async (key) => (key === "/" ? mockPage.data : null),
-    getKV: notAvailable,
-    getSite: async () => mockSite,
-    hasPermission: () => true,
-    putKV: notAvailable,
-    updatePageData: notAvailable,
-    updateSite: notAvailable,
-    signIn: notAvailable,
-    signOut: async () => {},
-  } satisfies OberonDatabaseAdapter & OberonCanAdapter,
+    addImage: () => notAvailable,
+    addPage: () => notAvailable,
+    addUser: () => async () => mockUser,
+    changeRole: () => notAvailable,
+    deleteImage: () => notAvailable,
+    deletePage: () => notAvailable,
+    deleteKV: () => notAvailable,
+    deleteUser: () => notAvailable,
+    getAllImages: () => async () => [],
+    getAllPages: () => async () => mockAllPages,
+    getAllUsers: () => async () => [mockUser],
+    getCurrentUser: () => async () => mockUser,
+    getPageData:
+      () =>
+      async ({ key }) =>
+        key === "/" ? mockPage.data : null,
+    getKV: () => notAvailable,
+    getSite: () => async () => mockSite,
+    hasPermission: () => () => true,
+    putKV: () => notAvailable,
+    updatePageData: () => notAvailable,
+    updateSite: () => notAvailable,
+    signIn: () => notAvailable,
+    signOut: () => async () => {},
+  },
 })

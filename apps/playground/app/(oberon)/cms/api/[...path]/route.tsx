@@ -1,3 +1,5 @@
-import { handler } from "@/oberon/adapter"
+import { createRestHandler } from "@oberoncms/plugin-nextjs"
 
-export const { GET, POST, PUT, PATCH, DELETE } = handler
+import { adapter } from "@/oberon/adapter"
+
+export const { GET, POST, PUT, PATCH, DELETE } = createRestHandler(adapter)

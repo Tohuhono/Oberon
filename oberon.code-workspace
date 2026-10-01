@@ -21,9 +21,9 @@
       "typescriptreact": "html",
     },
     "editor.detectIndentation": false,
-    "chat.agent.maxRequests": 50,
+    "chat.agent.maxRequests": 300,
     "[json]": {
-      "editor.defaultFormatter": "vscode.json-language-features",
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "chat.useNestedAgentsMdFiles": true,
     "chat.tools.terminal.autoApprove": {
@@ -82,20 +82,20 @@
       "markdown": false,
       "scminput": false,
       "typescript": false,
-      "dotenv": false
+      "dotenv": false,
     },
     "[typescript]": {
-      "editor.defaultFormatter": "vscode.typescript-language-features"
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "oxc.path.oxfmt": "node_modules/oxfmt/bin/oxfmt",
     "oxc.path.oxlint": "node_modules/oxlint/bin/oxlint",
     "oxc.path.node": "/run/current-system/sw/bin/node",
     "oxc.useExecPath": false,
     "[typescriptreact]": {
-      "editor.defaultFormatter": "vscode.typescript-language-features"
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "[jsonc]": {
-      "editor.defaultFormatter": "vscode.json-language-features"
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
   },
 }

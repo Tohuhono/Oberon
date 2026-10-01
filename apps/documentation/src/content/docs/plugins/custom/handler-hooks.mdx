@@ -3,14 +3,17 @@
 Custom route handlers are provided through the `handlers` field on `OberonPlugin`:
 
 ```tsx
-handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
+handlers?: Record<
+  string,
+  (adapter: OberonAdapter) => OberonHandler
+>
 ```
 
 Each key in that record maps to the first CMS path segment.
 
 ## Dispatch model
 
-`initOberon` builds the final CMS handler by:
+The Adapter dispatches Plugin HTTP requests by:
 
 - resolving the requested `path`
 - taking `path[0]` as the action key
@@ -23,23 +26,42 @@ requested HTTP method, the response is `405`.
 ## OberonHandler
 
 ```tsx
-type OberonHandler<Params = undefined> = Params extends undefined
-  ? {
-      [key in OberonMethod]?: (req: NextRequest) => Promise<Response> | Response
-    }
-  : {
-      [key in OberonMethod]: (
-        req: NextRequest,
-        context: { params: Promise<Params> },
-      ) => Promise<Response>
-    }
+type OberonHandler = {
+  [key in OberonMethod]?: (req: Request) => Promise<Response> | Response
+}
 ```
 
 For plugin handlers used in Oberon, the practical shape is the no-params form:
 
 - keys are HTTP methods
-- each method receives `NextRequest`
+- each method receives the standard Web `Request`
 - methods return `Response` or `Promise<Response>`
+
+## Framework entrypoint
+
+Each Framework integration projects the Adapter dispatch method into its native route-handler shape.
+Next.js routes export the methods returned by its integration:
+
+```tsx
+import { createRestHandler } from "@oberoncms/plugin-nextjs"
+
+import { adapter } from "@/oberon/adapter"
+
+export const { GET, POST, PUT, PATCH, DELETE } = createRestHandler(adapter)
+```
+
+TanStack Start routes use its integration's handler map directly:
+
+```tsx
+import { createRestHandler } from "@oberoncms/plugin-tanstack"
+import { createFileRoute } from "@tanstack/react-router"
+
+export const Route = createFileRoute("/cms/api/$")({
+  server: {
+    handlers: createRestHandler(adapter),
+  },
+})
+```
 
 ## Minimal handler example
 
@@ -59,10 +81,19 @@ export const plugin: OberonPlugin = () => ({
 That handler is mounted under the `health` action key and is reached through the CMS catch-all route
 when the first path segment is `health`.
 
-## OberonAdapter passed to handler factories
+## Adapter passed to handler factories
 
-Handler factories receive the final `OberonAdapter`, not the partial plugin adapter. This is the
-higher-level runtime surface exported by `initOberon`.
+Each factory is invoked once with the final `OberonAdapter`. It contains the composed Plugin
+capabilities and core-derived helpers such as `can`. Runtime requests reuse the returned Handler.
+
+```tsx
+handlers: {
+  asset: (adapter) => ({
+    GET: async () =>
+      Response.json(await adapter.getKV({ namespace: "my-plugin", key: "asset" })),
+  }),
+}
+```
 
 ### Runtime and settings
 
@@ -91,6 +122,8 @@ higher-level runtime surface exported by `initOberon`.
 - `getAllUsers`
 - `changeRole`
 - `can`
+- `will`
+- `whoWill`
 
 ### Site and migrations
 

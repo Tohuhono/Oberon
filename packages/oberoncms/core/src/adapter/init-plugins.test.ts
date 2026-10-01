@@ -1,25 +1,34 @@
-import { describe, expect, it } from "@dev/vitest"
+import { describe, expect, fromPartial, it } from "@dev/vitest"
 
 import { authPlugin } from "../auth"
-import { NotImplementedError, type OberonPlugin } from "../lib/dtd"
-import { initPlugins } from "./init-plugins"
+import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from "../lib/dtd"
+import { initAdapter } from "./init-adapter"
 import { mockPlugin } from "./mock-plugin"
+
+function initTestPlugins(plugins: OberonPlugin[] = []) {
+  return initAdapter({
+    client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+    plugins,
+  })
+}
 
 describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
   it("exposes a fallback KV contract before a database plugin implements it", async () => {
-    const { adapter } = initPlugins()
+    const adapter = initTestPlugins()
 
-    expect(() => adapter.getKV("tailwind", "state")).toThrow(
+    expect(() => adapter.getKV({ namespace: "tailwind", key: "state" })).toThrow(
       new NotImplementedError(
         "No oberon plugin provided for getKV action, please check your oberon adapter configuration.",
       ),
     )
-    expect(() => adapter.putKV("tailwind", "state", { activeHash: "abc123" })).toThrow(
+    expect(() =>
+      adapter.putKV({ namespace: "tailwind", key: "state", value: { activeHash: "abc123" } }),
+    ).toThrow(
       new NotImplementedError(
         "No oberon plugin provided for putKV action, please check your oberon adapter configuration.",
       ),
     )
-    expect(() => adapter.deleteKV("tailwind", "state")).toThrow(
+    expect(() => adapter.deleteKV({ namespace: "tailwind", key: "state" })).toThrow(
       new NotImplementedError(
         "No oberon plugin provided for deleteKV action, please check your oberon adapter configuration.",
       ),
@@ -27,15 +36,19 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
   })
 
   it("lets the mock plugin override KV methods with demo-only stubs", async () => {
-    const { adapter } = initPlugins([mockPlugin])
+    const adapter = initTestPlugins([mockPlugin])
 
-    expect(() => adapter.getKV("mock-plugin", "state")).toThrow(
+    expect(() => adapter.getKV({ namespace: "mock-plugin", key: "state" })).toThrow(
       new NotImplementedError("This action is not available in the demo"),
     )
-    expect(() => adapter.putKV("mock-plugin", "state", { activeHash: "abc123" })).toThrow(
-      new NotImplementedError("This action is not available in the demo"),
-    )
-    expect(() => adapter.deleteKV("mock-plugin", "state")).toThrow(
+    expect(() =>
+      adapter.putKV({
+        namespace: "mock-plugin",
+        key: "state",
+        value: { activeHash: "abc123" },
+      }),
+    ).toThrow(new NotImplementedError("This action is not available in the demo"))
+    expect(() => adapter.deleteKV({ namespace: "mock-plugin", key: "state" })).toThrow(
       new NotImplementedError("This action is not available in the demo"),
     )
   })
@@ -44,7 +57,7 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     const validAuthCapabilityPlugin: OberonPlugin = () => ({
       name: "valid-better-auth-plugin",
       adapter: {
-        sendVerificationRequest: async () => {},
+        sendVerificationRequest: () => async () => {},
       },
     })
 
@@ -54,11 +67,81 @@ describe("initPlugins key value store", { tags: ["ai", "issue-318"] }, () => {
     })
 
     expect(() =>
-      initPlugins([missingAuthCapabilityPlugin, validAuthCapabilityPlugin, authPlugin]),
+      initTestPlugins([missingAuthCapabilityPlugin, validAuthCapabilityPlugin, authPlugin]),
     ).not.toThrow()
 
     expect(() =>
-      initPlugins([validAuthCapabilityPlugin, missingAuthCapabilityPlugin, authPlugin]),
+      initTestPlugins([validAuthCapabilityPlugin, missingAuthCapabilityPlugin, authPlugin]),
     ).not.toThrow()
+  })
+})
+
+describe("initPlugins adapter hooks", { tags: ["ai", "issue-362"] }, () => {
+  it("gives earlier hooks later capabilities while preserving middleware order", async () => {
+    const events: string[] = []
+
+    const provider: OberonPlugin = () => ({
+      name: "provider",
+      adapter: {
+        addUser: () => async (user) => {
+          events.push(`provider ${user.email}`)
+          return { id: "user-1", ...user }
+        },
+      },
+    })
+    const middleware: OberonPlugin = () => ({
+      name: "middleware",
+      adapter: {
+        addUser:
+          ({ getAdapter, next }) =>
+          async (user) => {
+            events.push(typeof getAdapter().will)
+            events.push(String(await getAdapter().getKV({ namespace: "test", key: "suffix" })))
+            const result = await next({ ...user, email: `${user.email}.forwarded` })
+            events.push(`returned ${result.id}`)
+            return result
+          },
+      },
+    })
+    const laterCapability: OberonPlugin = () => ({
+      name: "later-capability",
+      adapter: {
+        getKV:
+          () =>
+          async ({ namespace, key }) => {
+            events.push(`${namespace}/${key}`)
+            return "later capability"
+          },
+      },
+    })
+
+    const adapter = initTestPlugins([provider, middleware, laterCapability])
+
+    await expect(adapter.addUser({ email: "user@example.com", role: "user" })).resolves.toEqual({
+      id: "user-1",
+      email: "user@example.com.forwarded",
+      role: "user",
+    })
+    expect(events).toEqual([
+      "function",
+      "test/suffix",
+      "later capability",
+      "provider user@example.com.forwarded",
+      "returned user-1",
+    ])
+  })
+
+  it("rejects final adapter access while hook factories are composing", () => {
+    const eagerPlugin: OberonPlugin = () => ({
+      name: "eager-plugin",
+      adapter: {
+        addUser: ({ getAdapter, next }) => {
+          expect(getAdapter).toThrow("Adapter used before initialization")
+          return next
+        },
+      },
+    })
+
+    expect(() => initTestPlugins([eagerPlugin])).not.toThrow()
   })
 })

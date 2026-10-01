@@ -5,9 +5,7 @@ import { fileURLToPath } from "url"
 import {
   USE_DEVELOPMENT_DATABASE_PLUGIN,
   USE_DEVELOPMENT_SEND_PLUGIN,
-  type OberonDatabaseAdapter,
   type OberonPlugin,
-  type OberonSendAdapter,
 } from "@oberoncms/core"
 import { getAdapter } from "@oberoncms/sqlite/adapter"
 import { migrate } from "drizzle-orm/libsql/migrator"
@@ -18,11 +16,13 @@ import { getClient, initialise } from "./db/client"
 const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => {
+  const adapter = getAdapter(getClient)
+
   return {
     name,
     version,
     disabled: !USE_DEVELOPMENT_SEND_PLUGIN && !USE_DEVELOPMENT_DATABASE_PLUGIN,
-    bootstrap: async (next) => {
+    bootstrap: async () => {
       if (USE_DEVELOPMENT_DATABASE_PLUGIN) {
         console.log(`Migrating database`)
 
@@ -32,7 +32,6 @@ export const plugin: OberonPlugin = () => {
 
         if (!db) {
           console.log("Prepare: No Database Connection Configured")
-          await next()
           return
         }
 
@@ -42,25 +41,40 @@ export const plugin: OberonPlugin = () => {
 
         console.log(`Database migration complete`)
       }
-
-      await next()
     },
     adapter: {
-      ...(USE_DEVELOPMENT_SEND_PLUGIN &&
-        ({
-          sendVerificationRequest: async (props) => {
-            const { email, url, token } = props
+      ...(USE_DEVELOPMENT_SEND_PLUGIN && {
+        sendVerificationRequest:
+          () =>
+          async ({ email, url, token }) => {
             console.log(`sendVerificationRequest not sent in development`, {
               email,
               url,
               token,
             })
           },
-        } satisfies OberonSendAdapter)),
-      ...(USE_DEVELOPMENT_DATABASE_PLUGIN &&
-        ({
-          ...getAdapter(getClient),
-        } satisfies OberonDatabaseAdapter)),
+      }),
+      ...(USE_DEVELOPMENT_DATABASE_PLUGIN && {
+        getAuthDatabase: () => adapter.getAuthDatabase,
+        getAuthPlugins: () => adapter.getAuthPlugins,
+        addPage: () => adapter.addPage,
+        addImage: () => adapter.addImage,
+        deletePage: () => adapter.deletePage,
+        deleteImage: () => adapter.deleteImage,
+        deleteKV: () => adapter.deleteKV,
+        getAllImages: () => adapter.getAllImages,
+        getAllPages: () => adapter.getAllPages,
+        getPageData: () => adapter.getPageData,
+        getKV: () => adapter.getKV,
+        getSite: () => adapter.getSite,
+        putKV: () => adapter.putKV,
+        updatePageData: () => adapter.updatePageData,
+        updateSite: () => adapter.updateSite,
+        addUser: () => adapter.addUser,
+        deleteUser: () => adapter.deleteUser,
+        changeRole: () => adapter.changeRole,
+        getAllUsers: () => adapter.getAllUsers,
+      }),
     },
   }
 }

@@ -3,34 +3,45 @@ import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 import { defineConfig } from "../index"
 import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from "../lib/dtd"
 import { bootstrapOberon } from "./bootstrap-oberon"
-import { initOberon } from "./init-oberon"
+import { createActionHandler } from "./init-action-handler"
+import { initAdapter } from "./init-adapter"
 
-describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] }, () => {
-  it("initialises plugin handlers once during runtime composition", async () => {
+describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, () => {
+  it("lazily initialises plugin handlers once with the final adapter", async () => {
     const get = vi.fn(() => new Response("ok"))
     const initHandler = vi.fn(() => ({ GET: get }))
 
     const plugin: OberonPlugin = () => ({
       name: "test-plugin",
+      adapter: {
+        getKV: () => async () => "composed capability",
+      },
       handlers: {
         test: initHandler,
       },
     })
 
-    const { handler, adapter } = initOberon({
+    const adapter = initAdapter({
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
       plugins: [plugin],
     })
+    expect(initHandler).not.toHaveBeenCalled()
 
-    await handler.GET(new Request("http://localhost/cms/api/test"), {
-      params: Promise.resolve({ path: ["test"] }),
+    await adapter.handleRequest(new Request("http://localhost/cms/api/test"), {
+      method: "GET",
+      path: ["test"],
     })
-    await handler.GET(new Request("http://localhost/cms/api/test"), {
-      params: Promise.resolve({ path: ["test"] }),
+    await adapter.handleRequest(new Request("http://localhost/cms/api/test"), {
+      method: "GET",
+      path: ["test"],
     })
 
     expect(initHandler).toHaveBeenCalledOnce()
     expect(initHandler).toHaveBeenCalledWith(adapter)
+    await expect(adapter.getKV({ namespace: "test", key: "key" })).resolves.toBe(
+      "composed capability",
+    )
+    expect(adapter.can).toEqual(expect.any(Function))
     expect(get).toHaveBeenCalledTimes(2)
   })
 
@@ -38,14 +49,17 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
-        getAllPages: async () => [{ key: "/database", updatedAt: new Date(), updatedBy: "system" }],
+        getAllPages: () => async () => [
+          { key: "/database", updatedAt: new Date(), updatedBy: "system" },
+        ],
       },
     })
 
-    const { actionHandler } = initOberon({
+    const adapter = initAdapter({
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
       plugins: [databasePlugin],
     })
+    const actionHandler = createActionHandler(adapter)
 
     await expect(actionHandler.getAllPaths()).resolves.toEqual({
       status: "success",
@@ -53,13 +67,35 @@ describe("initOberon handlers", { tags: ["ai", "feature-runtime-composition"] },
     })
   })
 
+  it("authorizes client actions without restricting the programmatic adapter", async () => {
+    const plugin: OberonPlugin = () => ({
+      name: "database-plugin",
+      adapter: {
+        getCurrentUser: () => async () => null,
+        getAllUsers: () => async () => [{ id: "user-1", email: "user@example.com", role: "user" }],
+      },
+    })
+
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+    const actionHandler = createActionHandler(adapter)
+
+    await expect(adapter.getAllUsers()).resolves.toHaveLength(1)
+    await expect(actionHandler.getAllUsers()).resolves.toEqual({
+      status: "error",
+      message: "You do not have permission to perform this action",
+    })
+  })
+
   it("exposes missing routing capabilities as NotImplementedError adapter methods", () => {
-    const { adapter } = initOberon({
+    const adapter = initAdapter({
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
       plugins: [],
     })
 
-    expect(() => adapter.redirect("/cms/pages")).toThrow(NotImplementedError)
+    expect(() => adapter.redirect({ href: "/cms/pages" })).toThrow(NotImplementedError)
     expect(() => adapter.notFound()).toThrow(NotImplementedError)
   })
 })
@@ -68,16 +104,16 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
   it("uses one Oberon config for runtime and bootstrap composition", async () => {
     const phases: string[] = []
 
-    const plugin: OberonPlugin = (_adapter, { phase } = { phase: "runtime" }) => {
+    const plugin: OberonPlugin = ({ phase }) => {
       phases.push(phase)
 
       return {
         name: "shared-config-plugin",
         adapter: {
-          getAllPages: async () => [],
-          getSite: async () => undefined,
-          updatePageData: async () => {},
-          updateSite: async () => {},
+          getAllPages: () => async () => [],
+          getSite: () => async () => undefined,
+          updatePageData: () => async () => {},
+          updateSite: () => async () => {},
         },
       }
     }
@@ -87,7 +123,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       plugins: [plugin],
     })
 
-    initOberon(config)
+    initAdapter(config)
     await bootstrapOberon(config)
 
     expect(phases).toEqual(["runtime", "bootstrap"])
@@ -96,7 +132,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
   it("passes runtime and bootstrap phase context to plugins", async () => {
     const phases: string[] = []
 
-    const plugin: OberonPlugin = (_adapter, { phase } = { phase: "runtime" }) => {
+    const plugin: OberonPlugin = ({ phase }) => {
       phases.push(phase)
 
       return {
@@ -104,15 +140,15 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter:
           phase === "runtime"
             ? {
-                getAllPages: async () => [
+                getAllPages: () => async () => [
                   { key: "/runtime", updatedAt: new Date(), updatedBy: "system" },
                 ],
               }
             : {
-                getAllPages: async () => [],
-                getSite: async () => undefined,
-                updatePageData: async () => {},
-                updateSite: async () => {},
+                getAllPages: () => async () => [],
+                getSite: () => async () => undefined,
+                updatePageData: () => async () => {},
+                updateSite: () => async () => {},
               },
       }
     }
@@ -122,7 +158,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       plugins: [plugin],
     })
 
-    const { adapter } = initOberon(config)
+    const adapter = initAdapter(config)
     await bootstrapOberon(config)
 
     await expect(adapter.getAllPages()).resolves.toEqual([
@@ -131,34 +167,31 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     expect(phases).toEqual(["runtime", "bootstrap"])
   })
 
-  it("runs bootstrap hooks in middleware order before welcome page initialisation", async () => {
+  it("runs bootstrap hooks sequentially before welcome page initialisation", async () => {
     const events: string[] = []
 
-    const firstPlugin: OberonPlugin = () => ({
+    const firstPlugin: OberonPlugin = ({ getAdapter }) => ({
       name: "first-plugin",
       adapter: {
-        getAllPages: async () => [],
-        getSite: async () => undefined,
-        updatePageData: async () => {
+        getAllPages: () => async () => [],
+        getSite: () => async () => undefined,
+        updatePageData: () => async () => {
           events.push("welcome")
         },
-        updateSite: async () => {
+        updateSite: () => async () => {
           events.push("site")
         },
       },
-      bootstrap: async (next) => {
-        events.push("first before")
-        await next()
-        events.push("first after")
+      bootstrap: async () => {
+        events.push(typeof getAdapter().will)
+        events.push("first")
       },
     })
 
     const secondPlugin: OberonPlugin = () => ({
       name: "second-plugin",
-      bootstrap: async (next) => {
-        events.push("second before")
-        await next()
-        events.push("second after")
+      bootstrap: async () => {
+        events.push("second")
       },
     })
 
@@ -167,13 +200,6 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       plugins: [firstPlugin, secondPlugin],
     })
 
-    expect(events).toEqual([
-      "second before",
-      "first before",
-      "first after",
-      "second after",
-      "welcome",
-      "site",
-    ])
+    expect(events).toEqual(["function", "first", "second", "welcome", "site"])
   })
 })

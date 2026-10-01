@@ -2,11 +2,7 @@ import "server-cli-only"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 
-import {
-  USE_DEVELOPMENT_DATABASE_PLUGIN,
-  type OberonDatabaseAdapter,
-  type OberonPlugin,
-} from "@oberoncms/core"
+import { USE_DEVELOPMENT_DATABASE_PLUGIN, type OberonPlugin } from "@oberoncms/core"
 import { migrate } from "drizzle-orm/node-postgres/migrator"
 
 import { name, version } from "../package.json" with { type: "json" }
@@ -20,9 +16,7 @@ export const plugin: OberonPlugin = () => ({
   name,
   version,
   disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
-  bootstrap: async (next) => {
-    await next()
-
+  bootstrap: async () => {
     console.log(`Migrating database`)
 
     if (!getClient()) {
@@ -37,7 +31,24 @@ export const plugin: OberonPlugin = () => ({
     console.log(`Database migration complete`)
   },
   adapter: {
-    ...getDatabaseAdapter(getClient),
-    ...getAuthAdapter(getClient),
-  } satisfies OberonDatabaseAdapter,
+    getAuthDatabase: () => getAuthAdapter(getClient).getAuthDatabase,
+    getAuthPlugins: () => getAuthAdapter(getClient).getAuthPlugins,
+    addPage: () => getDatabaseAdapter(getClient).addPage,
+    addImage: () => getDatabaseAdapter(getClient).addImage,
+    deletePage: () => getDatabaseAdapter(getClient).deletePage,
+    deleteImage: () => getDatabaseAdapter(getClient).deleteImage,
+    deleteKV: () => getDatabaseAdapter(getClient).deleteKV,
+    getAllImages: () => getDatabaseAdapter(getClient).getAllImages,
+    getAllPages: () => getDatabaseAdapter(getClient).getAllPages,
+    getPageData: () => getDatabaseAdapter(getClient).getPageData,
+    getKV: () => getDatabaseAdapter(getClient).getKV,
+    getSite: () => getDatabaseAdapter(getClient).getSite,
+    putKV: () => getDatabaseAdapter(getClient).putKV,
+    updatePageData: () => getDatabaseAdapter(getClient).updatePageData,
+    updateSite: () => getDatabaseAdapter(getClient).updateSite,
+    addUser: () => getDatabaseAdapter(getClient).addUser,
+    deleteUser: () => getDatabaseAdapter(getClient).deleteUser,
+    changeRole: () => getDatabaseAdapter(getClient).changeRole,
+    getAllUsers: () => getDatabaseAdapter(getClient).getAllUsers,
+  },
 })

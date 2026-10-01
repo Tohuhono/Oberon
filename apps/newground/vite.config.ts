@@ -11,7 +11,8 @@ const config = defineConfig(({ mode }) => {
 
   return {
     resolve: { tsconfigPaths: true },
-    server: { port: parseInt(env.PORT || "5173") },
+    server: { port: parseInt(process.env.PORT || "5173") },
+    preview: { port: parseInt(process.env.PORT || "5173") },
     plugins: [
       devtools(),
       tailwindcss(),
@@ -21,7 +22,7 @@ const config = defineConfig(({ mode }) => {
           crawlLinks: false,
         },
       }),
-      nitro({ preset: "vercel" }),
+      nitro({ preset: "vercel", traceDeps: ["@tailwindcss/node*"] }),
       viteReact(),
     ],
   }

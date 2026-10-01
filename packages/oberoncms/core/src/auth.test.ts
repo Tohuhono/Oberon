@@ -1,24 +1,25 @@
-import { beforeEach, describe, expect, it } from "@dev/vitest"
+import { beforeEach, describe, expect, fromPartial, it } from "@dev/vitest"
 import { vi } from "vitest"
 
 import { stubbedAdapter } from "./adapter/stubbed-adapter"
 import { authPlugin } from "./auth"
-import { type OberonUser } from "./lib/dtd"
+import { type OberonAdapter, type OberonUser } from "./lib/dtd"
 
 function createAuthPlugin(users: OberonUser[] = []) {
   const addUser = vi.fn(async ({ email, role }) => ({ id: "created-user", email, role }))
   const getAllUsers = vi.fn(async () => users)
-  const plugin = authPlugin({
+  const adapter = fromPartial<OberonAdapter>({
     ...stubbedAdapter,
     addUser,
     getAllUsers,
   })
+  const plugin = authPlugin({ getAdapter: () => adapter, phase: "bootstrap" })
 
   if (!plugin.bootstrap) {
     throw new Error("Expected auth plugin to expose bootstrap")
   }
 
-  return { addUser, getAllUsers, bootstrap: plugin.bootstrap }
+  return { adapter, addUser, getAllUsers, bootstrap: plugin.bootstrap }
 }
 
 describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"] }, () => {
@@ -40,9 +41,8 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
       return { id: "created-user", email, role }
     })
 
-    await bootstrap(async () => {
-      events.push("previous bootstrap")
-    })
+    events.push("previous bootstrap")
+    await bootstrap()
 
     expect(events).toEqual(["previous bootstrap", "check users", "add user"])
     expect(addUser).toHaveBeenCalledWith({
@@ -54,7 +54,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
   it("does not read users when MASTER_EMAIL is missing", async () => {
     const { addUser, getAllUsers, bootstrap } = createAuthPlugin()
 
-    await bootstrap(async () => {})
+    await bootstrap()
 
     expect(getAllUsers).not.toHaveBeenCalled()
     expect(addUser).not.toHaveBeenCalled()
@@ -70,7 +70,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
       },
     ])
 
-    await bootstrap(async () => {})
+    await bootstrap()
 
     expect(addUser).not.toHaveBeenCalled()
   })

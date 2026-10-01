@@ -4,30 +4,50 @@ import { createServerFn } from "@tanstack/react-start"
 
 import { clientConfig } from "#/oberon/client.config"
 
+function getActiveHash(value: unknown) {
+  return typeof value === "object" &&
+    value !== null &&
+    "activeHash" in value &&
+    (typeof value.activeHash === "string" || value.activeHash === null)
+    ? value.activeHash
+    : null
+}
+
 const getPageData = createServerFn({ method: "GET" })
   .validator((data: { path: string | undefined }) => data)
   .handler(async ({ data }) => {
     const { resolveSlug } = await import("@oberoncms/core")
     const { adapter } = await import("#/oberon/adapter")
 
-    return await adapter.getPageData(resolveSlug(data.path))
+    const pageData = await adapter.getPageData({ key: resolveSlug(data.path) })
+    const activeHash = getActiveHash(
+      await adapter.getKV({ namespace: "@oberoncms/plugin-tailwind", key: "state" }),
+    )
+    const stylesheet = activeHash ? `/cms/api/tailwind/${encodeURIComponent(activeHash)}.css` : null
+
+    return { pageData, stylesheet }
   })
 
 function Oberon() {
-  const data = Route.useLoaderData()
+  const { pageData, stylesheet } = Route.useLoaderData()
 
-  return <Render data={data} config={clientConfig} />
+  return (
+    <>
+      {stylesheet ? <link rel="stylesheet" href={stylesheet} precedence="oberon-dynamic" /> : null}
+      <Render data={pageData} config={clientConfig} />
+    </>
+  )
 }
 
 export const Route = createFileRoute("/$")({
   loader: async ({ params }) => {
     const data = await getPageData({ data: { path: params._splat } })
 
-    if (!data) {
+    if (!data.pageData) {
       throw notFound()
     }
 
-    return data
+    return { ...data, pageData: data.pageData }
   },
   component: Oberon,
 })

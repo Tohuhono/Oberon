@@ -48,7 +48,7 @@ const useOberonPages = (pages: OberonPageMeta[]) => {
           { key: newKey, updatedAt: new Date(), updatedBy: "", pending: true },
         ])
       })
-      const data = await getPageData(key)
+      const data = await getPageData({ key })
       if (data) {
         return publishPageData({ key: newKey, data })
       }

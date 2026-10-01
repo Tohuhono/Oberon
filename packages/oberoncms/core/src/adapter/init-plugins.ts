@@ -1,29 +1,23 @@
 import {
+  type OberonAdapter,
+  type OberonHandler,
   type OberonPlugin,
   type OberonPluginAdapter,
+  type OberonPluginPhase,
   type OberonPermissions,
   type PluginVersion,
-  type OberonHandler,
-  type OberonAdapter,
-  type OberonPluginPhase,
-  type OberonClientConfig,
 } from "../lib/dtd"
-import { getInitialData } from "./get-initial-data"
 import { stubbedAdapter } from "./stubbed-adapter"
-import { getComponentTransformVersions } from "./transforms"
 
-type InititalisedPlugins = {
+type InitialisedPlugins = {
   adapter: OberonPluginAdapter
-  bootstrap: () => Promise<void>
   handlers: Record<string, (adapter: OberonAdapter) => OberonHandler>
+  plugins: ReturnType<OberonPlugin>[]
   versions: PluginVersion[]
 }
 
-const baseAccumulator: InititalisedPlugins = {
-  handlers: {},
-  versions: [],
-  bootstrap: async () => {},
-  adapter: {
+function getBaseAdapter(): OberonPluginAdapter {
+  return {
     ...stubbedAdapter,
     hasPermission: ({ user, action, permission }) => {
       const permissions: OberonPermissions = {
@@ -53,65 +47,66 @@ const baseAccumulator: InititalisedPlugins = {
           permissions[role].all === "write")
       )
     },
-  } satisfies OberonPluginAdapter,
+  }
+}
+
+function composeAdapterHook<Key extends keyof OberonPluginAdapter>(
+  plugins: ReturnType<OberonPlugin>[],
+  getAdapter: () => OberonAdapter,
+  baseAdapter: OberonPluginAdapter,
+  key: Key,
+) {
+  return plugins.reduce<OberonPluginAdapter[Key]>((next, plugin) => {
+    const hook = plugin.adapter?.[key]
+    return hook ? hook({ getAdapter, next }) : next
+  }, baseAdapter[key])
+}
+
+function composeAdapter(
+  plugins: ReturnType<OberonPlugin>[],
+  getAdapter: () => OberonAdapter,
+): OberonPluginAdapter {
+  const baseAdapter = getBaseAdapter()
+
+  return (Object.keys(baseAdapter) as Array<keyof OberonPluginAdapter>).reduce(
+    (adapter, key) => ({
+      ...adapter,
+      [key]: composeAdapterHook(plugins, getAdapter, baseAdapter, key),
+    }),
+    baseAdapter,
+  )
 }
 
 export function initPlugins(
   plugins: OberonPlugin[] = [],
-  { config, phase = "runtime" }: { config?: OberonClientConfig; phase?: OberonPluginPhase } = {},
+  {
+    getAdapter,
+    phase = "runtime",
+  }: {
+    getAdapter: () => OberonAdapter
+    phase?: OberonPluginPhase
+  },
 ) {
-  const oberon: InititalisedPlugins = plugins.reduce<InititalisedPlugins>((accumulator, plugin) => {
-    const {
-      name,
-      version,
-      disabled,
-      adapter,
-      handlers = {},
-      bootstrap,
-    } = plugin(accumulator.adapter, {
-      phase,
-    })
-
-    if (disabled) {
-      return {
-        ...accumulator,
-        versions: [...accumulator.versions, { name, disabled, version: version || "" }],
-      }
-    }
-
-    return {
-      versions: [...accumulator.versions, { name, disabled, version: version || "" }],
-      handlers: {
-        ...accumulator.handlers,
-        ...(phase === "runtime" ? handlers : {}),
-      },
-      bootstrap: bootstrap ? () => bootstrap(accumulator.bootstrap) : accumulator.bootstrap,
-      adapter: {
-        ...accumulator.adapter,
-        ...adapter,
-      },
-    } satisfies InititalisedPlugins
-  }, baseAccumulator)
+  const definitions = plugins.map((plugin) => plugin({ getAdapter, phase }))
+  const enabledPlugins = definitions.filter(({ disabled }) => !disabled)
+  const adapter = composeAdapter(enabledPlugins, getAdapter)
+  const handlers = enabledPlugins.reduce<InitialisedPlugins["handlers"]>(
+    (accumulator, plugin) => ({
+      ...accumulator,
+      ...(phase === "runtime" ? plugin.handlers : {}),
+    }),
+    {},
+  )
+  const versions = definitions.map(({ name, disabled, version }) => ({
+    name,
+    disabled,
+    version: version || "",
+  }))
 
   return {
-    ...oberon,
-    bootstrap: async () => {
-      await oberon.bootstrap()
-      const allPages = await oberon.adapter.getAllPages()
-      if (!allPages.length) {
-        console.log("Initialising welcome page")
-        await oberon.adapter.updatePageData(getInitialData())
-      }
-
-      const site = await oberon.adapter.getSite()
-      if (!site && config) {
-        await oberon.adapter.updateSite({
-          version: config.version,
-          components: getComponentTransformVersions(config),
-          updatedAt: new Date(),
-          updatedBy: "system",
-        })
-      }
-    },
-  } satisfies InititalisedPlugins
+    adapter,
+    handlers,
+    plugins: enabledPlugins,
+    versions,
+  } satisfies InitialisedPlugins
 }

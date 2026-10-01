@@ -15,8 +15,7 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "prebuild": "tsx ./src/oberon/prebuild.ts",
-    "preview": "vite preview --host localhost --strictPort",
-    "start": "vite preview --strictPort",
+    "start": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "tsc": "tsc --pretty"
@@ -26,6 +25,7 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-pgsql": "workspace:*",
+    "@oberoncms/plugin-tailwind": "workspace:*",
     "@oberoncms/plugin-tanstack": "workspace:*",
     "@puckeditor/core": "^0.21.1",
     "@tanstack/react-devtools": "^0.10.5",

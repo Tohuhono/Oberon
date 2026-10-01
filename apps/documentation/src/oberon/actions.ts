@@ -1,78 +1,101 @@
-import type { OberonServerActions } from "@oberoncms/core"
+import {
+  AddImageSchema,
+  AddPageSchema,
+  AddUserSchema,
+  CanSchema,
+  ChangeRoleSchema,
+  DeleteImageSchema,
+  DeletePageSchema,
+  DeleteUserSchema,
+  GetAllImagesSchema,
+  GetAllPagesSchema,
+  GetAllPathsSchema,
+  GetAllUsersSchema,
+  GetConfigSchema,
+  GetPageDataSchema,
+  MigrateDataSchema,
+  PublishPageSchema,
+  SignInSchema,
+  SignOutSchema,
+  type OberonServerActions,
+} from "@oberoncms/core"
+import { createActionHandler } from "@oberoncms/core/adapter"
 
-import { actionHandler } from "./adapter"
+import { adapter } from "./adapter"
+
+const actionHandler = createActionHandler(adapter)
 
 export const actions = {
-  addImage: async (...props) => {
+  addImage: async (data) => {
     "use server"
-    return actionHandler.addImage(...props)
+    return actionHandler.addImage(AddImageSchema.parse(data))
   },
-  addPage: async (...props) => {
+  addPage: async (data) => {
     "use server"
-    return actionHandler.addPage(...props)
+    return actionHandler.addPage(AddPageSchema.parse(data))
   },
-  addUser: async (...props) => {
+  addUser: async (data) => {
     "use server"
-    return actionHandler.addUser(...props)
+    return actionHandler.addUser(AddUserSchema.parse(data))
   },
-  can: async (...props) => {
+  can: async (data) => {
     "use server"
-    return actionHandler.can(...props)
+    return actionHandler.can(CanSchema.parse(data))
   },
-  changeRole: async (...props) => {
+  changeRole: async (data) => {
     "use server"
-    return actionHandler.changeRole(...props)
+    return actionHandler.changeRole(ChangeRoleSchema.parse(data))
   },
-  deleteImage: async (...props) => {
+  deleteImage: async (data) => {
     "use server"
-    return actionHandler.deleteImage(...props)
+    return actionHandler.deleteImage(DeleteImageSchema.parse(data))
   },
-  deletePage: async (...props) => {
+  deletePage: async (data) => {
     "use server"
-    return actionHandler.deletePage(...props)
+    return actionHandler.deletePage(DeletePageSchema.parse(data))
   },
-  deleteUser: async (...props) => {
+  deleteUser: async (data) => {
     "use server"
-    return actionHandler.deleteUser(...props)
+    return actionHandler.deleteUser(DeleteUserSchema.parse(data))
   },
-  getAllImages: async (...props) => {
+  getAllImages: async (data) => {
     "use server"
-    return actionHandler.getAllImages(...props)
+    return actionHandler.getAllImages(GetAllImagesSchema.parse(data))
   },
-  getAllPages: async (...props) => {
+  getAllPages: async (data) => {
     "use server"
-    return actionHandler.getAllPages(...props)
+    return actionHandler.getAllPages(GetAllPagesSchema.parse(data))
   },
-  getAllPaths: async (...props) => {
+  getAllPaths: async (data) => {
     "use server"
-    return actionHandler.getAllPaths(...props)
+    return actionHandler.getAllPaths(GetAllPathsSchema.parse(data))
   },
-  getAllUsers: async (...props) => {
+  getAllUsers: async (data) => {
     "use server"
-    return actionHandler.getAllUsers(...props)
+    return actionHandler.getAllUsers(GetAllUsersSchema.parse(data))
   },
-  getConfig: async (...props) => {
+  getConfig: async (data) => {
     "use server"
-    return actionHandler.getConfig(...props)
+    return actionHandler.getConfig(GetConfigSchema.parse(data))
   },
-  getPageData: async (...props) => {
+  getPageData: async (data) => {
     "use server"
-    return actionHandler.getPageData(...props)
+    return actionHandler.getPageData(GetPageDataSchema.parse(data))
   },
-  migrateData: async (...props) => {
+  migrateData: async (data) => {
     "use server"
-    return actionHandler.migrateData(...props)
+    return actionHandler.migrateData(MigrateDataSchema.parse(data))
   },
-  publishPageData: async (...props) => {
+  publishPageData: async (data) => {
     "use server"
-    return actionHandler.publishPageData(...props)
+    return actionHandler.publishPageData(PublishPageSchema.parse(data))
   },
-  signIn: async (...props) => {
+  signIn: async (data) => {
     "use server"
-    return actionHandler.signIn(...props)
+    return actionHandler.signIn(SignInSchema.parse(data))
   },
-  signOut: async (...props) => {
+  signOut: async (data) => {
     "use server"
-    return actionHandler.signOut(...props)
+    return actionHandler.signOut(SignOutSchema.parse(data))
   },
 } satisfies OberonServerActions

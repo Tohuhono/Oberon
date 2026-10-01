@@ -5,26 +5,36 @@ This document records the current wiring of the monorepo. Canonical terms live i
 
 ## Boundaries
 
-- Applications own routes, server actions, and the server-side Oberon config passed to `initOberon`
+- Applications own routes, server actions, and the server-side Oberon config passed to `initAdapter`
   and `bootstrapOberon`.
-- `packages/oberoncms/core` owns runtime composition, permissions, schema parsing, and component
-  transform migration.
+- `packages/oberoncms/core` owns runtime composition, authorization, action orchestration, and
+  component transform migration.
 - `packages/plugins/*` add persistence, auth, storage, send, caching, and HTTP integrations.
 - `packages/create-oberon-app` plus `recipes/*` define generated project shapes.
 
 ## Composition model
 
-`initOberon(config)` is the Runtime composition root and returns `{ adapter, handler }`.
+`initAdapter(config)` is the Runtime composition root and returns the final Adapter.
 `bootstrapOberon(config)` is the Bootstrap composition root used by package `prebuild` scripts.
 
-1. `initPlugins` reduces the ordered plugin list into merged adapter methods, a handler map, and
-   version metadata.
-2. `initAdapter` wraps the merged adapter with permission checks, zod parsing, and transform
-   migration support.
-3. `initOberon` builds a single HTTP handler that dispatches by first path segment to plugin
-   handlers.
+1. The private phase composer initializes Plugins, creates the late-bound `getAdapter`, and adds
+   core capabilities such as `can`, `will`, `whoWill`, paths, Site config, transform migration, and
+   lazy REST dispatch before binding the getter to the final Adapter.
+2. `initAdapter(config)` selects Runtime composition and returns only its final Adapter.
+3. `bootstrapOberon(config)` selects Bootstrap composition, runs closure-bound Plugin Bootstrap
+   tasks sequentially, then initializes Page and Site state.
+4. `createActionHandler(adapter)` builds authorized Oberon actions from the Adapter. Framework
+   entrypoints validate external input and expose those actions to clients.
+5. `adapter.handleRequest` lazily routes standard Web Requests by method and first path segment to
+   Plugin handlers.
+6. Each Framework integration's `createRestHandler(adapter)` projects that dispatch capability into
+   its host framework's native route-handler shape.
 
-Later plugin fields override earlier ones, so plugin order is part of the runtime contract.
+Adapter hooks are initialized once with the final Adapter getter and the preceding implementation,
+then return a method with the original Adapter signature. The getter throws during hook factory
+initialization and resolves the final augmented Adapter when returned methods execute. Later hooks
+are outermost and use `next` to continue earlier implementations. Plugin order controls middleware
+nesting, replacement precedence, and sequential Bootstrap order.
 
 ## Runtime flows
 
@@ -33,7 +43,9 @@ Later plugin fields override earlier ones, so plugin order is part of the runtim
 - The app's `/cms/[[...path]]` page renders `OberonProvider`.
 - `OberonProvider` reads CMS state through the adapter and exposes wrapped server actions to the
   client.
-- Server actions call adapter methods, which delegate to plugin-provided implementations.
+- Server actions authorize calls through Adapter `will`/`whoWill` capabilities before delegating to
+  unrestricted Adapter methods. Next.js parses action input inside Server Functions; TanStack parses
+  it through `createServerFn().validator()`.
 
 ### Public rendering
 
@@ -42,13 +54,16 @@ Later plugin fields override earlier ones, so plugin order is part of the runtim
 
 ### Plugin HTTP
 
-- Apps that export the composed `handler` from `cms/api/[...path]` get plugin-owned HTTP endpoints
-  routed by first path segment.
+- Apps mount the `createRestHandler(adapter)` projection from their Framework integration at the
+  host framework's `cms/api` catch-all route. Plugin Handler factories initialize once on the first
+  REST request.
 
 ### Build lifecycle
 
 - App `prebuild` scripts call `bootstrapOberon(config)`.
-- Database plugins use top-level `bootstrap(next)` hooks to run migrations before builds.
+- Plugin phase factories receive `getAdapter`; Bootstrap tasks close over it when they need the
+  final Adapter. Database migration tasks need no Adapter access.
+- Bootstrap tasks are awaited in configured order before core initializes Page and Site state.
 - `@oberoncms/plugin-nextjs` adds cache tagging and revalidation around adapter reads and mutations;
   this behavior is skipped during Bootstrap composition.
 
@@ -58,4 +73,4 @@ Later plugin fields override earlier ones, so plugin order is part of the runtim
   public render, and `cms/api` routes.
 - `apps/documentation`: `mockPlugin`; exposes the CMS UI only and does not export `cms/api`.
 - `recipes/nextjs`: `mockPlugin`, `development`, `nextjs`, `auth`.
-- `recipes/tanstack`: `mockPlugin`, `development`, `auth`.
+- `recipes/tanstack`: `mockPlugin`, `development`, `tanstack`, `auth`; exposes `cms/api` routes.

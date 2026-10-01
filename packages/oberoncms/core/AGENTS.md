@@ -4,15 +4,19 @@ This package implements the OberonCMS adapter/plugin core used by apps.
 
 ## Architecture focus
 
-- `initOberon` performs Runtime composition and returns an `adapter` + HTTP `handler`.
+- `initAdapter` performs Runtime composition and returns the final Adapter.
 - `bootstrapOberon` performs Bootstrap composition for build-time initialization.
-- `initPlugins` merges plugin adapters/handlers/bootstrap hooks and applies default permissions.
-- `initAdapter` wraps permissions, caching, revalidation, and migrations.
+- The private phase composer owns Plugin composition, binds the late final Adapter getter, and adds
+  core authorization, migration, and lazy REST dispatch capabilities.
+- `bootstrapOberon` runs closure-bound Plugin Bootstrap tasks before core Page and Site setup.
+- `createActionHandler(adapter)` applies action authorization and delegates to the Adapter.
+- `adapter.handleRequest` exposes framework-neutral Plugin HTTP dispatch.
+- Framework integrations project `adapter.handleRequest` into native route handlers.
 
 ## Data flow
 
-Next.js route handler → `handler` → `adapter` methods → plugin adapter implementations
-(storage/auth/send) → persistence.
+Framework route → Framework integration `createRestHandler(adapter)` → `adapter.handleRequest` →
+Plugin Handler (storage/auth/send) → persistence.
 
 ## Core behaviors
 
