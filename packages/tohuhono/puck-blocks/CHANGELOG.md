@@ -1,5 +1,14 @@
 # @tohuhono/puck-blocks
 
+## 0.15.1
+
+### Patch Changes
+
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+  - @oberoncms/core@0.21.0
+
 ## 0.15.0
 
 ### Minor Changes

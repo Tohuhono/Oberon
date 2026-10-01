@@ -1,5 +1,15 @@
 # @oberoncms/testing
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+  - @oberoncms/core@0.21.0
+  - @oberoncms/sqlite@0.9.0
+
 ## 0.3.0
 
 ### Minor Changes
