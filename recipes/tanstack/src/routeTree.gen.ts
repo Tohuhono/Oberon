@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as CmsRouteImport } from './routes/cms'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CmsApiSplatRouteImport } from './routes/cms/api/$'
 
 const CmsRoute = CmsRouteImport.update({
   id: '/cms',
@@ -22,31 +23,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CmsApiSplatRoute = CmsApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
+  getParentRoute: () => CmsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cms': typeof CmsRoute
+  '/cms': typeof CmsRouteWithChildren
+  '/cms/api/$': typeof CmsApiSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cms': typeof CmsRoute
+  '/cms': typeof CmsRouteWithChildren
+  '/cms/api/$': typeof CmsApiSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/cms': typeof CmsRoute
+  '/cms': typeof CmsRouteWithChildren
+  '/cms/api/$': typeof CmsApiSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cms'
+  fullPaths: '/' | '/cms' | '/cms/api/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cms'
-  id: '__root__' | '/' | '/cms'
+  to: '/' | '/cms' | '/cms/api/$'
+  id: '__root__' | '/' | '/cms' | '/cms/api/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CmsRoute: typeof CmsRoute
+  CmsRoute: typeof CmsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +74,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cms/api/$': {
+      id: '/cms/api/$'
+      path: '/api/$'
+      fullPath: '/cms/api/$'
+      preLoaderRoute: typeof CmsApiSplatRouteImport
+      parentRoute: typeof CmsRoute
+    }
   }
 }
 
+interface CmsRouteChildren {
+  CmsApiSplatRoute: typeof CmsApiSplatRoute
+}
+
+const CmsRouteChildren: CmsRouteChildren = {
+  CmsApiSplatRoute: CmsApiSplatRoute,
+}
+
+const CmsRouteWithChildren = CmsRoute._addFileChildren(CmsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CmsRoute: CmsRoute,
+  CmsRoute: CmsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

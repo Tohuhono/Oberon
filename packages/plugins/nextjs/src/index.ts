@@ -6,6 +6,8 @@ import { notFound, redirect } from "next/navigation"
 
 import { name, version } from "../package.json" with { type: "json" }
 
+export { createRestHandler } from "./handler"
+
 export const plugin: OberonPlugin = ({ phase }) => {
   return {
     name,

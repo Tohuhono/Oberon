@@ -27,9 +27,9 @@ reuse these terms instead of redefining them.
 | **Oberon action response**  | The framework-neutral success or error result returned by an Oberon action to Oberon UI.                                                                                                           | server action response                |
 | **Oberon bootstrap**        | The lifecycle step that prepares an Oberon runtime before serving requests or building app output.                                                                                                 | prepare, prebuild, setup              |
 | **Bootstrap composition**   | Private plugin composition used during Oberon bootstrap.                                                                                                                                           | prebuild adapter, setup adapter       |
-| **Runtime composition**     | Plugin composition used to create the public Adapter and Handler returned by an Oberon runtime.                                                                                                    | final composition, live adapter       |
+| **Runtime composition**     | Plugin composition used to create the public Adapter returned by an Oberon runtime.                                                                                                                | final composition, live adapter       |
 | **Adapter**                 | The composed programmatic CMS interface returned by an Oberon runtime, not limited to data or persistence methods.                                                                                 | data adapter, plugin, service, client |
-| **Handler**                 | The composed HTTP entrypoint returned by an Oberon runtime.                                                                                                                                        | route, endpoint, API                  |
+| **Handler**                 | The framework-native HTTP entrypoint projected from an Oberon runtime's request dispatch capability.                                                                                               | route, endpoint, API                  |
 
 ## Content model
 
@@ -59,8 +59,8 @@ reuse these terms instead of redefining them.
 
 ## Relationships
 
-- An **Oberon runtime** exposes exactly one public **Adapter** and one public **Handler** from
-  **Runtime composition**.
+- **Runtime composition** exposes one public **Adapter**; a **Framework integration** projects its
+  request dispatch capability into a framework-native **Handler**.
 - A **Plugin** can contribute any combination of capabilities; its category does not fully prescribe
   what it can or cannot contribute.
 - A **Plugin** commonly fulfills one or more **Adapter capabilities**, but it is not limited to
@@ -133,8 +133,8 @@ reuse these terms instead of redefining them.
 >
 > **Dev:** "And that **Plugin** contributes a **Plugin adapter** to the **Oberon runtime**?"
 >
-> **Domain expert:** "Yes. The **Oberon runtime** composes plugin adapters into one **Adapter** and
-> one **Handler**."
+> **Domain expert:** "Yes. The **Oberon runtime** composes plugin adapters into one **Adapter**, and
+> the **Framework integration** projects its request dispatch into a native **Handler**."
 >
 > **Dev:** "Is the persisted version data part of the **Oberon config** too?"
 >

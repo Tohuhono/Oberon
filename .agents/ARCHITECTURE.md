@@ -25,8 +25,10 @@ This document records the current wiring of the monorepo. Canonical terms live i
    tasks sequentially, then initializes Page and Site state.
 4. `createActionHandler(adapter)` builds authorized Oberon actions from the Adapter. Framework
    entrypoints validate external input and expose those actions to clients.
-5. `createRestHandler(adapter)` projects the Adapter's lazy HTTP dispatch capability into
-   framework-compatible methods that route by first path segment to Plugin handlers.
+5. `adapter.handleRequest` lazily routes standard Web Requests by method and first path segment to
+   Plugin handlers.
+6. Each Framework integration's `createRestHandler(adapter)` projects that dispatch capability into
+   its host framework's native route-handler shape.
 
 Adapter hooks are initialized once with the final Adapter getter and the preceding implementation,
 then return a method with the original Adapter signature. The getter throws during hook factory
@@ -52,8 +54,8 @@ nesting, replacement precedence, and sequential Bootstrap order.
 
 ### Plugin HTTP
 
-- Apps that export `createRestHandler(adapter)` methods from `cms/api/[...path]` get plugin-owned
-  HTTP endpoints routed by first path segment. Plugin Handler factories initialize once on the first
+- Apps mount the `createRestHandler(adapter)` projection from their Framework integration at the
+  host framework's `cms/api` catch-all route. Plugin Handler factories initialize once on the first
   REST request.
 
 ### Build lifecycle
@@ -71,4 +73,4 @@ nesting, replacement precedence, and sequential Bootstrap order.
   public render, and `cms/api` routes.
 - `apps/documentation`: `mockPlugin`; exposes the CMS UI only and does not export `cms/api`.
 - `recipes/nextjs`: `mockPlugin`, `development`, `nextjs`, `auth`.
-- `recipes/tanstack`: `mockPlugin`, `development`, `auth`.
+- `recipes/tanstack`: `mockPlugin`, `development`, `tanstack`, `auth`; exposes `cms/api` routes.

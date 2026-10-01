@@ -5,7 +5,6 @@ import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from 
 import { bootstrapOberon } from "./bootstrap-oberon"
 import { createActionHandler } from "./init-action-handler"
 import { initAdapter } from "./init-adapter"
-import { createRestHandler } from "./init-handler"
 
 describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, () => {
   it("lazily initialises plugin handlers once with the final adapter", async () => {
@@ -26,15 +25,15 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
       plugins: [plugin],
     })
-    const restHandler = createRestHandler(adapter)
-
     expect(initHandler).not.toHaveBeenCalled()
 
-    await restHandler.GET(new Request("http://localhost/cms/api/test"), {
-      params: Promise.resolve({ path: ["test"] }),
+    await adapter.handleRequest(new Request("http://localhost/cms/api/test"), {
+      method: "GET",
+      path: ["test"],
     })
-    await restHandler.GET(new Request("http://localhost/cms/api/test"), {
-      params: Promise.resolve({ path: ["test"] }),
+    await adapter.handleRequest(new Request("http://localhost/cms/api/test"), {
+      method: "GET",
+      path: ["test"],
     })
 
     expect(initHandler).toHaveBeenCalledOnce()
