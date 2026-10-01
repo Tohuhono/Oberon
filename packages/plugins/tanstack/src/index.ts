@@ -6,6 +6,8 @@ import { parseSetCookieHeader } from "better-auth/cookies"
 
 import { name, version } from "../package.json" with { type: "json" }
 
+export { createRestHandler } from "./handler"
+
 const tanstackStartCookies = () => ({
   id: "tanstack-start-cookies",
   version,

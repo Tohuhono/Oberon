@@ -322,16 +322,9 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
-export type OberonHandler<Params = undefined> = Params extends undefined
-  ? {
-      [key in OberonMethod]?: (req: Request) => Promise<Response> | Response
-    }
-  : {
-      [key in OberonMethod]: (
-        req: Request,
-        context: { params: Promise<Params> | Params },
-      ) => Promise<Response>
-    }
+export type OberonHandler = {
+  [key in OberonMethod]?: (req: Request) => Promise<Response> | Response
+}
 
 export type OberonAdapter = OberonPluginAdapter & {
   can: (data: z.infer<typeof CanSchema>) => Promise<boolean>
