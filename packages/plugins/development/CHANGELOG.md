@@ -1,5 +1,26 @@
 # @oberoncms/plugin-development
 
+## 0.10.0
+
+### Minor Changes
+
+- 1037113: Migrate Plugins to declarative phase-based definitions. Adapter hooks now initialize with
+  the final composed adapter and preceding implementation, then receive the original method
+  arguments. Plugin phase factories receive a late-bound Adapter getter, closure-bound Bootstrap
+  hooks run sequentially, Handler factories receive the final augmented Adapter, and framework
+  action entrypoints validate input before authorized actions call Adapter methods. Runtime setup
+  now returns the Adapter directly through `initAdapter(config)`, with explicit
+  `createActionHandler(adapter)` and `createRestHandler(adapter)` projections. Bootstrap remains an
+  independent `bootstrapOberon(config)` lifecycle.
+
+### Patch Changes
+
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+  - @oberoncms/core@0.21.0
+  - @oberoncms/sqlite@0.9.0
+
 ## 0.9.0
 
 ### Minor Changes

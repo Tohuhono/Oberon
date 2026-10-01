@@ -1,5 +1,22 @@
 # @oberoncms/sqlite
 
+## 0.9.0
+
+### Minor Changes
+
+- 1037113: Use one final Adapter throughout Plugin composition. Adapter hooks now receive a
+  late-bound `getAdapter` function and object-shaped method payloads, while the Adapter exposes
+  reusable `can`, `will`, and `whoWill` authorization capabilities for action orchestration.
+  Framework action bridges now validate every action through an independently evolvable schema,
+  including explicit undefined schemas for actions that currently have no payload.
+
+### Patch Changes
+
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+  - @oberoncms/core@0.21.0
+
 ## 0.8.2
 
 ### Patch Changes
