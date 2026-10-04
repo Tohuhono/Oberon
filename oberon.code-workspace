@@ -5,6 +5,8 @@
     },
   ],
   "settings": {
+    "eslint.enable": false,
+    "prettier.enable": false,
     "editor.codeActionsOnSave": {
       "source.fixAll.oxc": "always",
     },
@@ -71,8 +73,6 @@
       "p": true,
       "rg": true,
     },
-    "tailwindCSS.experimental.configFile": "packages/oberoncms/core/tailwind.css",
-    "nix.formatterPath": "nixfmt",
     "editor.defaultFormatter": "oxc.oxc-vscode",
     "oxc.fmt.configPath": "oxfmt.config.ts",
     "github.copilot.nextEditSuggestions.enabled": false,
@@ -89,8 +89,6 @@
     },
     "oxc.path.oxfmt": "node_modules/oxfmt/bin/oxfmt",
     "oxc.path.oxlint": "node_modules/oxlint/bin/oxlint",
-    "oxc.path.node": "/run/current-system/sw/bin/node",
-    "oxc.useExecPath": false,
     "[typescriptreact]": {
       "editor.defaultFormatter": "oxc.oxc-vscode",
     },
