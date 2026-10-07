@@ -60,7 +60,7 @@
     "@uploadthing/react": "^7.3.3",
     "@uploadthing/shared": "^7.1.10",
     "image-size": "2.0.2",
-    "next": "^16.1.6",
+    "next": "^16.4.0",
     "server-cli-only": "^0.3.2",
     "uploadthing": "^7.7.4"
   },
@@ -73,8 +73,8 @@
     "@puckeditor/core": "^0.21.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "typescript": "7.0.2"
   },
   "peerDependencies": {

@@ -24,9 +24,9 @@
     "@oberoncms/plugin-tailwind": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
-    "next": "^16.1.6",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "resend": "^6.9.2",
     "server-cli-only": "^0.3.2"
   },
