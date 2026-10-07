@@ -48,7 +48,6 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "eslint-plugin-better-tailwindcss": "^4.5.0",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "7.0.2",

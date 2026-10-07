@@ -40,7 +40,6 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "eslint-plugin-better-tailwindcss": "^4.5.0",
     "oxlint": "^1.67.0"
   },
   "devDependencies": {
