@@ -68,13 +68,13 @@
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
     "@puckeditor/core": "^0.21.1",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "drizzle-kit": "^0.31.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   },
   "peerDependencies": {
     "react": "^19.2.0",

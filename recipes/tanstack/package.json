@@ -36,7 +36,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/devtools-vite": "^0.7.0",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
@@ -45,8 +45,8 @@
     "oxlint": "^1.67.0",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
-    "typescript": "5.9.3",
-    "vite": "^8.0.14"
+    "typescript": "7.0.2",
+    "vite": "^8.3.3"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

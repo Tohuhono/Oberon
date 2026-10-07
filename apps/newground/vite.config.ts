@@ -11,6 +11,13 @@ const config = defineConfig(({ mode }) => {
 
   return {
     resolve: { tsconfigPaths: true },
+    build: {
+      rolldownOptions: {
+        // Rolldown preserves directives despite emitting this Rollup-compatible warning:
+        // https://github.com/rolldown/rolldown/pull/10791
+        checks: { moduleLevelDirective: false },
+      },
+    },
     server: { port: parseInt(process.env.PORT || "5173") },
     preview: { port: parseInt(process.env.PORT || "5173") },
     plugins: [
