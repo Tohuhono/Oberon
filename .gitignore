@@ -53,4 +53,3 @@ vite.config.*.timestamp-*
 # Vercel adds this if it's not last
 .vercel/
 .vercel
-.env*

@@ -11,7 +11,7 @@ export function Layout({ children }: PropsWithChildren) {
         <HeadContent />
         <Antifouc />
       </head>
-      <body className="bg-background text-foreground">
+      <body className="bg-background font-noto text-foreground">
         {children}
         <TanStackDevtools
           config={{

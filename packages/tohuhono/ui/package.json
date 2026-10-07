@@ -11,6 +11,7 @@
   },
   "files": [
     "dist",
+    "fonts",
     "src",
     "tailwind.css",
     "theme.css",
