@@ -1,5 +1,13 @@
 @import "tailwindcss" source(none);
 
+@font-face {
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./fonts/noto-sans-latin-wght-normal.woff2") format("woff2-variations");
+}
+
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 @plugin "./src/plugin/corner-shape.ts";
@@ -7,6 +15,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-noto: "Noto Sans", sans-serif;
+
   --spacing-nav: var(--nav-height);
 
   --color-logo: var(--logo);

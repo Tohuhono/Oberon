@@ -14,7 +14,6 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@datacom-digital/ui-sample-components": "^0.3.3",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-nextjs": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",

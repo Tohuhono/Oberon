@@ -1,6 +1,4 @@
-import { Antifouc, cn } from "@oberoncms/core"
-import { Noto_Sans } from "next/font/google"
-const font = Noto_Sans({ subsets: ["latin"] })
+import { Antifouc } from "@oberoncms/core"
 
 export const metadata = {
   title: "Oberon CMS",
@@ -13,7 +11,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
       <head>
         <Antifouc />
       </head>
-      <body className={cn(font.className, "bg-background text-foreground")}>{children}</body>
+      <body className="bg-background font-noto text-foreground">{children}</body>
     </>
   )
 }

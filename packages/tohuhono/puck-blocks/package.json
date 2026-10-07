@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
+    "@tanstack/react-table": "^9.2.6",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "recharts": "^3.7.0"

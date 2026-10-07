@@ -20,7 +20,6 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@fontsource-variable/inter": "^5.2.8",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-tanstack": "workspace:*",
