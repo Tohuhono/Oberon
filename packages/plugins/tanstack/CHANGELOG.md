@@ -1,5 +1,34 @@
 # @oberoncms/plugin-development
 
+## 0.2.0
+
+### Minor Changes
+
+- 1037113: Use one final Adapter throughout Plugin composition. Adapter hooks now receive a
+  late-bound `getAdapter` function and object-shaped method payloads, while the Adapter exposes
+  reusable `can`, `will`, and `whoWill` authorization capabilities for action orchestration.
+  Framework action bridges now validate every action through an independently evolvable schema,
+  including explicit undefined schemas for actions that currently have no payload.
+- 1037113: Migrate Plugins to declarative phase-based definitions. Adapter hooks now initialize with
+  the final composed adapter and preceding implementation, then receive the original method
+  arguments. Plugin phase factories receive a late-bound Adapter getter, closure-bound Bootstrap
+  hooks run sequentially, Handler factories receive the final augmented Adapter, and framework
+  action entrypoints validate input before authorized actions call Adapter methods. Runtime setup
+  now returns the Adapter directly through `initAdapter(config)`, with explicit
+  `createActionHandler(adapter)` and `createRestHandler(adapter)` projections. Bootstrap remains an
+  independent `bootstrapOberon(config)` lifecycle.
+- 1037113: Move REST route projection from core into the Next.js and TanStack Framework
+  integrations. Each integration now exports a native `createRestHandler(adapter)` factory, while
+  the Adapter retains the framework-neutral Plugin HTTP dispatch capability.
+
+### Patch Changes
+
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [2b4526a]
+  - @oberoncms/core@0.21.0
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # @oberon/recipe-tanstack
 
+## 0.1.2
+
+### Patch Changes
+
+- 1037113: Move REST route projection from core into the Next.js and TanStack Framework
+  integrations. Each integration now exports a native `createRestHandler(adapter)` factory, while
+  the Adapter retains the framework-neutral Plugin HTTP dispatch capability.
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [2b4526a]
+  - @oberoncms/core@0.21.0
+  - @oberoncms/plugin-tanstack@0.2.0
+  - @oberoncms/plugin-development@0.10.0
+
 ## 0.1.1
 
 ### Patch Changes

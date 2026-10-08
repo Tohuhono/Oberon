@@ -1,5 +1,12 @@
 # @dev/vitest
 
+## 0.2.2
+
+### Patch Changes
+
+- facbd96: Restore default reporters locally, preserve package-labelled GitHub Actions reporting,
+  and use the supported Vitest reporter import.
+
 ## 0.2.1
 
 ### Patch Changes

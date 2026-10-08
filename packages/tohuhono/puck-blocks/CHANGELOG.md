@@ -1,5 +1,18 @@
 # @tohuhono/puck-blocks
 
+## 0.15.1
+
+### Patch Changes
+
+- 2b4526a: Migrate the data table card to the TanStack Table v9 feature API.
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [1037113]
+- Updated dependencies [2b4526a]
+  - @oberoncms/core@0.21.0
+  - @tohuhono/ui@0.18.0
+  - @tohuhono/utils@0.16.1
+
 ## 0.15.0
 
 ### Minor Changes
