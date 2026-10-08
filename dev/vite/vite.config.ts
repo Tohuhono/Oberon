@@ -1,9 +1,7 @@
-// @ts-check
-// vite.config.js
-import { exec } from "child_process"
 import { writeFile, mkdir } from "fs/promises"
 
 import fg from "fast-glob"
+import { dts } from "rolldown-plugin-dts"
 import {
   type ResolveOptions,
   type Rolldown,
@@ -11,30 +9,18 @@ import {
   defineConfig,
   type Plugin as VitePlugin,
 } from "vite"
-import { externalizeDeps } from "vite-plugin-externalize-deps"
 
-function dts(): VitePlugin {
+function externalizePackages(): VitePlugin {
   return {
-    name: "dts-generator",
-    enforce: "pre" as const,
-    buildEnd: (error?: Error) => {
-      if (!error) {
-        return new Promise((resolve, _reject) => {
-          exec(
-            "tsc --noEmit false --emitDeclarationOnly true --declaration true --declarationMap true --pretty",
-            (_error, stdout, stderr) => {
-              if (stdout) {
-                console.log(stdout)
-              }
-              if (stderr) {
-                console.error(stderr)
-              }
-              // Swallow errors
-              return resolve()
-            },
-          )
-        })
-      }
+    name: "externalize-packages",
+    enforce: "pre",
+    resolveId: {
+      order: "pre",
+      handler(source) {
+        if (!source.startsWith(".") && !source.startsWith("/") && !source.startsWith("\0")) {
+          return { id: source, external: true }
+        }
+      },
     },
   }
 }
@@ -102,7 +88,10 @@ export function initConfig({
       },
     },
     resolve,
-    plugins: [...plugins, externalizeDeps(), dts(), watchFile()],
+    plugins: [...plugins, externalizePackages(), dts({ generator: "tsgo" }), watchFile()],
+    oxc: {
+      exclude: [/\.js$/, /\.d\.[cm]?ts$/],
+    },
     build: {
       minify: false,
       lib: {
@@ -113,6 +102,9 @@ export function initConfig({
       emptyOutDir: false,
       rolldownOptions: {
         external,
+        // preserveModules emits modules 1:1 so "use client" survives, but rolldown
+        // warns for every directive regardless: https://github.com/rolldown/rolldown/pull/10791
+        checks: { moduleLevelDirective: false },
         output: {
           preserveModules: true,
           preserveModulesRoot: "src",

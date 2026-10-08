@@ -24,9 +24,9 @@
     "@oberoncms/plugin-tailwind": "workspace:*",
     "@oberoncms/plugin-uploadthing": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
-    "next": "^16.1.6",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "resend": "^6.9.2",
     "server-cli-only": "^0.3.2"
   },
@@ -38,13 +38,13 @@
     "@dev/vitest": "workspace:*",
     "@next/bundle-analyzer": "^16.1.6",
     "@tailwindcss/typography": "^0.5.19",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }

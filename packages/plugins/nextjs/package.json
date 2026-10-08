@@ -47,7 +47,7 @@
   "dependencies": {
     "@oberoncms/core": "workspace:*",
     "better-auth": "^1.6.3",
-    "next": "^16.1.6"
+    "next": "^16.4.0"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -56,12 +56,12 @@
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
     "@oberoncms/testing": "workspace:*",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "typescript": "5.9.3"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "7.0.2"
   },
   "peerDependencies": {
     "react": "^19.2.0",

@@ -17,22 +17,22 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-nextjs": "workspace:*",
     "@tohuhono/puck-blocks": "workspace:*",
-    "next": "^16.1.6",
+    "next": "^16.4.0",
     "nextra": "4.6.1",
     "nextra-theme-docs": "4.6.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
     "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "postcss": "^8.5.6",
     "tsx": "^4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }

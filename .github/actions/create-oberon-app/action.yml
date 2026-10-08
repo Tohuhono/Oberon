@@ -1,0 +1,27 @@
+name: Create Oberon App tests
+description: Run Create Oberon App tests and publish the failure report
+
+runs:
+  using: composite
+  steps:
+    - name: Setup project
+      uses: ./.github/actions/setup-project
+      with:
+        turbo-cache-key: coa
+    - name: Install Playwright browsers
+      shell: bash
+      run: pnpm exec playwright install --with-deps chromium
+    - name: Create Oberon App tests
+      shell: bash
+      run: pnpm test:coa
+    - name: Publish Create Oberon App Playwright report
+      if: ${{ failure() }}
+      uses: ./.github/actions/deploy-playwright-report
+      with:
+        artifact_name: playwright-report-create-oberon-app
+        artifact_path: |
+          packages/create-oberon-app/.playwright/report/**
+          packages/create-oberon-app/.playwright/logs/**
+        report_dir: packages/create-oberon-app/.playwright/report
+        summary_label: View Create Oberon App report
+        vercel_token: ${{ env.VERCEL_API_TOKEN }}

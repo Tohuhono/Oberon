@@ -6,10 +6,26 @@ packages:
   - "packages/plugins/*"
   - "packages/tohuhono/*"
   - "recipes/*"
-useNodeVersion: "24.13.0"
+nodeVersion: "24.21.0"
+publicHoistPattern:
+  - "*"
 allowBuilds:
   bufferutil: true
   esbuild: true
   msgpackr-extract: true
   sharp: true
   unrs-resolver: true
+overrides:
+  zod-validation-error: ^4.0.0
+packageExtensions:
+  # Twoslash's legacy compiler API is not compatible with TypeScript 7:
+  # https://github.com/shuding/nextra/issues/5046
+  twoslash@0.3.6:
+    dependencies:
+      typescript-legacy: npm:typescript@6.0.3
+patchedDependencies:
+  nextra: patches/nextra.patch
+  "@vitest/runner": patches/@vitest__runner.patch
+  twoslash@0.3.6: patches/twoslash@0.3.6.patch
+minimumReleaseAgeExclude:
+  - vite@8.3.3

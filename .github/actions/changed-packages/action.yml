@@ -1,0 +1,74 @@
+name: Changed packages
+description: Find packages affected since the latest successful production deployment
+
+inputs:
+  repository:
+    description: Repository containing the source ref
+    required: true
+  ref:
+    description: Source ref being evaluated
+    required: true
+  base:
+    description: Fallback base commit
+    required: true
+
+outputs:
+  changed-packages:
+    description: Stringified JSON array of changed packages
+    value: ${{ steps.output.outputs.changed-packages }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup project
+      uses: ./.github/actions/setup-project
+    - name: Detect recovery base ref
+      id: detect-recovery
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPOSITORY: ${{ inputs.repository }}
+        REF: ${{ inputs.ref }}
+        FALLBACK_BASE: ${{ inputs.base }}
+      run: |
+        BASE_REF="$FALLBACK_BASE"
+
+        if [[ "$REF" == refs/heads/* ]]; then
+          LAST_SHA=$(gh run list \
+            --repo "$REPOSITORY" \
+            --workflow "ci.yml" \
+            --status success \
+            --branch "${REF#refs/heads/}" \
+            --limit 100 \
+            --json headSha,event \
+            --jq '[.[] | select(.event == "push" or .event == "workflow_dispatch")][0].headSha // empty')
+
+          if [[ -n "$LAST_SHA" ]]; then
+            BASE_REF="$LAST_SHA"
+          fi
+        fi
+
+        if [[ -z "$BASE_REF" ]]; then
+          BASE_REF=$(git rev-parse HEAD^)
+        fi
+
+        echo "base-ref=$BASE_REF" >> "$GITHUB_OUTPUT"
+    - name: Find changes
+      id: changes
+      shell: bash
+      env:
+        BASE_REF: ${{ steps.detect-recovery.outputs.base-ref }}
+      run: |
+        RESULT=$(pnpm exec tsx ./dev/scripts/scripts/changed.ts "$BASE_REF")
+        echo 'result<<CHANGESET_DELIMITER' >> "$GITHUB_OUTPUT"
+        echo "$RESULT" >> "$GITHUB_OUTPUT"
+        echo 'CHANGESET_DELIMITER' >> "$GITHUB_OUTPUT"
+    - name: Output changed packages
+      id: output
+      shell: bash
+      env:
+        CHANGED_PACKAGES: ${{ github.head_ref == 'changeset-release/main' && '[]' || steps.changes.outputs.result }}
+      run: |
+        echo 'changed-packages<<CHANGED_PACKAGES_DELIMITER' >> "$GITHUB_OUTPUT"
+        echo "$CHANGED_PACKAGES" >> "$GITHUB_OUTPUT"
+        echo 'CHANGED_PACKAGES_DELIMITER' >> "$GITHUB_OUTPUT"

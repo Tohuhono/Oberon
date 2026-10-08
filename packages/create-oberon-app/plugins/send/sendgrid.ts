@@ -1,6 +1,6 @@
 import "server-cli-only"
 import { USE_DEVELOPMENT_SEND_PLUGIN, type OberonPlugin } from "@oberoncms/core"
-import { setApiKey, send, ResponseError } from "@sendgrid/mail"
+import { setApiKey, send } from "@sendgrid/mail"
 
 const EMAIL_FROM = process.env.EMAIL_FROM
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || process.env.SEND_SECRET
@@ -34,7 +34,13 @@ export const plugin: OberonPlugin = () => ({
         } catch (error) {
           console.error(error)
 
-          if (error instanceof ResponseError) {
+          if (
+            error instanceof Error &&
+            "response" in error &&
+            typeof error.response === "object" &&
+            error.response !== null &&
+            "body" in error.response
+          ) {
             console.error(error.response.body)
           }
         }

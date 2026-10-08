@@ -3,5 +3,5 @@
   "compilerOptions": {
     "rootDir": "."
   },
-  "include": ["index.ts"]
+  "include": ["index.ts", "vitest.config.ts"]
 }

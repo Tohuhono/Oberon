@@ -1,0 +1,36 @@
+name: Setup project
+description: Install Node.js, pnpm, project dependencies, and optional Turbo caching
+
+inputs:
+  turbo-cache-key:
+    description: Cache key segment for Turbo outputs
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Install pnpm
+      shell: bash
+      run: |
+        mkdir "$RUNNER_TEMP/pnpm"
+        curl -fsSL https://github.com/pnpm/pnpm/releases/download/v12.9.1/pnpm-linux-x64.tar.gz -o "$RUNNER_TEMP/pnpm.tar.gz"
+        echo "b4f58449ac02d9d24023ac89e17e05e8331f8ddc12ca1f489cf231bc2bb2bce1  $RUNNER_TEMP/pnpm.tar.gz" | sha256sum --check
+        tar -xzf "$RUNNER_TEMP/pnpm.tar.gz" -C "$RUNNER_TEMP/pnpm"
+        echo "$RUNNER_TEMP/pnpm" >> "$GITHUB_PATH"
+    - name: Use Node.js
+      uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      with:
+        node-version: "24.x"
+        cache: pnpm
+    - name: Cache Turbo build setup
+      if: ${{ inputs.turbo-cache-key != '' }}
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+      with:
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ inputs.turbo-cache-key }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-${{ inputs.turbo-cache-key }}-
+          ${{ runner.os }}-turbo-
+    - name: Install
+      shell: bash
+      run: pnpm install --frozen-lockfile

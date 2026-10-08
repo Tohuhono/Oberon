@@ -62,16 +62,16 @@
     "@tohuhono/utils": "workspace:*",
     "@types/ignore-walk": "^4.0.3",
     "@types/inquirer": "^9.0.9",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
     "ignore-walk": "^8.0.0",
     "resend": "^6.9.2",
     "server-cli-only": "^0.3.2",
-    "typescript": "5.9.3",
+    "typescript": "7.0.2",
     "verdaccio": "^6.0.5"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=24.21.0"
   }
 }

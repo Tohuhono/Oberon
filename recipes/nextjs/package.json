@@ -19,15 +19,15 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/plugin-development": "workspace:*",
     "@oberoncms/plugin-nextjs": "workspace:*",
-    "next": "^16.1.6",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/typography": "^0.5.19",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "oxfmt": "^0.51.0",
@@ -36,6 +36,6 @@
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }

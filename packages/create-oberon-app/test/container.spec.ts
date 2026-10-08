@@ -53,8 +53,7 @@ test.describe.serial("Initialise Pod", { tag: "@initialise-pod" }, () => {
           "--registry",
           `http://localhost:${VERDACCIO_PORT}`,
           "--no-git-checks",
-          "--provenance",
-          "false",
+          "--no-provenance",
         ],
         {
           cwd: MONOREPO_ROOT,

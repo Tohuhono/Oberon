@@ -51,7 +51,7 @@
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
     "drizzle-orm": "^0.45.1",
-    "next": "^16.1.6",
+    "next": "^16.4.0",
     "server-cli-only": "^0.3.2"
   },
   "devDependencies": {
@@ -62,13 +62,13 @@
     "@dev/vitest": "workspace:*",
     "@oberoncms/testing": "workspace:*",
     "@puckeditor/core": "^0.21.1",
-    "@types/node": "24.10.1",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "drizzle-kit": "^0.31.9",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "typescript": "5.9.3"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "7.0.2"
   },
   "peerDependencies": {
     "react": "^19.2.0",
