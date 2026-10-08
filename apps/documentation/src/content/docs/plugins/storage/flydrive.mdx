@@ -1,148 +1,49 @@
-import { Tabs } from "nextra/components"
-import { Callout } from "nextra/components"
+# Flydrive
 
-# plugin-flydrive
+The plugin uses a Flydrive driver to store images. It also supplies a Puck Image component. It
+requires a database plugin for image metadata.
 
-A plugin that provides an Image storage and a component, pre-configured using
-[flydrive](https://flydrive.dev/docs/introduction), a filesystem abstraction layer that allows you
-to easily interact with files systems of different cloud storage providers.
+## Setup
 
-## Installation
+Install the plugin:
 
 ```sh npm2yarn
 npm install @oberoncms/plugin-flydrive flydrive
 ```
 
-## Setup
+Configure a driver with the [Flydrive documentation](https://flydrive.dev/docs/introduction). Export
+that driver from `oberon/storage.ts`. Install any dependencies required by the driver.
 
-Use `getFlyDrivePlugin` function to generate the plugin, it takes a driver as an argument, the
-driver should be an instance of the flydrive any flydrive driver
+Create the plugin in your server config:
 
-<Callout type="info" emoji="ℹ️">
-  Make sure to follow the [flydrive documentation](https://flydrive.dev/docs/introduction)
-  instructions.
-</Callout>
-
-```typescript
-// create the driver
+```tsx filename="oberon/config.ts"
 import { getFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin"
-const flyDrivePlugin = getFlyDrivePlugin(driver) // <- pass a flydrive driver instance
+import { driver } from "./storage"
+
+const storagePlugin = getFlyDrivePlugin(driver)
 ```
 
-## Example using S3 driver
+Add `storagePlugin` after the database plugin in your [plugin list](/docs/configuration). The
+function returns an `OberonPlugin`, not a plugin and router pair. Mount the
+[framework HTTP handler](/docs/plugins/custom/handler-hooks) to expose `/cms/api/flydrive`.
 
-Install the required packages for the S3 driver
+## Image component
 
-```sh npm2yarn
-npm install @aws-sdk/s3-request-presigner @aws-sdk/client-s3
+Import the component in your [client config](/docs/components):
+
+```tsx
+import { Image } from "@oberoncms/plugin-flydrive"
 ```
 
-create a flydrive adapter, and generate your plugin!
+Add `Image` to `clientConfig.components`. Use `Image.fields.image` when you need the image field in
+another Puck component. Use the [Puck field reference](https://puckeditor.com/docs) for nested
+fields.
 
-```typescript
-// adapter.ts
-import "server-only"
-
-import { initAdapter } from "@oberoncms/core/adapter"
-import { S3Driver } from "flydrive/drivers/s3" // <- import the driver you want to use
-import { getFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin" // <- import the plugin
-
-const s3Driver = new S3Driver({ // <- create the s3 driver
-  credentials: {
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  },
-  forcePathStyle: true,
-  bucket: process.env.bucket,
-  urlBuilder: {
-    generateSignedURL() // mandatory
-    generateURL() // mandatory
-  },
-})
-// add the plugin to the server-side Oberon config
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [
-    // other plugins || order doesn't matter
-    getFlyDrivePlugin(s3Driver), // <- generate and add the plugin
-],
-})
-```
-
-## Prepare API
-
-## Oberon client config
-
-```typescript
-// client.config.tsx
-import { Image } from "@oberoncms/plugin-flydrive" // <- import the Image component
-
-export const clientConfig = {
-  // other client config
-  components: {
-    Image, // <- add the Image component
-
-    // using arrayFields/ObjectFields in NestedField Props
-    Nested: {
-      fields: {
-        // array of images
-        images: {
-          type: "array",
-          arrayFields: {
-             image: Image.fields.image
-            // another array fields
-           },
-        },
-
-        // object with an image
-        image: {
-          type: "object",
-          objectFields: {
-             image: Image.fields.image ,
-            // another object fields
-          },
-        },
-      },
-      render(props: {
-        images?: OberonImage[]
-        image?: { image?: OberonImage }
-      }) {
-        // props.images is an array of images
-        // props.image is an object with an image
-        return <></>
-      },
-    },
-    // other components
-  },
-}
-```
-
-Open the editor and start uploading images!
-
-That's it! you can now use the Image component in your editor!
+Image deletion attempts both database metadata removal and storage deletion. The plugin reports
+failures from either operation.
 
 ## Vercel Blob
 
-To use the Vercel Blob storage, you need to install the `@vercel/blob` package
-
-<Callout type="info" emoji="ℹ️">
-  Make sure to follow the [Vercel Blob](https://vercel.com/docs/storage/vercel-blob#getting-started)
-  instructions.
-</Callout>
-
-```typescript
-import { getFlyDrivePlugin } from "@oberoncms/plugin-flydrive/plugin"
-import { VercelBlobDriver } from "@oberoncms/plugin-flydrive/vercel"
-
-const vercelBlobDriver = new VercelBlobDriver() // <- create the driver, it will consume token from the environment
-
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [
-    // other plugins || order doesn't matter
-    getFlyDrivePlugin(vercelBlobDriver),
-  ],
-})
-```
-
-For API and runtime config, follow the same steps as shown in the S3 example.
+The package exports `VercelBlobDriver` from `@oberoncms/plugin-flydrive/vercel`. This driver does
+not implement the complete Flydrive contract. Do not assume it supports every operation of other
+drivers. Use a driver that supports the operations your app requires.

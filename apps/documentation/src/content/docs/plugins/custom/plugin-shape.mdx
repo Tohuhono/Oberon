@@ -1,98 +1,59 @@
-# Plugin Shape
+# Plugin shape
 
-Custom plugins implement `OberonPlugin`:
+A plugin receives the phase and a getter for the final Adapter. It returns its name and optional
+capabilities:
 
 ```tsx
-export type OberonPlugin = ({ phase }: { phase: "bootstrap" | "runtime" }) => {
+import type {
+  OberonAdapter,
+  OberonHandler,
+  OberonPluginAdapterHooks,
+  OberonPluginPhase,
+} from "@oberoncms/core"
+
+type Plugin = (context: { getAdapter: () => OberonAdapter; phase: OberonPluginPhase }) => {
   name: string
   version?: string
   disabled?: boolean
   adapter?: OberonPluginAdapterHooks
   handlers?: Record<string, (adapter: OberonAdapter) => OberonHandler>
-  bootstrap?: (context: { adapter: OberonAdapter }) => Promise<void>
+  bootstrap?: () => Promise<void>
 }
 ```
 
-## Input
+Use the exported `OberonPlugin` type for implementations. The example above describes its current
+contract.
 
-The plugin function receives the current `phase`. It returns a declarative definition; executable
-hooks receive adapters only after composition is complete.
+## Composition
 
-That means a plugin can:
+- Definitions run in configured order.
+- Disabled plugins contribute metadata only.
+- Later adapter hooks wrap earlier implementations.
+- A hook that does not call `next` replaces the earlier implementation.
+- Later handler keys replace earlier keys with the same name.
+- Handler factories run once, on the first HTTP request with an action segment.
+- Bootstrap tasks run in configured order.
 
-- contribute different definitions during Runtime and Bootstrap composition
-- wrap an Adapter method through `next` without losing later capabilities
-- use the final composed Adapter from Adapter hooks, Bootstrap hooks, and Handler hooks
+Do not call `getAdapter()` while a definition or hook factory runs. It throws until composition is
+complete. Call it from an executing adapter method or bootstrap task.
 
-## Return value
-
-### `name`
-
-Required. Included in the plugin metadata reported by the Oberon runtime.
-
-### `version`
-
-Optional. Included in plugin version metadata.
-
-### `disabled`
-
-Optional. When `true`, the plugin is recorded in plugin metadata but its `adapter` and `handlers`
-are not merged.
-
-### `adapter`
-
-Optional. Adapter hooks are factories that receive `{ getAdapter, next }` once and return a method
-with the corresponding `OberonPluginAdapter` signature. Call `getAdapter()` only from the returned
-method; it throws while factories are still composing. Only provide methods your plugin owns or
-wraps.
-
-### `handlers`
-
-Optional. A map of route segment to handler factory. Each factory receives the final `adapter` and
-is invoked once during Runtime composition.
-
-### `bootstrap`
-
-Optional. An ordered lifecycle task receiving the final Bootstrap Adapter.
-
-## Merge behavior
-
-Plugin definitions are collected in configured order before executable hooks run.
-
-- returned `handlers` are merged into the accumulated handler map
-- later adapter hooks are outermost and call `next` to continue the earlier chain
-- omitting `next` replaces every earlier implementation for that method
-- every executing hook resolves the same final augmented Adapter, regardless of Plugin position
-- Bootstrap hooks run sequentially in configured order
-- disabled plugins contribute version metadata only
-
-## Minimal shape
+## Bootstrap example
 
 ```tsx
 import type { OberonPlugin } from "@oberoncms/core"
 
-export const plugin: OberonPlugin = () => ({
-  name: "my-plugin",
-})
-```
-
-## Plugin with adapter and handlers
-
-```tsx
-import type { OberonPlugin } from "@oberoncms/core"
-
-export const plugin: OberonPlugin = () => ({
-  name: "my-plugin",
-  adapter: {
-    signOut:
-      ({ next }) =>
-      async () => {
-        await next()
-      },
+export const plugin: OberonPlugin = ({ getAdapter }) => ({
+  name: "initial-settings",
+  bootstrap: async () => {
+    await getAdapter().putKV({
+      namespace: "initial-settings",
+      key: "enabled",
+      value: true,
+    })
   },
-  handlers: {},
 })
 ```
 
-Use [Adapter Hooks](/docs/plugins/custom/adapter-hooks) for the adapter surface and
-[Handler Hooks](/docs/plugins/custom/handler-hooks) for route handlers.
+Bootstrap callbacks receive no arguments. Capture `getAdapter` from the plugin context when the task
+needs the final Adapter. Use [Adapter hooks](/docs/plugins/custom/adapter-hooks) and
+[Handler hooks](/docs/plugins/custom/handler-hooks) for other capabilities.

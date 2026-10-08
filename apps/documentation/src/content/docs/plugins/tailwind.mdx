@@ -1,91 +1,61 @@
-import { Callout } from "nextra/components"
+# Tailwind CSS plugin
 
-# Tailwind CSS Plugin
+The plugin generates CSS from `className` strings in published page data. It does not scan component
+source files. Keep static component styles in your app's normal Tailwind build.
 
-A plugin that provides dynamic Tailwind CSS generation for OberonCMS. It automatically extracts
-Tailwind classes from your page content and generates optimized CSS on demand.
+## Setup
 
-## Installation
+Install the plugin:
 
 ```sh npm2yarn
 npm install @oberoncms/plugin-tailwind
 ```
 
-```tsx filename="oberon/config.ts"
-import { defineConfig } from "@oberoncms/core"
+Import it in `oberon/config.ts`:
+
+```tsx
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
-
-import { clientConfig } from "./client.config"
-
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [developmentPlugin, databasePlugin, tailwindPlugin, authPlugin],
-})
 ```
 
-## How it works
+Add `tailwindPlugin` before the framework and auth plugins. See [Configuration](/docs/configuration)
+for plugin order. The installer does not add this plugin automatically.
 
-The Tailwind plugin monitors all `className` attributes in your page data and dynamically generates
-CSS for the classes you actually use. When pages are built or updated, the plugin:
+## Generated styles
 
-1. Extracts all Tailwind classes from the page content
-2. Generates a hash of the class list
-3. Compiles only those classes using Tailwind CSS
-4. Caches the CSS with long-term expiration
+Bootstrap and page updates collect classes from all published pages. The plugin stores CSS and its
+hash through the Adapter's key-value methods. The state uses namespace `@oberoncms/plugin-tailwind`
+and key `state`.
 
-This ensures your styles are always in sync with your content and you never ship unused CSS.
+Read the active hash in your server render route:
 
-## Setup
-
-If your project was created with `create-oberon-app`, Tailwind is already configured. In custom
-setups, ensure Tailwind CSS is configured in your Next.js app before enabling this plugin.
-
-## In your page render route
-
-The generated CSS is served from `/cms/api/tailwind/:hash.css`. Resolve the active hash from adapter
-settings, then render a stylesheet link:
-
-```tsx filename="app/(oberon)/[[...path]]/page.tsx"
+```tsx
 import { adapter } from "@/oberon/adapter"
 
-function getActiveHash(value: unknown) {
-  return typeof value === "object" &&
-    value !== null &&
-    "activeHash" in value &&
-    (typeof value.activeHash === "string" || value.activeHash === null)
-    ? value.activeHash
-    : null
-}
+async function getStylesheet() {
+  const state = await adapter.getKV({
+    namespace: "@oberoncms/plugin-tailwind",
+    key: "state",
+  })
 
-async function getDynamicStylesheets() {
-  const activeHash = getActiveHash(await adapter.getSetting("@oberoncms/plugin-tailwind", "state"))
+  if (
+    typeof state !== "object" ||
+    state === null ||
+    !("activeHash" in state) ||
+    typeof state.activeHash !== "string"
+  ) {
+    return null
+  }
 
-  return activeHash ? [`/cms/api/tailwind/${encodeURIComponent(activeHash)}.css`] : []
-}
-
-export default async function Page() {
-  const stylesheets = await getDynamicStylesheets()
-
-  return (
-    <>
-      {stylesheets.map((href) => (
-        <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
-      ))}
-      {/* ...render content... */}
-    </>
-  )
+  return `/cms/api/tailwind/${encodeURIComponent(state.activeHash)}.css`
 }
 ```
 
-<Callout type="info">
-  The plugin stores active hash and assets in adapter settings under `@oberoncms/plugin-tailwind`.
-</Callout>
+Render the URL as a stylesheet link when it is not `null`:
 
-## Performance
+```tsx
+<link rel="stylesheet" href={href} precedence="oberon-dynamic" />
+```
 
-The plugin uses content-based hashing and long-lived cache headers to ensure:
-
-- CSS is only regenerated when classes actually change
-- Browsers cache CSS indefinitely when the hash changes
-- No unused CSS in your stylesheets
-- Minimal overhead during page updates
+Mount the [CMS API handler](/docs/plugins/custom/handler-hooks) to serve the CSS. Successful
+responses use a one-year cache lifetime and immutable URLs. The plugin regenerates CSS when the
+class list changes or the stored asset is missing.

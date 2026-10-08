@@ -3,7 +3,7 @@
 ## General
 
 - Avoid comments unless referencing an external bug or workaround
-- Aviod premature optimisation - YAGNI
+- Avoid premature optimisation - YAGNI
 - Simple, direct code is easier to fix, test, and understand. Excess options create "dead code" or
   "configuration hell" that slows down development.
 - Avoid small single-use helpers unless explicitly justified.
@@ -24,9 +24,10 @@
 
 - Usually react hooks and related logic should be encapsulated in a custom hook
 
-## Next.js
+## Frameworks
 
-- Next.js App Router conventions apply; keep server actions with `"use server"`
+- Follow the host framework's conventions. In Next.js, use App Router and keep server actions with
+  `"use server"`.
 
 ## Validation
 
@@ -36,3 +37,13 @@ Shell-Validation Pattern: Zod at the gates, Types in the streets.
 - Parse, Don't Just Validate.
 - Fail Early and Loudly.
 - Avoid runtime validation checks; favour improving static checking;
+
+## Documentation
+
+- Use [ASD-STE100](https://www.asd-ste100.org/) principles for public documentation: active voice,
+  direct instructions, consistent terms, and one action per instruction.
+- Limit procedural sentences to 20 words and descriptive sentences to 25 words. Preserve API names
+  and technical identifiers. Do not claim full STE compliance without a dictionary review.
+- Keep public documentation as the reference for product behavior. Agent guidance should link to the
+  public source and add only repository-specific constraints.
+- Remove obsolete or repeated guidance instead of adding parallel explanations.

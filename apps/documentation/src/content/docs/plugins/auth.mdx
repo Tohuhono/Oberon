@@ -1,111 +1,58 @@
-import { Callout } from "nextra/components"
+# Authentication and authorization
 
-# Authentication and Authorization
+OberonCMS uses Better Auth for email codes and sessions. Automatic signup is disabled. Users must
+exist in the CMS before they can sign in.
 
-OberonCMS uses an auth plugin for sign-in, session handling, and role-aware access control.
+## Setup
 
-## Overview
+Add `authPlugin` from `@oberoncms/core/auth` to your server config. Put it after the database, send,
+and framework plugins. See [Configuration](/docs/configuration) for an example.
 
-The built-in auth integration provides:
+The auth plugin needs these Adapter capabilities:
 
-- Email-based one-time code login
-- Session management through the Oberon auth plugin
-- Role-aware user context (`admin` and `user`)
-- Route handlers mounted at `/cms/api/auth`
+- `getAuthDatabase` and `getAuthPlugins` for Better Auth storage and extensions
+- `sendVerificationRequest` for email delivery
+- `getRequestHeaders` for request sessions
 
-## Enable auth
-
-Add the auth plugin to your server-side Oberon config.
-
-```tsx filename="oberon/config.ts"
-import { defineConfig } from "@oberoncms/core"
-import { authPlugin } from "@oberoncms/core/auth"
-import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
-import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
-import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
-
-import { clientConfig } from "./client.config"
-
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
-})
-```
-
-## Required adapter capabilities
-
-The current auth flow does not require auth-specific database adapter methods. It requires a send
-adapter that implements `sendVerificationRequest` so codes can be delivered to users.
-
-See:
-
-- [Database Adapter Contract](/docs/plugins/database)
-- [Custom Plugins](/docs/plugins/custom)
-
-## Email login flow
-
-1. A user enters an email at the CMS login screen
-2. Auth requests a verification token
-3. Oberon calls `sendVerificationRequest` on your send adapter
-4. User completes sign-in and receives a session
-
-In development mode, verification details are logged by the development plugin instead of being
-sent.
-
-## Routes
-
-Auth routes are served under:
-
-- `/cms/api/auth/*`
-
-Sign-in page is configured as:
-
-- `/cms/login`
-
-After sign-in, users are redirected to:
-
-- `/cms/pages`
-
-## Roles
-
-Oberon supports two built-in roles:
-
-- `admin`
-- `user`
-
-Role information is attached to the session user and used by adapter-level permission checks.
-
-## Master admin email
-
-You can configure a master admin email with environment variable:
-
-```sh
-MASTER_EMAIL=admin@example.com
-```
-
-When set, this email is treated as an admin override in the auth plugin.
-
-<Callout type="warning">
-  Restrict access to this environment variable and use a secure mailbox for the master admin email.
-</Callout>
+The database and framework plugins supply the required auth capabilities. See
+[Database](/docs/plugins/database) and [Send](/docs/plugins/send) for provider setup. Mount the
+[framework HTTP handler](/docs/plugins/custom/handler-hooks) at `/cms/api/`.
 
 ## Environment variables
 
-Typical auth-related variables:
-
 ```sh
 MASTER_EMAIL=admin@example.com
+AUTH_SECRET=your-generated-secret
+BETTER_AUTH_URL=https://your-site.example
 EMAIL_FROM=noreply@example.com
-SEND_SECRET=your-send-provider-secret
-OBERON_SITE_URL=http://localhost:3000
 ```
 
-Your chosen database and send plugins may require additional variables.
+The installer generates `AUTH_SECRET`. Keep it private and stable across deployments. The auth
+plugin uses `BETTER_AUTH_URL`, then `VERCEL_URL`, then `BASE_URL` to select its base URL.
+`OBERON_SITE_URL` does not configure the current auth plugin. Set the credentials required by your
+email provider separately.
 
-## Production checklist
+## Initial admin
 
-- Configure a production database adapter (Turso/PostgreSQL/custom)
-- Configure a production send adapter
-- Set `MASTER_EMAIL` for emergency admin access
-- Set the correct site URL environment variable for your runtime environment
-- Verify sign-in flow on your deployed domain
+Bootstrap creates an `admin` user for `MASTER_EMAIL` if that email does not exist. It does not
+change an existing user's role. This variable is not an emergency permission override. Use a secure
+mailbox for the initial admin.
+
+## Sign-in
+
+1. Open `/cms/login`.
+2. Enter an existing user's email.
+3. Request a sign-in code.
+4. Enter the code or open the email link.
+
+The development plugin writes verification details to the terminal instead of sending email.
+Production needs a configured [send plugin](/docs/plugins/send).
+
+## Permissions
+
+The default roles are `admin` and `user`. Admins can manage all CMS resources. Users can edit pages
+and images and read Site information. Unauthenticated requests can read pages.
+
+CMS actions use `can`, `will`, and `whoWill` to enforce permissions. Persistence methods do not
+enforce these permissions themselves. Custom HTTP handlers must check access before they expose
+protected data or mutations.

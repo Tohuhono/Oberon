@@ -5,76 +5,24 @@ asIndexPage: true
 
 # Plugins
 
-Configure the Oberon runtime in `oberon/config.ts` by passing plugins to `defineConfig`.
+Plugins add database, email, storage, authentication, and framework behavior. Add them to the
+ordered list in `oberon/config.ts`. See [Configuration](/docs/configuration) for setup and plugin
+order.
 
-```tsx filename="oberon/config.ts"
-import { defineConfig } from "@oberoncms/core"
-import { authPlugin } from "@oberoncms/core/auth/mock"
-import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
-import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
-import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
+## Available plugins
 
-import { clientConfig } from "./client.config"
+- [Database](/docs/plugins/database): Turso and PostgreSQL
+- [Email](/docs/plugins/send): Resend, SendGrid, and custom templates
+- [Storage](/docs/plugins/storage): Flydrive and Uploadthing
+- [Authentication](/docs/plugins/auth): Email codes and sessions
+- [Development](/docs/plugins/development): Local database and logged sign-in codes
+- [Tailwind](/docs/plugins/tailwind): CSS from published page data
 
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
-})
-```
+The framework plugins provide Next.js or TanStack Start integration. See
+[HTTP handlers](/docs/plugins/custom/handler-hooks) for route setup.
 
-## Order matters
+## Custom plugins
 
-Plugin definitions are collected in array order. Later adapter hooks wrap earlier implementations,
-while every executing hook resolves the final Adapter and can use capabilities from any position.
-Bootstrap tasks run sequentially in configured order.
-
-Generated starter apps therefore put:
-
-- development first
-- database next
-- storage after database
-- send after storage
-- other runtime plugins after send
-- auth last
-
-## Custom plugin shape
-
-A custom plugin returns an object with:
-
-- `name`
-- optional `version`
-- optional `disabled`
-- optional `adapter`
-- optional `handlers`
-
-```tsx
-import type { OberonPlugin } from "@oberoncms/core"
-
-export const plugin: OberonPlugin = ({ phase }) => ({
-  name: "my-plugin",
-  disabled: phase === "bootstrap",
-  handlers: {},
-})
-```
-
-## Available hooks
-
-Plugins can contribute three kinds of extension points.
-
-`adapter` hooks:
-
-- content: `addPage`, `deletePage`, `getAllPages`, `getPageData`, `updatePageData`
-- media: `addImage`, `deleteImage`, `getAllImages`
-- users: `addUser`, `deleteUser`, `getAllUsers`, `changeRole`, `getCurrentUser`
-- auth/session: `signIn`, `signOut`, `hasPermission`
-- site and kv: `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`
-
-`bootstrap` hooks:
-
-- ordered lifecycle tasks receiving the final Bootstrap Adapter
-
-`handlers` hooks:
-
-- route factories keyed by path segment, receiving the final Adapter
-
-Use the section pages in this Plugins area for concrete examples of each plugin type.
+Start with [Plugin shape](/docs/plugins/custom/plugin-shape). Use
+[Adapter hooks](/docs/plugins/custom/adapter-hooks) for CMS behavior. Use
+[Handler hooks](/docs/plugins/custom/handler-hooks) for HTTP endpoints.

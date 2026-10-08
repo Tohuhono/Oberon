@@ -1,69 +1,29 @@
-import { Callout } from "nextra/components"
+# Components
 
-# Puck Components
-
-OberonCMS uses Puck's component model. Puck components are defined in the client-safe config at
-`oberon/client.config.tsx` and rendered by the visual editor.
-
-`create-oberon-app` scaffolds starter apps with a minimal `Text` component as a starting point:
+OberonCMS uses Puck components. Define them in the browser-safe config at
+`oberon/client.config.tsx`. Use `defineOberonComponent` to infer prop types from supported fields.
 
 ```tsx filename="oberon/client.config.tsx"
-import { type OberonClientConfig } from "@oberoncms/core"
+import { defineOberonComponent, type OberonClientConfig } from "@oberoncms/core"
 
-export const clientConfig: OberonClientConfig = {
-  version: 1,
-  components: {
-    Text: {
-      fields: {
-        text: { type: "text" },
-      },
-      defaultProps: {
-        text: "Welcome to OberonCMS",
-      },
-      render: ({ text }) => <div className="prose dark:prose-invert lg:prose-lg">{text}</div>,
-    },
-  },
-}
-```
-
-## Creating Custom Components
-
-Components implement the `OberonComponent` interface, which wraps the Puck `ComponentConfig` type.
-Define your fields and render function:
-
-```tsx
-import type { OberonComponent } from "@oberoncms/core"
-
-export const MyCustomBlock = {
+const Text = defineOberonComponent({
   fields: {
-    title: { type: "text" },
-    description: { type: "textarea" },
+    text: { type: "text" },
   },
-  render: ({ title, description }) => (
-    <div>
-      <h2>{title}</h2>
-      <p>{description}</p>
-    </div>
-  ),
-} satisfies OberonComponent
-```
-
-Then register it in your Oberon client config:
-
-```tsx filename="oberon/client.config.tsx"
-import { MyCustomBlock } from "@/components/blocks"
-import { type OberonClientConfig } from "@oberoncms/core"
+  defaultProps: {
+    text: "Welcome to OberonCMS",
+  },
+  render: ({ text }) => <div>{text}</div>,
+})
 
 export const clientConfig: OberonClientConfig = {
   version: 1,
-  components: {
-    MyCustomBlock,
-  },
+  components: { Text },
 }
 ```
 
-<Callout type="info">
-  OberonCMS uses the Puck editor API for all component configuration — fields, drop zones,
-  categorisation, and the root component. Refer to the [Puck
-  documentation](https://puckeditor.com/docs) for the full reference.
-</Callout>
+`OberonComponent` is the typed equivalent of Puck's `ComponentConfig`. Use it when you need explicit
+prop types. Component entries can also include `transforms` to migrate stored props.
+
+Use the [Puck documentation](https://puckeditor.com/docs) for fields, slots, categories, and root
+configuration. Keep server-only plugins out of this file.

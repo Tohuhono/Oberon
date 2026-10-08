@@ -1,87 +1,48 @@
-import { Callout } from "nextra/components"
-
 # Uploadthing
 
-A plugin that provides image storage and upload functionality for OberonCMS using
-[Uploadthing](https://uploadthing.com/).
+The plugin provides image uploads and a Puck Image component. It requires a database plugin for
+image metadata.
 
-## Installation
+## Setup
+
+Install the plugin:
 
 ```sh npm2yarn
 npm install @oberoncms/plugin-uploadthing uploadthing
 ```
 
-## Configuration
-
-### 1. Set up Uploadthing
-
-First, create an [Uploadthing](https://uploadthing.com/) account and get your API keys.
-
-Set your environment variables:
+Create an [Uploadthing](https://docs.uploadthing.com/) app. Set the credentials required by the
+installed Uploadthing SDK. The route handler uses `UPLOADTHING_TOKEN`. This plugin's image deletion
+code also reads `UPLOADTHING_SECRET`. Set both to the app token:
 
 ```sh
-UPLOADTHING_SECRET=<your-uploadthing-secret>
-UPLOADTHING_APP_ID=<your-uploadthing-app-id>
+UPLOADTHING_TOKEN=your-uploadthing-token
+UPLOADTHING_SECRET=your-uploadthing-token
 ```
 
-### 2. Add the plugin
+Import the plugin in `oberon/config.ts`:
 
-```tsx filename="oberon/config.ts"
-import { defineConfig } from "@oberoncms/core"
+```tsx
 import { plugin as uploadthingPlugin } from "@oberoncms/plugin-uploadthing/plugin"
-
-import { clientConfig } from "./client.config"
-
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [developmentPlugin, databasePlugin, uploadthingPlugin, authPlugin],
-})
 ```
 
-### 3. Ensure the CMS API route is wired
+Add it after the database plugin. See [Configuration](/docs/configuration) for plugin order. Mount
+the [framework HTTP handler](/docs/plugins/custom/handler-hooks) to expose `/cms/api/uploadthing`.
 
-Uploadthing endpoints are exposed through the Oberon catch-all API handler.
+## Image component
 
-```tsx filename="app/(oberon)/cms/api/[...path]/route.tsx"
-import { handler } from "@/oberon/adapter"
+Import `Image` in your [client config](/docs/components):
 
-export const { GET, POST, PUT, PATCH, DELETE } = handler
-```
-
-## Using in the editor
-
-Import the Image component from the plugin:
-
-```tsx filename="oberon/client.config.tsx"
+```tsx
 import { Image } from "@oberoncms/plugin-uploadthing"
-import { type OberonClientConfig } from "@oberoncms/core"
-
-export const clientConfig: OberonClientConfig = {
-  version: 1,
-  components: {
-    Image,
-    // other components...
-  },
-}
 ```
 
-<Callout type="info">
-  The Uploadthing plugin ships the file router and route handler internally. You only need to
-  include the plugin and wire your Oberon API route.
-</Callout>
+Add `Image` to `clientConfig.components`. Import the default styles in your app layout:
 
-## Image deletion
-
-The Uploadthing plugin automatically handles image deletion. When you delete an image in the CMS,
-it:
-
-1. Removes the image metadata from your database
-2. Deletes the image from Uploadthing storage
-
-## CSS styling
-
-The plugin includes default styles. Import the stylesheet in your layout:
-
-```tsx filename="app/layout.tsx"
+```tsx
 import "@oberoncms/plugin-uploadthing/source.css"
 ```
+
+Uploads require image write permission. The file router accepts images up to 4 MB. Image deletion
+attempts both database metadata removal and provider deletion. The plugin reports failures from
+either operation.

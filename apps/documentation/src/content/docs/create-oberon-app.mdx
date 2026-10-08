@@ -1,55 +1,56 @@
-import { Callout } from "nextra/components"
+# Getting started
 
-# Getting Started
+## Requirements
 
-## Prerequisites
+Use Node.js 24.21.0 or later. The installer supports npm, pnpm, and Yarn.
 
-Node.js 22 or later
+## Create an app
 
-## Installation
+Run the installer:
 
-```sh npx2yarn copy
+```sh
 npx create-oberon-app my-app
 ```
 
-Answer the prompts:
+Select these options:
 
-- **App name** - Valid npm package name for the starter app
-- **Package manager** - npm, pnpm, or yarn
-- **Recipe** - Starter app recipe (currently `nextjs`)
-- **Database** - Turso, PostgreSQL, or custom
-- **Email service** - Resend, SendGrid, or custom
-- **Admin email** - Initial account email
+- **App name:** A valid npm package name
+- **Package manager:** npm, pnpm, or Yarn
+- **Recipe:** `nextjs` or `tanstack`
+- **Database:** `turso`, `pgsql`, or `custom`
+- **Email service:** `resend`, `sendgrid`, or `custom`
+- **Admin email:** The initial admin address
 
-The installer then:
+The installer copies the recipe, writes the config, and creates `.env.local`. It installs
+dependencies, formats the app, and runs bootstrap. Custom database and email templates need your
+implementation.
 
-- Scaffolds a starter app from the selected recipe into your target directory
-- Generates `oberon/adapter.ts` from selected plugins
-- Creates `.env.local` with the provided admin email
-- Installs dependencies and runs recipe prebuild
+## Start the app
 
-## Run
+Open the app directory:
 
 ```sh
 cd my-app
-pnpm dev
 ```
 
-Open `http://localhost:3000/cms` for the editor.
+Start the development server with your selected package manager:
 
-## Options
+```sh npm2yarn
+npm run dev
+```
 
-Pre-fill prompts with flags:
+Open the URL shown in the terminal. Add `/cms` to that URL to open the editor. The development email
+plugin writes sign-in codes to the terminal.
+
+## Command options
+
+Use flags to supply answers:
 
 ```sh
 npx create-oberon-app my-app --use pnpm --recipe nextjs --database turso --send resend --email admin@example.com
 ```
 
-<Callout type="info">
-  Use `--dir <directory>` to scaffold into a directory different from the starter app name.
-</Callout>
+Use `--dir <directory>` for a target directory that differs from the app name.
 
-## See Also
-
-- [Configuration](/docs/configuration) - Oberon runtime composition and runtime config
-- [Plugins](/docs/plugins) - Database and email adapters
+See [Configuration](/docs/configuration) before you change plugins. See
+[Deployment](/docs/deployment) before you publish the app.
