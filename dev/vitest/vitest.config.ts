@@ -2,7 +2,7 @@ import { appendFileSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
 import { dirname, join } from "node:path"
 
 import { defineConfig } from "vitest/config"
-import { GithubActionsReporter } from "vitest/reporters"
+import { GithubActionsReporter } from "vitest/node"
 
 class PackageGithubActionsReporter extends GithubActionsReporter {
   onTestRunEnd(...args: Parameters<GithubActionsReporter["onTestRunEnd"]>) {
@@ -32,10 +32,9 @@ class PackageGithubActionsReporter extends GithubActionsReporter {
 export function initTestConfig() {
   return defineConfig({
     test: {
-      reporters:
-        process.env.GITHUB_ACTIONS === "true"
-          ? ["default", new PackageGithubActionsReporter()]
-          : undefined,
+      ...(process.env.GITHUB_ACTIONS === "true" && {
+        reporters: ["default", new PackageGithubActionsReporter()],
+      }),
       cache: false,
       include: ["src/**/*.test.ts"],
       passWithNoTests: true,
