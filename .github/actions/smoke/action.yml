@@ -1,0 +1,32 @@
+name: Smoke tests
+description: Run deployed application smoke tests and publish the failure report
+
+inputs:
+  project:
+    description: Project selected by the Playwright smoke suite
+    required: true
+  base-url:
+    description: Deployment or production URL to test
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install Playwright browsers
+      shell: bash
+      run: pnpm exec playwright install --with-deps chromium
+    - name: Run deployed smoke tests
+      shell: bash
+      env:
+        PLAYWRIGHT_BASE_URL: ${{ inputs.base-url }}
+        PROJECT: ${{ inputs.project }}
+      run: timeout 10m pnpm test:smoke -- --project "$PROJECT"
+    - name: Publish Playwright smoke report
+      if: ${{ failure() }}
+      uses: ./.github/actions/deploy-playwright-report
+      with:
+        artifact_name: playwright-smoke-report-${{ inputs.project }}
+        artifact_path: dev/playwright/.playwright/report
+        report_dir: dev/playwright/.playwright/report
+        summary_label: View report for ${{ inputs.project }}
+        vercel_token: ${{ env.VERCEL_API_TOKEN }}

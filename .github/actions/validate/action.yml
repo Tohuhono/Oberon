@@ -1,0 +1,16 @@
+name: Validate
+description: Check formatting, linting, types, and unit tests
+
+runs:
+  using: composite
+  steps:
+    - name: Setup project
+      uses: ./.github/actions/setup-project
+      with:
+        turbo-cache-key: validate
+    - name: Format
+      shell: bash
+      run: pnpm format:check
+    - name: Check
+      shell: bash
+      run: pnpm check

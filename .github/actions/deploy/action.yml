@@ -1,0 +1,39 @@
+name: Deploy
+description: Build, deploy, and smoke-test an Oberon application
+
+inputs:
+  project:
+    description: Project name used for the deployment artifact and smoke suite
+    required: true
+
+outputs:
+  url:
+    description: Deployment URL
+    value: ${{ steps.deploy.outputs.url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup project
+      uses: ./.github/actions/setup-project
+      with:
+        turbo-cache-key: deploy
+    - name: Build and deploy
+      id: deploy
+      shell: bash
+      run: |
+        pnpm run deploy
+        echo "url=$(tail -n 1 .vercel/DEPLOY_LOG)" >> "$GITHUB_OUTPUT"
+    - name: Upload deployment log
+      if: ${{ always() }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      with:
+        name: deployment-log-${{ inputs.project }}
+        path: .vercel/DEPLOY_LOG
+        if-no-files-found: warn
+        include-hidden-files: true
+    - name: Smoke-test deployment
+      uses: ./.github/actions/smoke
+      with:
+        project: ${{ inputs.project }}
+        base-url: ${{ steps.deploy.outputs.url }}

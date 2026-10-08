@@ -27,12 +27,10 @@ jobs:
         with:
           node-version: "24.x"
           package-manager-cache: false
-      - name: Corepack
-        run: corepack enable pnpm
       - name: Update contributors
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           CONTRIBUTORS_REPO: Tohuhono/Oberon
           CONTRIBUTORS_HEADING: "## Contributors"
           CONTRIBUTORS_README: ./README.md
-        run: pnpm dlx tsx@4.21.0 dev/scripts/scripts/update-contributors.ts
+        run: node dev/scripts/scripts/update-contributors.ts

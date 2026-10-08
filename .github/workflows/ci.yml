@@ -1,0 +1,285 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  changed-packages:
+    name: Changed Packages
+    runs-on: ubuntu-latest
+    outputs:
+      changed-packages: ${{ steps.changes.outputs.changed-packages }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+      - name: Find changed packages
+        id: changes
+        uses: ./.github/actions/changed-packages
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          base: ${{ github.event.pull_request.base.sha || github.event.before }}
+
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    env:
+      USE_DEVELOPMENT_DATABASE: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Validate
+        uses: ./.github/actions/validate
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    env:
+      USE_DEVELOPMENT_DATABASE: "true"
+      USE_DEVELOPMENT_SEND: "true"
+      AUTH_TRUST_HOST: "true"
+      AUTH_SECRET: ${{ secrets.E2E_AUTH_SECRET }}
+      MASTER_EMAIL: ${{ vars.E2E_MASTER_EMAIL }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Run E2E tests
+        uses: ./.github/actions/e2e
+
+  create-oberon-app:
+    name: Create Oberon App
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Run Create Oberon App tests
+        uses: ./.github/actions/create-oberon-app
+
+  deploy-docs:
+    name: Oberon Docs
+    needs: [changed-packages]
+    if:
+      ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
+      '@oberon/docs') }}
+    runs-on: ubuntu-latest
+    environment:
+      name:
+        ${{ format('{0}-oberon-docs', github.event_name == 'pull_request' && 'preview' ||
+        'production') }}
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_ENVIRONMENT:
+        ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      MASTER_EMAIL: ${{ vars.MASTER_EMAIL }}
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+      - name: Deploy
+        id: deploy
+        uses: ./.github/actions/deploy
+        with:
+          project: oberon-docs
+
+  deploy-playground:
+    name: Oberon Playground
+    needs: [changed-packages]
+    if:
+      ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
+      '@oberon/playground') }}
+    runs-on: ubuntu-latest
+    environment:
+      name:
+        ${{ format('{0}-playground', github.event_name == 'pull_request' && 'preview' ||
+        'production') }}
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      DATABASE_BRANCH:
+        ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
+        || 'main' }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_ENVIRONMENT:
+        ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      MASTER_EMAIL: ${{ vars.MASTER_EMAIL }}
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+      - name: Deploy
+        id: deploy
+        uses: ./.github/actions/deploy
+        with:
+          project: playground
+
+  deploy-newground:
+    name: TanStack Playground
+    needs: [changed-packages]
+    if:
+      ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
+      '@oberon/newground') }}
+    runs-on: ubuntu-latest
+    environment:
+      name:
+        ${{ format('{0}-newground', github.event_name == 'pull_request' && 'preview' ||
+        'production') }}
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      DATABASE_BRANCH:
+        ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
+        || 'main' }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_ENVIRONMENT:
+        ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      MASTER_EMAIL: ${{ vars.MASTER_EMAIL }}
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+      - name: Deploy
+        id: deploy
+        uses: ./.github/actions/deploy
+        with:
+          project: newground
+
+  test-status:
+    name: CI / Test Status
+    needs:
+      [
+        changed-packages,
+        validate,
+        e2e,
+        create-oberon-app,
+        deploy-docs,
+        deploy-playground,
+        deploy-newground,
+      ]
+    if: always()
+    runs-on: ubuntu-latest
+    env:
+      STATUS:
+        "${{ (contains(needs.*.result, 'failure') || contains(needs.*.result,
+        'cancelled')) && 'failed' || 'passed' }}"
+      MESSAGE: |
+        Latest deployments available at:
+        ${{ needs.deploy-docs.outputs.url && format('[docs]({0}) ', needs.deploy-docs.outputs.url) }}
+        ${{ needs.deploy-playground.outputs.url && format('[developer playground]({0}) ', needs.deploy-playground.outputs.url) }}
+        ${{ needs.deploy-newground.outputs.url && format('[tanstack playground]({0}) ', needs.deploy-newground.outputs.url) }}
+    steps:
+      - name: Add preview URL to job summary
+        run: echo "$MESSAGE" >> "$GITHUB_STEP_SUMMARY"
+      - name: Failing deploy
+        if: ${{ env.STATUS == 'failed' }}
+        run: exit 1
+
+  promote-docs:
+    name: Oberon CMS Docs
+    needs: [test-status, deploy-docs]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: production-oberon-docs
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Promote
+        uses: ./.github/actions/promote
+        with:
+          staging-url: ${{ needs.deploy-docs.outputs.url }}
+          production-url: www.oberoncms.com
+          project: oberon-docs
+
+  promote-playground:
+    name: Oberon Playground
+    needs: [test-status, deploy-playground]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: production-playground
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Promote
+        uses: ./.github/actions/promote
+        with:
+          staging-url: ${{ needs.deploy-playground.outputs.url }}
+          production-url: playground.tohuhono.com
+          project: playground
+
+  promote-newground:
+    name: TanStack Playground
+    needs: [test-status, deploy-newground]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: production-newground
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Promote
+        uses: ./.github/actions/promote
+        with:
+          staging-url: ${{ needs.deploy-newground.outputs.url }}
+          production-url: newground.tohuhono.com
+          project: newground

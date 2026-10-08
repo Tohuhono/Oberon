@@ -1,0 +1,49 @@
+name: E2E tests
+description: Run application end-to-end tests and publish failure reports
+
+runs:
+  using: composite
+  steps:
+    - name: Setup project
+      uses: ./.github/actions/setup-project
+      with:
+        turbo-cache-key: e2e
+    - name: Install Playwright browsers
+      shell: bash
+      run: pnpm exec playwright install --with-deps chromium
+    - name: E2E tests
+      shell: bash
+      run: pnpm test:e2e
+    - name: Publish documentation Playwright report
+      if: ${{ failure() }}
+      uses: ./.github/actions/deploy-playwright-report
+      with:
+        artifact_name: playwright-report-documentation
+        artifact_path: |
+          apps/documentation/.playwright/report/**
+          apps/documentation/.playwright/logs/**
+        report_dir: apps/documentation/.playwright/report
+        summary_label: View documentation report
+        vercel_token: ${{ env.VERCEL_API_TOKEN }}
+    - name: Publish playground Playwright report
+      if: ${{ failure() }}
+      uses: ./.github/actions/deploy-playwright-report
+      with:
+        artifact_name: playwright-report-playground
+        artifact_path: |
+          apps/playground/.playwright/report/**
+          apps/playground/.playwright/logs/**
+        report_dir: apps/playground/.playwright/report
+        summary_label: View playground report
+        vercel_token: ${{ env.VERCEL_API_TOKEN }}
+    - name: Publish newground Playwright report
+      if: ${{ failure() }}
+      uses: ./.github/actions/deploy-playwright-report
+      with:
+        artifact_name: playwright-report-newground
+        artifact_path: |
+          apps/newground/.playwright/report/**
+          apps/newground/.playwright/logs/**
+        report_dir: apps/newground/.playwright/report
+        summary_label: View newground report
+        vercel_token: ${{ env.VERCEL_API_TOKEN }}
