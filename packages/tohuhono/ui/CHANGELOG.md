@@ -1,5 +1,16 @@
 # @oberon/ui
 
+## 0.18.0
+
+### Minor Changes
+
+- 2b4526a: Share a self-hosted Noto Sans utility across Oberon apps so production builds do not
+  require Google Fonts network access.
+
+### Patch Changes
+
+- @tohuhono/utils@0.16.1
+
 ## 0.17.0
 
 ### Minor Changes
