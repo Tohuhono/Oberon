@@ -1,64 +1,37 @@
-import { Callout } from "nextra/components"
+# Development plugin
 
-# Development Plugin
+The plugin provides a local SQLite database and logs sign-in codes instead of sending email.
 
-A plugin that provides local development defaults for database and email verification flows.
+## Setup
 
-The development plugin helps you run OberonCMS quickly without provisioning external infrastructure
-during local development.
-
-## Installation
+Install the plugin:
 
 ```sh npm2yarn
 npm install @oberoncms/plugin-development
 ```
 
-```tsx filename="oberon/config.ts"
-import { defineConfig } from "@oberoncms/core"
-import { authPlugin } from "@oberoncms/core/auth"
+Import it in `oberon/config.ts`:
+
+```tsx
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
-import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
-import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
-
-import { clientConfig } from "./client.config"
-
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
-})
 ```
 
-## What it does
+Put it first in the plugin list. Keep your production database and send plugins in that list. See
+[Configuration](/docs/configuration) for the complete setup.
 
-When enabled, the plugin can provide:
+## Feature flags
 
-- A local development database adapter
-- A development email sender that logs verification details instead of sending real emails
-- Database migrations during Oberon bootstrap
+Use these variables to select development behavior:
 
-## Environment-based behavior
+```sh
+USE_DEVELOPMENT_DATABASE=true
+USE_DEVELOPMENT_SEND=true
+```
 
-The plugin auto-disables itself when both development feature flags are off.
+Each flag accepts `true` or `false`. Without an explicit value, development behavior is enabled
+outside CI when `NODE_ENV` is unset or `development`. The plugin is disabled when both features are
+off.
 
-<Callout type="info">
-  In production, you should use real database and send plugins (for example, Turso/PostgreSQL plus a
-  custom send implementation).
-</Callout>
-
-## Typical workflow
-
-1. Add the plugin first in your plugin list
-2. Keep your production database plugin configured
-3. Run your app locally and let the development plugin handle local-only needs
-4. Deploy with production environment variables so real plugins are used
-
-## Verification emails in development
-
-For local development, verification requests are logged instead of sent by email. This allows quick
-sign-in testing without SMTP setup.
-
-## Notes
-
-- The plugin is intended for development only
-- Do not rely on development send behavior in production
-- Always verify production plugin configuration before release
+Set both flags to `false` in production. Generated apps explicitly set them to `true` in
+`.env.local`, including when you build locally. See [Deployment](/docs/deployment) before you build
+for production.

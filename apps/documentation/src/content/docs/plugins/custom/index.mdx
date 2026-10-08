@@ -3,36 +3,11 @@ title: Custom
 asIndexPage: true
 ---
 
-import { Callout } from "nextra/components"
+# Custom plugins
 
-# Custom
+Use a custom plugin when the built-in providers do not meet your requirements. Add it to
+`oberon/config.ts` as shown in [Configuration](/docs/configuration).
 
-Use a custom plugin when the built-in providers do not match your runtime, storage, delivery, or
-routing requirements.
-
-Custom plugins are configured in `oberon/config.ts` like any other plugin:
-
-```tsx filename="oberon/config.ts"
-import { defineConfig } from "@oberoncms/core"
-import { authPlugin } from "@oberoncms/core/auth"
-import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
-import { plugin as myPlugin } from "./my-plugin"
-
-import { clientConfig } from "./client.config"
-
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [developmentPlugin, myPlugin, authPlugin],
-})
-```
-
-This section covers:
-
-- the `OberonPlugin` return shape
-- the full `OberonPluginAdapter` surface grouped by its constituent parts
-- custom route handlers via `OberonHandler`
-- the `OberonAdapter` passed into each handler factory
-
-Use [Plugin Shape](/docs/plugins/custom/plugin-shape) first, then move to
-[Adapter Hooks](/docs/plugins/custom/adapter-hooks) or
-[Handler Hooks](/docs/plugins/custom/handler-hooks) depending on what your plugin needs to add.
+Start with [Plugin shape](/docs/plugins/custom/plugin-shape). Use
+[Adapter hooks](/docs/plugins/custom/adapter-hooks) to add or wrap CMS methods. Use
+[Handler hooks](/docs/plugins/custom/handler-hooks) to add HTTP endpoints.

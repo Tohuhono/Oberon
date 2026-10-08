@@ -1,40 +1,34 @@
-import { Callout } from "nextra/components"
+# Turso
 
-# Turso (sqlite)
+The plugin stores CMS data and auth records in a Turso database.
 
-A plugin providing a database adapter using [Turso](https://turso.tech/).
+## Setup
 
-## Installation
+Install the plugin:
 
 ```sh npm2yarn
 npm install @oberoncms/plugin-turso
 ```
 
-```tsx filename="oberon/config.ts"
-import { defineConfig } from "@oberoncms/core"
+Import it in `oberon/config.ts`:
+
+```tsx
 import { plugin as databasePlugin } from "@oberoncms/plugin-turso"
-
-import { clientConfig } from "./client.config"
-
-export const config = defineConfig({
-  client: clientConfig,
-  plugins: [developmentPlugin, databasePlugin, authPlugin],
-})
 ```
 
-## Configuration
+Add `databasePlugin` after the development plugin. See [Configuration](/docs/configuration) for the
+plugin list.
 
-<Callout type="info">
-  By default the Turso plugin will automatically use Turso for production builds and fall back to a
-  development database.
-</Callout>
+## Environment variables
 
-### Environment Variables
-
-To use Turso, you need to create a [Turso](https://turso.tech/) account and set your URL and API
-environment variables:
+Create a database with [Turso](https://docs.turso.tech/). Set its URL and token:
 
 ```sh
-TURSO_URL=<libsql://your-database-name.turso.io>
-TURSO_TOKEN=<your-api-key>
+TURSO_URL=libsql://your-database.turso.io
+TURSO_TOKEN=your-token
+USE_DEVELOPMENT_DATABASE=false
 ```
+
+When `USE_DEVELOPMENT_DATABASE` is true, this plugin is disabled. Use the
+[development plugin](/docs/plugins/development) for local storage. Bootstrap runs the enabled
+database plugin's migrations.

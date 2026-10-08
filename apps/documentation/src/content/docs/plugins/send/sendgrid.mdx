@@ -1,4 +1,4 @@
-# Sendgrid
+# SendGrid
 
 A send adapter template for delivering sign-in verification emails with
 [SendGrid](https://sendgrid.com/).
@@ -9,7 +9,10 @@ A send adapter template for delivering sign-in verification emails with
 npm install @sendgrid/mail
 ```
 
-## Example plugin
+## Plugin
+
+Save this template as `oberon/send.ts`. Add its `plugin` export to your
+[server configuration](/docs/configuration).
 
 ```tsx filename="oberon/send.ts"
 import "server-cli-only"
@@ -50,4 +53,5 @@ EMAIL_FROM=noreply@example.com
 SENDGRID_API_KEY=your-sendgrid-api-key
 ```
 
-`SEND_SECRET` can be used as a fallback alias for `SENDGRID_API_KEY`.
+The template accepts `SEND_SECRET` if `SENDGRID_API_KEY` is unset. Verify your sender with SendGrid
+before you send production email.

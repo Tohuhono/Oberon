@@ -1,45 +1,15 @@
 # create-oberon-app
 
-`create-oberon-app` scaffolds starter apps from the recipes in this monorepo. For a full list of
-available recipes, please see the monorepo README.
-
-## Usage
-
-Requires Node.js 22 or newer.
-
-npx
+Create an OberonCMS app with a Next.js or TanStack Start recipe. Use Node.js 24.21.0 or later.
 
 ```sh
 npx create-oberon-app my-app
 ```
 
-yarn
+See [Getting started](https://oberoncms.com/docs/create-oberon-app) for options and setup. See
+[Configuration](https://oberoncms.com/docs/configuration) before you change plugins.
 
-```sh
-yarn create oberon-app my-app
-```
-
-## COA e2e lanes
-
-The COA Playwright suite is separated into explicit lanes:
-
-- `@auth`: one-time real login bootstrap that writes reusable browser state
-- `@cms`: shared CMS behavior reusing that state
-- `@login`: unauthenticated login-journey behavior tests
-- `@verdaccio`: package provenance checks inside the container harness
-- `@container-initialise` / `@container-teardown`: container lifecycle lanes
-
-Run headless COA e2e:
-
-```sh
-pnpm test:coa
-```
-
-Run interactive COA e2e UI:
-
-```sh
-pnpm test:coa:ui
-```
+For repository tests, use the [contributor guide](https://github.com/Tohuhono/Oberon#testing).
 
 ## License
 

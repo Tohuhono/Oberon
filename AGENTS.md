@@ -1,7 +1,7 @@
 This is the OberonCMS monorepo for the CMS core, plugins, documentation, website and
 create-oberon-app script
 
-- CRITICAL: Read [CODESTYLE](.agents/CODESTYLE.md) before any edits
+- CRITICAL: Read [CODESTYLE](.agents/CODESTYLE.md) before any edits.
 - CRITICAL: Lint, Typecheck, Build and test always use `pnpm validate` it is dependency checked, and
   optimally cached.
 - CRITICAL: Format always use `pnpm format` from root to format files. Do not filter, just run on
@@ -17,12 +17,36 @@ create-oberon-app script
   manually
 - Document durable repo guidance in `.agents/` rather than agent memory
 - Temporary files stay in the repo, use `.tmp/`
+- Use public documentation for product behavior. Link to it from agent guidance instead of repeating
+  it; keep only agent-specific constraints here.
 
 # Potential Follow-up docs
 
 - [coding style rules and guidelines](.agents/CODESTYLE.md)
 - [testing strategy and scope](.agents/TESTING.md)
-- [design and architecture](.agents/ARCHITECTURE.md)
+- [architecture references](.agents/ARCHITECTURE.md)
 - [git and github metadata](.agents/METADATA.md)
 - [Ubiquitous Language and glossary of terms](.agents/CONTEXT.md)
 - [Puck API questions or source changes](https://puckeditor.com/docs)
+
+## Agent skills
+
+### Issues
+
+Use GitHub Issues through the `gh` CLI. Tracker operations and triage labels are documented in
+[ISSUES.md](.agents/ISSUES.md).
+
+### Domain docs
+
+This is a single-context repo. Read [CONTEXT.md](.agents/CONTEXT.md) for domain vocabulary. Use
+[ARCHITECTURE.md](.agents/ARCHITECTURE.md) to find the composition and runtime documentation.
+
+Read relevant ADRs under `.agents/adr/` when present. Create that directory only when a durable
+architectural decision needs its rationale recorded; surface conflicts with existing ADRs rather
+than silently overriding them. Do not create a parallel root glossary or `docs/adr/` directory.
+
+If the repo is deliberately split into multiple contexts, record their locations in
+`.agents/CONTEXT-MAP.md` and update this guidance.
+
+These repository paths and the existing coding, testing, and metadata policies take precedence over
+generic examples in skill instructions.

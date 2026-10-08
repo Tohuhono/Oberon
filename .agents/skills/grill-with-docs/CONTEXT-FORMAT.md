@@ -1,5 +1,9 @@
 # CONTEXT.md Format
 
+Use the glossary path configured in the root `AGENTS.md` and its existing formatting. In this repo,
+update `.agents/CONTEXT.md` and preserve its tables. The examples below are defaults for
+repositories without an existing glossary, not instructions to create a parallel root file.
+
 ## Structure
 
 ```md

@@ -1,46 +1,21 @@
-import { Callout } from "nextra/components"
-
 # Configuration
 
-OberonCMS starter apps are configured in three files under `oberon/`:
+An Oberon config combines component settings with an ordered list of plugins. Starter apps keep
+these files in `oberon/`:
 
-- `adapter.ts` for Oberon runtime composition
-- `config.ts` for the server-side Oberon config and plugin list
-- `client.config.tsx` for client-safe Puck component configuration
+| File                | Purpose                                             |
+| ------------------- | --------------------------------------------------- |
+| `client.config.tsx` | Component settings that can run in the browser      |
+| `config.ts`         | Server-only configuration and plugins               |
+| `adapter.ts`        | Runtime initialization                              |
+| `prebuild.ts`       | Database migrations and initial CMS data            |
+| `actions.ts`        | CMS actions for the selected framework              |
+| `send.ts`           | Generated email plugin                              |
+| `database.ts`       | Generated database plugin, when you select `custom` |
 
-## File Structure
+## Server configuration
 
-```
-oberon/
-├── adapter.ts
-├── client.config.tsx
-├── config.ts
-├── database.ts?        # Present if database=custom
-└── send.ts?            # Present if send=custom
-```
-
-## adapter.ts
-
-`adapter.ts` composes the Oberon runtime from your selected plugins and exports both:
-
-- `adapter` for server-side operations
-- `handler` for CMS/auth route handling
-
-### Basic Setup
-
-```tsx filename="oberon/adapter.ts"
-import "server-cli-only"
-
-import { initOberon } from "@oberoncms/core/adapter"
-import { config } from "./config"
-
-export const { adapter, handler } = initOberon(config)
-```
-
-## config.ts
-
-`config.ts` is the server-only Oberon config. It combines your client-safe component config with the
-ordered plugin list used by both Runtime composition and Oberon bootstrap.
+This example uses Next.js and Turso:
 
 ```tsx filename="oberon/config.ts"
 import "server-cli-only"
@@ -48,79 +23,84 @@ import "server-cli-only"
 import { defineConfig } from "@oberoncms/core"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
-import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
+import { plugin as nextjsPlugin } from "@oberoncms/plugin-nextjs"
 import { plugin as tursoPlugin } from "@oberoncms/plugin-turso"
 
 import { clientConfig } from "./client.config"
+import { plugin as sendPlugin } from "./send"
 
 export const config = defineConfig({
   client: clientConfig,
-  plugins: [developmentPlugin, tursoPlugin, tailwindPlugin, authPlugin],
+  plugins: [developmentPlugin, tursoPlugin, sendPlugin, nextjsPlugin, authPlugin],
 })
 ```
 
-### Plugin Order
+For TanStack Start, use `plugin` from `@oberoncms/plugin-tanstack` instead of the Next.js plugin.
+Select a [send plugin](/docs/plugins/send) for production email.
 
-Plugin order is significant. Generated starter apps place:
+### Plugin order
 
-- `developmentPlugin` first
-- database plugin after development
-- storage plugin after database
-- send plugin after storage
-- other runtime plugins after send
-- `authPlugin` last
+Later adapter hooks wrap earlier implementations. Bootstrap tasks run in list order. See
+[Plugin shape](/docs/plugins/custom/plugin-shape) for composition rules.
 
-## client.config.tsx
+Generated apps use this order:
 
-`client.config.tsx` is the Oberon client config for your Puck components. Keep Oberon docs brief and
-use Puck as the primary reference for overlapping API surface.
+1. Development plugin
+2. Database plugin
+3. Send plugin
+4. Framework plugin
+5. Auth plugin
 
-Use the Puck docs for component fields, Puck components, root configuration, and layout:
-[https://puckeditor.com/docs](https://puckeditor.com/docs)
+If you add storage or Tailwind, put storage after the database and Tailwind before the framework
+plugin.
 
-### Oberon-specific divergences from Puck
+## Runtime
 
-- `OberonClientConfig` requires `version: 1`
-- Each entry in `components` may include optional `transforms`
-- `OberonComponent` is a typed alias over Puck `ComponentConfig`
+`initAdapter` returns the composed Adapter. It does not return a route handler.
 
-```tsx filename="oberon/client.config.tsx"
-import { type OberonClientConfig, type OberonComponent } from "@oberoncms/core"
+```tsx filename="oberon/adapter.ts"
+import "server-cli-only"
 
-const Text = {
-  fields: {
-    text: { type: "text" },
-  },
-  defaultProps: {
-    text: "Welcome to OberonCMS",
-  },
-  transforms: [(props) => ({ ...props })],
-  render: ({ text }) => <div>{text}</div>,
-} satisfies OberonComponent
+import { initAdapter } from "@oberoncms/core/adapter"
+import { config } from "./config"
 
-export const clientConfig: OberonClientConfig = {
-  version: 1,
-  components: {
-    Text,
-  },
-}
+export const adapter = initAdapter(config)
 ```
 
-<Callout type="info">
-  When in doubt, follow Puck docs first and only apply Oberon-specific additions listed above.
-</Callout>
+Create HTTP entrypoints with the [framework's route handler](/docs/plugins/custom/handler-hooks).
+The framework plugin supplies request headers, redirects, and auth cookie handling. The Next.js
+plugin also caches reads and updates cache tags after mutations.
 
-## Environment Variables
+## Bootstrap
 
-Required keys depend on selected plugins. See plugin pages for exact variables. At minimum,
-generated starter apps include:
+`bootstrapOberon` creates an Adapter for the bootstrap phase. It runs enabled plugin tasks in order.
+It creates a welcome page if the database has no pages. It creates Site state if none exists.
+
+```tsx filename="oberon/prebuild.ts"
+import { bootstrapOberon } from "@oberoncms/core/adapter"
+import { config } from "./config"
+
+await bootstrapOberon(config)
+```
+
+Bootstrap tasks are not Adapter methods. If a task fails, later tasks and CMS initialization do not
+run.
+
+## Components
+
+Use `OberonClientConfig` for browser-safe settings. It requires `version: 1` and permits optional
+component transforms. See [Components](/docs/components) for an example. Use the
+[Puck documentation](https://puckeditor.com/docs) for fields, slots, and layouts.
+
+## Environment variables
+
+The installer creates `.env.local` with the admin email, an auth secret, and development settings.
+It does not supply production credentials. Set the variables required by
+[authentication](/docs/plugins/auth) and your selected plugins.
+
+Turn off both development flags before deployment:
 
 ```sh
-OBERON_SITE_URL=http://localhost:3000
-EMAIL_FROM=noreply@example.com
+USE_DEVELOPMENT_DATABASE=false
+USE_DEVELOPMENT_SEND=false
 ```
-
-<Callout type="info">
-  The `create-oberon-app` CLI automatically generates a `.env.local` template with placeholders for
-  your chosen plugins.
-</Callout>

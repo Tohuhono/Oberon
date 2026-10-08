@@ -1,195 +1,70 @@
-# Adapter Hooks
+# Adapter hooks
 
-Plugins contribute Adapter hooks through `OberonPluginAdapterHooks`:
+An adapter hook receives the final Adapter getter and the previous implementation. It returns a
+method with the original signature:
 
 ```tsx
-type OberonPluginAdapterHook<Key extends keyof OberonPluginAdapter> = (context: {
+import type { OberonAdapter, OberonPluginAdapter } from "@oberoncms/core"
+
+type Hook<Key extends keyof OberonPluginAdapter> = (context: {
   getAdapter: () => Omit<OberonAdapter, Key>
   next: OberonPluginAdapter[Key]
 }) => OberonPluginAdapter[Key]
 ```
 
-Each hook is initialized once with the final Adapter getter and the preceding `next` implementation,
-then returns an Adapter method with its original signature. Methods with input receive one object:
-`updatePageData` receives a Page, while `putKV` receives `{ namespace, key, value }`. Methods
-without input remain zero-argument functions.
+The exported `OberonPluginAdapterHooks` type makes each method optional. Supply only the methods
+your plugin implements or wraps.
 
-Call `getAdapter()` from the returned method when it executes, not while the hook factory
-initializes. The getter throws until composition is complete, then returns the same final augmented
-Adapter used by Handlers and actions. Its current method is omitted from the getter's static return
-type to prevent accidental self-recursion. Use `next` to continue the current method's middleware
-chain.
+## Middleware
 
-Later plugins are outermost. For `[storage, tailwind, seo, framework]`, `updatePageData` enters
-`framework`, `seo`, `tailwind`, then `storage`, and unwinds in reverse. A direct provider ignores
-`next` and returns its implementation; middleware returns a function that calls `next` before or
-after its own behavior.
-
-## Bootstrap hooks
-
-Lifecycle work used during setup and build is exposed as a top-level `bootstrap` hook, not as
-adapter middleware.
+Use `next` to call the previous implementation. Later plugins wrap earlier plugins. For
+`[database, tailwind, framework]`, a page update enters the framework hook first and the database
+method last.
 
 ```tsx
-type OberonPlugin = ({ phase }: { phase: OberonPluginPhase }) => {
-  bootstrap?: (context: { adapter: OberonAdapter }) => Promise<void>
-}
-```
+import type { OberonPlugin } from "@oberoncms/core"
 
-Use `bootstrap` for migrations or initialization required before build output. Enabled hooks are
-awaited once in configured plugin order. If one throws, later hooks and core Page/Site
-initialization do not run.
-
-## OberonDatabaseAdapter
-
-Database plugins own the persistence surface.
-
-### Content and media methods
-
-- `addPage`
-- `deletePage`
-- `getAllPages`
-- `getPageData`
-- `updatePageData`
-- `addImage`
-- `deleteImage`
-- `getAllImages`
-
-### Site and key-value methods
-
-- `getSite`
-- `updateSite`
-- `getKV`
-- `putKV`
-- `deleteKV`
-
-### User methods
-
-- `addUser`
-- `deleteUser`
-- `getAllUsers`
-- `changeRole`
-
-## OberonCanAdapter
-
-Permission and session helpers:
-
-- `getCurrentUser`
-- `hasPermission`
-- `signIn`
-- `signOut`
-
-`hasPermission` receives `user`, `action`, and `permission`, and returns a boolean synchronously.
-The final Adapter also provides `can`, `will`, and `whoWill`. Actions use these helpers to enforce
-permissions without making persistence methods authorize themselves.
-
-## OberonAuthAdapter
-
-Auth storage and extensions:
-
-- `getAuthDatabase`
-- `getAuthPlugins`
-
-## OberonRoutingAdapter
-
-Framework integrations provide request and navigation behavior:
-
-- `redirect`
-- `notFound`
-- `getRequestHeaders`
-
-## OberonSendAdapter
-
-Send plugins provide verification delivery:
-
-- `sendVerificationRequest`
-
-```tsx
-type OberonSendAdapter = {
-  sendVerificationRequest: (props: { email: string; token: string; url: string }) => Promise<void>
-}
-```
-
-## Minimal custom implementations
-
-Database-oriented custom plugin:
-
-```tsx
-import { USE_DEVELOPMENT_DATABASE_PLUGIN, notImplemented, type OberonPlugin } from "@oberoncms/core"
-import { migrate } from "./database"
-
-export const databasePlugin: OberonPlugin = () => ({
-  name: "Custom Database Plugin",
-  disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
-  bootstrap: async ({ adapter }) => {
-    await migrate(adapter)
-  },
+export const plugin: OberonPlugin = () => ({
+  name: "page-log",
   adapter: {
-    addPage: () => notImplemented("addPage"),
-    addImage: () => notImplemented("addImage"),
-    addUser: () => notImplemented("addUser"),
-    deletePage: () => notImplemented("deletePage"),
-    deleteImage: () => notImplemented("deleteImage"),
-    deleteKV: () => notImplemented("deleteKV"),
-    deleteUser: () => notImplemented("deleteUser"),
-    changeRole: () => notImplemented("changeRole"),
-    getAllImages: () => notImplemented("getAllImages"),
-    getAllPages: () => notImplemented("getAllPages"),
-    getAllUsers: () => notImplemented("getAllUsers"),
-    getKV: () => notImplemented("getKV"),
-    getPageData: () => notImplemented("getPageData"),
-    getSite: () => notImplemented("getSite"),
-    putKV: () => notImplemented("putKV"),
-    updatePageData: () => notImplemented("updatePageData"),
-    updateSite: () => notImplemented("updateSite"),
-  },
-})
-```
-
-Send-oriented custom plugin:
-
-```tsx
-import "server-cli-only"
-
-import { USE_DEVELOPMENT_SEND_PLUGIN, type OberonPlugin } from "@oberoncms/core"
-
-const EMAIL_FROM = process.env.EMAIL_FROM
-const SEND_SECRET = process.env.SEND_SECRET
-
-async function sendEmail(
-  message: {
-    from: string
-    subject: string
-    text: string
-    to: string
-  },
-  secret: string,
-) {
-  void message
-  void secret
-  throw new Error("sendEmail is not implemented")
-}
-
-export const sendPlugin: OberonPlugin = () => ({
-  name: "Custom Send",
-  disabled: USE_DEVELOPMENT_SEND_PLUGIN,
-  adapter: {
-    sendVerificationRequest:
-      () =>
-      async ({ email, token, url }) => {
-        if (!SEND_SECRET) throw new Error("No SEND_SECRET configured")
-        if (!EMAIL_FROM) throw new Error("No EMAIL_FROM configured")
-
-        await sendEmail(
-          {
-            from: EMAIL_FROM,
-            subject: "One time login to Oberon CMS",
-            text: `Sign in with code\n\n${token}\n\n${url}\n\n`,
-            to: email,
-          },
-          SEND_SECRET,
-        )
+    updatePageData:
+      ({ next }) =>
+      async (page) => {
+        await next(page)
+        console.info("Page updated", page.key)
       },
   },
 })
 ```
+
+Call `getAdapter()` only from the returned method. It throws during factory initialization. Its
+static return type omits the current method to discourage self-recursion. A provider can ignore
+`next` to replace an earlier method.
+
+## Method groups
+
+Use the exported types for exact signatures. Methods with input receive one object. Methods without
+input take no arguments.
+
+| Type                    | Methods                                                                                                                                                                                                                         |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OberonDatabaseAdapter` | `addPage`, `deletePage`, `getAllPages`, `getPageData`, `updatePageData`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
+| `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                          |
+| `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                             |
+| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                     |
+| `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                       |
+
+`hasPermission` returns a boolean synchronously. The final Adapter also supplies permission helpers,
+route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
+
+## Bootstrap
+
+Use a top-level bootstrap task for migrations or initial data, not an adapter hook. See
+[Plugin shape](/docs/plugins/custom/plugin-shape) for its no-argument callback and Adapter access.
+
+## Provider examples
+
+- [Database plugins](/docs/plugins/database)
+- [Resend](/docs/plugins/send/resend)
+- [SendGrid](/docs/plugins/send/sendgrid)
+- [HTTP handlers](/docs/plugins/custom/handler-hooks)

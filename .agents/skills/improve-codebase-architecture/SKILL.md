@@ -2,9 +2,9 @@
 name: improve-codebase-architecture
 description:
   Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the
-  decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring
-  opportunities, consolidate tightly-coupled modules, or make a codebase more testable and
-  AI-navigable.
+  configured architecture decisions. Use when the user wants to improve architecture, find
+  refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable
+  and AI-navigable.
 ---
 
 # Improve Codebase Architecture
@@ -43,7 +43,8 @@ seams; ADRs record decisions the skill should not re-litigate.
 
 ### 1. Explore
 
-Read the project's domain glossary and any ADRs in the area you're touching first.
+Read the root agent guidance first. Then read its configured domain glossary and relevant ADRs. In
+this repo, use `.agents/CONTEXT.md` and `.agents/adr/`; do not create `docs/adr/`.
 
 Then use the Agent tool with `subagent_type=Explore` to walk the codebase. Don't follow rigid
 heuristics — explore organically and note where you experience friction:

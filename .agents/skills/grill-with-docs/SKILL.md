@@ -24,39 +24,17 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 During codebase exploration, also look for existing documentation:
 
+Read the root `AGENTS.md` domain guidance first. Its glossary, architecture, and ADR paths take
+precedence over the generic layouts below. In this repo, update `.agents/CONTEXT.md` rather than
+creating a root glossary, consult `.agents/ARCHITECTURE.md`, and create ADRs under `.agents/adr/`.
+
 ### File structure
 
-Most repos have a single context:
+Use the paths in the root agent guidance. If that guidance does not configure domain paths, use a
+root `CONTEXT.md`, an optional root `CONTEXT-MAP.md`, and `docs/adr/`.
 
-```
-/
-├── CONTEXT.md
-├── docs/
-│   └── adr/
-│       ├── 0001-event-sourced-orders.md
-│       └── 0002-postgres-for-write-model.md
-└── src/
-```
-
-If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The map points to where
-each one lives:
-
-```
-/
-├── CONTEXT-MAP.md
-├── docs/
-│   └── adr/                          ← system-wide decisions
-├── src/
-│   ├── ordering/
-│   │   ├── CONTEXT.md
-│   │   └── docs/adr/                 ← context-specific decisions
-│   └── billing/
-│       ├── CONTEXT.md
-│       └── docs/adr/
-```
-
-Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one
-when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+Create files lazily. In this repo, update `.agents/CONTEXT.md` and create `.agents/adr/` only when
+the first ADR is needed.
 
 ## During the session
 
