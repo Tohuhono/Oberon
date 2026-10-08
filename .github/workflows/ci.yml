@@ -75,7 +75,7 @@ jobs:
         uses: ./.github/actions/create-oberon-app
 
   deploy-docs:
-    name: Oberon Docs
+    name: Deploy and Test Oberon Docs
     needs: [changed-packages]
     if:
       ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
@@ -110,7 +110,7 @@ jobs:
           project: oberon-docs
 
   deploy-playground:
-    name: Oberon Playground
+    name: Deploy and Test Oberon Playground
     needs: [changed-packages]
     if:
       ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
@@ -151,7 +151,7 @@ jobs:
           project: playground
 
   deploy-newground:
-    name: TanStack Playground
+    name: Deploy and Test TanStack Playground
     needs: [changed-packages]
     if:
       ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
@@ -222,7 +222,7 @@ jobs:
         run: exit 1
 
   promote-docs:
-    name: Oberon CMS Docs
+    name: Promote and Test Oberon Docs
     needs: [test-status, deploy-docs]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -243,7 +243,7 @@ jobs:
           project: oberon-docs
 
   promote-playground:
-    name: Oberon Playground
+    name: Promote and Test Oberon Playground
     needs: [test-status, deploy-playground]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -264,7 +264,7 @@ jobs:
           project: playground
 
   promote-newground:
-    name: TanStack Playground
+    name: Promote and Test TanStack Playground
     needs: [test-status, deploy-newground]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
