@@ -4,10 +4,9 @@
 "@dev/typescript": patch
 ---
 
-Enable Cache Components and partial prefetching in the playground, and suspend public page
-rendering. Disable instant rendering for public and CMS routes.
+Enable Cache Components in the playground, and suspend public page rendering. Disable partial
+prefetching so missing pages return HTTP 404. Disable instant rendering for public and CMS routes.
 
-Add browser coverage for inline theme scripts on 404 pages before and after hydration. Track the
-upstream rendering issue: https://github.com/vercel/next.js/issues/62228.
+Add browser coverage to verify that missing pages return HTTP 404 and respect the saved theme.
 
 Declare TypeScript as a dependency of the shared TypeScript configuration package.

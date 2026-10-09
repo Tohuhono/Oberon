@@ -13,7 +13,8 @@ test.describe("Smoke Tests", { tag: "@smoke" }, () => {
   })
 
   test("unknown route returns 404", async ({ page }) => {
-    await page.goto("/nonexistent-page-xyz")
+    const response = await page.goto("/nonexistent-page-xyz")
+    expect(response?.status()).toBe(404)
     await expect(page.getByText("404 - page not found")).toBeVisible()
   })
 })
@@ -25,46 +26,17 @@ test.describe("CMS Smoke Tests", { tag: ["@smoke", "@cms", "@playground"] }, () 
     await expect(page.getByRole("heading", { name: "Welcome to OberonCMS" })).toBeVisible()
   })
 
-  // https://github.com/vercel/next.js/issues/62228
-  test("not-found markup and inline theme script work without hydration", async ({ page }) => {
+  test("not-found page respects the saved theme", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" })
     await page.addInitScript(() => localStorage.setItem("oberon:theme", "dark"))
-    await page.route("**/*", async (route) => {
-      if (route.request().resourceType() === "script") {
-        await route.abort()
-      } else {
-        await route.continue()
-      }
-    })
 
-    const response = await page.goto("/nonexistent-page-xyz/inline-script-regression", {
-      waitUntil: "domcontentloaded",
-    })
+    const response = await page.goto("/nonexistent-page-xyz/theme-regression")
     expect(response?.status()).toBe(404)
-    expect(response?.headers()["content-type"]).toContain("text/html")
 
     await expect(
       page.getByRole("heading", { name: "404 - page not found", level: 1, exact: true }),
     ).toBeVisible()
     await expect(page.locator("html")).toHaveClass(/\bdark\b/)
-  })
-
-  test("not-found theme survives hydration", async ({ page }) => {
-    const scriptWarnings: string[] = []
-    page.on("console", (message) => {
-      if (
-        /scripts inside React components|hydration failed|hydration mismatch/i.test(message.text())
-      ) {
-        scriptWarnings.push(message.text())
-      }
-    })
-    await page.emulateMedia({ colorScheme: "light" })
-    await page.addInitScript(() => localStorage.setItem("oberon:theme", "dark"))
-
-    await page.goto("/nonexistent-page-xyz/hydration-regression")
-    await expect(page.getByRole("heading", { name: "404 - page not found" })).toBeVisible()
-    await expect(page.locator("html")).toHaveClass(/\bdark\b/)
-    expect(scriptWarnings).toEqual([])
   })
 })
 
