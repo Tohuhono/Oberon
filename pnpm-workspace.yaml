@@ -20,12 +20,15 @@ overrides:
 packageExtensions:
   # Twoslash's legacy compiler API is not compatible with TypeScript 7:
   # https://github.com/shuding/nextra/issues/5046
-  twoslash@0.3.6:
+  twoslash:
     dependencies:
       typescript-legacy: npm:typescript@6.0.3
 patchedDependencies:
   nextra: patches/nextra.patch
-  "@vitest/runner": patches/@vitest__runner.patch
-  twoslash@0.3.6: patches/twoslash@0.3.6.patch
+  # Zod >=4.4 compatibility; remove when a release includes this fix:
+  # https://github.com/shuding/nextra/pull/4990
+  nextra-theme-docs: patches/nextra-theme-docs.patch
+  vitest: patches/vitest.patch
+  twoslash: patches/twoslash.patch
 minimumReleaseAgeExclude:
   - vite@8.3.3

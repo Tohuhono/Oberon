@@ -59,7 +59,7 @@
     "@radix-ui/react-icons": "^1.3.2",
     "@uploadthing/react": "^7.3.3",
     "@uploadthing/shared": "^7.1.10",
-    "image-size": "2.0.2",
+    "image-size": "2.0.4",
     "next": "^16.4.0",
     "server-cli-only": "^0.3.2",
     "uploadthing": "^7.7.4"
@@ -70,9 +70,9 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@puckeditor/core": "^0.21.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
+    "@puckeditor/core": "^0.23.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "7.0.2"

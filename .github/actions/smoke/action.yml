@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Install Playwright browsers
       shell: bash
-      run: pnpm exec playwright install --with-deps chromium
+      run: pnpm test:install --with-deps
     - name: Run deployed smoke tests
       shell: bash
       env:

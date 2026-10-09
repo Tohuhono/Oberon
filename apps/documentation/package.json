@@ -28,11 +28,11 @@
     "@dev/playwright": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
-    "@types/node": "24.19.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "postcss": "^8.5.6",
-    "tsx": "^4.21.0",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "postcss": "^8.5.29",
+    "tsx": "^4.23.15",
     "typescript": "7.0.2"
   }
 }

@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "@total-typescript/shoehorn": "^0.1.2",
-    "vitest": "^4.1.2"
+    "vitest": "^5.0.3"
   }
 }

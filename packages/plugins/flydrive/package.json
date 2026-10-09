@@ -59,9 +59,9 @@
   "dependencies": {
     "@oberoncms/core": "workspace:*",
     "@radix-ui/react-icons": "^1.3.2",
-    "flydrive": "^2.0.0",
-    "image-size": "2.0.2",
-    "react-dropzone": "^15.0.0",
+    "flydrive": "^2.2.0",
+    "image-size": "2.0.4",
+    "react-dropzone": "^20.1.2",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
@@ -70,10 +70,10 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@puckeditor/core": "^0.21.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "@vercel/blob": "^2.2.0",
+    "@puckeditor/core": "^0.23.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vercel/blob": "^2.8.1",
     "next": "^16.4.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

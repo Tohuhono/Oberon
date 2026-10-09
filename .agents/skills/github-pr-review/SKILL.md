@@ -43,16 +43,16 @@ gh api repos/:owner/:repo/pulls/<PR_NUMBER>/reviews \
 ````
 
 Additional explanation...' \
- --jq '{id, state}'
+--jq '{id, state}'
 
 # Returns: {"id": <REVIEW_ID>, "state": "PENDING"}
 
 # Step 2: Submit the pending review
 
 gh api repos/:owner/:repo/pulls/<PR_NUMBER>/reviews/<REVIEW_ID>/events \
- -X POST \
- -f event="COMMENT" \
- -f body="Optional overall review message"
+-X POST \
+-f event="COMMENT" \
+-f body="Optional overall review message"
 
 ````
 

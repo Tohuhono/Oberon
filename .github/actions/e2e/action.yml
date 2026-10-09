@@ -10,7 +10,7 @@ runs:
         turbo-cache-key: e2e
     - name: Install Playwright browsers
       shell: bash
-      run: pnpm exec playwright install --with-deps chromium
+      run: pnpm test:install --with-deps
     - name: E2E tests
       shell: bash
       run: pnpm test:e2e

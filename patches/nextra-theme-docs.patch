@@ -1,0 +1,12 @@
+diff --git a/dist/layout.js b/dist/layout.js
+--- a/dist/layout.js
++++ b/dist/layout.js
+@@ -27,7 +27,7 @@
+     const {
+       data: t12,
+       error
+-    } = LayoutPropsSchema.safeParse(themeConfig);
++    } = LayoutPropsSchema.safeParse({ ...themeConfig, children });
+     data = t12;
+     if (error) {
+       throw z.prettifyError(error);

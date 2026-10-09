@@ -37,12 +37,12 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@commander-js/extra-typings": "^14.0.0",
-    "commander": "^14.0.3",
+    "@commander-js/extra-typings": "^15.0.0",
+    "commander": "^15.0.0",
     "fast-glob": "^3.3.3",
     "prompts": "^2.4.2",
-    "validate-npm-package-name": "^7.0.2",
-    "zod": "^4.3.6"
+    "validate-npm-package-name": "^8.0.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -61,15 +61,15 @@
     "@sendgrid/mail": "8.1.6",
     "@tohuhono/utils": "workspace:*",
     "@types/ignore-walk": "^4.0.3",
-    "@types/inquirer": "^9.0.9",
-    "@types/node": "24.19.1",
+    "@types/inquirer": "^9.0.10",
+    "@types/node": "26.6.4",
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
-    "ignore-walk": "^8.0.0",
-    "resend": "^6.9.2",
+    "ignore-walk": "^9.0.0",
+    "resend": "^6.32.1",
     "server-cli-only": "^0.3.2",
     "typescript": "7.0.2",
-    "verdaccio": "^6.0.5"
+    "verdaccio": "^6.10.5"
   },
   "engines": {
     "node": ">=24.21.0"

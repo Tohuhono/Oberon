@@ -32,13 +32,13 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "rimraf": "^6.1.2",
-    "tsx": "^4.21.0"
+    "rimraf": "^6.1.3",
+    "tsx": "^4.23.15"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
     "@dev/typescript": "workspace:*",
-    "@types/node": "24.19.1",
+    "@types/node": "26.6.4",
     "typescript": "7.0.2"
   }
 }

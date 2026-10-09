@@ -1,0 +1,17 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -1,4 +1,4 @@
+ 'use strict';
+ 
+-const ts = require('typescript');
++const ts = require('typescript-legacy');
+ const core = require('./core.cjs');
+diff --git a/dist/index.mjs b/dist/index.mjs
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -1,3 +1,3 @@
+-import ts from 'typescript';
++import ts from 'typescript-legacy';
+ import { createTwoslasher as createTwoslasher$1, twoslasher as twoslasher$1 } from './core.mjs';
+ export { validateCodeForErrors } from './core.mjs';

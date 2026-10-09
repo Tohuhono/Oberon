@@ -35,6 +35,9 @@ dependency-aware validation workflow. The repository uses Oxlint, not ESLint, fo
 Unit tests use Vitest. Browser tests use Playwright. The `create-oberon-app` tests use a container
 harness and require Linux with Podman.
 
+Run `pnpm test:install` after installing or updating Playwright to download the required Chromium
+browser.
+
 | Command            | Purpose                                     |
 | ------------------ | ------------------------------------------- |
 | `pnpm validate`    | Required build, lint, type, and test checks |
