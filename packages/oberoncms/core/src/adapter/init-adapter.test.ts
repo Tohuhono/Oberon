@@ -5,13 +5,11 @@ import { initAdapter } from "./init-adapter"
 
 describe("initAdapter permissions", { tags: ["ai", "feature-better-auth-migration"] }, () => {
   it("uses the current session user when anonymous access is denied", async () => {
-    const getCurrentUser = vi.fn(
-      async (): Promise<OberonUser> => ({
-        id: "user-1",
-        email: "editor@example.com",
-        role: "admin",
-      }),
-    )
+    const getCurrentUser = vi.fn(async (): Promise<OberonUser> => ({
+      id: "user-1",
+      email: "editor@example.com",
+      role: "admin",
+    }))
 
     const hasPermission = vi.fn(({ user }: { user?: { role: string } | null }) => {
       return user?.role === "admin"

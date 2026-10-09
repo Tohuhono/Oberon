@@ -28,19 +28,19 @@
   },
   "dependencies": {
     "@dev/vitest": "workspace:*",
-    "@libsql/client": "^0.17.0",
+    "@libsql/client": "^0.18.0",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
-    "drizzle-orm": "^0.45.1"
+    "drizzle-orm": "^0.45.3"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
-    "@types/node": "24.19.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "7.0.2"

@@ -53,13 +53,13 @@
     "wait:clean": "rimraf ./dist/version"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.0",
-    "@libsql/core": "^0.17.0",
+    "@libsql/client": "^0.18.0",
+    "@libsql/core": "^0.18.0",
     "@oberoncms/core": "workspace:*",
-    "better-auth": "^1.6.3",
-    "drizzle-orm": "^0.45.1",
+    "better-auth": "^1.7.7",
+    "drizzle-orm": "^0.45.3",
     "server-cli-only": "^0.3.2",
-    "zod": "^4.3.6"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -67,11 +67,11 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@puckeditor/core": "^0.21.1",
-    "@types/node": "24.19.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "drizzle-kit": "^0.31.9",
+    "@puckeditor/core": "^0.23.0",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "drizzle-kit": "^0.31.11",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "7.0.2"

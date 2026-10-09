@@ -23,5 +23,8 @@ const useLinkComponent = () => useContext(LinkContext)
 export function Link(props: LinkProps) {
   const Component = useLinkComponent() ?? AnchorLink
 
+  // Context selects an existing component; it does not create one.
+  // Related false positive: https://github.com/react/react/issues/34794
+  // oxlint-disable-next-line react/static-components
   return <Component {...props} />
 }

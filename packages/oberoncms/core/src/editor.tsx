@@ -31,7 +31,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
   const { notFound } = useOberonNavigation()
 
   if (action === "login") {
-    return <Login {...data} />
+    return <Login key={JSON.stringify([data.email, data.token])} {...data} />
   }
 
   if (action === "edit") {

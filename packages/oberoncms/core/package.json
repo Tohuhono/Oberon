@@ -55,18 +55,18 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "@puckeditor/core": "^0.21.1",
+    "@hookform/resolvers": "^5.9.1",
+    "@puckeditor/core": "^0.23.0",
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
-    "better-auth": "^1.6.3",
-    "dotenv": "^17.3.1",
-    "filesize": "^11.0.13",
-    "react-hook-form": "^7.71.1",
-    "swr": "^2.4.0",
-    "use-debounce": "^10.1.0",
+    "better-auth": "^1.7.7",
+    "dotenv": "^18.0.6",
+    "filesize": "^11.0.25",
+    "react-hook-form": "^7.89.0",
+    "swr": "^2.5.1",
+    "use-debounce": "^10.1.1",
     "walkjs": "^6.0.1",
-    "zod": "^4.3.6"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -74,9 +74,9 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@types/node": "24.19.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "7.0.2"

@@ -14,8 +14,11 @@ import { Input } from "@tohuhono/ui/input"
 import { Label } from "@tohuhono/ui/label"
 import { RadioGroup, RadioGroupItem } from "@tohuhono/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tohuhono/ui/select"
+import { useClientState } from "@tohuhono/utils/use-client-state"
 
 export function CardsPaymentMethod() {
+  const currentYear = useClientState(() => new Date().getFullYear(), [])
+
   return (
     <Card>
       <CardHeader>
@@ -132,11 +135,12 @@ export function CardsPaymentMethod() {
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <SelectItem key={i} value={`${new Date().getFullYear() + i}`}>
-                    {new Date().getFullYear() + i}
-                  </SelectItem>
-                ))}
+                {currentYear !== undefined &&
+                  Array.from({ length: 10 }, (_, i) => (
+                    <SelectItem key={i} value={`${currentYear + i}`}>
+                      {currentYear + i}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>

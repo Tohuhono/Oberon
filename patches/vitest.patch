@@ -1,0 +1,14 @@
+diff --git a/dist/chunks/run.BTlFXlnv.js b/dist/chunks/run.BTlFXlnv.js
+--- a/dist/chunks/run.BTlFXlnv.js
++++ b/dist/chunks/run.BTlFXlnv.js
+@@ -2389,10 +2389,8 @@
+ function resolveTagPattern(tagPattern, availableTags) {
+ 	if (tagPattern.includes("*")) {
+ 		const regex = createWildcardRegex(tagPattern);
+-		if (!availableTags.some((tag) => regex.test(tag.name))) throw createNoTagsError(availableTags, tagPattern, "tag pattern");
+ 		return regex;
+ 	}
+-	if (!availableTags.length || !availableTags.some((tag) => tag.name === tagPattern)) throw createNoTagsError(availableTags, tagPattern, "tag pattern");
+ 	return null;
+ }
+ function evaluateNode(node, tags) {

@@ -9,18 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CmsRouteImport } from './routes/cms'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CmsRouteImport } from './routes/cms'
 import { Route as CmsApiSplatRouteImport } from './routes/cms/api/$'
 
-const CmsRoute = CmsRouteImport.update({
-  id: '/cms',
-  path: '/cms',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CmsRoute = CmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CmsApiSplatRoute = CmsApiSplatRouteImport.update({
@@ -60,18 +60,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/cms': {
-      id: '/cms'
-      path: '/cms'
-      fullPath: '/cms'
-      preLoaderRoute: typeof CmsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cms': {
+      id: '/cms'
+      path: '/cms'
+      fullPath: '/cms'
+      preLoaderRoute: typeof CmsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cms/api/$': {
