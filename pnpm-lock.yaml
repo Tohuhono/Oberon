@@ -567,7 +567,11 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
 
-  dev/typescript: {}
+  dev/typescript:
+    dependencies:
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
 
   dev/vite:
     dependencies:

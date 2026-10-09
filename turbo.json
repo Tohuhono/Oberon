@@ -30,11 +30,8 @@
     "errorsOnlyShowHash": false
   },
   "tasks": {
-    "//#clean:db": {
-      "cache": false
-    },
     "prebuild": {
-      "dependsOn": ["^build", "//#clean:db"],
+      "dependsOn": ["^build"],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*",
@@ -62,7 +59,7 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["wait:clean", "^wait", "prebuild"]
+      "dependsOn": ["^wait", "prebuild"]
     },
     "start": {
       "cache": false,

@@ -6,6 +6,8 @@ import { adapter } from "@/oberon/adapter"
 
 import { Client } from "./client"
 
+export const instant = false
+
 export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
   const { path = [] } = await params
   return await getMetaData(adapter, path.slice(1), path[0])
