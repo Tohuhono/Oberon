@@ -13,7 +13,8 @@ test.describe("Smoke Tests", { tag: "@smoke" }, () => {
   })
 
   test("unknown route returns 404", async ({ page }) => {
-    await page.goto("/nonexistent-page-xyz")
+    const response = await page.goto("/nonexistent-page-xyz")
+    expect(response?.status()).toBe(404)
     await expect(page.getByText("404 - page not found")).toBeVisible()
   })
 })
@@ -23,6 +24,19 @@ test.describe("CMS Smoke Tests", { tag: ["@smoke", "@cms", "@playground"] }, () 
     const response = await page.goto("/")
     expect(response?.status()).toBe(200)
     await expect(page.getByRole("heading", { name: "Welcome to OberonCMS" })).toBeVisible()
+  })
+
+  test("not-found page respects the saved theme", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" })
+    await page.addInitScript(() => localStorage.setItem("oberon:theme", "dark"))
+
+    const response = await page.goto("/nonexistent-page-xyz/theme-regression")
+    expect(response?.status()).toBe(404)
+
+    await expect(
+      page.getByRole("heading", { name: "404 - page not found", level: 1, exact: true }),
+    ).toBeVisible()
+    await expect(page.locator("html")).toHaveClass(/\bdark\b/)
   })
 })
 

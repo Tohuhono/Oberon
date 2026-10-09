@@ -24,6 +24,8 @@ const nextConfig = {
       },
     ],
   },
+  cacheComponents: true,
+  partialPrefetching: false,
 }
 
 // TODO bundle analyzer is not compatible with turbo
