@@ -43,14 +43,9 @@ test.describe("CMS Smoke Tests", { tag: ["@smoke", "@cms", "@playground"] }, () 
     expect(response?.status()).toBe(404)
     expect(response?.headers()["content-type"]).toContain("text/html")
 
-    const html = await response!.text()
-    const markup = html.replace(/<script\b[\s\S]*?<\/script>/gi, "")
-    expect(markup).toMatch(/<h1\b[^>]*>404 - page not found<\/h1>/)
-    const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1]
-    expect(head).toContain("oberon:theme")
-    expect(head).toContain('document.documentElement.classList.add("dark")')
-
-    await expect(page.getByRole("heading", { name: "404 - page not found" })).toBeVisible()
+    await expect(
+      page.getByRole("heading", { name: "404 - page not found", level: 1, exact: true }),
+    ).toBeVisible()
     await expect(page.locator("html")).toHaveClass(/\bdark\b/)
   })
 

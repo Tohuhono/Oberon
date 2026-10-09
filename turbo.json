@@ -4,6 +4,7 @@
   "remoteCache": {
     "enabled": false
   },
+  "agentGuidance": false,
   "globalEnv": [
     "CI",
     "NODE_ENV",
