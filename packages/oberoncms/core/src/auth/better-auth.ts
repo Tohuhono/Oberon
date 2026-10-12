@@ -100,10 +100,12 @@ export const authPlugin: OberonPlugin = ({ getAdapter }) => ({
     getCurrentUser:
       ({ getAdapter }) =>
       async () => {
+        const adapter = getAdapter()
+        const headers = await adapter.getRequestHeaders()
+
         try {
-          const adapter = getAdapter()
           const session = await getAuth(adapter).api.getSession({
-            headers: await adapter.getRequestHeaders(),
+            headers,
           })
 
           if (!session?.user?.id || !session.user.email || !session.user.role) {
@@ -123,17 +125,19 @@ export const authPlugin: OberonPlugin = ({ getAdapter }) => ({
       ({ getAdapter }) =>
       async () => {
         const adapter = getAdapter()
+        const headers = await adapter.getRequestHeaders()
         await getAuth(adapter).api.signOut({
-          headers: await adapter.getRequestHeaders(),
+          headers,
         })
       },
     signIn:
       ({ getAdapter }) =>
       async ({ email }) => {
         const adapter = getAdapter()
+        const headers = await adapter.getRequestHeaders()
         await getAuth(adapter).api.sendVerificationOTP({
           body: { email, type: "sign-in" },
-          headers: await adapter.getRequestHeaders(),
+          headers,
         })
       },
   },

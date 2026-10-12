@@ -1,5 +1,6 @@
-import "./app.css"
 import { Antifouc } from "@oberoncms/core"
+
+import "./app.css"
 
 export const metadata = {
   title: "Oberon CMS",

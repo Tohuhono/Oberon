@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ path?: st
 
 export default async function OberonRender({ params }: { params: Promise<{ path?: [] }> }) {
   const { path = [] } = await params
+
   const stylesheets = await getDynamicStylesheets()
 
   return (
@@ -52,9 +53,7 @@ export default async function OberonRender({ params }: { params: Promise<{ path?
       {stylesheets.map((href) => (
         <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
       ))}
-      <Suspense>
-        <Render path={path} adapter={adapter} config={clientConfig} />
-      </Suspense>
+      <Render path={path} adapter={adapter} config={clientConfig} />
     </>
   )
 }
