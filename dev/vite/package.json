@@ -28,14 +28,14 @@
   },
   "dependencies": {
     "fast-glob": "^3.3.3",
-    "rolldown-plugin-dts": "^0.28.6",
-    "vite": "^8.3.3"
+    "rolldown-plugin-dts": "^0.28.8",
+    "vite": "^8.3.4"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
     "@dev/scripts": "workspace:*",
     "@dev/typescript": "workspace:*",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "typescript": "7.0.2"
   }
 }

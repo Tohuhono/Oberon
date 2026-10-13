@@ -60,13 +60,13 @@
     "@tohuhono/ui": "workspace:*",
     "@tohuhono/utils": "workspace:*",
     "better-auth": "^1.7.7",
-    "dotenv": "^18.0.6",
-    "filesize": "^11.0.25",
-    "react-hook-form": "^7.89.0",
+    "dotenv": "^18.0.7",
+    "filesize": "^11.0.26",
+    "react-hook-form": "^7.90.0",
     "swr": "^2.5.1",
     "use-debounce": "^10.1.1",
     "walkjs": "^6.0.1",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -74,7 +74,7 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "react": "^19.3.0",

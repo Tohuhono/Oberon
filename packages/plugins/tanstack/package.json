@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
-    "@tanstack/start-server-core": "1.169.39",
+    "@tanstack/start-server-core": "1.169.40",
     "better-auth": "^1.7.7"
   },
   "devDependencies": {
@@ -58,7 +58,7 @@
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
     "@oberoncms/testing": "workspace:*",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "react": "^19.3.0",

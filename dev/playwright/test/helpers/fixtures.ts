@@ -68,13 +68,18 @@ async function createCmsPage(page: Page, key: string) {
 
 async function deleteCmsPages(page: Page, key: string) {
   await page.goto("/cms/pages")
+  await expect(page.getByLabel("Page path", { exact: true })).toBeEditable()
 
   const links = page.getByRole("link", { name: key })
 
   for (const _ of Array(await links.count())) {
-    const pageKey = await links.first().innerText()
-    expect(pageKey).toMatch(/.+/)
-    await page.getByRole("button", { name: `Delete ${pageKey}`, exact: true }).click()
+    const pageKey = await links.first().getAttribute("href")
+    if (!pageKey) {
+      throw new Error(`Missing Page key on cleanup link for ${key}`)
+    }
+    const deleteButton = page.getByRole("button", { name: `Delete ${pageKey}`, exact: true })
+    await expect(deleteButton).toBeEnabled()
+    await deleteButton.click()
     await expect(page.getByRole("link", { name: pageKey, exact: true })).not.toBeVisible()
   }
 
@@ -118,9 +123,12 @@ export const test = base.extend<{
   cmsSeededPageKey: async ({ cms, testKey }, use) => {
     const key = `/${testKey}`
 
-    await createCmsPage(cms, key)
-    await use(key)
-    await deleteCmsPages(cms, key)
+    try {
+      await createCmsPage(cms, key)
+      await use(key)
+    } finally {
+      await deleteCmsPages(cms, key)
+    }
   },
 
   errorCapture: async ({ cms }, use) => {

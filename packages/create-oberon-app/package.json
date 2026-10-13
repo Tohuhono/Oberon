@@ -42,7 +42,7 @@
     "fast-glob": "^3.3.3",
     "prompts": "^2.4.2",
     "validate-npm-package-name": "^8.0.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -62,7 +62,7 @@
     "@tohuhono/utils": "workspace:*",
     "@types/ignore-walk": "^4.0.3",
     "@types/inquirer": "^9.0.10",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
     "ignore-walk": "^9.0.0",

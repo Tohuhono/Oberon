@@ -53,10 +53,6 @@ For deployed smoke tests, set the base URL:
 PLAYWRIGHT_BASE_URL=https://your-deployment.example pnpm test:smoke
 ```
 
-Run `pnpm validate` before you submit code or documentation changes. Do not replace root workflows
-with package-local commands or manual package filters. Request a root script change if the current
-scripts cannot run the required checks.
-
 ## Repository layout
 
 | Location                                                   | Purpose                                                                |

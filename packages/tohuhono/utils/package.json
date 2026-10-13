@@ -57,7 +57,7 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "react": "^19.3.0",

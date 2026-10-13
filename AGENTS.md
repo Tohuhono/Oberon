@@ -17,8 +17,8 @@ create-oberon-app script
   manually
 - Document durable repo guidance in `.agents/` rather than agent memory
 - Temporary files stay in the repo, use `.tmp/`
-- Use public documentation for product behavior. Link to it from agent guidance instead of repeating
-  it; keep only agent-specific constraints here.
+- Use public documentation for product behavior.
+- Use simplified english ASD-STE100 plus ubiquitous language with active voice
 
 # Potential Follow-up docs
 
@@ -28,6 +28,7 @@ create-oberon-app script
 - [git and github metadata](.agents/METADATA.md)
 - [Ubiquitous Language and glossary of terms](.agents/CONTEXT.md)
 - [Puck API questions or source changes](https://puckeditor.com/docs)
+- [ASD-STE100](https://www.asd-ste100.org/)
 
 ## Agent skills
 

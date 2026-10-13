@@ -50,7 +50,7 @@
     "@libsql/core": "^0.18.0",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
-    "drizzle-orm": "^0.45.3",
+    "drizzle-orm": "^0.45.4",
     "next": "^16.4.0",
     "server-cli-only": "^0.3.2"
   },
@@ -62,7 +62,7 @@
     "@dev/vitest": "workspace:*",
     "@oberoncms/testing": "workspace:*",
     "@puckeditor/core": "^0.23.0",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "drizzle-kit": "^0.31.11",

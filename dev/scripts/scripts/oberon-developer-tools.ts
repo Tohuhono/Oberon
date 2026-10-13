@@ -1,5 +1,7 @@
 #!/usr/bin/env tsx
 
+import { randomUUID } from "node:crypto"
+import { readdir, writeFile } from "node:fs/promises"
 import { resolve } from "path"
 
 import { rimraf } from "rimraf"
@@ -12,6 +14,17 @@ const value = globalThis.process.argv[4]
 
 if (action === "turbo") {
   runTurboLog(globalThis.process.argv.slice(3))
+} else if (action === "clean:db") {
+  for (const app of await readdir("./apps", { withFileTypes: true })) {
+    if (!app.isDirectory()) continue
+
+    const appDir = resolve("./apps", app.name)
+    const database = resolve(appDir, ".oberon/db/oberon.db")
+
+    console.warn(`Reset development database in ${appDir}`)
+    await rimraf([database, `${database}-wal`, `${database}-shm`, `${database}-journal`])
+    await writeFile(resolve(appDir, ".oberon-db-reset"), randomUUID())
+  }
 } else if (action === "clean") {
   const WITH = filter === "--with" && value
   const ONLY = filter === "--only" && value
@@ -22,6 +35,7 @@ if (action === "turbo") {
         "./dist",
         "./.next",
         "./.oberon",
+        "./.oberon-db-reset",
         "./.turbo",
         "./.rollup.cache",
         "./.vercel",
