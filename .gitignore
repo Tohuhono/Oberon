@@ -37,6 +37,7 @@ yarn-error.log*
 
 # Oberon
 .oberon/
+.oberon-db-reset
 .output/
 
 # vite doesn't know how to clean up after itself

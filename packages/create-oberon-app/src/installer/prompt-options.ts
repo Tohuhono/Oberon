@@ -79,8 +79,8 @@ export async function promptOptions(
         message: "Master email - this user has superadmin priviledges for the cms",
         initial: args.email,
         validate: (value: string) => {
-          const { success, error } = z.string().email().safeParse(value)
-          return success || error.format()._errors.join(", ")
+          const { success, error } = z.email().safeParse(value)
+          return success || z.treeifyError(error).errors.join(", ")
         },
       },
       {

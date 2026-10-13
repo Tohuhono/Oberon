@@ -6,23 +6,9 @@ test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
     await expect(cms.getByRole("button", { name: "Add Page" })).toBeVisible()
   })
 
-  test("adds a page", async ({ cms, testKey }) => {
-    const key = `/${testKey}_add_page`
-
-    await cms.goto("/cms/pages")
-    const pagePathInput = cms.getByLabel("Page path", { exact: true })
-    await expect(pagePathInput).toBeEditable()
-    await pagePathInput.fill(key)
-    const addPageButton = cms.getByRole("button", { name: "Add Page" })
-    await expect(addPageButton).toBeEnabled()
-    await addPageButton.click()
-
-    await expect(cms.getByRole("link", { name: key, exact: true })).toBeVisible()
-    await expectCmsPagePersisted(cms, key)
-
-    await cms.goto("/cms/pages")
-    await cms.getByRole("button", { name: `Delete ${key}`, exact: true }).click()
-    await expect(cms.getByRole("link", { name: key, exact: true })).toHaveCount(0)
+  test("adds a page", async ({ cms, cmsSeededPageKey }) => {
+    await expect(cms.getByRole("link", { name: cmsSeededPageKey, exact: true })).toBeVisible()
+    await expectCmsPagePersisted(cms, cmsSeededPageKey)
   })
 
   test("copies a page", async ({ cms, cmsSeededPageKey }) => {

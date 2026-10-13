@@ -9,6 +9,7 @@ async function addUser(page: Page, email: string) {
 
 async function deleteUserByEmail(page: Page, email: string) {
   await page.goto("/cms/users")
+  await expect(page.getByLabel("User email")).toBeEditable()
   const deleteButton = page.getByRole("button", { name: `Delete ${email}` })
   const count = await deleteButton.count()
 
@@ -27,9 +28,12 @@ const test = base.extend<{
   cmsSeededUserEmail: async ({ cms, testKey }, use) => {
     const email = `e2e-${testKey}@tohuhono.com`
     await deleteUserByEmail(cms, email)
-    await addUser(cms, email)
-    await use(email)
-    await deleteUserByEmail(cms, email)
+    try {
+      await addUser(cms, email)
+      await use(email)
+    } finally {
+      await deleteUserByEmail(cms, email)
+    }
   },
 })
 

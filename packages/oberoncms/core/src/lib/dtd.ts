@@ -153,7 +153,7 @@ export const PageSchema = z.object({
     .string()
     .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
     .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
-  data: z.object({}).passthrough(),
+  data: z.looseObject({}),
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
@@ -210,7 +210,7 @@ export type OberonImage = MaybeOptimistic<z.infer<typeof ImageSchema>>
  */
 export const UserSchema = z.object({
   id: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   role: z.union([z.literal("user"), z.literal("admin"), z.string()]),
 })
 
@@ -224,7 +224,7 @@ export type OberonUser = MaybeOptimistic<z.infer<typeof UserSchema>> & {
 
 export const roles: OberonRole[] = ["user", "admin"] as const
 
-export const SignInSchema = z.object({ email: z.string().email() })
+export const SignInSchema = z.object({ email: z.email() })
 
 /*
  * Site
