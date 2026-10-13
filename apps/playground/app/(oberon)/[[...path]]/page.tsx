@@ -4,8 +4,6 @@ import { Render } from "@oberoncms/core/render"
 import { adapter } from "@/oberon/adapter"
 import { clientConfig } from "@/oberon/client.config"
 
-export const instant = false
-
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
     value !== null &&
