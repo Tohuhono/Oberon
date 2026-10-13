@@ -3,6 +3,7 @@ import { nextCookies } from "better-auth/next-js"
 import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
+import { connection } from "next/server"
 
 import { name, version } from "../package.json" with { type: "json" }
 
@@ -19,8 +20,11 @@ export const plugin: OberonPlugin = ({ phase }) => {
               () =>
               ({ href }) =>
                 redirect(href),
-            notFound: () => () => notFound(),
-            getRequestHeaders: () => async () => new Headers(await headers()),
+            notFound: () => notFound,
+            getRequestHeaders: () => async () => {
+              await connection()
+              return headers()
+            },
             getAuthPlugins:
               ({ next }) =>
               () => [...next(), nextCookies()],

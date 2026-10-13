@@ -4,6 +4,8 @@ import { Render } from "@oberoncms/core/render"
 import { adapter } from "@/oberon/adapter"
 import { clientConfig } from "@/oberon/client.config"
 
+export const instant = false
+
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
     value !== null &&
@@ -42,6 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<{ path?: st
 
 export default async function OberonRender({ params }: { params: Promise<{ path?: [] }> }) {
   const { path = [] } = await params
+
   const stylesheets = await getDynamicStylesheets()
 
   return (
