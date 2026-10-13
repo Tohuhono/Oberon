@@ -1,6 +1,5 @@
 import { getMetaData } from "@oberoncms/core"
 import { Render } from "@oberoncms/core/render"
-import { Suspense } from "react"
 
 import { adapter } from "@/oberon/adapter"
 import { clientConfig } from "@/oberon/client.config"

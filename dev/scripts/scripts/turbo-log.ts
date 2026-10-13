@@ -23,7 +23,13 @@ export function runTurboLog(turboArgs: string[]) {
     process.stderr.write(chunk)
   })
 
-  child.on("exit", (code, signal) => {
+  child.on("error", (error) => {
+    renderer.flushProgress()
+    process.stderr.write(`Failed to start Turbo: ${error.message}\n`)
+    process.exitCode = 1
+  })
+
+  child.on("close", (code, signal) => {
     renderer.flushProgress()
 
     if (signal) {
@@ -76,17 +82,18 @@ function createRenderer() {
       if (!event.text) return
 
       if (event.source === "turbo") {
-        const failedSource = getFailedTaskSource(event)
         const output = isErrorEvent(event) ? process.stderr : process.stdout
 
         flushProgress()
-        if (failedSource) replayHiddenOutput(failedSource)
+        for (const source of getFailedTaskSources(event)) {
+          replayHiddenOutput(source)
+        }
         activeSource = event.source
         output.write(`${event.text}\n`)
         return
       }
 
-      if (!isErrorEvent(event)) {
+      if (!replayedSources.has(event.source)) {
         const output = hiddenOutput.get(event.source) ?? []
 
         output.push(event.text)
@@ -123,10 +130,11 @@ function createRenderer() {
   function replayHiddenOutput(source: string) {
     if (replayedSources.has(source)) return
 
+    replayedSources.add(source)
     const output = hiddenOutput.get(source)
     if (!output) return
 
-    replayedSources.add(source)
+    hiddenOutput.delete(source)
 
     for (const line of output) {
       writeSourceHeader(source)
@@ -139,12 +147,17 @@ function isErrorEvent(event: TurboEvent) {
   return event.level === "stderr" || event.level === "error"
 }
 
-function getFailedTaskSource(event: TurboEvent) {
-  if (!isErrorEvent(event)) return undefined
+function getFailedTaskSources(event: TurboEvent) {
+  const failedTasks = event.text.match(/^\s*Failed:\s+(.+)$/m)?.[1]
+  if (failedTasks) {
+    return failedTasks.split(",").map((source) => source.trim())
+  }
 
-  const match = event.text.match(/^(.+?#.+?): command \(/)
+  if (!isErrorEvent(event)) return []
 
-  return match?.[1]
+  const source = event.text.match(/^(.+?#.+?): command \(/)?.[1]
+
+  return source ? [source] : []
 }
 
 function parseTurboEvent(line: string) {
