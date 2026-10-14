@@ -385,7 +385,10 @@ export const GetConfigSchema = z.undefined()
 export const MigrateDataSchema = z.undefined()
 export const SignOutSchema = z.undefined()
 
+export const ResolvePathSchema = z.object({ key: z.string() })
+
 export type OberonServerActions = {
+  resolvePath: (data: z.infer<typeof ResolvePathSchema>) => Promise<{ key: string; data: PageData }>
   addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
@@ -412,10 +415,6 @@ export type OberonServerActions = {
   publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ key: string }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
-}
-
-export type OberonActionHandler = OberonServerActions & {
-  resolvePath: (data: z.infer<typeof GetPageDataSchema>) => Promise<{ key: string; data: PageData }>
 }
 
 /*
@@ -464,9 +463,7 @@ export type OberonNavigation = {
 }
 
 type UnwrappedResult<TResponse> =
-  Extract<Awaited<TResponse>, { status: "success" }> extends { result: infer TResult }
-    ? TResult
-    : never
+  TResponse extends OberonResponse<infer TResult> ? TResult : Awaited<TResponse>
 
 export type OberonClientActions = {
   [Key in keyof OberonServerActions]: (

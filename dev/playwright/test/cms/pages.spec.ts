@@ -1,6 +1,7 @@
-import { insertTextComponent } from "@dev/playwright/helpers/editor"
 import { expect, expectCmsPagePersisted, test } from "@dev/playwright/helpers/fixtures"
 import type { Route } from "@playwright/test"
+
+import { insertTextComponent } from "../helpers/editor"
 
 test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
   test("shows add page button", async ({ cms }) => {

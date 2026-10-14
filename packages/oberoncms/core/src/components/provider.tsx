@@ -62,6 +62,7 @@ export const OberonClientProvider = ({
   Partial<OberonNavigation>) => {
   const actions = useMemo(() => {
     const unwrappedActions: OberonClientActions = {
+      resolvePath: serverActions.resolvePath,
       addPage: unwrapServerAction("addPage", serverActions.addPage),
       addImage: unwrapServerAction("addImage", serverActions.addImage),
       addUser: unwrapServerAction("addUser", serverActions.addUser),

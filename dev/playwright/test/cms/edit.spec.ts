@@ -1,6 +1,7 @@
-import { insertTextComponent } from "@dev/playwright/helpers/editor"
 import { expect, test } from "@dev/playwright/helpers/fixtures"
 import type { Locator, Page } from "@playwright/test"
+
+import { insertTextComponent } from "../helpers/editor"
 
 async function waitForEditorPreview(cms: Page) {
   await expect(cms.getByRole("group", { name: "Viewport size", exact: true })).toBeVisible()

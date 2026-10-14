@@ -4,6 +4,7 @@
 "@oberon/newground": patch
 "@oberon/playground": patch
 "@oberon/recipe-nextjs": patch
+"@oberon/docs": patch
 "@dev/playwright": patch
 ---
 
@@ -12,7 +13,8 @@ Render editable Pages in the TanStack Playground through Oberon's React server c
 immutable prerendered files. Shared cache storage remains unconfigured.
 
 Add `resolvePath` to the action handler to check Page permissions and resolve missing Pages before
-rendering. Change `Render` to accept only `data` and `config`. Use static imports in the TanStack
+rendering. Include it in the server action contract and reuse the existing app actions in public
+routes. Change `Render` to accept only `data` and `config`. Use static imports in the TanStack
 public route.
 
 Keep Page creation, copying, and deletion pending until the mutation and route refresh finish.

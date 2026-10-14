@@ -16,6 +16,7 @@ import {
   MigrateDataSchema,
   OberonClientContextRequestSchema,
   PublishPageSchema,
+  ResolvePathSchema,
   SignInSchema,
   SignOutSchema,
   type OberonServerActions,
@@ -27,6 +28,10 @@ import { createServerFn } from "@tanstack/react-start"
 import { adapter } from "./adapter"
 
 const actionHandler = createActionHandler(adapter)
+
+const resolvePath = createServerFn({ method: "GET" })
+  .validator(ResolvePathSchema)
+  .handler(({ data }) => actionHandler.resolvePath(data))
 
 // Keep loader and action transports together until https://github.com/TanStack/router/issues/7943 is fixed.
 export const getCmsContext = createServerFn({ method: "GET" })
@@ -112,6 +117,7 @@ const signOut = createServerFn({ method: "POST" })
   .handler(({ data }) => actionHandler.signOut(data))
 
 export const actions = {
+  resolvePath: (data) => resolvePath({ data }),
   addImage: (data) => addImage({ data }),
   addPage: (data) => addPage({ data }),
   addUser: (data) => addUser({ data }),

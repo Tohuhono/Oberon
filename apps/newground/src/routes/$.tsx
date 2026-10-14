@@ -1,13 +1,11 @@
-import { createActionHandler } from "@oberoncms/core/adapter"
 import { Render } from "@oberoncms/core/render"
 import { createFileRoute } from "@tanstack/react-router"
 import { createServerFn } from "@tanstack/react-start"
 import { renderServerComponent } from "@tanstack/react-start/rsc"
 
+import { actions } from "#/oberon/actions"
 import { adapter } from "#/oberon/adapter"
 import { clientConfig } from "#/oberon/client.config"
-
-const actionHandler = createActionHandler(adapter)
 
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
@@ -21,7 +19,7 @@ function getActiveHash(value: unknown) {
 const getPage = createServerFn({ method: "GET" })
   .validator((data: { path: string | undefined }) => data)
   .handler(async ({ data }) => {
-    const page = await actionHandler.resolvePath({ key: `/${data.path ?? ""}` })
+    const page = await actions.resolvePath({ key: `/${data.path ?? ""}` })
     const activeHash = getActiveHash(
       await adapter.getKV({ namespace: "@oberoncms/plugin-tailwind", key: "state" }),
     )

@@ -21,9 +21,6 @@
     },
     "./helpers/fixtures": {
       "default": "./test/helpers/fixtures.ts"
-    },
-    "./helpers/editor": {
-      "default": "./test/helpers/editor.ts"
     }
   },
   "scripts": {

@@ -15,6 +15,7 @@ import {
   GetPageDataSchema,
   MigrateDataSchema,
   PublishPageSchema,
+  ResolvePathSchema,
   SignInSchema,
   SignOutSchema,
   type OberonServerActions,
@@ -26,6 +27,10 @@ import { adapter } from "./adapter"
 const actionHandler = createActionHandler(adapter)
 
 export const actions = {
+  resolvePath: async (data) => {
+    "use server"
+    return actionHandler.resolvePath(ResolvePathSchema.parse(data))
+  },
   addImage: async (data) => {
     "use server"
     return actionHandler.addImage(AddImageSchema.parse(data))
