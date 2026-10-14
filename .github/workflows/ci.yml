@@ -75,7 +75,7 @@ jobs:
         uses: ./.github/actions/create-oberon-app
 
   deploy-docs:
-    name: Deploy and Test Oberon Docs
+    name: Deploy Docs
     needs: [changed-packages]
     if:
       ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
@@ -91,7 +91,6 @@ jobs:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT:
         ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
-      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
@@ -108,9 +107,13 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: oberon-docs
+      - name: Add deployment URL to job summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: echo "[Docs]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-playground:
-    name: Deploy and Test Oberon Playground
+    name: Deploy Playground
     needs: [changed-packages]
     if:
       ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
@@ -125,14 +128,12 @@ jobs:
       DATABASE_BRANCH:
         ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
         || 'main' }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT:
         ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
-      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
@@ -149,9 +150,13 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: playground
+      - name: Add deployment URL to job summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: echo "[Developer Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-newground:
-    name: Deploy and Test TanStack Playground
+    name: Deploy Newground
     needs: [changed-packages]
     if:
       ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
@@ -166,14 +171,12 @@ jobs:
       DATABASE_BRANCH:
         ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
         || 'main' }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT:
         ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
-      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
@@ -190,6 +193,58 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: newground
+      - name: Add deployment URL to job summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: echo "[TanStack Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
+
+  smoke-docs:
+    name: Smoke Test Docs
+    needs: [deploy-docs]
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Smoke-test deployment
+        uses: ./.github/actions/smoke
+        with:
+          project: oberon-docs
+          base-url: ${{ needs.deploy-docs.outputs.url }}
+
+  smoke-playground:
+    name: Smoke Test Playground
+    needs: [deploy-playground]
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Smoke-test deployment
+        uses: ./.github/actions/smoke
+        with:
+          project: playground
+          base-url: ${{ needs.deploy-playground.outputs.url }}
+
+  smoke-newground:
+    name: Smoke Test Newground
+    needs: [deploy-newground]
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Smoke-test deployment
+        uses: ./.github/actions/smoke
+        with:
+          project: newground
+          base-url: ${{ needs.deploy-newground.outputs.url }}
 
   test-status:
     name: CI / Test Status
@@ -202,6 +257,9 @@ jobs:
         deploy-docs,
         deploy-playground,
         deploy-newground,
+        smoke-docs,
+        smoke-playground,
+        smoke-newground,
       ]
     if: always()
     runs-on: ubuntu-latest
@@ -209,28 +267,19 @@ jobs:
       STATUS:
         "${{ (contains(needs.*.result, 'failure') || contains(needs.*.result,
         'cancelled')) && 'failed' || 'passed' }}"
-      MESSAGE: |
-        Latest deployments available at:
-        ${{ needs.deploy-docs.outputs.url && format('[docs]({0}) ', needs.deploy-docs.outputs.url) }}
-        ${{ needs.deploy-playground.outputs.url && format('[developer playground]({0}) ', needs.deploy-playground.outputs.url) }}
-        ${{ needs.deploy-newground.outputs.url && format('[tanstack playground]({0}) ', needs.deploy-newground.outputs.url) }}
     steps:
-      - name: Add preview URL to job summary
-        run: echo "$MESSAGE" >> "$GITHUB_STEP_SUMMARY"
       - name: Failing deploy
         if: ${{ env.STATUS == 'failed' }}
         run: exit 1
 
   promote-docs:
-    name: Promote and Test Oberon Docs
+    name: Promote Docs
     needs: [test-status, deploy-docs]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: production-oberon-docs
     env:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
     steps:
       - name: Checkout
@@ -240,18 +289,15 @@ jobs:
         with:
           staging-url: ${{ needs.deploy-docs.outputs.url }}
           production-url: www.oberoncms.com
-          project: oberon-docs
 
   promote-playground:
-    name: Promote and Test Oberon Playground
+    name: Promote Playground
     needs: [test-status, deploy-playground]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: production-playground
     env:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
     steps:
       - name: Checkout
@@ -261,18 +307,15 @@ jobs:
         with:
           staging-url: ${{ needs.deploy-playground.outputs.url }}
           production-url: playground.tohuhono.com
-          project: playground
 
   promote-newground:
-    name: Promote and Test TanStack Playground
+    name: Promote Newground
     needs: [test-status, deploy-newground]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: production-newground
     env:
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
     steps:
       - name: Checkout
@@ -282,4 +325,51 @@ jobs:
         with:
           staging-url: ${{ needs.deploy-newground.outputs.url }}
           production-url: newground.tohuhono.com
+
+  smoke-production-docs:
+    name: Smoke Test Production Docs
+    needs: [promote-docs]
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Smoke-test production domain
+        uses: ./.github/actions/smoke
+        with:
+          project: oberon-docs
+          base-url: https://www.oberoncms.com
+
+  smoke-production-playground:
+    name: Smoke Test Production Playground
+    needs: [promote-playground]
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Smoke-test production domain
+        uses: ./.github/actions/smoke
+        with:
+          project: playground
+          base-url: https://playground.tohuhono.com
+
+  smoke-production-newground:
+    name: Smoke Test Production Newground
+    needs: [promote-newground]
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Smoke-test production domain
+        uses: ./.github/actions/smoke
+        with:
           project: newground
+          base-url: https://newground.tohuhono.com

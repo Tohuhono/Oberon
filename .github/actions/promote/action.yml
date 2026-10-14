@@ -1,10 +1,7 @@
 name: Promote
-description: Alias a tested Vercel deployment and smoke-test its production domain
+description: Alias a tested Vercel deployment to its production domain
 
 inputs:
-  project:
-    description: Project selected by the Playwright smoke suite
-    required: true
   staging-url:
     description: Tested deployment URL
     required: true
@@ -27,8 +24,3 @@ runs:
           "${{ inputs.production-url }}" \
           --token="${{ env.VERCEL_API_TOKEN }}" \
           --scope "${{ env.VERCEL_SCOPE }}"
-    - name: Smoke-test production domain
-      uses: ./.github/actions/smoke
-      with:
-        project: ${{ inputs.project }}
-        base-url: https://${{ inputs.production-url }}

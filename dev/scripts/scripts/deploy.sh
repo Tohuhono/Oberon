@@ -49,7 +49,8 @@ then
   echo "Creating new branch: $DATABASE_BRANCH"
   DATABASE_URL="$(neonctl branches create --name "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID" --output json | jq -r '.connection_uris[0].connection_uri')"
 else
-  echo "Branch $DATABASE_BRANCH already exists, fetching connection string..."
+  echo "Branch $DATABASE_BRANCH already exists, reseting"
+  neonctl branches reset "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID" --parent
   DATABASE_URL="$(neonctl connection-string "$DATABASE_BRANCH" --project-id "$NEON_PROJECT_ID")"
 fi
 
