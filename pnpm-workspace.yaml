@@ -32,3 +32,4 @@ patchedDependencies:
   twoslash: patches/twoslash.patch
 minimumReleaseAgeExclude:
   - vite@8.3.3
+  - "@vitejs/plugin-rsc@0.5.37"

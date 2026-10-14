@@ -1,8 +1,6 @@
-import { Render } from "@puckeditor/core"
-import { createFileRoute, notFound } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 import { createServerFn } from "@tanstack/react-start"
-
-import { clientConfig } from "#/oberon/client.config"
+import { renderServerComponent } from "@tanstack/react-start/rsc"
 
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
@@ -13,41 +11,43 @@ function getActiveHash(value: unknown) {
     : null
 }
 
-const getPageData = createServerFn({ method: "GET" })
+const getPage = createServerFn({ method: "GET" })
   .validator((data: { path: string | undefined }) => data)
   .handler(async ({ data }) => {
-    const { resolveSlug } = await import("@oberoncms/core")
+    const { Render } = await import("@oberoncms/core/render")
     const { adapter } = await import("#/oberon/adapter")
+    const { clientConfig } = await import("#/oberon/client.config")
 
-    const pageData = await adapter.getPageData({ key: resolveSlug(data.path) })
+    const page = await Render({
+      path: data.path?.split("/"),
+      adapter,
+      config: clientConfig,
+    })
     const activeHash = getActiveHash(
       await adapter.getKV({ namespace: "@oberoncms/plugin-tailwind", key: "state" }),
     )
     const stylesheet = activeHash ? `/cms/api/tailwind/${encodeURIComponent(activeHash)}.css` : null
 
-    return { pageData, stylesheet }
+    return await renderServerComponent(
+      <>
+        {stylesheet ? (
+          <link rel="stylesheet" href={stylesheet} precedence="oberon-dynamic" />
+        ) : null}
+        {page}
+      </>,
+    )
   })
 
 function Oberon() {
-  const { pageData, stylesheet } = Route.useLoaderData()
-
-  return (
-    <>
-      {stylesheet ? <link rel="stylesheet" href={stylesheet} precedence="oberon-dynamic" /> : null}
-      <Render data={pageData} config={clientConfig} />
-    </>
-  )
+  const page = Route.useLoaderData()
+  return <>{page}</>
 }
 
 export const Route = createFileRoute("/$")({
-  loader: async ({ params }) => {
-    const data = await getPageData({ data: { path: params._splat } })
-
-    if (!data.pageData) {
-      throw notFound()
-    }
-
-    return { ...data, pageData: data.pageData }
-  },
+  headers: () => ({
+    "X-Oberon-Page": "1",
+    "Cache-Control": "public, max-age=0, must-revalidate",
+  }),
+  loader: ({ params }) => getPage({ data: { path: params._splat } }),
   component: Oberon,
 })

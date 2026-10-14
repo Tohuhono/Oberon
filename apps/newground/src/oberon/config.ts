@@ -4,7 +4,7 @@ import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 import { plugin as pgsqlPlugin } from "@oberoncms/plugin-pgsql"
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
-import { plugin as tanstackPlugin } from "@oberoncms/plugin-tanstack"
+import { createPlugin, revalidatePage } from "@oberoncms/plugin-tanstack"
 
 import { clientConfig } from "./client.config"
 import { plugin as resendPlugin } from "./send"
@@ -16,7 +16,7 @@ export const config = defineConfig({
     pgsqlPlugin,
     resendPlugin,
     tailwindPlugin,
-    tanstackPlugin,
+    createPlugin({ revalidate: revalidatePage }),
     authPlugin,
   ],
 })

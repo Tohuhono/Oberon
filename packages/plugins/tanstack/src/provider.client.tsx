@@ -15,9 +15,9 @@ function useInvalidatingServerActions(serverActions: OberonServerActions) {
     const invalidateAfter =
       <TProps extends unknown[], TResult>(action: (...props: TProps) => Promise<TResult>) =>
       async (...props: TProps) => {
-        const reponse = await action(...props)
-        await router.invalidate()
-        return reponse
+        const response = await action(...props)
+        await router.invalidate({ sync: true })
+        return response
       }
     return {
       ...serverActions,
@@ -50,7 +50,7 @@ export function TanstackOberonClientProvider({
       notFound={() => {
         throw notFound()
       }}
-      refresh={() => router.invalidate()}
+      refresh={() => router.invalidate({ sync: true })}
       {...props}
     />
   )
