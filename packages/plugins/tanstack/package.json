@@ -28,7 +28,6 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./nitro": "./dist/nitro.js",
     "./provider": "./dist/provider.js",
     "./provider/client": "./dist/provider.client.js",
     "./search": "./dist/search.js"
@@ -49,9 +48,7 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
-    "@tanstack/start-server-core": "1.169.40",
-    "better-auth": "^1.7.7",
-    "nitro": "3.0.260903-beta"
+    "better-auth": "^1.7.7"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",

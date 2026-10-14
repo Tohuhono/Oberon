@@ -1,5 +1,3 @@
-import { randomUUID } from "node:crypto"
-
 import tailwindcss from "@tailwindcss/vite"
 import { devtools } from "@tanstack/devtools-vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
@@ -29,12 +27,7 @@ const config = defineConfig(({ mode }) => {
       tanstackStart({
         rsc: { enabled: true },
       }),
-      nitro({
-        preset: "vercel",
-        traceDeps: ["@tailwindcss/node*"],
-        handlers: [{ route: "/**", handler: "./src/nitro/page-cache.ts" }],
-        runtimeConfig: { oberonCacheDeployment: randomUUID() },
-      }),
+      nitro({ preset: "vercel", traceDeps: ["@tailwindcss/node*"] }),
       rsc(),
       viteReact(),
     ],
