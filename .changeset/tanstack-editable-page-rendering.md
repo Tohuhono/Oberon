@@ -8,8 +8,9 @@
 "@dev/playwright": patch
 ---
 
-Add optional Nitro-managed Page output caching and invalidate rendered output after content changes.
-Render editable Pages in the TanStack Playground through Oberon's React server component instead of
+Add Nitro-managed Page output caching and invalidate rendered output after content changes through
+the standard TanStack plugin hooks, without callback configuration or a global registry. Render
+editable Pages in the TanStack Playground through Oberon's React server component instead of
 immutable prerendered files. Shared cache storage remains unconfigured.
 
 Add `resolvePath` to the action handler to check Page permissions and resolve missing Pages before

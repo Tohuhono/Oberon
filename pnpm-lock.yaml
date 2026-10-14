@@ -1212,6 +1212,9 @@ importers:
       better-auth:
         specifier: ^1.7.7
         version: 1.7.7(@tanstack/react-start@1.168.61(@vitejs/plugin-rsc@0.5.37(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(crossws@0.4.15(srvx@1.0.5))(esbuild@0.28.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rolldown@1.2.13)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(drizzle-kit@0.31.11)(drizzle-orm@0.45.4(@electric-sql/pglite@0.5.8)(@libsql/client@0.18.0)(@types/pg@8.23.1)(kysely@0.29.6)(pg@8.23.1))(next@16.4.0(@babel/core@7.29.7)(@playwright/test@1.64.0)(@types/node@26.6.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(pg@8.23.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.17)(vitest@5.0.3(patch_hash=94b490c5b6bff684a60f753bb323876060979b2ef85e1bf1b5219ef107b5444a)(@edge-runtime/vm@3.2.0)(@types/node@26.6.5)(happy-dom@20.14.6)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))
+      nitro:
+        specifier: 3.0.260903-beta
+        version: 3.0.260903-beta
     devDependencies:
       '@dev/oxlint':
         specifier: workspace:*
@@ -1240,9 +1243,6 @@ importers:
       '@types/react-dom':
         specifier: 19.3.0
         version: 19.3.0(@types/react@19.3.0)
-      nitro:
-        specifier: 3.0.260903-beta
-        version: 3.0.260903-beta
       react:
         specifier: ^19.3.0
         version: 19.3.0

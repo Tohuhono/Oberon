@@ -32,7 +32,7 @@ const config = defineConfig(({ mode }) => {
       nitro({
         preset: "vercel",
         traceDeps: ["@tailwindcss/node*"],
-        plugins: ["./src/nitro/page-cache.ts"],
+        handlers: [{ route: "/**", handler: "./src/nitro/page-cache.ts" }],
         runtimeConfig: { oberonCacheDeployment: randomUUID() },
       }),
       rsc(),

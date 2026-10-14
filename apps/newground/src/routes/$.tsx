@@ -41,10 +41,6 @@ function Oberon() {
 }
 
 export const Route = createFileRoute("/$")({
-  headers: () => ({
-    "X-Oberon-Page": "1",
-    "Cache-Control": "public, max-age=0, must-revalidate",
-  }),
   loader: ({ params }) => getPage({ data: { path: params._splat } }),
   component: Oberon,
 })
