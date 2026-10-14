@@ -17,7 +17,6 @@ create-oberon-app script
   manually
 - Document durable repo guidance in `.agents/` rather than agent memory
 - Temporary files stay in the repo, use `.tmp/`
-- Use public documentation for product behavior.
 - Use simplified english ASD-STE100 plus ubiquitous language with active voice
 
 # Potential Follow-up docs

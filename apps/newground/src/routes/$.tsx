@@ -1,6 +1,13 @@
+import { createActionHandler } from "@oberoncms/core/adapter"
+import { Render } from "@oberoncms/core/render"
 import { createFileRoute } from "@tanstack/react-router"
 import { createServerFn } from "@tanstack/react-start"
 import { renderServerComponent } from "@tanstack/react-start/rsc"
+
+import { adapter } from "#/oberon/adapter"
+import { clientConfig } from "#/oberon/client.config"
+
+const actionHandler = createActionHandler(adapter)
 
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
@@ -14,15 +21,7 @@ function getActiveHash(value: unknown) {
 const getPage = createServerFn({ method: "GET" })
   .validator((data: { path: string | undefined }) => data)
   .handler(async ({ data }) => {
-    const { Render } = await import("@oberoncms/core/render")
-    const { adapter } = await import("#/oberon/adapter")
-    const { clientConfig } = await import("#/oberon/client.config")
-
-    const page = await Render({
-      path: data.path?.split("/"),
-      adapter,
-      config: clientConfig,
-    })
+    const page = await actionHandler.resolvePath({ key: `/${data.path ?? ""}` })
     const activeHash = getActiveHash(
       await adapter.getKV({ namespace: "@oberoncms/plugin-tailwind", key: "state" }),
     )
@@ -33,7 +32,7 @@ const getPage = createServerFn({ method: "GET" })
         {stylesheet ? (
           <link rel="stylesheet" href={stylesheet} precedence="oberon-dynamic" />
         ) : null}
-        {page}
+        <Render data={page.data} config={clientConfig} />
       </>,
     )
   })

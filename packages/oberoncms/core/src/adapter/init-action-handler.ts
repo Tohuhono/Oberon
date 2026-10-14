@@ -1,10 +1,10 @@
 import {
   INITIAL_DATA,
   ResponseError,
+  type OberonActionHandler,
   type OberonAdapter,
   type OberonPage,
   type OberonResponse,
-  type OberonServerActions,
 } from "../lib/dtd"
 
 export async function transport<T>(
@@ -38,8 +38,18 @@ export async function transport<T>(
   }
 }
 
-export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
+export function createActionHandler(adapter: OberonAdapter): OberonActionHandler {
   return {
+    resolvePath: async ({ key }) => {
+      await adapter.will({ action: "pages", permission: "read" })
+      const data = await adapter.getPageData({ key })
+
+      if (!data) {
+        return adapter.notFound()
+      }
+
+      return { key, data }
+    },
     addPage: (data) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })

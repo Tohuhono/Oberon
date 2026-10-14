@@ -1,13 +1,19 @@
 ---
 "@oberoncms/plugin-tanstack": minor
-"@oberoncms/core": patch
+"@oberoncms/core": minor
 "@oberon/newground": patch
+"@oberon/playground": patch
+"@oberon/recipe-nextjs": patch
 "@dev/playwright": patch
 ---
 
 Add optional Nitro-managed Page output caching and invalidate rendered output after content changes.
 Render editable Pages in the TanStack Playground through Oberon's React server component instead of
 immutable prerendered files. Shared cache storage remains unconfigured.
+
+Add `resolvePath` to the action handler to check Page permissions and resolve missing Pages before
+rendering. Change `Render` to accept only `data` and `config`. Use static imports in the TanStack
+public route.
 
 Keep Page creation, copying, and deletion pending until the mutation and route refresh finish.
 

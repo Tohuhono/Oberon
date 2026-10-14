@@ -414,6 +414,10 @@ export type OberonServerActions = {
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
 
+export type OberonActionHandler = OberonServerActions & {
+  resolvePath: (data: z.infer<typeof GetPageDataSchema>) => Promise<{ key: string; data: PageData }>
+}
+
 /*
  * Context
  */
