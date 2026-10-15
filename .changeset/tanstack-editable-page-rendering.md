@@ -1,11 +1,6 @@
 ---
 "@oberoncms/plugin-tanstack": patch
 "@oberoncms/core": minor
-"@oberon/newground": patch
-"@oberon/playground": patch
-"@oberon/recipe-nextjs": patch
-"@oberon/docs": patch
-"@dev/playwright": patch
 ---
 
 Render editable Pages in the TanStack Playground through Oberon's React server component. Serve

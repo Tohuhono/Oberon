@@ -1,9 +1,4 @@
 ---
-"@oberon/docs": patch
-"@oberon/newground": patch
-"@oberon/playground": patch
-"@oberon/recipe-nextjs": patch
-"@oberon/recipe-tanstack": patch
 "@oberoncms/core": minor
 "@oberoncms/plugin-nextjs": minor
 "@oberoncms/plugin-tanstack": minor
