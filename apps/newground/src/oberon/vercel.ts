@@ -1,6 +1,6 @@
 import type { OberonPlugin } from "@oberoncms/core"
 import { createMiddleware } from "@tanstack/react-start"
-import { setResponseHeaders } from "@tanstack/react-start/server"
+import { getResponseHeaders, setResponseHeader } from "@tanstack/react-start/server"
 
 const globalTag = "oberon-public-pages"
 
@@ -21,13 +21,11 @@ export const publicPage = createMiddleware().server(async ({ request, next }) =>
       request.headers.has(header),
     )
 
-  setResponseHeaders(
-    new Headers({
-      "Cache-Control": "private, no-store",
-      "Vercel-CDN-Cache-Control": cacheable ? "public, max-age=31536000" : "private, no-store",
-      Vary: "Accept, X-TSR-ServerFn",
-    }),
+  setResponseHeader(
+    "Vercel-CDN-Cache-Control",
+    cacheable ? "public, max-age=31536000" : "private, no-store",
   )
+  getResponseHeaders().append("Vary", "Accept, X-TSR-ServerFn")
   return next()
 })
 

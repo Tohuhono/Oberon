@@ -27,7 +27,6 @@
     "[json]": {
       "editor.defaultFormatter": "oxc.oxc-vscode",
     },
-    "chat.useNestedAgentsMdFiles": true,
     "chat.tools.terminal.autoApprove": {
       "tee": true,
       "test": true,
