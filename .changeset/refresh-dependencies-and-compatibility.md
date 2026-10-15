@@ -1,18 +1,7 @@
 ---
-"@oberon/docs": patch
-"@oberon/newground": patch
-"@oberon/playground": patch
-"@oberon/recipe-nextjs": patch
-"@oberon/recipe-tanstack": patch
-"@dev/oxlint": patch
-"@dev/playwright": patch
-"@dev/scripts": patch
-"@dev/vite": patch
-"@dev/vitest": patch
 "create-oberon-app": patch
 "@oberoncms/core": patch
 "@oberoncms/sqlite": patch
-"@oberoncms/testing": patch
 "@oberoncms/plugin-development": patch
 "@oberoncms/plugin-flydrive": patch
 "@oberoncms/plugin-nextjs": patch

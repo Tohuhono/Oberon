@@ -1,8 +1,4 @@
 ---
-"@oberon/docs": patch
-"@oberon/newground": patch
-"@oberon/playground": patch
-"@oberon/recipe-nextjs": patch
 "@oberoncms/core": minor
 "@oberoncms/sqlite": minor
 "@oberoncms/plugin-flydrive": minor
