@@ -18,10 +18,20 @@ class PackageGithubActionsReporter extends GithubActionsReporter {
     try {
       super.onTestRunEnd(...args)
       const packageName = process.env.npm_package_name ?? this.ctx.config.root
-      appendFileSync(
-        summaryPath,
-        `# Unit tests: \`${packageName}\`\n\n${readFileSync(outputPath, "utf8")}`,
-      )
+      const report = readFileSync(outputPath, "utf8")
+      const testFiles = report.match(/^- \*\*Test Files\*\*: (.+)$/m)?.[1]
+      const testResults = report.match(/^- \*\*Test Results\*\*: (.+)$/m)?.[1]
+
+      if (testFiles === "0 total" && testResults === "0 total") {
+        return
+      }
+
+      const compact = (value: string) => value.replaceAll("**", "").replaceAll(" · ", "/")
+      const packageSummary =
+        testFiles && testResults
+          ? `- \`${packageName}\`: ${compact(testFiles)} files; ${compact(testResults)} tests\n`
+          : `### Unit tests: \`${packageName}\`\n\n${report}`
+      appendFileSync(summaryPath, packageSummary)
     } finally {
       this.options.jobSummary.outputPath = summaryPath
       rmSync(directory, { recursive: true })
