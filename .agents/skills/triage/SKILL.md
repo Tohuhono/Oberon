@@ -1,14 +1,18 @@
 ---
 name: triage
 description:
-  Triage issues through a state machine driven by triage roles. Use when user wants to create an
-  issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent,
-  or manage issue workflow.
+  Triage Oberon's GitHub issues and explicitly named PRs, verify requests, and write agent-ready
+  briefs.
+disable-model-invocation: true
 ---
 
 # Triage
 
-Move issues on the project issue tracker through a small state machine of triage roles.
+Use the `gh` CLI and [ISSUES.md](../../ISSUES.md) for GitHub operations and label roles.
+
+Discover issues only. An explicitly named PR can also be triaged, regardless of author. Resolve
+issue and PR references with [ISSUES.md](../../ISSUES.md); report lookup errors instead of treating
+them as missing items.
 
 Every comment or issue posted to the issue tracker during triage **must** start with this
 disclaimer:
@@ -19,33 +23,22 @@ disclaimer:
 
 ## Reference docs
 
-- [AGENT-BRIEF.md](AGENT-BRIEF.md) — how to write durable agent briefs
-- [OUT-OF-SCOPE.md](OUT-OF-SCOPE.md) — how the `.out-of-scope/` knowledge base works
+- [AGENT-BRIEF.md](AGENT-BRIEF.md): how to write durable agent briefs
+- [OUT-OF-SCOPE.md](OUT-OF-SCOPE.md): durable rejection records under `.agents/out-of-scope/`
 
 ## Roles
 
-Two **category** roles:
+Use the category and state roles defined in [ISSUES.md](../../ISSUES.md). Every triaged item needs
+exactly one category and one state. Replace only conflicting category or state labels; preserve
+unrelated labels. If existing roles conflict, ask the maintainer before changing them.
 
-- `bug` — something is broken
-- `enhancement` — new feature or improvement
-
-Five **state** roles:
-
-- `needs-triage` — maintainer needs to evaluate
-- `needs-info` — waiting on reporter for more information
-- `ready-for-agent` — fully specified, ready for an AFK agent
-- `ready-for-human` — needs human implementation
-- `wontfix` — will not be actioned
-
-Every triaged issue should carry exactly one category role and one state role. If state roles
-conflict, flag it and ask the maintainer before doing anything else.
-
-These are canonical role names — the actual label strings used in the issue tracker may differ. The
-mapping should have been provided to you - run `/setup-matt-pocock-skills` if not.
+For a PR, the same states read against the attached code: `ready-for-agent` means a brief is
+attached and an agent should take the next step on the diff; `ready-for-human` means it's ready for
+a human to merge.
 
 State transitions: an unlabeled issue normally goes to `needs-triage` first; from there it moves to
 `needs-info`, `ready-for-agent`, `ready-for-human`, or `wontfix`. `needs-info` returns to
-`needs-triage` once the reporter replies. The maintainer can override at any time — flag transitions
+`needs-triage` once the reporter replies. The maintainer can override at any time; flag transitions
 that look unusual and ask before proceeding.
 
 ## Invocation
@@ -54,46 +47,62 @@ The maintainer invokes `/triage` and describes what they want in natural languag
 request and act. Examples:
 
 - "Show me anything that needs my attention"
-- "Let's look at #42"
+- "Let's look at #42" (issue or PR)
 - "Move #42 to ready-for-agent"
 - "What's ready for agents to pick up?"
 
 ## Show what needs attention
 
-Query the issue tracker and present three buckets, oldest first:
+Query GitHub issues and present three buckets, oldest first:
 
-1. **Unlabeled** — never triaged.
-2. **`needs-triage`** — evaluation in progress.
-3. **`needs-info` with reporter activity since the last triage notes** — needs re-evaluation.
+1. **Unlabeled**: never triaged.
+2. **`needs-triage`**: evaluation in progress.
+3. **`needs-info` with reporter activity since the last triage notes**: needs re-evaluation.
 
-Show counts and a one-line summary per issue. Let the maintainer pick.
+Show counts and a one-line summary per item. Let the maintainer pick.
 
-## Triage a specific issue
+## Triage a specific issue or PR
 
-1. **Gather context.** Read the full issue (body, comments, labels, reporter, dates). Parse any
-   prior triage notes so you don't re-ask resolved questions. Explore the codebase using the
-   project's domain glossary, respecting ADRs in the area. Read `.out-of-scope/*.md` and surface any
-   prior rejection that resembles this issue.
+1. **Gather context.** Read the full issue or PR (body, comments, labels, author, dates; for a PR,
+   the diff too). Parse any prior triage notes so you don't re-ask resolved questions. Explore the
+   codebase using [CONTEXT.md](../../CONTEXT.md) and [ARCHITECTURE.md](../../ARCHITECTURE.md),
+   respecting relevant ADRs under `.agents/adr/`. Run two checks against the codebase: (a)
+   **redundancy**: search for an existing implementation of the requested behavior by domain concept
+   (not just the request's wording), and report where you looked. If found, it's an
+   already-implemented `wontfix` (step 5). (b) **prior rejection**: read `.agents/out-of-scope/*.md`
+   when present and surface any record that resembles this request.
 
 2. **Recommend.** Tell the maintainer your category and state recommendation with reasoning, plus a
-   brief codebase summary relevant to the issue. Wait for direction.
+   brief codebase summary relevant to the request (including whether it's already implemented). Wait
+   for direction.
 
-3. **Reproduce (bugs only).** Before any grilling, attempt reproduction: read the reporter's steps,
-   trace the relevant code, run tests or commands. Report what happened — successful repro with code
-   path, failed repro, or insufficient detail (a strong `needs-info` signal). A confirmed repro
-   makes a much stronger agent brief.
+3. **Verify the claim.** Before any grilling, check that the claim holds up. For a bug, reproduce it
+   from the reporter's steps. For a PR, inspect the diff and verify the claimed behavior. Protect
+   current work before checking out a PR; stop if checkout would overwrite it. Follow
+   [TESTING.md](../../TESTING.md) for root reproduction commands and validation. Report what
+   happened: confirmed (with code path), failed, or insufficient detail (a strong `needs-info`
+   signal). A confirmed verification makes a much stronger agent brief.
 
-4. **Grill (if needed).** If the issue needs fleshing out, run a `/grill-with-docs` session.
+4. **Grill (if needed).** If the request needs fleshing out, call the Skill tool twice, for
+   "grilling" and "domain-modeling", and grill it into shape a round of questions at a time,
+   sharpening domain terms in [CONTEXT.md](../../CONTEXT.md) and recording ADRs under `.agents/adr/`
+   as decisions land.
 
 5. **Apply the outcome:**
-   - `ready-for-agent` — post an agent brief comment ([AGENT-BRIEF.md](AGENT-BRIEF.md)).
-   - `ready-for-human` — same structure as an agent brief, but note why it can't be delegated
+   - `ready-for-agent`: post an agent brief comment ([AGENT-BRIEF.md](AGENT-BRIEF.md)).
+   - `ready-for-human`: same structure as an agent brief, but note why it can't be delegated
      (judgment calls, external access, design decisions, manual testing).
-   - `needs-info` — post triage notes (template below).
-   - `wontfix` (bug) — polite explanation, then close.
-   - `wontfix` (enhancement) — write to `.out-of-scope/`, link to it from a comment, then close
-     ([OUT-OF-SCOPE.md](OUT-OF-SCOPE.md)).
-   - `needs-triage` — apply the role. Optional comment if there's partial progress.
+   - `needs-info`: post triage notes (template below).
+   - For `wontfix`, close the issue or explicitly named PR, with the comment depending on _why_:
+     - **Already implemented**: the change already exists in the codebase. Point to where it lives;
+       do **not** write a rejection record for a built feature.
+     - **Rejected (bug)**: give a polite explanation, then close.
+     - **Rejected (enhancement)**: record the approved decision under `.agents/out-of-scope/`, link
+       to it from a comment, then close ([OUT-OF-SCOPE.md](OUT-OF-SCOPE.md)).
+   - `needs-triage`: apply the role. Optional comment if there's partial progress.
+
+Read back the item to confirm its category, state, comments, and open or closed status. Report
+failed operations explicitly rather than claiming the transition completed.
 
 ## Quick state override
 
@@ -122,6 +131,6 @@ Questions must be specific and actionable, not "please provide more info".
 
 ## Resuming a previous session
 
-If prior triage notes exist on the issue, read them, check whether the reporter has answered any
-outstanding questions, and present an updated picture before continuing. Don't re-ask resolved
+If prior triage notes exist on the issue or PR, read them, check whether the reporter has answered
+any outstanding questions, and present an updated picture before continuing. Don't re-ask resolved
 questions.
