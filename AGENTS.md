@@ -38,8 +38,7 @@ Use GitHub Issues through the `gh` CLI. Tracker operations and triage labels are
 
 ### Domain docs
 
-This is a single-context repo. Read [CONTEXT.md](.agents/CONTEXT.md) for domain vocabulary. Use
-[ARCHITECTURE.md](.agents/ARCHITECTURE.md) to find the composition and runtime documentation.
+This is a single-context repo. Read [CONTEXT.md](.agents/CONTEXT.md) for domain vocabulary.
 
 Read relevant ADRs under `.agents/adr/` when present. Create that directory only when a durable
 architectural decision needs its rationale recorded; surface conflicts with existing ADRs rather

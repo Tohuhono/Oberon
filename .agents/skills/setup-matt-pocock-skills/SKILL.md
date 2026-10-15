@@ -23,6 +23,7 @@ rather than assuming an upstream layout:
 - The public documentation linked from those files
 - `git remote -v` to identify the tracker
 - `gh label list --limit 100 --json name,description` for GitHub labels
+- Whether the `triage` skill is installed. Skip label setup if it is not.
 
 ## 2. Confirm decisions
 
@@ -36,6 +37,10 @@ requests a change.
    category and one state. Identify missing tracker labels.
 3. **Domain docs:** Confirm the existing glossary, architecture references, and ADR paths. This repo
    uses `.agents/CONTEXT.md` and optional `.agents/adr/`, not parallel root or `docs/` files.
+
+Upstream skills call the glossary `GLOSSARY.md`; use the existing `.agents/CONTEXT.md` instead. Keep
+PR discovery out of issue triage unless `.agents/ISSUES.md` enables it. Do not prompt to enable it
+during setup.
 
 ## 3. Show the draft
 
