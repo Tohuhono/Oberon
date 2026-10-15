@@ -23,12 +23,14 @@ The database and framework plugins supply the required auth capabilities. See
 ```sh
 MASTER_EMAIL=admin@example.com
 AUTH_SECRET=your-generated-secret
-BETTER_AUTH_URL=https://your-site.example
+BASE_URL=https://your-site.example
 EMAIL_FROM=noreply@example.com
 ```
 
 The installer generates `AUTH_SECRET`. Keep it private and stable across deployments. The auth
-plugin uses `BETTER_AUTH_URL`, then `VERCEL_URL`, then `BASE_URL` to select its base URL.
+plugin uses `BASE_URL`, then `VERCEL_URL` to select its base URL. Without either variable, Better
+Auth can use `BETTER_AUTH_URL`. Set `BASE_URL` to the production domain, including `https://`, for
+production builds and the deployed server. Preview deployments can use `VERCEL_URL`.
 `OBERON_SITE_URL` does not configure the current auth plugin. Set the credentials required by your
 email provider separately.
 
