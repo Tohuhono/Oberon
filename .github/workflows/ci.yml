@@ -87,6 +87,8 @@ jobs:
         'production') }}
       url: ${{ steps.deploy.outputs.url }}
     env:
+      BASE_URL:
+        ${{ github.event_name != 'pull_request' && 'https://www.oberoncms.com' || '' }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_ENVIRONMENT:
@@ -121,6 +123,8 @@ jobs:
         'production') }}
       url: ${{ steps.deploy.outputs.url }}
     env:
+      BASE_URL:
+        ${{ github.event_name != 'pull_request' && 'https://playground.tohuhono.com' || '' }}
       DATABASE_BRANCH:
         ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
         || 'main' }}
@@ -160,6 +164,8 @@ jobs:
         'production') }}
       url: ${{ steps.deploy.outputs.url }}
     env:
+      BASE_URL:
+        ${{ github.event_name != 'pull_request' && 'https://newground.tohuhono.com' || '' }}
       DATABASE_BRANCH:
         ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
         || 'main' }}

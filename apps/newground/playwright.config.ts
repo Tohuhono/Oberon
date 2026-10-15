@@ -29,7 +29,7 @@ export default defineConfig({
     stderr: "pipe",
     stdout: "pipe",
     env: {
-      BETTER_AUTH_URL: baseURL,
+      BASE_URL: baseURL,
       PORT: "3220",
       FORCE_COLOR: "0",
       NO_COLOR: "1",

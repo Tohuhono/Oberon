@@ -64,6 +64,13 @@ else
 DB_RUN_FLAG=
 fi
 
+if [[ -n $BASE_URL ]]
+then
+BASE_URL_RUN_FLAG="--env BASE_URL=$BASE_URL"
+else
+BASE_URL_RUN_FLAG=
+fi
+
 pnpm exec vercel pull --yes --environment=$VERCEL_ENVIRONMENT $SCOPE_FLAG $TOKEN_FLAG
 pnpm exec vercel build $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG
-pnpm exec vercel deploy --archive=tgz --prebuilt $SKIP_FLAG $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG $DB_RUN_FLAG | tee .vercel/DEPLOY_LOG
+pnpm exec vercel deploy --archive=tgz --prebuilt $SKIP_FLAG $PROD_FLAG $SCOPE_FLAG $TOKEN_FLAG $DB_RUN_FLAG $BASE_URL_RUN_FLAG | tee .vercel/DEPLOY_LOG
