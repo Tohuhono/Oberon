@@ -107,6 +107,10 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: oberon-docs
+      - name: Add deployment URL to job summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: echo "[Docs]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-playground:
     name: Deploy Playground
@@ -146,6 +150,10 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: playground
+      - name: Add deployment URL to job summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: echo "[Developer Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-newground:
     name: Deploy Newground
@@ -185,6 +193,10 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: newground
+      - name: Add deployment URL to job summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: echo "[TanStack Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   smoke-docs:
     name: Smoke Test Docs
@@ -411,17 +423,14 @@ jobs:
       DOCS_SMOKE: ${{ needs.smoke-docs.result }}
       DOCS_PROMOTE: ${{ needs.promote-docs.result }}
       DOCS_PRODUCTION_SMOKE: ${{ needs.smoke-production-docs.result }}
-      DOCS_URL: ${{ needs.deploy-docs.outputs.url }}
       PLAYGROUND_DEPLOY: ${{ needs.deploy-playground.result }}
       PLAYGROUND_SMOKE: ${{ needs.smoke-playground.result }}
       PLAYGROUND_PROMOTE: ${{ needs.promote-playground.result }}
       PLAYGROUND_PRODUCTION_SMOKE: ${{ needs.smoke-production-playground.result }}
-      PLAYGROUND_URL: ${{ needs.deploy-playground.outputs.url }}
       NEWGROUND_DEPLOY: ${{ needs.deploy-newground.result }}
       NEWGROUND_SMOKE: ${{ needs.smoke-newground.result }}
       NEWGROUND_PROMOTE: ${{ needs.promote-newground.result }}
       NEWGROUND_PRODUCTION_SMOKE: ${{ needs.smoke-production-newground.result }}
-      NEWGROUND_URL: ${{ needs.deploy-newground.outputs.url }}
     steps:
       - name: Add workflow summary
         shell: bash
@@ -437,15 +446,12 @@ jobs:
             echo "| Create Oberon App | $CREATE_APP |"
             echo "| Test status gate | $TEST_STATUS |"
             echo
-            echo "| App | Deploy | Smoke | Promote | Production smoke | Deployment |"
-            echo "| --- | --- | --- | --- | --- | --- |"
-            printf '| Docs | %s | %s | %s | %s | %s |\n' \
-              "$DOCS_DEPLOY" "$DOCS_SMOKE" "$DOCS_PROMOTE" "$DOCS_PRODUCTION_SMOKE" \
-              "${DOCS_URL:+[Deployment]($DOCS_URL)}"
-            printf '| Playground | %s | %s | %s | %s | %s |\n' \
-              "$PLAYGROUND_DEPLOY" "$PLAYGROUND_SMOKE" "$PLAYGROUND_PROMOTE" "$PLAYGROUND_PRODUCTION_SMOKE" \
-              "${PLAYGROUND_URL:+[Deployment]($PLAYGROUND_URL)}"
-            printf '| Newground | %s | %s | %s | %s | %s |\n' \
-              "$NEWGROUND_DEPLOY" "$NEWGROUND_SMOKE" "$NEWGROUND_PROMOTE" "$NEWGROUND_PRODUCTION_SMOKE" \
-              "${NEWGROUND_URL:+[Deployment]($NEWGROUND_URL)}"
+            echo "| App | Deploy | Smoke | Promote | Production smoke |"
+            echo "| --- | --- | --- | --- | --- |"
+            printf '| Docs | %s | %s | %s | %s |\n' \
+              "$DOCS_DEPLOY" "$DOCS_SMOKE" "$DOCS_PROMOTE" "$DOCS_PRODUCTION_SMOKE"
+            printf '| Playground | %s | %s | %s | %s |\n' \
+              "$PLAYGROUND_DEPLOY" "$PLAYGROUND_SMOKE" "$PLAYGROUND_PROMOTE" "$PLAYGROUND_PRODUCTION_SMOKE"
+            printf '| Newground | %s | %s | %s | %s |\n' \
+              "$NEWGROUND_DEPLOY" "$NEWGROUND_SMOKE" "$NEWGROUND_PROMOTE" "$NEWGROUND_PRODUCTION_SMOKE"
           } >> "$GITHUB_STEP_SUMMARY"
