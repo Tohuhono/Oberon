@@ -1,8 +1,5 @@
 ---
 "@oberoncms/core": patch
-"@dev/scripts": patch
-"@oberon/newground": patch
-"@oberon/docs": patch
 ---
 
 Use `BASE_URL` before `VERCEL_URL` for the auth base URL and pass the configured URL to deployed
