@@ -24,11 +24,6 @@
 
 - Usually react hooks and related logic should be encapsulated in a custom hook
 
-## Frameworks
-
-- Follow the host framework's conventions. In Next.js, use App Router and keep server actions with
-  `"use server"`.
-
 ## Validation
 
 Shell-Validation Pattern: Zod at the gates, Types in the streets.

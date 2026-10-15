@@ -13,15 +13,6 @@ moment they crystallise. (Merely _reading_ [CONTEXT.md](../../CONTEXT.md) for vo
 skill: that's a one-line habit any skill can do. This skill is for when you're changing the model,
 not just consuming it.)
 
-## File structure
-
-Use [CONTEXT.md](../../CONTEXT.md) as the single glossary and preserve its tables. Consult
-[ARCHITECTURE.md](../../ARCHITECTURE.md) and its public documentation links for behavior and runtime
-contracts. Read relevant ADRs under `.agents/adr/` before proposing changes to decisions.
-
-Create `.agents/adr/` only when the first ADR is needed. Keep domain guidance in these existing
-locations.
-
 ## During the session
 
 ### Challenge against the glossary
