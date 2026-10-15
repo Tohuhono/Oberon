@@ -38,6 +38,13 @@ Shared CMS tests live in `dev/playwright/test/cms/`. Shared projects live in
 `dev/playwright/projects.ts`; app configs select projects and server settings. Keep app-specific
 configuration in those app configs.
 
+Put Playground rendering regressions in the shared CMS suite with `@cms` and `@playground`. Use
+`@smoke` only when the test must also run against deployed sites.
+
+Test user-visible results across both Playgrounds. Publishing and Page lifecycle regressions belong
+in the existing shared CMS projects. Assert content and HTTP status, not framework cache headers,
+cache hit states, or storage keys.
+
 - `@auth`: login setup.
 - `@cms`: authenticated CMS behavior.
 - `@login`: unauthenticated sign-in behavior.

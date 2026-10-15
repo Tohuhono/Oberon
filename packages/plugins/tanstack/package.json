@@ -48,7 +48,6 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
-    "@tanstack/start-server-core": "1.169.40",
     "better-auth": "^1.7.7"
   },
   "devDependencies": {

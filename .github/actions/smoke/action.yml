@@ -12,6 +12,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup project
+      uses: ./.github/actions/setup-project
+      with:
+        turbo-cache-key: smoke
     - name: Install Playwright browsers
       shell: bash
       run: pnpm test:install --with-deps

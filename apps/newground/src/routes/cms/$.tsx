@@ -2,7 +2,7 @@ import { OberonQueryParamsSchema } from "@oberoncms/core"
 import { ClientOnly, createFileRoute } from "@tanstack/react-router"
 import { lazy, Suspense } from "react"
 
-import { getCmsContext } from "#/oberon/cms-context"
+import { getCmsContext } from "#/oberon/actions"
 
 const CmsClient = lazy(() =>
   import("#/oberon/cms.client").then((module) => ({ default: module.CmsClient })),

@@ -53,6 +53,10 @@ For deployed smoke tests, set the base URL:
 PLAYWRIGHT_BASE_URL=https://your-deployment.example pnpm test:smoke
 ```
 
+CI runs deployment and smoke tests in separate jobs for each app. Deployment smoke tests must pass
+before CI promotes a deployment. Separate production smoke jobs test each production domain after
+promotion.
+
 ## Repository layout
 
 | Location                                                   | Purpose                                                                |

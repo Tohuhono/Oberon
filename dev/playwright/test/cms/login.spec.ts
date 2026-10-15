@@ -39,18 +39,13 @@ test.describe("CMS Login Behavior", { tag: "@login" }, () => {
     await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible()
   })
 
-  test("redirects to login and completes real OTP sign-in", async ({
+  test("redirects to login, keeps the session after reload, and signs out", async ({
     page,
     serverLog,
     authEmail,
-    authStorageStatePath,
-  }) => {
+  }, testInfo) => {
     if (!authEmail) {
       throw new Error("authEmail fixture option must be provided")
-    }
-
-    if (!authStorageStatePath) {
-      throw new Error("authStorageStatePath fixture option must be provided")
     }
 
     await page.goto("/cms/pages")
@@ -61,9 +56,24 @@ test.describe("CMS Login Behavior", { tag: "@login" }, () => {
       page,
       email: authEmail,
       getLog: serverLog.read,
-      storageStatePath: authStorageStatePath,
+      storageStatePath: testInfo.outputPath("sign-out-session.json"),
     })
 
     await expect.poll(() => new URL(page.url()).pathname).toBe("/cms/pages")
+    await page.reload()
+    const signOut = page.getByRole("button", { name: "Sign Out", exact: true })
+    await expect(signOut).toBeVisible()
+    await expect(page).toHaveURL("/cms/pages")
+    await signOut.click()
+
+    await expect
+      .poll(async () => {
+        const response = await page.request.get("/cms/pages")
+        return new URL(response.url()).pathname
+      })
+      .toBe("/cms/login")
+    await page.reload()
+    await expect.poll(() => new URL(page.url()).pathname).toBe("/cms/login")
+    await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible()
   })
 })

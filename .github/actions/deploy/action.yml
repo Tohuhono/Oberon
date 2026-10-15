@@ -1,9 +1,9 @@
 name: Deploy
-description: Build, deploy, and smoke-test an Oberon application
+description: Build and deploy an Oberon application
 
 inputs:
   project:
-    description: Project name used for the deployment artifact and smoke suite
+    description: Project name used for the deployment artifact
     required: true
 
 outputs:
@@ -32,8 +32,3 @@ runs:
         path: .vercel/DEPLOY_LOG
         if-no-files-found: warn
         include-hidden-files: true
-    - name: Smoke-test deployment
-      uses: ./.github/actions/smoke
-      with:
-        project: ${{ inputs.project }}
-        base-url: ${{ steps.deploy.outputs.url }}

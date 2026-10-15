@@ -1,7 +1,12 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
 import { defineConfig } from "../index"
-import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from "../lib/dtd"
+import {
+  INITIAL_DATA,
+  NotImplementedError,
+  type OberonClientConfig,
+  type OberonPlugin,
+} from "../lib/dtd"
 import { bootstrapOberon } from "./bootstrap-oberon"
 import { createActionHandler } from "./init-action-handler"
 import { initAdapter } from "./init-adapter"
@@ -97,6 +102,68 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
 
     expect(() => adapter.redirect({ href: "/cms/pages" })).toThrow(NotImplementedError)
     expect(() => adapter.notFound()).toThrow(NotImplementedError)
+  })
+
+  it.each(["/", "/guides/start"])("resolves Page data for %s", async (key) => {
+    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const plugin: OberonPlugin = () => ({
+      name: "page-resolution",
+      adapter: { getPageData: () => getPageData },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+
+    await expect(createActionHandler(adapter).resolvePath({ key })).resolves.toEqual({
+      key,
+      data: INITIAL_DATA,
+    })
+    expect(getPageData).toHaveBeenCalledExactlyOnceWith({ key })
+  })
+
+  it("resolves a missing Page through the routing adapter", async () => {
+    const missing = new Error("not-found")
+    const notFound = vi.fn((): never => {
+      throw missing
+    })
+    const plugin: OberonPlugin = () => ({
+      name: "missing-page",
+      adapter: {
+        getPageData: () => async () => null,
+        notFound: () => notFound,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+
+    await expect(createActionHandler(adapter).resolvePath({ key: "/missing" })).rejects.toBe(
+      missing,
+    )
+    expect(notFound).toHaveBeenCalledOnce()
+  })
+
+  it("checks Page permission before path resolution reads data", async () => {
+    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const plugin: OberonPlugin = () => ({
+      name: "private-pages",
+      adapter: {
+        hasPermission: () => () => false,
+        getCurrentUser: () => async () => null,
+        getPageData: () => getPageData,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+
+    await expect(createActionHandler(adapter).resolvePath({ key: "/private" })).rejects.toThrow(
+      "You do not have permission to perform this action",
+    )
+    expect(getPageData).not.toHaveBeenCalled()
   })
 })
 

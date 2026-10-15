@@ -40,6 +40,16 @@ export async function transport<T>(
 
 export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
+    resolvePath: async ({ key }) => {
+      await adapter.will({ action: "pages", permission: "read" })
+      const data = await adapter.getPageData({ key })
+
+      if (!data) {
+        return adapter.notFound()
+      }
+
+      return { key, data }
+    },
     addPage: (data) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })

@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@tohuhono/u
 import { Grid, GridHeading } from "@tohuhono/ui/grid"
 import { Input } from "@tohuhono/ui/input"
 import { Link } from "@tohuhono/ui/link"
-import { Fragment, startTransition, useOptimistic } from "react"
+import { Fragment, useOptimistic, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -28,39 +28,42 @@ function copyKey(optimisticPages: OberonPageMeta[], key: OberonPageMeta["key"]) 
 const useOberonPages = (pages: OberonPageMeta[]) => {
   const { deletePage, addPage, publishPageData, getPageData } = useOberonActions()
   const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonPageMeta[]>(pages)
+  const [isPending, startTransition] = useTransition()
 
   return {
     pages: optimisticPages,
+    isPending,
     addPage: (page: z.infer<typeof AddPageSchema>) => {
-      startTransition(() => {
+      startTransition(async () => {
         optimisticPageUpdate([
           ...optimisticPages,
           { ...page, updatedAt: new Date(), updatedBy: "", pending: true },
         ])
+        await addPage(page)
       })
-      return addPage(page)
     },
-    copyPage: async (key: OberonPageMeta["key"]) => {
-      const newKey = copyKey(optimisticPages, key)
-      startTransition(() => {
+    copyPage: (key: OberonPageMeta["key"]) => {
+      startTransition(async () => {
+        const newKey = copyKey(optimisticPages, key)
         optimisticPageUpdate([
           ...optimisticPages,
           { key: newKey, updatedAt: new Date(), updatedBy: "", pending: true },
         ])
+        const data = await getPageData({ key })
+        if (data) {
+          await publishPageData({ key: newKey, data })
+        } else {
+          await addPage({ key: newKey })
+        }
       })
-      const data = await getPageData({ key })
-      if (data) {
-        return publishPageData({ key: newKey, data })
-      }
-      return addPage({ key: newKey })
     },
-    deletePage: async (key: OberonPageMeta["key"]) => {
-      startTransition(() =>
+    deletePage: (key: OberonPageMeta["key"]) => {
+      startTransition(async () => {
         optimisticPageUpdate(
           optimisticPages.map((page) => (page.key === key ? { ...page, pending: true } : page)),
-        ),
-      )
-      return deletePage({ key })
+        )
+        await deletePage({ key })
+      })
     },
   }
 }
@@ -74,7 +77,7 @@ const parsePath = (key: string) => {
 }
 
 export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
-  const { pages, deletePage, addPage, copyPage } = useOberonPages(serverPages)
+  const { pages, isPending, deletePage, addPage, copyPage } = useOberonPages(serverPages)
 
   const form = useForm<z.infer<typeof AddPageSchema>>({
     resolver: zodResolver(AddPageSchema),
@@ -106,6 +109,7 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
                   <Input
                     aria-label="Page path"
                     placeholder=""
+                    disabled={isPending}
                     {...field}
                     onChange={(e) => {
                       form.setValue("key", parsePath(e.currentTarget.value))
@@ -117,7 +121,7 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
             )}
           />
           <div className="col-span-2 row-span-2" />
-          <Button type="submit" className="col-span-3 row-span-2">
+          <Button type="submit" className="col-span-3 row-span-2" disabled={isPending}>
             Add Page
           </Button>
         </form>

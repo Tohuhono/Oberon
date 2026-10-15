@@ -1,8 +1,7 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
-import type { OberonAdapter, OberonClientConfig, OberonServerActions } from "./lib/dtd"
+import type { OberonAdapter, OberonServerActions } from "./lib/dtd"
 import { OberonProvider } from "./provider"
-import { Render } from "./render"
 
 describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-core"] }, () => {
   it("redirects through the adapter when no CMS action is provided", async () => {
@@ -39,42 +38,5 @@ describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-c
     ).rejects.toThrow("not-found")
 
     expect(notFound).toHaveBeenCalledOnce()
-  })
-
-  it("not-founds through the adapter when public page data is missing", async () => {
-    const notFound = vi.fn((): never => {
-      throw new Error("not-found")
-    })
-
-    await expect(
-      Render({
-        path: ["missing"],
-        config: fromPartial<OberonClientConfig>({ components: {} }),
-        adapter: fromPartial<OberonAdapter>({
-          can: async () => true,
-          getPageData: async () => null,
-          notFound,
-        }),
-      }),
-    ).rejects.toThrow("not-found")
-
-    expect(notFound).toHaveBeenCalledOnce()
-  })
-
-  it("checks page permission before reading public page data", async () => {
-    const getPageData = vi.fn(async () => null)
-
-    await expect(
-      Render({
-        path: ["private"],
-        config: fromPartial<OberonClientConfig>({ components: {} }),
-        adapter: fromPartial<OberonAdapter>({
-          can: async () => false,
-          getPageData,
-        }),
-      }),
-    ).rejects.toThrow("You do not have permission to perform this action")
-
-    expect(getPageData).not.toHaveBeenCalled()
   })
 })

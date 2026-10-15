@@ -1,6 +1,7 @@
 import { getMetaData } from "@oberoncms/core"
 import { Render } from "@oberoncms/core/render"
 
+import { actions } from "@/oberon/actions"
 import { adapter } from "@/oberon/adapter"
 import { clientConfig } from "@/oberon/client.config"
 
@@ -40,9 +41,10 @@ export async function generateMetadata({ params }: { params: Promise<{ path?: st
   return getMetaData(adapter, path)
 }
 
-export default async function OberonRender({ params }: { params: Promise<{ path?: [] }> }) {
+export default async function OberonRender({ params }: { params: Promise<{ path?: string[] }> }) {
   const { path = [] } = await params
 
+  const page = await actions.resolvePath({ key: `/${path.join("/")}` })
   const stylesheets = await getDynamicStylesheets()
 
   return (
@@ -50,7 +52,7 @@ export default async function OberonRender({ params }: { params: Promise<{ path?
       {stylesheets.map((href) => (
         <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
       ))}
-      <Render path={path} adapter={adapter} config={clientConfig} />
+      <Render data={page.data} config={clientConfig} />
     </>
   )
 }

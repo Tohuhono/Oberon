@@ -1,28 +1,13 @@
 import { Render as PuckRender } from "@puckeditor/core/rsc"
 
-import { ResponseError, type OberonAdapter, type OberonClientConfig } from "./lib/dtd"
-import { resolveSlug } from "./lib/utils"
+import type { OberonClientConfig, PageData } from "./lib/dtd"
 
-export async function Render({
-  path = [],
+export function Render({
+  data,
   config: { components },
-  adapter,
 }: {
-  path?: string[]
+  data: PageData
   config: OberonClientConfig
-  adapter: OberonAdapter
 }) {
-  if (!(await adapter.can({ action: "pages", permission: "read" }))) {
-    throw new ResponseError("You do not have permission to perform this action")
-  }
-
-  const slug = resolveSlug(path)
-
-  const data = await adapter.getPageData({ key: slug })
-
-  if (!data) {
-    return adapter.notFound()
-  }
-
   return <PuckRender data={data} config={{ components }} />
 }

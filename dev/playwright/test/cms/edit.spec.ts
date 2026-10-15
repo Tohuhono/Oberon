@@ -1,6 +1,8 @@
 import { expect, test } from "@dev/playwright/helpers/fixtures"
 import type { Locator, Page } from "@playwright/test"
 
+import { insertTextComponent } from "../helpers/editor"
+
 async function waitForEditorPreview(cms: Page) {
   await expect(cms.getByRole("group", { name: "Viewport size", exact: true })).toBeVisible()
   await expect(cms.getByRole("button", { name: "Preview mode", exact: true })).toBeVisible()
@@ -90,42 +92,60 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
   })
 
   test(
+    "publishes changes to the existing homepage without a rebuild",
+    { tag: "@playground" },
+    async ({ cms, page, request, testKey, errorCapture }) => {
+      const text = `Published homepage ${testKey}`
+      const htmlHeaders = { Accept: "text/html" }
+      await page.goto("/")
+      await expect(page.getByRole("heading", { name: "Welcome to OberonCMS" })).toBeVisible()
+      await page.reload()
+      await expect(page.getByText(text, { exact: true })).toBeHidden()
+
+      await cms.goto("/cms/edit/")
+      await waitForEditorPreview(cms)
+      await insertTextComponent(cms)
+      await cms.locator('textarea[name="text"]').fill(text)
+      const preview = cms.frameLocator("iframe#preview-frame")
+      await expect(preview.getByText(text, { exact: true })).toBeVisible()
+
+      try {
+        await cms.getByRole("button", { name: "Publish", exact: true }).click()
+        await expect(cms.getByText("Successfully published /", { exact: true })).toBeVisible()
+
+        const published = await request.get("/", { headers: htmlHeaders })
+        expect(published.status()).toBe(200)
+        expect(await published.text()).toContain(text)
+        await page.reload()
+        await expect(page.getByText(text, { exact: true })).toBeVisible()
+
+        await cms.goto("/cms/pages")
+        errorCapture.clear()
+        await cms.getByRole("link", { name: "/", exact: true }).click()
+        await expect(cms.getByText(text, { exact: true })).toBeVisible()
+        expect(errorCapture.browserErrors).toEqual([])
+      } finally {
+        await cms.goto("/cms/edit/")
+        await expect(preview.getByText(text, { exact: true })).toBeVisible()
+        await preview.getByText(text, { exact: true }).click()
+        await preview.getByRole("button", { name: "Delete", exact: true }).click()
+        await expect(preview.getByText(text, { exact: true })).toBeHidden()
+        await cms.getByRole("button", { name: "Publish", exact: true }).click()
+        await expect(cms.getByText("Successfully published /", { exact: true })).toBeVisible()
+        const restored = await request.get("/", { headers: htmlHeaders })
+        expect(await restored.text()).not.toContain(text)
+      }
+    },
+  )
+
+  test(
     "publishes a text component with a className",
     { tag: "@playground" },
     async ({ cms, cmsSeededPageKey, errorCapture }) => {
       await cms.goto(`/cms/edit${cmsSeededPageKey}`)
       await waitForEditorPreview(cms)
 
-      await cms.getByRole("tab", { name: "Components", exact: true }).click()
-
-      const previewFrame = cms.frameLocator("iframe#preview-frame")
-      const rootDropZone = previewFrame.getByTestId("dropzone:root:default-zone")
-      await expect(rootDropZone).toBeVisible()
-
-      const drawerItemBox = await cms.getByTestId("drawer-item:Text").boundingBox()
-      const rootDropZoneBox = await rootDropZone.boundingBox()
-
-      if (!drawerItemBox || !rootDropZoneBox) {
-        throw new Error("Text drawer item and root drop zone must have bounding boxes")
-      }
-
-      await cms.mouse.move(
-        drawerItemBox.x + drawerItemBox.width / 2,
-        drawerItemBox.y + drawerItemBox.height / 2,
-      )
-      await cms.mouse.down()
-      await cms.waitForTimeout(250)
-      await cms.mouse.move(
-        drawerItemBox.x + drawerItemBox.width / 2 + 10,
-        drawerItemBox.y + drawerItemBox.height / 2,
-        { steps: 5 },
-      )
-      await cms.mouse.move(
-        rootDropZoneBox.x + rootDropZoneBox.width / 2,
-        rootDropZoneBox.y + rootDropZoneBox.height / 2,
-        { steps: 20 },
-      )
-      await cms.mouse.up()
+      await insertTextComponent(cms)
 
       const pageSettingsTab = cms.getByRole("tab", { name: "Page Settings", exact: true })
       await expect(pageSettingsTab).toHaveAttribute("aria-selected", "true")
