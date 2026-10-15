@@ -6,9 +6,9 @@
 "@dev/playwright": patch
 ---
 
-Add a permission-checked Page resolution hook and global or selective cache invalidation through the
-Adapter. Use native TanStack middleware and Vercel cache tagging in the TanStack Playground. Keep
-the standard server entry and Nitro integration.
+Add global or selective cache invalidation through the Adapter. Use the existing Page read hook,
+native TanStack middleware, and Vercel cache tagging in the TanStack Playground. Keep the standard
+server entry and Nitro integration.
 
 Invalidate Page output after successful Page mutations. Invalidate all public Page output when the
 global Tailwind stylesheet changes, without purging immutable CSS assets. Keep the TanStack Recipe

@@ -37,12 +37,12 @@ export const plugin: OberonPlugin = ({ phase }) => ({
   adapter:
     phase === "runtime"
       ? {
-          willResolvePath:
+          getPageData:
             ({ next }) =>
             async (page) => {
-              await next(page)
               const { addCacheTag } = await import("@vercel/functions")
               await addCacheTag([globalTag, await pageTag(page.key)])
+              return next(page)
             },
           invalidateCache: () => async (data) => {
             const tags = data?.tags ?? [globalTag]

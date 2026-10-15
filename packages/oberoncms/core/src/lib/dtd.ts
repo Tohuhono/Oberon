@@ -283,7 +283,6 @@ export type OberonRoutingAdapter = {
   redirect: (data: { href: string }) => never
   notFound: () => never
   getRequestHeaders: () => Promise<Headers>
-  willResolvePath: (data: z.infer<typeof GetPageDataSchema>) => Promise<void>
 }
 
 export type OberonCacheAdapter = {

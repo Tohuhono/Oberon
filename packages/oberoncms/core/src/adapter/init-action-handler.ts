@@ -42,7 +42,6 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
   return {
     resolvePath: async ({ key }) => {
       await adapter.will({ action: "pages", permission: "read" })
-      await adapter.willResolvePath({ key })
       const data = await adapter.getPageData({ key })
 
       if (!data) {

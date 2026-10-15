@@ -26,15 +26,17 @@ response eligibility rules, including cookie-setting responses.
 Only declare output public when the entire response, including the app shell, is identical for all
 visitors. An origin cookie check cannot protect private content on a CDN hit.
 
-## Page resolution hook
+## Page dependencies
 
-`resolvePath` checks read permission, calls `adapter.willResolvePath({ key })`, then reads the Page.
-The default hook does nothing. It runs for missing Pages too, so a platform can associate missing
-results with the Page dependency before creation. It does not run after denied permission.
+The Vercel Plugin wraps the existing `getPageData` method. Before reading, it calls `addCacheTag`
+from `@vercel/functions` with an internal Page tag and a global public-Page tag. This declares a
+dependency of the response, not a cache of the database read. Missing results receive tags too, so
+creation can invalidate any cached missing result.
 
-The Vercel Plugin implements this hook with `addCacheTag` from `@vercel/functions`. It assigns an
-internal Page tag and a global public-Page tag. The native SDK owns tag delivery; no response header
-getter or framework transport parser is required.
+Tags do not make a response cacheable. Editor and other reads remain subject to their existing
+response policies. Only the explicitly registered public middleware enables CDN caching. The native
+SDK owns tag delivery; no new resolution hook, response header getter, or framework transport parser
+is required. `resolvePath` still checks permission before reading Page data.
 
 Resolution stays in the action handler. `Render` still accepts `data` and `config`. The hook does
 not move resolution or require a resolver callback. Response cache policy is declared before
