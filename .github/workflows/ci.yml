@@ -44,6 +44,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
       - name: Validate
         uses: ./.github/actions/validate
 
@@ -77,9 +79,7 @@ jobs:
   deploy-docs:
     name: Deploy Docs
     needs: [changed-packages]
-    if:
-      ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
-      '@oberon/docs') }}
+    if: ${{ always() && contains(needs.changed-packages.outputs.changed-packages, '@oberon/docs') }}
     runs-on: ubuntu-latest
     environment:
       name:
@@ -87,12 +87,10 @@ jobs:
         'production') }}
       url: ${{ steps.deploy.outputs.url }}
     env:
-      BASE_URL:
-        ${{ github.event_name != 'pull_request' && 'https://www.oberoncms.com' || '' }}
+      BASE_URL: ${{ github.event_name != 'pull_request' && 'https://www.oberoncms.com' || '' }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_ENVIRONMENT:
-        ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      VERCEL_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
@@ -126,14 +124,13 @@ jobs:
       BASE_URL:
         ${{ github.event_name != 'pull_request' && 'https://playground.tohuhono.com' || '' }}
       DATABASE_BRANCH:
-        ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
-        || 'main' }}
+        ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number) ||
+        'main' }}
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_ENVIRONMENT:
-        ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      VERCEL_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
@@ -155,8 +152,8 @@ jobs:
     name: Deploy Newground
     needs: [changed-packages]
     if:
-      ${{ always() && contains(needs.changed-packages.outputs.changed-packages,
-      '@oberon/newground') }}
+      ${{ always() && contains(needs.changed-packages.outputs.changed-packages, '@oberon/newground')
+      }}
     runs-on: ubuntu-latest
     environment:
       name:
@@ -164,17 +161,15 @@ jobs:
         'production') }}
       url: ${{ steps.deploy.outputs.url }}
     env:
-      BASE_URL:
-        ${{ github.event_name != 'pull_request' && 'https://newground.tohuhono.com' || '' }}
+      BASE_URL: ${{ github.event_name != 'pull_request' && 'https://newground.tohuhono.com' || '' }}
       DATABASE_BRANCH:
-        ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number)
-        || 'main' }}
+        ${{ github.event_name == 'pull_request' && format('preview/pr-{0}', github.event.number) ||
+        'main' }}
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      VERCEL_ENVIRONMENT:
-        ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      VERCEL_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
@@ -271,8 +266,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS:
-        "${{ (contains(needs.*.result, 'failure') || contains(needs.*.result,
-        'cancelled')) && 'failed' || 'passed' }}"
+        "${{ (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) &&
+        'failed' || 'passed' }}"
     steps:
       - name: Failing deploy
         if: ${{ env.STATUS == 'failed' }}
