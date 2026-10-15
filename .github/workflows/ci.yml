@@ -107,10 +107,6 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: oberon-docs
-      - name: Add deployment URL to job summary
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
-        run: echo "[Docs]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-playground:
     name: Deploy Playground
@@ -150,10 +146,6 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: playground
-      - name: Add deployment URL to job summary
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
-        run: echo "[Developer Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-newground:
     name: Deploy Newground
@@ -193,13 +185,9 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: newground
-      - name: Add deployment URL to job summary
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
-        run: echo "[TanStack Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   smoke-docs:
-    name: Smoke Test Docs
+    name: Smoke Docs
     needs: [deploy-docs]
     runs-on: ubuntu-latest
     environment:
@@ -219,7 +207,7 @@ jobs:
           base-url: ${{ needs.deploy-docs.outputs.url }}
 
   smoke-playground:
-    name: Smoke Test Playground
+    name: Smoke Playground
     needs: [deploy-playground]
     runs-on: ubuntu-latest
     environment:
@@ -239,7 +227,7 @@ jobs:
           base-url: ${{ needs.deploy-playground.outputs.url }}
 
   smoke-newground:
-    name: Smoke Test Newground
+    name: Smoke Newground
     needs: [deploy-newground]
     runs-on: ubuntu-latest
     environment:
@@ -339,7 +327,7 @@ jobs:
           production-url: newground.tohuhono.com
 
   smoke-production-docs:
-    name: Smoke Test Production Docs
+    name: Smoke Docs
     needs: [promote-docs]
     runs-on: ubuntu-latest
     environment: production-oberon-docs
@@ -356,7 +344,7 @@ jobs:
           base-url: https://www.oberoncms.com
 
   smoke-production-playground:
-    name: Smoke Test Production Playground
+    name: Smoke Playground
     needs: [promote-playground]
     runs-on: ubuntu-latest
     environment: production-playground
@@ -373,7 +361,7 @@ jobs:
           base-url: https://playground.tohuhono.com
 
   smoke-production-newground:
-    name: Smoke Test Production Newground
+    name: Smoke Newground
     needs: [promote-newground]
     runs-on: ubuntu-latest
     environment: production-newground
