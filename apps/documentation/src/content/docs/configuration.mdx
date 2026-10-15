@@ -71,6 +71,10 @@ Create HTTP entrypoints with the [framework's route handler](/docs/plugins/custo
 The framework plugin supplies request headers, redirects, and auth cookie handling. The Next.js
 plugin also caches reads and updates cache tags after mutations.
 
+The TanStack Playground uses a separate Vercel Plugin for
+[rendered Page caching](/docs/plugins/caching). The TanStack framework Plugin does not select a
+deployment platform. The TanStack Recipe does not enable rendered Page caching.
+
 ## Bootstrap
 
 `bootstrapOberon` creates an Adapter for the bootstrap phase. It runs enabled plugin tasks in order.

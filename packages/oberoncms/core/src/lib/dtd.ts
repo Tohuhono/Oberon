@@ -283,6 +283,11 @@ export type OberonRoutingAdapter = {
   redirect: (data: { href: string }) => never
   notFound: () => never
   getRequestHeaders: () => Promise<Headers>
+  willResolvePath: (data: z.infer<typeof GetPageDataSchema>) => Promise<void>
+}
+
+export type OberonCacheAdapter = {
+  invalidateCache: (data?: { tags: string[] }) => Promise<void>
 }
 
 export type OberonAuthAdapter = {
@@ -318,7 +323,8 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
-  OberonRoutingAdapter
+  OberonRoutingAdapter &
+  OberonCacheAdapter
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 

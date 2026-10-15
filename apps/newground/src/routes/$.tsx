@@ -1,3 +1,4 @@
+import { ResolvePathSchema } from "@oberoncms/core"
 import { Render } from "@oberoncms/core/render"
 import { createFileRoute } from "@tanstack/react-router"
 import { createServerFn } from "@tanstack/react-start"
@@ -6,6 +7,7 @@ import { renderServerComponent } from "@tanstack/react-start/rsc"
 import { actions } from "#/oberon/actions"
 import { adapter } from "#/oberon/adapter"
 import { clientConfig } from "#/oberon/client.config"
+import { publicPage } from "#/oberon/vercel"
 
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
@@ -17,9 +19,10 @@ function getActiveHash(value: unknown) {
 }
 
 const getPage = createServerFn({ method: "GET" })
-  .validator((data: { path: string | undefined }) => data)
+  .middleware([publicPage])
+  .validator(ResolvePathSchema)
   .handler(async ({ data }) => {
-    const page = await actions.resolvePath({ key: `/${data.path ?? ""}` })
+    const page = await actions.resolvePath(data)
     const activeHash = getActiveHash(
       await adapter.getKV({ namespace: "@oberoncms/plugin-tailwind", key: "state" }),
     )
@@ -41,6 +44,7 @@ function Oberon() {
 }
 
 export const Route = createFileRoute("/$")({
-  loader: ({ params }) => getPage({ data: { path: params._splat } }),
+  server: { middleware: [publicPage] },
+  loader: ({ params }) => getPage({ data: { key: `/${params._splat ?? ""}` } }),
   component: Oberon,
 })

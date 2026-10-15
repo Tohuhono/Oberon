@@ -84,7 +84,10 @@ const tailwindTest = createPluginTest(test)
     { scope: "worker" },
     // oxlint-disable-next-line no-empty-pattern
     async ({}, { onCleanup }) => {
-      return await createAdapter(onCleanup)
+      return {
+        ...(await createAdapter(onCleanup)),
+        invalidateCache: async () => {},
+      }
     },
   )
   .extend("plugin", { scope: "worker" }, async ({ adapter }) => {
@@ -107,6 +110,25 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       await adapter.deletePage({ key })
     }
   })
+
+  tailwindTest(
+    "fails publishing when global cache invalidation fails",
+    async ({ expect, adapter, plugin }) => {
+      adapter.invalidateCache = async () => {
+        throw new Error("CDN unavailable")
+      }
+      try {
+        await expect(
+          plugin.adapter!.updatePageData!({
+            getAdapter: () => asFinalAdapter(adapter),
+            next: adapter.updatePageData,
+          })(createPage("underline")),
+        ).rejects.toThrow(new ResponseError("Failed to update Tailwind styles: CDN unavailable"))
+      } finally {
+        adapter.invalidateCache = async () => {}
+      }
+    },
+  )
 
   tailwindTest(
     "publishes a hashed dynamic asset and exposes its stylesheet href",

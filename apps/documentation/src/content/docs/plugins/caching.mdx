@@ -1,0 +1,90 @@
+# Rendered Page caching
+
+The TanStack Playground uses Vercel's native CDN response cache. Public HTML and client-navigation
+responses can be reused without calling the app server. Page mutations invalidate the matching Page
+dependency. A change to global CSS invalidates all public Page output.
+
+This integration targets Vercel. Cloudflare support is future work. The TanStack Recipe is
+unchanged. There is no external cache backend or rendered-output storage in the CMS database.
+
+## Native integration
+
+The Playground uses the standard TanStack server entry and Nitro's Vercel preset. It does not wrap
+the server handler, reconstruct responses, inspect server-function URLs, or keep custom request
+state.
+
+The app-local Vercel module exports `publicPage`, a native TanStack request middleware. The public
+catch-all registers it through `server.middleware`; the rendering server function registers the same
+middleware through `middleware`. This explicitly declares the two public representations. It does
+not enable caching for unrelated CMS actions or editor routes.
+
+The middleware sets native CDN policy through TanStack's response-header helpers. The CDN lifetime
+is one year; browser responses remain `private, no-store`. Requests with cookies, authorization, or
+range headers do not opt in. Anonymous Page reads must be permitted. Vercel handles its native
+response eligibility rules, including cookie-setting responses.
+
+Only declare output public when the entire response, including the app shell, is identical for all
+visitors. An origin cookie check cannot protect private content on a CDN hit.
+
+## Page resolution hook
+
+`resolvePath` checks read permission, calls `adapter.willResolvePath({ key })`, then reads the Page.
+The default hook does nothing. It runs for missing Pages too, so a platform can associate missing
+results with the Page dependency before creation. It does not run after denied permission.
+
+The Vercel Plugin implements this hook with `addCacheTag` from `@vercel/functions`. It assigns an
+internal Page tag and a global public-Page tag. The native SDK owns tag delivery; no response header
+getter or framework transport parser is required.
+
+Resolution stays in the action handler. `Render` still accepts `data` and `config`. The hook does
+not move resolution or require a resolver callback. Response cache policy is declared before
+rendering; native streaming and tag behavior remain platform responsibilities.
+
+## Publication and invalidation
+
+The Adapter exposes:
+
+- `invalidateCache()` to invalidate all cached public CMS Page output.
+- `invalidateCache({ tags })` to invalidate selected dependencies. An empty list does nothing.
+
+Without a cache Plugin, invalidation does nothing. Call invalidation after a successful mutation and
+await it. A failure must not become a successful action.
+
+The Vercel Plugin wraps `addPage`, `updatePageData`, and `deletePage` through existing Plugin
+composition. It uses native `invalidateByTag`, which permits stale output while Vercel regenerates
+it. Publishing does not wait for the one-year expiry, rebuild, or deployment.
+
+The Tailwind Plugin calls global invalidation only when the active compiled stylesheet changes. It
+does not purge immutable CSS assets. Regenerated Pages reference the new stylesheet URL. Text-only
+edits do not change the stylesheet hash.
+
+The app registers the Plugins in this order:
+
+```ts
+plugins: [
+  developmentPlugin,
+  databasePlugin,
+  sendPlugin,
+  tailwindPlugin,
+  tanstackPlugin,
+  vercelPlugin,
+  authPlugin,
+]
+```
+
+The generic TanStack Plugin has no Vercel dependency. Tailwind does not import either Plugin. Native
+caching and invalidation are disabled outside Vercel and during Oberon bootstrap. Editable public
+routes are not immutable prerendered files.
+
+## Verification scope
+
+The shared CMS browser suite uses real local authentication to publish content, check stylesheet
+behavior, and exercise homepage and Page lifecycle changes across both Playgrounds. These tests
+check content and HTTP status, not cache headers, internal tags, or artificial render markers.
+
+Preview smoke tests remain read-only routing checks. They do not intercept authentication and do not
+prove publish-triggered CDN invalidation. Authorized testing in preview environments is outside this
+implementation's scope. Native deployed publish invalidation remains unverified.
+
+See [TanStack ISR](https://tanstack.com/start/latest/docs/framework/react/guide/isr) and
+[Vercel cache tagging and invalidation](https://vercel.com/docs/functions/functions-api-reference/vercel-functions-package).

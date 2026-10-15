@@ -11,6 +11,8 @@ export const stubbedAdapter = {
   redirect: notImplemented("redirect"),
   notFound: notImplemented("notFound"),
   getRequestHeaders: notImplemented("getRequestHeaders"),
+  willResolvePath: async () => {},
+  invalidateCache: async () => {},
   sendVerificationRequest: notImplemented("sendVerificationRequest"),
   addImage: notImplemented("addImage"),
   addPage: notImplemented("addPage"),

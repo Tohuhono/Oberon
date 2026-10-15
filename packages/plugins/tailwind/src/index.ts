@@ -77,7 +77,10 @@ async function getAllPublishedClasses(
 }
 
 async function syncStyles(
-  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getKV" | "getPageData" | "putKV">,
+  adapter: Pick<
+    OberonPluginAdapter,
+    "getAllPages" | "getKV" | "getPageData" | "putKV" | "invalidateCache"
+  >,
 ) {
   const classes = await getAllPublishedClasses(adapter)
   const state = await getState(adapter)
@@ -88,19 +91,27 @@ async function syncStyles(
     }
 
     await adapter.putKV({ namespace: name, key: "state", value: { activeHash: null, classes: [] } })
+    if (state.activeHash !== null) {
+      await adapter.invalidateCache()
+    }
     return
   }
 
-  const hash = createHash("sha256").update(classes.join("\n")).digest("hex")
-
-  if (hash === state.activeHash && (await getAsset(adapter, hash))) {
+  if (
+    classes.join("\n") === state.classes.join("\n") &&
+    (await getAsset(adapter, state.activeHash))
+  ) {
     return
   }
 
   const css = await buildCss(classes)
+  const hash = createHash("sha256").update(css).digest("hex")
   await adapter.putKV({ namespace: name, key: `asset:${hash}`, value: css })
 
   await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
+  if (hash !== state.activeHash) {
+    await adapter.invalidateCache()
+  }
 }
 
 export const plugin: OberonPlugin = ({ getAdapter }) => ({

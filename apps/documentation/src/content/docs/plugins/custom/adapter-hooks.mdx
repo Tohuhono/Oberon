@@ -51,11 +51,21 @@ input take no arguments.
 | `OberonDatabaseAdapter` | `addPage`, `deletePage`, `getAllPages`, `getPageData`, `updatePageData`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
 | `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                          |
 | `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                             |
-| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                     |
+| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`, `willResolvePath`                                                                                                                                                                  |
 | `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                       |
+| `OberonCacheAdapter`    | `invalidateCache`                                                                                                                                                                                                               |
 
 `hasPermission` returns a boolean synchronously. The final Adapter also supplies permission helpers,
 route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
+
+The action handler calls `willResolvePath({ key })` after it checks Page read permission and before
+it reads Page data. The hook defaults to no operation. It lets integrations observe public Page
+resolution, including missing Pages, without wrapping database reads or changing `Render`.
+
+Without a cache Plugin, invalidation does nothing. A platform Plugin can invalidate selected tags
+with `invalidateCache({ tags })`, or all cached public CMS Page output with `invalidateCache()`. An
+empty tag list does nothing. Shared-content Plugins can request global invalidation without knowing
+platform headers or tags. See [Rendered Page caching](/docs/plugins/caching).
 
 ## Bootstrap
 
