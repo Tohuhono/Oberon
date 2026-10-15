@@ -107,10 +107,6 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: oberon-docs
-      - name: Add deployment URL to job summary
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
-        run: echo "[Docs]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-playground:
     name: Deploy Playground
@@ -150,10 +146,6 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: playground
-      - name: Add deployment URL to job summary
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
-        run: echo "[Developer Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-newground:
     name: Deploy Newground
@@ -193,10 +185,6 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           project: newground
-      - name: Add deployment URL to job summary
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
-        run: echo "[TanStack Playground]($DEPLOYMENT_URL)" >> "$GITHUB_STEP_SUMMARY"
 
   smoke-docs:
     name: Smoke Test Docs
@@ -388,70 +376,3 @@ jobs:
         with:
           project: newground
           base-url: https://newground.tohuhono.com
-
-  ci-summary:
-    name: CI Summary
-    needs:
-      [
-        changed-packages,
-        validate,
-        e2e,
-        create-oberon-app,
-        deploy-docs,
-        deploy-playground,
-        deploy-newground,
-        smoke-docs,
-        smoke-playground,
-        smoke-newground,
-        test-status,
-        promote-docs,
-        promote-playground,
-        promote-newground,
-        smoke-production-docs,
-        smoke-production-playground,
-        smoke-production-newground,
-      ]
-    if: always()
-    runs-on: ubuntu-latest
-    env:
-      CHANGED_PACKAGES: ${{ needs.changed-packages.result }}
-      VALIDATE: ${{ needs.validate.result }}
-      E2E: ${{ needs.e2e.result }}
-      CREATE_APP: ${{ needs.create-oberon-app.result }}
-      TEST_STATUS: ${{ needs.test-status.result }}
-      DOCS_DEPLOY: ${{ needs.deploy-docs.result }}
-      DOCS_SMOKE: ${{ needs.smoke-docs.result }}
-      DOCS_PROMOTE: ${{ needs.promote-docs.result }}
-      DOCS_PRODUCTION_SMOKE: ${{ needs.smoke-production-docs.result }}
-      PLAYGROUND_DEPLOY: ${{ needs.deploy-playground.result }}
-      PLAYGROUND_SMOKE: ${{ needs.smoke-playground.result }}
-      PLAYGROUND_PROMOTE: ${{ needs.promote-playground.result }}
-      PLAYGROUND_PRODUCTION_SMOKE: ${{ needs.smoke-production-playground.result }}
-      NEWGROUND_DEPLOY: ${{ needs.deploy-newground.result }}
-      NEWGROUND_SMOKE: ${{ needs.smoke-newground.result }}
-      NEWGROUND_PROMOTE: ${{ needs.promote-newground.result }}
-      NEWGROUND_PRODUCTION_SMOKE: ${{ needs.smoke-production-newground.result }}
-    steps:
-      - name: Add workflow summary
-        shell: bash
-        run: |
-          {
-            echo "## CI summary"
-            echo
-            echo "| Check | Result |"
-            echo "| --- | --- |"
-            echo "| Changed packages | $CHANGED_PACKAGES |"
-            echo "| Validation | $VALIDATE |"
-            echo "| E2E tests | $E2E |"
-            echo "| Create Oberon App | $CREATE_APP |"
-            echo "| Test status gate | $TEST_STATUS |"
-            echo
-            echo "| App | Deploy | Smoke | Promote | Production smoke |"
-            echo "| --- | --- | --- | --- | --- |"
-            printf '| Docs | %s | %s | %s | %s |\n' \
-              "$DOCS_DEPLOY" "$DOCS_SMOKE" "$DOCS_PROMOTE" "$DOCS_PRODUCTION_SMOKE"
-            printf '| Playground | %s | %s | %s | %s |\n' \
-              "$PLAYGROUND_DEPLOY" "$PLAYGROUND_SMOKE" "$PLAYGROUND_PROMOTE" "$PLAYGROUND_PRODUCTION_SMOKE"
-            printf '| Newground | %s | %s | %s | %s |\n' \
-              "$NEWGROUND_DEPLOY" "$NEWGROUND_SMOKE" "$NEWGROUND_PROMOTE" "$NEWGROUND_PRODUCTION_SMOKE"
-          } >> "$GITHUB_STEP_SUMMARY"
