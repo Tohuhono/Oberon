@@ -1,5 +1,20 @@
 # @oberon/utils
 
+## 0.16.2
+
+### Patch Changes
+
+- 4d7244e: Refresh dependencies and tooling, adapt login and UI components to updated APIs, and
+  preserve documentation routing and build compatibility.
+- e146b23: Replace deprecated Zod APIs while preserving email validation, installer feedback, and
+  arbitrary Page data fields.
+
+  Refresh direct dependencies to their latest releases.
+
+  Clean up seeded Pages and Users after failures. Make explicit development database resets
+  invalidate bootstrap and dependent build caches without changing normal bootstrap behavior or
+  shared workflow cache keys.
+
 ## 0.16.1
 
 ### Patch Changes

@@ -1,5 +1,75 @@
 # @oberoncms/core
 
+## 0.21.0
+
+### Minor Changes
+
+- 1037113: Use one final Adapter throughout Plugin composition. Adapter hooks now receive a
+  late-bound `getAdapter` function and object-shaped method payloads, while the Adapter exposes
+  reusable `can`, `will`, and `whoWill` authorization capabilities for action orchestration.
+  Framework action bridges now validate every action through an independently evolvable schema,
+  including explicit undefined schemas for actions that currently have no payload.
+- 1037113: Migrate Plugins to declarative phase-based definitions. Adapter hooks now initialize with
+  the final composed adapter and preceding implementation, then receive the original method
+  arguments. Plugin phase factories receive a late-bound Adapter getter, closure-bound Bootstrap
+  hooks run sequentially, Handler factories receive the final augmented Adapter, and framework
+  action entrypoints validate input before authorized actions call Adapter methods. Runtime setup
+  now returns the Adapter directly through `initAdapter(config)`, with explicit
+  `createActionHandler(adapter)` and `createRestHandler(adapter)` projections. Bootstrap remains an
+  independent `bootstrapOberon(config)` lifecycle.
+- 1037113: Move REST route projection from core into the Next.js and TanStack Framework
+  integrations. Each integration now exports a native `createRestHandler(adapter)` factory, while
+  the Adapter retains the framework-neutral Plugin HTTP dispatch capability.
+- cac4747: Render editable Pages in the TanStack Playground through Oberon's React server component.
+  Serve editable Pages at request time instead of generating immutable prerendered files.
+
+  Add `resolvePath` to the action handler to check Page permissions and resolve missing Pages before
+  rendering. Include it in the server action contract and reuse the existing app actions in public
+  routes. Change `Render` to accept only `data` and `config`. Use static imports in the TanStack
+  public route.
+
+  Keep Page creation, copying, and deletion pending until the mutation and route refresh finish.
+
+  Use Better Auth's official TanStack Start cookie integration instead of a custom cookie bridge.
+
+  Add shared browser regressions for publishing the existing homepage, deleting and recreating
+  Pages, slow Page creation, and rendering without JavaScript.
+
+### Patch Changes
+
+- 67b584a: Use `BASE_URL` before `VERCEL_URL` for the auth base URL and pass the configured URL to
+  deployed servers.
+
+  Configure production deployment jobs with their production domains, align Newground login tests
+  with `BASE_URL`, and document auth URL configuration.
+
+- 4d7244e: Refresh dependencies and tooling, adapt login and UI components to updated APIs, and
+  preserve documentation routing and build compatibility.
+- e146b23: Replace deprecated Zod APIs while preserving email validation, installer feedback, and
+  arbitrary Page data fields.
+
+  Refresh direct dependencies to their latest releases.
+
+  Clean up seeded Pages and Users after failures. Make explicit development database resets
+  invalidate bootstrap and dependent build caches without changing normal bootstrap behavior or
+  shared workflow cache keys.
+
+- 2b4526a: Share a self-hosted Noto Sans utility across Oberon apps so production builds do not
+  require Google Fonts network access.
+- e4553af: Export `pageTag` from core to create stable Page cache tags.
+
+  Hash Tailwind stylesheets from their CSS content and retain previous stylesheet URLs for cached
+  Pages.
+
+  Revalidate the affected Next.js Page's public, editor, and preview paths after creation,
+  publication, and deletion without expiring unrelated Page reads.
+
+- Updated dependencies [4d7244e]
+- Updated dependencies [e146b23]
+- Updated dependencies [2b4526a]
+  - @tohuhono/ui@0.18.0
+  - @tohuhono/utils@0.16.2
+
 ## 0.20.0
 
 ### Minor Changes
