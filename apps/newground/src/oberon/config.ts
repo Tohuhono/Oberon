@@ -8,6 +8,7 @@ import { plugin as tanstackPlugin } from "@oberoncms/plugin-tanstack"
 
 import { clientConfig } from "./client.config"
 import { plugin as resendPlugin } from "./send"
+import { plugin as vercelPlugin } from "./vercel"
 
 export const config = defineConfig({
   client: clientConfig,
@@ -17,6 +18,7 @@ export const config = defineConfig({
     resendPlugin,
     tailwindPlugin,
     tanstackPlugin,
+    vercelPlugin,
     authPlugin,
   ],
 })

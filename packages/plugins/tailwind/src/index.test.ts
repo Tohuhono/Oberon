@@ -84,7 +84,7 @@ const tailwindTest = createPluginTest(test)
     { scope: "worker" },
     // oxlint-disable-next-line no-empty-pattern
     async ({}, { onCleanup }) => {
-      return await createAdapter(onCleanup)
+      return createAdapter(onCleanup)
     },
   )
   .extend("plugin", { scope: "worker" }, async ({ adapter }) => {
@@ -107,6 +107,36 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       await adapter.deletePage({ key })
     }
   })
+
+  tailwindTest(
+    "keeps previous stylesheet URLs available after styles change or are cleared",
+    async ({ expect, adapter, plugin }) => {
+      const publish = plugin.adapter!.updatePageData!({
+        getAdapter: () => asFinalAdapter(adapter),
+        next: adapter.updatePageData,
+      })
+      await publish(createPage("underline"))
+      const [firstHref] = await getStylesheets(adapter)
+
+      await publish(createPage("text-red-500"))
+      const [secondHref] = await getStylesheets(adapter)
+      expect(secondHref).not.toBe(firstHref)
+
+      await publish(createPage(""))
+      await expect(getStylesheets(adapter)).resolves.toEqual([])
+
+      const handler = plugin.handlers!.tailwind!(asFinalAdapter(adapter))
+      for (const [href, css] of [
+        [firstHref, ".underline"],
+        [secondHref, ".text-red-500"],
+      ]) {
+        const response = await handler.GET!(new Request(`https://oberon.invalid${href}`))
+        expect(response.status).toBe(200)
+        expect(response.headers.get("Cache-Control")).toBe("public, max-age=31536000, immutable")
+        await expect(response.text()).resolves.toContain(css)
+      }
+    },
+  )
 
   tailwindTest(
     "publishes a hashed dynamic asset and exposes its stylesheet href",

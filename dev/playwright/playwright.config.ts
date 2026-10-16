@@ -35,6 +35,7 @@ export default defineConfig({
     {
       ...smokeProject,
       name: "newground",
+      grepInvert: /@docs/,
       use: { baseURL },
     },
   ],

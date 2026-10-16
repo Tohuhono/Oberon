@@ -59,3 +59,7 @@ Render the URL as a stylesheet link when it is not `null`:
 Mount the [CMS API handler](/docs/plugins/custom/handler-hooks) to serve the CSS. Successful
 responses use a one-year cache lifetime and immutable URLs. The plugin regenerates CSS when the
 class list changes or the stored asset is missing.
+
+The hash identifies the generated CSS. Text-only Page edits do not change the stylesheet URL. The
+Plugin keeps previous stylesheets available after styles change or are cleared, so cached Pages can
+still load their styles without invalidating other Pages.

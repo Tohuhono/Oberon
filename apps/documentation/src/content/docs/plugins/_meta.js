@@ -6,4 +6,5 @@ export default {
   send: "Send",
   development: "Development",
   tailwind: "Tailwind CSS",
+  caching: "Vercel caching proof of concept",
 }

@@ -1,0 +1,39 @@
+# Vercel caching proof of concept
+
+The implementation uses Vercel's content delivery network (CDN) to cache public HTML and
+client-navigation responses.
+
+## Response policy
+
+The `applyCDNHeaders` middleware runs on the public catch-all route and its rendering server
+function. It sets `Vercel-CDN-Cache-Control` to a one-year cache lifetime for GET requests without
+cookies, authorization, or range headers. Other requests receive `private, no-store`. It leaves the
+browser cache policy unchanged and adds `Accept` and `X-TSR-ServerFn` to `Vary`.
+
+Only cache public content when the entire response, including the app shell, is identical for all
+visitors. A cache hit skips the app server and its permission checks. Checking cookies at the app
+server cannot protect private content on a cache hit.
+
+## Invalidation
+
+The custom Plugin uses `pageTag` from `@oberoncms/core` to create a stable cache tag for each Page
+key. It calls `addCacheTag` from `@vercel/functions` before reading Page data, including missing
+Pages.
+
+After Page creation, publication, or deletion, the custom Plugin calls `invalidateByTag` for that
+Page. This asks Vercel to mark matching cached responses as stale without invalidating unrelated
+Pages. Vercel can serve stale content while it generates a new response. An invalidation error
+causes the action to report a failure.
+
+The [Tailwind Plugin](/docs/plugins/tailwind) keeps previous stylesheet URLs available, so cached
+Pages can continue to use them.
+
+## Limits
+
+The cache hooks do not run during Oberon bootstrap. The Vercel SDK cache methods do nothing without
+Vercel's request context.
+
+Publish-triggered cache invalidation has not been verified on Vercel.
+
+See [TanStack ISR](https://tanstack.com/start/latest/docs/framework/react/guide/isr) and
+[Vercel cache tagging and invalidation](https://vercel.com/docs/functions/functions-api-reference/vercel-functions-package).

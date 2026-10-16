@@ -26,6 +26,7 @@ const config = defineConfig(({ mode }) => {
       tailwindcss(),
       tanstackStart({
         rsc: { enabled: true },
+        prerender: { enabled: false },
       }),
       nitro({ preset: "vercel", traceDeps: ["@tailwindcss/node*"] }),
       rsc(),

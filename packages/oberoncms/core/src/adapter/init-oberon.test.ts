@@ -108,7 +108,9 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const getPageData = vi.fn(async () => INITIAL_DATA)
     const plugin: OberonPlugin = () => ({
       name: "page-resolution",
-      adapter: { getPageData: () => getPageData },
+      adapter: {
+        getPageData: () => getPageData,
+      },
     })
     const adapter = initAdapter({
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),

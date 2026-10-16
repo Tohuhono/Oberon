@@ -139,6 +139,61 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
   )
 
   test(
+    "preserves Page styling and immutable CSS assets after a text-only edit",
+    { tag: "@playground" },
+    async ({ cms, cmsSeededPageKey, page, request, testKey }) => {
+      const firstText = `First publication ${testKey}`
+      const secondText = `Second publication ${testKey}`
+      await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+      await waitForEditorPreview(cms)
+      const preview = cms.frameLocator("iframe#preview-frame")
+      await expect(preview.getByText(firstText, { exact: true })).toHaveCount(0)
+      await expect(preview.getByText(secondText, { exact: true })).toHaveCount(0)
+      await insertTextComponent(cms)
+      await cms.locator('textarea[name="text"]').fill(firstText)
+      await cms.locator('input[name="className"]').fill("p-1")
+      await cms.getByRole("button", { name: "Publish", exact: true }).click()
+      await expect(
+        cms.getByText(`Successfully published ${cmsSeededPageKey}`, { exact: true }),
+      ).toBeVisible()
+
+      expect((await page.goto(cmsSeededPageKey))?.status()).toBe(200)
+      await expect(page.getByText(firstText, { exact: true })).toHaveCSS("padding", "4px")
+      const stylesheets = await page
+        .locator('link[rel="stylesheet"]')
+        .evaluateAll((links) => links.map((link) => link.getAttribute("href")))
+      expect(stylesheets.length).toBeGreaterThan(0)
+      const assets = []
+      for (const href of stylesheets) {
+        if (!href) throw new Error("Published Page has a stylesheet without a URL")
+        const response = await request.get(href)
+        expect(response.status()).toBe(200)
+        assets.push({ href, css: await response.text() })
+      }
+
+      await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+      await waitForEditorPreview(cms)
+      await expect(preview.getByText(firstText, { exact: true })).toHaveCount(1)
+      await expect(preview.getByText(secondText, { exact: true })).toHaveCount(0)
+      await preview.getByText(firstText, { exact: true }).click()
+      await cms.locator('textarea[name="text"]').fill(secondText)
+      await cms.getByRole("button", { name: "Publish", exact: true }).click()
+      await expect(
+        cms.getByText(`Successfully published ${cmsSeededPageKey}`, { exact: true }),
+      ).toBeVisible()
+
+      expect((await page.goto(cmsSeededPageKey))?.status()).toBe(200)
+      await expect(page.getByText(secondText, { exact: true })).toHaveCSS("padding", "4px")
+      await expect(page.getByText(firstText, { exact: true })).toBeHidden()
+      for (const { href, css } of assets) {
+        const unchanged = await request.get(href)
+        expect(unchanged.status()).toBe(200)
+        expect(await unchanged.text()).toBe(css)
+      }
+    },
+  )
+
+  test(
     "publishes a text component with a className",
     { tag: "@playground" },
     async ({ cms, cmsSeededPageKey, errorCapture }) => {

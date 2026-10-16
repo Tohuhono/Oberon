@@ -1,5 +1,12 @@
 import { NotImplementedError, type ClientAction } from "./dtd"
 
+export async function pageTag(key: string) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(key))
+  return `oberon-page-${Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("")}`
+}
+
 export function getTitle(action: ClientAction, slug?: string) {
   switch (action) {
     case "edit":

@@ -22,6 +22,7 @@
     "RESEND_SECRET",
     "UPLOADTHING_SECRET",
     "VERCEL_URL",
+    "VERCEL",
     "VERCEL_BLOB_API_URL",
     "NEXT_PUBLIC_VERCEL_BLOB_API_URL"
   ],
@@ -31,6 +32,7 @@
     "errorsOnlyShowHash": false
   },
   "tasks": {
+    "//#change:status": { "inputs": [".changeset/**"] },
     "prebuild": {
       "dependsOn": ["^build"],
       "inputs": [
@@ -69,7 +71,7 @@
       "dependsOn": ["build"]
     },
     "check": {
-      "dependsOn": ["lint", "tsc", "test:unit"]
+      "dependsOn": ["//#change:status", "lint", "tsc", "test:unit"]
     },
     "clean": {
       "cache": false
@@ -206,7 +208,7 @@
       "dependsOn": ["build"]
     },
     "validate": {
-      "dependsOn": ["lint", "tsc", "test:unit", "test:e2e", "test:coa"]
+      "dependsOn": ["//#change:status", "lint", "tsc", "test:unit", "test:e2e", "test:coa"]
     }
   }
 }

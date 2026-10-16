@@ -91,13 +91,15 @@ async function syncStyles(
     return
   }
 
-  const hash = createHash("sha256").update(classes.join("\n")).digest("hex")
-
-  if (hash === state.activeHash && (await getAsset(adapter, hash))) {
+  if (
+    classes.join("\n") === state.classes.join("\n") &&
+    (await getAsset(adapter, state.activeHash))
+  ) {
     return
   }
 
   const css = await buildCss(classes)
+  const hash = createHash("sha256").update(css).digest("hex")
   await adapter.putKV({ namespace: name, key: `asset:${hash}`, value: css })
 
   await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
