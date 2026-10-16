@@ -57,10 +57,6 @@ input take no arguments.
 `hasPermission` returns a boolean synchronously. The final Adapter also supplies permission helpers,
 route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
 
-Framework integrations invalidate cached Page output through their mutation hooks. Cache APIs and
-tags stay in the integration, not on the Adapter. See
-[Rendered Page caching](/docs/plugins/caching).
-
 ## Bootstrap
 
 Use a top-level bootstrap task for migrations or initial data, not an adapter hook. See
