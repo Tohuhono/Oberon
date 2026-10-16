@@ -1,7 +1,10 @@
 ---
+"@oberoncms/core": patch
 "@oberoncms/plugin-tailwind": patch
 "@oberoncms/plugin-nextjs": patch
 ---
+
+Export the platform-neutral `pageTag` utility from core to create stable Page cache tags.
 
 Use the existing Page read hook, native TanStack middleware, and Vercel cache tagging in the
 TanStack Playground. Keep the standard server entry and Nitro integration. Keep cache invalidation

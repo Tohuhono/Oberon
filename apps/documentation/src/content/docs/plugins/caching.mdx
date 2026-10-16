@@ -21,9 +21,9 @@ not enable caching for unrelated CMS actions or editor routes.
 The middleware sets native CDN policy through TanStack's response-header helpers. The CDN lifetime
 is one year. It sets only `Vercel-CDN-Cache-Control` and leaves the existing browser cache policy
 unchanged. It appends the required representation tokens to `Vary` without replacing existing
-values. Requests with cookies, authorization, or range headers do not opt in. Anonymous Page reads
-must be permitted. Vercel handles its native response eligibility rules, including cookie-setting
-responses.
+values. Requests with cookies, authorization, or range headers do not opt in. The existing Page
+resolution checks permission before reading Page data. Vercel handles its native response
+eligibility rules, including cookie-setting responses.
 
 Only declare output public when the entire response, including the app shell, is identical for all
 visitors. An origin cookie check cannot protect private content on a CDN hit.
@@ -71,9 +71,9 @@ plugins: [
 ]
 ```
 
-The generic TanStack Plugin has no Vercel dependency. Tailwind does not import either Plugin. Native
-caching and invalidation are disabled outside Vercel and during Oberon bootstrap. Editable public
-routes are not immutable prerendered files.
+The generic TanStack Plugin has no Vercel dependency. Tailwind does not import either Plugin. The
+native SDK cache methods do nothing without Vercel's request context. The cache hooks do not run
+during Oberon bootstrap. Editable public routes are not immutable prerendered files.
 
 The Next.js Plugin revalidates the affected Page's public, editor, and preview paths after creation,
 publication, and deletion. Individual Page reads do not use the shared `oberon-pages` tag; that tag

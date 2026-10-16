@@ -7,7 +7,7 @@ import { renderServerComponent } from "@tanstack/react-start/rsc"
 import { actions } from "#/oberon/actions"
 import { adapter } from "#/oberon/adapter"
 import { clientConfig } from "#/oberon/client.config"
-import { publicPage } from "#/oberon/vercel"
+import { applyCDNHeaders } from "#/oberon/vercel"
 
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
@@ -19,7 +19,7 @@ function getActiveHash(value: unknown) {
 }
 
 const getPage = createServerFn({ method: "GET" })
-  .middleware([publicPage])
+  .middleware([applyCDNHeaders])
   .validator(ResolvePathSchema)
   .handler(async ({ data }) => {
     const page = await actions.resolvePath(data)
@@ -44,7 +44,7 @@ function Oberon() {
 }
 
 export const Route = createFileRoute("/$")({
-  server: { middleware: [publicPage] },
+  server: { middleware: [applyCDNHeaders] },
   loader: ({ params }) => getPage({ data: { key: `/${params._splat ?? ""}` } }),
   component: Oberon,
 })
