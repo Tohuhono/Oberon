@@ -1,8 +1,7 @@
-# Rendered Page caching
+# Vercel caching proof of concept
 
-The TanStack Playground includes an app-local Vercel Plugin for rendered Page caching. It uses
-Vercel's content delivery network (CDN) to cache public HTML and client-navigation responses. The
-TanStack Recipe does not enable this caching.
+The implementation uses Vercel's content delivery network (CDN) to cache public HTML and
+client-navigation responses.
 
 ## Response policy
 
@@ -17,13 +16,14 @@ server cannot protect private content on a cache hit.
 
 ## Invalidation
 
-The Plugin uses `pageTag` from `@oberoncms/core` to create a stable cache tag for each Page key. It
-calls `addCacheTag` from `@vercel/functions` before reading Page data, including missing Pages.
+The custom Plugin uses `pageTag` from `@oberoncms/core` to create a stable cache tag for each Page
+key. It calls `addCacheTag` from `@vercel/functions` before reading Page data, including missing
+Pages.
 
-After Page creation, publication, or deletion, the Plugin calls `invalidateByTag` for that Page.
-This asks Vercel to mark matching cached responses as stale without invalidating unrelated Pages.
-Vercel can serve stale content while it generates a new response. An invalidation error causes the
-action to report a failure.
+After Page creation, publication, or deletion, the custom Plugin calls `invalidateByTag` for that
+Page. This asks Vercel to mark matching cached responses as stale without invalidating unrelated
+Pages. Vercel can serve stale content while it generates a new response. An invalidation error
+causes the action to report a failure.
 
 The [Tailwind Plugin](/docs/plugins/tailwind) keeps previous stylesheet URLs available, so cached
 Pages can continue to use them.

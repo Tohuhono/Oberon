@@ -72,9 +72,6 @@ The framework plugin supplies request headers, redirects, and auth cookie handli
 Plugin also caches reads. After Page creation, publication, or deletion, it revalidates that Page's
 public, editor, and preview paths and refreshes the Page list without expiring unrelated Page reads.
 
-The TanStack Playground uses a separate Vercel Plugin for
-[rendered Page caching](/docs/plugins/caching).
-
 ## Bootstrap
 
 `bootstrapOberon` creates an Adapter for the bootstrap phase. It runs enabled plugin tasks in order.
