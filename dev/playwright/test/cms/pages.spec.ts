@@ -123,6 +123,9 @@ test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
       await page.reload()
       await expect(page.getByText(text, { exact: true })).toBeVisible()
 
+      await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+      const preview = cms.frameLocator("iframe#preview-frame")
+      await expect(preview.getByText(text, { exact: true })).toBeVisible()
       await cms.goto("/cms/pages")
       await cms.getByRole("button", { name: `Delete ${cmsSeededPageKey}`, exact: true }).click()
       await expect(cms.getByRole("link", { name: cmsSeededPageKey, exact: true })).toBeHidden()
@@ -138,6 +141,11 @@ test.describe("CMS Pages Actions", { tag: "@cms" }, () => {
       expect(await recreated.text()).not.toContain(text)
       await page.reload()
       await expect(page.getByText(text, { exact: true })).toBeHidden()
+
+      await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+      await expect(cms.locator("iframe#preview-frame")).toBeVisible()
+      await expect(preview.getByTestId("dropzone:root:default-zone")).toBeVisible()
+      await expect(preview.getByText(text, { exact: true })).toHaveCount(0)
     },
   )
 })

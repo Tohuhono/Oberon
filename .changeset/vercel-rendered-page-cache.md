@@ -1,9 +1,7 @@
 ---
 "@oberoncms/core": minor
 "@oberoncms/plugin-tailwind": patch
-"@oberon/newground": patch
-"@oberon/docs": patch
-"@dev/playwright": patch
+"@oberoncms/plugin-nextjs": patch
 ---
 
 Add global or selective cache invalidation through the Adapter. Use the existing Page read hook,
@@ -16,3 +14,7 @@ and generic TanStack Plugin unchanged.
 
 Test local publishing and immutable stylesheet behavior through shared authenticated CMS tests. Keep
 preview smoke tests read-only; deployed publish invalidation remains unverified.
+
+Revalidate the affected Next.js Page's editor and preview paths after publication, creation, and
+deletion, alongside its public path. Keep individual Page reads out of the shared Page-list tag.
+Cover editor reopening and Page recreation in shared browser tests.

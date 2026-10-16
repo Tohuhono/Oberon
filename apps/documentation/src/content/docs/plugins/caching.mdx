@@ -80,6 +80,10 @@ The generic TanStack Plugin has no Vercel dependency. Tailwind does not import e
 caching and invalidation are disabled outside Vercel and during Oberon bootstrap. Editable public
 routes are not immutable prerendered files.
 
+The Next.js Plugin revalidates the affected Page's public, editor, and preview paths after creation,
+publication, and deletion. Individual Page reads do not use the shared `oberon-pages` tag; that tag
+remains for the Page list. This refreshes editor data without expiring every Page read.
+
 ## Verification scope
 
 The shared CMS browser suite uses real local authentication to publish content, check stylesheet

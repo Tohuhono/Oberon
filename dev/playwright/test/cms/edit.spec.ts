@@ -146,6 +146,9 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
       const secondText = `Second publication ${testKey}`
       await cms.goto(`/cms/edit${cmsSeededPageKey}`)
       await waitForEditorPreview(cms)
+      const preview = cms.frameLocator("iframe#preview-frame")
+      await expect(preview.getByText(firstText, { exact: true })).toHaveCount(0)
+      await expect(preview.getByText(secondText, { exact: true })).toHaveCount(0)
       await insertTextComponent(cms)
       await cms.locator('textarea[name="text"]').fill(firstText)
       await cms.locator('input[name="className"]').fill("p-1")
@@ -170,7 +173,9 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
 
       await cms.goto(`/cms/edit${cmsSeededPageKey}`)
       await waitForEditorPreview(cms)
-      await cms.frameLocator("iframe#preview-frame").getByText(firstText, { exact: true }).click()
+      await expect(preview.getByText(firstText, { exact: true })).toHaveCount(1)
+      await expect(preview.getByText(secondText, { exact: true })).toHaveCount(0)
+      await preview.getByText(firstText, { exact: true }).click()
       await cms.locator('textarea[name="text"]').fill(secondText)
       await cms.getByRole("button", { name: "Publish", exact: true }).click()
       await expect(

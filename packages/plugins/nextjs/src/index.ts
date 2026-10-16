@@ -33,6 +33,8 @@ export const plugin: OberonPlugin = ({ phase }) => {
               async (page) => {
                 await next(page)
                 revalidatePath(page.key)
+                revalidatePath(`/cms/edit${page.key}`)
+                revalidatePath(`/cms/preview${page.key}`)
                 updateTag("oberon-pages")
               },
             addPage:
@@ -40,6 +42,8 @@ export const plugin: OberonPlugin = ({ phase }) => {
               async (page) => {
                 await next(page)
                 revalidatePath(page.key)
+                revalidatePath(`/cms/edit${page.key}`)
+                revalidatePath(`/cms/preview${page.key}`)
                 updateTag("oberon-pages")
               },
             deletePage:
@@ -48,6 +52,8 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 await next(data)
                 const { key } = data
                 revalidatePath(key)
+                revalidatePath(`/cms/edit${key}`)
+                revalidatePath(`/cms/preview${key}`)
                 updateTag("oberon-pages")
               },
             updateSite:
