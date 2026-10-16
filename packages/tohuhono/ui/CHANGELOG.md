@@ -1,5 +1,29 @@
 # @oberon/ui
 
+## 0.18.0
+
+### Minor Changes
+
+- 2b4526a: Share a self-hosted Noto Sans utility across Oberon apps so production builds do not
+  require Google Fonts network access.
+
+### Patch Changes
+
+- 4d7244e: Refresh dependencies and tooling, adapt login and UI components to updated APIs, and
+  preserve documentation routing and build compatibility.
+- e146b23: Replace deprecated Zod APIs while preserving email validation, installer feedback, and
+  arbitrary Page data fields.
+
+  Refresh direct dependencies to their latest releases.
+
+  Clean up seeded Pages and Users after failures. Make explicit development database resets
+  invalidate bootstrap and dependent build caches without changing normal bootstrap behavior or
+  shared workflow cache keys.
+
+- Updated dependencies [4d7244e]
+- Updated dependencies [e146b23]
+  - @tohuhono/utils@0.16.2
+
 ## 0.17.0
 
 ### Minor Changes
