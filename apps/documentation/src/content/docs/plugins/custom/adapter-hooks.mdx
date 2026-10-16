@@ -53,15 +53,13 @@ input take no arguments.
 | `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                             |
 | `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                     |
 | `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                       |
-| `OberonCacheAdapter`    | `invalidateCache`                                                                                                                                                                                                               |
 
 `hasPermission` returns a boolean synchronously. The final Adapter also supplies permission helpers,
 route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
 
-Without a cache Plugin, invalidation does nothing. A platform Plugin can invalidate selected tags
-with `invalidateCache({ tags })`, or all cached public CMS Page output with `invalidateCache()`. An
-empty tag list does nothing. Shared-content Plugins can request global invalidation without knowing
-platform headers or tags. See [Rendered Page caching](/docs/plugins/caching).
+Framework integrations invalidate cached Page output through their mutation hooks. Cache APIs and
+tags stay in the integration, not on the Adapter. See
+[Rendered Page caching](/docs/plugins/caching).
 
 ## Bootstrap
 

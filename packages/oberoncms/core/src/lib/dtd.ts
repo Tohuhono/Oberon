@@ -285,10 +285,6 @@ export type OberonRoutingAdapter = {
   getRequestHeaders: () => Promise<Headers>
 }
 
-export type OberonCacheAdapter = {
-  invalidateCache: (data?: { tags: string[] }) => Promise<void>
-}
-
 export type OberonAuthAdapter = {
   getAuthDatabase: () => BetterAuthOptions["database"]
   getAuthPlugins: () => NonNullable<BetterAuthOptions["plugins"]>
@@ -322,8 +318,7 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
-  OberonRoutingAdapter &
-  OberonCacheAdapter
+  OberonRoutingAdapter
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 

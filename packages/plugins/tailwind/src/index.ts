@@ -77,10 +77,7 @@ async function getAllPublishedClasses(
 }
 
 async function syncStyles(
-  adapter: Pick<
-    OberonPluginAdapter,
-    "getAllPages" | "getKV" | "getPageData" | "putKV" | "invalidateCache"
-  >,
+  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getKV" | "getPageData" | "putKV">,
 ) {
   const classes = await getAllPublishedClasses(adapter)
   const state = await getState(adapter)
@@ -91,9 +88,6 @@ async function syncStyles(
     }
 
     await adapter.putKV({ namespace: name, key: "state", value: { activeHash: null, classes: [] } })
-    if (state.activeHash !== null) {
-      await adapter.invalidateCache()
-    }
     return
   }
 
@@ -109,9 +103,6 @@ async function syncStyles(
   await adapter.putKV({ namespace: name, key: `asset:${hash}`, value: css })
 
   await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
-  if (hash !== state.activeHash) {
-    await adapter.invalidateCache()
-  }
 }
 
 export const plugin: OberonPlugin = ({ getAdapter }) => ({

@@ -12,16 +12,6 @@ import { createActionHandler } from "./init-action-handler"
 import { initAdapter } from "./init-adapter"
 
 describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, () => {
-  it("supports optional invalidation when no cache Plugin is configured", async () => {
-    const adapter = initAdapter({
-      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-      plugins: [],
-    })
-
-    await expect(adapter.invalidateCache()).resolves.toBeUndefined()
-    await expect(adapter.invalidateCache({ tags: ["page"] })).resolves.toBeUndefined()
-  })
-
   it("lazily initialises plugin handlers once with the final adapter", async () => {
     const get = vi.fn(() => new Response("ok"))
     const initHandler = vi.fn(() => ({ GET: get }))

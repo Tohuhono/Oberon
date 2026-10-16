@@ -2,7 +2,7 @@
 
 The TanStack Playground uses Vercel's native CDN response cache. Public HTML and client-navigation
 responses can be reused without calling the app server. Page mutations invalidate the matching Page
-dependency. A change to global CSS invalidates all public Page output.
+dependency. Tailwind stylesheet changes do not invalidate other Pages.
 
 This integration targets Vercel. Cloudflare support is future work. The TanStack Recipe is
 unchanged. There is no external cache backend or rendered-output storage in the CMS database.
@@ -31,9 +31,9 @@ visitors. An origin cookie check cannot protect private content on a CDN hit.
 ## Page dependencies
 
 The Vercel Plugin wraps the existing `getPageData` method. Before reading, it calls `addCacheTag`
-from `@vercel/functions` with an internal Page tag and a global public-Page tag. This declares a
-dependency of the response, not a cache of the database read. Missing results receive tags too, so
-creation can invalidate any cached missing result.
+from `@vercel/functions` with an internal Page tag. This declares a dependency of the response, not
+a cache of the database read. Missing results receive tags too, so creation can invalidate any
+cached missing result.
 
 Tags do not make a response cacheable. Editor and other reads remain subject to their existing
 response policies. Only the explicitly registered public middleware enables CDN caching. The native
@@ -46,21 +46,16 @@ rendering; native streaming and tag behavior remain platform responsibilities.
 
 ## Publication and invalidation
 
-The Adapter exposes:
-
-- `invalidateCache()` to invalidate all cached public CMS Page output.
-- `invalidateCache({ tags })` to invalidate selected dependencies. An empty list does nothing.
-
-Without a cache Plugin, invalidation does nothing. Call invalidation after a successful mutation and
-await it. A failure must not become a successful action.
-
 The Vercel Plugin wraps `addPage`, `updatePageData`, and `deletePage` through existing Plugin
-composition. It uses native `invalidateByTag`, which permits stale output while Vercel regenerates
-it. Publishing does not wait for the one-year expiry, rebuild, or deployment.
+composition. After a successful mutation, it awaits native `invalidateByTag` for the matching Page.
+An invalidation failure must not become a successful action. Vercel permits stale output while it
+regenerates the Page. Publishing does not wait for the one-year expiry, rebuild, or deployment.
+Cache APIs and tags stay local to the Vercel Plugin; the Adapter has no invalidation method.
 
-The Tailwind Plugin calls global invalidation only when the active compiled stylesheet changes. It
-does not purge immutable CSS assets. Regenerated Pages reference the new stylesheet URL. Text-only
-edits do not change the stylesheet hash.
+The Tailwind Plugin retains immutable CSS assets at hashed URLs. Cached Pages keep their existing
+stylesheet URLs and styles. The changed Page references the new stylesheet URL when it regenerates.
+Tailwind does not need to invalidate cached Pages. Text-only edits do not change the stylesheet
+hash.
 
 The app registers the Plugins in this order:
 

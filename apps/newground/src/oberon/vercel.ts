@@ -2,8 +2,6 @@ import type { OberonPlugin } from "@oberoncms/core"
 import { createMiddleware } from "@tanstack/react-start"
 import { getResponseHeaders, setResponseHeader } from "@tanstack/react-start/server"
 
-const globalTag = "oberon-public-pages"
-
 async function pageTag(key: string) {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(key))
   return `oberon-page-${Array.from(new Uint8Array(digest), (byte) =>
@@ -39,33 +37,29 @@ export const plugin: OberonPlugin = ({ phase }) => ({
             ({ next }) =>
             async (page) => {
               const { addCacheTag } = await import("@vercel/functions")
-              await addCacheTag([globalTag, await pageTag(page.key)])
+              await addCacheTag(await pageTag(page.key))
               return next(page)
             },
-          invalidateCache: () => async (data) => {
-            const tags = data?.tags ?? [globalTag]
-            if (tags.length) {
-              const { invalidateByTag } = await import("@vercel/functions")
-              await invalidateByTag(tags)
-            }
-          },
           addPage:
-            ({ next, getAdapter }) =>
+            ({ next }) =>
             async (page) => {
               await next(page)
-              await getAdapter().invalidateCache({ tags: [await pageTag(page.key)] })
+              const { invalidateByTag } = await import("@vercel/functions")
+              await invalidateByTag(await pageTag(page.key))
             },
           updatePageData:
-            ({ next, getAdapter }) =>
+            ({ next }) =>
             async (page) => {
               await next(page)
-              await getAdapter().invalidateCache({ tags: [await pageTag(page.key)] })
+              const { invalidateByTag } = await import("@vercel/functions")
+              await invalidateByTag(await pageTag(page.key))
             },
           deletePage:
-            ({ next, getAdapter }) =>
+            ({ next }) =>
             async (page) => {
               await next(page)
-              await getAdapter().invalidateCache({ tags: [await pageTag(page.key)] })
+              const { invalidateByTag } = await import("@vercel/functions")
+              await invalidateByTag(await pageTag(page.key))
             },
         }
       : {},

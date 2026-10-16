@@ -1,16 +1,15 @@
 ---
-"@oberoncms/core": minor
 "@oberoncms/plugin-tailwind": patch
 "@oberoncms/plugin-nextjs": patch
 ---
 
-Add global or selective cache invalidation through the Adapter. Use the existing Page read hook,
-native TanStack middleware, and Vercel cache tagging in the TanStack Playground. Keep the standard
-server entry and Nitro integration.
+Use the existing Page read hook, native TanStack middleware, and Vercel cache tagging in the
+TanStack Playground. Keep the standard server entry and Nitro integration. Keep cache invalidation
+local to the framework integration instead of exposing it on the Adapter.
 
-Invalidate Page output after successful Page mutations. Invalidate all public Page output when the
-global Tailwind stylesheet changes, without purging immutable CSS assets. Keep the TanStack Recipe
-and generic TanStack Plugin unchanged.
+Invalidate only the affected Page output after successful Page mutations. Retain immutable Tailwind
+CSS assets so cached Pages can keep their existing styles without global invalidation. Keep the
+TanStack Recipe and generic TanStack Plugin unchanged.
 
 Test local publishing and immutable stylesheet behavior through shared authenticated CMS tests. Keep
 preview smoke tests read-only; deployed publish invalidation remains unverified.
