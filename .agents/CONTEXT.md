@@ -33,15 +33,18 @@ names, not planned implementation.
 
 ## Content
 
-| Term                       | Definition                                                          | Aliases to avoid       |
-| -------------------------- | ------------------------------------------------------------------- | ---------------------- |
-| **Page**                   | A content record addressed by a slash-prefixed key.                 | document, route, entry |
-| **Puck component**         | A page-building component used by the editor.                       | block, widget          |
-| **Image**                  | A media record managed through storage and database capabilities.   | file, asset            |
-| **Oberon Image component** | A component that displays an Image through framework image support. | Next Image             |
-| **User**                   | An authenticated identity used by CMS permission checks.            | account, editor        |
-| **Site state**             | Stored CMS-wide version and component migration data.               | config, settings       |
-| **Tailwind style assets**  | CSS generated from published Page data.                             | Tailwind config        |
+| Term                       | Definition                                                                        | Aliases to avoid       |
+| -------------------------- | --------------------------------------------------------------------------------- | ---------------------- |
+| **Page**                   | A content record addressed by a slash-prefixed key.                               | document, route, entry |
+| **Puck component**         | A page-building component used by the editor.                                     | block, widget          |
+| **Named composition**      | An independently authored, named tree of one or more Puck components.             | shell, partial Page    |
+| **Composition instance**   | A reference to a Named composition in a component tree, with its own prop values. |                        |
+| **Exposed prop**           | A selected internal component prop surfaced as a prop of a Named composition.     |                        |
+| **Image**                  | A media record managed through storage and database capabilities.                 | file, asset            |
+| **Oberon Image component** | A component that displays an Image through framework image support.               | Next Image             |
+| **User**                   | An authenticated identity used by CMS permission checks.                          | account, editor        |
+| **Site state**             | Stored CMS-wide version and component migration data.                             | config, settings       |
+| **Tailwind style assets**  | CSS generated from published Page data.                                           | Tailwind config        |
 
 ## Project surfaces
 
@@ -79,4 +82,6 @@ names, not planned implementation.
 - Use **Plugin** for an integration and **Plugin adapter** for one capability implementation.
 - Use **Starter app** for generated output. Use the specific surface name for repo-owned apps.
 - Use **Puck component** for editor-facing page units. Reserve "block" for package names.
+- Use **Named composition** for authored component trees. Runtime composition and Bootstrap
+  composition refer to Plugin composition.
 - Use **Oberon runtime** for the composed system. Reserve "core package" for `@oberoncms/core`.
