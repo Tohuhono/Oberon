@@ -26,6 +26,18 @@ test.describe("CMS Smoke Tests", { tag: ["@smoke", "@cms", "@playground"] }, () 
     await expect(page.getByRole("heading", { name: "Welcome to OberonCMS" })).toBeVisible()
   })
 
+  test("CMS route reaches the login flow", async ({ page }) => {
+    const response = await page.goto("/cms")
+    expect(response?.status()).toBe(200)
+    await expect.poll(() => new URL(page.url()).pathname).toBe("/cms/login")
+    expect(new URL(page.url()).searchParams.get("callbackUrl")).toBe("/cms/pages")
+  })
+
+  test("CMS API route reaches the Oberon handler", async ({ request }) => {
+    const response = await request.get("/cms/api/not-a-handler")
+    expect(response.status()).toBe(405)
+  })
+
   test("not-found page respects the saved theme", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" })
     await page.addInitScript(() => localStorage.setItem("oberon:theme", "dark"))
