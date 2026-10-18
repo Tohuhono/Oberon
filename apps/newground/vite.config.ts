@@ -28,7 +28,7 @@ const config = defineConfig(({ mode }) => {
         rsc: { enabled: true },
         prerender: { enabled: false },
       }),
-      nitro({ preset: "vercel", traceDeps: ["@tailwindcss/node*"] }),
+      nitro({ preset: "vercel", traceDeps: ["@tailwindcss/node*", "tailwindcss*"] }),
       rsc(),
       viteReact(),
     ],
