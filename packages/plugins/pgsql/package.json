@@ -61,11 +61,11 @@
   },
   "dependencies": {
     "@oberoncms/core": "workspace:*",
-    "better-auth": "^1.7.7",
+    "better-auth": "^1.7.18",
     "drizzle-orm": "^0.45.4",
     "pg": "^8.23.1",
     "server-cli-only": "^0.3.2",
-    "zod": "^4.6.6"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",
@@ -73,16 +73,16 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@electric-sql/pglite": "0.5.8",
-    "@electric-sql/pglite-socket": "^0.2.11",
+    "@electric-sql/pglite": "0.5.15",
+    "@electric-sql/pglite-socket": "^0.2.18",
     "@oberoncms/testing": "workspace:*",
-    "@types/node": "26.6.5",
+    "@types/node": "26.6.6",
     "@types/pg": "^8.23.1",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "drizzle-kit": "^0.31.11",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "typescript": "7.0.2"
   },
   "peerDependencies": {
