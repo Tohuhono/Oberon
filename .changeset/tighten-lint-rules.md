@@ -9,4 +9,5 @@
 "@tohuhono/utils": patch
 ---
 
-Apply stricter lint rules, remove variable shadowing, and keep editor, calendar, and chart component identities stable.
+Apply stricter lint rules, remove variable shadowing, and keep editor, calendar, and chart component
+identities stable.
