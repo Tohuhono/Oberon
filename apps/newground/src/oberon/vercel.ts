@@ -1,6 +1,6 @@
 import { pageTag, type OberonPlugin } from "@oberoncms/core"
 import { createMiddleware } from "@tanstack/react-start"
-import { getResponseHeaders, setResponseHeader } from "@tanstack/react-start/server"
+import { appendResponseHeader, setResponseHeader } from "@tanstack/react-start/server"
 import { addCacheTag, invalidateByTag } from "@vercel/functions"
 
 export const applyCDNHeaders = createMiddleware().server(async ({ request, next }) => {
@@ -14,7 +14,7 @@ export const applyCDNHeaders = createMiddleware().server(async ({ request, next 
     "Vercel-CDN-Cache-Control",
     cacheable ? "public, max-age=31536000" : "private, no-store",
   )
-  getResponseHeaders().append("Vary", "Accept, X-TSR-ServerFn")
+  appendResponseHeader("Vary", "Accept, X-TSR-ServerFn")
   return next()
 })
 

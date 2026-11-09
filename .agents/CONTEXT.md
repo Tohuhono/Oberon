@@ -33,18 +33,20 @@ names, not planned implementation.
 
 ## Content
 
-| Term                       | Definition                                                                        | Aliases to avoid       |
-| -------------------------- | --------------------------------------------------------------------------------- | ---------------------- |
-| **Page**                   | A content record addressed by a slash-prefixed key.                               | document, route, entry |
-| **Puck component**         | A page-building component used by the editor.                                     | block, widget          |
-| **Named composition**      | An independently authored, named tree of one or more Puck components.             | shell, partial Page    |
-| **Composition instance**   | A reference to a Named composition in a component tree, with its own prop values. |                        |
-| **Exposed prop**           | A selected internal component prop surfaced as a prop of a Named composition.     |                        |
-| **Image**                  | A media record managed through storage and database capabilities.                 | file, asset            |
-| **Oberon Image component** | A component that displays an Image through framework image support.               | Next Image             |
-| **User**                   | An authenticated identity used by CMS permission checks.                          | account, editor        |
-| **Site state**             | Stored CMS-wide version and component migration data.                             | config, settings       |
-| **Tailwind style assets**  | CSS generated from published Page data.                                           | Tailwind config        |
+| Term                          | Definition                                                                            | Aliases to avoid                       |
+| ----------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------- |
+| **Fragment**                  | An independently addressable, authored Puck tree identified by a globally unique key. | document, entry                        |
+| **Fragment type**             | A Fragment's classification, such as `page` or `shared`.                              | collection                             |
+| **Page**                      | A Fragment of type `page` whose slash-prefixed key is its public path.                | document, route, entry                 |
+| **Puck component**            | A configured component used within an authored Puck tree.                             | block, widget                          |
+| **Shared component**          | A named Fragment authored for reuse inside Pages or other Shared components.          | Named composition, shell, partial Page |
+| **Shared component instance** | A reference to a Shared component in a component tree, with its own prop values.      | Composition instance                   |
+| **Exposed prop**              | A selected internal component prop surfaced as a prop of a Shared component.          |                                        |
+| **Image**                     | A media record managed through storage and database capabilities.                     | file, asset                            |
+| **Oberon Image component**    | A component that displays an Image through framework image support.                   | Next Image                             |
+| **User**                      | An authenticated identity used by CMS permission checks.                              | account, editor                        |
+| **Site state**                | Stored CMS-wide version and component migration data.                                 | config, settings                       |
+| **Tailwind style assets**     | CSS generated from published Fragment data.                                           | Tailwind config                        |
 
 ## Project surfaces
 
@@ -72,6 +74,9 @@ names, not planned implementation.
 - The Auth Plugin owns authentication behavior. The Framework integration supplies host plumbing.
 - Server routing decisions and Client route effects are different capabilities.
 - Site state is persisted CMS data. It is not part of the Oberon config.
+- A Fragment key identifies one record across all Fragment types.
+- A Fragment type classifies the record; it is not part of the record's identity.
+- A Page key is its public path.
 - A Starter app is generated from a Recipe. Playgrounds and the Documentation app are not Starter
   apps.
 
@@ -81,7 +86,9 @@ names, not planned implementation.
   configuration, and **Site state** for persisted CMS-wide data.
 - Use **Plugin** for an integration and **Plugin adapter** for one capability implementation.
 - Use **Starter app** for generated output. Use the specific surface name for repo-owned apps.
-- Use **Puck component** for editor-facing page units. Reserve "block" for package names.
-- Use **Named composition** for authored component trees. Runtime composition and Bootstrap
-  composition refer to Plugin composition.
+- Use **Fragment** for an independently authored Puck tree and **Puck component** for a component
+  within that tree. Reserve "block" for package names.
+- Use **Fragment type** for record classification. Use **key** for record identity.
+- Use **Shared component** for a named Fragment authored for reuse. Runtime composition and
+  Bootstrap composition refer to Plugin composition.
 - Use **Oberon runtime** for the composed system. Reserve "core package" for `@oberoncms/core`.

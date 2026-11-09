@@ -40,10 +40,10 @@
     "tsc": "tsc --pretty"
   },
   "dependencies": {
-    "oxlint": "^1.87.0"
+    "oxlint": "^1.92.0"
   },
   "devDependencies": {
     "@dev/typescript": "workspace:*",
-    "@types/node": "26.6.5"
+    "@types/node": "26.6.6"
   }
 }

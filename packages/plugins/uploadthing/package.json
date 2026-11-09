@@ -59,8 +59,8 @@
     "@radix-ui/react-icons": "^1.3.2",
     "@uploadthing/react": "^7.3.3",
     "@uploadthing/shared": "^7.1.10",
-    "image-size": "2.0.4",
-    "next": "^16.4.0",
+    "image-size": "2.1.0",
+    "next": "^16.4.5",
     "server-cli-only": "^0.3.2",
     "uploadthing": "^7.7.4"
   },
@@ -70,11 +70,11 @@
     "@dev/typescript": "workspace:*",
     "@dev/vite": "workspace:*",
     "@dev/vitest": "workspace:*",
-    "@puckeditor/core": "^0.23.0",
+    "@puckeditor/core": "^0.24.0",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "typescript": "7.0.2"
   },
   "peerDependencies": {
