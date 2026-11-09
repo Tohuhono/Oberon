@@ -18,12 +18,12 @@ export const ThemeEditorMenu = ({ className }: { className?: string }) => {
   const [mode, setMode] = useMode()
 
   const onInputChange =
-    (id: string, mode: "light" | "dark") => (event: ChangeEvent<HTMLInputElement>) =>
+    (id: string, themeMode: "light" | "dark") => (event: ChangeEvent<HTMLInputElement>) =>
       setTheme(
         theme.map((t) => ({
           ...t,
           ...(t.id === id && {
-            [mode]: event.currentTarget.value,
+            [themeMode]: event.currentTarget.value,
           }),
         })),
       )

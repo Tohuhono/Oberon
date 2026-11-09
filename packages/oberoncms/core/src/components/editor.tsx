@@ -2,7 +2,7 @@
 
 import "@puckeditor/core/puck.css"
 import { Config, Data, Puck } from "@puckeditor/core"
-import { useMemo, useState, type PropsWithChildren } from "react"
+import { createContext, useContext, useState, type PropsWithChildren } from "react"
 
 import { useLocalData } from "../hooks/use-local-data"
 import { useOberonActions } from "../hooks/use-oberon"
@@ -18,6 +18,27 @@ import {
   SidebarTabs,
   useSidebarTab,
 } from "./editor/sidebar"
+
+const PreviewModeContext = createContext<PreviewMode>("follow")
+
+function EditorIframe({
+  children,
+  document: iframeDocument,
+}: PropsWithChildren<{ document?: Document }>) {
+  const previewMode = useContext(PreviewModeContext)
+
+  return (
+    <PreviewIframe iframeDocument={iframeDocument} previewMode={previewMode}>
+      {children}
+    </PreviewIframe>
+  )
+}
+
+const editorOverrides = {
+  drawer: Drawer,
+  drawerItem: DrawerItem,
+  iframe: EditorIframe,
+}
 
 export function Editor({
   path,
@@ -35,86 +56,70 @@ export function Editor({
   const { currentViewport, setCurrentViewport } = useViewPort()
   const [previewMode, setPreviewMode] = useState<PreviewMode>("follow")
 
-  const editorOverrides = useMemo(
-    () => ({
-      drawer: Drawer,
-      drawerItem: DrawerItem,
-      iframe: ({
-        children,
-        document: iframeDocument,
-      }: PropsWithChildren<{ document?: Document }>) => (
-        <PreviewIframe iframeDocument={iframeDocument} previewMode={previewMode}>
-          {children}
-        </PreviewIframe>
-      ),
-    }),
-    [previewMode],
-  )
-
-  const onPublish = async (data: Data) => {
+  const onPublish = async (pageData: Data) => {
     await publishPageData({
       key: path,
-      data,
+      data: pageData,
     })
   }
 
   return (
-    <Puck
-      config={config}
-      data={data || localData || INITIAL_DATA}
-      onChange={(data: Data) => {
-        setLocalData(data)
-      }}
-      onAction={(action) => {
-        if (action.type === "insert") {
-          setActiveTab("fields")
-        }
-      }}
-      onPublish={onPublish}
-      overrides={editorOverrides}
-    >
-      <div
-        className="
+    <PreviewModeContext value={previewMode}>
+      <Puck
+        config={config}
+        data={data || localData || INITIAL_DATA}
+        onChange={setLocalData}
+        onAction={(action) => {
+          if (action.type === "insert") {
+            setActiveTab("fields")
+          }
+        }}
+        onPublish={onPublish}
+        overrides={editorOverrides}
+      >
+        <div
+          className="
           grid h-dvh grid-cols-[minmax(0,1fr)_auto_300px]
           grid-rows-[auto_auto_1fr] overflow-hidden bg-card
         "
-      >
-        <span className="col-span-3">
-          <Header path={path} onPublish={onPublish} />
-        </span>
-        <PreviewHeading
-          className="flex flex-row items-center justify-center gap-6 pt-0.5"
-          currentViewport={currentViewport}
-          setCurrentViewport={setCurrentViewport}
-          previewMode={previewMode}
-          setPreviewMode={setPreviewMode}
-        />
-        <div className="" />
-        <SidebarHeading
-          className="
+        >
+          <span className="col-span-3">
+            <Header path={path} onPublish={onPublish} />
+          </span>
+          <PreviewHeading
+            className="flex flex-row items-center justify-center gap-6 pt-0.5"
+            currentViewport={currentViewport}
+            setCurrentViewport={setCurrentViewport}
+            previewMode={previewMode}
+            setPreviewMode={setPreviewMode}
+          />
+          <div className="" />
+          <SidebarHeading
+            className="
             rounded-tl-lg bg-sidebar-primary text-sidebar-primary-foreground
           "
-          activeTab={activeTab}
-        />
+            activeTab={activeTab}
+          />
 
-        <Preview className="p-1" currentViewport={currentViewport} />
+          <Preview className="p-1" currentViewport={currentViewport} />
 
-        <SidebarTabs
-          className="
+          <SidebarTabs
+            className="
             flex flex-col pt-2
             [&>button]:aria-selected:bg-sidebar-primary
           "
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-        <Sidebar
-          className="
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+          <Sidebar
+            className="
             border-t-2 border-l-2 border-sidebar-primary bg-sidebar-background
             text-sidebar-foreground
           "
-          activeTab={activeTab}
-        />
-      </div>
-    </Puck>
+            activeTab={activeTab}
+          />
+        </div>
+      </Puck>
+    </PreviewModeContext>
   )
 }

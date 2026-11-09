@@ -21,7 +21,9 @@ function useMigration() {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView()
+    if (results || summary) {
+      scrollRef.current?.scrollIntoView()
+    }
   }, [results, summary])
 
   return {
@@ -32,14 +34,14 @@ function useMigration() {
       try {
         const response = iterateStreamResponse(migrateData())
 
-        let results: TransformResult[] = []
+        let migrationResults: TransformResult[] = []
         setResults([])
         setSummary(undefined)
 
         for await (const result of response) {
           if (result.type === "transform") {
-            results = [...results, result]
-            setResults(results)
+            migrationResults = [...migrationResults, result]
+            setResults(migrationResults)
           }
           if (result.type === "summary") {
             setSummary(result)

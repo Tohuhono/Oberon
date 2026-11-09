@@ -9,9 +9,9 @@ export const pages = pgTable(
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },
-  (pages) => {
+  (table) => {
     return {
-      pagesKeyIdx: uniqueIndex("pages_key_idx").on(pages.key),
+      pagesKeyIdx: uniqueIndex("pages_key_idx").on(table.key),
     }
   },
 )

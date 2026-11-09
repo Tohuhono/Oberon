@@ -15,6 +15,16 @@ import {
 import { initPlugins } from "./init-plugins"
 import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
 
+const sortPages = (a: { key: string }, b: { key: string }) => {
+  if (a.key < b.key) {
+    return -1
+  }
+  if (a.key > b.key) {
+    return 1
+  }
+  return 0
+}
+
 export function composeAdapter(
   { client: config, plugins = [] }: OberonConfig,
   phase: OberonPluginPhase,
@@ -88,15 +98,6 @@ export function composeAdapter(
 
   const readAllPages = adapter.getAllPages
   const getAllPages = async () => {
-    const sortPages = (a: { key: string }, b: { key: string }) => {
-      if (a.key < b.key) {
-        return -1
-      }
-      if (a.key > b.key) {
-        return 1
-      }
-      return 0
-    }
     const result = await readAllPages()
 
     const data = result.sort(sortPages)

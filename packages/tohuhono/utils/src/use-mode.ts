@@ -7,7 +7,7 @@ export type EditorMode = "light" | "dark" | "system"
 export const useMode = () => {
   const [mode, setLocalMode] = useLocalStorage<EditorMode>("theme")
 
-  const setMode = (mode: EditorMode) => setLocalMode(mode === "system" ? null : mode)
+  const setMode = (nextMode: EditorMode) => setLocalMode(nextMode === "system" ? null : nextMode)
 
   useEffect(() => {
     if (mode === "dark") {

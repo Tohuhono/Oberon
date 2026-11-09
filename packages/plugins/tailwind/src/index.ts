@@ -28,7 +28,7 @@ export async function extractTailwindClasses(data: unknown) {
     }
   }
 
-  return [...classes].sort()
+  return Array.from(classes).sort()
 }
 
 async function getState(adapter: Pick<OberonPluginAdapter, "getKV">) {
@@ -73,7 +73,7 @@ async function getAllPublishedClasses(
     }
   }
 
-  return [...classes].sort()
+  return Array.from(classes).sort()
 }
 
 async function syncStyles(
@@ -105,7 +105,7 @@ async function syncStyles(
   await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
 }
 
-export const plugin: OberonPlugin = ({ getAdapter }) => ({
+export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
   name,
   version,
   handlers: {
@@ -148,7 +148,7 @@ export const plugin: OberonPlugin = ({ getAdapter }) => ({
   },
   bootstrap: async () => {
     try {
-      await syncStyles(getAdapter())
+      await syncStyles(getBootstrapAdapter())
     } catch (error) {
       if (error instanceof ResponseError) {
         throw error

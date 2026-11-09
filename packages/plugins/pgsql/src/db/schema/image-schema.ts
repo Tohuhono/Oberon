@@ -12,9 +12,9 @@ export const images = pgTable(
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },
-  (images) => {
+  (table) => {
     return {
-      imagesKeyIdx: uniqueIndex("images_key_idx").on(images.key),
+      imagesKeyIdx: uniqueIndex("images_key_idx").on(table.key),
     }
   },
 )

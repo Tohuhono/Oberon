@@ -2,11 +2,26 @@
 
 import { cn } from "@tohuhono/utils"
 import { ComponentProps } from "react"
-import { DayPicker } from "react-day-picker"
+import { DayPicker, type ChevronProps } from "react-day-picker"
 
 import { buttonVariants } from "./button"
 
 export type CalendarProps = ComponentProps<typeof DayPicker>
+
+function CalendarChevron({ orientation }: ChevronProps) {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
+      <path
+        d={orientation === "left" ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6"}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
@@ -73,30 +88,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         ...classNames,
       }}
       components={{
-        Chevron: ({ orientation }) =>
-          orientation === "left" ? (
-            <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-              <path
-                d="m15 18-6-6 6-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-              <path
-                d="m9 18 6-6-6-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          ),
+        Chevron: CalendarChevron,
       }}
       {...props}
     />
