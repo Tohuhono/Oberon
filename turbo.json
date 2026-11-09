@@ -8,6 +8,7 @@
   "globalEnv": [
     "CI",
     "NODE_ENV",
+    "NODE_EXTRA_CA_CERTS",
     "AUTH_*",
     "BASE_URL",
     "BETTER_AUTH_URL",

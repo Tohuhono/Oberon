@@ -14,6 +14,9 @@ type AuthSetupOptions = {
 const PLAYWRIGHT_AUTH_EMAIL = "test@tohuhono.com"
 const PLAYWRIGHT_AUTH_STATE_PATH = path.resolve(process.cwd(), ".playwright/storage-state.json")
 
+// Playwright runs test and project teardown on SIGINT, including during web-server startup.
+process.once("SIGTERM", () => process.kill(process.pid, "SIGINT"))
+
 export const test = baseTest.extend<AuthSetupOptions>({
   serverLog: [
     // Empty destructure required for playwright runtime validation
