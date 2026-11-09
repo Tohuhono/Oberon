@@ -61,11 +61,11 @@ export function streamResponse<T, P extends unknown[] = unknown[]>(
 /*
  * Unwrap a streamed server action on the client
  */
-export function iterateStreamResponse<T>(streamResponse: Promise<StreamResponseChunk<T>>) {
+export function iterateStreamResponse<T>(response: Promise<StreamResponseChunk<T>>) {
   return {
     [Symbol.asyncIterator]: function () {
       return {
-        current: streamResponse,
+        current: response,
         async next() {
           const { iteratorResult, next } = await this.current
           if (next) {

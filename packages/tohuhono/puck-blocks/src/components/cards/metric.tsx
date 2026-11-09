@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@tohuhono/ui/card"
 import { type CSSProperties } from "react"
-import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts"
+import { Line, LineChart, ResponsiveContainer, Tooltip, type TooltipContentProps } from "recharts"
 
 const data = [
   {
@@ -33,6 +33,27 @@ const data = [
   },
 ]
 
+function MetricTooltip({ active, payload }: TooltipContentProps) {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-lg border bg-background p-2 shadow-xs">
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col">
+            <span className="text-[0.70rem] text-muted-foreground uppercase">Average</span>
+            <span className="font-bold text-muted-foreground">{payload[0]?.value}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[0.70rem] text-muted-foreground uppercase">Today</span>
+            <span className="font-bold">{payload[1]?.value}</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return null
+}
+
 export function CardsMetric() {
   const averageLineStyle: CSSProperties = {
     stroke: "hsl(var(--primary))",
@@ -62,46 +83,7 @@ export function CardsMetric() {
                 bottom: 0,
               }}
             >
-              <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div
-                        className="
-                          rounded-lg border bg-background p-2 shadow-xs
-                        "
-                      >
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="flex flex-col">
-                            <span
-                              className="
-                                text-[0.70rem] text-muted-foreground uppercase
-                              "
-                            >
-                              Average
-                            </span>
-                            <span className="font-bold text-muted-foreground">
-                              {payload[0]?.value}
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span
-                              className="
-                                text-[0.70rem] text-muted-foreground uppercase
-                              "
-                            >
-                              Today
-                            </span>
-                            <span className="font-bold">{payload[1]?.value}</span>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }
-
-                  return null
-                }}
-              />
+              <Tooltip content={MetricTooltip} />
               <Line
                 type="monotone"
                 strokeWidth={2}

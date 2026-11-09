@@ -6,6 +6,11 @@ import type { Disk } from "flydrive"
 
 import { getImageSize } from "./get-image-size"
 
+const GET = async () => {
+  // could be used to get presigned URLs
+  return new Response("GET request handled", { status: 200 })
+}
+
 export function initRouteHandler(
   { can }: OberonAdapter,
   disk: Disk,
@@ -45,11 +50,6 @@ export function initRouteHandler(
     return new Response(JSON.stringify(response), {
       headers: { "Content-Type": "application/json" },
     })
-  }
-
-  const GET = async () => {
-    // could be used to get presigned URLs
-    return new Response("GET request handled", { status: 200 })
   }
 
   return { POST, GET }

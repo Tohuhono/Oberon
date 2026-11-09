@@ -76,7 +76,7 @@ async function ensureMasterUser(adapter: OberonPluginAdapter) {
   }
 }
 
-export const authPlugin: OberonPlugin = ({ getAdapter }) => ({
+export const authPlugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
   name: `${name}/auth`,
   version,
   handlers: {
@@ -93,7 +93,7 @@ export const authPlugin: OberonPlugin = ({ getAdapter }) => ({
     },
   },
   bootstrap: async () => {
-    await ensureMasterUser(getAdapter())
+    await ensureMasterUser(getBootstrapAdapter())
   },
   adapter: {
     getCurrentUser:

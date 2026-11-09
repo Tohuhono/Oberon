@@ -5,6 +5,7 @@ export default defineConfig({
   jsPlugins: ["@dev/oxlint/plugin"],
   categories: {
     correctness: "error",
+    suspicious: "error",
   },
   env: {
     builtin: true,
@@ -24,6 +25,12 @@ export default defineConfig({
     "**/*.d.ts",
   ],
   rules: {
+    // dissabling from categories
+    "react/react-in-jsx-scope": "off",
+    "no-underscore-dangle": "off",
+    "unicorn/no-array-sort": "off",
+
+    // adding rules
     "no-case-declarations": "error",
     "no-empty": "error",
     "no-fallthrough": "error",
@@ -61,21 +68,7 @@ export default defineConfig({
     {
       files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
       rules: {
-        "constructor-super": "off",
-        "no-class-assign": "off",
-        "no-const-assign": "off",
-        "no-dupe-class-members": "off",
-        "no-dupe-keys": "off",
-        "no-func-assign": "off",
-        "no-import-assign": "off",
-        "no-new-native-nonconstructor": "off",
         "no-unused-vars": "off",
-        "no-obj-calls": "off",
-        "no-redeclare": "off",
-        "no-setter-return": "off",
-        "no-this-before-super": "off",
-        "no-unsafe-negation": "off",
-        "no-with": "off",
       },
     },
     {
@@ -83,6 +76,7 @@ export default defineConfig({
       rules: {
         "tohuhono/no-type-assertion-except-object-keys": "off",
         "no-empty-pattern": "off",
+        "unicorn/consistent-function-scoping": "off",
         "typescript/no-explicit-any": "off",
         "typescript/no-non-null-assertion": "off",
       },

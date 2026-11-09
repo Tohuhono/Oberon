@@ -110,7 +110,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
           </Button>
         </form>
       </Form>
-      {users.map(({ role, id, email, pending }) => {
+      {users.map(({ role: currentRole, id, email, pending }) => {
         return (
           <Fragment key={id}>
             <div className="pr-6">{email}</div>
@@ -123,7 +123,7 @@ export function Users({ users: serverUsers }: { users: OberonUser[] }) {
               }}
             >
               <SelectTrigger aria-label={`Role ${email}`} className="h-6 text-xs">
-                <SelectValue placeholder={role} />
+                <SelectValue placeholder={currentRole} />
               </SelectTrigger>
               <SelectContent>
                 {roles.map((role) => (

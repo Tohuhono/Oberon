@@ -20,8 +20,8 @@ const LoginSchema = z.object({
 
 export function Login({
   callbackUrl,
-  email,
-  token,
+  email: initialEmail,
+  token: initialToken,
 }: {
   callbackUrl: string
   email: string
@@ -34,14 +34,14 @@ export function Login({
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email,
-      token,
+      email: initialEmail,
+      token: initialToken,
     },
   })
 
   const [sending, setSending] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [sent, setSent] = useState(!!email && !!token)
+  const [sent, setSent] = useState(!!initialEmail && !!initialToken)
 
   const debouncedSetSending = useDebouncedCallback((loading: boolean) => setSending(loading), 3000)
 

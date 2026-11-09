@@ -1,5 +1,5 @@
 import type { OberonAdapter, OberonHandler } from "@oberoncms/core"
-// TODO https://github.com/pingdotgg/uploadthing/issues/790
+// oxlint-disable-next-line unicorn/require-module-specifiers https://github.com/pingdotgg/uploadthing/issues/790
 import type {} from "@uploadthing/shared"
 import {
   createUploadthing,
