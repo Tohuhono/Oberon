@@ -5,7 +5,7 @@ create-oberon-app script
 
 - CRITICAL: Read [CODESTYLE](.agents/CODESTYLE.md) before any edits.
 - CRITICAL: Lint, Typecheck, Build and test always use `pnpm validate` it is dependency checked, and
-  optimally cached.
+  optimally cached, unless explicitly overridden.
 - CRITICAL: Format always use `pnpm format` from root to format files. Do not filter, just run on
   all.
 

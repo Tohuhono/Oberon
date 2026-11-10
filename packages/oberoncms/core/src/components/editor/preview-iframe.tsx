@@ -61,5 +61,5 @@ export const PreviewIframe = ({
     }
   }, [iframeDocument, previewMode])
 
-  return <>{children}</>
+  return children
 }
