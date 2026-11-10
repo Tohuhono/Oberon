@@ -23,19 +23,19 @@ export default defineConfig({
     {
       ...smokeProject,
       name: "playground",
-      grepInvert: /@docs/,
+      grepInvert: /@docs/u,
       use: { baseURL },
     },
     {
       ...smokeProject,
       name: "oberon-docs",
-      grepInvert: /@playground/,
+      grepInvert: /@playground/u,
       use: { baseURL },
     },
     {
       ...smokeProject,
       name: "newground",
-      grepInvert: /@docs/,
+      grepInvert: /@docs/u,
       use: { baseURL },
     },
   ],

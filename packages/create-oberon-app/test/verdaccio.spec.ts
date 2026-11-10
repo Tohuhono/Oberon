@@ -17,24 +17,24 @@ async function readVerdaccioLogs() {
 }
 
 function getVerdaccioPackagePath(packageName: string) {
-  return packageName.replace(/\//g, "%2F")
+  return packageName.replace(/\//gu, "%2F")
 }
 
 function escapeRegExp(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")
 }
 
 function createRequestPattern(path: string) {
   return new RegExp(
     `requested\\s+['"]?(?:GET|HEAD)\\s+/${escapeRegExp(path)}(?:\\?|['"\\s]|$)`,
-    "i",
+    "iu",
   )
 }
 
 function createNpmjsRequestPattern(path: string) {
   return new RegExp(
     `making request:\\s+['"]?(?:GET|HEAD)\\s+https://registry\\.npmjs\\.org/${escapeRegExp(path)}(?:\\?|['"\\s]|$)`,
-    "i",
+    "iu",
   )
 }
 

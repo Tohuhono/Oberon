@@ -48,7 +48,7 @@ test.describe("CMS Smoke Tests", { tag: ["@smoke", "@cms", "@playground"] }, () 
     await expect(
       page.getByRole("heading", { name: "404 - page not found", level: 1, exact: true }),
     ).toBeVisible()
-    await expect(page.locator("html")).toHaveClass(/\bdark\b/)
+    await expect(page.locator("html")).toHaveClass(/\bdark\b/u)
   })
 })
 

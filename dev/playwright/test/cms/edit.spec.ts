@@ -276,10 +276,10 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     await selectMenuItem(previewModeButton, previewFollowItem)
 
     await selectMenuItem(editorThemeToggle, editorLightItem)
-    await expect(frameHtml).not.toHaveClass(/dark/)
+    await expect(frameHtml).not.toHaveClass(/dark/u)
 
     await selectMenuItem(editorThemeToggle, editorDarkItem)
-    await expect(frameHtml).toHaveClass(/dark/)
+    await expect(frameHtml).toHaveClass(/dark/u)
   })
 
   test("applies explicit preview light and dark modes", async ({ cms, cmsSeededPageKey }) => {
@@ -304,13 +304,13 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     })
 
     await selectMenuItem(previewModeButton, previewDarkItem)
-    await expect(frameHtml).toHaveClass(/dark/)
+    await expect(frameHtml).toHaveClass(/dark/u)
 
     await selectMenuItem(previewModeButton, previewLightItem)
-    await expect(frameHtml).not.toHaveClass(/dark/)
+    await expect(frameHtml).not.toHaveClass(/dark/u)
 
     await selectMenuItem(previewModeButton, previewDarkItem)
-    await expect(frameHtml).toHaveClass(/dark/)
+    await expect(frameHtml).toHaveClass(/dark/u)
   })
 
   test("hides preview mode controls outside editor pages", async ({ cms }) => {
@@ -341,7 +341,7 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
     })
 
     await selectMenuItem(previewModeButton, previewDarkItem)
-    await expect(frameHtml).toHaveClass(/dark/)
+    await expect(frameHtml).toHaveClass(/dark/u)
 
     await cms.goto("/cms/pages")
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
@@ -349,6 +349,6 @@ test.describe("CMS Edit Theme Modes", { tag: "@tdd" }, () => {
 
     await selectMenuItem(previewModeButton, previewLightItem)
 
-    await expect(frameHtml).not.toHaveClass(/dark/)
+    await expect(frameHtml).not.toHaveClass(/dark/u)
   })
 })

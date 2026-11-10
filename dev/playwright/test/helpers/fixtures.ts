@@ -12,15 +12,15 @@ function sanitizeKeyPart(value: string) {
   return (
     value
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "_")
-      .replace(/^_+|_+$/g, "")
+      .replace(/[^a-z0-9]+/gu, "_")
+      .replace(/^_+|_+$/gu, "")
       .slice(0, 40) || "test"
   )
 }
 
 function getTestKey(testInfo: TestInfo) {
   const fileName = testInfo.file.split("/").at(-1) ?? "spec"
-  const fileKey = sanitizeKeyPart(fileName.replace(/\.spec\.[mc]?tsx?$/, ""))
+  const fileKey = sanitizeKeyPart(fileName.replace(/\.spec\.[mc]?tsx?$/u, ""))
   const titleKey = sanitizeKeyPart(testInfo.title)
 
   return `${fileKey}_${titleKey}_${testInfo.parallelIndex}_${testInfo.repeatEachIndex}_${testInfo.retry}_${testInfo.workerIndex}`

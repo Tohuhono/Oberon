@@ -151,8 +151,8 @@ export type JsonValue = z.infer<typeof JsonValueSchema>
 export const PageSchema = z.object({
   key: z
     .string()
-    .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
-    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
+    .regex(/^[0-9a-zA-Z_.-/]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
+    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/u, "Route segments cannot be empty"),
   data: z.looseObject({}),
   updatedAt: z.date(),
   updatedBy: z.string(),

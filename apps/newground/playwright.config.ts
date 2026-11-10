@@ -43,7 +43,7 @@ export default defineConfig({
     },
   },
   projects: [
-    { ...authProject, grepInvert: /@docs/ },
-    { ...authenticatedProject, grepInvert: /@docs/ },
+    { ...authProject, grepInvert: /@docs/u },
+    { ...authenticatedProject, grepInvert: /@docs/u },
   ],
 })

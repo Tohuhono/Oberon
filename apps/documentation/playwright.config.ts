@@ -8,5 +8,5 @@ export default defineConfig({
     command: "pnpm start -p 3201",
     url: "http://localhost:3201",
   },
-  projects: [{ ...smokeProject, grepInvert: /@cms/ }],
+  projects: [{ ...smokeProject, grepInvert: /@cms/u }],
 })
