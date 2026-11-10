@@ -19,8 +19,8 @@ const config = defineConfig(({ mode }) => {
         checks: { moduleLevelDirective: false },
       },
     },
-    server: { port: parseInt(process.env.PORT || "5173") },
-    preview: { port: parseInt(process.env.PORT || "5173") },
+    server: { port: parseInt(process.env.PORT || "5173", 10) },
+    preview: { port: parseInt(process.env.PORT || "5173", 10) },
     plugins: [
       devtools(),
       tailwindcss(),

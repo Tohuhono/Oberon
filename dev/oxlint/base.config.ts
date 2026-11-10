@@ -47,7 +47,6 @@ export default defineConfig({
     "unicorn/prefer-top-level-await": "off",
 
     // TODO
-    radix: "off",
 
     // Style
     "prefer-const": "error",
