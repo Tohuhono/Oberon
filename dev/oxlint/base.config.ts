@@ -47,7 +47,6 @@ export default defineConfig({
     "unicorn/prefer-top-level-await": "off",
 
     // TODO
-    "no-unescaped-entities": "off",
     "prefer-native-coercion-functions": "off",
     "prefer-number-coercion": "off",
     "require-unicode-regexp": "off",
