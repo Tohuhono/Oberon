@@ -437,9 +437,7 @@ export type OberonClientContext = DescriminatedContext & {
   slug: string
 }
 
-const OberonQueryParamValueSchema = z
-  .union([z.string(), z.number(), z.boolean()])
-  .transform((value) => String(value))
+const OberonQueryParamValueSchema = z.union([z.string(), z.number(), z.boolean()]).transform(String)
 
 export const OberonQueryParamsSchema = z.record(
   z.string(),
