@@ -3,7 +3,7 @@ import { expect, test } from "@dev/playwright/helpers/fixtures"
 test.describe("CMS Routes", { tag: "@cms" }, () => {
   test("redirects /cms to /cms/pages", async ({ cms }) => {
     await cms.goto("/cms")
-    await expect(cms).toHaveURL(/\/cms\/pages$/)
+    await expect(cms).toHaveURL(/\/cms\/pages$/u)
   })
 
   test("loads /cms/site", async ({ cms }) => {
@@ -33,6 +33,6 @@ test.describe("CMS Routes", { tag: "@cms" }, () => {
 
   test("shows 404 for unknown cms route", async ({ cms }) => {
     await cms.goto("/cms/unknown-route")
-    await expect(cms.getByText(/404 - page not found/i)).toBeVisible()
+    await expect(cms.getByText(/404 - page not found/iu)).toBeVisible()
   })
 })

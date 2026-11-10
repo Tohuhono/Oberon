@@ -17,24 +17,24 @@ async function readVerdaccioLogs() {
 }
 
 function getVerdaccioPackagePath(packageName: string) {
-  return packageName.replace(/\//g, "%2F")
+  return packageName.replaceAll("/", "%2F")
 }
 
 function escapeRegExp(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  return value.replaceAll(/[.*+?^${}()|[\]\\]/gu, "\\$&")
 }
 
 function createRequestPattern(path: string) {
   return new RegExp(
     `requested\\s+['"]?(?:GET|HEAD)\\s+/${escapeRegExp(path)}(?:\\?|['"\\s]|$)`,
-    "i",
+    "iu",
   )
 }
 
 function createNpmjsRequestPattern(path: string) {
   return new RegExp(
     `making request:\\s+['"]?(?:GET|HEAD)\\s+https://registry\\.npmjs\\.org/${escapeRegExp(path)}(?:\\?|['"\\s]|$)`,
-    "i",
+    "iu",
   )
 }
 
@@ -53,7 +53,7 @@ function getRelevantLogContext(logs: string, path: string) {
 
 function getTarballName(packageName: string, version: string) {
   const packageParts = packageName.split("/")
-  const packageBaseName = packageParts[packageParts.length - 1] || packageName
+  const packageBaseName = packageParts.at(-1) || packageName
 
   return `${packageBaseName}-${version}.tgz`
 }

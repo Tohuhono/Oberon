@@ -28,25 +28,25 @@ export default defineConfig({
     {
       name: "initialise-pod",
       testDir: "./test",
-      grep: /@initialise-pod/,
+      grep: /@initialise-pod/u,
       teardown: "teardown-pod",
     },
     {
       name: "initialise-nextjs",
       testDir: "./test",
-      grep: /@initialise-nextjs/,
+      grep: /@initialise-nextjs/u,
       dependencies: ["initialise-pod"],
     },
     {
       name: "verdaccio-nextjs",
       testDir: "./test",
-      grep: /@verdaccio-nextjs/,
+      grep: /@verdaccio-nextjs/u,
       dependencies: ["initialise-nextjs"],
     },
     {
       name: "initialise-tanstack",
       testDir: "./test",
-      grep: /@initialise-tanstack/,
+      grep: /@initialise-tanstack/u,
       dependencies: ["initialise-pod"],
     },
     {
@@ -78,7 +78,7 @@ export default defineConfig({
     },
     {
       name: "teardown-pod",
-      grep: /@teardown-pod/,
+      grep: /@teardown-pod/u,
     },
   ],
 })

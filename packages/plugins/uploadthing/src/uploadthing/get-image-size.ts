@@ -3,11 +3,11 @@ import { imageSize } from "image-size"
 type ImageSize = { width: number; height: number }
 
 // TODO change to iterable stream when supported https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams#consuming_a_fetch_using_asynchronous_iteration
-export async function getImageSize(
-  url: string,
-  defaultSize: ImageSize = { width: 100, height: 100 },
-): Promise<ImageSize> {
-  const MAX_HEADER_BYTES = 128 * 1024 // 128KB
+export async function getImageSize(url: string, defaultSize?: ImageSize): Promise<ImageSize> {
+  const fallbackSize = defaultSize ?? { width: 100, height: 100 }
+
+  // 128KB
+  const MAX_HEADER_BYTES = 128 * 1024
   let totalBytes = 0
   const chunks: Uint8Array[] = []
   const response = await fetch(url)
@@ -18,11 +18,11 @@ export async function getImageSize(
   while (true) {
     const { done, value } = await reader.read()
     if (done) {
-      return defaultSize
+      return fallbackSize
     }
     if (totalBytes + value.length > MAX_HEADER_BYTES) {
       reader.cancel()
-      return defaultSize
+      return fallbackSize
     }
     totalBytes += value.length
     chunks.push(value)
@@ -33,7 +33,7 @@ export async function getImageSize(
         return { width, height }
       }
       // If the width or height are (probably incorrectly) zero, return the default
-      return defaultSize
+      return fallbackSize
     } catch (error) {
       // Cannot determine the size yet
     }

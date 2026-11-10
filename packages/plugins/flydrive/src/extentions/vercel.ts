@@ -195,20 +195,19 @@ export class VercelBlobDriver implements DriverContract {
       cursor: options?.paginationToken,
     })
 
+    const files = blobList.blobs.map((blob) => new DriveFile(blob.pathname, this))
     if (mode === "expanded") {
-      const files = blobList.blobs.map((blob) => new DriveFile(blob.pathname, this))
       return {
         paginationToken: blobList.cursor,
         objects: files,
       }
-    } else {
-      const files = blobList.blobs.map((blob) => new DriveFile(blob.pathname, this))
-      const folders =
-        "folders" in blobList ? blobList.folders.map((folder) => new DriveDirectory(folder)) : []
-      return {
-        paginationToken: blobList.cursor,
-        objects: [...files, ...folders],
-      }
+    }
+
+    const folders =
+      "folders" in blobList ? blobList.folders.map((folder) => new DriveDirectory(folder)) : []
+    return {
+      paginationToken: blobList.cursor,
+      objects: [...files, ...folders],
     }
   }
 }

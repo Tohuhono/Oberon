@@ -148,14 +148,14 @@ function isErrorEvent(event: TurboEvent) {
 }
 
 function getFailedTaskSources(event: TurboEvent) {
-  const failedTasks = event.text.match(/^\s*Failed:\s+(.+)$/m)?.[1]
+  const failedTasks = event.text.match(/^\s*Failed:\s+(.+)$/mu)?.[1]
   if (failedTasks) {
     return failedTasks.split(",").map((source) => source.trim())
   }
 
   if (!isErrorEvent(event)) return []
 
-  const source = event.text.match(/^(.+?#.+?): command \(/)?.[1]
+  const source = event.text.match(/^(.+?#.+?): command \(/u)?.[1]
 
   return source ? [source] : []
 }
@@ -209,7 +209,7 @@ function hashSource(source: string) {
   let hash = 0
 
   for (const character of source) {
-    hash = (hash * 31 + character.charCodeAt(0)) >>> 0
+    hash = (hash * 31 + (character.codePointAt(0) ?? 0)) >>> 0
   }
 
   return hash

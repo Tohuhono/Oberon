@@ -4,5 +4,5 @@ import baseConfig from "./base.config.ts"
 
 export default defineConfig({
   extends: [baseConfig],
-  plugins: ["react", "react-perf"],
+  plugins: ["react"],
 })

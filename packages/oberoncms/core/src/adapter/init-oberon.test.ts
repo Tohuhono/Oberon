@@ -252,8 +252,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         },
       },
       bootstrap: async () => {
-        events.push(typeof getAdapter().will)
-        events.push("first")
+        events.push(typeof getAdapter().will, "first")
       },
     })
 

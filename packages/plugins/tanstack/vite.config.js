@@ -4,7 +4,8 @@ export default initConfig({
   plugins: [
     {
       name: "external-pre-resolver",
-      enforce: "pre", // Run before Vite's built-in resolver hooks
+      // Run before Vite's built-in resolver hooks
+      enforce: "pre",
       resolveId(source) {
         // Intercept bare specifiers before Vite crawls their package.json imports
         if (

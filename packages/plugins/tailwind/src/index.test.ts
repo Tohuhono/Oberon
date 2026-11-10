@@ -1,5 +1,4 @@
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
+import { resolve } from "path"
 
 import { fromPartial, test } from "@dev/vitest"
 import type { OberonAdapter, OberonPluginAdapter } from "@oberoncms/core"
@@ -10,7 +9,7 @@ import { z } from "zod"
 import { name as pluginName } from "../package.json" with { type: "json" }
 import { plugin as tailwindPlugin } from "./index"
 
-const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..")
+const rootDirectory = resolve(import.meta.dirname, "../../../..")
 
 const sqliteFile = resolve(rootDirectory, ".tmp/tailwind-plugin-unit-tests.db")
 

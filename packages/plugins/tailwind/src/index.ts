@@ -13,7 +13,7 @@ const tailwindStateSchema = z.object({
   classes: z.array(z.string()),
 })
 
-const classDelimiter = /\s+/
+const classDelimiter = /\s+/u
 
 export async function extractTailwindClasses(data: unknown) {
   const classes = new Set<string>()

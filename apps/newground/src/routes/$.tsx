@@ -40,7 +40,7 @@ const getPage = createServerFn({ method: "GET" })
 
 function Oberon() {
   const page = Route.useLoaderData()
-  return <>{page}</>
+  return page
 }
 
 export const Route = createFileRoute("/$")({

@@ -24,7 +24,7 @@ export const PreviewIframe = ({
       const tailwindScript = iframeDocument.createElement("script")
       tailwindScript.setAttribute("id", "preview-frame-tailwind")
       tailwindScript.setAttribute("src", iframeTailwindSrc)
-      iframeDocument.head.appendChild(tailwindScript)
+      iframeDocument.head.append(tailwindScript)
     }
 
     iframeDocument.body.classList.add(...document.body.classList)
@@ -61,5 +61,5 @@ export const PreviewIframe = ({
     }
   }, [iframeDocument, previewMode])
 
-  return <>{children}</>
+  return children
 }

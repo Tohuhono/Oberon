@@ -1,6 +1,5 @@
 import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
 
 import { fromPartial } from "@dev/vitest"
 import { createClient } from "@libsql/client"
@@ -12,7 +11,7 @@ import { drizzle } from "drizzle-orm/libsql"
 type OnCleanup = (callback: () => Promise<void>) => void
 
 const migrationsFolder = resolve(
-  dirname(fileURLToPath(import.meta.url)),
+  import.meta.dirname,
   "../../../plugins/development/src/db/migrations",
 )
 

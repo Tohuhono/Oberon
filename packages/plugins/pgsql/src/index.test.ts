@@ -1,5 +1,4 @@
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
+import { resolve } from "path"
 
 import { fromPartial, test as baseTest } from "@dev/vitest"
 import { PGlite } from "@electric-sql/pglite"
@@ -13,7 +12,7 @@ import { Pool } from "pg"
 import { getDatabaseAdapter } from "./db/database-adapter"
 import * as schema from "./db/schema"
 
-const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "./db/migrations")
+const migrationsFolder = resolve(import.meta.dirname, "./db/migrations")
 
 ;(async () => {
   const client = new PGlite()

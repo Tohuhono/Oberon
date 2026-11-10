@@ -39,8 +39,8 @@ describe("dependency boundaries", { tags: ["ai", "feature-remove-nextjs-from-cor
       const content = await readFile(file, "utf8")
 
       if (
-        /from\s+["']next(?:[/'"])/.test(content) ||
-        /import\s*\(\s*["']next(?:[/'"])/.test(content)
+        /from\s+["']next(?:[/'"])/u.test(content) ||
+        /import\s*\(\s*["']next(?:[/'"])/u.test(content)
       ) {
         nextImports.push(relative(coreRoot.pathname, file))
       }

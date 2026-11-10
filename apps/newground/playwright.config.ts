@@ -1,11 +1,10 @@
 import { readFile } from "node:fs/promises"
 import path from "node:path"
-import { fileURLToPath } from "node:url"
 
 import { base, defineConfig } from "@dev/playwright"
 import { authProject, authenticatedProject } from "@dev/playwright/projects"
 
-const PLAYWRIGHT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".playwright")
+const PLAYWRIGHT_DIR = path.resolve(import.meta.dirname, ".playwright")
 
 const APP_LOG_DIR = path.resolve(PLAYWRIGHT_DIR, "logs")
 
@@ -43,7 +42,7 @@ export default defineConfig({
     },
   },
   projects: [
-    { ...authProject, grepInvert: /@docs/ },
-    { ...authenticatedProject, grepInvert: /@docs/ },
+    { ...authProject, grepInvert: /@docs/u },
+    { ...authenticatedProject, grepInvert: /@docs/u },
   ],
 })

@@ -16,8 +16,8 @@ export function Home() {
           your own to customise the OberonCMS to your needs.
         </p>
         <p>
-          We're still building out the core capabilities and [documentation](/docs/about), but we're
-          excited to see what you can do with it.
+          We&apos;re still building out the core capabilities and [documentation](/docs/about), but
+          we&apos;re excited to see what you can do with it.
         </p>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { getAuthAdapter } from "./db/auth-adapter"
 import { getClient } from "./db/client"
 import { getDatabaseAdapter } from "./db/database-adapter"
 
+// oxlint-disable-next-line unicorn/prefer-import-meta-properties -- Bundled output does not preserve import.meta.dirname.
 const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => ({

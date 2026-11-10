@@ -151,8 +151,8 @@ export type JsonValue = z.infer<typeof JsonValueSchema>
 export const PageSchema = z.object({
   key: z
     .string()
-    .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
-    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
+    .regex(/^[0-9a-zA-Z_.-/]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
+    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/u, "Route segments cannot be empty"),
   data: z.looseObject({}),
   updatedAt: z.date(),
   updatedBy: z.string(),
@@ -294,7 +294,8 @@ export type OberonDatabaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
-  deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void> // TODO uploadthing
+  // TODO uploadthing
+  deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void>
   deleteKV: (data: { namespace: string; key: string }) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>
@@ -436,9 +437,7 @@ export type OberonClientContext = DescriminatedContext & {
   slug: string
 }
 
-const OberonQueryParamValueSchema = z
-  .union([z.string(), z.number(), z.boolean()])
-  .transform((value) => String(value))
+const OberonQueryParamValueSchema = z.union([z.string(), z.number(), z.boolean()]).transform(String)
 
 export const OberonQueryParamsSchema = z.record(
   z.string(),

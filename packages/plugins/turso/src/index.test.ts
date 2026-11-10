@@ -1,6 +1,5 @@
 import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
 
 import { fromPartial, test, vi } from "@dev/vitest"
 import { createClient, type Client } from "@libsql/client"
@@ -11,7 +10,7 @@ import { drizzle } from "drizzle-orm/libsql"
 
 import * as schema from "./db/schema"
 
-const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..")
+const rootDirectory = resolve(import.meta.dirname, "../../../..")
 
 const sqliteFile = resolve(rootDirectory, ".tmp/turso-plugin-unit-tests.db")
 

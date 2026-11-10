@@ -1,11 +1,12 @@
 import { defineConfig } from "oxlint"
 
 export default defineConfig({
-  plugins: ["typescript", "unicorn"],
+  plugins: ["eslint", "typescript", "unicorn", "oxc"],
   jsPlugins: ["@dev/oxlint/plugin"],
   categories: {
     correctness: "error",
     suspicious: "error",
+    pedantic: "error",
   },
   env: {
     builtin: true,
@@ -25,44 +26,45 @@ export default defineConfig({
     "**/*.d.ts",
   ],
   rules: {
-    // dissabling from categories
-    "react/react-in-jsx-scope": "off",
+    // dissabled from categories
     "no-underscore-dangle": "off",
+    "react/react-in-jsx-scope": "off",
     "unicorn/no-array-sort": "off",
 
-    // adding rules
-    "no-case-declarations": "error",
-    "no-empty": "error",
-    "no-fallthrough": "error",
-    "no-prototype-builtins": "error",
-    "no-redeclare": "error",
-    "no-regex-spaces": "error",
-    "preserve-caught-error": "error",
-    "no-array-constructor": "error",
-    "no-useless-constructor": "error",
-    "no-var": "error",
+    // dissabled from pedantic
+    "ban-types": "off",
+    "explicit-length-check": "off",
+    "max-classes-per-file": "off",
+    "max-lines": "off",
+    "max-lines-per-function": "off",
+    "no-promise-executor-return": "off",
+    "no-warning-comments": "off",
+    "require-await": "off",
+    "unicorn/no-useless-switch-case": "off",
+    "unicorn/no-useless-undefined": "off",
+    "unicorn/prefer-query-selector": "off",
+    "unicorn/prefer-top-level-await": "off",
+
+    // Style
     "prefer-const": "error",
     "prefer-rest-params": "error",
     "prefer-spread": "error",
+    "typescript/unified-signatures": "error",
+
+    // Restriction
+    "no-empty": "error",
+    "no-regex-spaces": "error",
+    "no-var": "error",
     "typescript/no-dynamic-delete": "error",
     "typescript/no-explicit-any": "error",
-    "typescript/no-extraneous-class": "error",
     "typescript/no-invalid-void-type": "error",
     "typescript/no-namespace": "error",
-    "typescript/no-non-null-asserted-nullish-coalescing": "error",
     "typescript/no-non-null-assertion": "error",
     "typescript/no-require-imports": "error",
-    "typescript/no-unnecessary-type-constraint": "error",
-    "typescript/no-unsafe-function-type": "error",
     "typescript/prefer-literal-enum-member": "error",
-    "typescript/unified-signatures": "error",
-    "tohuhono/no-type-assertion-except-object-keys": ["error"],
-    "typescript/ban-ts-comment": [
-      "error",
-      {
-        minimumDescriptionLength: 10,
-      },
-    ],
+
+    // Custom
+    "tohuhono/no-type-assertion-except-object-keys": "error",
   },
   overrides: [
     {

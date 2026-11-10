@@ -18,7 +18,7 @@ function copyKey(optimisticPages: OberonPageMeta[], key: OberonPageMeta["key"]) 
   let iterator = 0
   let newKey = `${key}_copy`
 
-  while (optimisticPages.find((page) => page.key === newKey)) {
+  while (optimisticPages.some((page) => page.key === newKey)) {
     newKey = `${key}_copy_${++iterator}`
   }
 

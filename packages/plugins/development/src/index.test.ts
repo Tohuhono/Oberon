@@ -1,6 +1,5 @@
 import { rm } from "fs/promises"
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
+import { resolve } from "path"
 
 import { expect, test, fromPartial, vi } from "@dev/vitest"
 import { INITIAL_DATA, type OberonPluginAdapter } from "@oberoncms/core"
@@ -8,7 +7,7 @@ import { getAdapter } from "@oberoncms/sqlite/adapter"
 import { createAdapterTest, createAdapterTests } from "@oberoncms/testing"
 import { eq } from "drizzle-orm"
 
-const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../../../")
+const rootDirectory = resolve(import.meta.dirname, "../../../../")
 
 async function closeDevelopmentClient() {
   const client = Reflect.get(globalThis, "oberonDb")

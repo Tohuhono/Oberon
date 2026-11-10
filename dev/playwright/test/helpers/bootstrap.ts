@@ -10,7 +10,7 @@ const CALLBACK_PATH = "/cms/pages"
 
 function parseDevelopmentOtpEntry(logs: string): string | null {
   const strippedLog = stripVTControlCharacters(logs)
-  const tokenPatterns = [/token:\s*["']?(\d{6})["']?/g, /Sign in with code\s+(\d{6})/g]
+  const tokenPatterns = [/token:\s*["']?(\d{6})["']?/gu, /Sign in with code\s+(\d{6})/gu]
 
   let lastMatch: string | null = null
 

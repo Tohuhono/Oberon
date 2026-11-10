@@ -95,8 +95,10 @@ describe("initPlugins adapter hooks", { tags: ["ai", "issue-362"] }, () => {
         addUser:
           ({ getAdapter, next }) =>
           async (user) => {
-            events.push(typeof getAdapter().will)
-            events.push(String(await getAdapter().getKV({ namespace: "test", key: "suffix" })))
+            const adapterType = typeof getAdapter().will
+            events.push(adapterType)
+            const suffix = String(await getAdapter().getKV({ namespace: "test", key: "suffix" }))
+            events.push(suffix)
             const result = await next({ ...user, email: `${user.email}.forwarded` })
             events.push(`returned ${result.id}`)
             return result

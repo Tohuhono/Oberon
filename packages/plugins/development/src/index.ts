@@ -13,6 +13,7 @@ import { migrate } from "drizzle-orm/libsql/migrator"
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient, initialise } from "./db/client"
 
+// oxlint-disable-next-line unicorn/prefer-import-meta-properties -- Bundled output does not preserve import.meta.dirname.
 const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => {

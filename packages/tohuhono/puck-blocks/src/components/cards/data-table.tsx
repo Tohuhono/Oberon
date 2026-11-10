@@ -134,7 +134,7 @@ export const columns = columnHelper.columns([
   columnHelper.accessor("amount", {
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
+      const amount = Number(row.getValue("amount"))
 
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
