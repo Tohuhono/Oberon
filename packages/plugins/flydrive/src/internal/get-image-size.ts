@@ -2,17 +2,16 @@ import { imageSize } from "image-size"
 
 type ImageSize = { width: number; height: number }
 
-export async function getImageSize(
-  image: Buffer,
-  defaultSize: ImageSize = { width: 100, height: 100 },
-): Promise<ImageSize> {
+export async function getImageSize(image: Buffer, defaultSize?: ImageSize): Promise<ImageSize> {
+  const fallbackSize = defaultSize ?? { width: 100, height: 100 }
+
   try {
     const { width, height } = imageSize(image)
     if (width && height) {
       return { width, height }
     }
-    return defaultSize
+    return fallbackSize
   } catch (error) {
-    return defaultSize
+    return fallbackSize
   }
 }

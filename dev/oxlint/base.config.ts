@@ -47,7 +47,6 @@ export default defineConfig({
     "unicorn/prefer-top-level-await": "off",
 
     // TODO
-    "unicorn/no-object-as-default-parameter": "off",
     "unicorn/prefer-array-some": "off",
     "unicorn/prefer-at": "off",
     "unicorn/prefer-dom-node-append": "off",
