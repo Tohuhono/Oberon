@@ -1,20 +1,20 @@
 import {
   AddImageSchema,
-  AddPageSchema,
+  AddFragmentSchema,
   AddUserSchema,
   CanSchema,
   ChangeRoleSchema,
   DeleteImageSchema,
-  DeletePageSchema,
+  DeleteFragmentSchema,
   DeleteUserSchema,
   GetAllImagesSchema,
-  GetAllPagesSchema,
+  GetAllFragmentsSchema,
   GetAllPathsSchema,
   GetAllUsersSchema,
   GetConfigSchema,
-  GetPageDataSchema,
+  GetFragmentDataSchema,
   MigrateDataSchema,
-  PublishPageSchema,
+  PublishFragmentSchema,
   ResolvePathSchema,
   SignInSchema,
   SignOutSchema,
@@ -35,9 +35,9 @@ export const actions = {
     "use server"
     return actionHandler.addImage(AddImageSchema.parse(data))
   },
-  addPage: async (data) => {
+  addFragment: async (data) => {
     "use server"
-    return actionHandler.addPage(AddPageSchema.parse(data))
+    return actionHandler.addFragment(AddFragmentSchema.parse(data))
   },
   addUser: async (data) => {
     "use server"
@@ -55,9 +55,9 @@ export const actions = {
     "use server"
     return actionHandler.deleteImage(DeleteImageSchema.parse(data))
   },
-  deletePage: async (data) => {
+  deleteFragment: async (data) => {
     "use server"
-    return actionHandler.deletePage(DeletePageSchema.parse(data))
+    return actionHandler.deleteFragment(DeleteFragmentSchema.parse(data))
   },
   deleteUser: async (data) => {
     "use server"
@@ -67,9 +67,9 @@ export const actions = {
     "use server"
     return actionHandler.getAllImages(GetAllImagesSchema.parse(data))
   },
-  getAllPages: async (data) => {
+  getAllFragments: async (data) => {
     "use server"
-    return actionHandler.getAllPages(GetAllPagesSchema.parse(data))
+    return actionHandler.getAllFragments(GetAllFragmentsSchema.parse(data))
   },
   getAllPaths: async (data) => {
     "use server"
@@ -83,17 +83,17 @@ export const actions = {
     "use server"
     return actionHandler.getConfig(GetConfigSchema.parse(data))
   },
-  getPageData: async (data) => {
+  getFragmentData: async (data) => {
     "use server"
-    return actionHandler.getPageData(GetPageDataSchema.parse(data))
+    return actionHandler.getFragmentData(GetFragmentDataSchema.parse(data))
   },
   migrateData: async (data) => {
     "use server"
     return actionHandler.migrateData(MigrateDataSchema.parse(data))
   },
-  publishPageData: async (data) => {
+  publishFragmentData: async (data) => {
     "use server"
-    return actionHandler.publishPageData(PublishPageSchema.parse(data))
+    return actionHandler.publishFragmentData(PublishFragmentSchema.parse(data))
   },
   signIn: async (data) => {
     "use server"

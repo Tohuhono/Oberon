@@ -9,7 +9,7 @@ import type {
 import type { ImageTransform } from "@tohuhono/ui/image"
 import type { StreamResponseChunk } from "@tohuhono/utils"
 import type { BetterAuthOptions } from "better-auth/minimal"
-import type { ReactNode } from "react"
+import type { ComponentType, ReactNode } from "react"
 import { z } from "zod"
 
 // Compatible with Nextjs
@@ -19,13 +19,15 @@ export class OberonError extends Error {}
 
 export class ResponseError extends Error {}
 
+export class FragmentRevisionError extends ResponseError {}
+
 export class NotImplementedError extends ResponseError {}
 
 // TODO fix types
 // oxlint-disable-next-line @typescript/no-explicit-any
 type Transforms = Array<(props: any) => any>
 
-export type PageData = Data
+export type FragmentData = Data<DefaultComponents, DefaultComponentProps>
 
 export type OberonClientConfig<Components extends DefaultComponents = DefaultComponents> = Config<{
   components: Components
@@ -37,6 +39,12 @@ export type OberonClientConfig<Components extends DefaultComponents = DefaultCom
       transforms?: Transforms
     }
   >
+  authoring?: {
+    Editor?: ComponentType<{ path: string; data: FragmentData | null; config: OberonClientConfig }>
+    Preview?: ComponentType<{ path: string; data: FragmentData | null; config: OberonClientConfig }>
+    Library?: ComponentType<{ config: OberonClientConfig }>
+    label?: string
+  }
 }
 
 export type OberonConfig = {
@@ -112,6 +120,7 @@ export const clientActions = [
   "pages",
   "site",
   "login",
+  "library",
 ] as const
 export const actionPaths = clientActions.map((action) => ({
   path: [action],
@@ -146,43 +155,86 @@ export const JsonValueSchema = z.json()
 export type JsonValue = z.infer<typeof JsonValueSchema>
 
 /*
- * Pages
+ * Fragments
  */
-export const PageSchema = z.object({
-  key: z
-    .string()
-    .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
-    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty"),
-  data: z.looseObject({}),
+export const PagePathSchema = z
+  .string()
+  .regex(/^[0-9a-zA-Z_.-/]+$/, "Valid characters: 0-9 a-z A-Z -_./")
+  .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/, "Route segments cannot be empty")
+
+const ComponentDataSchema = z.looseObject({
+  type: z.string().min(1),
+  props: z.looseObject({ id: z.string().min(1) }),
+})
+
+export const FragmentDataSchema = z
+  .looseObject({
+    root: z.looseObject({ props: z.record(z.string(), JsonValueSchema).optional() }),
+    content: z.array(ComponentDataSchema),
+    zones: z.record(z.string(), z.array(ComponentDataSchema)).optional(),
+  })
+  .refine((data) => JsonValueSchema.safeParse(data).success, "Fragment data must be JSON")
+
+export const FragmentSchema = z.object({
+  key: z.string().min(1).max(512),
+  type: z.string().regex(/^[a-z][a-z0-9-]*$/, "Use a lowercase Fragment type"),
+  data: FragmentDataSchema,
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
 
-export const AddPageSchema = PageSchema.pick({ key: true })
+function validatePagePath(fragment: { key: string; type: string }, context: z.RefinementCtx) {
+  if (fragment.type !== "page") return
 
-export const DeletePageSchema = PageSchema.pick({ key: true })
+  const parsed = PagePathSchema.safeParse(fragment.key)
+  if (!parsed.success) {
+    for (const issue of parsed.error.issues) {
+      context.addIssue({ code: "custom", path: ["key"], message: issue.message })
+    }
+  }
+}
 
-export const GetPageDataSchema = PageSchema.pick({ key: true })
+export const AddFragmentSchema = FragmentSchema.pick({ key: true, type: true }).superRefine(
+  validatePagePath,
+)
 
-export const PublishPageSchema = PageSchema.pick({ key: true, data: true })
+export const DeleteFragmentSchema = FragmentSchema.pick({ key: true, type: true })
+  .extend({ expectedUpdatedAt: z.coerce.date().optional() })
+  .superRefine(validatePagePath)
 
-export const PageMetaSchema = PageSchema.pick({
+export const GetFragmentDataSchema = FragmentSchema.pick({ key: true }).extend({
+  type: FragmentSchema.shape.type.optional(),
+})
+
+export const PublishFragmentSchema = FragmentSchema.pick({ key: true, type: true, data: true })
+  .extend({ expectedUpdatedAt: z.coerce.date().optional() })
+  .superRefine(validatePagePath)
+
+export const FragmentMetaSchema = FragmentSchema.pick({
   key: true,
+  type: true,
   updatedAt: true,
   updatedBy: true,
 })
 
-export type OberonPage = z.infer<typeof PageSchema> & {
-  data: PageData
+export type OberonFragment = z.infer<typeof FragmentSchema> & {
+  data: FragmentData
   key: OberonRoute
 }
 
 // Cannot infer from zod because we need nextjs to understand key is a valid Route
-export type OberonPageMeta = MaybeOptimistic<
-  z.infer<typeof PageMetaSchema> & {
+export type OberonFragmentMeta = MaybeOptimistic<
+  z.infer<typeof FragmentMetaSchema> & {
     key: OberonRoute
   }
 >
+
+export const FRAGMENT_REVISION = { namespace: "oberon-fragments", key: "revision" } as const
+
+export type FragmentWriteOptions = {
+  expectedUpdatedAt?: Date
+  expectedRevision?: string
+}
 
 /*
  * Images
@@ -291,18 +343,21 @@ export type OberonAuthAdapter = {
 }
 
 export type OberonDatabaseAdapter = {
-  addPage: (page: OberonPage) => Promise<void>
+  addFragment: (fragment: OberonFragment & FragmentWriteOptions) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
+  deleteFragment: (
+    data: z.infer<typeof DeleteFragmentSchema> & FragmentWriteOptions,
+  ) => Promise<void>
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void> // TODO uploadthing
   deleteKV: (data: { namespace: string; key: string }) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
-  getAllPages: () => Promise<OberonPageMeta[]>
-  getPageData: (data: z.infer<typeof DeletePageSchema>) => Promise<Data | null>
+  getAllFragments: (data: z.infer<typeof GetAllFragmentsSchema>) => Promise<OberonFragmentMeta[]>
+  getFragmentData: (data: z.infer<typeof GetFragmentDataSchema>) => Promise<FragmentData | null>
+  getFragmentRevision: () => Promise<string>
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updatePageData: (data: OberonPage) => Promise<void>
+  updateFragmentData: (data: OberonFragment & FragmentWriteOptions) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -318,7 +373,14 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
-  OberonRoutingAdapter
+  OberonRoutingAdapter & {
+    getContentClasses: (content: { fragments: FragmentData[] }) => Promise<string[]>
+    prepareContent: (content: { config: Config; data: FragmentData }) => Promise<{
+      config: Config
+      data: FragmentData
+    }>
+    contentChanged: () => Promise<void>
+  }
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
@@ -378,7 +440,7 @@ export type OberonResponse<T = unknown> = Promise<
 >
 
 export const GetAllImagesSchema = z.undefined()
-export const GetAllPagesSchema = z.undefined()
+export const GetAllFragmentsSchema = z.object({ type: FragmentSchema.shape.type.optional() })
 export const GetAllPathsSchema = z.undefined()
 export const GetAllUsersSchema = z.undefined()
 export const GetConfigSchema = z.undefined()
@@ -388,11 +450,13 @@ export const SignOutSchema = z.undefined()
 export const ResolvePathSchema = z.object({ key: z.string() })
 
 export type OberonServerActions = {
-  resolvePath: (data: z.infer<typeof ResolvePathSchema>) => Promise<{ key: string; data: PageData }>
-  addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
+  resolvePath: (
+    data: z.infer<typeof ResolvePathSchema>,
+  ) => Promise<{ key: string; data: FragmentData }>
+  addFragment: (page: z.infer<typeof AddFragmentSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<void>
+  deleteFragment: (data: z.infer<typeof DeleteFragmentSchema>) => OberonResponse<void>
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => OberonResponse<void>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
@@ -402,17 +466,23 @@ export type OberonServerActions = {
     data: z.infer<typeof ChangeRoleSchema>,
   ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
   getAllImages: (data?: z.infer<typeof GetAllImagesSchema>) => OberonResponse<OberonImage[]>
-  getAllPages: (data?: z.infer<typeof GetAllPagesSchema>) => OberonResponse<OberonPageMeta[]>
+  getAllFragments: (
+    data: z.infer<typeof GetAllFragmentsSchema>,
+  ) => OberonResponse<OberonFragmentMeta[]>
   getAllPaths: (
     data?: z.infer<typeof GetAllPathsSchema>,
   ) => OberonResponse<Array<{ path: string[] }>>
   getAllUsers: (data?: z.infer<typeof GetAllUsersSchema>) => OberonResponse<OberonUser[]>
   getConfig: (data?: z.infer<typeof GetConfigSchema>) => OberonResponse<OberonSiteConfig>
-  getPageData: (data: z.infer<typeof GetPageDataSchema>) => OberonResponse<Data | null>
+  getFragmentData: (
+    data: z.infer<typeof GetFragmentDataSchema>,
+  ) => OberonResponse<FragmentData | null>
   migrateData: (
     data?: z.infer<typeof MigrateDataSchema>,
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ key: string }>
+  publishFragmentData: (
+    data: z.infer<typeof PublishFragmentSchema>,
+  ) => OberonResponse<{ key: string }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
@@ -422,11 +492,12 @@ export type OberonServerActions = {
  */
 
 type DescriminatedContext =
-  | { action: "edit" | "preview"; data: Data | null }
+  | { action: "edit" | "preview"; data: FragmentData | null }
   | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: OberonPageMeta[] }
+  | { action: "pages"; data: OberonFragmentMeta[] }
   | { action: "site"; data: OberonSiteConfig }
+  | { action: "library"; data: null }
   | {
       action: "login"
       data: { callbackUrl: string; email: string; token: string }

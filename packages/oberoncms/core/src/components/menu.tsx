@@ -10,9 +10,11 @@ export const Menu = ({
   title,
   path,
   children,
+  libraryLabel,
 }: PropsWithChildren<{
   title?: string
   path?: string
+  libraryLabel?: string
 }>) => {
   const { can, signOut } = useOberonActions()
 
@@ -22,27 +24,32 @@ export const Menu = ({
   return (
     <div
       className="
-        grid w-full grid-cols-3 items-center bg-sidebar-background p-2
+        flex w-full flex-wrap items-center justify-between gap-2 bg-sidebar-background p-2
         text-sidebar-foreground
       "
     >
-      <div className="flex justify-start gap-1">{children}</div>
-      <div className="flex justify-center">
+      {children && <div className="flex max-w-full flex-wrap justify-start gap-1">{children}</div>}
+      <div className="flex min-w-0 flex-1 basis-full justify-center wrap-anywhere sm:basis-0">
         {path ? (
-          <a href={path} target="_blank" rel="noreferrer">
+          <a href={path} target="_blank" rel="noreferrer" className="min-w-0 truncate">
             {title || path}
           </a>
         ) : (
           title
         )}
       </div>
-      <div className="flex justify-end gap-1">
+      <div className="flex w-full flex-wrap justify-end gap-1 sm:w-auto">
         <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/site">
           Site
         </Link>
         <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/pages">
           Pages
         </Link>
+        {libraryLabel && (
+          <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/library">
+            {libraryLabel}
+          </Link>
+        )}
         {showImages && (
           <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/images">
             Images

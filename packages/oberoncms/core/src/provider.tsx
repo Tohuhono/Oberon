@@ -14,7 +14,7 @@ import { ResponseError } from "./lib/dtd"
 import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
-  { getPageData, getAllImages, getAllPages, getAllUsers, getConfig }: OberonAdapter,
+  { getFragmentData, getAllImages, getAllFragments, getAllUsers, getConfig }: OberonAdapter,
   action: ClientAction,
   slug: string,
   searchParams: OberonQueryParams,
@@ -35,7 +35,7 @@ async function getContext(
       return {
         action,
         slug,
-        data: await getPageData({ key: slug }),
+        data: await getFragmentData({ key: slug, type: "page" }),
       }
     case "users":
       return {
@@ -59,13 +59,15 @@ async function getContext(
       return {
         action,
         slug,
-        data: await getAllPages(),
+        data: await getAllFragments({ type: "page" }),
       }
+    case "library":
+      return { action, slug, data: null }
   }
 }
 
 function getActionGroup(action: Exclude<ClientAction, "login">): AdapterActionGroup {
-  if (action === "edit" || action === "preview") {
+  if (action === "edit" || action === "preview" || action === "library") {
     return "pages"
   }
   return action

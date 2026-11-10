@@ -114,7 +114,7 @@ developmentAdapterTest.describe(
     developmentAdapterTest(
       "keeps page updatedBy as a write-time snapshot after auth user changes",
       async ({ adapter }) => {
-        if (!adapter.addUser || !adapter.addPage || !adapter.getAllPages) {
+        if (!adapter.addUser || !adapter.addFragment || !adapter.getAllFragments) {
           throw new Error("Development plugin adapter is missing page or user methods")
         }
 
@@ -123,15 +123,16 @@ developmentAdapterTest.describe(
           role: "admin",
         })
 
-        await adapter.addPage({
+        await adapter.addFragment({
           key: "/write-time-snapshot",
+          type: "page",
           data: INITIAL_DATA,
           updatedAt: new Date("2024-01-01T00:00:00.000Z"),
           updatedBy: added.email,
         })
 
         const readUpdatedBy = async () => {
-          const pages = await adapter.getAllPages()
+          const pages = await adapter.getAllFragments({ type: "page" })
 
           return pages.find((page) => page.key === "/write-time-snapshot")?.updatedBy
         }

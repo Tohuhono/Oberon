@@ -6,16 +6,21 @@ export function Preview({
   path,
   data,
   config,
+  draftConfig = config,
+  prepareData,
 }: {
   path: string
   config: Config
   data: Data | null
+  draftConfig?: Config
+  prepareData?: (data: Data) => Data
 }) {
-  const localData = useLocalData(path, config)[0]
+  const [localData, , isReady] = useLocalData(path, draftConfig, data)
+  const content = localData ?? data
 
-  if (!localData || !data) {
-    return <></>
+  if (!isReady || !content) {
+    return <div role="status">Loading preview...</div>
   }
 
-  return <Render data={localData} config={config} />
+  return <Render data={prepareData ? prepareData(content) : content} config={config} />
 }

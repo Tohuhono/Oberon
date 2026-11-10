@@ -1,10 +1,53 @@
 # Database adapters
 
-Database plugins store pages, image metadata, users, Site state, and key-value data. The built-in
-plugins also supply Better Auth storage.
+Database Plugins store Fragments, image metadata, users, Site state, and key-value data. The
+built-in plugins also supply Better Auth storage.
 
 Use [Turso](/docs/plugins/database/turso) or [PostgreSQL](/docs/plugins/database/pgsql) for database
 setup.
 
 If you are implementing your own database plugin, see
 [Custom > Adapter Hooks](/docs/plugins/custom/adapter-hooks).
+
+## Fragment records
+
+Each Fragment has a globally unique `key`, an indexed `type`, published Puck `data`, `updatedAt`,
+and `updatedBy`. A Page uses type `page`; its key remains its public path. A Shared component uses
+type `shared` and has no Page route.
+
+Use `getFragmentData({ key })` for an exact-key read. Add `type` to restrict the read.
+`getAllFragments({ type })` returns metadata without the Puck tree. Pass `{}` to list all types.
+Deletes require both the key and type. Core applies path validation and route effects only to Pages.
+
+## Custom database migration
+
+The Fragment lifecycle replaces the Page operation names directly:
+
+| Previous          | Replacement           |
+| ----------------- | --------------------- |
+| `addPage`         | `addFragment`         |
+| `getPageData`     | `getFragmentData`     |
+| `getAllPages`     | `getAllFragments`     |
+| `updatePageData`  | `updateFragmentData`  |
+| `deletePage`      | `deleteFragment`      |
+| `publishPageData` | `publishFragmentData` |
+
+Update custom providers, action transports, and write hooks together. Carry `type` through writes
+and apply Page-only effects only when it is `page`. Filter public routing and Page lists by type.
+
+The built-in migrations retain the physical `pages` table. They add an indexed `type` column with
+default `page`, preserving existing keys, data, authors, and update times. SQLite also migrates
+timestamps from seconds to milliseconds.
+
+Implement `getFragmentRevision()` and the optional write guards in custom database providers:
+
+- Return an opaque revision string. Return `""` before the first Fragment mutation.
+- Advance the revision on every successful add, update, and delete, across all Fragment types.
+- Check `expectedRevision` in the same transaction as the mutation. On mismatch, throw
+  `FragmentRevisionError`.
+- Check `expectedUpdatedAt` atomically when supplied. Reject stale records with `ResponseError`.
+- Reject duplicate keys and attempts to change an existing Fragment's type.
+
+The Shared components Plugin validates the reference graph against this revision. It retries
+unrelated concurrent publications, but does not retry stale same-source edits. Without atomic
+guards, concurrent publications can introduce cycles or delete a source that is still in use.

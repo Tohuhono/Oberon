@@ -19,6 +19,7 @@ const mockPage = getInitialData()
 const mockAllPages = [
   {
     key: mockPage.key,
+    type: "page",
     updatedAt: mockPage.updatedAt,
     updatedBy: mockPage.updatedBy,
   },
@@ -32,26 +33,30 @@ export const mockPlugin: OberonPlugin = () => ({
   name: "mock-plugin",
   adapter: {
     addImage: () => notAvailable,
-    addPage: () => notAvailable,
+    addFragment: () => notAvailable,
     addUser: () => async () => mockUser,
     changeRole: () => notAvailable,
     deleteImage: () => notAvailable,
-    deletePage: () => notAvailable,
+    deleteFragment: () => notAvailable,
     deleteKV: () => notAvailable,
     deleteUser: () => notAvailable,
     getAllImages: () => async () => [],
-    getAllPages: () => async () => mockAllPages,
+    getAllFragments:
+      () =>
+      async ({ type }) =>
+        !type || type === "page" ? mockAllPages : [],
     getAllUsers: () => async () => [mockUser],
     getCurrentUser: () => async () => mockUser,
-    getPageData:
+    getFragmentData:
       () =>
-      async ({ key }) =>
-        key === "/" ? mockPage.data : null,
+      async ({ key, type }) =>
+        key === "/" && (!type || type === "page") ? mockPage.data : null,
+    getFragmentRevision: () => async () => "",
     getKV: () => notAvailable,
     getSite: () => async () => mockSite,
     hasPermission: () => () => true,
     putKV: () => notAvailable,
-    updatePageData: () => notAvailable,
+    updateFragmentData: () => notAvailable,
     updateSite: () => notAvailable,
     signIn: () => notAvailable,
     signOut: () => async () => {},

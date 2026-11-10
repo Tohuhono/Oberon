@@ -18,20 +18,20 @@ your plugin implements or wraps.
 ## Middleware
 
 Use `next` to call the previous implementation. Later plugins wrap earlier plugins. For
-`[database, tailwind, framework]`, a page update enters the framework hook first and the database
-method last.
+`[database, tailwind, framework]`, a Fragment update enters the Framework hook first and the
+database method last.
 
 ```tsx
 import type { OberonPlugin } from "@oberoncms/core"
 
 export const plugin: OberonPlugin = () => ({
-  name: "page-log",
+  name: "fragment-log",
   adapter: {
-    updatePageData:
+    updateFragmentData:
       ({ next }) =>
-      async (page) => {
-        await next(page)
-        console.info("Page updated", page.key)
+      async (fragment) => {
+        await next(fragment)
+        console.info("Fragment updated", fragment.key, fragment.type)
       },
   },
 })
@@ -46,16 +46,32 @@ static return type omits the current method to discourage self-recursion. A prov
 Use the exported types for exact signatures. Methods with input receive one object. Methods without
 input take no arguments.
 
-| Type                    | Methods                                                                                                                                                                                                                         |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OberonDatabaseAdapter` | `addPage`, `deletePage`, `getAllPages`, `getPageData`, `updatePageData`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
-| `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                          |
-| `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                             |
-| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                     |
-| `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                       |
+| Type                    | Methods                                                                                                                                                                                                                                                                    |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OberonDatabaseAdapter` | `addFragment`, `deleteFragment`, `getAllFragments`, `getFragmentData`, `getFragmentRevision`, `updateFragmentData`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
+| `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                                                                     |
+| `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                                                                        |
+| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                                                                |
+| `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                                                                  |
 
 `hasPermission` returns a boolean synchronously. The final Adapter also supplies permission helpers,
 route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
+
+`prepareContent({ config, data })` prepares a Puck config and tree before rendering. Its default
+implementation returns the input unchanged. Use it for Plugin-owned reference resolution. Pass the
+Adapter to Oberon's public `Render` when a Plugin supplies this hook.
+
+`getContentClasses({ fragments })` returns CSS utility tokens contributed by a Plugin. Its default
+implementation returns an empty array. Call `next` and include its result. The Tailwind Plugin
+combines these tokens with literal `className` values from all published Fragments. Shared
+components use this hook for Exposed `className` props stored under stable instance keys.
+
+`contentChanged()` notifies a Framework that a route-free publication can affect public content. Its
+default implementation does nothing. A caching Framework must invalidate affected rendering when
+this hook runs. Page-specific route effects remain on the typed Fragment write hooks.
+
+See [Database adapters](/docs/plugins/database) for Fragment identity, listing, and atomic write
+guards.
 
 ## Bootstrap
 

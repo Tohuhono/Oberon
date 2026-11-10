@@ -304,6 +304,9 @@ importers:
       '@oberoncms/plugin-pgsql':
         specifier: workspace:*
         version: link:../../packages/plugins/pgsql
+      '@oberoncms/plugin-shared-components':
+        specifier: workspace:*
+        version: link:../../packages/plugins/shared-components
       '@oberoncms/plugin-tailwind':
         specifier: workspace:*
         version: link:../../packages/plugins/tailwind
@@ -404,6 +407,9 @@ importers:
       '@oberoncms/plugin-pgsql':
         specifier: workspace:*
         version: link:../../packages/plugins/pgsql
+      '@oberoncms/plugin-shared-components':
+        specifier: workspace:*
+        version: link:../../packages/plugins/shared-components
       '@oberoncms/plugin-tailwind':
         specifier: workspace:*
         version: link:../../packages/plugins/tailwind
@@ -550,6 +556,9 @@ importers:
       typescript:
         specifier: 7.0.2
         version: 7.0.2
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
 
   dev/scripts:
     dependencies:
@@ -1133,6 +1142,70 @@ importers:
       drizzle-kit:
         specifier: ^0.31.11
         version: 0.31.11
+      react:
+        specifier: ^19.3.1
+        version: 19.3.1
+      react-dom:
+        specifier: ^19.3.1
+        version: 19.3.1(react@19.3.1)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+
+  packages/plugins/shared-components:
+    dependencies:
+      '@oberoncms/core':
+        specifier: workspace:*
+        version: link:../../oberoncms/core
+      '@puckeditor/core':
+        specifier: ^0.24.0
+        version: 0.24.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))
+      '@tohuhono/ui':
+        specifier: workspace:*
+        version: link:../../tohuhono/ui
+      '@tohuhono/utils':
+        specifier: workspace:*
+        version: link:../../tohuhono/utils
+      server-cli-only:
+        specifier: ^0.3.2
+        version: 0.3.2
+      swr:
+        specifier: ^2.5.1
+        version: 2.5.1(react@19.3.1)
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@dev/oxlint':
+        specifier: workspace:*
+        version: link:../../../dev/oxlint
+      '@dev/scripts':
+        specifier: workspace:*
+        version: link:../../../dev/scripts
+      '@dev/typescript':
+        specifier: workspace:*
+        version: link:../../../dev/typescript
+      '@dev/vite':
+        specifier: workspace:*
+        version: link:../../../dev/vite
+      '@dev/vitest':
+        specifier: workspace:*
+        version: link:../../../dev/vitest
+      '@oberoncms/sqlite':
+        specifier: workspace:*
+        version: link:../../oberoncms/sqlite
+      '@oberoncms/testing':
+        specifier: workspace:*
+        version: link:../../oberoncms/testing
+      '@types/node':
+        specifier: 26.6.6
+        version: 26.6.6
+      '@types/react':
+        specifier: 19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
       react:
         specifier: ^19.3.1
         version: 19.3.1

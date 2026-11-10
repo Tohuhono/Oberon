@@ -1,0 +1,70 @@
+{
+  "name": "@oberoncms/plugin-shared-components",
+  "version": "0.1.0",
+  "description": "Visually authored Shared components for OberonCMS",
+  "license": "MIT",
+  "author": "Tohuhono ltd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tohuhono/Oberon",
+    "directory": "packages/plugins/shared-components"
+  },
+  "files": [
+    "dist",
+    "src",
+    "source.css",
+    "CHANGELOG*",
+    "README*",
+    "LICENSE*"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./config": "./dist/config.js",
+    "./client": "./dist/client.js",
+    "./source.css": "./source.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build",
+    "clean": "odt clean",
+    "dev": "vite build --watch",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "tsc": "tsc --pretty",
+    "wait": "wait-on ./dist/version && echo done",
+    "wait:clean": "rimraf ./dist/version"
+  },
+  "dependencies": {
+    "@oberoncms/core": "workspace:*",
+    "@puckeditor/core": "^0.24.0",
+    "@tohuhono/ui": "workspace:*",
+    "@tohuhono/utils": "workspace:*",
+    "server-cli-only": "^0.3.2",
+    "swr": "^2.5.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@dev/oxlint": "workspace:*",
+    "@dev/scripts": "workspace:*",
+    "@dev/typescript": "workspace:*",
+    "@dev/vite": "workspace:*",
+    "@dev/vitest": "workspace:*",
+    "@oberoncms/sqlite": "workspace:*",
+    "@oberoncms/testing": "workspace:*",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "7.0.2"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

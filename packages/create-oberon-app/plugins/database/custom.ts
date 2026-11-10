@@ -6,17 +6,18 @@ export const databasePlugin: OberonPlugin = () => ({
   adapter: {
     // OberonBaseAdapter
     addImage: () => notImplemented("addImage"),
-    addPage: () => notImplemented("addPage"),
+    addFragment: () => notImplemented("addFragment"),
     deleteImage: () => notImplemented("deleteImage"),
-    deletePage: () => notImplemented("deletePage"),
+    deleteFragment: () => notImplemented("deleteFragment"),
     deleteKV: () => notImplemented("deleteKV"),
     getAllImages: () => notImplemented("getAllImages"),
-    getAllPages: () => notImplemented("getAllPages"),
-    getPageData: () => notImplemented("getPageData"),
+    getAllFragments: () => notImplemented("getAllFragments"),
+    getFragmentData: () => notImplemented("getFragmentData"),
+    getFragmentRevision: () => notImplemented("getFragmentRevision"),
     getKV: () => notImplemented("getKV"),
     getSite: () => notImplemented("getSite"),
     putKV: () => notImplemented("putKV"),
-    updatePageData: () => notImplemented("updatePageData"),
+    updateFragmentData: () => notImplemented("updateFragmentData"),
     updateSite: () => notImplemented("updateSite"),
     // OberonAuthAdapter
     addUser: () => notImplemented("addUser"),

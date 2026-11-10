@@ -2,11 +2,12 @@ import { streamResponse } from "@tohuhono/utils"
 
 import { version } from "../../package.json" with { type: "json" }
 import {
+  AddFragmentSchema,
   type MigrationResult,
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
-  type OberonPage,
+  type OberonFragment,
   type OberonPluginPhase,
   type OberonUser,
   ResponseError,
@@ -15,7 +16,7 @@ import {
 import { initPlugins } from "./init-plugins"
 import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
 
-const sortPages = (a: { key: string }, b: { key: string }) => {
+const sortFragments = (a: { key: string }, b: { key: string }) => {
   if (a.key < b.key) {
     return -1
   }
@@ -23,6 +24,13 @@ const sortPages = (a: { key: string }, b: { key: string }) => {
     return 1
   }
   return 0
+}
+
+function validateFragmentIdentity(fragment: Pick<OberonFragment, "key" | "type">) {
+  const parsed = AddFragmentSchema.safeParse(fragment)
+  if (!parsed.success) {
+    throw new ResponseError(parsed.error.issues.map((issue) => issue.message).join(". "))
+  }
 }
 
 export function composeAdapter(
@@ -96,16 +104,15 @@ export function composeAdapter(
     return handler(request)
   }
 
-  const readAllPages = adapter.getAllPages
-  const getAllPages = async () => {
-    const result = await readAllPages()
-
-    const data = result.sort(sortPages)
+  const readAllPages = adapter.getAllFragments
+  const getAllFragments: OberonAdapter["getAllFragments"] = async (filter) => {
+    const result = await readAllPages(filter)
+    const data = result.sort(sortFragments)
     return data
   }
 
   const getAllPaths = async () => {
-    const result = await adapter.getAllPages()
+    const result = await adapter.getAllFragments({ type: "page" })
     const data = result.map((row) => ({
       path: row["key"].split("/").slice(1),
     }))
@@ -124,17 +131,23 @@ export function composeAdapter(
     return allImages || []
   }
 
-  const updatePageData = ({
-    key,
-    data,
-    updatedBy,
-  }: Pick<OberonPage, "key" | "data" | "updatedBy">) =>
-    adapter.updatePageData({
-      key,
-      data,
-      updatedAt: new Date(),
-      updatedBy,
+  const addFragment: OberonAdapter["addFragment"] = async (fragment) => {
+    validateFragmentIdentity(fragment)
+    await adapter.addFragment(fragment)
+  }
+
+  const updateFragmentData: OberonAdapter["updateFragmentData"] = async (fragment) => {
+    validateFragmentIdentity(fragment)
+    await adapter.updateFragmentData({
+      ...fragment,
+      updatedAt: new Date(Math.max(Date.now(), (fragment.expectedUpdatedAt?.getTime() ?? 0) + 1)),
     })
+  }
+
+  const deleteFragment: OberonAdapter["deleteFragment"] = async (fragment) => {
+    validateFragmentIdentity(fragment)
+    await adapter.deleteFragment(fragment)
+  }
 
   const getConfig = async () => {
     const site = await adapter.getSite()
@@ -168,13 +181,13 @@ export function composeAdapter(
         return summary
       }
 
-      const pages = await getAllPages()
+      const fragments = await getAllFragments({})
 
       const results = applyTransforms({
         transforms,
-        pages,
-        getPageData: (key) => adapter.getPageData({ key }),
-        updatePageData,
+        fragments,
+        getFragmentData: (key) => adapter.getFragmentData({ key }),
+        updateFragmentData,
       })
 
       for await (const result of results) {
@@ -189,15 +202,17 @@ export function composeAdapter(
         updatedBy: user.email,
       })
 
-      yield { ...summary, total: pages.length }
+      yield { ...summary, total: fragments.length }
     },
   )
 
   const finalAdapter: OberonAdapter = {
     ...adapter,
+    addFragment,
     can,
+    deleteFragment,
     getAllImages,
-    getAllPages,
+    getAllFragments,
     getAllPaths,
     getAllUsers,
     getConfig,
@@ -205,6 +220,7 @@ export function composeAdapter(
     migrateData,
     will,
     whoWill,
+    updateFragmentData,
   }
   state.adapter = finalAdapter
 

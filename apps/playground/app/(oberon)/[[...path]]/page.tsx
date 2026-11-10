@@ -52,7 +52,7 @@ export default async function OberonRender({ params }: { params: Promise<{ path?
       {stylesheets.map((href) => (
         <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
       ))}
-      <Render data={page.data} config={clientConfig} />
+      <Render data={page.data} config={clientConfig} adapter={adapter} />
     </>
   )
 }

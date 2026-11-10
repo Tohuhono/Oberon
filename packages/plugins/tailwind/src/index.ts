@@ -53,56 +53,75 @@ async function getAsset(
 }
 
 async function getAllPublishedClasses(
-  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getPageData">,
+  adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getFragmentData" | "getContentClasses">,
 ) {
-  const classes = new Set<string>()
-  const pages = await adapter.getAllPages()
-
-  for (const { key } of pages) {
-    const data = await adapter.getPageData({ key })
-    if (!data) continue
-
-    for await (const node of walkAsyncStep(data)) {
-      if (node.key !== "className" || typeof node.val !== "string") {
-        continue
-      }
-
-      for (const cls of node.val.split(classDelimiter)) {
-        if (cls) classes.add(cls)
-      }
-    }
-  }
-
-  return Array.from(classes).sort()
+  const fragments = await adapter.getAllFragments({})
+  const data = (
+    await Promise.all(fragments.map(({ key }) => adapter.getFragmentData({ key })))
+  ).filter((fragment) => fragment !== null)
+  return [
+    ...new Set([
+      ...(await extractTailwindClasses(data)),
+      ...(await adapter.getContentClasses({ fragments: data })),
+    ]),
+  ].sort()
 }
 
 async function syncStyles(
-  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getKV" | "getPageData" | "putKV">,
+  adapter: Pick<
+    OberonPluginAdapter,
+    | "getAllFragments"
+    | "getKV"
+    | "getFragmentData"
+    | "getContentClasses"
+    | "getFragmentRevision"
+    | "putKV"
+  >,
+  operation: "prepare" | "update" = "update",
 ) {
-  const classes = await getAllPublishedClasses(adapter)
-  const state = await getState(adapter)
-
-  if (!classes.length) {
-    if (state.activeHash === null && state.classes.length === 0) {
-      return
+  try {
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const revision = await adapter.getFragmentRevision()
+      try {
+        const classes = await getAllPublishedClasses(adapter)
+        const state = await getState(adapter)
+        if (!classes.length) {
+          if (state.activeHash !== null || state.classes.length !== 0) {
+            await adapter.putKV({
+              namespace: name,
+              key: "state",
+              value: { activeHash: null, classes: [] },
+            })
+          }
+        } else if (
+          classes.join("\n") !== state.classes.join("\n") ||
+          !(await getAsset(adapter, state.activeHash))
+        ) {
+          const css = await buildCss(classes)
+          const hash = createHash("sha256").update(css).digest("hex")
+          await adapter.putKV({ namespace: name, key: `asset:${hash}`, value: css })
+          await adapter.putKV({
+            namespace: name,
+            key: "state",
+            value: { activeHash: hash, classes },
+          })
+        }
+        if ((await adapter.getFragmentRevision()) === revision) return
+      } catch (error) {
+        if ((await adapter.getFragmentRevision()) === revision) throw error
+      }
     }
-
-    await adapter.putKV({ namespace: name, key: "state", value: { activeHash: null, classes: [] } })
-    return
+    throw new ResponseError(
+      "Published content kept changing while preparing Tailwind styles. Try publishing again.",
+    )
+  } catch (error) {
+    if (error instanceof ResponseError) throw error
+    throw new ResponseError(
+      error instanceof Error && error.message
+        ? `Failed to ${operation} Tailwind styles: ${error.message}`
+        : `Failed to ${operation} Tailwind styles`,
+    )
   }
-
-  if (
-    classes.join("\n") === state.classes.join("\n") &&
-    (await getAsset(adapter, state.activeHash))
-  ) {
-    return
-  }
-
-  const css = await buildCss(classes)
-  const hash = createHash("sha256").update(css).digest("hex")
-  await adapter.putKV({ namespace: name, key: `asset:${hash}`, value: css })
-
-  await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
 }
 
 export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
@@ -146,39 +165,25 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
       },
     }),
   },
-  bootstrap: async () => {
-    try {
-      await syncStyles(getBootstrapAdapter())
-    } catch (error) {
-      if (error instanceof ResponseError) {
-        throw error
-      }
-
-      throw new ResponseError(
-        error instanceof Error && error.message
-          ? `Failed to prepare Tailwind styles: ${error.message}`
-          : "Failed to prepare Tailwind styles",
-      )
-    }
-  },
+  bootstrap: async () => syncStyles(getBootstrapAdapter(), "prepare"),
   adapter: {
-    updatePageData:
+    addFragment:
       ({ getAdapter, next }) =>
-      async (page) => {
-        try {
-          await next(page)
-          await syncStyles(getAdapter())
-        } catch (error) {
-          if (error instanceof ResponseError) {
-            throw error
-          }
-
-          throw new ResponseError(
-            error instanceof Error && error.message
-              ? `Failed to update Tailwind styles: ${error.message}`
-              : "Failed to update Tailwind styles",
-          )
-        }
+      async (fragment) => {
+        await next(fragment)
+        await syncStyles(getAdapter())
+      },
+    updateFragmentData:
+      ({ getAdapter, next }) =>
+      async (fragment) => {
+        await next(fragment)
+        await syncStyles(getAdapter())
+      },
+    deleteFragment:
+      ({ getAdapter, next }) =>
+      async (fragment) => {
+        await next(fragment)
+        await syncStyles(getAdapter())
       },
   },
 })

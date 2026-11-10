@@ -1,0 +1,135 @@
+# Shared components
+
+Build a reusable design in the visual editor. Insert it into Pages or other Shared components.
+Publish the source to update its shared design in every instance.
+
+A Shared component is a `shared` Fragment, not a Page. Its key is a stable identity, not a public
+route. Rename its display name without changing its identity.
+
+## Setup
+
+Install `@oberoncms/plugin-shared-components`. Wrap the browser-safe component config:
+
+```tsx filename="oberon/client.config.tsx"
+import { type OberonClientConfig } from "@oberoncms/core"
+import { withSharedComponents } from "@oberoncms/plugin-shared-components/config"
+
+export const clientConfig: OberonClientConfig = withSharedComponents({
+  version: 1,
+  components: {
+    // Your registered Puck components.
+  },
+})
+```
+
+Keep the server Plugin in the server config. Put it after the database and Tailwind Plugins, and
+before the Framework and auth Plugins:
+
+```tsx filename="oberon/config.ts"
+import { plugin as sharedComponentsPlugin } from "@oberoncms/plugin-shared-components"
+
+import { clientConfig } from "./client.config"
+
+// Add sharedComponentsPlugin(clientConfig) to config.plugins.
+```
+
+Import the package's Tailwind source registration in the app stylesheet:
+
+```css
+@import "@oberoncms/plugin-shared-components/source.css";
+```
+
+Pass the composed Adapter to Oberon's public Render component. This prepares the current source
+definitions before rendering:
+
+```tsx
+import { Render } from "@oberoncms/core/render"
+
+import { adapter } from "@/oberon/adapter"
+import { clientConfig } from "@/oberon/client.config"
+
+const data = await adapter.getFragmentData({ key: "/", type: "page" })
+
+if (data) {
+  return <Render data={data} config={clientConfig} adapter={adapter} />
+}
+```
+
+Mount the normal CMS API route. The Plugin attaches its Handler at `/cms/api/shared-components`.
+Both Playgrounds include this setup.
+
+## Author a source
+
+1. Open **Shared** in the CMS menu.
+2. Select **New Shared component** and give the source a name.
+3. Use the normal component palette to build its design.
+4. Select an internal component. In **Shared or per instance**, enable the props that each instance
+   can change.
+5. Give each Exposed prop a clear label.
+6. Select **Publish source**.
+
+The source editor uses the same registered components, layout tools, preview modes, and theme as the
+Page editor. Name, exposure, and content changes participate in Undo and Redo.
+
+Source changes remain in this browser until publication. Creation adds an empty published source;
+publish again after you author its design.
+
+## Edit an instance
+
+Open a Page and insert a source from the **Shared components** palette group. Its Exposed props
+appear as normal Puck fields.
+
+- Unexposed content belongs to the source.
+- Exposed scalar values belong to the instance.
+- Children in an exposed slot belong to the instance. Move, duplicate, delete, and edit those
+  children with the normal Puck controls.
+- A nested Shared component stays connected to its own source, including inside instance-owned
+  children.
+
+Oberon seeds insertion defaults from the source. Later default changes do not replace values already
+stored on an instance. A new instance receives the current defaults.
+
+Use **Edit Shared source** to change the shared design. **Back to Page** returns to the Page with
+its browser-local draft. Preview includes that draft; the public Page includes only its published
+instance values.
+
+Publishing a source updates unexposed design without republishing consumer Pages. The Next.js
+integration invalidates dependent public rendering through a content-wide notification. Other
+Framework integrations must implement the `contentChanged` Adapter hook if they cache content. The
+Tailwind Plugin prepares source classes from all published Fragments and includes instance-owned
+values from Exposed `className` props.
+
+## Labels and ownership
+
+Exposed props have stable storage keys. Changing a label does not lose instance values.
+
+Removing an Exposed prop returns that target to shared ownership. Adding it again creates a new
+storage key; Oberon does not reconnect old values automatically. Remove an exposure before deleting
+its internal target.
+
+Do not expose a child prop from inside an already exposed slot. Those children already belong to
+each instance. Use a nested Shared component when part of that child tree must stay shared.
+
+## Permissions and errors
+
+The library uses the configured Pages read permission. Source creation, publication, and deletion
+use Pages write permission. Read-only authors can inspect a published source but cannot publish it.
+
+Oberon rejects missing sources, circular references, invalid Exposed props, duplicate IDs, and stale
+source publications. If another author publishes the source first, reload its publication before
+continuing. Reload replaces the local source draft.
+
+Delete a source from the library. Oberon refuses deletion while any published Fragment references
+it, including references in slots and legacy zones. Remove the consuming instances first. Unsaved
+browser drafts are not part of this check.
+
+## Supported component surface
+
+The initial Exposed prop surface includes text, textarea, number, select, radio, and slot fields.
+The generated fields reuse their source field settings. Rendering supports inline slots, slots in
+static object and array fields, source root layouts, and legacy zones.
+
+Do not assume that rich text, custom field runtimes, dynamic field resolution, or asynchronous
+component resolution work at a Shared component boundary. Test those components before using them in
+a source. Full Template inheritance, exposure reconnection, and publication history are separate
+features.
