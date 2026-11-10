@@ -46,7 +46,6 @@ export default defineConfig({
     "unicorn/prefer-top-level-await": "off",
 
     // TODO
-    "jsx-no-useless-fragment": "off",
     "no-inline-comments": "off",
     "no-negated-condition": "off",
     "no-unescaped-entities": "off",

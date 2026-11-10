@@ -14,7 +14,7 @@ export function Preview({
   const localData = useLocalData(path, config)[0]
 
   if (!localData || !data) {
-    return <></>
+    return null
   }
 
   return <Render data={localData} config={config} />

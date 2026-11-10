@@ -6,7 +6,7 @@ export const Image = {
   fields: {
     image: {
       type: "custom",
-      render: () => <></>, // only render on the client
+      render: () => null, // only render on the client
     },
   },
   defaultProps: {
