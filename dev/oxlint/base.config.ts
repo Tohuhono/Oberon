@@ -47,7 +47,6 @@ export default defineConfig({
     "unicorn/prefer-top-level-await": "off",
 
     // TODO
-    "unicorn/prefer-at": "off",
     "unicorn/prefer-dom-node-append": "off",
     "unicorn/prefer-import-meta-properties": "off",
     "unicorn/prefer-single-call": "off",

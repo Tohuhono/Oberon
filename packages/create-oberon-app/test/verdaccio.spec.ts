@@ -53,7 +53,7 @@ function getRelevantLogContext(logs: string, path: string) {
 
 function getTarballName(packageName: string, version: string) {
   const packageParts = packageName.split("/")
-  const packageBaseName = packageParts[packageParts.length - 1] || packageName
+  const packageBaseName = packageParts.at(-1) || packageName
 
   return `${packageBaseName}-${version}.tgz`
 }
