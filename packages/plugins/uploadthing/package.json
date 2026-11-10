@@ -1,6 +1,6 @@
 {
   "name": "@oberoncms/plugin-uploadthing",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "An Puck component and OberonCMS plugin for embeding uploadthing images",
   "keywords": [
     "block",

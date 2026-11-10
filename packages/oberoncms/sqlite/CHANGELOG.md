@@ -1,5 +1,14 @@
 # @oberoncms/sqlite
 
+## 0.9.1
+
+### Patch Changes
+
+- aa5944a: Update published packages to the latest dependency versions.
+- Updated dependencies [aa5944a]
+- Updated dependencies [48e3a22]
+  - @oberoncms/core@0.21.1
+
 ## 0.9.0
 
 ### Minor Changes
