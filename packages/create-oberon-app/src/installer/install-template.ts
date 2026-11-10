@@ -23,7 +23,8 @@ export async function installTemplate(appName: string, appPath: string, template
 
   for (const templateFile of templateFiles) {
     const filePath = path.join(templatePath, templateFile)
-    const targetPath = filePath.replace(templatePath, appPath).replace("gitignore", ".gitignore") // Rename gitignore back to .gitignore (.gitignore) gets ignored by npm during publish
+    // Restore .gitignore after copying the template.
+    const targetPath = filePath.replace(templatePath, appPath).replace("gitignore", ".gitignore")
 
     await mkdir(path.dirname(targetPath), { recursive: true })
     await copyFile(filePath, targetPath)

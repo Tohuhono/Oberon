@@ -61,10 +61,8 @@ export const generateTemplates = async () => {
     await mkdir(path.dirname(targetPath), { recursive: true })
 
     if (targetPath.indexOf(".gitignore") > -1) {
-      await copyFile(
-        filePath,
-        targetPath.replace(".gitignore", "gitignore"), // rename .gitignore to gitignore so NPM publish doesn't ignore it
-      )
+      // NPM ignores .gitignore during publish, so copy it with a different name.
+      await copyFile(filePath, targetPath.replace(".gitignore", "gitignore"))
       counter += 1
       continue
     }

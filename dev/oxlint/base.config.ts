@@ -38,7 +38,8 @@ export default defineConfig({
     "max-lines": "off",
     "max-lines-per-function": "off",
     "no-promise-executor-return": "off",
-    "no-warning-comments": "off", // TODO: warn
+    // TODO: warn
+    "no-warning-comments": "off",
     "require-await": "off",
     "unicorn/no-useless-switch-case": "off",
     "unicorn/no-useless-undefined": "off",
@@ -46,7 +47,6 @@ export default defineConfig({
     "unicorn/prefer-top-level-await": "off",
 
     // TODO
-    "no-inline-comments": "off",
     "no-negated-condition": "off",
     "no-unescaped-entities": "off",
     "prefer-native-coercion-functions": "off",

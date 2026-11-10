@@ -133,7 +133,8 @@ export async function startPod() {
       "--pod",
       POD_NAME,
       "--volume",
-      `${LOCAL_LOG_PATH}:${CONTAINER_LOG_PATH}`, // Isolated logs
+      // Isolated logs
+      `${LOCAL_LOG_PATH}:${CONTAINER_LOG_PATH}`,
       "--name",
       VERDACCIO_CONTAINER_NAME,
       VERDACCIO_CONTAINER_IMAGE,
@@ -154,9 +155,11 @@ export async function startPod() {
       "--env",
       `BASE_URL=${NEXTJS_BASE_URL}`,
       "--volume",
-      `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`, // Safe to share cache volume
+      // Safe to share cache volume
+      `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`,
       "--volume",
-      `${LOCAL_LOG_PATH}:${CONTAINER_LOG_PATH}`, // Isolated logs
+      // Isolated logs
+      `${LOCAL_LOG_PATH}:${CONTAINER_LOG_PATH}`,
       APP_CONTAINER_IMAGE,
     ],
     { cwd: MONOREPO_ROOT },
@@ -175,9 +178,11 @@ export async function startPod() {
       "--env",
       `BASE_URL=${TANSTACK_BASE_URL}`,
       "--volume",
-      `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`, // Safe to share cache volume
+      // Safe to share cache volume
+      `${CONTAINER_PNPM_STORE_VOLUME}:${CONTAINER_PNPM_STORE_PATH}`,
       "--volume",
-      `${LOCAL_LOG_PATH}:${CONTAINER_LOG_PATH}`, // Isolated logs
+      // Isolated logs
+      `${LOCAL_LOG_PATH}:${CONTAINER_LOG_PATH}`,
       APP_CONTAINER_IMAGE,
     ],
     { cwd: MONOREPO_ROOT },

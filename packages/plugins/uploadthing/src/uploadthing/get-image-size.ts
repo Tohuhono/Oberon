@@ -7,7 +7,8 @@ export async function getImageSize(
   url: string,
   defaultSize: ImageSize = { width: 100, height: 100 },
 ): Promise<ImageSize> {
-  const MAX_HEADER_BYTES = 128 * 1024 // 128KB
+  // 128KB
+  const MAX_HEADER_BYTES = 128 * 1024
   let totalBytes = 0
   const chunks: Uint8Array[] = []
   const response = await fetch(url)

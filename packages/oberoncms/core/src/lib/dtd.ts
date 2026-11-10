@@ -294,7 +294,8 @@ export type OberonDatabaseAdapter = {
   addPage: (page: OberonPage) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
   deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
-  deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void> // TODO uploadthing
+  // TODO uploadthing
+  deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void>
   deleteKV: (data: { namespace: string; key: string }) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
   getAllPages: () => Promise<OberonPageMeta[]>

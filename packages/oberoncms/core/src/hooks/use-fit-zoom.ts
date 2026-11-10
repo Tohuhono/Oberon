@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from "react"
 
 export const useFitZoom = (targetWidth: number | "100%") => {
   const [scale, setScale] = useState(1)
-  const [scaledHeight, setScaledHeight] = useState<string | number>("100%") // Added state
+  const [scaledHeight, setScaledHeight] = useState<string | number>("100%")
   const containerRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
