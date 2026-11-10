@@ -4,10 +4,8 @@ create-oberon-app script
 # Constraints
 
 - CRITICAL: Read [CODESTYLE](.agents/CODESTYLE.md) before any edits.
-- CRITICAL: Lint, Typecheck, Build and test always use `pnpm validate` it is dependency checked, and
-  optimally cached.
-- CRITICAL: Format always use `pnpm format` from root to format files. Do not filter, just run on
-  all.
+- CRITICAL: Format: `pnpm format`, Lint: `pnpm lint`, Typecheck: `pnpm tsc`, Build: `pnpm build`
+- CRITICAL: Before completing work, run `pnpm validate`.
 
 - Run all lifecycle commands from repo root
 - Use canonical root `pnpm` scripts below rather than reconstructing task graphs manually.
