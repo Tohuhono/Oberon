@@ -17,11 +17,11 @@ async function readVerdaccioLogs() {
 }
 
 function getVerdaccioPackagePath(packageName: string) {
-  return packageName.replace(/\//gu, "%2F")
+  return packageName.replaceAll("/", "%2F")
 }
 
 function escapeRegExp(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")
+  return value.replaceAll(/[.*+?^${}()|[\]\\]/gu, "\\$&")
 }
 
 function createRequestPattern(path: string) {

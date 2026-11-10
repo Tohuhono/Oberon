@@ -12,8 +12,8 @@ function sanitizeKeyPart(value: string) {
   return (
     value
       .toLowerCase()
-      .replace(/[^a-z0-9]+/gu, "_")
-      .replace(/^_+|_+$/gu, "")
+      .replaceAll(/[^a-z0-9]+/gu, "_")
+      .replaceAll(/^_+|_+$/gu, "")
       .slice(0, 40) || "test"
   )
 }

@@ -47,7 +47,6 @@ export default defineConfig({
     "unicorn/prefer-top-level-await": "off",
 
     // TODO
-    "unicorn/prefer-string-replace-all": "off",
     radix: "off",
 
     // Style
