@@ -1,6 +1,5 @@
 import { mkdir, rm } from "fs/promises"
 import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
 
 import { fromPartial, test, vi } from "@dev/vitest"
 import { createClient, type Client } from "@libsql/client"

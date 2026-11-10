@@ -2,12 +2,14 @@ import type { OberonComponent, OberonImage } from "@oberoncms/core"
 import { ImageIcon } from "@radix-ui/react-icons"
 import NextImage from "next/image"
 
+const EmptyImageField = () => null
+
 export const Image = {
   fields: {
     image: {
       type: "custom",
       // only render on the client
-      render: () => null,
+      render: () => <EmptyImageField />,
     },
   },
   defaultProps: {

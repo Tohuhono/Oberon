@@ -8,7 +8,8 @@ import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
 
-const migrationsFolder = resolve(import.meta.dirname, "../src/db/migrations")
+// oxlint-disable-next-line unicorn/prefer-import-meta-properties -- Bundled output does not preserve import.meta.dirname.
+const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => ({
   name,

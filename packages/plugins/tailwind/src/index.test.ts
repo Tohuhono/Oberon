@@ -1,5 +1,4 @@
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
+import { resolve } from "path"
 
 import { fromPartial, test } from "@dev/vitest"
 import type { OberonAdapter, OberonPluginAdapter } from "@oberoncms/core"

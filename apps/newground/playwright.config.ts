@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises"
 import path from "node:path"
-import { fileURLToPath } from "node:url"
 
 import { base, defineConfig } from "@dev/playwright"
 import { authProject, authenticatedProject } from "@dev/playwright/projects"

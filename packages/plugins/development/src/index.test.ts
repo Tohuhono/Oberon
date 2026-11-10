@@ -1,6 +1,5 @@
 import { rm } from "fs/promises"
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
+import { resolve } from "path"
 
 import { expect, test, fromPartial, vi } from "@dev/vitest"
 import { INITIAL_DATA, type OberonPluginAdapter } from "@oberoncms/core"

@@ -1,5 +1,4 @@
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
+import { resolve } from "path"
 
 import { fromPartial, test as baseTest } from "@dev/vitest"
 import { PGlite } from "@electric-sql/pglite"
