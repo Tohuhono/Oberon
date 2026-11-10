@@ -8,7 +8,7 @@ import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
 
-const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
+const migrationsFolder = resolve(import.meta.dirname, "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => ({
   name,

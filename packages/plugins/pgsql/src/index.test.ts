@@ -13,7 +13,7 @@ import { Pool } from "pg"
 import { getDatabaseAdapter } from "./db/database-adapter"
 import * as schema from "./db/schema"
 
-const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "./db/migrations")
+const migrationsFolder = resolve(import.meta.dirname, "./db/migrations")
 
 ;(async () => {
   const client = new PGlite()

@@ -10,7 +10,7 @@ import { getAuthAdapter } from "./db/auth-adapter"
 import { getClient } from "./db/client"
 import { getDatabaseAdapter } from "./db/database-adapter"
 
-const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
+const migrationsFolder = resolve(import.meta.dirname, "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => ({
   name,

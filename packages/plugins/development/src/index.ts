@@ -13,7 +13,7 @@ import { migrate } from "drizzle-orm/libsql/migrator"
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient, initialise } from "./db/client"
 
-const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
+const migrationsFolder = resolve(import.meta.dirname, "../src/db/migrations")
 
 export const plugin: OberonPlugin = () => {
   const adapter = getAdapter(getClient)

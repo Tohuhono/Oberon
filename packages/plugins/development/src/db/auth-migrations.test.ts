@@ -9,9 +9,9 @@ import { migrate } from "drizzle-orm/libsql/migrator"
 
 import * as schema from "./schema"
 
-const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../../../../")
+const rootDirectory = resolve(import.meta.dirname, "../../../../../")
 
-const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "./migrations")
+const migrationsFolder = resolve(import.meta.dirname, "./migrations")
 
 const sqliteFile = resolve(rootDirectory, ".tmp/development-auth-migrations.test.db")
 

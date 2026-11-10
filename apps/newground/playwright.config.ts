@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url"
 import { base, defineConfig } from "@dev/playwright"
 import { authProject, authenticatedProject } from "@dev/playwright/projects"
 
-const PLAYWRIGHT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".playwright")
+const PLAYWRIGHT_DIR = path.resolve(import.meta.dirname, ".playwright")
 
 const APP_LOG_DIR = path.resolve(PLAYWRIGHT_DIR, "logs")
 

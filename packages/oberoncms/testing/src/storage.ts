@@ -12,7 +12,7 @@ import { drizzle } from "drizzle-orm/libsql"
 type OnCleanup = (callback: () => Promise<void>) => void
 
 const migrationsFolder = resolve(
-  dirname(fileURLToPath(import.meta.url)),
+  import.meta.dirname,
   "../../../plugins/development/src/db/migrations",
 )
 
