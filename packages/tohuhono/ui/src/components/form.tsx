@@ -106,7 +106,7 @@ const FormControl = ({ children, ...props }: ComponentPropsWithRef<"div">) => {
   return cloneElement(only, {
     ...props,
     id: formItemId,
-    "aria-describedby": !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`,
+    "aria-describedby": error ? `${formDescriptionId} ${formMessageId}` : `${formDescriptionId}`,
     "aria-invalid": !!error,
   })
 }
