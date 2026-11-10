@@ -209,7 +209,7 @@ function hashSource(source: string) {
   let hash = 0
 
   for (const character of source) {
-    hash = (hash * 31 + character.charCodeAt(0)) >>> 0
+    hash = (hash * 31 + (character.codePointAt(0) ?? 0)) >>> 0
   }
 
   return hash

@@ -72,7 +72,8 @@ async function deleteCmsPages(page: Page, key: string) {
 
   const links = page.getByRole("link", { name: key })
 
-  for (const _ of Array(await links.count())) {
+  const count = await links.count()
+  for (let index = 0; index < count; index++) {
     const pageKey = await links.first().getAttribute("href")
     if (!pageKey) {
       throw new Error(`Missing Page key on cleanup link for ${key}`)

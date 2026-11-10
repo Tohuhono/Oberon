@@ -6,7 +6,7 @@ export default defineConfig({
   categories: {
     correctness: "error",
     suspicious: "error",
-    pedantic: "warn",
+    pedantic: "error",
   },
   env: {
     builtin: true,
@@ -38,15 +38,12 @@ export default defineConfig({
     "max-lines": "off",
     "max-lines-per-function": "off",
     "no-promise-executor-return": "off",
-    // TODO: warn
     "no-warning-comments": "off",
     "require-await": "off",
     "unicorn/no-useless-switch-case": "off",
     "unicorn/no-useless-undefined": "off",
     "unicorn/prefer-query-selector": "off",
     "unicorn/prefer-top-level-await": "off",
-
-    // TODO
 
     // Style
     "prefer-const": "error",

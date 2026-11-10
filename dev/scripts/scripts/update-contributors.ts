@@ -97,7 +97,7 @@ function buildTable(contributors: Contributor[]): string {
   for (let i = 0; i < contributors.length; i += COLUMNS_PER_ROW) {
     const cells = contributors
       .slice(i, i + COLUMNS_PER_ROW)
-      .map(buildCell)
+      .map((contributor) => buildCell(contributor))
       .join("\n")
     rows.push(`<tr>\n${cells}\n</tr>`)
   }
