@@ -1,5 +1,11 @@
 # create-oberon-app
 
+## 0.13.1
+
+### Patch Changes
+
+- aa5944a: Update published packages to the latest dependency versions.
+
 ## 0.13.0
 
 ### Minor Changes

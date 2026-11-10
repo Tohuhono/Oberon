@@ -1,5 +1,17 @@
 # @oberoncms/core
 
+## 0.21.1
+
+### Patch Changes
+
+- aa5944a: Update published packages to the latest dependency versions.
+- 48e3a22: Apply stricter lint rules, remove variable shadowing, and keep editor, calendar, and
+  chart component identities stable.
+- Updated dependencies [aa5944a]
+- Updated dependencies [48e3a22]
+  - @tohuhono/ui@0.18.1
+  - @tohuhono/utils@0.16.3
+
 ## 0.21.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # @oberon/utils
 
+## 0.16.3
+
+### Patch Changes
+
+- aa5944a: Update published packages to the latest dependency versions.
+- 48e3a22: Apply stricter lint rules, remove variable shadowing, and keep editor, calendar, and
+  chart component identities stable.
+
 ## 0.16.2
 
 ### Patch Changes
