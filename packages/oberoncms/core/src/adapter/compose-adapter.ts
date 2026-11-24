@@ -1,21 +1,24 @@
 import { streamResponse } from "@tohuhono/utils"
+import { createElement } from "react"
 
 import { version } from "../../package.json" with { type: "json" }
+import { withSharedComponent } from "../components/shared-component-render"
 import {
   type MigrationResult,
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
-  type OberonPage,
+  type SharedComponentData,
   type OberonPluginPhase,
   type OberonUser,
   ResponseError,
   type TransformResult,
 } from "../lib/dtd"
+import { findSharedReferences, validateSharedComponent } from "../lib/shared-components"
 import { initPlugins } from "./init-plugins"
 import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
 
-const sortPages = (a: { key: string }, b: { key: string }) => {
+const sortFragments = (a: { key: string }, b: { key: string }) => {
   if (a.key < b.key) {
     return -1
   }
@@ -96,16 +99,16 @@ export function composeAdapter(
     return handler(request)
   }
 
-  const readAllPages = adapter.getAllPages
-  const getAllPages = async () => {
-    const result = await readAllPages()
+  const readAllFragments = adapter.getAllFragments
+  const getAllFragments: OberonAdapter["getAllFragments"] = async (type) => {
+    const result = await readAllFragments(type)
 
-    const data = result.sort(sortPages)
+    const data = result.sort(sortFragments)
     return data
   }
 
   const getAllPaths = async () => {
-    const result = await adapter.getAllPages()
+    const result = await adapter.getAllFragments("page")
     const data = result.map((row) => ({
       path: row["key"].split("/").slice(1),
     }))
@@ -124,17 +127,78 @@ export function composeAdapter(
     return allImages || []
   }
 
-  const updatePageData = ({
-    key,
-    data,
-    updatedBy,
-  }: Pick<OberonPage, "key" | "data" | "updatedBy">) =>
-    adapter.updatePageData({
-      key,
-      data,
-      updatedAt: new Date(),
-      updatedBy,
-    })
+  const getSharedComponents = async (omitId?: string) => {
+    const metadata = await adapter.getAllFragments("shared")
+    const sources: Record<string, SharedComponentData> = {}
+
+    for (const { key } of metadata) {
+      if (key === omitId) {
+        continue
+      }
+
+      const fragment = await adapter.getFragmentData({ key, type: "shared" })
+      if (fragment?.type === "shared") {
+        sources[key] = fragment.data
+      }
+    }
+
+    return sources
+  }
+
+  const updateFragmentData: OberonAdapter["updateFragmentData"] = async (fragment) => {
+    if (fragment.type === "shared") {
+      const sources = await getSharedComponents(fragment.key)
+      const validationSources = { ...sources, [fragment.key]: fragment.data }
+      validateSharedComponent(
+        fragment.key,
+        fragment.data,
+        sources,
+        withSharedComponent(config, () => createElement("div"), validationSources),
+      )
+    }
+
+    return adapter.updateFragmentData({ ...fragment, updatedAt: new Date() })
+  }
+
+  const deleteFragment: OberonAdapter["deleteFragment"] = async (fragment) => {
+    if (fragment.type === "shared") {
+      const references = new Set<string>()
+      const referenceConfig = withSharedComponent(
+        config,
+        () => createElement("div"),
+        await getSharedComponents(),
+      )
+
+      for (const { key, type } of [
+        ...(await adapter.getAllFragments("page")),
+        ...(await adapter.getAllFragments("shared")),
+      ]) {
+        if (key === fragment.key && type === "shared") {
+          continue
+        }
+
+        const consumer = await adapter.getFragmentData({ key, type })
+        if (!consumer) {
+          continue
+        }
+
+        const tree = consumer.type === "page" ? consumer.data : consumer.data.tree
+        for (const sourceId of findSharedReferences(tree, referenceConfig)) {
+          if (sourceId === fragment.key) {
+            references.add(key)
+          }
+        }
+      }
+
+      if (references.size) {
+        throw new ResponseError(
+          `Cannot delete this Shared component because it is used by: ${[...references].join(", ")}.`,
+        )
+      }
+    }
+
+    await adapter.deleteFragment(fragment)
+  }
 
   const getConfig = async () => {
     const site = await adapter.getSite()
@@ -168,13 +232,13 @@ export function composeAdapter(
         return summary
       }
 
-      const pages = await getAllPages()
+      const fragments = await getAllFragments("page")
 
       const results = applyTransforms({
         transforms,
-        pages,
-        getPageData: (key) => adapter.getPageData({ key }),
-        updatePageData,
+        fragments,
+        getFragmentData: (key) => adapter.getFragmentData({ key, type: "page" }),
+        updateFragmentData,
       })
 
       for await (const result of results) {
@@ -189,20 +253,22 @@ export function composeAdapter(
         updatedBy: user.email,
       })
 
-      yield { ...summary, total: pages.length }
+      yield { ...summary, total: fragments.length }
     },
   )
 
   const finalAdapter: OberonAdapter = {
     ...adapter,
     can,
+    deleteFragment,
     getAllImages,
-    getAllPages,
+    getAllFragments,
     getAllPaths,
     getAllUsers,
     getConfig,
     handleRequest,
     migrateData,
+    updateFragmentData,
     will,
     whoWill,
   }

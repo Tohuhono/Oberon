@@ -28,33 +28,42 @@ export const plugin: OberonPlugin = ({ phase }) => {
             getAuthPlugins:
               ({ next }) =>
               () => [...next(), nextCookies()],
-            updatePageData:
+            updateFragmentData:
               ({ next }) =>
-              async (page) => {
-                await next(page)
-                revalidatePath(page.key)
-                revalidatePath(`/cms/edit${page.key}`)
-                revalidatePath(`/cms/preview${page.key}`)
-                updateTag("oberon-pages")
+              async (fragment) => {
+                const updatedAt = await next(fragment)
+                if (fragment.type === "page") {
+                  revalidatePath(fragment.key)
+                  revalidatePath(`/cms/edit${fragment.key}`)
+                  revalidatePath(`/cms/preview${fragment.key}`)
+                  updateTag("oberon-pages")
+                }
+                updateTag("oberon-fragments")
+                return updatedAt
               },
-            addPage:
+            addFragment:
               ({ next }) =>
-              async (page) => {
-                await next(page)
-                revalidatePath(page.key)
-                revalidatePath(`/cms/edit${page.key}`)
-                revalidatePath(`/cms/preview${page.key}`)
-                updateTag("oberon-pages")
+              async (fragment) => {
+                await next(fragment)
+                if (fragment.type === "page") {
+                  revalidatePath(fragment.key)
+                  revalidatePath(`/cms/edit${fragment.key}`)
+                  revalidatePath(`/cms/preview${fragment.key}`)
+                  updateTag("oberon-pages")
+                }
+                updateTag("oberon-fragments")
               },
-            deletePage:
+            deleteFragment:
               ({ next }) =>
               async (data) => {
                 await next(data)
-                const { key } = data
-                revalidatePath(key)
-                revalidatePath(`/cms/edit${key}`)
-                revalidatePath(`/cms/preview${key}`)
-                updateTag("oberon-pages")
+                if (data.type === "page") {
+                  revalidatePath(data.key)
+                  revalidatePath(`/cms/edit${data.key}`)
+                  revalidatePath(`/cms/preview${data.key}`)
+                  updateTag("oberon-pages")
+                }
+                updateTag("oberon-fragments")
               },
             updateSite:
               ({ next }) =>
@@ -93,10 +102,11 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 await next(data)
                 updateTag("oberon-users")
               },
-            getPageData: ({ next }) => cache(next, ["oberon-get-page-data"]),
-            getAllPages: ({ next }) =>
-              cache(next, ["oberon-get-all-pages"], {
-                tags: ["oberon-pages"],
+            getFragmentData: ({ next }) =>
+              cache(next, ["oberon-get-fragment-data"], { tags: ["oberon-fragments"] }),
+            getAllFragments: ({ next }) =>
+              cache(next, ["oberon-get-all-fragments"], {
+                tags: ["oberon-fragments", "oberon-pages"],
               }),
             getAllUsers: ({ next }) =>
               cache(next, ["oberon-get-all-users"], {

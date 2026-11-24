@@ -103,7 +103,19 @@ export const config = defineConfig({
 `
 }
 
-const createAdapter = () => {
+const createAdapter = (recipe: Recipe) => {
+  if (recipe === "nextjs") {
+    return `
+import "server-cli-only"
+
+import { initOberon } from "@oberoncms/core/render"
+
+import { config } from "./config"
+
+export const { adapter, getPage, RenderPage } = initOberon(config)
+`
+  }
+
   return `
 import "server-cli-only"
 
@@ -129,7 +141,7 @@ export async function installAdapter(
   }
 
   const config = createConfig(plugins, recipe)
-  const adapter = createAdapter()
+  const adapter = createAdapter(recipe)
 
   await writeFile(path.join(oberonPath, "config.ts"), config)
   await writeFile(path.join(oberonPath, "adapter.ts"), adapter)

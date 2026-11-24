@@ -110,6 +110,7 @@ export const clientActions = [
   "users",
   "images",
   "pages",
+  "library",
   "site",
   "login",
 ] as const
@@ -146,41 +147,151 @@ export const JsonValueSchema = z.json()
 export type JsonValue = z.infer<typeof JsonValueSchema>
 
 /*
- * Pages
+ * Fragments
  */
+export function isPageData(value: unknown): value is PageData {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "content" in value &&
+    Array.isArray(value.content) &&
+    "root" in value &&
+    typeof value.root === "object" &&
+    value.root !== null
+  )
+}
+
+export const PageDataSchema = z.custom<PageData>(isPageData, "Invalid Puck data")
+
+export const SharedExposureKeySchema = z
+  .string()
+  .regex(/^instance_[0-9a-f]{8}(?:_[0-9a-f]{4}){3}_[0-9a-f]{12}$/iu)
+
+export const SharedExposureSchema = z.object({
+  key: SharedExposureKeySchema,
+  nodeId: z.string().min(1),
+  prop: z.string().min(1),
+  label: z.string().trim().min(1),
+})
+
+export const SharedComponentDataSchema = z.object({
+  name: z.string().trim().min(1),
+  tree: PageDataSchema,
+  exposures: z.array(SharedExposureSchema),
+  defaults: z.record(z.string(), JsonValueSchema),
+})
+
+export type SharedComponentData = z.infer<typeof SharedComponentDataSchema>
+
+const PageKeySchema = z
+  .string()
+  .regex(/^[0-9a-zA-Z_.-/]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
+  .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/u, "Route segments cannot be empty")
+
 export const PageSchema = z.object({
-  key: z
-    .string()
-    .regex(/^[0-9a-zA-Z_.-/]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
-    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/u, "Route segments cannot be empty"),
-  data: z.looseObject({}),
+  key: PageKeySchema,
+  data: PageDataSchema,
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
 
-export const AddPageSchema = PageSchema.pick({ key: true })
+export const FragmentTypeSchema = z.enum(["page", "shared"])
+export type FragmentType = z.infer<typeof FragmentTypeSchema>
 
-export const DeletePageSchema = PageSchema.pick({ key: true })
+const FragmentKeySchema = z.string().min(1, "Fragment key cannot be empty")
+const ExpectedUpdatedAtSchema = z
+  .union([z.date(), z.iso.datetime().transform((value) => new Date(value))])
+  .optional()
 
-export const GetPageDataSchema = PageSchema.pick({ key: true })
+export const FragmentSchema = z.discriminatedUnion("type", [
+  PageSchema.extend({ key: FragmentKeySchema, type: z.literal("page") }),
+  z.object({
+    key: FragmentKeySchema,
+    type: z.literal("shared"),
+    data: SharedComponentDataSchema,
+    updatedAt: z.date(),
+    updatedBy: z.string(),
+  }),
+])
 
-export const PublishPageSchema = PageSchema.pick({ key: true, data: true })
-
-export const PageMetaSchema = PageSchema.pick({
-  key: true,
-  updatedAt: true,
-  updatedBy: true,
-})
-
-export type OberonPage = z.infer<typeof PageSchema> & {
-  data: PageData
-  key: OberonRoute
+function validateFragmentKey(value: { key: string; type: FragmentType }, context: z.RefinementCtx) {
+  const result = (value.type === "page" ? PageKeySchema : FragmentKeySchema).safeParse(value.key)
+  if (!result.success) {
+    context.addIssue({
+      code: "custom",
+      message: result.error.issues[0]?.message ?? "Invalid fragment key",
+    })
+  }
 }
 
-// Cannot infer from zod because we need nextjs to understand key is a valid Route
+export const AddFragmentSchema = z.discriminatedUnion("type", [
+  z.object({ key: PageKeySchema, type: z.literal("page") }),
+  z.object({
+    key: FragmentKeySchema,
+    type: z.literal("shared"),
+    data: SharedComponentDataSchema,
+  }),
+])
+
+export const DeleteFragmentSchema = z
+  .object({
+    key: FragmentKeySchema,
+    type: FragmentTypeSchema,
+    expectedUpdatedAt: ExpectedUpdatedAtSchema,
+  })
+  .superRefine(validateFragmentKey)
+
+export const GetFragmentDataSchema = z
+  .object({ key: FragmentKeySchema, type: FragmentTypeSchema })
+  .superRefine(validateFragmentKey)
+
+export const PublishFragmentSchema = z.discriminatedUnion("type", [
+  z.object({
+    key: PageKeySchema,
+    type: z.literal("page"),
+    data: PageDataSchema,
+    expectedUpdatedAt: ExpectedUpdatedAtSchema,
+  }),
+  z.object({
+    key: FragmentKeySchema,
+    type: z.literal("shared"),
+    data: SharedComponentDataSchema,
+    expectedUpdatedAt: ExpectedUpdatedAtSchema,
+  }),
+])
+
+export const FragmentMetaSchema = z.object({
+  key: FragmentKeySchema,
+  type: FragmentTypeSchema,
+  updatedAt: z.date(),
+  updatedBy: z.string(),
+})
+
+export type OberonFragment =
+  | {
+      key: string
+      type: "page"
+      data: PageData
+      updatedAt: Date
+      updatedBy: string
+    }
+  | {
+      key: string
+      type: "shared"
+      data: SharedComponentData
+      updatedAt: Date
+      updatedBy: string
+    }
+
+export type OberonSharedFragment = Extract<OberonFragment, { type: "shared" }>
+
+export type OberonFragmentMeta = MaybeOptimistic<z.infer<typeof FragmentMetaSchema>>
+
+// Cannot infer from zod because we need nextjs to understand Page keys are valid Routes.
 export type OberonPageMeta = MaybeOptimistic<
-  z.infer<typeof PageMetaSchema> & {
+  z.infer<typeof FragmentMetaSchema> & {
     key: OberonRoute
+    type: "page"
   }
 >
 
@@ -291,19 +402,19 @@ export type OberonAuthAdapter = {
 }
 
 export type OberonDatabaseAdapter = {
-  addPage: (page: OberonPage) => Promise<void>
+  addFragment: (fragment: OberonFragment) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
+  deleteFragment: (data: z.infer<typeof DeleteFragmentSchema>) => Promise<void>
   // TODO uploadthing
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void>
   deleteKV: (data: { namespace: string; key: string }) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
-  getAllPages: () => Promise<OberonPageMeta[]>
-  getPageData: (data: z.infer<typeof DeletePageSchema>) => Promise<Data | null>
+  getAllFragments: (type: FragmentType) => Promise<OberonFragmentMeta[]>
+  getFragmentData: (data: z.infer<typeof GetFragmentDataSchema>) => Promise<OberonFragment | null>
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updatePageData: (data: OberonPage) => Promise<void>
+  updateFragmentData: (data: OberonFragment & { expectedUpdatedAt?: Date }) => Promise<Date>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -379,7 +490,7 @@ export type OberonResponse<T = unknown> = Promise<
 >
 
 export const GetAllImagesSchema = z.undefined()
-export const GetAllPagesSchema = z.undefined()
+export const GetAllFragmentsSchema = z.object({ type: FragmentTypeSchema })
 export const GetAllPathsSchema = z.undefined()
 export const GetAllUsersSchema = z.undefined()
 export const GetConfigSchema = z.undefined()
@@ -390,10 +501,10 @@ export const ResolvePathSchema = z.object({ key: z.string() })
 
 export type OberonServerActions = {
   resolvePath: (data: z.infer<typeof ResolvePathSchema>) => Promise<{ key: string; data: PageData }>
-  addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
+  addFragment: (fragment: z.infer<typeof AddFragmentSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<void>
+  deleteFragment: (data: z.infer<typeof DeleteFragmentSchema>) => OberonResponse<void>
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => OberonResponse<void>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
@@ -403,17 +514,23 @@ export type OberonServerActions = {
     data: z.infer<typeof ChangeRoleSchema>,
   ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
   getAllImages: (data?: z.infer<typeof GetAllImagesSchema>) => OberonResponse<OberonImage[]>
-  getAllPages: (data?: z.infer<typeof GetAllPagesSchema>) => OberonResponse<OberonPageMeta[]>
+  getAllFragments: (
+    data: z.infer<typeof GetAllFragmentsSchema>,
+  ) => OberonResponse<OberonFragmentMeta[]>
   getAllPaths: (
     data?: z.infer<typeof GetAllPathsSchema>,
   ) => OberonResponse<Array<{ path: string[] }>>
   getAllUsers: (data?: z.infer<typeof GetAllUsersSchema>) => OberonResponse<OberonUser[]>
   getConfig: (data?: z.infer<typeof GetConfigSchema>) => OberonResponse<OberonSiteConfig>
-  getPageData: (data: z.infer<typeof GetPageDataSchema>) => OberonResponse<Data | null>
+  getFragmentData: (
+    data: z.infer<typeof GetFragmentDataSchema>,
+  ) => OberonResponse<OberonFragment | null>
   migrateData: (
     data?: z.infer<typeof MigrateDataSchema>,
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ key: string }>
+  publishFragmentData: (
+    data: z.infer<typeof PublishFragmentSchema>,
+  ) => OberonResponse<{ key: string; type: FragmentType; updatedAt: Date }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
@@ -423,10 +540,23 @@ export type OberonServerActions = {
  */
 
 type DescriminatedContext =
-  | { action: "edit" | "preview"; data: Data | null }
+  | {
+      action: "edit" | "preview"
+      data: Data | null
+      updatedAt: Date | null
+      sharedComponents?: Record<string, SharedComponentData>
+    }
   | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: OberonPageMeta[] }
+  | { action: "pages"; data: OberonFragmentMeta[] }
+  | {
+      action: "library"
+      data: {
+        sources: OberonSharedFragment[]
+        sourceId: string | null
+        returnTo: string | null
+      }
+    }
   | { action: "site"; data: OberonSiteConfig }
   | {
       action: "login"

@@ -29,6 +29,13 @@
       "when": 1776303051268,
       "tag": "0003_glorious_pete_wisdom",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1794300000000,
+      "tag": "0004_fragment_storage",
+      "breakpoints": true
     }
   ]
 }

@@ -12,9 +12,11 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { useOberonActions } from "../hooks/use-oberon"
-import { AddPageSchema, type OberonPageMeta } from "../lib/dtd"
+import { PageSchema, type OberonFragmentMeta } from "../lib/dtd"
 
-function copyKey(optimisticPages: OberonPageMeta[], key: OberonPageMeta["key"]) {
+const AddPageKeySchema = PageSchema.pick({ key: true })
+
+function copyKey(optimisticPages: OberonFragmentMeta[], key: OberonFragmentMeta["key"]) {
   let iterator = 0
   let newKey = `${key}_copy`
 
@@ -25,44 +27,53 @@ function copyKey(optimisticPages: OberonPageMeta[], key: OberonPageMeta["key"]) 
   return newKey
 }
 
-const useOberonPages = (pages: OberonPageMeta[]) => {
-  const { deletePage, addPage, publishPageData, getPageData } = useOberonActions()
-  const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonPageMeta[]>(pages)
+const useOberonPages = (pages: OberonFragmentMeta[]) => {
+  const { deleteFragment, addFragment, publishFragmentData, getFragmentData } = useOberonActions()
+  const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonFragmentMeta[]>(pages)
   const [isPending, startTransition] = useTransition()
+  const uniquePages = optimisticPages.filter(
+    (page, index, allPages) => allPages.findIndex(({ key }) => key === page.key) === index,
+  )
 
   return {
-    pages: optimisticPages,
+    pages: uniquePages,
     isPending,
-    addPage: (page: z.infer<typeof AddPageSchema>) => {
+    addPage: (page: z.infer<typeof AddPageKeySchema>) => {
       startTransition(async () => {
         optimisticPageUpdate([
           ...optimisticPages,
-          { ...page, updatedAt: new Date(), updatedBy: "", pending: true },
+          { ...page, type: "page", updatedAt: new Date(), updatedBy: "", pending: true },
         ])
-        await addPage(page)
+        await addFragment({ ...page, type: "page" })
       })
     },
-    copyPage: (key: OberonPageMeta["key"]) => {
+    copyPage: (key: OberonFragmentMeta["key"]) => {
       startTransition(async () => {
         const newKey = copyKey(optimisticPages, key)
         optimisticPageUpdate([
           ...optimisticPages,
-          { key: newKey, updatedAt: new Date(), updatedBy: "", pending: true },
+          { key: newKey, type: "page", updatedAt: new Date(), updatedBy: "", pending: true },
         ])
-        const data = await getPageData({ key })
-        if (data) {
-          await publishPageData({ key: newKey, data })
+        const fragment = await getFragmentData({ key, type: "page" })
+        if (fragment?.type === "page") {
+          await addFragment({ key: newKey, type: "page" })
+          await publishFragmentData({ key: newKey, type: "page", data: fragment.data })
         } else {
-          await addPage({ key: newKey })
+          await addFragment({ key: newKey, type: "page" })
         }
       })
     },
-    deletePage: (key: OberonPageMeta["key"]) => {
+    deletePage: (key: OberonFragmentMeta["key"]) => {
       startTransition(async () => {
+        const existingPage = optimisticPages.find((fragment) => fragment.key === key)
         optimisticPageUpdate(
           optimisticPages.map((page) => (page.key === key ? { ...page, pending: true } : page)),
         )
-        await deletePage({ key })
+        await deleteFragment({
+          key,
+          type: "page",
+          ...(existingPage ? { expectedUpdatedAt: existingPage.updatedAt } : {}),
+        })
       })
     },
   }
@@ -76,11 +87,11 @@ const parsePath = (key: string) => {
   return (key.charAt(0) === "/" ? key : "/" + key).replace(" ", "_")
 }
 
-export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
+export function Pages({ pages: serverPages }: { pages: OberonFragmentMeta[] }) {
   const { pages, isPending, deletePage, addPage, copyPage } = useOberonPages(serverPages)
 
-  const form = useForm<z.infer<typeof AddPageSchema>>({
-    resolver: zodResolver(AddPageSchema),
+  const form = useForm<z.infer<typeof AddPageKeySchema>>({
+    resolver: zodResolver(AddPageKeySchema),
     defaultValues: {
       key: "",
     },

@@ -1,17 +1,19 @@
-import type { PageData } from "@oberoncms/core"
-import { pgTable, jsonb, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
+import type { FragmentType, OberonFragment } from "@oberoncms/core"
+import { index, pgTable, jsonb, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
 
-export const pages = pgTable(
-  "pages",
+export const fragments = pgTable(
+  "fragments",
   {
     key: text("key").notNull().primaryKey(),
-    data: jsonb("data").notNull().$type<PageData>(),
+    type: text("type").$type<FragmentType>().notNull(),
+    data: jsonb("data").notNull().$type<OberonFragment["data"]>(),
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },
   (table) => {
     return {
-      pagesKeyIdx: uniqueIndex("pages_key_idx").on(table.key),
+      fragmentsKeyIdx: uniqueIndex("fragments_key_idx").on(table.key),
+      fragmentsTypeIdx: index("fragments_type_idx").on(table.type),
     }
   },
 )

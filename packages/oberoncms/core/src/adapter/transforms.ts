@@ -1,12 +1,12 @@
-import { transformProps, type Data } from "@puckeditor/core"
+import { transformProps } from "@puckeditor/core"
 import { mapConcurrent } from "@tohuhono/utils/map-concurrent"
 
 type PropTransform = Parameters<typeof transformProps>[1]
 
 import type {
   OberonClientConfig,
-  OberonPage,
-  OberonPageMeta,
+  OberonFragment,
+  OberonFragmentMeta,
   TransformResult,
   TransformVersions,
 } from "../lib/dtd"
@@ -14,13 +14,13 @@ import type {
 async function applyTransform(
   key: string,
   transforms: PropTransform,
-  getPageData: (key: string) => Promise<Data | null>,
-  updatePageData: (data: OberonPage) => Promise<void>,
+  getFragmentData: (key: string) => Promise<OberonFragment | null>,
+  updateFragmentData: (data: OberonFragment) => Promise<Date>,
 ): Promise<TransformResult> {
   try {
-    const data = await getPageData(key)
+    const fragment = await getFragmentData(key)
 
-    if (!data) {
+    if (!fragment || fragment.type !== "page") {
       return {
         type: "transform",
         key,
@@ -28,9 +28,10 @@ async function applyTransform(
       }
     }
 
-    await updatePageData({
+    await updateFragmentData({
       key,
-      data: transformProps(data, transforms),
+      type: "page",
+      data: transformProps(fragment.data, transforms),
       updatedAt: new Date(),
       updatedBy: "migration",
     })
@@ -54,18 +55,18 @@ const MAX_CONCURRENCY = 10
 
 export async function* applyTransforms({
   transforms,
-  pages,
-  getPageData,
-  updatePageData,
+  fragments,
+  getFragmentData,
+  updateFragmentData,
 }: {
   transforms: PropTransform
-  pages: OberonPageMeta[]
-  getPageData: (key: string) => Promise<Data | null>
-  updatePageData: (data: OberonPage) => Promise<void>
+  fragments: OberonFragmentMeta[]
+  getFragmentData: (key: string) => Promise<OberonFragment | null>
+  updateFragmentData: (data: OberonFragment) => Promise<Date>
 }): AsyncGenerator<TransformResult, void, void> {
   yield* mapConcurrent(
-    pages,
-    ({ key }) => applyTransform(key, transforms, getPageData, updatePageData),
+    fragments,
+    ({ key }) => applyTransform(key, transforms, getFragmentData, updateFragmentData),
     MAX_CONCURRENCY,
   )
 }

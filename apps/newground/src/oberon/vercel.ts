@@ -23,30 +23,43 @@ export const plugin: OberonPlugin = ({ phase }) => ({
   adapter:
     phase === "runtime"
       ? {
-          getPageData:
+          getFragmentData:
             ({ next }) =>
-            async (page) => {
-              await addCacheTag(await pageTag(page.key))
-              return next(page)
+            async (fragment) => {
+              await addCacheTag("oberon-pages")
+              if (fragment.type === "page") {
+                await addCacheTag(await pageTag(fragment.key))
+              }
+              return next(fragment)
             },
-          addPage:
+          addFragment:
             ({ next }) =>
-            async (page) => {
-              await next(page)
-              await invalidateByTag(await pageTag(page.key))
+            async (fragment) => {
+              const updatedAt = await next(fragment)
+              await invalidateFragment(fragment)
+              return updatedAt
             },
-          updatePageData:
+          updateFragmentData:
             ({ next }) =>
-            async (page) => {
-              await next(page)
-              await invalidateByTag(await pageTag(page.key))
+            async (fragment) => {
+              const updatedAt = await next(fragment)
+              await invalidateFragment(fragment)
+              return updatedAt
             },
-          deletePage:
+          deleteFragment:
             ({ next }) =>
-            async (page) => {
-              await next(page)
-              await invalidateByTag(await pageTag(page.key))
+            async (fragment) => {
+              await next(fragment)
+              await invalidateFragment(fragment)
             },
         }
       : {},
 })
+
+async function invalidateFragment(fragment: { key: string; type: "page" | "shared" }) {
+  if (fragment.type === "page") {
+    await invalidateByTag(await pageTag(fragment.key))
+  } else {
+    await invalidateByTag("oberon-pages")
+  }
+}

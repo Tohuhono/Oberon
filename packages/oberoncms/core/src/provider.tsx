@@ -11,10 +11,11 @@ import type {
   OberonServerActions,
 } from "./lib/dtd"
 import { ResponseError } from "./lib/dtd"
+import { getSharedComponentFragments, getSharedComponentLibrary } from "./lib/shared-components"
 import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
-  { getPageData, getAllImages, getAllPages, getAllUsers, getConfig }: OberonAdapter,
+  { getFragmentData, getAllImages, getAllFragments, getAllUsers, getConfig }: OberonAdapter,
   action: ClientAction,
   slug: string,
   searchParams: OberonQueryParams,
@@ -31,12 +32,16 @@ async function getContext(
         },
       }
     case "edit":
-    case "preview":
+    case "preview": {
+      const fragment = await getFragmentData({ key: slug, type: "page" })
       return {
         action,
         slug,
-        data: await getPageData({ key: slug }),
+        data: fragment?.type === "page" ? fragment.data : null,
+        updatedAt: fragment?.updatedAt ?? null,
+        sharedComponents: await getSharedComponentLibrary({ getAllFragments, getFragmentData }),
       }
+    }
     case "users":
       return {
         action,
@@ -59,13 +64,26 @@ async function getContext(
       return {
         action,
         slug,
-        data: await getAllPages(),
+        data: await getAllFragments("page"),
+      }
+    case "library":
+      return {
+        action,
+        slug,
+        data: {
+          sources: await getSharedComponentFragments({ getAllFragments, getFragmentData }),
+          sourceId: typeof searchParams.source === "string" ? searchParams.source : null,
+          returnTo: typeof searchParams.returnTo === "string" ? searchParams.returnTo : null,
+        },
       }
   }
 }
 
 function getActionGroup(action: Exclude<ClientAction, "login">): AdapterActionGroup {
   if (action === "edit" || action === "preview") {
+    return "pages"
+  }
+  if (action === "library") {
     return "pages"
   }
   return action

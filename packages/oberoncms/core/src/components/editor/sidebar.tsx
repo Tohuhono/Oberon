@@ -10,7 +10,7 @@ import {
 } from "@radix-ui/react-icons"
 import { Button } from "@tohuhono/ui/button"
 import { cn, isValidKey } from "@tohuhono/utils"
-import { useState, type PropsWithChildren } from "react"
+import { useState, type PropsWithChildren, type ReactNode } from "react"
 
 const usePuck = createUsePuck()
 
@@ -91,16 +91,23 @@ export const SidebarHeading = ({
 export const Sidebar = ({
   activeTab,
   className,
+  fieldsFooter,
 }: {
   activeTab: SidebarTab
   className?: string
+  fieldsFooter?: ReactNode
 }) => {
   return (
     <div className={cn(className, "h-full overflow-auto p-2")}>
       <div id={`editor-tool-${activeTab}`} role="tabpanel">
         {activeTab === "components" && <Puck.Components />}
         {activeTab === "outline" && <Puck.Outline />}
-        {activeTab === "fields" && <Puck.Fields />}
+        {activeTab === "fields" && (
+          <>
+            <Puck.Fields />
+            {fieldsFooter}
+          </>
+        )}
       </div>
     </div>
   )

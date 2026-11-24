@@ -2,7 +2,9 @@
 
 ## Issue tracker
 
-Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
+Publish plans and specs as GitHub issues. Embed screenshots in the issue rather than committing
+planning assets to the repository. Link the issue from the implementing PR. Use the `gh` CLI for
+issue operations.
 
 - **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line
   bodies.
