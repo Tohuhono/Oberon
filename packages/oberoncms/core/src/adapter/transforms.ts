@@ -5,20 +5,20 @@ type PropTransform = Parameters<typeof transformProps>[1]
 
 import type {
   OberonClientConfig,
-  OberonPage,
-  OberonPageMeta,
+  OberonFragment,
+  OberonFragmentMeta,
   TransformResult,
   TransformVersions,
 } from "../lib/dtd"
 
 async function applyTransform(
-  key: string,
+  { key, type }: Pick<OberonFragment, "key" | "type">,
   transforms: PropTransform,
-  getPageData: (key: string) => Promise<Data | null>,
-  updatePageData: (data: OberonPage) => Promise<void>,
+  getFragmentData: (key: string) => Promise<Data | null>,
+  updateFragmentData: (data: OberonFragment) => Promise<void>,
 ): Promise<TransformResult> {
   try {
-    const data = await getPageData(key)
+    const data = await getFragmentData(key)
 
     if (!data) {
       return {
@@ -28,8 +28,9 @@ async function applyTransform(
       }
     }
 
-    await updatePageData({
+    await updateFragmentData({
       key,
+      type,
       data: transformProps(data, transforms),
       updatedAt: new Date(),
       updatedBy: "migration",
@@ -54,18 +55,18 @@ const MAX_CONCURRENCY = 10
 
 export async function* applyTransforms({
   transforms,
-  pages,
-  getPageData,
-  updatePageData,
+  fragments,
+  getFragmentData,
+  updateFragmentData,
 }: {
   transforms: PropTransform
-  pages: OberonPageMeta[]
-  getPageData: (key: string) => Promise<Data | null>
-  updatePageData: (data: OberonPage) => Promise<void>
+  fragments: OberonFragmentMeta[]
+  getFragmentData: (key: string) => Promise<Data | null>
+  updateFragmentData: (data: OberonFragment) => Promise<void>
 }): AsyncGenerator<TransformResult, void, void> {
   yield* mapConcurrent(
-    pages,
-    ({ key }) => applyTransform(key, transforms, getPageData, updatePageData),
+    fragments,
+    (fragment) => applyTransform(fragment, transforms, getFragmentData, updateFragmentData),
     MAX_CONCURRENCY,
   )
 }

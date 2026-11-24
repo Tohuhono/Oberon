@@ -1,4 +1,5 @@
 @import "@oberoncms/core/tailwind.css";
+@import "@oberoncms/plugin-shared-components/source.css";
 
 @source ".";
 @source "../oberon";

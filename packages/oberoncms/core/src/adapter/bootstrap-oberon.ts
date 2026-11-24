@@ -12,10 +12,10 @@ export async function bootstrapOberon(config: OberonConfig) {
     await plugin.bootstrap?.()
   }
 
-  const allPages = await adapter.getAllPages()
+  const allPages = await adapter.getAllFragments({ type: "page" })
   if (!allPages.length) {
     console.log("Initialising welcome page")
-    await adapter.updatePageData(getInitialData())
+    await adapter.updateFragmentData(getInitialData())
   }
 
   const site = await adapter.getSite()

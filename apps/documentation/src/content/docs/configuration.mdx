@@ -68,9 +68,14 @@ export const adapter = initAdapter(config)
 ```
 
 Create HTTP entrypoints with the [framework's route handler](/docs/plugins/custom/handler-hooks).
-The framework plugin supplies request headers, redirects, and auth cookie handling. The Next.js
-Plugin also caches reads. After Page creation, publication, or deletion, it revalidates that Page's
-public, editor, and preview paths and refreshes the Page list without expiring unrelated Page reads.
+The Framework Plugin supplies request headers, redirects, and auth cookie handling. After Page
+creation, publication, or deletion, the Next.js Plugin revalidates that Page's public, editor, and
+preview paths and refreshes the Page list. Fragment reads remain fresh so publication checks can
+validate the current reference graph.
+
+Optional [Shared components](/docs/plugins/shared-components) use the same Fragment lifecycle. Their
+route-free publications notify the Framework through `contentChanged` so cached public rendering can
+refresh without republishing consumer Pages.
 
 ## Bootstrap
 

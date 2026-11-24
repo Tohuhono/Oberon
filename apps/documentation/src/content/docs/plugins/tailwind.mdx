@@ -1,7 +1,11 @@
 # Tailwind CSS plugin
 
-The plugin generates CSS from `className` strings in published page data. It does not scan component
-source files. Keep static component styles in your app's normal Tailwind build.
+The Plugin generates CSS from `className` strings in published Fragment data, including Shared
+component sources. It does not scan component source files. Keep static component styles in your
+app's normal Tailwind build.
+
+Plugins can contribute tokens through `getContentClasses`. Shared components use this hook for
+Exposed `className` values stored under stable instance keys.
 
 ## Setup
 
@@ -22,9 +26,13 @@ for plugin order. The installer does not add this plugin automatically.
 
 ## Generated styles
 
-Bootstrap and page updates collect classes from all published pages. The plugin stores CSS and its
-hash through the Adapter's key-value methods. The state uses namespace `@oberoncms/plugin-tailwind`
-and key `state`.
+Bootstrap and Fragment creation, publication, and deletion collect classes from all published
+Fragments. The Plugin stores CSS and its hash through the Adapter's key-value methods. The state
+uses namespace `@oberoncms/plugin-tailwind` and key `state`.
+
+The Plugin checks the Fragment revision after style activation. If content changes during a build,
+it collects and compiles again. Concurrent publications cannot leave an older class list active.
+Five unsuccessful attempts produce an explicit publication error.
 
 Read the active hash in your server render route:
 

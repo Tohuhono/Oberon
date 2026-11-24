@@ -3,6 +3,7 @@ import { defineConfig } from "@oberoncms/core"
 import { authPlugin } from "@oberoncms/core/auth"
 import { plugin as developmentPlugin } from "@oberoncms/plugin-development"
 import { plugin as pgsqlPlugin } from "@oberoncms/plugin-pgsql"
+import { plugin as sharedComponentsPlugin } from "@oberoncms/plugin-shared-components"
 import { plugin as tailwindPlugin } from "@oberoncms/plugin-tailwind"
 import { plugin as tanstackPlugin } from "@oberoncms/plugin-tanstack"
 
@@ -17,6 +18,7 @@ export const config = defineConfig({
     pgsqlPlugin,
     resendPlugin,
     tailwindPlugin,
+    sharedComponentsPlugin(clientConfig),
     tanstackPlugin,
     vercelPlugin,
     authPlugin,

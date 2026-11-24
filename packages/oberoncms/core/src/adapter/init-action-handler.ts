@@ -2,7 +2,7 @@ import {
   INITIAL_DATA,
   ResponseError,
   type OberonAdapter,
-  type OberonPage,
+  type OberonFragment,
   type OberonResponse,
   type OberonServerActions,
 } from "../lib/dtd"
@@ -42,7 +42,7 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
   return {
     resolvePath: async ({ key }) => {
       await adapter.will({ action: "pages", permission: "read" })
-      const data = await adapter.getPageData({ key })
+      const data = await adapter.getFragmentData({ key, type: "page" })
 
       if (!data) {
         return adapter.notFound()
@@ -50,12 +50,13 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
 
       return { key, data }
     },
-    addPage: (data) =>
+    addFragment: (data) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })
-        const { key } = data
-        await adapter.addPage({
+        const { key, type } = data
+        await adapter.addFragment({
           key,
+          type,
           data: INITIAL_DATA,
           updatedAt: new Date(),
           updatedBy: user.email,
@@ -74,10 +75,10 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         const { id } = await adapter.addUser({ email, role })
         return { id, email, role }
       }),
-    deletePage: (data) =>
+    deleteFragment: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "write" })
-        await adapter.deletePage(data)
+        await adapter.deleteFragment(data)
       }),
     deleteImage: (data) =>
       transport(async () => {
@@ -104,10 +105,10 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         await adapter.will({ action: "images", permission: "read" })
         return adapter.getAllImages()
       }),
-    getAllPages: () =>
+    getAllFragments: (filter) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "read" })
-        return adapter.getAllPages()
+        return adapter.getAllFragments(filter)
       }),
     getAllPaths: () =>
       transport(async () => {
@@ -124,29 +125,31 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         await adapter.will({ action: "site", permission: "read" })
         return adapter.getConfig()
       }),
-    getPageData: (data) =>
+    getFragmentData: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "read" })
-        return adapter.getPageData(data)
+        return adapter.getFragmentData(data)
       }),
     migrateData: () =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "site", permission: "write" })
         return adapter.migrateData(user)
       }),
-    publishPageData: (data) =>
+    publishFragmentData: (data) =>
       transport(
         async () => {
           const user = await adapter.whoWill({ action: "pages", permission: "write" })
-          const { key, data: pageData } = data
+          const { key, type, data: pageData, expectedUpdatedAt } = data
 
           if (!isPageData(pageData)) {
-            throw new ResponseError("Invalid page data")
+            throw new ResponseError("Invalid Fragment data")
           }
 
-          await adapter.updatePageData({
+          await adapter.updateFragmentData({
             key,
+            type,
             data: pageData,
+            expectedUpdatedAt,
             updatedAt: new Date(),
             updatedBy: user.email,
           })
@@ -161,6 +164,6 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
   }
 }
 
-function isPageData(value: unknown): value is OberonPage["data"] {
+function isPageData(value: unknown): value is OberonFragment["data"] {
   return typeof value === "object" && value !== null && "content" in value && "root" in value
 }

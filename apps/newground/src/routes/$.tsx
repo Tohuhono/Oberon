@@ -33,7 +33,7 @@ const getPage = createServerFn({ method: "GET" })
         {stylesheet ? (
           <link rel="stylesheet" href={stylesheet} precedence="oberon-dynamic" />
         ) : null}
-        <Render data={page.data} config={clientConfig} />
+        <Render data={page.data} config={clientConfig} adapter={adapter} />
       </>,
     )
   })

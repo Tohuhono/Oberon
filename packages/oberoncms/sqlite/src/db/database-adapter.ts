@@ -1,16 +1,53 @@
 import { randomUUID } from "crypto"
 
-import { JsonValueSchema, type OberonDatabaseAdapter, type PageData } from "@oberoncms/core"
+import {
+  FRAGMENT_REVISION,
+  FragmentDataSchema,
+  FragmentRevisionError,
+  JsonValueSchema,
+  ResponseError,
+  type FragmentWriteOptions,
+  type OberonDatabaseAdapter,
+} from "@oberoncms/core"
 import { UserSchema } from "@oberoncms/core"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
 import type { DatabaseClient } from "./client"
 import { user } from "./schema"
-import { images, kv, pages, site } from "./schema"
+import { fragments, images, kv, site } from "./schema"
 
-function isPageData(value: unknown): value is PageData {
-  return typeof value === "object" && value !== null && "content" in value && "root" in value
+async function writeFragment(
+  db: () => DatabaseClient,
+  expectedRevision: FragmentWriteOptions["expectedRevision"],
+  write: (
+    transaction: Parameters<Parameters<DatabaseClient["transaction"]>[0]>[0],
+  ) => Promise<void>,
+) {
+  await db().transaction(async (transaction) => {
+    await transaction
+      .insert(kv)
+      .values({ ...FRAGMENT_REVISION, value: "" })
+      .onConflictDoNothing()
+      .execute()
+
+    const [current] = await transaction
+      .select({ value: kv.value })
+      .from(kv)
+      .where(and(eq(kv.namespace, FRAGMENT_REVISION.namespace), eq(kv.key, FRAGMENT_REVISION.key)))
+      .execute()
+
+    if (expectedRevision !== undefined && current?.value !== expectedRevision) {
+      throw new FragmentRevisionError("Content changed while saving. Reload and try again.")
+    }
+
+    await write(transaction)
+    await transaction
+      .update(kv)
+      .set({ value: randomUUID() })
+      .where(and(eq(kv.namespace, FRAGMENT_REVISION.namespace), eq(kv.key, FRAGMENT_REVISION.key)))
+      .execute()
+  })
 }
 
 export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdapter => ({
@@ -58,11 +95,37 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
       .from(images)
       .execute()
   },
-  addPage: async ({ key, data, updatedAt, updatedBy }) => {
-    await db().insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
+  addFragment: async ({ key, type, data, updatedAt, updatedBy, expectedRevision }) => {
+    await writeFragment(db, expectedRevision, async (transaction) => {
+      const [existing] = await transaction
+        .select({ key: fragments.key })
+        .from(fragments)
+        .where(eq(fragments.key, key))
+        .execute()
+      if (existing) throw new ResponseError(`A Fragment already uses the key "${key}".`)
+      await transaction
+        .insert(fragments)
+        .values({ key, type, data, updatedAt, updatedBy })
+        .execute()
+    })
   },
-  deletePage: async ({ key }) => {
-    await db().delete(pages).where(eq(pages.key, key)).execute()
+  deleteFragment: async ({ key, type, expectedUpdatedAt, expectedRevision }) => {
+    await writeFragment(db, expectedRevision, async (transaction) => {
+      const deleted = await transaction
+        .delete(fragments)
+        .where(
+          and(
+            eq(fragments.key, key),
+            eq(fragments.type, type),
+            expectedUpdatedAt ? eq(fragments.updatedAt, expectedUpdatedAt) : undefined,
+          ),
+        )
+        .returning({ key: fragments.key })
+        .execute()
+      if (!deleted.length) {
+        throw new ResponseError("The Fragment changed or no longer exists. Reload and try again.")
+      }
+    })
   },
   deleteKV: async ({ namespace, key }) => {
     await db()
@@ -70,18 +133,24 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
       .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
       .execute()
   },
-  getPageData: async ({ key }) => {
+  getFragmentData: async ({ key, type }) => {
     const result = await db()
       .select({
-        data: pages.data,
+        data: fragments.data,
       })
-      .from(pages)
-      .where(eq(pages.key, key))
+      .from(fragments)
+      .where(and(eq(fragments.key, key), type ? eq(fragments.type, type) : undefined))
       .execute()
 
-    const pageData = result[0]?.data
-
-    return isPageData(pageData) ? pageData : null
+    return result[0] ? FragmentDataSchema.parse(result[0].data) : null
+  },
+  getFragmentRevision: async () => {
+    const [revision] = await db()
+      .select({ value: kv.value })
+      .from(kv)
+      .where(and(eq(kv.namespace, FRAGMENT_REVISION.namespace), eq(kv.key, FRAGMENT_REVISION.key)))
+      .execute()
+    return z.string().parse(revision?.value ?? "")
   },
   getKV: async ({ namespace, key }) => {
     const result = await db()
@@ -94,12 +163,40 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
 
     return value === undefined ? null : JsonValueSchema.parse(value)
   },
-  updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
-    await db()
-      .insert(pages)
-      .values({ key, data, updatedAt, updatedBy })
-      .onConflictDoUpdate({ target: pages.key, set: { data } })
-      .execute()
+  updateFragmentData: async ({
+    key,
+    type,
+    data,
+    updatedAt,
+    updatedBy,
+    expectedUpdatedAt,
+    expectedRevision,
+  }) => {
+    await writeFragment(db, expectedRevision, async (transaction) => {
+      const [existing] = await transaction
+        .select({ type: fragments.type, updatedAt: fragments.updatedAt })
+        .from(fragments)
+        .where(eq(fragments.key, key))
+        .execute()
+      if (
+        (existing && existing.type !== type) ||
+        (expectedUpdatedAt && existing?.updatedAt.getTime() !== expectedUpdatedAt.getTime())
+      ) {
+        throw new ResponseError("The Fragment changed. Reload before publishing your changes.")
+      }
+      if (existing) {
+        await transaction
+          .update(fragments)
+          .set({ data, updatedAt, updatedBy })
+          .where(eq(fragments.key, key))
+          .execute()
+      } else {
+        await transaction
+          .insert(fragments)
+          .values({ key, type, data, updatedAt, updatedBy })
+          .execute()
+      }
+    })
   },
   putKV: async ({ namespace, key, value }) => {
     await db()
@@ -111,14 +208,16 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
       })
       .execute()
   },
-  getAllPages: async () => {
+  getAllFragments: async ({ type }) => {
     return await db()
       .select({
-        key: pages.key,
-        updatedAt: pages.updatedAt,
-        updatedBy: pages.updatedBy,
+        key: fragments.key,
+        type: fragments.type,
+        updatedAt: fragments.updatedAt,
+        updatedBy: fragments.updatedBy,
       })
-      .from(pages)
+      .from(fragments)
+      .where(type ? eq(fragments.type, type) : undefined)
       .execute()
   },
   getAllUsers: async () => {

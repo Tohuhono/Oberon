@@ -11,10 +11,11 @@ import { Fragment, useOptimistic, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { clearLocalData } from "../hooks/use-local-data"
 import { useOberonActions } from "../hooks/use-oberon"
-import { AddPageSchema, type OberonPageMeta } from "../lib/dtd"
+import { AddFragmentSchema, type OberonClientConfig, type OberonFragmentMeta } from "../lib/dtd"
 
-function copyKey(optimisticPages: OberonPageMeta[], key: OberonPageMeta["key"]) {
+function copyKey(optimisticPages: OberonFragmentMeta[], key: OberonFragmentMeta["key"]) {
   let iterator = 0
   let newKey = `${key}_copy`
 
@@ -25,44 +26,45 @@ function copyKey(optimisticPages: OberonPageMeta[], key: OberonPageMeta["key"]) 
   return newKey
 }
 
-const useOberonPages = (pages: OberonPageMeta[]) => {
-  const { deletePage, addPage, publishPageData, getPageData } = useOberonActions()
-  const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonPageMeta[]>(pages)
+const useOberonPages = (pages: OberonFragmentMeta[], config: OberonClientConfig) => {
+  const { deleteFragment, addFragment, publishFragmentData, getFragmentData } = useOberonActions()
+  const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonFragmentMeta[]>(pages)
   const [isPending, startTransition] = useTransition()
 
   return {
     pages: optimisticPages,
     isPending,
-    addPage: (page: z.infer<typeof AddPageSchema>) => {
+    addFragment: (page: z.infer<typeof AddFragmentSchema>) => {
       startTransition(async () => {
         optimisticPageUpdate([
           ...optimisticPages,
           { ...page, updatedAt: new Date(), updatedBy: "", pending: true },
         ])
-        await addPage(page)
+        await addFragment(page)
       })
     },
-    copyPage: (key: OberonPageMeta["key"]) => {
+    copyPage: (key: OberonFragmentMeta["key"]) => {
       startTransition(async () => {
         const newKey = copyKey(optimisticPages, key)
         optimisticPageUpdate([
           ...optimisticPages,
-          { key: newKey, updatedAt: new Date(), updatedBy: "", pending: true },
+          { key: newKey, type: "page", updatedAt: new Date(), updatedBy: "", pending: true },
         ])
-        const data = await getPageData({ key })
+        const data = await getFragmentData({ key, type: "page" })
         if (data) {
-          await publishPageData({ key: newKey, data })
+          await publishFragmentData({ key: newKey, type: "page", data })
         } else {
-          await addPage({ key: newKey })
+          await addFragment({ key: newKey, type: "page" })
         }
       })
     },
-    deletePage: (key: OberonPageMeta["key"]) => {
+    deleteFragment: (key: OberonFragmentMeta["key"]) => {
       startTransition(async () => {
         optimisticPageUpdate(
           optimisticPages.map((page) => (page.key === key ? { ...page, pending: true } : page)),
         )
-        await deletePage({ key })
+        await deleteFragment({ key, type: "page" })
+        clearLocalData(key, config)
       })
     },
   }
@@ -76,13 +78,23 @@ const parsePath = (key: string) => {
   return (key.charAt(0) === "/" ? key : "/" + key).replace(" ", "_")
 }
 
-export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
-  const { pages, isPending, deletePage, addPage, copyPage } = useOberonPages(serverPages)
+export function Pages({
+  pages: serverPages,
+  config,
+}: {
+  pages: OberonFragmentMeta[]
+  config: OberonClientConfig
+}) {
+  const { pages, isPending, deleteFragment, addFragment, copyPage } = useOberonPages(
+    serverPages,
+    config,
+  )
 
-  const form = useForm<z.infer<typeof AddPageSchema>>({
-    resolver: zodResolver(AddPageSchema),
+  const form = useForm<z.infer<typeof AddFragmentSchema>>({
+    resolver: zodResolver(AddFragmentSchema),
     defaultValues: {
       key: "",
+      type: "page",
     },
   })
 
@@ -96,7 +108,7 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
         <form
           className="contents"
           onSubmit={form.handleSubmit((data) => {
-            addPage(data)
+            addFragment(data)
             form.reset()
           })}
         >
@@ -175,7 +187,7 @@ export function Pages({ pages: serverPages }: { pages: OberonPageMeta[] }) {
             aria-label={`Delete ${route}`}
             variant="destructive"
             size="sm"
-            onClick={() => deletePage(route)}
+            onClick={() => deleteFragment(route)}
             disabled={pending}
           >
             Delete

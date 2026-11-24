@@ -1,6 +1,7 @@
 import { fromPartial, type test as vitest } from "@dev/vitest"
 import type { OberonPluginAdapter } from "@oberoncms/core"
 
+import { testFragments } from "./adapter/fragments"
 import { testKV } from "./adapter/key-value"
 
 export function createAdapterTest(baseTest: typeof vitest) {
@@ -39,5 +40,6 @@ export function describeAdapterTests({
 }) {
   test.describe(description, () => {
     testKV(test)
+    testFragments(test)
   })
 }

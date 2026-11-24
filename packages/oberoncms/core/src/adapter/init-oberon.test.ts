@@ -54,8 +54,8 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
-        getAllPages: () => async () => [
-          { key: "/database", updatedAt: new Date(), updatedBy: "system" },
+        getAllFragments: () => async () => [
+          { key: "/database", type: "page", updatedAt: new Date(), updatedBy: "system" },
         ],
       },
     })
@@ -105,11 +105,11 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
   })
 
   it.each(["/", "/guides/start"])("resolves Page data for %s", async (key) => {
-    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const getFragmentData = vi.fn(async () => INITIAL_DATA)
     const plugin: OberonPlugin = () => ({
       name: "page-resolution",
       adapter: {
-        getPageData: () => getPageData,
+        getFragmentData: () => getFragmentData,
       },
     })
     const adapter = initAdapter({
@@ -121,7 +121,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
       key,
       data: INITIAL_DATA,
     })
-    expect(getPageData).toHaveBeenCalledExactlyOnceWith({ key })
+    expect(getFragmentData).toHaveBeenCalledExactlyOnceWith({ key, type: "page" })
   })
 
   it("resolves a missing Page through the routing adapter", async () => {
@@ -132,7 +132,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const plugin: OberonPlugin = () => ({
       name: "missing-page",
       adapter: {
-        getPageData: () => async () => null,
+        getFragmentData: () => async () => null,
         notFound: () => notFound,
       },
     })
@@ -148,13 +148,13 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
   })
 
   it("checks Page permission before path resolution reads data", async () => {
-    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const getFragmentData = vi.fn(async () => INITIAL_DATA)
     const plugin: OberonPlugin = () => ({
       name: "private-pages",
       adapter: {
         hasPermission: () => () => false,
         getCurrentUser: () => async () => null,
-        getPageData: () => getPageData,
+        getFragmentData: () => getFragmentData,
       },
     })
     const adapter = initAdapter({
@@ -165,7 +165,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     await expect(createActionHandler(adapter).resolvePath({ key: "/private" })).rejects.toThrow(
       "You do not have permission to perform this action",
     )
-    expect(getPageData).not.toHaveBeenCalled()
+    expect(getFragmentData).not.toHaveBeenCalled()
   })
 })
 
@@ -179,9 +179,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       return {
         name: "shared-config-plugin",
         adapter: {
-          getAllPages: () => async () => [],
+          getAllFragments: () => async () => [],
           getSite: () => async () => undefined,
-          updatePageData: () => async () => {},
+          updateFragmentData: () => async () => {},
           updateSite: () => async () => {},
         },
       }
@@ -209,14 +209,14 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter:
           phase === "runtime"
             ? {
-                getAllPages: () => async () => [
-                  { key: "/runtime", updatedAt: new Date(), updatedBy: "system" },
+                getAllFragments: () => async () => [
+                  { key: "/runtime", type: "page", updatedAt: new Date(), updatedBy: "system" },
                 ],
               }
             : {
-                getAllPages: () => async () => [],
+                getAllFragments: () => async () => [],
                 getSite: () => async () => undefined,
-                updatePageData: () => async () => {},
+                updateFragmentData: () => async () => {},
                 updateSite: () => async () => {},
               },
       }
@@ -230,8 +230,8 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const adapter = initAdapter(config)
     await bootstrapOberon(config)
 
-    await expect(adapter.getAllPages()).resolves.toEqual([
-      { key: "/runtime", updatedAt: expect.any(Date), updatedBy: "system" },
+    await expect(adapter.getAllFragments({ type: "page" })).resolves.toEqual([
+      { key: "/runtime", type: "page", updatedAt: expect.any(Date), updatedBy: "system" },
     ])
     expect(phases).toEqual(["runtime", "bootstrap"])
   })
@@ -242,9 +242,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const firstPlugin: OberonPlugin = ({ getAdapter }) => ({
       name: "first-plugin",
       adapter: {
-        getAllPages: () => async () => [],
+        getAllFragments: () => async () => [],
         getSite: () => async () => undefined,
-        updatePageData: () => async () => {
+        updateFragmentData: () => async () => {
           events.push("welcome")
         },
         updateSite: () => async () => {

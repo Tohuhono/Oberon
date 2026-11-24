@@ -10,7 +10,7 @@ import {
 } from "@radix-ui/react-icons"
 import { Button } from "@tohuhono/ui/button"
 import { cn, isValidKey } from "@tohuhono/utils"
-import { useState, type PropsWithChildren } from "react"
+import { useState, type PropsWithChildren, type ReactNode } from "react"
 
 const usePuck = createUsePuck()
 
@@ -25,19 +25,22 @@ export const Drawer = ({ children }: PropsWithChildren) => (
   <div className="h-full space-y-1">{children}</div>
 )
 
-export const DrawerItem = ({ name }: { name: string }) => (
-  <div
-    className="
-      flex cursor-grab flex-col items-baseline justify-between rounded-sm border
-      border-border bg-card px-2 py-1 text-card-foreground shadow-sm
-      transition-colors
-      hover:bg-accent hover:text-accent-foreground
-    "
-  >
-    {name}
-    <DragHandleDots2Icon />
-  </div>
-)
+export const DrawerItem = ({ name }: { name: string }) => {
+  const label = usePuck((state) => state.config.components[name]?.label ?? name)
+  return (
+    <div
+      className="
+        flex min-w-0 cursor-grab flex-col items-baseline justify-between
+        rounded-sm border border-border bg-card px-2 py-1 wrap-anywhere
+        text-card-foreground shadow-sm transition-colors
+        hover:bg-accent hover:text-accent-foreground
+      "
+    >
+      {label}
+      <DragHandleDots2Icon />
+    </div>
+  )
+}
 
 export const SidebarTabs = ({
   activeTab,
@@ -81,26 +84,40 @@ export const SidebarHeading = ({
   activeTab: SidebarTab
   className?: string
 }) => {
-  const selectedComponent = usePuck((s) => s.selectedItem?.type || sidebarTabs["fields"].label)
+  const selectedComponent = usePuck((state) => {
+    const type = state.selectedItem?.type
+    return type ? (state.config.components[type]?.label ?? type) : sidebarTabs.fields.label
+  })
 
   const tabLabel = activeTab === "fields" ? selectedComponent : sidebarTabs[activeTab].label
 
-  return <h3 className={cn(className, "p-2 pl-4")}>{tabLabel}</h3>
+  return (
+    <h3 title={tabLabel} className={cn(className, "min-w-0 truncate p-2 pl-4")}>
+      {tabLabel}
+    </h3>
+  )
 }
 
 export const Sidebar = ({
   activeTab,
   className,
+  fieldsFooter,
 }: {
   activeTab: SidebarTab
   className?: string
+  fieldsFooter?: ReactNode
 }) => {
   return (
     <div className={cn(className, "h-full overflow-auto p-2")}>
       <div id={`editor-tool-${activeTab}`} role="tabpanel">
         {activeTab === "components" && <Puck.Components />}
         {activeTab === "outline" && <Puck.Outline />}
-        {activeTab === "fields" && <Puck.Fields />}
+        {activeTab === "fields" && (
+          <>
+            <Puck.Fields />
+            {fieldsFooter}
+          </>
+        )}
       </div>
     </div>
   )

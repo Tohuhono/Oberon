@@ -3,7 +3,13 @@ import type { SlotComponent } from "@puckeditor/core"
 import { createElement } from "react"
 import type { ReactNode } from "react"
 
-import { AddUserSchema, defineOberonComponent, PageSchema, SignInSchema, UserSchema } from "./dtd"
+import {
+  AddUserSchema,
+  defineOberonComponent,
+  FragmentSchema,
+  SignInSchema,
+  UserSchema,
+} from "./dtd"
 
 describe("CMS input schemas", { tags: ["ai", "issue-323"] }, () => {
   it.each(["editor@example.com", "editor+cms@example.co.nz"])(
@@ -31,6 +37,7 @@ describe("CMS input schemas", { tags: ["ai", "issue-323"] }, () => {
   it("preserves arbitrary page data fields", () => {
     const page = {
       key: "/test",
+      type: "page",
       data: {
         content: [{ type: "Heading", props: { id: "heading", title: "Test" } }],
         root: { props: { title: "Test page" } },
@@ -40,13 +47,14 @@ describe("CMS input schemas", { tags: ["ai", "issue-323"] }, () => {
       updatedBy: "editor",
     }
 
-    expect(PageSchema.parse(page)).toEqual(page)
+    expect(FragmentSchema.parse(page)).toEqual(page)
   })
 
   it.each([null, [], "content", 123])("rejects non-object page data %s", (data) => {
     expect(
-      PageSchema.safeParse({
+      FragmentSchema.safeParse({
         key: "/test",
+        type: "page",
         data,
         updatedAt: new Date(),
         updatedBy: "editor",

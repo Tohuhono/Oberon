@@ -1,8 +1,9 @@
-import type { OberonPage } from "../lib/dtd"
+import type { OberonFragment } from "../lib/dtd"
 
-export function getInitialData(): OberonPage {
+export function getInitialData(): OberonFragment {
   return {
     key: "/",
+    type: "page",
     data: {
       content: [
         { type: "Welcome", props: { id: "Welcome-1" } },

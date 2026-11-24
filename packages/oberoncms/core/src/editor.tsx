@@ -14,6 +14,12 @@ import type { OberonClientConfig } from "./lib/dtd"
 import { getTitle } from "./lib/utils"
 
 export { useOberonImages } from "./hooks/use-oberon-images"
+export { useOberonActions, useOberonNavigation } from "./hooks/use-oberon"
+export { clearLocalData, useLocalData } from "./hooks/use-local-data"
+export { Editor as PageEditor } from "./components/editor"
+export { Preview as PagePreview } from "./components/preview"
+export { Menu as EditorMenu } from "./components/menu"
+export { HistoryControls as EditorHistory } from "./components/editor/history"
 
 const previewConfig = {
   root: {
@@ -35,18 +41,31 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
   }
 
   if (action === "edit") {
-    return <Editor path={slug} data={data} config={config} />
+    const AuthoringEditor = config.authoring?.Editor ?? Editor
+    return <AuthoringEditor path={slug} data={data} config={config} />
   }
 
   if (action === "preview") {
-    return <Preview path={slug} data={data} config={{ ...previewConfig, ...config }} />
+    const AuthoringPreview = config.authoring?.Preview ?? Preview
+    return <AuthoringPreview path={slug} data={data} config={{ ...previewConfig, ...config }} />
+  }
+
+  if (action === "library") {
+    const Library = config.authoring?.Library
+    return Library ? <Library config={config} /> : notFound()
   }
 
   if (["users", "images", "pages", "site"].includes(action)) {
     return (
       <>
         {/* TODO fix path to be dynamic */}
-        <Menu title={getTitle(action, slug)} path={`/cms/${action}`} />
+        <Menu
+          title={getTitle(action, slug)}
+          path={`/cms/${action}`}
+          libraryLabel={
+            config.authoring?.Library ? (config.authoring.label ?? "Library") : undefined
+          }
+        />
         <div className="flex w-full justify-center">
           <div
             className="
@@ -57,7 +76,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
           >
             {action === "users" && <Users users={data} />}
             {action === "images" && <Images images={data} />}
-            {action === "pages" && <Pages pages={data} />}
+            {action === "pages" && <Pages pages={data} config={config} />}
             {action === "site" && <Site config={data} />}
           </div>
         </div>

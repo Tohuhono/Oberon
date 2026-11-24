@@ -1,13 +1,16 @@
 import { Render as PuckRender } from "@puckeditor/core/rsc"
 
-import type { OberonClientConfig, PageData } from "./lib/dtd"
+import type { OberonAdapter, OberonClientConfig, FragmentData } from "./lib/dtd"
 
-export function Render({
+export async function Render({
   data,
-  config: { components },
+  config,
+  adapter,
 }: {
-  data: PageData
+  data: FragmentData
   config: OberonClientConfig
+  adapter?: Pick<OberonAdapter, "prepareContent">
 }) {
-  return <PuckRender data={data} config={{ components }} />
+  const prepared = adapter ? await adapter.prepareContent({ config, data }) : { config, data }
+  return <PuckRender data={prepared.data} config={prepared.config} />
 }

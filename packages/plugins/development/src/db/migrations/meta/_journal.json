@@ -29,6 +29,13 @@
       "when": 1776303051268,
       "tag": "0003_glorious_pete_wisdom",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1794267376543,
+      "tag": "0004_woozy_sage",
+      "breakpoints": true
     }
   ]
 }
