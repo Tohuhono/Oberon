@@ -31,7 +31,10 @@ Explain and ask about one decision at a time. Preserve approved settings on reru
 requests a change.
 
 1. **Tracker:** GitHub (`gh`), GitLab (`glab`), local markdown, or a described external workflow.
-   For local markdown, confirm a durable location rather than using `.tmp/`.
+   For local markdown, confirm a durable location rather than using `.tmp/`. For GitHub or GitLab,
+   confirm a remote points to the chosen host. If none does, ask for the repository URL and add a
+   remote with the user's approval. Continue only when `gh repo view` or `glab repo view` shows the
+   chosen repository.
 2. **Labels:** Map category roles `bug` and `enhancement`, and state roles `needs-triage`,
    `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix`. Each triaged issue needs one
    category and one state. Identify missing tracker labels.
