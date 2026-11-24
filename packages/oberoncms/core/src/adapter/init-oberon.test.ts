@@ -91,39 +91,6 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     })
   })
 
-  it("returns the persisted timestamp after publishing a Fragment", async () => {
-    const page = getInitialData()
-    const persistedAt = new Date("2026-10-13T00:00:00.000Z")
-    const plugin: OberonPlugin = () => ({
-      name: "persisted-fragment-timestamp",
-      adapter: {
-        getCurrentUser: () => async () => ({
-          id: "editor",
-          email: "editor@example.com",
-          role: "admin",
-        }),
-        getFragmentData: () => async () => ({ ...page, updatedAt: persistedAt }),
-        updateFragmentData: () => async () => persistedAt,
-      },
-    })
-    const adapter = initAdapter({
-      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-      plugins: [plugin],
-    })
-
-    await expect(
-      createActionHandler(adapter).publishFragmentData({
-        key: page.key,
-        type: "page",
-        data: page.data,
-        expectedUpdatedAt: page.updatedAt,
-      }),
-    ).resolves.toMatchObject({
-      status: "success",
-      result: { key: page.key, type: "page", updatedAt: persistedAt },
-    })
-  })
-
   it("exposes missing routing capabilities as NotImplementedError adapter methods", () => {
     const adapter = initAdapter({
       client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
@@ -309,5 +276,40 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     })
 
     expect(events).toEqual(["function", "first", "second", "welcome", "site"])
+  })
+})
+
+describe("Fragment publishing", { tags: ["ai", "feature-shared-components"] }, () => {
+  it("returns the persisted timestamp after publishing a Fragment", async () => {
+    const page = getInitialData()
+    const persistedAt = new Date("2026-10-13T00:00:00.000Z")
+    const plugin: OberonPlugin = () => ({
+      name: "persisted-fragment-timestamp",
+      adapter: {
+        getCurrentUser: () => async () => ({
+          id: "editor",
+          email: "editor@example.com",
+          role: "admin",
+        }),
+        getFragmentData: () => async () => ({ ...page, updatedAt: persistedAt }),
+        updateFragmentData: () => async () => persistedAt,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+
+    await expect(
+      createActionHandler(adapter).publishFragmentData({
+        key: page.key,
+        type: "page",
+        data: page.data,
+        expectedUpdatedAt: page.updatedAt,
+      }),
+    ).resolves.toMatchObject({
+      status: "success",
+      result: { key: page.key, type: "page", updatedAt: persistedAt },
+    })
   })
 })

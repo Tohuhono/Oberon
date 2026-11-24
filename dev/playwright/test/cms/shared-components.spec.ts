@@ -2,7 +2,7 @@ import { expect, test } from "@dev/playwright/helpers/fixtures"
 
 test.describe("CMS Shared components", { tag: "@cms" }, () => {
   test("creates, publishes and deletes a Shared component", async ({ cms, testKey }) => {
-    const name = `Shared ${testKey} ${Date.now()}`
+    const name = `Shared ${testKey}`
     await cms.goto("/cms/library")
     await cms.getByRole("button", { name: "+ New Shared component", exact: true }).click()
     await expect(cms.getByRole("button", { name: "Create Shared component" })).toBeDisabled()

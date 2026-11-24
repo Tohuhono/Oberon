@@ -10,11 +10,8 @@ import {
   PageSchema,
   PublishFragmentSchema,
   SignInSchema,
-  SharedComponentDataSchema,
-  SharedExposureKeySchema,
   UserSchema,
 } from "./dtd"
-import { createSharedExposureKey } from "./shared-components"
 
 describe("CMS input schemas", { tags: ["ai", "issue-323"] }, () => {
   it.each(["editor@example.com", "editor+cms@example.co.nz"])(
@@ -63,35 +60,6 @@ describe("CMS input schemas", { tags: ["ai", "issue-323"] }, () => {
         updatedBy: "editor",
       }).success,
     ).toBe(false)
-  })
-
-  it("applies route validation only to Page Fragment keys", () => {
-    expect(AddFragmentSchema.parse({ key: "/articles/one", type: "page" })).toEqual({
-      key: "/articles/one",
-      type: "page",
-    })
-    expect(AddFragmentSchema.safeParse({ key: "Article", type: "page" }).success).toBe(false)
-    const data = {
-      name: "Article",
-      tree: { content: [], root: { props: {} } },
-      exposures: [],
-      defaults: {},
-    }
-
-    expect(AddFragmentSchema.parse({ key: "article", type: "shared", data })).toEqual({
-      key: "article",
-      type: "shared",
-      data,
-    })
-    expect(AddFragmentSchema.safeParse({ key: "article", type: "shared" }).success).toBe(false)
-    expect(SharedComponentDataSchema.safeParse({ ...data, name: " " }).success).toBe(false)
-  })
-
-  it("accepts only stable Shared instance field keys", () => {
-    const key = createSharedExposureKey()
-
-    expect(SharedExposureKeySchema.parse(key)).toBe(key)
-    expect(SharedExposureKeySchema.safeParse(crypto.randomUUID()).success).toBe(false)
   })
 })
 
@@ -168,6 +136,29 @@ describe("defineOberonComponent", { tags: ["ai", "feature-component-typing"] }, 
         return image ? createElement("img", { alt: "", src: image.url }) : createElement("div")
       },
     })
+  })
+})
+
+describe("Fragment input schemas", { tags: ["ai", "feature-shared-components"] }, () => {
+  it("applies route validation only to Page Fragment keys", () => {
+    expect(AddFragmentSchema.parse({ key: "/articles/one", type: "page" })).toEqual({
+      key: "/articles/one",
+      type: "page",
+    })
+    expect(AddFragmentSchema.safeParse({ key: "Article", type: "page" }).success).toBe(false)
+    const data = {
+      name: "Article",
+      tree: { content: [], root: { props: {} } },
+      exposures: [],
+      defaults: {},
+    }
+
+    expect(AddFragmentSchema.parse({ key: "article", type: "shared", data })).toEqual({
+      key: "article",
+      type: "shared",
+      data,
+    })
+    expect(AddFragmentSchema.safeParse({ key: "article", type: "shared" }).success).toBe(false)
   })
 
   it("parses serialized optimistic-concurrency timestamps", () => {

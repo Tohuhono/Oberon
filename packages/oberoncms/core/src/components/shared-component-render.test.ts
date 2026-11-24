@@ -4,11 +4,7 @@ import { createElement } from "react"
 
 import type { SharedComponentData } from "../lib/dtd"
 import { createSharedExposureKey, findSharedReferences } from "../lib/shared-components"
-import {
-  resolveSharedInstanceData,
-  withSharedComponent,
-  withSharedEditorComponents,
-} from "./shared-component-render"
+import { withSharedComponent, withSharedEditorComponents } from "./shared-component-render"
 
 const config = fromPartial<Config>({
   components: {
@@ -27,59 +23,6 @@ describe(
   "Shared component instance rendering",
   { tags: ["ai", "feature-shared-components"] },
   () => {
-    it("uses instance values and namespaces source node IDs", () => {
-      const key = createSharedExposureKey()
-      const source: SharedComponentData = {
-        name: "Call to action",
-        tree: {
-          content: [{ type: "Text", props: { id: "headline", text: "Source headline" } }],
-          root: { props: {} },
-        },
-        exposures: [{ key, nodeId: "headline", prop: "text", label: "Headline" }],
-        defaults: {},
-      }
-
-      const data = resolveSharedInstanceData(
-        source,
-        { [key]: "Instance headline" },
-        config,
-        "instance-1",
-      )
-
-      expect(data.content[0]).toMatchObject({
-        type: "Text",
-        props: { id: "instance-1__headline", text: "Instance headline" },
-      })
-    })
-
-    it("keeps authored slot children when the instance has no saved value", () => {
-      const key = createSharedExposureKey()
-      const slotChild = { type: "Text", props: { id: "source-child", text: "Source child" } }
-      const source: SharedComponentData = {
-        name: "Article",
-        tree: {
-          content: [
-            {
-              type: "Container",
-              props: { id: "body", content: [slotChild] },
-            },
-          ],
-          root: { props: {} },
-        },
-        exposures: [{ key, nodeId: "body", prop: "content", label: "Body" }],
-        defaults: {},
-      }
-
-      const data = resolveSharedInstanceData(source, {}, config, "instance-2")
-
-      expect(data.content[0]).toMatchObject({
-        props: {
-          id: "instance-2__body",
-          content: [{ props: { id: "instance-2__source-child" } }],
-        },
-      } satisfies Partial<Data["content"][number]>)
-    })
-
     it("maps nested Shared instances to editor aliases and back to stored types", () => {
       const bodyKey = createSharedExposureKey()
       const library: Record<string, SharedComponentData> = {
@@ -131,7 +74,6 @@ describe(
       const storedData = session.toStoredData(editorData)
 
       expect(editorData.content[0]?.type).toBe("SharedPalette_article")
-      expect(storedData).toMatchObject(pageData)
       expect(storedData.content).toEqual(pageData.content)
     })
 

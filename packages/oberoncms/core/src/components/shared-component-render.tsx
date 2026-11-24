@@ -103,7 +103,7 @@ function renderSharedSource(
   })
 }
 
-export function resolveSharedInstanceData(
+function resolveSharedInstanceData(
   source: SharedComponentData,
   props: Record<string, unknown>,
   config: Config,
