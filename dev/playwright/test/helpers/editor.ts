@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test"
 
-export async function insertTextComponent(page: Page) {
+export async function insertComponent(page: Page, type: string) {
   await expect(page.locator("iframe#preview-frame")).toBeVisible()
   await page.getByRole("tab", { name: "Components", exact: true }).click()
 
@@ -8,11 +8,11 @@ export async function insertTextComponent(page: Page) {
     .frameLocator("iframe#preview-frame")
     .getByTestId("dropzone:root:default-zone")
   await expect(rootDropZone).toBeVisible()
-  const drawerItemBox = await page.getByTestId("drawer-item:Text").boundingBox()
+  const drawerItemBox = await page.getByTestId(`drawer-item:${type}`).boundingBox()
   const rootDropZoneBox = await rootDropZone.boundingBox()
 
   if (!drawerItemBox || !rootDropZoneBox) {
-    throw new Error("Text drawer item and root drop zone must have bounding boxes")
+    throw new Error(`${type} drawer item and root drop zone must have bounding boxes`)
   }
 
   await page.mouse.move(
@@ -32,6 +32,10 @@ export async function insertTextComponent(page: Page) {
     { steps: 20 },
   )
   await page.mouse.up()
+}
+
+export async function insertTextComponent(page: Page) {
+  await insertComponent(page, "Text")
   await expect(page.getByRole("tab", { name: "Page Settings", exact: true })).toHaveAttribute(
     "aria-selected",
     "true",
