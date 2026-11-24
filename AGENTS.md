@@ -16,6 +16,8 @@ create-oberon-app script
 - Avoid filtering, changing directory, or otherwise targeting specific packages (--filter, --dir)
   manually
 - Document durable repo guidance in `.agents/` rather than agent memory
+- Local SQLite development databases are transient; use them for development, testing safely reset
+  with `pnpm clean:db`
 - Temporary files stay in the repo, use `.tmp/`
 - Use simplified english ASD-STE100 plus ubiquitous language with active voice
 

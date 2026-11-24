@@ -38,7 +38,7 @@ before you look:
 Read the root `AGENTS.md` domain guidance first, then its configured glossary and relevant ADRs. In
 this repo, use `.agents/CONTEXT.md`, `.agents/ARCHITECTURE.md`, and `.agents/adr/`.
 
-Then spawn a sub-agent to walk the codebase. Don't follow rigid heuristics; explore organically and
+Then spawn a sub-agent with a fresh context window to walk the codebase. Explore organically and
 note where you experience friction:
 
 - Where does understanding one concept require bouncing between many small modules?

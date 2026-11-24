@@ -12,18 +12,22 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Comment on an issue**: `gh issue comment <number> --body "..."`
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` /
   `gh issue edit <number> --remove-label "..."`
-- **Close**: `gh issue close <number> --comment "..."`
+- **Close**: Post the explanation with `gh issue comment <number> --body "..."`, then run
+  `gh issue close <number>`. `gh issue close --comment` drops the comment on already-closed issues.
 - **Make a sub-issue**: `gh issue create --parent <parent> ...`, or
   `gh issue edit <parent> --add-sub-issue <child>` (`gh` 2.94+). With older versions, use
   `gh api --method POST repos/<owner>/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>`.
   If sub-issues are not available, put `Part of #<parent>` at the top of the child body.
-- **Add a blocker**:
+- **Add a blocker**: Use `gh issue create --blocked-by <n>,<n> ...` or
+  `gh issue edit <child> --add-blocked-by <blocker>` (`gh` 2.94+). With older versions, use
   `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`.
   Get the numeric database ID with `gh api repos/<owner>/<repo>/issues/<number> --jq .id`. Use the
   database ID, not the issue number or node ID. If native dependencies are not available, put
   `Blocked by: #<number>` at the top of the child body.
 
-Infer the repository from `git remote -v`; `gh` does this automatically inside this clone.
+Infer the repository from `git remote -v`; `gh` does this automatically inside this clone. Before
+creating the first issue, check `gh repo view --json nameWithOwner`. A fork can default to its
+upstream parent. Confirm the target with the user if it is not their repository.
 
 When a skill says to publish to the issue tracker, create a GitHub issue. When it says to fetch the
 relevant ticket, run `gh issue view <number> --comments`.
@@ -32,11 +36,12 @@ relevant ticket, run `gh issue view <number> --comments`.
 
 **PRs as a request surface: no.** Issue triage does not discover external PRs by default.
 
-An explicitly named PR can still be triaged. Read it with `gh pr view <number> --comments` and
-`gh pr diff <number>`. Use `gh pr comment`, `gh pr edit`, and `gh pr close` for PR operations.
-GitHub shares issue and PR numbers. Resolve a bare reference with `gh pr view <number>`, then use
-`gh issue view <number>` only if the reference is not a PR. Report authentication and network errors
-instead of treating them as a missing PR.
+An explicitly named PR can still be triaged. Use `gh pr view <number>` for the body,
+`gh pr view <number> --comments` for comments, and `gh pr diff <number>` for the diff. Use
+`gh pr comment`, `gh pr edit`, and `gh pr close` for PR operations. GitHub shares issue and PR
+numbers. Resolve a bare reference with `gh pr view <number>`, then use `gh issue view <number>` only
+if the reference is not a PR. Report authentication and network errors instead of treating them as a
+missing PR.
 
 ## Triage labels
 
