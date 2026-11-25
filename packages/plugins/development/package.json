@@ -35,7 +35,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
-    "drizzle": "drizzle-kit",
+    "generate:migrations": "drizzle-kit generate",
     "dev": "vite build --watch",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",

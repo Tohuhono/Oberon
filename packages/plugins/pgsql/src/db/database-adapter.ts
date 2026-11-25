@@ -9,17 +9,15 @@ import {
   type OberonDatabaseAdapter,
 } from "@oberoncms/core"
 import { and, eq, sql } from "drizzle-orm"
-import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core"
 import { z } from "zod"
 
+import type { DatabaseClient } from "./client"
 import { user } from "./schema"
 import { fragments, images, kv, site } from "./schema"
 
-export function getDatabaseAdapter<Result extends PgQueryResultHKT>(
-  db: () => PgAsyncDatabase<Result>,
-): OberonDatabaseAdapter {
+export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdapter {
   const transaction = new AsyncLocalStorage<
-    Parameters<Parameters<PgAsyncDatabase<Result>["transaction"]>[0]>[0]
+    Parameters<Parameters<DatabaseClient["transaction"]>[0]>[0]
   >()
   const fragmentsDb = () => transaction.getStore() ?? db()
   return {

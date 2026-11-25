@@ -14,7 +14,7 @@
     "build:coa": "turbo build --concurrency 50 --filter=create-oberon-app... && turbo generate:recipes",
     "change": "changeset",
     "change:status": "changeset status",
-    "check": "USE_DEVELOPMENT_DATABASE=true USE_DEVELOPMENT_SEND=true turbo check --concurrency 50 --output-logs errors-only",
+    "check": "USE_DEVELOPMENT_DATABASE=true USE_DEVELOPMENT_SEND=true turbo workspace:check --concurrency 50 --output-logs errors-only",
     "clean": "turbo clean --continue && odt clean",
     "clean:next": "turbo clean --continue -- --only ./.next",
     "clean:node": "pnpm clean && rimraf --glob ./**/node_modules",
@@ -29,9 +29,7 @@
     "dev:packages": "turbo dev --concurrency 50 --filter={./packages/**/*}...",
     "format": "oxfmt \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
     "format:check": "oxfmt --check \"**/*.{ts,tsx,js,jsx,css,md,mdx,json}\"",
-    "generate:migrations": "turbo run drizzle --continue -- generate",
-    "up:migrations": "turbo run drizzle -- up",
-    "check:migrations": "turbo run drizzle -- check",
+    "generate:migrations": "odt turbo generate:migrations",
     "lint": "turbo lint --concurrency 50",
     "lint:fix": "turbo lint --concurrency 50 -- --fix",
     "lint:root": "oxlint",
@@ -57,10 +55,10 @@
     "test:e2e:ui": "turbo test:e2e:ui --concurrency 50 --filter=@oberon/newground...",
     "test:unit": "odt turbo test:unit --filter={./packages/tohuhono/*}... --filter={./packages/plugins/*}... --filter={./packages/oberoncms/*}... --concurrency 50 ",
     "test:watch": "turbo test:watch --filter={./packages/*}... --concurrency 50",
-    "test:tdd": "turbo test:tdd --concurrency 50 --filter=@oberon/playground... --output-logs new-only",
-    "test:tdd:ui": "turbo test:tdd:ui --concurrency 50 --filter=@oberon/playground...",
+    "test:tdd": "turbo @oberon/playground#test:tdd --concurrency 50 --output-logs new-only",
+    "test:tdd:ui": "turbo @oberon/playground#test:tdd:ui --concurrency 50",
     "test:smoke": "turbo test:smoke --concurrency 50",
-    "validate": "odt turbo validate --concurrency 50 --output-logs new-only --continue=dependencies-successful"
+    "validate": "odt turbo workspace:validate --concurrency 50 --output-logs new-only --continue=dependencies-successful"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.3",

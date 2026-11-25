@@ -30,7 +30,8 @@
   "globalDependencies": [".github/workflows/**", ".github/actions/**"],
   "futureFlags": {
     "watchUsingTaskInputs": true,
-    "errorsOnlyShowHash": false
+    "errorsOnlyShowHash": false,
+    "strictTaskEntrypointSelection": true
   },
   "tasks": {
     "//#change:status": { "inputs": [".changeset/**"] },
@@ -71,13 +72,14 @@
       "persistent": true,
       "dependsOn": ["build"]
     },
-    "check": {
+    "workspace:check": {
       "dependsOn": ["//#change:status", "lint", "tsc", "test:unit"]
     },
     "clean": {
       "cache": false
     },
-    "drizzle": {
+    "generate:migrations": {
+      "dependsOn": ["^build"],
       "cache": false
     },
     "test:unit": {
@@ -208,7 +210,7 @@
     "prepublishOnly": {
       "dependsOn": ["build"]
     },
-    "validate": {
+    "workspace:validate": {
       "dependsOn": ["//#change:status", "lint", "tsc", "test:unit", "test:e2e", "test:coa"]
     }
   }

@@ -2,9 +2,11 @@ import { resolve } from "path"
 
 import { fromPartial, test } from "@dev/vitest"
 import { PGlite } from "@electric-sql/pglite"
+import { PGLiteSocketServer } from "@electric-sql/pglite-socket"
 import { createAdapterTests } from "@oberoncms/testing"
-import { drizzle } from "drizzle-orm/pglite"
-import { migrate } from "drizzle-orm/pglite/migrator"
+import { drizzle } from "drizzle-orm/node-postgres"
+import { migrate } from "drizzle-orm/node-postgres/migrator"
+import { Pool } from "pg"
 
 import { getDatabaseAdapter } from "./db/database-adapter"
 
@@ -15,10 +17,28 @@ createAdapterTests({
   test,
   getAdapter: async (onCleanup) => {
     const client = new PGlite()
-    onCleanup(() => client.close())
+    const server = new PGLiteSocketServer({ db: client, port: 0 })
+    let pool: Pool | undefined
 
-    const db = drizzle({ client })
-    await migrate(db, { migrationsFolder })
-    return fromPartial(getDatabaseAdapter(() => db))
+    const cleanup = async () => {
+      await pool?.end()
+      await server.stop()
+      await client.close()
+    }
+
+    try {
+      await server.start()
+      pool = new Pool({
+        connectionString: `postgresql://postgres@${server.getServerConn()}/postgres`,
+      })
+      const db = drizzle({ client: pool })
+      await migrate(db, { migrationsFolder })
+
+      onCleanup(cleanup)
+      return fromPartial(getDatabaseAdapter(() => db))
+    } catch (error) {
+      await cleanup()
+      throw error
+    }
   },
 })
