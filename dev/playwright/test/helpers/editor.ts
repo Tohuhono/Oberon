@@ -18,6 +18,7 @@ export async function dragComponent(
 ) {
   await expect(dropZone).toBeVisible()
   await expect(draggable).toBeVisible()
+  if (nested) await dropZone.scrollIntoViewIfNeeded()
   await draggable.scrollIntoViewIfNeeded()
   const draggableBox = await draggable.boundingBox()
   const dropZoneBox = await dropZone.boundingBox()
@@ -40,7 +41,7 @@ export async function dragComponent(
   try {
     await page.mouse.move(
       dropZoneBox.x + dropZoneBox.width / 2,
-      dropZoneBox.y + dropZoneBox.height / 2,
+      dropZoneBox.y + (nested ? dropZoneBox.height / 2 : dropZoneBox.height - 8),
       { steps: 20 },
     )
     if (nested) {

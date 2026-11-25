@@ -139,8 +139,8 @@ test.describe("CMS Shared components", { tag: "@cms" }, () => {
       testInfo.setTimeout(90_000)
       const runId = crypto.randomUUID().slice(0, 8)
       const name = `Article ${runId}`
-      const heading = `Article heading ${testKey}`
-      const revisedHeading = `Revised heading ${testKey}`
+      const heading = `Article heading ${runId}`
+      const revisedHeading = `Revised heading ${runId}`
       const pageKey = `/${testKey}-${runId}`
       const canvas = cms.frameLocator("iframe#preview-frame")
       const text = cms.locator('textarea[name="text"]')
@@ -171,9 +171,13 @@ test.describe("CMS Shared components", { tag: "@cms" }, () => {
 
         await createCmsPage(cms, pageKey)
         await cms.goto(`/cms/edit${pageKey}`)
-        await insertComponent(cms, "Container")
-        await insertComponent(cms, name, canvas.getByTestId(/^dropzone:Container-.*:content$/u))
-        await insertComponent(cms, name)
+        const containers = canvas.getByTestId(/^dropzone:Container-.*:content$/u)
+        for (let count = 1; count <= 3; count++) {
+          await insertComponent(cms, "Container")
+          await expect(containers).toHaveCount(count)
+        }
+        await insertComponent(cms, name, containers.nth(0))
+        await insertComponent(cms, name, containers.nth(1))
 
         const bodies = canvas.getByTestId(/^dropzone:SharedPalette_.*:instance_/u)
         await expect(bodies).toHaveCount(2)
@@ -188,21 +192,15 @@ test.describe("CMS Shared components", { tag: "@cms" }, () => {
           await expect(canvas.getByText(caption, { exact: true })).toBeVisible()
         }
 
-        await insertComponent(cms, "Container")
-        const emptyContainer = canvas
-          .getByTestId(/^dropzone:Container-.*:content$/u)
-          .filter({ hasNotText: heading })
-        const destinationId = await emptyContainer.getAttribute("data-testid")
-        if (!destinationId) throw new Error("The empty Container must have a drop zone")
-        const destination = canvas.getByTestId(destinationId)
-        const bodyToMove = await bodies.first().innerText()
+        const destination = containers.nth(2)
         await dragComponent(
           cms,
-          canvas.getByText(heading, { exact: true }).first(),
+          containers.nth(0).getByText(heading, { exact: true }),
           destination,
           true,
         )
-        await expect(destination.getByText(bodyToMove.trim(), { exact: true })).toBeVisible()
+        await expect(destination.getByText("First body", { exact: true })).toBeVisible()
+        await expect(containers.nth(0).getByText(heading, { exact: true })).toHaveCount(0)
 
         await cms.getByRole("button", { name: "Publish", exact: true }).click()
         await expect(
