@@ -24,3 +24,6 @@ Shared component drafts keep their base publication timestamp to detect conflict
 
 Upgrade Drizzle ORM and Kit to 1.0.0-rc.6. Existing migration SQL moves into the v1 history format.
 The Fragment migrations preserve Page records and convert their SQLite timestamps to milliseconds.
+
+Apply component migrations to Pages and Shared components in one transaction with the Site version
+update. A failed transform leaves content and migration versions available for a retry.

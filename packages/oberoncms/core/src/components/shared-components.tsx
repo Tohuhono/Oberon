@@ -1,7 +1,7 @@
 "use client"
 
 import "@puckeditor/core/puck.css"
-import type { Config } from "@puckeditor/core"
+import { Render as PuckRender, type Config } from "@puckeditor/core"
 import { Button } from "@tohuhono/ui/button"
 import {
   Dialog,
@@ -20,7 +20,6 @@ import useSWR from "swr"
 import { useOberonActions, useOberonNavigation } from "../hooks/use-oberon"
 import { INITIAL_DATA, type OberonSharedFragment } from "../lib/dtd"
 import { findSharedReferences, sourceEditorUrl } from "../lib/shared-components"
-import { renderPuckTree } from "./editor/workspace"
 import { Menu } from "./menu"
 import { SharedComponentCard } from "./shared-component-card"
 import { withSharedComponent } from "./shared-component-render"
@@ -48,7 +47,7 @@ export function SharedComponents({
   )
 
   const library = Object.fromEntries(sources.map(({ key, data }) => [key, data]))
-  const sharedConfig = withSharedComponent(clientConfig, renderPuckTree, library)
+  const sharedConfig = withSharedComponent(clientConfig, PuckRender, library)
   const source = sourceId ? sources.find(({ key }) => key === sourceId) : undefined
 
   if (source) {

@@ -31,7 +31,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       return result
     },
     getSite: async () => {
-      const result = await db()
+      const result = await fragmentsDb()
         .select({
           version: site.version,
           components: site.components,
@@ -44,7 +44,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       return result[0]
     },
     updateSite: async ({ version, components, updatedAt, updatedBy }) => {
-      await db()
+      await fragmentsDb()
         .insert(site)
         .values({ id: 1, version, components, updatedAt, updatedBy })
         .onConflictDoUpdate({

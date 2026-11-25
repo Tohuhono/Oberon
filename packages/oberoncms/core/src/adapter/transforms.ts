@@ -1,109 +1,112 @@
 import { transformProps, type Config } from "@puckeditor/core"
-import { mapConcurrent } from "@tohuhono/utils/map-concurrent"
+import { createElement } from "react"
 import { z } from "zod"
 
-import { JsonValueSchema } from "../lib/dtd"
-import { getNodeById, isSlotContent } from "../lib/shared-components"
+import { withSharedComponent } from "../components/shared-component-render"
+import {
+  JsonValueSchema,
+  type MigrationResult,
+  type OberonClientConfig,
+  type OberonDatabaseAdapter,
+  type OberonFragment,
+  type OberonFragmentMeta,
+  type OberonPluginAdapter,
+  type OberonUser,
+  type TransformResult,
+  type TransformVersions,
+} from "../lib/dtd"
+import { getNodeById, getSharedComponentLibrary, isSlotContent } from "../lib/shared-components"
 
 type PropTransform = Parameters<typeof transformProps>[1]
 
-import type {
-  OberonClientConfig,
-  OberonDatabaseAdapter,
-  OberonFragmentMeta,
-  TransformResult,
-  TransformVersions,
-} from "../lib/dtd"
+function transformFragment(fragment: OberonFragment, transforms: PropTransform, config: Config) {
+  if (fragment.type === "page") {
+    return { ...fragment, data: transformProps(fragment.data, transforms, config) }
+  }
 
-async function applyTransform(
-  key: string,
-  transforms: PropTransform,
-  getFragmentData: OberonDatabaseAdapter["getFragmentData"],
-  updateFragmentData: OberonDatabaseAdapter["updateFragmentData"],
-  config: Config,
-): Promise<TransformResult> {
-  try {
-    const fragment = await getFragmentData({ key })
-
-    if (!fragment) {
-      return {
-        type: "transform",
-        key,
-        status: "success",
-      }
-    }
-
-    const publication = {
-      updatedBy: "migration",
-      expectedUpdatedAt: fragment.updatedAt,
-    }
-    if (fragment.type === "page") {
-      await updateFragmentData({
-        ...fragment,
-        ...publication,
-        data: transformProps(fragment.data, transforms, config),
-      })
-    } else {
-      const { tree, defaults, ...data } = fragment.data
-      const transformedDefaults = Object.fromEntries(
-        Object.entries(defaults).map(([exposureKey, value]) => {
-          const exposure = fragment.data.exposures.find((item) => item.key === exposureKey)
-          const node = exposure && getNodeById(tree, config, exposure.nodeId)
-          const field = exposure && node && config.components[node.type]?.fields?.[exposure.prop]
-          return [
-            exposureKey,
-            field?.type === "slot" && isSlotContent(value)
-              ? transformProps({ root: {}, content: value }, transforms, config).content
-              : value,
-          ]
-        }),
-      )
-      await updateFragmentData({
-        ...fragment,
-        ...publication,
-        data: {
-          ...data,
-          tree: transformProps(tree, transforms, config),
-          defaults: z.record(z.string(), JsonValueSchema).parse(transformedDefaults),
-        },
-      })
-    }
-
-    return {
-      type: "transform",
-      key,
-      status: "success",
-    }
-  } catch (error) {
-    console.error(error)
-    return {
-      type: "transform",
-      key,
-      status: "error",
-    }
+  const { tree, defaults, exposures, name } = fragment.data
+  const transformedDefaults = Object.fromEntries(
+    Object.entries(defaults).map(([exposureKey, value]) => {
+      const exposure = exposures.find((item) => item.key === exposureKey)
+      const node = exposure && getNodeById(tree, config, exposure.nodeId)
+      const field = exposure && node && config.components[node.type]?.fields?.[exposure.prop]
+      return [
+        exposureKey,
+        field?.type === "slot" && isSlotContent(value)
+          ? transformProps({ root: {}, content: value }, transforms, config).content
+          : value,
+      ]
+    }),
+  )
+  return {
+    ...fragment,
+    data: {
+      name,
+      exposures,
+      tree: transformProps(tree, transforms, config),
+      defaults: z.record(z.string(), JsonValueSchema).parse(transformedDefaults),
+    },
   }
 }
 
-const MAX_CONCURRENCY = 10
+export async function* migrateFragments(
+  adapter: OberonPluginAdapter,
+  config: OberonClientConfig,
+  user: OberonUser,
+  updateFragment: OberonDatabaseAdapter["updateFragmentData"],
+): AsyncGenerator<TransformResult | MigrationResult> {
+  let fragments: OberonFragmentMeta[] = []
+  let status: TransformResult["status"] = "success"
+  try {
+    await adapter.withFragmentTransaction(async () => {
+      const site = await adapter.getSite()
+      const { components, transforms } = getTransforms(site?.components, config)
+      if (!transforms) return
 
-export async function* applyTransforms({
-  transforms,
-  fragments,
-  getFragmentData,
-  updateFragmentData,
-  config,
-}: {
-  transforms: PropTransform
-  fragments: OberonFragmentMeta[]
-  getFragmentData: OberonDatabaseAdapter["getFragmentData"]
-  updateFragmentData: OberonDatabaseAdapter["updateFragmentData"]
-  config: Config
-}): AsyncGenerator<TransformResult, void, void> {
-  yield* mapConcurrent(
-    fragments,
-    ({ key }) => applyTransform(key, transforms, getFragmentData, updateFragmentData, config),
-    MAX_CONCURRENCY,
-  )
+      fragments = [
+        ...(await adapter.getAllFragments("page")),
+        ...(await adapter.getAllFragments("shared")),
+      ]
+      const transformConfig = withSharedComponent(
+        config,
+        () => createElement("div"),
+        await getSharedComponentLibrary(adapter),
+      )
+
+      for (const { key } of fragments) {
+        const fragment = await adapter.getFragmentData({ key })
+        if (!fragment) continue
+        await updateFragment({
+          ...transformFragment(fragment, transforms, transformConfig),
+          expectedUpdatedAt: fragment.updatedAt,
+          updatedBy: user.email,
+        })
+      }
+
+      await adapter.updateSite({
+        version: config.version,
+        components,
+        updatedAt: new Date(),
+        updatedBy: user.email,
+      })
+    })
+  } catch (error) {
+    console.error(error)
+    status = "error"
+  }
+
+  const summary: MigrationResult = {
+    type: "summary",
+    total: fragments.length,
+    error: [],
+    success: [],
+  }
+  for (const fragment of fragments) {
+    if (status === "success") await adapter.onFragmentChange(fragment)
+    summary[status].push(fragment.key)
+    yield { type: "transform", key: fragment.key, status }
+  }
+  yield summary
 }
 
 export function getComponentTransformVersions({ components }: OberonClientConfig) {

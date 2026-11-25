@@ -18,7 +18,7 @@ import {
 } from "../hooks/use-shared-source-settings"
 import type { OberonSharedFragment, SharedComponentData } from "../lib/dtd"
 import { DraftConflict } from "./editor/draft-conflict"
-import { EditorWorkspace, renderPuckTree } from "./editor/workspace"
+import { EditorWorkspace } from "./editor/workspace"
 import { Menu } from "./menu"
 import { withSharedEditorComponents } from "./shared-component-render"
 import { SharedExposurePanel } from "./shared-exposure-panel"
@@ -67,7 +67,7 @@ export function SharedSourceEditor({
   canWrite: boolean
 }) {
   const editorSession = useMemo(
-    () => withSharedEditorComponents(clientConfig, library, renderPuckTree),
+    () => withSharedEditorComponents(clientConfig, library, PuckRender),
     [clientConfig, library],
   )
   if (!useBrowserDraftsReady()) return null

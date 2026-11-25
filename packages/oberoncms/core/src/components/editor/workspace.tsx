@@ -1,7 +1,7 @@
 "use client"
 
 import "@puckeditor/core/puck.css"
-import { Puck, Render as PuckRender, type Config, type Data, type Metadata } from "@puckeditor/core"
+import { Puck, type Config, type Data } from "@puckeditor/core"
 import { createContext, useContext, useState, type PropsWithChildren, type ReactNode } from "react"
 
 import type { SharedComponentData } from "../../lib/dtd"
@@ -28,18 +28,6 @@ const editorOverrides = {
   drawer: Drawer,
   drawerItem: DrawerItem,
   iframe: EditorIframe,
-}
-
-export function renderPuckTree({
-  config,
-  data,
-  metadata,
-}: {
-  config: Config
-  data: Data
-  metadata: Metadata
-}) {
-  return <PuckRender data={data} config={config} metadata={metadata} />
 }
 
 export function EditorWorkspace({

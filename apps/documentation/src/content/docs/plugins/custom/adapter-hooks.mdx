@@ -60,8 +60,8 @@ route dispatch, and component migration. See [Authentication](/docs/plugins/auth
 
 Fragment reads take the unique key. Lists take the Fragment type and return metadata. Database
 Plugins implement `withFragmentTransaction` to serialize competing Fragment writes and use the same
-transaction for the reads and writes in the callback. Use `onFragmentChange` for cache invalidation
-and other effects that need to read committed content.
+transaction for Fragment and Site state operations in the callback. Use `onFragmentChange` for cache
+invalidation and other effects that need to read committed content.
 
 ## Bootstrap
 

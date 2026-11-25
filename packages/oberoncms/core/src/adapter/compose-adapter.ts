@@ -1,22 +1,17 @@
 import { streamResponse } from "@tohuhono/utils"
-import { createElement } from "react"
 
 import { version } from "../../package.json" with { type: "json" }
-import { withSharedComponent } from "../components/shared-component-render"
 import {
-  type MigrationResult,
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
   type OberonPluginPhase,
   type OberonUser,
   ResponseError,
-  type TransformResult,
 } from "../lib/dtd"
-import { getSharedComponentLibrary } from "../lib/shared-components"
 import { fragmentWrites } from "./fragment-writes"
 import { initPlugins } from "./init-plugins"
-import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
+import { getTransforms, migrateFragments } from "./transforms"
 
 const sortFragments = (a: { key: string }, b: { key: string }) => {
   if (a.key < b.key) {
@@ -127,7 +122,7 @@ export function composeAdapter(
     return allImages || []
   }
 
-  const writes = fragmentWrites(adapter, config)
+  const { updateInTransaction, ...writes } = fragmentWrites(adapter, config)
 
   const getConfig = async () => {
     const site = await adapter.getSite()
@@ -144,52 +139,8 @@ export function composeAdapter(
     return siteConfig
   }
 
-  const migrateData = streamResponse<TransformResult | MigrationResult, [OberonUser]>(
-    async function* (user: OberonUser) {
-      const summary: MigrationResult = {
-        type: "summary",
-        error: [],
-        success: [],
-        total: 0,
-      }
-
-      const site = await adapter.getSite()
-
-      const { transforms } = getTransforms(site?.components, config)
-
-      if (!transforms) {
-        return summary
-      }
-
-      const fragments = [...(await getAllFragments("page")), ...(await getAllFragments("shared"))]
-
-      const transformConfig = withSharedComponent(
-        config,
-        () => createElement("div"),
-        await getSharedComponentLibrary(adapter),
-      )
-      const results = applyTransforms({
-        transforms,
-        fragments,
-        getFragmentData: adapter.getFragmentData,
-        updateFragmentData: writes.updateFragmentData,
-        config: transformConfig,
-      })
-
-      for await (const result of results) {
-        summary[result.status].push(result.key)
-        yield result
-      }
-
-      await adapter.updateSite({
-        version: config.version,
-        components: getComponentTransformVersions(config),
-        updatedAt: new Date(),
-        updatedBy: user.email,
-      })
-
-      yield { ...summary, total: fragments.length }
-    },
+  const migrateData: OberonAdapter["migrateData"] = streamResponse((user: OberonUser) =>
+    migrateFragments(adapter, config, user, updateInTransaction),
   )
 
   const finalAdapter: OberonAdapter = {

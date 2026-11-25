@@ -49,11 +49,13 @@ export function fragmentWrites(adapter: OberonPluginAdapter, config: OberonClien
     await adapter.onFragmentChange(fragment)
   }
 
+  const updateInTransaction: OberonPluginAdapter["updateFragmentData"] = async (fragment) => {
+    await prepare(fragment)
+    return adapter.updateFragmentData({ ...fragment, updatedAt: new Date() })
+  }
+
   const updateFragmentData: OberonPluginAdapter["updateFragmentData"] = async (fragment) => {
-    const updatedAt = await adapter.withFragmentTransaction(async () => {
-      await prepare(fragment)
-      return adapter.updateFragmentData({ ...fragment, updatedAt: new Date() })
-    })
+    const updatedAt = await adapter.withFragmentTransaction(() => updateInTransaction(fragment))
     await adapter.onFragmentChange(fragment)
     return updatedAt
   }
@@ -95,5 +97,5 @@ export function fragmentWrites(adapter: OberonPluginAdapter, config: OberonClien
     await adapter.onFragmentChange(fragment)
   }
 
-  return { addFragment, updateFragmentData, deleteFragment }
+  return { addFragment, updateFragmentData, deleteFragment, updateInTransaction }
 }

@@ -2,7 +2,6 @@ import { Render, type Config, type Data } from "@puckeditor/core"
 
 import { usePageDraft } from "../hooks/use-fragment-draft"
 import type { SharedComponentData } from "../lib/dtd"
-import { renderPuckTree } from "./editor/workspace"
 import { withSharedEditorComponents } from "./shared-component-render"
 
 export function Preview({
@@ -16,7 +15,7 @@ export function Preview({
   data: Data | null
   sharedComponents: Record<string, SharedComponentData>
 }) {
-  const session = withSharedEditorComponents(config, sharedComponents, renderPuckTree)
+  const session = withSharedEditorComponents(config, sharedComponents, Render)
   const { draft } = usePageDraft(path, config)
   const preview = draft?.data ?? data
 

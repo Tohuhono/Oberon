@@ -221,3 +221,105 @@ developmentAdapterTest.describe(
     )
   },
 )
+
+developmentAdapterTest.describe(
+  "Component migrations",
+  { tags: ["ai", "feature-shared-components"] },
+  () => {
+    developmentAdapterTest(
+      "rolls back a Page update when a Shared transform fails",
+      async ({ adapter: storage }) => {
+        const { initAdapter } = await import("@oberoncms/core/adapter")
+        const updatedAt = new Date()
+        const user = { id: "editor", email: "editor@example.com", role: "admin" as const }
+        const page = "/migration-page"
+        const shared = "migration-shared"
+        const publication = { updatedAt, updatedBy: user.email }
+        let failShared = true
+
+        const adapter = initAdapter({
+          client: fromPartial({
+            version: 1,
+            components: {
+              Text: {
+                transforms: [
+                  (props: Record<string, unknown>) => {
+                    if (props.text === "shared" && failShared)
+                      throw new Error("Shared transform failed")
+                    return { ...props, text: String(props.text) + " migrated" }
+                  },
+                ],
+              },
+            },
+          }),
+          plugins: [
+            () => ({
+              name: "fragment-storage",
+              adapter: {
+                getAllFragments: () => storage.getAllFragments,
+                getFragmentData: () => storage.getFragmentData,
+                getSite: () => storage.getSite,
+                updateFragmentData: () => storage.updateFragmentData,
+                updateSite: () => storage.updateSite,
+                withFragmentTransaction: () => storage.withFragmentTransaction,
+              },
+            }),
+          ],
+        })
+
+        await storage.updateSite({ ...publication, version: 1, components: { Text: 0 } })
+        await storage.addFragment({
+          ...publication,
+          key: page,
+          type: "page",
+          data: {
+            ...INITIAL_DATA,
+            content: [{ type: "Text", props: { id: "page-text", text: "page" } }],
+          },
+        })
+        await storage.addFragment({
+          ...publication,
+          key: shared,
+          type: "shared",
+          data: {
+            name: "Shared",
+            tree: {
+              ...INITIAL_DATA,
+              content: [{ type: "Text", props: { id: "shared-text", text: "shared" } }],
+            },
+            exposures: [],
+            defaults: {},
+          },
+        })
+
+        const migrate = async () => {
+          let chunk = await adapter.migrateData(user)
+          while (chunk.next && chunk.iteratorResult.value?.type !== "summary")
+            chunk = await chunk.next
+          return chunk.iteratorResult.value
+        }
+
+        await expect(migrate()).resolves.toMatchObject({
+          error: expect.arrayContaining([page, shared]),
+        })
+        await expect(storage.getSite()).resolves.toMatchObject({ components: { Text: 0 } })
+        await expect(storage.getFragmentData({ key: page })).resolves.toMatchObject({
+          data: { content: [{ props: { text: "page" } }] },
+        })
+
+        failShared = false
+        await expect(migrate()).resolves.toMatchObject({
+          error: [],
+          success: expect.arrayContaining([page, shared]),
+        })
+        await expect(storage.getSite()).resolves.toMatchObject({ components: { Text: 1 } })
+        await expect(storage.getFragmentData({ key: page })).resolves.toMatchObject({
+          data: { content: [{ props: { text: "page migrated" } }] },
+        })
+        await expect(storage.getFragmentData({ key: shared })).resolves.toMatchObject({
+          data: { tree: { content: [{ props: { text: "shared migrated" } }] } },
+        })
+      },
+    )
+  },
+)

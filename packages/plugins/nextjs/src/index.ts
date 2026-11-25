@@ -40,12 +40,6 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 }
                 await next(fragment)
               },
-            updateSite:
-              ({ next }) =>
-              async (site) => {
-                await next(site)
-                updateTag("oberon-config")
-              },
             addImage:
               ({ next }) =>
               async (image) => {
@@ -84,10 +78,6 @@ export const plugin: OberonPlugin = ({ phase }) => {
             getAllImages: ({ next }) =>
               cache(next, ["oberon-get-all-images"], {
                 tags: ["oberon-images"],
-              }),
-            getSite: ({ next }) =>
-              cache(next, ["oberon-get-site"], {
-                tags: ["oberon-config"],
               }),
           }
         : {},
