@@ -8,7 +8,9 @@ export async function insertComponent(page: Page, type: string) {
     .frameLocator("iframe#preview-frame")
     .getByTestId("dropzone:root:default-zone")
   await expect(rootDropZone).toBeVisible()
-  const drawerItemBox = await page.getByTestId(`drawer-item:${type}`).boundingBox()
+  const drawerItem = page.getByTestId(`drawer-item:${type}`)
+  await drawerItem.scrollIntoViewIfNeeded()
+  const drawerItemBox = await drawerItem.boundingBox()
   const rootDropZoneBox = await rootDropZone.boundingBox()
 
   if (!drawerItemBox || !rootDropZoneBox) {
