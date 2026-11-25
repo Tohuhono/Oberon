@@ -21,8 +21,8 @@ rather than assuming an upstream layout:
 - `.agents/CONTEXT.md`, `.agents/ARCHITECTURE.md`, and any `.agents/CONTEXT-MAP.md`
 - `.agents/CODESTYLE.md`, `.agents/TESTING.md`, and relevant `.agents/adr/` decisions
 - The public documentation linked from those files
-- `git remote -v` and `gh repo view --json nameWithOwner` to verify the GitHub repository
-- `gh label list --limit 100 --json name,description` for issue labels
+- `git remote -v` to identify the tracker
+- `gh label list --limit 100 --json name,description` for GitHub labels
 - Whether the `triage` skill is installed. Skip label setup if it is not.
 
 ## 2. Confirm decisions
@@ -30,14 +30,15 @@ rather than assuming an upstream layout:
 Explain and ask about one decision at a time. Preserve approved settings on reruns unless the user
 requests a change.
 
-Use GitHub issues for plans and specs, as documented in [ISSUES.md](../../ISSUES.md). If
-`gh repo view` does not identify Oberon, confirm the repository with the user before changing
-tracker settings or labels.
-
-1. **Labels:** Map category roles `bug` and `enhancement`, and state roles `needs-triage`,
+1. **Tracker:** GitHub (`gh`), GitLab (`glab`), local markdown, or a described external workflow.
+   For local markdown, confirm a durable location rather than using `.tmp/`. For GitHub or GitLab,
+   confirm a remote points to the chosen host. If none does, ask for the repository URL and add a
+   remote with the user's approval. Continue only when `gh repo view` or `glab repo view` shows the
+   chosen repository.
+2. **Labels:** Map category roles `bug` and `enhancement`, and state roles `needs-triage`,
    `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix`. Each triaged issue needs one
    category and one state. Identify missing tracker labels.
-2. **Domain docs:** Confirm the existing glossary, architecture references, and ADR paths. This repo
+3. **Domain docs:** Confirm the existing glossary, architecture references, and ADR paths. This repo
    uses `.agents/CONTEXT.md` and optional `.agents/adr/`, not parallel root or `docs/` files.
 
 Upstream skills call the glossary `GLOSSARY.md`; use the existing `.agents/CONTEXT.md` instead. Keep
@@ -47,9 +48,12 @@ during setup.
 ## 3. Show the draft
 
 Present the root section and `.agents/ISSUES.md` changes before writing. Keep existing policy and
-product explanations in their current documents. Use these templates only as needed:
+product explanations in their current documents. Use these templates only where the selected tracker
+needs them:
 
 - [GitHub](issue-tracker-github.md)
+- [GitLab](issue-tracker-gitlab.md)
+- [Local markdown](issue-tracker-local.md)
 - [Label mapping](triage-labels.md)
 - [Domain references](domain.md)
 

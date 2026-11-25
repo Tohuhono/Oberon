@@ -5,9 +5,9 @@ export const fragments = sqliteTable(
   "fragments",
   {
     key: text("key").notNull().primaryKey(),
-    type: text("type").$type<FragmentType>().notNull(),
+    type: text("type").$type<FragmentType>().notNull().default("page"),
     data: text("data", { mode: "json" }).$type<OberonFragment["data"]>().notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },
   (table) => ({

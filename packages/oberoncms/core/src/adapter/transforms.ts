@@ -1,11 +1,15 @@
-import { transformProps } from "@puckeditor/core"
+import { transformProps, type Config } from "@puckeditor/core"
 import { mapConcurrent } from "@tohuhono/utils/map-concurrent"
+import { z } from "zod"
+
+import { JsonValueSchema } from "../lib/dtd"
+import { getNodeById, isSlotContent } from "../lib/shared-components"
 
 type PropTransform = Parameters<typeof transformProps>[1]
 
 import type {
   OberonClientConfig,
-  OberonFragment,
+  OberonDatabaseAdapter,
   OberonFragmentMeta,
   TransformResult,
   TransformVersions,
@@ -14,13 +18,14 @@ import type {
 async function applyTransform(
   key: string,
   transforms: PropTransform,
-  getFragmentData: (key: string) => Promise<OberonFragment | null>,
-  updateFragmentData: (data: OberonFragment) => Promise<Date>,
+  getFragmentData: OberonDatabaseAdapter["getFragmentData"],
+  updateFragmentData: OberonDatabaseAdapter["updateFragmentData"],
+  config: Config,
 ): Promise<TransformResult> {
   try {
-    const fragment = await getFragmentData(key)
+    const fragment = await getFragmentData({ key })
 
-    if (!fragment || fragment.type !== "page") {
+    if (!fragment) {
       return {
         type: "transform",
         key,
@@ -28,13 +33,41 @@ async function applyTransform(
       }
     }
 
-    await updateFragmentData({
-      key,
-      type: "page",
-      data: transformProps(fragment.data, transforms),
-      updatedAt: new Date(),
+    const publication = {
       updatedBy: "migration",
-    })
+      expectedUpdatedAt: fragment.updatedAt,
+    }
+    if (fragment.type === "page") {
+      await updateFragmentData({
+        ...fragment,
+        ...publication,
+        data: transformProps(fragment.data, transforms, config),
+      })
+    } else {
+      const { tree, defaults, ...data } = fragment.data
+      const transformedDefaults = Object.fromEntries(
+        Object.entries(defaults).map(([exposureKey, value]) => {
+          const exposure = fragment.data.exposures.find((item) => item.key === exposureKey)
+          const node = exposure && getNodeById(tree, config, exposure.nodeId)
+          const field = exposure && node && config.components[node.type]?.fields?.[exposure.prop]
+          return [
+            exposureKey,
+            field?.type === "slot" && isSlotContent(value)
+              ? transformProps({ root: {}, content: value }, transforms, config).content
+              : value,
+          ]
+        }),
+      )
+      await updateFragmentData({
+        ...fragment,
+        ...publication,
+        data: {
+          ...data,
+          tree: transformProps(tree, transforms, config),
+          defaults: z.record(z.string(), JsonValueSchema).parse(transformedDefaults),
+        },
+      })
+    }
 
     return {
       type: "transform",
@@ -58,15 +91,17 @@ export async function* applyTransforms({
   fragments,
   getFragmentData,
   updateFragmentData,
+  config,
 }: {
   transforms: PropTransform
   fragments: OberonFragmentMeta[]
-  getFragmentData: (key: string) => Promise<OberonFragment | null>
-  updateFragmentData: (data: OberonFragment) => Promise<Date>
+  getFragmentData: OberonDatabaseAdapter["getFragmentData"]
+  updateFragmentData: OberonDatabaseAdapter["updateFragmentData"]
+  config: Config
 }): AsyncGenerator<TransformResult, void, void> {
   yield* mapConcurrent(
     fragments,
-    ({ key }) => applyTransform(key, transforms, getFragmentData, updateFragmentData),
+    ({ key }) => applyTransform(key, transforms, getFragmentData, updateFragmentData, config),
     MAX_CONCURRENCY,
   )
 }

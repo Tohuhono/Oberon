@@ -15,11 +15,14 @@ const tailwindStateSchema = z.object({
 
 const classDelimiter = /\s+/u
 
-export async function extractTailwindClasses(data: unknown) {
+export async function extractTailwindClasses(data: unknown, exposedClassKeys = new Set<string>()) {
   const classes = new Set<string>()
 
   for await (const node of walkAsyncStep(data)) {
-    if (node.key !== "className" || typeof node.val !== "string") {
+    if (
+      typeof node.val !== "string" ||
+      (node.key !== "className" && !exposedClassKeys.has(String(node.key)))
+    ) {
       continue
     }
 
@@ -59,13 +62,22 @@ async function getAllPublishedClasses(
     adapter.getAllFragments("page"),
     adapter.getAllFragments("shared"),
   ])
+  const fragments = await Promise.all(
+    [...pages, ...shared].map(({ key }) => adapter.getFragmentData({ key })),
+  )
+  const exposedClassKeys = new Set<string>()
+  for (const fragment of fragments) {
+    if (fragment?.type === "shared") {
+      for (const exposure of fragment.data.exposures) {
+        if (exposure.prop === "className") exposedClassKeys.add(exposure.key)
+      }
+    }
+  }
+
   const classes = new Set<string>()
-
-  for (const { key, type } of [...pages, ...shared]) {
-    const fragment = await adapter.getFragmentData({ key, type })
+  for (const fragment of fragments) {
     if (!fragment) continue
-
-    for (const cls of await extractTailwindClasses(fragment.data)) {
+    for (const cls of await extractTailwindClasses(fragment.data, exposedClassKeys)) {
       classes.add(cls)
     }
   }
@@ -159,32 +171,20 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
     }
   },
   adapter: {
-    updateFragmentData:
+    onFragmentChange:
       ({ getAdapter, next }) =>
-      async (fragment) =>
-        syncAfterWrite(() => next(fragment), getAdapter),
-    addFragment:
-      ({ getAdapter, next }) =>
-      async (fragment) =>
-        syncAfterWrite(() => next(fragment), getAdapter),
-    deleteFragment:
-      ({ getAdapter, next }) =>
-      async (fragment) =>
-        syncAfterWrite(() => next(fragment), getAdapter),
+      async (fragment) => {
+        await next(fragment)
+        await syncAfterWrite(getAdapter())
+      },
   },
 })
 
-async function syncAfterWrite<Result>(
-  write: () => Promise<Result>,
-  getAdapter: () => Pick<
-    OberonPluginAdapter,
-    "getAllFragments" | "getFragmentData" | "getKV" | "putKV"
-  >,
+async function syncAfterWrite(
+  adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getFragmentData" | "getKV" | "putKV">,
 ) {
   try {
-    const result = await write()
-    await syncStyles(getAdapter())
-    return result
+    await syncStyles(adapter)
   } catch (error) {
     if (error instanceof ResponseError) {
       throw error

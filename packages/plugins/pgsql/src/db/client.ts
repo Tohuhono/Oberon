@@ -1,9 +1,8 @@
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres"
 import pg from "pg"
 const { Pool } = pg
-import * as schema from "./schema"
 
-export type DatabaseClient = NodePgDatabase<typeof schema>
+export type DatabaseClient = NodePgDatabase
 
 const createRemoteClient = () => {
   if (!process.env.DATABASE_URL) {
@@ -19,9 +18,7 @@ let db: DatabaseClient
 
 const lazy = {
   get client() {
-    db ??= drizzle(createRemoteClient(), {
-      schema,
-    }) satisfies DatabaseClient
+    db ??= drizzle({ client: createRemoteClient() }) satisfies DatabaseClient
 
     return db
   },

@@ -1,4 +1,4 @@
-import { resolveAllData } from "@puckeditor/core"
+import { resolveAllData, type Config, type Data, type Metadata } from "@puckeditor/core"
 import { Render as PuckRender } from "@puckeditor/core/rsc"
 
 import { initAdapter } from "./adapter"
@@ -32,13 +32,22 @@ export async function Render({
 }) {
   const sharedConfig = withSharedComponent(
     config,
-    ({ config: nestedConfig, data: nestedData, metadata }) => (
-      <PuckRender data={nestedData} config={nestedConfig} metadata={metadata} />
-    ),
+    (props) => <ResolvedPuckTree {...props} />,
     sharedComponents,
   )
-  const metadata = { sharedComponents }
-  const resolvedData = await resolveAllData(data, sharedConfig, metadata)
 
-  return <PuckRender data={resolvedData} config={sharedConfig} metadata={metadata} />
+  return ResolvedPuckTree({ data, config: sharedConfig, metadata: { sharedComponents } })
+}
+
+async function ResolvedPuckTree({
+  config,
+  data,
+  metadata,
+}: {
+  config: Config
+  data: Data
+  metadata: Metadata
+}) {
+  const resolvedData = await resolveAllData(data, config, metadata)
+  return <PuckRender data={resolvedData} config={config} metadata={metadata} />
 }

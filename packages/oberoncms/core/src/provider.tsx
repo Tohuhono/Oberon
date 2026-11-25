@@ -14,6 +14,17 @@ import { ResponseError } from "./lib/dtd"
 import { getSharedComponentFragments, getSharedComponentLibrary } from "./lib/shared-components"
 import { parseClientAction, resolveSlug } from "./lib/utils"
 
+function pageEditorReturnPath(value: unknown) {
+  if (
+    typeof value !== "string" ||
+    !/^\/cms\/edit\/(?:[0-9a-zA-Z_.-]+(?:\/[0-9a-zA-Z_.-]+)*)?$/u.test(value)
+  ) {
+    return null
+  }
+
+  return value.split("/").some((segment) => segment === "." || segment === "..") ? null : value
+}
+
 async function getContext(
   { getFragmentData, getAllImages, getAllFragments, getAllUsers, getConfig }: OberonAdapter,
   action: ClientAction,
@@ -33,7 +44,7 @@ async function getContext(
       }
     case "edit":
     case "preview": {
-      const fragment = await getFragmentData({ key: slug, type: "page" })
+      const fragment = await getFragmentData({ key: slug })
       return {
         action,
         slug,
@@ -73,7 +84,7 @@ async function getContext(
         data: {
           sources: await getSharedComponentFragments({ getAllFragments, getFragmentData }),
           sourceId: typeof searchParams.source === "string" ? searchParams.source : null,
-          returnTo: typeof searchParams.returnTo === "string" ? searchParams.returnTo : null,
+          returnTo: pageEditorReturnPath(searchParams.returnTo),
         },
       }
   }

@@ -159,3 +159,65 @@ developmentAdapterTest.describe(
     )
   },
 )
+
+developmentAdapterTest.describe(
+  "Fragment writes",
+  { tags: ["ai", "feature-shared-components"] },
+  () => {
+    developmentAdapterTest(
+      "serializes publishing a reference with deleting its source",
+      async ({ adapter: storage }) => {
+        const { initAdapter } = await import("@oberoncms/core/adapter")
+        const adapter = initAdapter({
+          client: fromPartial({ version: 1, components: {} }),
+          plugins: [
+            () => ({
+              name: "fragment-storage",
+              adapter: {
+                addFragment: () => storage.addFragment,
+                deleteFragment: () => storage.deleteFragment,
+                getAllFragments: () => storage.getAllFragments,
+                getFragmentData: () => storage.getFragmentData,
+                withFragmentTransaction: () => storage.withFragmentTransaction,
+              },
+            }),
+          ],
+        })
+        const key = "transaction-source"
+        const updatedAt = new Date()
+        const updatedBy = "test@example.com"
+
+        await adapter.addFragment({
+          key,
+          type: "shared",
+          data: { name: "Source", tree: INITIAL_DATA, exposures: [], defaults: {} },
+          updatedAt,
+          updatedBy,
+        })
+
+        const [publication, deletion] = await Promise.allSettled([
+          adapter.addFragment({
+            key: "/transaction-page",
+            type: "page",
+            data: {
+              ...INITIAL_DATA,
+              content: [
+                { type: "SharedComponent", props: { id: "instance", sharedComponentKey: key } },
+              ],
+            },
+            updatedAt,
+            updatedBy,
+          }),
+          adapter.deleteFragment({ key, type: "shared" }),
+        ])
+
+        expect(publication.status).toBe("fulfilled")
+        expect(deletion).toMatchObject({
+          status: "rejected",
+          reason: { message: expect.stringContaining("/transaction-page") },
+        })
+        await expect(adapter.getFragmentData({ key })).resolves.toMatchObject({ type: "shared" })
+      },
+    )
+  },
+)

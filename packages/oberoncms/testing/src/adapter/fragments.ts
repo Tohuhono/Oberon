@@ -22,7 +22,7 @@ export function testFragments(test: AdapterTestAPI) {
       )
     })
 
-    test("filters metadata and data by Fragment type", async ({ adapter, expect }) => {
+    test("lists metadata by type and reads data by key", async ({ adapter, expect }) => {
       const key = `fragment-${crypto.randomUUID()}`
       const updatedAt = new Date("2026-01-01T00:00:00.000Z")
 
@@ -43,8 +43,7 @@ export function testFragments(test: AdapterTestAPI) {
         updatedAt,
         updatedBy: "test@example.com",
       })
-      await expect(adapter.getFragmentData({ key, type: "page" })).resolves.toBeNull()
-      await expect(adapter.getFragmentData({ key, type: "shared" })).resolves.toMatchObject({
+      await expect(adapter.getFragmentData({ key })).resolves.toMatchObject({
         key,
         type: "shared",
         data: sharedData,
@@ -82,7 +81,6 @@ export function testFragments(test: AdapterTestAPI) {
     test("rejects stale Fragment publishes and deletes", async ({ adapter, expect }) => {
       const key = `fragment-${crypto.randomUUID()}`
       const createdAt = new Date("2026-01-01T00:00:00.000Z")
-      const publishedAt = new Date("2026-01-02T00:00:00.000Z")
 
       await adapter.addFragment({
         key,
@@ -91,14 +89,16 @@ export function testFragments(test: AdapterTestAPI) {
         updatedAt: createdAt,
         updatedBy: "test@example.com",
       })
-      await adapter.updateFragmentData({
+      const publishedAt = await adapter.updateFragmentData({
         key,
         type: "shared",
         data: sharedData,
-        updatedAt: publishedAt,
+        updatedAt: createdAt,
         updatedBy: "test@example.com",
         expectedUpdatedAt: createdAt,
       })
+
+      expect(publishedAt.getTime()).toBeGreaterThan(createdAt.getTime())
 
       const staleWrite = adapter.updateFragmentData({
         key,

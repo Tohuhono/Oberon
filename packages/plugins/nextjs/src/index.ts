@@ -28,42 +28,17 @@ export const plugin: OberonPlugin = ({ phase }) => {
             getAuthPlugins:
               ({ next }) =>
               () => [...next(), nextCookies()],
-            updateFragmentData:
+            onFragmentChange:
               ({ next }) =>
               async (fragment) => {
-                const updatedAt = await next(fragment)
                 if (fragment.type === "page") {
                   revalidatePath(fragment.key)
                   revalidatePath(`/cms/edit${fragment.key}`)
                   revalidatePath(`/cms/preview${fragment.key}`)
-                  updateTag("oberon-pages")
+                } else {
+                  revalidatePath("/", "layout")
                 }
-                updateTag("oberon-fragments")
-                return updatedAt
-              },
-            addFragment:
-              ({ next }) =>
-              async (fragment) => {
                 await next(fragment)
-                if (fragment.type === "page") {
-                  revalidatePath(fragment.key)
-                  revalidatePath(`/cms/edit${fragment.key}`)
-                  revalidatePath(`/cms/preview${fragment.key}`)
-                  updateTag("oberon-pages")
-                }
-                updateTag("oberon-fragments")
-              },
-            deleteFragment:
-              ({ next }) =>
-              async (data) => {
-                await next(data)
-                if (data.type === "page") {
-                  revalidatePath(data.key)
-                  revalidatePath(`/cms/edit${data.key}`)
-                  revalidatePath(`/cms/preview${data.key}`)
-                  updateTag("oberon-pages")
-                }
-                updateTag("oberon-fragments")
               },
             updateSite:
               ({ next }) =>
@@ -102,12 +77,6 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 await next(data)
                 updateTag("oberon-users")
               },
-            getFragmentData: ({ next }) =>
-              cache(next, ["oberon-get-fragment-data"], { tags: ["oberon-fragments"] }),
-            getAllFragments: ({ next }) =>
-              cache(next, ["oberon-get-all-fragments"], {
-                tags: ["oberon-fragments", "oberon-pages"],
-              }),
             getAllUsers: ({ next }) =>
               cache(next, ["oberon-get-all-users"], {
                 tags: ["oberon-users"],

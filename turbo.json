@@ -77,7 +77,7 @@
     "clean": {
       "cache": false
     },
-    "generate:migrations": {
+    "drizzle": {
       "cache": false
     },
     "test:unit": {

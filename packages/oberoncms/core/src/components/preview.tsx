@@ -1,8 +1,9 @@
 import { Render, type Config, type Data } from "@puckeditor/core"
 
-import { useLocalData } from "../hooks/use-local-data"
+import { usePageDraft } from "../hooks/use-fragment-draft"
 import type { SharedComponentData } from "../lib/dtd"
-import { withSharedComponent } from "./shared-component-render"
+import { renderPuckTree } from "./editor/workspace"
+import { withSharedEditorComponents } from "./shared-component-render"
 
 export function Preview({
   path,
@@ -15,18 +16,15 @@ export function Preview({
   data: Data | null
   sharedComponents: Record<string, SharedComponentData>
 }) {
-  const sharedConfig = withSharedComponent(
-    config,
-    ({ config: renderConfig, data: renderData, metadata }) => (
-      <Render data={renderData} config={renderConfig} metadata={metadata} />
-    ),
-    sharedComponents,
-  )
-  const localData = useLocalData(path, sharedConfig)[0]
+  const session = withSharedEditorComponents(config, sharedComponents, renderPuckTree)
+  const { draft } = usePageDraft(path, config)
+  const preview = draft?.data ?? data
 
-  if (!localData || !data) {
-    return null
-  }
-
-  return <Render data={localData} config={sharedConfig} metadata={{ sharedComponents }} />
+  return preview ? (
+    <Render
+      data={session.toEditorData(preview)}
+      config={session.config}
+      metadata={{ sharedComponents }}
+    />
+  ) : null
 }

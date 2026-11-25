@@ -17,3 +17,10 @@ resolve Shared components without reading the Page twice.
 
 Breaking: replace Page-specific Adapter capabilities, actions, and schemas with their Fragment
 equivalents. Update custom Plugins and action transports to use the typed Fragment operations.
+
+Fragment reads use the unique key. Fragment writes validate references inside a database
+transaction, and Plugins can use `onFragmentChange` to react after the transaction commits. Page and
+Shared component drafts keep their base publication timestamp to detect conflicting edits.
+
+Upgrade Drizzle ORM and Kit to 1.0.0-rc.6. Existing migration SQL moves into the v1 history format.
+The Fragment migrations preserve Page records and convert their SQLite timestamps to milliseconds.

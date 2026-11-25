@@ -25,3 +25,12 @@ Read the maintained public documentation instead of duplicating API descriptions
 | TanStack recipe     | [`recipes/tanstack/oberon/config.ts`](../recipes/tanstack/oberon/config.ts)             |
 
 Use [CONTEXT.md](CONTEXT.md) for domain names. Read relevant `.agents/adr/` decisions when present.
+
+## Database migrations
+
+Run `pnpm generate:migrations --output json --explain` from the repository root to inspect the
+proposed SQL. If Drizzle Kit returns `missing_hints`, put the reviewed hints in a JSON file under
+`.tmp/`. Pass its absolute path with `--hints-file`, rerun the preview, then drop `--explain` to
+generate the SQL and snapshots. Run `pnpm check:migrations --output json` to check all database
+Plugins. Keep each migration folder and its snapshot together.
+[Drizzle Kit reference](https://orm.drizzle.team/docs/drizzle-kit-generate)

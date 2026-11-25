@@ -46,8 +46,8 @@ export const mockPlugin: OberonPlugin = () => ({
     getCurrentUser: () => async () => mockUser,
     getFragmentData:
       () =>
-      async ({ key, type }) =>
-        key === "/" && type === "page" ? mockPage : null,
+      async ({ key }) =>
+        key === mockPage.key ? mockPage : null,
     getKV: () => notAvailable,
     getSite: () => async () => mockSite,
     hasPermission: () => () => true,

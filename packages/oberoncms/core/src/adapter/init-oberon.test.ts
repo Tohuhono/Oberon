@@ -50,10 +50,9 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
-        getAllFragments: () => async (type) =>
-          type === "page"
-            ? [{ key: "/database", type: "page", updatedAt: new Date(), updatedBy: "system" }]
-            : [{ key: "/not-a-route", type: "shared", updatedAt: new Date(), updatedBy: "system" }],
+        getAllFragments: () => async (type) => [
+          { key: "/database", type, updatedAt: new Date(), updatedBy: "system" },
+        ],
       },
     })
 
@@ -119,7 +118,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
       key,
       data: page.data,
     })
-    expect(getFragmentData).toHaveBeenCalledExactlyOnceWith({ key, type: "page" })
+    expect(getFragmentData).toHaveBeenCalledExactlyOnceWith({ key })
   })
 
   it("resolves a missing Page through the routing adapter", async () => {
@@ -311,5 +310,53 @@ describe("Fragment publishing", { tags: ["ai", "feature-shared-components"] }, (
       status: "success",
       result: { key: page.key, type: "page", updatedAt: persistedAt },
     })
+  })
+
+  it("validates references before publishing a Page or creating a Shared component", async () => {
+    const addFragment = vi.fn(async () => {})
+    const updateFragmentData = vi.fn(async () => new Date())
+    const plugin: OberonPlugin = () => ({
+      name: "fragment-storage",
+      adapter: {
+        getCurrentUser: () => async () => ({
+          id: "editor",
+          email: "editor@example.com",
+          role: "admin",
+        }),
+        getAllFragments: () => async () => [],
+        addFragment: () => addFragment,
+        updateFragmentData: () => updateFragmentData,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+    const actions = createActionHandler(adapter)
+    const tree = {
+      root: {},
+      content: [
+        { type: "SharedComponent", props: { id: "instance", sharedComponentKey: "missing" } },
+      ],
+    }
+
+    await expect(
+      actions.publishFragmentData({ type: "page", key: "/", data: tree }),
+    ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
+    await expect(
+      actions.addFragment({
+        type: "shared",
+        key: "source",
+        data: { name: "Source", tree, exposures: [], defaults: {} },
+      }),
+    ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
+    expect(addFragment).not.toHaveBeenCalled()
+    expect(updateFragmentData).not.toHaveBeenCalled()
+
+    const suppliedData = { root: { props: { title: "Supplied" } }, content: [] }
+    await expect(
+      actions.addFragment({ type: "page", key: "/", data: suppliedData }),
+    ).resolves.toMatchObject({ status: "success" })
+    expect(addFragment).toHaveBeenCalledWith(expect.objectContaining({ data: suppliedData }))
   })
 })

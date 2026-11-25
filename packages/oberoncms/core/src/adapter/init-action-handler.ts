@@ -1,8 +1,8 @@
 import {
   INITIAL_DATA,
-  PageDataSchema,
+  AddFragmentSchema,
+  PublishFragmentSchema,
   ResponseError,
-  SharedComponentDataSchema,
   type OberonAdapter,
   type OberonResponse,
   type OberonServerActions,
@@ -41,7 +41,7 @@ export async function transport<T>(
 
 export async function resolvePage(adapter: OberonAdapter, key: string) {
   await adapter.will({ action: "pages", permission: "read" })
-  const fragment = await adapter.getFragmentData({ key, type: "page" })
+  const fragment = await adapter.getFragmentData({ key })
 
   if (!fragment || fragment.type !== "page") {
     return adapter.notFound()
@@ -53,23 +53,20 @@ export async function resolvePage(adapter: OberonAdapter, key: string) {
 export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
     resolvePath: ({ key }) => resolvePage(adapter, key),
-    addFragment: (data) =>
+    addFragment: (input) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })
-        if (data.type === "page") {
-          await adapter.addFragment({
-            ...data,
-            data: INITIAL_DATA,
-            updatedAt: new Date(),
-            updatedBy: user.email,
-          })
-        } else {
-          await adapter.addFragment({
-            ...data,
-            updatedAt: new Date(),
-            updatedBy: user.email,
-          })
+        const parsed = AddFragmentSchema.safeParse(input)
+        if (!parsed.success) {
+          throw new ResponseError(parsed.error.issues[0]?.message ?? "Invalid Fragment data")
         }
+        const data = parsed.data
+        const publication = { updatedAt: new Date(), updatedBy: user.email }
+        await adapter.addFragment(
+          data.type === "page"
+            ? { ...data, ...publication, data: data.data ?? INITIAL_DATA }
+            : { ...data, ...publication },
+        )
       }),
     addImage: (data) =>
       transport(async () => {
@@ -144,14 +141,15 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         const user = await adapter.whoWill({ action: "site", permission: "write" })
         return adapter.migrateData(user)
       }),
-    publishFragmentData: (data) =>
+    publishFragmentData: (input) =>
       transport(
         async () => {
           const user = await adapter.whoWill({ action: "pages", permission: "write" })
-          const schema = data.type === "page" ? PageDataSchema : SharedComponentDataSchema
-          if (!schema.safeParse(data.data).success) {
+          const parsed = PublishFragmentSchema.safeParse(input)
+          if (!parsed.success) {
             throw new ResponseError("Invalid Fragment data")
           }
+          const data = parsed.data
 
           const updatedAt = await adapter.updateFragmentData({
             ...data,

@@ -13,16 +13,8 @@ export async function getSharedComponentFragments(
   adapter: Pick<OberonAdapter, "getAllFragments" | "getFragmentData">,
 ): Promise<OberonSharedFragment[]> {
   const fragments = await adapter.getAllFragments("shared")
-  return Promise.all(
-    fragments.map(async ({ key }) => {
-      const fragment = await adapter.getFragmentData({ key, type: "shared" })
-      if (fragment?.type !== "shared") {
-        throw new ResponseError(`Shared component "${key}" is no longer available.`)
-      }
-
-      return fragment
-    }),
-  )
+  const records = await Promise.all(fragments.map(({ key }) => adapter.getFragmentData({ key })))
+  return records.filter((fragment) => fragment?.type === "shared")
 }
 
 export async function getSharedComponentLibrary(
@@ -58,8 +50,12 @@ function isComponentData(value: unknown): value is Data["content"][number] {
   )
 }
 
+export function isSlotContent(value: unknown): value is Data["content"] {
+  return Array.isArray(value) && value.every((item) => isComponentData(item))
+}
+
 function copySlotDefaults(value: unknown, config: Config) {
-  if (!Array.isArray(value) || !value.every((item) => isComponentData(item))) {
+  if (!isSlotContent(value)) {
     return []
   }
 
@@ -114,22 +110,32 @@ function getExposureKind(
   return field?.type === "slot" ? "slot" : "scalar"
 }
 
-export function findSharedReferences(data: Data, config: Config) {
+export function findSharedReferences(
+  data: Data,
+  config: Config,
+  defaults: SharedComponentData["defaults"] = {},
+) {
   const references = new Set<string>()
   const migratedData = migrate(data, config)
 
-  walkTree(migratedData, config, (content) => {
+  const collect = (content: Data["content"]) => {
     for (const node of content) {
       if (node.type !== SHARED_COMPONENT_TYPE) {
         continue
       }
 
-      const definitionId = node.props.definitionId
-      if (typeof definitionId === "string" && definitionId) {
-        references.add(definitionId)
+      const sharedComponentKey = node.props.sharedComponentKey
+      if (typeof sharedComponentKey === "string" && sharedComponentKey) {
+        references.add(sharedComponentKey)
       }
     }
-  })
+  }
+  walkTree(migratedData, config, collect)
+  for (const value of Object.values(defaults)) {
+    if (isSlotContent(value)) {
+      walkTree({ root: {}, content: value }, config, collect)
+    }
+  }
 
   return [...references]
 }
@@ -164,13 +170,9 @@ export function validateSharedComponent(
       }
 
       if (node.type === SHARED_COMPONENT_TYPE) {
-        const targetId = node.props.definitionId
+        const targetId = node.props.sharedComponentKey
         if (typeof targetId !== "string" || !targetId) {
           errors.push("A Shared component instance is missing its source.")
-        } else if (allSources[targetId]) {
-          references.set(sourceId, [...(references.get(sourceId) ?? []), targetId])
-        } else {
-          errors.push(`The source references missing Shared component "${targetId}".`)
         }
       }
     }
@@ -211,7 +213,12 @@ export function validateSharedComponent(
         ? fields[exposure.prop]
         : undefined
 
-    if (!field || exposure.prop === "id") {
+    if (
+      !field ||
+      node.type === SHARED_COMPONENT_TYPE ||
+      exposure.prop === "id" ||
+      exposure.prop === "puck"
+    ) {
       errors.push(`The Exposed prop "${exposure.label}" targets an invalid or reserved prop.`)
       continue
     }
@@ -232,7 +239,7 @@ export function validateSharedComponent(
     if (kind === "slot") {
       if (Object.hasOwn(source.defaults, exposure.key)) {
         const defaultValue = source.defaults[exposure.key]
-        if (!Array.isArray(defaultValue) || !defaultValue.every((item) => isComponentData(item))) {
+        if (!isSlotContent(defaultValue)) {
           errors.push(`The default for slot "${exposure.label}" must be a Puck component list.`)
         }
       }
@@ -261,6 +268,12 @@ export function validateSharedComponent(
   for (const key of Object.keys(source.defaults)) {
     if (!keys.has(key)) {
       errors.push(`The default for removed Exposed prop "${key}" is not valid.`)
+    }
+  }
+
+  for (const target of findSharedReferences(source.tree, config, source.defaults)) {
+    if (!Object.hasOwn(allSources, target)) {
+      errors.push(`The source references missing Shared component "${target}".`)
     }
   }
 
@@ -293,8 +306,13 @@ export function validateSharedComponent(
 
     references.set(
       id,
-      findSharedReferences(componentData.tree, config).filter((target) => !!allSources[target]),
+      findSharedReferences(componentData.tree, config, componentData.defaults).filter((target) =>
+        Object.hasOwn(allSources, target),
+      ),
     )
+  }
+
+  for (const id of references.keys()) {
     if (visit(id)) {
       errors.push(`The Shared component references contain a cycle through "${id}".`)
       break
@@ -304,4 +322,10 @@ export function validateSharedComponent(
   if (errors.length) {
     throw new ResponseError(errors.join(" "))
   }
+}
+
+export function sourceEditorUrl(key: string, returnTo: string | null) {
+  const search = new URLSearchParams({ source: key })
+  if (returnTo) search.set("returnTo", returnTo)
+  return `/cms/library?${search}`
 }

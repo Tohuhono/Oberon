@@ -8,13 +8,13 @@ import {
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
-  type SharedComponentData,
   type OberonPluginPhase,
   type OberonUser,
   ResponseError,
   type TransformResult,
 } from "../lib/dtd"
-import { findSharedReferences, validateSharedComponent } from "../lib/shared-components"
+import { getSharedComponentLibrary } from "../lib/shared-components"
+import { fragmentWrites } from "./fragment-writes"
 import { initPlugins } from "./init-plugins"
 import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
 
@@ -127,78 +127,7 @@ export function composeAdapter(
     return allImages || []
   }
 
-  const getSharedComponents = async (omitId?: string) => {
-    const metadata = await adapter.getAllFragments("shared")
-    const sources: Record<string, SharedComponentData> = {}
-
-    for (const { key } of metadata) {
-      if (key === omitId) {
-        continue
-      }
-
-      const fragment = await adapter.getFragmentData({ key, type: "shared" })
-      if (fragment?.type === "shared") {
-        sources[key] = fragment.data
-      }
-    }
-
-    return sources
-  }
-
-  const updateFragmentData: OberonAdapter["updateFragmentData"] = async (fragment) => {
-    if (fragment.type === "shared") {
-      const sources = await getSharedComponents(fragment.key)
-      const validationSources = { ...sources, [fragment.key]: fragment.data }
-      validateSharedComponent(
-        fragment.key,
-        fragment.data,
-        sources,
-        withSharedComponent(config, () => createElement("div"), validationSources),
-      )
-    }
-
-    return adapter.updateFragmentData({ ...fragment, updatedAt: new Date() })
-  }
-
-  const deleteFragment: OberonAdapter["deleteFragment"] = async (fragment) => {
-    if (fragment.type === "shared") {
-      const references = new Set<string>()
-      const referenceConfig = withSharedComponent(
-        config,
-        () => createElement("div"),
-        await getSharedComponents(),
-      )
-
-      for (const { key, type } of [
-        ...(await adapter.getAllFragments("page")),
-        ...(await adapter.getAllFragments("shared")),
-      ]) {
-        if (key === fragment.key && type === "shared") {
-          continue
-        }
-
-        const consumer = await adapter.getFragmentData({ key, type })
-        if (!consumer) {
-          continue
-        }
-
-        const tree = consumer.type === "page" ? consumer.data : consumer.data.tree
-        for (const sourceId of findSharedReferences(tree, referenceConfig)) {
-          if (sourceId === fragment.key) {
-            references.add(key)
-          }
-        }
-      }
-
-      if (references.size) {
-        throw new ResponseError(
-          `Cannot delete this Shared component because it is used by: ${[...references].join(", ")}.`,
-        )
-      }
-    }
-
-    await adapter.deleteFragment(fragment)
-  }
+  const writes = fragmentWrites(adapter, config)
 
   const getConfig = async () => {
     const site = await adapter.getSite()
@@ -232,13 +161,19 @@ export function composeAdapter(
         return summary
       }
 
-      const fragments = await getAllFragments("page")
+      const fragments = [...(await getAllFragments("page")), ...(await getAllFragments("shared"))]
 
+      const transformConfig = withSharedComponent(
+        config,
+        () => createElement("div"),
+        await getSharedComponentLibrary(adapter),
+      )
       const results = applyTransforms({
         transforms,
         fragments,
-        getFragmentData: (key) => adapter.getFragmentData({ key, type: "page" }),
-        updateFragmentData,
+        getFragmentData: adapter.getFragmentData,
+        updateFragmentData: writes.updateFragmentData,
+        config: transformConfig,
       })
 
       for await (const result of results) {
@@ -260,7 +195,7 @@ export function composeAdapter(
   const finalAdapter: OberonAdapter = {
     ...adapter,
     can,
-    deleteFragment,
+    ...writes,
     getAllImages,
     getAllFragments,
     getAllPaths,
@@ -268,7 +203,6 @@ export function composeAdapter(
     getConfig,
     handleRequest,
     migrateData,
-    updateFragmentData,
     will,
     whoWill,
   }

@@ -1,9 +1,11 @@
 import { describe, expect, fromPartial, it } from "@dev/vitest"
-import type { Config, Data } from "@puckeditor/core"
+import type { Config, Data, SlotComponent } from "@puckeditor/core"
 import { createElement } from "react"
+import { renderToReadableStream } from "react-dom/server"
 
-import type { SharedComponentData } from "../lib/dtd"
+import type { OberonClientConfig, SharedComponentData } from "../lib/dtd"
 import { createSharedExposureKey, findSharedReferences } from "../lib/shared-components"
+import { Render } from "../render"
 import { withSharedComponent, withSharedEditorComponents } from "./shared-component-render"
 
 const config = fromPartial<Config>({
@@ -57,11 +59,11 @@ describe(
             type: "SharedComponent",
             props: {
               id: "article-instance",
-              definitionId: "article",
+              sharedComponentKey: "article",
               [bodyKey]: [
                 {
                   type: "SharedComponent",
-                  props: { id: "navigation-instance", definitionId: "navigation" },
+                  props: { id: "navigation-instance", sharedComponentKey: "navigation" },
                 },
               ],
             },
@@ -75,6 +77,60 @@ describe(
 
       expect(editorData.content[0]?.type).toBe("SharedPalette_article")
       expect(storedData.content).toEqual(pageData.content)
+    })
+
+    it("renders distinct instance-owned slot children and resolves components inside the source", async () => {
+      const body = createSharedExposureKey()
+      const library = {
+        article: {
+          name: "Article",
+          tree: {
+            root: {},
+            content: [
+              {
+                type: "Container",
+                props: {
+                  id: "container",
+                  content: [{ type: "Text", props: { id: "default", text: "Source default" } }],
+                },
+              },
+            ],
+          },
+          exposures: [{ key: body, nodeId: "container", prop: "content", label: "Body" }],
+          defaults: {},
+        },
+      }
+      const publicConfig = fromPartial<OberonClientConfig>({
+        components: {
+          Container: {
+            fields: { content: { type: "slot" } },
+            resolveData: () => ({ props: { heading: "Resolved title" } }),
+            render: ({ content: Slot, heading }: { content: SlotComponent; heading: string }) =>
+              createElement("article", null, heading, createElement(Slot)),
+          },
+          Text: {
+            render: ({ text }: { text: string }) => createElement("p", null, text),
+          },
+        },
+      })
+      const data: Data = {
+        root: {},
+        content: ["First", "Second"].map((text) => ({
+          type: "SharedComponent",
+          props: {
+            id: text,
+            sharedComponentKey: "article",
+            [body]: [{ type: "Text", props: { id: `${text}-child`, text } }],
+          },
+        })),
+      }
+
+      const result = await Render({ config: publicConfig, data, sharedComponents: library })
+      const html = await new Response(await renderToReadableStream(result)).text()
+
+      expect(html).toContain("<article>Resolved title<div><p>First</p></div></article>")
+      expect(html).toContain("<article>Resolved title<div><p>Second</p></div></article>")
+      expect(html).not.toContain("Source default")
     })
 
     it("walks instance-owned slots when finding nested Shared references", () => {
@@ -102,11 +158,11 @@ describe(
             type: "SharedComponent",
             props: {
               id: "article-instance",
-              definitionId: "article",
+              sharedComponentKey: "article",
               [bodyKey]: [
                 {
                   type: "SharedComponent",
-                  props: { id: "navigation-instance", definitionId: "navigation" },
+                  props: { id: "navigation-instance", sharedComponentKey: "navigation" },
                 },
               ],
             },

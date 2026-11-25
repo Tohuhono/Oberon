@@ -5,7 +5,7 @@ export const fragments = pgTable(
   "fragments",
   {
     key: text("key").notNull().primaryKey(),
-    type: text("type").$type<FragmentType>().notNull(),
+    type: text("type").$type<FragmentType>().notNull().default("page"),
     data: jsonb("data").notNull().$type<OberonFragment["data"]>(),
     updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
     updatedBy: text("updated_by").notNull(),

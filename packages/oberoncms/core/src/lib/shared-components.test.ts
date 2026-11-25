@@ -15,7 +15,7 @@ const config = fromPartial<Config>({
       render: () => null,
     },
     SharedComponent: {
-      fields: { definitionId: { type: "text" } },
+      fields: { sharedComponentKey: { type: "text" } },
       render: () => null,
     },
     Text: {
@@ -39,15 +39,20 @@ function source(
 }
 
 describe("Shared component validation", { tags: ["ai", "feature-shared-components"] }, () => {
-  it("rejects a reference cycle across sources", () => {
+  it("checks all edges before walking an indirect reference cycle", () => {
     const first = source([
-      { type: "SharedComponent", props: { id: "first-ref", definitionId: "second" } },
+      { type: "SharedComponent", props: { id: "first-ref", sharedComponentKey: "second" } },
     ])
     const second = source([
-      { type: "SharedComponent", props: { id: "second-ref", definitionId: "first" } },
+      { type: "SharedComponent", props: { id: "second-ref", sharedComponentKey: "third" } },
+    ])
+    const third = source([
+      { type: "SharedComponent", props: { id: "third-ref", sharedComponentKey: "first" } },
     ])
 
-    expect(() => validateSharedComponent("first", first, { second }, config)).toThrow(/cycle/u)
+    expect(() => validateSharedComponent("first", first, { second, third }, config)).toThrow(
+      /cycle/u,
+    )
   })
 
   it("rejects an exposure inside an instance-owned slot", () => {
@@ -76,7 +81,7 @@ describe("Shared component validation", { tags: ["ai", "feature-shared-component
 
   it("rejects a missing referenced source with its identity", () => {
     const shared = source([
-      { type: "SharedComponent", props: { id: "missing-ref", definitionId: "missing" } },
+      { type: "SharedComponent", props: { id: "missing-ref", sharedComponentKey: "missing" } },
     ])
 
     expect(() => validateSharedComponent("source", shared, {}, config)).toThrow(

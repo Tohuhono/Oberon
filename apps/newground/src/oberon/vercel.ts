@@ -25,32 +25,19 @@ export const plugin: OberonPlugin = ({ phase }) => ({
       ? {
           getFragmentData:
             ({ next }) =>
-            async (fragment) => {
+            async ({ key }) => {
+              const fragment = await next({ key })
               await addCacheTag("oberon-pages")
-              if (fragment.type === "page") {
-                await addCacheTag(await pageTag(fragment.key))
+              if (fragment?.type === "page" || (!fragment && key.startsWith("/"))) {
+                await addCacheTag(await pageTag(key))
               }
-              return next(fragment)
+              return fragment
             },
-          addFragment:
+          onFragmentChange:
             ({ next }) =>
             async (fragment) => {
-              const updatedAt = await next(fragment)
               await invalidateFragment(fragment)
-              return updatedAt
-            },
-          updateFragmentData:
-            ({ next }) =>
-            async (fragment) => {
-              const updatedAt = await next(fragment)
-              await invalidateFragment(fragment)
-              return updatedAt
-            },
-          deleteFragment:
-            ({ next }) =>
-            async (fragment) => {
               await next(fragment)
-              await invalidateFragment(fragment)
             },
         }
       : {},

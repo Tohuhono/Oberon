@@ -16,7 +16,7 @@ export async function getMetaData(
     }
   }
 
-  const fragment = await getFragmentData({ key: slug, type: "page" })
+  const fragment = await getFragmentData({ key: slug })
 
   return {
     title: fragment?.type === "page" ? fragment.data.root.title || "Oberon CMS" : "Oberon CMS",

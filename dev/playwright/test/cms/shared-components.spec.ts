@@ -1,7 +1,7 @@
 import { createCmsPage, deleteCmsPages, expect, test } from "@dev/playwright/helpers/fixtures"
 import type { Page } from "@playwright/test"
 
-import { insertComponent } from "../helpers/editor"
+import { insertComponent, insertTextComponent } from "../helpers/editor"
 
 async function createSharedComponent(cms: Page, name: string) {
   await cms.goto("/cms/library")
@@ -65,37 +65,58 @@ test.describe("CMS Shared components", { tag: "@cms" }, () => {
   })
 
   test(
-    "renders a published Shared component on a public Page",
+    "restores a Page draft from source editing and renders the published Shared component",
     { tag: "@playground" },
-    async ({ cms, page, testKey }) => {
+    async ({ cms, page, testKey }, testInfo) => {
+      testInfo.setTimeout(60_000)
       const name = `Shared ${testKey}`
       const text = `Shared text ${testKey}`
       const pageKey = `/${testKey}`
 
       try {
         const sourceId = await createSharedComponent(cms, name)
-        await insertComponent(cms, "Text")
-        await cms.getByRole("tab", { name: "Page Settings", exact: true }).click()
-        await cms.locator('textarea[name="text"]').fill(text)
+        const textInput = cms.locator('textarea[name="text"]')
+        await expect(async () => {
+          if (!(await textInput.isVisible())) await insertTextComponent(cms)
+        }).toPass({ timeout: 15_000 })
+        await textInput.fill(text)
         await publishSharedComponent(cms, sourceId)
 
         await createCmsPage(cms, pageKey)
         await cms.goto(`/cms/edit${pageKey}`)
-        await insertComponent(cms, `SharedPalette_${encodeURIComponent(sourceId)}`)
+        const instance = cms.frameLocator("iframe#preview-frame").getByText(text, { exact: true })
+        await expect(async () => {
+          if (!(await instance.isVisible())) {
+            await insertComponent(cms, `SharedPalette_${encodeURIComponent(sourceId)}`)
+          }
+          await expect(instance).toBeVisible({ timeout: 2_000 })
+        }).toPass({ timeout: 15_000 })
+        const sourceQuery = new URLSearchParams({
+          source: sourceId,
+          returnTo: `/cms/edit${pageKey}`,
+        })
+        await cms.goto(`/cms/library?${sourceQuery}`, { waitUntil: "domcontentloaded" })
+        const backToPage = cms.getByRole("button", { name: "Back to Page", exact: true })
+        await expect(backToPage).toBeVisible()
+        await backToPage.click()
+        await expect(cms).toHaveURL(new RegExp(`/cms/edit${pageKey}$`, "u"))
         await expect(
           cms.frameLocator("iframe#preview-frame").getByText(text, { exact: true }),
         ).toBeVisible()
+
         await cms.getByRole("button", { name: "Publish", exact: true }).click()
         await expect(
           cms.getByText(`Successfully published ${pageKey}`, { exact: true }),
         ).toBeVisible()
 
-        const response = await page.goto(pageKey)
+        const response = await page.goto(pageKey, { waitUntil: "domcontentloaded" })
         expect(response?.status()).toBe(200)
         await expect(page.getByText(text, { exact: true })).toBeVisible()
       } finally {
-        await deleteCmsPages(cms, pageKey)
-        await deleteSharedComponent(cms, name)
+        if (!cms.isClosed()) {
+          await deleteCmsPages(cms, pageKey)
+          await deleteSharedComponent(cms, name)
+        }
       }
     },
   )

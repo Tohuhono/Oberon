@@ -11,7 +11,9 @@ const usePuck = createUsePuck()
 export const Header = ({
   path,
   onPublish,
+  publishDisabled,
 }: {
+  publishDisabled: boolean
   path: string
   onPublish: (data: Data) => Promise<void>
 }) => {
@@ -32,7 +34,7 @@ export const Header = ({
         View
       </Button>
       <Button
-        disabled={isPublishing}
+        disabled={isPublishing || publishDisabled}
         onClick={async () => {
           setIsPublishing(true)
           try {

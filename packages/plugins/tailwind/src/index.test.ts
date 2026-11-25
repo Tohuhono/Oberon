@@ -101,20 +101,26 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
     await adapter.deleteKV({ namespace: pluginName, key: "state" })
 
-    const pages = await adapter.getAllFragments("page")
+    const fragments = [
+      ...(await adapter.getAllFragments("page")),
+      ...(await adapter.getAllFragments("shared")),
+    ]
 
-    for (const { key } of pages) {
-      await adapter.deleteFragment({ key, type: "page" })
+    for (const { key, type } of fragments) {
+      await adapter.deleteFragment({ key, type })
     }
   })
 
   tailwindTest(
     "keeps previous stylesheet URLs available after styles change or are cleared",
     async ({ expect, adapter, plugin }) => {
-      const publish = plugin.adapter!.updateFragmentData!({
-        getAdapter: () => asFinalAdapter(adapter),
-        next: adapter.updateFragmentData,
-      })
+      const publish = async (page: OberonFragment) => {
+        await adapter.updateFragmentData(page)
+        await plugin.adapter?.onFragmentChange?.({
+          getAdapter: () => asFinalAdapter(adapter),
+          next: async () => {},
+        })(page)
+      }
       await publish(createPage("underline"))
       const [firstHref] = await getStylesheets(adapter)
 
@@ -143,9 +149,10 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("text-red-500 md:grid text-red-500")
 
-      await plugin.adapter?.updateFragmentData?.({
+      await adapter.updateFragmentData(page)
+      await plugin.adapter?.onFragmentChange?.({
         getAdapter: () => asFinalAdapter(adapter),
-        next: adapter.updateFragmentData,
+        next: async () => {},
       })(page)
 
       const state = await getState(adapter)
@@ -172,12 +179,13 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("prose dark:prose-invert lg:prose-lg p-1")
 
+      await adapter.updateFragmentData(page)
       await expect(
-        plugin.adapter?.updateFragmentData?.({
+        plugin.adapter?.onFragmentChange?.({
           getAdapter: () => asFinalAdapter(adapter),
-          next: adapter.updateFragmentData,
+          next: async () => {},
         })(page),
-      ).resolves.toEqual(page.updatedAt)
+      ).resolves.toBeUndefined()
 
       const state = await getState(adapter)
 
@@ -187,12 +195,55 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
   )
 
   tailwindTest(
+    "includes classes from Exposed props and explicit defaults",
+    async ({ expect, adapter, plugin }) => {
+      const key = "instance_20e9cce7_1189_4dd3_9319_59873d8f57bb"
+      const updatedAt = new Date()
+      const source = {
+        key: "banner",
+        type: "shared" as const,
+        updatedAt,
+        updatedBy: "test",
+        data: {
+          name: "Banner",
+          tree: { root: {}, content: [{ type: "Text", props: { id: "banner-text" } }] },
+          exposures: [{ key, label: "Style", nodeId: "banner-text", prop: "className" }],
+          defaults: { [key]: "italic" },
+        },
+      }
+      const page = {
+        key: "/",
+        type: "page" as const,
+        updatedAt,
+        updatedBy: "test",
+        data: {
+          root: {},
+          content: [
+            {
+              type: "SharedComponent",
+              props: { id: "instance", sharedComponentKey: "banner", [key]: "underline" },
+            },
+          ],
+        },
+      }
+      await adapter.addFragment(source)
+      await adapter.addFragment(page)
+      await plugin.adapter?.onFragmentChange?.({
+        getAdapter: () => asFinalAdapter(adapter),
+        next: async () => {},
+      })(page)
+      await expect(getState(adapter)).resolves.toMatchObject({ classes: ["italic", "underline"] })
+    },
+  )
+
+  tailwindTest(
     "reconciles missing assets during bootstrap",
     async ({ expect, adapter, plugin }) => {
       const page = createPage("underline")
-      await plugin.adapter?.updateFragmentData?.({
+      await adapter.updateFragmentData(page)
+      await plugin.adapter?.onFragmentChange?.({
         getAdapter: () => asFinalAdapter(adapter),
-        next: adapter.updateFragmentData,
+        next: async () => {},
       })(page)
 
       await plugin.bootstrap?.()
@@ -255,7 +306,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "fails loudly during page updates when KV storage is unavailable",
     async ({ expect }) => {
       const adapter = fromPartial<OberonAdapter>({
-        updateFragmentData: async () => new Date(),
+        onFragmentChange: async () => {},
         getAllFragments: async () => [
           { key: "/", type: "page", updatedAt: new Date(), updatedBy: "test" },
         ],
@@ -271,9 +322,9 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       const page = createPage("underline")
 
       await expect(
-        plugin.adapter?.updateFragmentData?.({
+        plugin.adapter?.onFragmentChange?.({
           getAdapter: () => asFinalAdapter(adapter),
-          next: adapter.updateFragmentData,
+          next: adapter.onFragmentChange,
         })(page),
       ).rejects.toThrow(new NotImplementedError("This action is not available in the demo"))
 
@@ -289,7 +340,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "surfaces generic Tailwind update failures as response errors",
     async ({ expect }) => {
       const adapter = fromPartial<OberonAdapter>({
-        updateFragmentData: async () => new Date(),
+        onFragmentChange: async () => {},
         getAllFragments: async () => [
           { key: "/", type: "page", updatedAt: new Date(), updatedBy: "test" },
         ],
@@ -303,9 +354,9 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       const page = createPage("underline")
 
       await expect(
-        plugin.adapter?.updateFragmentData?.({
+        plugin.adapter?.onFragmentChange?.({
           getAdapter: () => adapter,
-          next: adapter.updateFragmentData,
+          next: adapter.onFragmentChange,
         })(page),
       ).rejects.toThrow(new ResponseError("Failed to update Tailwind styles: boom"))
     },

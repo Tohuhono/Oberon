@@ -28,5 +28,7 @@ export const stubbedAdapter = {
   getSite: notImplemented("getSite"),
   putKV: notImplemented("putKV"),
   updateFragmentData: notImplemented("updateFragmentData"),
+  withFragmentTransaction: (write) => write(),
+  onFragmentChange: async () => {},
   updateSite: notImplemented("updateSite"),
 } satisfies OberonPluginAdapter

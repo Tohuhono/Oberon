@@ -1,0 +1,113 @@
+{
+  "type": "diff",
+  "version": "10",
+  "dialect": "postgres",
+  "id": "93faf501-802b-4457-a9fb-867e531b185e",
+  "prevIds": ["bd1852f6-9d5e-4865-8454-dc6c346e5e7c"],
+  "footprints": [
+    {
+      "statementType": "rename_table",
+      "statementTarget": ["table", "public", "pages"],
+      "writes": [
+        "s|tbl|public.pages",
+        "n|tbl|public.pages",
+        "n|rel|public.pages",
+        "n|type|public.pages",
+        "s|tbl|public.fragments",
+        "n|tbl|public.fragments",
+        "n|rel|public.fragments",
+        "n|type|public.fragments"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "rename_index",
+      "statementTarget": ["index", "public", "fragments", "pages_key_idx"],
+      "writes": [
+        "s|idx|public.pages_key_idx",
+        "n|idx|public.pages_key_idx",
+        "n|rel|public.pages_key_idx",
+        "s|idx|public.fragments_key_idx",
+        "n|idx|public.fragments_key_idx",
+        "n|rel|public.fragments_key_idx"
+      ],
+      "reads": ["e|tbl|public.fragments", "n|sch|public", "e|col|public.fragments.key"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "fragments", "type"],
+      "writes": [
+        "s|col|public.fragments.type",
+        "n|col|public.fragments.type",
+        "e|col|public.fragments.type"
+      ],
+      "reads": ["n|tbl|public.fragments", "n|sch|public"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "fragments", "fragments_type_idx"],
+      "writes": [
+        "s|idx|public.fragments_type_idx",
+        "n|idx|public.fragments_type_idx",
+        "e|idx|public.fragments_type_idx",
+        "n|rel|public.fragments_type_idx"
+      ],
+      "reads": ["n|tbl|public.fragments", "n|sch|public", "n|col|public.fragments.type"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "rename",
+      "key": "tables\u0000[\"public\",\"pages\"]",
+      "set": {
+        "name": "fragments"
+      }
+    },
+    {
+      "op": "rename",
+      "key": "indexes\u0000[\"public\",\"pages_key_idx\"]",
+      "set": {
+        "name": "fragments_key_idx"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "fragments",
+        "name": "type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'page'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "fragments",
+        "name": "fragments_type_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "type",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "entityType": "indexes"
+      }
+    }
+  ]
+}

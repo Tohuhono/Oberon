@@ -149,19 +149,17 @@ export type JsonValue = z.infer<typeof JsonValueSchema>
 /*
  * Fragments
  */
-export function isPageData(value: unknown): value is PageData {
-  return (
+export const PuckDataSchema = z.custom<Data>(
+  (value) =>
     typeof value === "object" &&
     value !== null &&
     "content" in value &&
     Array.isArray(value.content) &&
     "root" in value &&
     typeof value.root === "object" &&
-    value.root !== null
-  )
-}
-
-export const PageDataSchema = z.custom<PageData>(isPageData, "Invalid Puck data")
+    value.root !== null,
+  "Invalid Puck data",
+)
 
 export const SharedExposureKeySchema = z
   .string()
@@ -176,7 +174,7 @@ export const SharedExposureSchema = z.object({
 
 export const SharedComponentDataSchema = z.object({
   name: z.string().trim().min(1),
-  tree: PageDataSchema,
+  tree: PuckDataSchema,
   exposures: z.array(SharedExposureSchema),
   defaults: z.record(z.string(), JsonValueSchema),
 })
@@ -190,7 +188,7 @@ const PageKeySchema = z
 
 export const PageSchema = z.object({
   key: PageKeySchema,
-  data: PageDataSchema,
+  data: PuckDataSchema,
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
@@ -225,7 +223,7 @@ function validateFragmentKey(value: { key: string; type: FragmentType }, context
 }
 
 export const AddFragmentSchema = z.discriminatedUnion("type", [
-  z.object({ key: PageKeySchema, type: z.literal("page") }),
+  z.object({ key: PageKeySchema, type: z.literal("page"), data: PuckDataSchema.optional() }),
   z.object({
     key: FragmentKeySchema,
     type: z.literal("shared"),
@@ -241,15 +239,13 @@ export const DeleteFragmentSchema = z
   })
   .superRefine(validateFragmentKey)
 
-export const GetFragmentDataSchema = z
-  .object({ key: FragmentKeySchema, type: FragmentTypeSchema })
-  .superRefine(validateFragmentKey)
+export const GetFragmentDataSchema = z.object({ key: FragmentKeySchema })
 
 export const PublishFragmentSchema = z.discriminatedUnion("type", [
   z.object({
     key: PageKeySchema,
     type: z.literal("page"),
-    data: PageDataSchema,
+    data: PuckDataSchema,
     expectedUpdatedAt: ExpectedUpdatedAtSchema,
   }),
   z.object({
@@ -267,21 +263,7 @@ export const FragmentMetaSchema = z.object({
   updatedBy: z.string(),
 })
 
-export type OberonFragment =
-  | {
-      key: string
-      type: "page"
-      data: PageData
-      updatedAt: Date
-      updatedBy: string
-    }
-  | {
-      key: string
-      type: "shared"
-      data: SharedComponentData
-      updatedAt: Date
-      updatedBy: string
-    }
+export type OberonFragment = z.infer<typeof FragmentSchema>
 
 export type OberonSharedFragment = Extract<OberonFragment, { type: "shared" }>
 
@@ -415,6 +397,7 @@ export type OberonDatabaseAdapter = {
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
   updateFragmentData: (data: OberonFragment & { expectedUpdatedAt?: Date }) => Promise<Date>
+  withFragmentTransaction: <Result>(write: () => Promise<Result>) => Promise<Result>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -430,7 +413,9 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
-  OberonRoutingAdapter
+  OberonRoutingAdapter & {
+    onFragmentChange: (fragment: Pick<OberonFragment, "key" | "type">) => Promise<void>
+  }
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 

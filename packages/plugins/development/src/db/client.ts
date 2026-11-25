@@ -7,8 +7,6 @@ import type { Client } from "@libsql/core/api"
 import { drizzle } from "drizzle-orm/libsql"
 import { sql } from "drizzle-orm/sql"
 
-import * as schema from "./schema"
-
 declare global {
   var oberonDb: Client
 }
@@ -20,10 +18,7 @@ const databasePath = url.startsWith("file:") ? url.slice("file:".length) : undef
 const getGlobalClient: () => Client = () =>
   globalThis.oberonDb || (globalThis.oberonDb = createClient({ url }))
 
-export const getClient = () =>
-  drizzle(getGlobalClient(), {
-    schema,
-  })
+export const getClient = () => drizzle({ client: getGlobalClient() })
 
 export async function initialise() {
   if (databasePath) {

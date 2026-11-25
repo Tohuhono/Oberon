@@ -41,6 +41,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
       <Editor
         path={slug}
         data={data}
+        updatedAt={context.updatedAt}
         config={config}
         sharedComponents={context.sharedComponents ?? {}}
       />
@@ -84,7 +85,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
           >
             {action === "users" && <Users users={data} />}
             {action === "images" && <Images images={data} />}
-            {action === "pages" && <Pages pages={data} />}
+            {action === "pages" && <Pages pages={data} config={config} />}
             {action === "site" && <Site config={data} />}
           </div>
         </div>
