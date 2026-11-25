@@ -35,8 +35,7 @@
     "./schema": {
       "types": "./dist/schema.d.ts",
       "default": "./dist/schema.js"
-    },
-    "./schema/source": "./src/schema.ts"
+    }
   },
   "publishConfig": {
     "access": "public"
