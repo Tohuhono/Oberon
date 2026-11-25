@@ -1,0 +1,1 @@
+Disposable marker for the VS Code sandbox and GitHub access test.
