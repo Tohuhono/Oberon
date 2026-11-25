@@ -5,7 +5,6 @@ import { fromPartial } from "@dev/vitest"
 import { createClient } from "@libsql/client"
 import type { OberonPluginAdapter } from "@oberoncms/core"
 import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
-import * as schema from "@oberoncms/sqlite/schema"
 import { drizzle } from "drizzle-orm/libsql"
 
 type OnCleanup = (callback: () => Promise<void>) => void
@@ -21,7 +20,7 @@ export function createStorageAdapterFactory({ sqliteFile }: { sqliteFile: string
     await rm(sqliteFile, { force: true })
 
     const client = createClient({ url: `file:${sqliteFile}` })
-    const db = drizzle(client, { schema })
+    const db = drizzle({ client })
 
     await migrate(db, { migrationsFolder })
 

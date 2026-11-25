@@ -31,7 +31,7 @@
     "@libsql/client": "^0.18.0",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
-    "drizzle-orm": "^0.45.4"
+    "drizzle-orm": "1.0.0-rc.6"
   },
   "devDependencies": {
     "@dev/oxlint": "workspace:*",

@@ -2,13 +2,15 @@ import { randomUUID } from "crypto"
 
 import { UserSchema, JsonValueSchema, type OberonDatabaseAdapter } from "@oberoncms/core"
 import { and, eq } from "drizzle-orm"
+import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core"
 import { z } from "zod"
 
-import { type DatabaseClient } from "./client"
 import { user } from "./schema"
 import { images, kv, pages, site } from "./schema"
 
-export const getDatabaseAdapter: (db: () => DatabaseClient) => OberonDatabaseAdapter = (db) => ({
+export const getDatabaseAdapter = <Result extends PgQueryResultHKT>(
+  db: () => PgAsyncDatabase<Result>,
+): OberonDatabaseAdapter => ({
   getSite: async () => {
     const result = await db()
       .select({

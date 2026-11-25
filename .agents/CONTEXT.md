@@ -33,20 +33,24 @@ names, not planned implementation.
 
 ## Content
 
-| Term                          | Definition                                                                            | Aliases to avoid                       |
-| ----------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------- |
-| **Fragment**                  | An independently addressable, authored Puck tree identified by a globally unique key. | document, entry                        |
-| **Fragment type**             | A Fragment's classification, such as `page` or `shared`.                              | collection                             |
-| **Page**                      | A Fragment of type `page` whose slash-prefixed key is its public path.                | document, route, entry                 |
-| **Puck component**            | A configured component used within an authored Puck tree.                             | block, widget                          |
-| **Shared component**          | A named Fragment authored for reuse inside Pages or other Shared components.          | Named composition, shell, partial Page |
-| **Shared component instance** | A reference to a Shared component in a component tree, with its own prop values.      | Composition instance                   |
-| **Exposed prop**              | A selected internal component prop surfaced as a prop of a Shared component.          |                                        |
-| **Image**                     | A media record managed through storage and database capabilities.                     | file, asset                            |
-| **Oberon Image component**    | A component that displays an Image through framework image support.                   | Next Image                             |
-| **User**                      | An authenticated identity used by CMS permission checks.                              | account, editor                        |
-| **Site state**                | Stored CMS-wide version and component migration data.                                 | config, settings                       |
-| **Tailwind style assets**     | CSS generated from published Fragment data.                                           | Tailwind config                        |
+| Term                          | Definition                                                                                                       | Aliases to avoid                                          |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **Fragment**                  | An independently addressable, authored Puck tree identified by a globally unique key.                            | document, entry                                           |
+| **Fragment type**             | A Fragment's classification, such as `page` or `shared`.                                                         | collection                                                |
+| **Page**                      | A Fragment of type `page` whose slash-prefixed key is its public path.                                           | document, route, entry                                    |
+| **Puck component**            | A configured component used within an authored Puck tree.                                                        | block, widget                                             |
+| **Shared component**          | A named Fragment authored for reuse inside Pages or other Shared components.                                     | Named composition, shell, partial Page, Shared definition |
+| **Shared component instance** | A reference to a Shared component in a component tree, with its own prop values.                                 | Composition instance                                      |
+| **Exposed prop**              | A selected internal component prop surfaced as a prop of a Shared component.                                     |                                                           |
+| **Exposed slot**              | An Exposed prop whose field is a slot.                                                                           |                                                           |
+| **Instance-owned content**    | The Puck components inside an Exposed slot of one Shared component instance.                                     | local content, override                                   |
+| **Instance rendering**        | Rendering a Shared component instance from its Shared component, Exposed prop values and Instance-owned content. | render bridge                                             |
+| **Consumer**                  | A Fragment that contains a Shared component instance.                                                            | host, parent Page                                         |
+| **Image**                     | A media record managed through storage and database capabilities.                                                | file, asset                                               |
+| **Oberon Image component**    | A component that displays an Image through framework image support.                                              | Next Image                                                |
+| **User**                      | An authenticated identity used by CMS permission checks.                                                         | account, editor                                           |
+| **Site state**                | Stored CMS-wide version and component migration data.                                                            | config, settings                                          |
+| **Tailwind style assets**     | CSS generated from published Fragment data.                                                                      | Tailwind config                                           |
 
 ## Project surfaces
 
@@ -77,6 +81,10 @@ names, not planned implementation.
 - A Fragment key identifies one record across all Fragment types.
 - A Fragment type classifies the record; it is not part of the record's identity.
 - A Page key is its public path.
+- An unexposed prop belongs to the Shared component. An Exposed prop value belongs to the Shared
+  component instance.
+- Instance-owned content belongs to one Shared component instance.
+- A Consumer stores a reference and instance values, never a copy of the Shared component.
 - A Starter app is generated from a Recipe. Playgrounds and the Documentation app are not Starter
   apps.
 
@@ -89,6 +97,8 @@ names, not planned implementation.
 - Use **Fragment** for an independently authored Puck tree and **Puck component** for a component
   within that tree. Reserve "block" for package names.
 - Use **Fragment type** for record classification. Use **key** for record identity.
+- Use **Shared component** for the authored, reusable Fragment. Use "source" only in UI text, such
+  as "Edit source". Do not use "definition".
 - Use **Shared component** for a named Fragment authored for reuse. Runtime composition and
   Bootstrap composition refer to Plugin composition.
 - Use **Oberon runtime** for the composed system. Reserve "core package" for `@oberoncms/core`.

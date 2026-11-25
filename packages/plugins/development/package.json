@@ -35,7 +35,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "odt clean",
-    "generate:migrations": "drizzle-kit generate",
+    "drizzle": "drizzle-kit",
     "dev": "vite build --watch",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
@@ -50,7 +50,7 @@
     "@libsql/core": "^0.18.0",
     "@oberoncms/core": "workspace:*",
     "@oberoncms/sqlite": "workspace:*",
-    "drizzle-orm": "^0.45.4",
+    "drizzle-orm": "1.0.0-rc.6",
     "next": "^16.4.5",
     "server-cli-only": "^0.3.2"
   },
@@ -65,7 +65,7 @@
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "drizzle-kit": "^0.31.11",
+    "drizzle-kit": "1.0.0-rc.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "typescript": "7.0.2"
