@@ -30,11 +30,4 @@ Use [CONTEXT.md](CONTEXT.md) for domain names. Read relevant `.agents/adr/` deci
 
 The Development, Turso, and PostgreSQL Plugins each own the migration history in their
 `src/db/migrations` folder. The Development and Turso Plugins load the shared TypeScript schema
-through `@oberoncms/sqlite/schema/source`. Drizzle Kit loads this export directly.
-
-Run `pnpm generate:migrations --output json --explain` from the repository root to inspect the
-proposed SQL. If Drizzle Kit returns `missing_hints`, put the reviewed hints in a JSON file under
-`.tmp/`. Pass its absolute path with `--hints-file`, rerun the preview, then drop `--explain` to
-generate the SQL and snapshots. Run `pnpm check:migrations --output json` to check all database
-Plugins. Keep each migration folder and its snapshot together.
-[Drizzle Kit reference](https://orm.drizzle.team/docs/drizzle-kit-generate)
+through `@oberoncms/sqlite/schema/source`.
