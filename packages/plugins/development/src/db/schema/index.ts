@@ -1,1 +1,1 @@
-export * from "@oberoncms/sqlite/schema"
+export * from "@oberoncms/sqlite/schema/source"

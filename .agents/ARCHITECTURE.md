@@ -29,8 +29,8 @@ Use [CONTEXT.md](CONTEXT.md) for domain names. Read relevant `.agents/adr/` deci
 ## Database migrations
 
 The Development, Turso, and PostgreSQL Plugins each own the migration history in their
-`src/db/migrations` folder. The Development and Turso Plugins import the shared schema from
-`@oberoncms/sqlite/schema`. The migration task builds that package before Drizzle Kit loads it.
+`src/db/migrations` folder. The Development and Turso Plugins load the shared TypeScript schema
+through `@oberoncms/sqlite/schema/source`. Drizzle Kit loads this export directly.
 
 Run `pnpm generate:migrations --output json --explain` from the repository root to inspect the
 proposed SQL. If Drizzle Kit returns `missing_hints`, put the reviewed hints in a JSON file under

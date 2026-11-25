@@ -78,7 +78,6 @@
       "cache": false
     },
     "drizzle": {
-      "dependsOn": ["^build"],
       "cache": false
     },
     "test:unit": {
