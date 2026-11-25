@@ -98,7 +98,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       }
     },
     deleteKV: async ({ namespace, key }) => {
-      await db()
+      await fragmentsDb()
         .delete(kv)
         .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
         .execute()
@@ -115,7 +115,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       return fragment ?? null
     },
     getKV: async ({ namespace, key }) => {
-      const result = await db()
+      const result = await fragmentsDb()
         .select({ value: kv.value })
         .from(kv)
         .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
@@ -161,7 +161,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       return persisted.updatedAt
     },
     putKV: async ({ namespace, key, value }) => {
-      await db()
+      await fragmentsDb()
         .insert(kv)
         .values({ namespace, key, value })
         .onConflictDoUpdate({

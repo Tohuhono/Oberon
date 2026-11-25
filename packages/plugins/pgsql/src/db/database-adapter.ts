@@ -15,6 +15,8 @@ import type { DatabaseClient } from "./client"
 import { user } from "./schema"
 import { fragments, images, kv, site } from "./schema"
 
+const fragmentRevision = sql`date_trunc('milliseconds', ${fragments.updatedAt})`
+
 export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdapter {
   const transaction = new AsyncLocalStorage<
     Parameters<Parameters<DatabaseClient["transaction"]>[0]>[0]
@@ -84,12 +86,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
             eq(fragments.key, key),
             eq(fragments.type, type),
             ...(expectedUpdatedAt
-              ? [
-                  eq(
-                    sql`date_trunc('milliseconds', ${fragments.updatedAt})`,
-                    sql`${expectedUpdatedAt.toISOString()}::timestamp`,
-                  ),
-                ]
+              ? [eq(fragmentRevision, sql`${expectedUpdatedAt.toISOString()}::timestamp`)]
               : []),
           ),
         )
@@ -101,7 +98,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       }
     },
     deleteKV: async ({ namespace, key }) => {
-      await db()
+      await fragmentsDb()
         .delete(kv)
         .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
         .execute()
@@ -118,7 +115,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       return fragment ?? null
     },
     getKV: async ({ namespace, key }) => {
-      const result = await db()
+      const result = await fragmentsDb()
         .select({ value: kv.value })
         .from(kv)
         .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
@@ -143,10 +140,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
             .where(
               and(
                 condition,
-                eq(
-                  sql`date_trunc('milliseconds', ${fragments.updatedAt})`,
-                  sql`${expectedUpdatedAt.toISOString()}::timestamp`,
-                ),
+                eq(fragmentRevision, sql`${expectedUpdatedAt.toISOString()}::timestamp`),
               ),
             )
             .returning(returning)
@@ -172,7 +166,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       return persisted.updatedAt
     },
     putKV: async ({ namespace, key, value }) => {
-      await db()
+      await fragmentsDb()
         .insert(kv)
         .values({ namespace, key, value })
         .onConflictDoUpdate({

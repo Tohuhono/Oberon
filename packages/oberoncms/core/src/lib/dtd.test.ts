@@ -140,9 +140,19 @@ describe("defineOberonComponent", { tags: ["ai", "feature-component-typing"] }, 
 })
 
 describe("Fragment input schemas", { tags: ["ai", "feature-shared-components"] }, () => {
+  it.each([
+    { root: [], content: [] },
+    { root: {}, content: [null] },
+    { root: {}, content: [{ type: "Text", props: [] }] },
+  ])("rejects malformed Puck structures before publication", (data) => {
+    expect(PublishFragmentSchema.safeParse({ key: "/test", type: "page", data }).success).toBe(
+      false,
+    )
+  })
+
   it("applies route validation only to Page Fragment keys", () => {
-    expect(AddFragmentSchema.parse({ key: "/articles/one", type: "page" })).toEqual({
-      key: "/articles/one",
+    expect(AddFragmentSchema.parse({ key: "/articles/first-article", type: "page" })).toEqual({
+      key: "/articles/first-article",
       type: "page",
     })
     expect(AddFragmentSchema.safeParse({ key: "Article", type: "page" }).success).toBe(false)

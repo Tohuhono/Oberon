@@ -1,10 +1,16 @@
 import { NotImplementedError, type ClientAction } from "./dtd"
 
 export async function pageTag(key: string) {
+  return `oberon-page-${await hashFragmentKey(key)}`
+}
+
+export async function fragmentTag(key: string) {
+  return `oberon-fragment-${await hashFragmentKey(key)}`
+}
+
+async function hashFragmentKey(key: string) {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(key))
-  return `oberon-page-${Array.from(new Uint8Array(digest), (byte) =>
-    byte.toString(16).padStart(2, "0"),
-  ).join("")}`
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")
 }
 
 export function getTitle(action: ClientAction, slug?: string) {

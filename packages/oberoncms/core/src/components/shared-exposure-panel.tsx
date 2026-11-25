@@ -6,11 +6,8 @@ import { Input } from "@tohuhono/ui/input"
 import { Switch } from "@tohuhono/ui/switch"
 
 import { useSharedSourceSettings } from "../hooks/use-shared-source-settings"
-import {
-  createSharedExposureKey,
-  getNodeById,
-  SHARED_COMPONENT_TYPE,
-} from "../lib/shared-components"
+import { createSharedExposureKey, getNodeById } from "../lib/shared-components"
+import { isSharedEditorComponent } from "./shared-component-render"
 
 const usePuck = createUsePuck()
 
@@ -24,7 +21,7 @@ export function SharedExposurePanel({ config }: { config: Config }) {
   const selectedId = typeof selectedItem?.props.id === "string" ? selectedItem.props.id : null
   const component = selectedItem ? config.components[selectedItem.type] : undefined
   const fields =
-    selectedItem?.type === SHARED_COMPONENT_TYPE || selectedItem?.type.startsWith("SharedPalette_")
+    selectedItem && isSharedEditorComponent(selectedItem.type)
       ? []
       : Object.entries(component?.fields ?? {})
           .filter(([prop]) => prop !== "id")

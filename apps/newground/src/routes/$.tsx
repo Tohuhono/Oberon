@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { createServerFn } from "@tanstack/react-start"
 import { renderServerComponent } from "@tanstack/react-start/rsc"
 
-import { adapter, getPage, RenderPage } from "#/oberon/adapter"
+import { adapter, RenderPage } from "#/oberon/adapter"
 import { applyCDNHeaders } from "#/oberon/vercel"
 
 function getActiveHash(value: unknown) {
@@ -19,7 +19,7 @@ const getPageResponse = createServerFn({ method: "GET" })
   .middleware([applyCDNHeaders])
   .validator(ResolvePathSchema)
   .handler(async ({ data }) => {
-    const page = await getPage(data)
+    const page = await adapter.getPage(data)
     const activeHash = getActiveHash(
       await adapter.getKV({ namespace: "@oberoncms/plugin-tailwind", key: "state" }),
     )

@@ -121,28 +121,41 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     expect(getFragmentData).toHaveBeenCalledExactlyOnceWith({ key })
   })
 
-  it("resolves a missing Page through the routing adapter", async () => {
-    const missing = new Error("not-found")
-    const notFound = vi.fn((): never => {
-      throw missing
-    })
-    const plugin: OberonPlugin = () => ({
-      name: "missing-page",
-      adapter: {
-        getFragmentData: () => async () => null,
-        notFound: () => notFound,
-      },
-    })
-    const adapter = initAdapter({
-      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-      plugins: [plugin],
-    })
+  it.each(["missing", "shared"] as const)(
+    "routes a %s Fragment as a missing Page",
+    async (kind) => {
+      const missing = new Error("not-found")
+      const notFound = vi.fn((): never => {
+        throw missing
+      })
+      const plugin: OberonPlugin = () => ({
+        name: "missing-page",
+        adapter: {
+          getFragmentData: () => async () =>
+            kind === "shared"
+              ? {
+                  ...getInitialData(),
+                  type: "shared",
+                  data: {
+                    name: "Header",
+                    tree: getInitialData().data,
+                    exposures: [],
+                    defaults: {},
+                  },
+                }
+              : null,
+          notFound: () => notFound,
+        },
+      })
+      const adapter = initAdapter({
+        client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+        plugins: [plugin],
+      })
 
-    await expect(createActionHandler(adapter).resolvePath({ key: "/missing" })).rejects.toBe(
-      missing,
-    )
-    expect(notFound).toHaveBeenCalledOnce()
-  })
+      await expect(adapter.getPage({ key: "/missing" })).rejects.toBe(missing)
+      expect(notFound).toHaveBeenCalledOnce()
+    },
+  )
 
   it("checks Page permission before path resolution reads data", async () => {
     const getFragmentData = vi.fn(async () => getInitialData())

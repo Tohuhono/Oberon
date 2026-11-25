@@ -29,7 +29,11 @@ async function getTursoAdapter(
 
   const { plugin } = await import("./index")
 
-  const tursoPlugin = plugin({ getAdapter: () => fromPartial({}), phase: "bootstrap" })
+  const tursoPlugin = plugin({
+    client: { version: 1, components: {} },
+    getAdapter: () => fromPartial({}),
+    phase: "bootstrap",
+  })
 
   await tursoPlugin.bootstrap?.()
 

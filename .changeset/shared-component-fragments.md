@@ -12,15 +12,16 @@
 
 Add a Shared components library so authors can reuse published trees with per-instance values. Store
 Pages and Shared components as typed Fragments and migrate existing Page records. Public routes can
-use `getPage` and `RenderPage` from `initOberon` to check for missing Pages before rendering and
-resolve Shared components without reading the Page twice.
+use `adapter.getPage` and `RenderPage` to check for missing Pages before rendering and resolve
+Shared components without reading the Page twice.
 
 Breaking: replace Page-specific Adapter capabilities, actions, and schemas with their Fragment
 equivalents. Update custom Plugins and action transports to use the typed Fragment operations.
 
-Fragment reads use the unique key. Fragment writes validate references inside a database
-transaction, and Plugins can use `onFragmentChange` to react after the transaction commits. Page and
-Shared component drafts keep their base publication timestamp to detect conflicting edits.
+Fragment reads use the unique key. Fragment writes validate references and reconcile Tailwind style
+assets in a database transaction. Plugins can use `onFragmentChange` to invalidate cached content
+after the transaction commits. Page and Shared component drafts keep their base publication
+timestamp to detect conflicting edits.
 
 The Fragment migrations preserve Page records and convert their SQLite timestamps to milliseconds.
 

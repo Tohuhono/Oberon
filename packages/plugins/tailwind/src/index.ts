@@ -1,7 +1,13 @@
 import "server-cli-only"
 import { createHash } from "crypto"
 
-import { type OberonPlugin, type OberonPluginAdapter, ResponseError } from "@oberoncms/core"
+import {
+  getFragmentStyleProps,
+  type OberonClientConfig,
+  type OberonPlugin,
+  type OberonPluginAdapter,
+  ResponseError,
+} from "@oberoncms/core"
 import { walkAsyncStep } from "walkjs"
 import { z } from "zod"
 
@@ -57,6 +63,7 @@ async function getAsset(
 
 async function getAllPublishedClasses(
   adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getFragmentData">,
+  client: OberonClientConfig,
 ) {
   const [pages, shared] = await Promise.all([
     adapter.getAllFragments("page"),
@@ -65,30 +72,18 @@ async function getAllPublishedClasses(
   const fragments = await Promise.all(
     [...pages, ...shared].map(({ key }) => adapter.getFragmentData({ key })),
   )
-  const exposedClassKeys = new Set<string>()
-  for (const fragment of fragments) {
-    if (fragment?.type === "shared") {
-      for (const exposure of fragment.data.exposures) {
-        if (exposure.prop === "className") exposedClassKeys.add(exposure.key)
-      }
-    }
-  }
-
-  const classes = new Set<string>()
-  for (const fragment of fragments) {
-    if (!fragment) continue
-    for (const cls of await extractTailwindClasses(fragment.data, exposedClassKeys)) {
-      classes.add(cls)
-    }
-  }
-
-  return Array.from(classes).sort()
+  const { props, exposedClassKeys } = getFragmentStyleProps(
+    fragments.filter((fragment) => fragment !== null),
+    client,
+  )
+  return extractTailwindClasses(props, exposedClassKeys)
 }
 
 async function syncStyles(
   adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getKV" | "getFragmentData" | "putKV">,
+  client: OberonClientConfig,
 ) {
-  const classes = await getAllPublishedClasses(adapter)
+  const classes = await getAllPublishedClasses(adapter, client)
   const state = await getState(adapter)
 
   if (!classes.length) {
@@ -114,7 +109,7 @@ async function syncStyles(
   await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
 }
 
-export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
+export const plugin: OberonPlugin = ({ client, getAdapter: getBootstrapAdapter }) => ({
   name,
   version,
   handlers: {
@@ -157,7 +152,7 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
   },
   bootstrap: async () => {
     try {
-      await syncStyles(getBootstrapAdapter())
+      await syncStyles(getBootstrapAdapter(), client)
     } catch (error) {
       if (error instanceof ResponseError) {
         throw error
@@ -171,20 +166,21 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
     }
   },
   adapter: {
-    onFragmentChange:
+    onFragmentWrite:
       ({ getAdapter, next }) =>
-      async (fragment) => {
-        await next(fragment)
-        await syncAfterWrite(getAdapter())
+      async () => {
+        await next()
+        await syncAfterWrite(getAdapter(), client)
       },
   },
 })
 
 async function syncAfterWrite(
   adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getFragmentData" | "getKV" | "putKV">,
+  client: OberonClientConfig,
 ) {
   try {
-    await syncStyles(adapter)
+    await syncStyles(adapter, client)
   } catch (error) {
     if (error instanceof ResponseError) {
       throw error

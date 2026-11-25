@@ -1,6 +1,7 @@
 export * from "./lib/dtd"
 export * from "./lib/utils"
 export * from "./lib/get-metadata"
+export { getFragmentStyleProps } from "./lib/fragment-style-props"
 export {
   createSharedExposureKey,
   getSharedComponentFragments,

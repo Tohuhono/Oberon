@@ -1,7 +1,9 @@
 "use client"
 
-import "@puckeditor/core/puck.css"
 import { Render as PuckRender, type Config } from "@puckeditor/core"
+
+import "@puckeditor/core/puck.css"
+import { LayersIcon } from "@radix-ui/react-icons"
 import { Button } from "@tohuhono/ui/button"
 import {
   Dialog,
@@ -102,7 +104,10 @@ export function SharedComponents({
       <main className="mx-auto w-full max-w-6xl space-y-8 px-4 py-8">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm text-primary">Your design library</p>
+            <p className="flex items-center gap-2 text-sm text-primary">
+              <LayersIcon aria-hidden="true" />
+              Your design library
+            </p>
             <h1 className="text-3xl font-semibold md:text-4xl">Shared components</h1>
             <p className="mt-2 text-sm text-muted-foreground">One source. Every instance.</p>
           </div>
@@ -189,6 +194,7 @@ export function SharedComponents({
           </div>
         ) : (
           <div className="rounded-lg border border-dashed p-10 text-center">
+            <LayersIcon aria-hidden="true" className="mx-auto mb-2 text-primary" />
             <h2 className="text-lg font-semibold">Start with something worth sharing</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Try a Site header, a call to action or an Article layout.

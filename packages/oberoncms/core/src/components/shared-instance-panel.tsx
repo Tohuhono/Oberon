@@ -1,11 +1,13 @@
 "use client"
 
 import { createUsePuck } from "@puckeditor/core"
+import { LayersIcon } from "@radix-ui/react-icons"
 import { buttonVariants } from "@tohuhono/ui/button"
 import { Link } from "@tohuhono/ui/link"
 
 import type { SharedComponentData } from "../lib/dtd"
-import { SHARED_COMPONENT_TYPE, sourceEditorUrl } from "../lib/shared-components"
+import { sourceEditorUrl } from "../lib/shared-components"
+import { isSharedEditorComponent } from "./shared-component-render"
 
 const usePuck = createUsePuck()
 
@@ -18,10 +20,7 @@ export function SharedInstancePanel({
 }) {
   const selectedItem = usePuck((state) => state.selectedItem)
   const sharedItem =
-    selectedItem &&
-    (selectedItem.type === SHARED_COMPONENT_TYPE || selectedItem.type.startsWith("SharedPalette_"))
-      ? selectedItem
-      : null
+    selectedItem && isSharedEditorComponent(selectedItem.type) ? selectedItem : null
   const sharedComponentKey =
     sharedItem && typeof sharedItem.props.sharedComponentKey === "string"
       ? sharedItem.props.sharedComponentKey
@@ -48,7 +47,10 @@ export function SharedInstancePanel({
 
   return (
     <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-3">
-      <h3 className="font-semibold">Shared instance</h3>
+      <h3 className="flex items-center gap-2 font-semibold">
+        <LayersIcon aria-hidden="true" className="text-primary" />
+        Shared instance
+      </h3>
       <p className="mt-2 text-sm">{source?.name ?? sharedComponentKey}</p>
       <p className="mt-1 text-xs text-muted-foreground">
         These Exposed props belong to this instance. The rest of the design stays shared.

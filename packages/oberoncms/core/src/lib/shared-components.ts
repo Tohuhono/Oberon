@@ -167,6 +167,8 @@ export function validateSharedComponent(
         } else {
           nodes.set(nodeId, node)
         }
+      } else {
+        errors.push(`The "${node.type}" component is missing its node ID.`)
       }
 
       if (node.type === SHARED_COMPONENT_TYPE) {
@@ -239,7 +241,17 @@ export function validateSharedComponent(
     if (kind === "slot") {
       if (Object.hasOwn(source.defaults, exposure.key)) {
         const defaultValue = source.defaults[exposure.key]
-        if (!isSlotContent(defaultValue)) {
+        if (isSlotContent(defaultValue)) {
+          walkTree({ content: defaultValue, root: {} }, config, (content) => {
+            for (const item of content) {
+              if (!Object.hasOwn(config.components, item.type)) {
+                errors.push(
+                  `The default for slot "${exposure.label}" uses missing component "${item.type}".`,
+                )
+              }
+            }
+          })
+        } else {
           errors.push(`The default for slot "${exposure.label}" must be a Puck component list.`)
         }
       }

@@ -25,11 +25,21 @@ export function fragmentWrites(adapter: OberonPluginAdapter, config: OberonClien
 
     const library = await getSharedComponentLibrary(adapter)
     if (fragment.type === "shared") {
-      const sharedConfig = withSharedComponent(config, render, {
-        ...library,
-        [fragment.key]: fragment.data,
-      })
-      validateSharedComponent(fragment.key, fragment.data, library, sharedConfig)
+      try {
+        const sharedConfig = withSharedComponent(config, render, {
+          ...library,
+          [fragment.key]: fragment.data,
+        })
+        validateSharedComponent(fragment.key, fragment.data, library, sharedConfig)
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.message.startsWith("Could not find component config for ")
+        ) {
+          throw new ResponseError(error.message)
+        }
+        throw error
+      }
     } else {
       const sharedConfig = withSharedComponent(config, render, library)
       const missing = findSharedReferences(fragment.data, sharedConfig).filter(
@@ -45,6 +55,7 @@ export function fragmentWrites(adapter: OberonPluginAdapter, config: OberonClien
     await adapter.withFragmentTransaction(async () => {
       await prepare(fragment)
       await adapter.addFragment(fragment)
+      await adapter.onFragmentWrite()
     })
     await adapter.onFragmentChange(fragment)
   }
@@ -55,7 +66,11 @@ export function fragmentWrites(adapter: OberonPluginAdapter, config: OberonClien
   }
 
   const updateFragmentData: OberonPluginAdapter["updateFragmentData"] = async (fragment) => {
-    const updatedAt = await adapter.withFragmentTransaction(() => updateInTransaction(fragment))
+    const updatedAt = await adapter.withFragmentTransaction(async () => {
+      const persistedAt = await updateInTransaction(fragment)
+      await adapter.onFragmentWrite()
+      return persistedAt
+    })
     await adapter.onFragmentChange(fragment)
     return updatedAt
   }
@@ -93,6 +108,7 @@ export function fragmentWrites(adapter: OberonPluginAdapter, config: OberonClien
       }
 
       await adapter.deleteFragment(fragment)
+      await adapter.onFragmentWrite()
     })
     await adapter.onFragmentChange(fragment)
   }

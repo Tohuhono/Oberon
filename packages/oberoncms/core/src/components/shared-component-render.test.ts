@@ -99,6 +99,29 @@ describe(
           exposures: [{ key: body, nodeId: "container", prop: "content", label: "Body" }],
           defaults: {},
         },
+        header: {
+          name: "Site header",
+          tree: {
+            root: {},
+            content: [
+              {
+                type: "SharedComponent",
+                props: { id: "navigation-in-header", sharedComponentKey: "navigation" },
+              },
+            ],
+          },
+          exposures: [],
+          defaults: {},
+        },
+        navigation: {
+          name: "Main navigation",
+          tree: {
+            root: {},
+            content: [{ type: "Text", props: { id: "navigation", text: "Main navigation" } }],
+          },
+          exposures: [],
+          defaults: {},
+        },
       }
       const publicConfig = fromPartial<OberonClientConfig>({
         components: {
@@ -120,7 +143,17 @@ describe(
           props: {
             id: text,
             sharedComponentKey: "article",
-            [body]: [{ type: "Text", props: { id: `${text}-child`, text } }],
+            [body]: [
+              { type: "Text", props: { id: `${text}-child`, text } },
+              ...(text === "First"
+                ? [
+                    {
+                      type: "SharedComponent",
+                      props: { id: "header-in-article", sharedComponentKey: "header" },
+                    },
+                  ]
+                : []),
+            ],
           },
         })),
       }
@@ -128,7 +161,9 @@ describe(
       const result = await Render({ config: publicConfig, data, sharedComponents: library })
       const html = await new Response(await renderToReadableStream(result)).text()
 
-      expect(html).toContain("<article>Resolved title<div><p>First</p></div></article>")
+      expect(html).toContain(
+        "<article>Resolved title<div><p>First</p><p>Main navigation</p></div></article>",
+      )
       expect(html).toContain("<article>Resolved title<div><p>Second</p></div></article>")
       expect(html).not.toContain("Source default")
     })

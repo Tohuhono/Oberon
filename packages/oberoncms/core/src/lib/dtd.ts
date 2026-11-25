@@ -149,17 +149,19 @@ export type JsonValue = z.infer<typeof JsonValueSchema>
 /*
  * Fragments
  */
-export const PuckDataSchema = z.custom<Data>(
-  (value) =>
-    typeof value === "object" &&
-    value !== null &&
-    "content" in value &&
-    Array.isArray(value.content) &&
-    "root" in value &&
-    typeof value.root === "object" &&
-    value.root !== null,
-  "Invalid Puck data",
-)
+const PuckNodeSchema = z.looseObject({
+  type: z.string().min(1),
+  props: z.looseObject({ id: z.string().optional() }),
+  readOnly: z.record(z.string(), z.boolean().optional()).optional(),
+})
+
+export const PuckDataSchema: z.ZodType<Data> = z.looseObject({
+  content: z.array(PuckNodeSchema),
+  root: z.looseObject({
+    props: z.looseObject({}).optional(),
+  }),
+  zones: z.record(z.string(), z.array(PuckNodeSchema)).optional(),
+})
 
 export const SharedExposureKeySchema = z
   .string()
@@ -183,7 +185,7 @@ export type SharedComponentData = z.infer<typeof SharedComponentDataSchema>
 
 const PageKeySchema = z
   .string()
-  .regex(/^[0-9a-zA-Z_.-/]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
+  .regex(/^[0-9a-zA-Z_./-]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
   .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/u, "Route segments cannot be empty")
 
 export const PageSchema = z.object({
@@ -414,6 +416,7 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
   OberonRoutingAdapter & {
+    onFragmentWrite: () => Promise<void>
     onFragmentChange: (fragment: Pick<OberonFragment, "key" | "type">) => Promise<void>
   }
 
@@ -434,6 +437,7 @@ export type OberonAdapter = OberonPluginAdapter & {
     action: AdapterActionGroup
     permission: AdapterPermission
   }) => Promise<OberonUser>
+  getPage: (data: { key: string }) => Promise<{ key: string; data: PageData }>
   getAllPaths: () => Promise<Array<{ path: string[] }>>
   getConfig: () => Promise<OberonSiteConfig>
   migrateData: (user: OberonUser) => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
@@ -451,6 +455,7 @@ export type OberonPluginAdapterHooks = {
 }
 
 export type OberonPlugin = (context: {
+  client: OberonClientConfig
   getAdapter: () => OberonAdapter
   phase: OberonPluginPhase
 }) => {

@@ -81,18 +81,18 @@ import { initOberon } from "@oberoncms/core/render"
 
 import { config } from "./config"
 
-export const { adapter, getPage, RenderPage } = initOberon(config)
+export const { adapter, RenderPage } = initOberon(config)
 ```
 
-In the public route, import `getPage` and `RenderPage` from this module:
+In the public route, import `adapter` and `RenderPage` from this module.
 
 ```tsx
-const page = await getPage({ key })
+const page = await adapter.getPage({ key })
 return <RenderPage page={page} />
 ```
 
-`getPage` checks read permission and handles missing Pages. Await it before the response starts
-streaming so the framework can return a `404`. In TanStack Start, await it before calling
+`adapter.getPage` checks read permission and handles missing Pages. Await it before the response
+starts streaming so the framework can return a `404`. In TanStack Start, await it before calling
 `renderServerComponent`. `RenderPage` loads published Shared components but does not read the Page
 again. The route still controls layout, metadata, and stylesheets.
 

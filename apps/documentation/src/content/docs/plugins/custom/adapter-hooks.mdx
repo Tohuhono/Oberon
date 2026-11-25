@@ -59,9 +59,10 @@ input take no arguments.
 route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
 
 Fragment reads take the unique key. Lists take the Fragment type and return metadata. Database
-Plugins implement `withFragmentTransaction` to serialize competing Fragment writes and use the same
-transaction for Fragment and Site state operations in the callback. Use `onFragmentChange` for cache
-invalidation and other effects that need to read committed content.
+Plugins implement `withFragmentTransaction` to serialize competing writes. Fragment, Site state, and
+key-value operations in the callback use the same transaction. Use `onFragmentWrite` to update
+derived data such as Tailwind style assets as part of publication. Use `onFragmentChange` for cache
+invalidation after the transaction commits.
 
 ## Bootstrap
 

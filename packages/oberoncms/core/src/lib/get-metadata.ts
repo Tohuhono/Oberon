@@ -1,5 +1,9 @@
-import type { OberonAdapter } from "./dtd"
+import type { OberonAdapter, PageData } from "./dtd"
 import { getTitle, parseClientAction, resolveSlug } from "./utils"
+
+export function getPageMetadata(data?: PageData) {
+  return { title: data?.root.props?.title || data?.root.title || "Oberon CMS" }
+}
 
 export async function getMetaData(
   { getFragmentData }: OberonAdapter,
@@ -18,7 +22,5 @@ export async function getMetaData(
 
   const fragment = await getFragmentData({ key: slug })
 
-  return {
-    title: fragment?.type === "page" ? fragment.data.root.title || "Oberon CMS" : "Oberon CMS",
-  }
+  return getPageMetadata(fragment?.type === "page" ? fragment.data : undefined)
 }

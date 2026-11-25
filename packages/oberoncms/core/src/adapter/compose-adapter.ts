@@ -40,6 +40,7 @@ export function composeAdapter(
     plugins: definitions,
     versions,
   } = initPlugins(plugins, {
+    client: config,
     getAdapter,
     phase,
   })
@@ -102,6 +103,13 @@ export function composeAdapter(
     return data
   }
 
+  const getPage: OberonAdapter["getPage"] = async ({ key }) => {
+    await will({ action: "pages", permission: "read" })
+    const fragment = await adapter.getFragmentData({ key })
+    if (fragment?.type !== "page") return adapter.notFound()
+    return { key, data: fragment.data }
+  }
+
   const getAllPaths = async () => {
     const result = await adapter.getAllFragments("page")
     const data = result.map((row) => ({
@@ -152,6 +160,7 @@ export function composeAdapter(
     getAllPaths,
     getAllUsers,
     getConfig,
+    getPage,
     handleRequest,
     migrateData,
     will,

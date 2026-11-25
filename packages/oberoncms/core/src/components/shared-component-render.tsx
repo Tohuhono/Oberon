@@ -5,6 +5,7 @@ import {
   type Data,
   type Metadata,
   type ComponentData,
+  type SlotComponent,
 } from "@puckeditor/core"
 import { createElement, type ReactElement } from "react"
 
@@ -14,13 +15,23 @@ import {
   getSharedInstanceDefaults,
   SHARED_COMPONENT_TYPE,
 } from "../lib/shared-components"
+import { SharedSlot, SharedSlotOwner } from "./editor/shared-slot"
 
 type SharedComponentLibrary = Record<string, SharedComponentData>
+const sharedPalettePrefix = "SharedPalette_"
 type SharedTreeRenderer = (props: {
   config: Config
   data: Data
   metadata: Metadata
 }) => ReactElement
+
+function isRenderedSlot(value: unknown): value is SlotComponent {
+  return typeof value === "function"
+}
+
+export function isSharedEditorComponent(type: string) {
+  return type === SHARED_COMPONENT_TYPE || type.startsWith(sharedPalettePrefix)
+}
 
 function getExposureFields(source: SharedComponentData, config: Config) {
   const fields: NonNullable<Config["components"][string]["fields"]> = {}
@@ -38,10 +49,12 @@ function renderSharedSource(
   instanceId: string,
   values: Record<string, unknown>,
   metadata: Metadata,
+  isEditing: boolean,
   config: Config,
-  library: SharedComponentLibrary,
+  fallbackLibrary: SharedComponentLibrary,
   renderTree: SharedTreeRenderer,
 ) {
+  const library: SharedComponentLibrary = metadata.sharedComponents ?? fallbackLibrary
   const stack: ReadonlySet<string> =
     metadata.sharedComponentStack instanceof Set ? metadata.sharedComponentStack : new Set<string>()
   const source = typeof key === "string" && Object.hasOwn(library, key) ? library[key] : undefined
@@ -58,8 +71,18 @@ function renderSharedSource(
         if (exposure.nodeId !== node.props.id || !Object.hasOwn(values, exposure.key)) continue
         const value = values[exposure.key]
         const field = config.components[node.type]?.fields?.[exposure.prop]
-        if (field?.type === "slot" && typeof value === "function") {
-          slots.set(props.id, { ...slots.get(props.id), [exposure.prop]: value })
+        if (field?.type === "slot" && isRenderedSlot(value)) {
+          slots.set(props.id, {
+            ...slots.get(props.id),
+            [exposure.prop]: isEditing
+              ? (slotProps: Parameters<SlotComponent>[0]) =>
+                  createElement(SharedSlot, {
+                    slotKey: exposure.key,
+                    slot: value,
+                    props: slotProps,
+                  })
+              : value,
+          })
           slotOwners.add(node.type)
           Object.assign(props, { [exposure.prop]: [] })
         } else {
@@ -70,7 +93,11 @@ function renderSharedSource(
     }),
   )
 
-  const nestedConfig = { ...config, components: { ...config.components } }
+  const nestedConfig = {
+    ...config,
+    root: config.root && { ...config.root, render: undefined },
+    components: { ...config.components },
+  }
   for (const type of slotOwners) {
     const component = config.components[type]
     if (!component) continue
@@ -80,11 +107,12 @@ function renderSharedSource(
     }
   }
 
-  return renderTree({
+  const rendered = renderTree({
     config: nestedConfig,
     data,
     metadata: { ...metadata, sharedComponentStack: new Set([...stack, key]) },
   })
+  return isEditing && slots.size ? createElement(SharedSlotOwner, null, rendered) : rendered
 }
 
 function fillInstanceValues<Node extends Pick<ComponentData, "props">>(
@@ -128,6 +156,7 @@ export function withSharedComponent(
         id,
         values,
         puck.metadata,
+        puck.isEditing,
         sharedConfig,
         library,
         renderTree,
@@ -155,7 +184,7 @@ export function withSharedEditorComponents(
   const keys = new Map<string, string>()
 
   for (const [key, source] of Object.entries(library)) {
-    const alias = `SharedPalette_${encodeURIComponent(key)}`
+    const alias = `${sharedPalettePrefix}${encodeURIComponent(key)}`
     aliases.set(key, alias)
     keys.set(alias, key)
 
@@ -170,7 +199,16 @@ export function withSharedEditorComponents(
           : walkTree({ ...resolved, type: alias }, sessionConfig, aliasSharedNodes)
       },
       render: ({ id, puck, ...values }) =>
-        renderSharedSource(key, id, values, puck.metadata, sharedConfig, library, renderTree),
+        renderSharedSource(
+          key,
+          id,
+          values,
+          puck.metadata,
+          puck.isEditing,
+          sharedConfig,
+          library,
+          renderTree,
+        ),
     }
   }
 

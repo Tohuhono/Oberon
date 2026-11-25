@@ -42,7 +42,11 @@ async function getDevelopmentAdapter(
 
   const { plugin } = await import("./index")
 
-  const developmentPlugin = plugin({ getAdapter: () => fromPartial({}), phase: "bootstrap" })
+  const developmentPlugin = plugin({
+    client: { version: 1, components: {} },
+    getAdapter: () => fromPartial({}),
+    phase: "bootstrap",
+  })
 
   await developmentPlugin.bootstrap?.()
 
@@ -164,6 +168,48 @@ developmentAdapterTest.describe(
   "Fragment writes",
   { tags: ["ai", "feature-shared-components"] },
   () => {
+    developmentAdapterTest(
+      "rolls back the Fragment and derived data when a publication effect fails",
+      async ({ adapter: storage }) => {
+        const { initAdapter } = await import("@oberoncms/core/adapter")
+        const key = "/failed-publication"
+        const effect = { namespace: "publication-test", key }
+        const adapter = initAdapter({
+          client: fromPartial({ version: 1, components: {} }),
+          plugins: [
+            ({ getAdapter: getRuntimeAdapter }) => ({
+              name: "fragment-storage",
+              adapter: {
+                addFragment: () => storage.addFragment,
+                getFragmentData: () => storage.getFragmentData,
+                withFragmentTransaction: () => storage.withFragmentTransaction,
+                getKV: () => storage.getKV,
+                putKV: () => storage.putKV,
+                onFragmentWrite: () => async () => {
+                  const runtimeAdapter = getRuntimeAdapter()
+                  expect(await runtimeAdapter.getFragmentData({ key })).toMatchObject({ key })
+                  await runtimeAdapter.putKV({ ...effect, value: "derived asset" })
+                  throw new Error("Publication effect failed")
+                },
+              },
+            }),
+          ],
+        })
+
+        await expect(
+          adapter.addFragment({
+            key,
+            type: "page",
+            data: INITIAL_DATA,
+            updatedAt: new Date(),
+            updatedBy: "test@example.com",
+          }),
+        ).rejects.toThrow("Publication effect failed")
+        await expect(adapter.getFragmentData({ key })).resolves.toBeNull()
+        await expect(adapter.getKV(effect)).resolves.toBeNull()
+      },
+    )
+
     developmentAdapterTest(
       "serializes publishing a reference with deleting its source",
       async ({ adapter: storage }) => {

@@ -31,6 +31,7 @@ export const plugin: OberonPlugin = ({ phase }) => {
             onFragmentChange:
               ({ next }) =>
               async (fragment) => {
+                await next(fragment)
                 if (fragment.type === "page") {
                   revalidatePath(fragment.key)
                   revalidatePath(`/cms/edit${fragment.key}`)
@@ -38,7 +39,6 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 } else {
                   revalidatePath("/", "layout")
                 }
-                await next(fragment)
               },
             addImage:
               ({ next }) =>

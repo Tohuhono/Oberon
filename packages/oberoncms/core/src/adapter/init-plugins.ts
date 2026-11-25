@@ -1,5 +1,6 @@
 import {
   type OberonAdapter,
+  type OberonClientConfig,
   type OberonHandler,
   type OberonPlugin,
   type OberonPluginAdapter,
@@ -80,14 +81,16 @@ function composeAdapter(
 export function initPlugins(
   plugins: OberonPlugin[] = [],
   {
+    client,
     getAdapter,
     phase = "runtime",
   }: {
+    client: OberonClientConfig
     getAdapter: () => OberonAdapter
     phase?: OberonPluginPhase
   },
 ) {
-  const definitions = plugins.map((plugin) => plugin({ getAdapter, phase }))
+  const definitions = plugins.map((plugin) => plugin({ client, getAdapter, phase }))
   const enabledPlugins = definitions.filter(({ disabled }) => !disabled)
   const adapter = composeAdapter(enabledPlugins, getAdapter)
   const handlers = enabledPlugins.reduce<InitialisedPlugins["handlers"]>(

@@ -1,6 +1,7 @@
 "use client"
 
-import { type Config, type Data, Render as PuckRender, useGetPuck } from "@puckeditor/core"
+import { type Config, type Data, useGetPuck } from "@puckeditor/core"
+import { LayersIcon } from "@radix-ui/react-icons"
 import { Button } from "@tohuhono/ui/button"
 import { Input } from "@tohuhono/ui/input"
 import { useMemo, useState } from "react"
@@ -17,7 +18,8 @@ import {
   withSourceSettings,
 } from "../hooks/use-shared-source-settings"
 import type { OberonSharedFragment, SharedComponentData } from "../lib/dtd"
-import { DraftConflict } from "./editor/draft-conflict"
+import { EditorHistory } from "./editor/header"
+import { ResolvedPreview } from "./editor/resolved-preview"
 import { EditorWorkspace } from "./editor/workspace"
 import { Menu } from "./menu"
 import { withSharedEditorComponents } from "./shared-component-render"
@@ -42,6 +44,7 @@ function SharedSourceHeader({
       <Button variant="outline" size="sm" onClick={() => navigate(returnTo ?? "/cms/library")}>
         {returnTo ? "Back to Page" : "Back to library"}
       </Button>
+      <EditorHistory />
       <Button
         size="sm"
         onClick={() => onPublish(getPuck().appState.data)}
@@ -67,7 +70,8 @@ export function SharedSourceEditor({
   canWrite: boolean
 }) {
   const editorSession = useMemo(
-    () => withSharedEditorComponents(clientConfig, library, PuckRender),
+    () =>
+      withSharedEditorComponents(clientConfig, library, (props) => <ResolvedPreview {...props} />),
     [clientConfig, library],
   )
   if (!useBrowserDraftsReady()) return null
@@ -112,7 +116,7 @@ function ReadOnlySharedSource({
         Read-only source. Ask an author with Pages write permission to make changes.
       </p>
       <main className="mx-auto max-w-5xl p-4">
-        <PuckRender
+        <ResolvedPreview
           data={session.toEditorData(source.data.tree)}
           config={session.config}
           metadata={{ sharedComponents: library }}
@@ -149,13 +153,13 @@ function EditableSharedSource({
       await publication.publish((expectedUpdatedAt) =>
         publishFragmentData({ key: source.key, type: "shared", data, expectedUpdatedAt }),
       )
-      refresh()
     } catch (error) {
       setPublishError(
         error instanceof Error ? error.message : "Could not publish Shared component.",
       )
     } finally {
       setIsPublishing(false)
+      refresh()
     }
   }
 
@@ -176,7 +180,17 @@ function EditableSharedSource({
           />
           <div className="border-b bg-card px-4 py-2">
             <SourceName />
-            {publication.isStale && <DraftConflict {...publication} />}
+            {publication.isStale && (
+              <div
+                role="alert"
+                className="mt-2 flex items-center gap-2 rounded bg-destructive/10 p-2 text-sm"
+              >
+                <p>This Shared component changed elsewhere. Reload it before publishing.</p>
+                <Button size="sm" variant="outline" onClick={publication.discardDraft}>
+                  Reload source
+                </Button>
+              </div>
+            )}
             {publishError && (
               <p role="alert" className="p-2 text-sm text-destructive">
                 {publishError}
@@ -193,11 +207,20 @@ function EditableSharedSource({
 function SourceName() {
   const { settings, updateSettings } = useSharedSourceSettings()
   return (
-    <Input
-      aria-label="Shared component name"
-      className="max-w-sm"
-      value={settings.name}
-      onChange={(event) => updateSettings({ name: event.currentTarget.value })}
-    />
+    <div className="flex flex-wrap items-center gap-2">
+      <LayersIcon aria-hidden="true" className="text-primary" />
+      <Input
+        aria-label="Shared component name"
+        className="max-w-sm"
+        value={settings.name}
+        onChange={(event) => updateSettings({ name: event.currentTarget.value })}
+      />
+      <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-1 text-xs">
+        Source
+      </span>
+      <p className="text-xs text-muted-foreground">
+        Local draft. Publish to update every instance.
+      </p>
+    </div>
   )
 }

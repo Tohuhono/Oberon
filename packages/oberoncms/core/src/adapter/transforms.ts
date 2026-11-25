@@ -89,6 +89,7 @@ export async function* migrateFragments(
         updatedAt: new Date(),
         updatedBy: user.email,
       })
+      if (fragments.length) await adapter.onFragmentWrite()
     })
   } catch (error) {
     console.error(error)

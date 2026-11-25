@@ -2,12 +2,7 @@
 
 import "@puckeditor/core/puck.css"
 import { createUsePuck, Puck } from "@puckeditor/core"
-import {
-  CardStackPlusIcon,
-  ListBulletIcon,
-  MixerHorizontalIcon,
-  DragHandleDots2Icon,
-} from "@radix-ui/react-icons"
+import { CardStackPlusIcon, ListBulletIcon, MixerHorizontalIcon } from "@radix-ui/react-icons"
 import { Button } from "@tohuhono/ui/button"
 import { cn, isValidKey } from "@tohuhono/utils"
 import { useState, type PropsWithChildren, type ReactNode } from "react"
@@ -25,7 +20,7 @@ export const Drawer = ({ children }: PropsWithChildren) => (
   <div className="h-full space-y-1">{children}</div>
 )
 
-export const DrawerItem = ({ name }: { name: string }) => (
+export const DrawerItem = ({ children }: PropsWithChildren) => (
   <div
     className="
       flex cursor-grab flex-col items-baseline justify-between rounded-sm border
@@ -34,8 +29,7 @@ export const DrawerItem = ({ name }: { name: string }) => (
       hover:bg-accent hover:text-accent-foreground
     "
   >
-    {name}
-    <DragHandleDots2Icon />
+    {children}
   </div>
 )
 
@@ -81,7 +75,11 @@ export const SidebarHeading = ({
   activeTab: SidebarTab
   className?: string
 }) => {
-  const selectedComponent = usePuck((s) => s.selectedItem?.type || sidebarTabs["fields"].label)
+  const selectedComponent = usePuck(({ selectedItem, config }) =>
+    selectedItem
+      ? (config.components[selectedItem.type]?.label ?? selectedItem.type)
+      : sidebarTabs.fields.label,
+  )
 
   const tabLabel = activeTab === "fields" ? selectedComponent : sidebarTabs[activeTab].label
 

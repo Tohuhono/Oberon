@@ -8,6 +8,33 @@ import { Menu } from "../menu"
 
 const usePuck = createUsePuck()
 
+export function EditorHistory() {
+  const getPuck = useGetPuck()
+  const hasPast = usePuck(({ history }) => history.hasPast)
+  const hasFuture = usePuck(({ history }) => history.hasFuture)
+
+  return (
+    <>
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={!hasPast}
+        onClick={() => getPuck().history.back()}
+      >
+        Undo
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={!hasFuture}
+        onClick={() => getPuck().history.forward()}
+      >
+        Redo
+      </Button>
+    </>
+  )
+}
+
 export const Header = ({
   path,
   onPublish,
@@ -23,6 +50,7 @@ export const Header = ({
 
   return (
     <Menu title={title} path={path}>
+      <EditorHistory />
       <Button
         onClick={() => window.open(`/cms/preview${path}`, "_blank")?.focus()}
         variant="outline"

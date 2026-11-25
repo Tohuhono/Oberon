@@ -39,20 +39,9 @@ export async function transport<T>(
   }
 }
 
-export async function resolvePage(adapter: OberonAdapter, key: string) {
-  await adapter.will({ action: "pages", permission: "read" })
-  const fragment = await adapter.getFragmentData({ key })
-
-  if (!fragment || fragment.type !== "page") {
-    return adapter.notFound()
-  }
-
-  return { key, data: fragment.data }
-}
-
 export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
-    resolvePath: ({ key }) => resolvePage(adapter, key),
+    resolvePath: adapter.getPage,
     addFragment: (input) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })

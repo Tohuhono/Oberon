@@ -1,5 +1,6 @@
 "use client"
 
+import { LayersIcon } from "@radix-ui/react-icons"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
 import { LocalDate } from "@tohuhono/ui/date"
 import {
@@ -40,11 +41,11 @@ export function SharedComponentCard({
   return (
     <article className="rounded-lg border bg-card p-4 text-card-foreground">
       <div className="flex items-center justify-between gap-2">
-        <span aria-hidden="true" className="text-primary">
-          ▱
-        </span>
+        <LayersIcon aria-hidden="true" className="text-primary" />
         <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-1 text-xs">
-          {labels.length ? `${labels.length} Exposed props` : "Fully shared"}
+          {labels.length
+            ? `${labels.length} Exposed prop${labels.length === 1 ? "" : "s"}`
+            : "Fully shared"}
         </span>
       </div>
       <h2 className="mt-3 text-lg font-semibold">

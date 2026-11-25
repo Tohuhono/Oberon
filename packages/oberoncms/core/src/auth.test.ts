@@ -13,7 +13,11 @@ function createAuthPlugin(users: OberonUser[] = []) {
     addUser,
     getAllUsers,
   })
-  const plugin = authPlugin({ getAdapter: () => adapter, phase: "bootstrap" })
+  const plugin = authPlugin({
+    client: { version: 1, components: {} },
+    getAdapter: () => adapter,
+    phase: "bootstrap",
+  })
 
   if (!plugin.bootstrap) {
     throw new Error("Expected auth plugin to expose bootstrap")
