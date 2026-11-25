@@ -8,8 +8,6 @@ import { getAdapter } from "@oberoncms/sqlite/adapter"
 import { createAdapterTests } from "@oberoncms/testing"
 import { drizzle } from "drizzle-orm/libsql"
 
-import * as schema from "./db/schema"
-
 const rootDirectory = resolve(import.meta.dirname, "../../../..")
 
 const sqliteFile = resolve(rootDirectory, ".tmp/turso-plugin-unit-tests.db")
@@ -23,7 +21,7 @@ async function getTursoAdapter(
   vi.resetModules()
 
   const client: Client = createClient({ url: `file:${sqliteFile}` })
-  const db = drizzle(client, { schema })
+  const db = drizzle({ client })
 
   vi.doMock("./db/client", () => ({
     getClient: () => db,

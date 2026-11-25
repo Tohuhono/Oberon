@@ -1,44 +1,44 @@
 import { resolve } from "path"
 
-import { fromPartial, test as baseTest } from "@dev/vitest"
+import { fromPartial, test } from "@dev/vitest"
 import { PGlite } from "@electric-sql/pglite"
 import { PGLiteSocketServer } from "@electric-sql/pglite-socket"
-import type { OberonPluginAdapter } from "@oberoncms/core"
-import { describeAdapterTests } from "@oberoncms/testing"
+import { createAdapterTests } from "@oberoncms/testing"
 import { drizzle } from "drizzle-orm/node-postgres"
 import { migrate } from "drizzle-orm/node-postgres/migrator"
 import { Pool } from "pg"
 
 import { getDatabaseAdapter } from "./db/database-adapter"
-import * as schema from "./db/schema"
 
 const migrationsFolder = resolve(import.meta.dirname, "./db/migrations")
 
-;(async () => {
-  const client = new PGlite()
-  const server = new PGLiteSocketServer({ db: client })
+createAdapterTests({
+  description: "pgsql plugin",
+  test,
+  getAdapter: async (onCleanup) => {
+    const client = new PGlite()
+    const server = new PGLiteSocketServer({ db: client, port: 0 })
+    let pool: Pool | undefined
 
-  await server.start()
+    const cleanup = async () => {
+      await pool?.end()
+      await server.stop()
+      await client.close()
+    }
 
-  const pool = new Pool()
-  const db = drizzle(pool, { schema })
-
-  await migrate(db, { migrationsFolder })
-
-  const test = baseTest.extend(
-    "adapter",
-    { scope: "worker" },
-    // oxlint-disable-next-line no-empty-pattern
-    async ({}, { onCleanup }): Promise<OberonPluginAdapter> => {
-      onCleanup(async () => {
-        await pool.end()
-        await server.stop()
-        await client.close()
+    try {
+      await server.start()
+      pool = new Pool({
+        connectionString: `postgresql://postgres@${server.getServerConn()}/postgres`,
       })
+      const db = drizzle({ client: pool })
+      await migrate(db, { migrationsFolder })
 
+      onCleanup(cleanup)
       return fromPartial(getDatabaseAdapter(() => db))
-    },
-  )
-
-  describeAdapterTests({ description: "pgsql plugin", test })
-})()
+    } catch (error) {
+      await cleanup()
+      throw error
+    }
+  },
+})

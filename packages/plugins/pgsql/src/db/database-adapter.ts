@@ -4,7 +4,7 @@ import { UserSchema, JsonValueSchema, type OberonDatabaseAdapter } from "@oberon
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
-import { type DatabaseClient } from "./client"
+import type { DatabaseClient } from "./client"
 import { user } from "./schema"
 import { images, kv, pages, site } from "./schema"
 

@@ -6,8 +6,6 @@ import { createClient, type Client } from "@libsql/client"
 import { drizzle } from "drizzle-orm/libsql"
 import { migrate } from "drizzle-orm/libsql/migrator"
 
-import * as schema from "./schema"
-
 const rootDirectory = resolve(import.meta.dirname, "../../../../../")
 
 const migrationsFolder = resolve(import.meta.dirname, "./migrations")
@@ -34,7 +32,7 @@ describe("development auth migrations", { tags: ["ai", "feature-better-auth-migr
     await rm(sqliteFile, { force: true })
 
     client = createClient({ url: `file:${sqliteFile}` })
-    const db = drizzle(client, { schema })
+    const db = drizzle({ client })
 
     await migrate(db, { migrationsFolder })
   })

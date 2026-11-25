@@ -52,6 +52,7 @@ describe("authPlugin bootstrap", { tags: ["ai", "feature-better-auth-migration"]
   })
 
   it("does not read users when MASTER_EMAIL is missing", async () => {
+    vi.stubEnv("MASTER_EMAIL", undefined)
     const { addUser, getAllUsers, bootstrap } = createAuthPlugin()
 
     await bootstrap()

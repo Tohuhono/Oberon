@@ -1,8 +1,6 @@
 import { createClient } from "@libsql/client/web"
 import { drizzle } from "drizzle-orm/libsql"
 
-import * as schema from "./schema"
-
 export const getClient = () => {
   if (!process.env.TURSO_URL) {
     throw new Error(
@@ -10,13 +8,10 @@ export const getClient = () => {
     )
   }
 
-  return drizzle(
-    createClient({
+  return drizzle({
+    client: createClient({
       url: process.env.TURSO_URL,
       authToken: process.env.TURSO_TOKEN,
     }),
-    {
-      schema,
-    },
-  )
+  })
 }

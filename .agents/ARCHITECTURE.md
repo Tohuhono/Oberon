@@ -25,3 +25,10 @@ Read the maintained public documentation instead of duplicating API descriptions
 | TanStack recipe     | [`recipes/tanstack/oberon/config.ts`](../recipes/tanstack/oberon/config.ts)             |
 
 Use [CONTEXT.md](CONTEXT.md) for domain names. Read relevant `.agents/adr/` decisions when present.
+
+## Database migrations
+
+The Development, Turso, and PostgreSQL Plugins each own the migration history in their
+`src/db/migrations` folder. The Development and Turso Plugins use the shared schema from
+`@oberoncms/sqlite/schema`. Run `pnpm generate:migrations` from the repository root. Turbo builds
+the Plugins' workspace dependencies before it runs Drizzle Kit.
