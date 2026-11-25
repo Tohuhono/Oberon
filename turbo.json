@@ -80,6 +80,14 @@
     "drizzle": {
       "cache": false
     },
+    "@oberoncms/plugin-development#drizzle": {
+      "dependsOn": ["@oberoncms/sqlite#build"],
+      "cache": false
+    },
+    "@oberoncms/plugin-turso#drizzle": {
+      "dependsOn": ["@oberoncms/sqlite#build"],
+      "cache": false
+    },
     "test:unit": {
       "dependsOn": ["^build"],
       "inputs": [
