@@ -2,7 +2,6 @@ import { defineConfig } from "oxlint"
 
 export default defineConfig({
   plugins: ["typescript", "unicorn"],
-  jsPlugins: ["./oxlint.custom.mjs"],
   env: {
     builtin: true,
     node: true,
@@ -77,7 +76,6 @@ export default defineConfig({
     "valid-typeof": "error",
     "no-array-constructor": "error",
     "no-useless-constructor": "error",
-    "tohuhono/no-type-assertion-except-object-keys": ["error"],
     "typescript/ban-ts-comment": [
       "error",
       {
@@ -140,7 +138,6 @@ export default defineConfig({
     {
       files: ["**/*.test.ts", "**/*.spec.ts"],
       rules: {
-        "tohuhono/no-type-assertion-except-object-keys": "off",
         "typescript/no-explicit-any": "off",
         "typescript/no-non-null-assertion": "off",
       },
