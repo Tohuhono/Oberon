@@ -11,11 +11,12 @@ export function Preview({
   config: Config
   data: Data | null
 }) {
-  const localData = useLocalData(path, config)[0]
+  const [localData] = useLocalData(path, config)
+  const preview = localData ?? data
 
-  if (!localData || !data) {
+  if (!preview) {
     return null
   }
 
-  return <Render data={localData} config={config} />
+  return <Render data={preview} config={config} />
 }

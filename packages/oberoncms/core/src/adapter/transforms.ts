@@ -4,6 +4,7 @@ import { mapConcurrent } from "@tohuhono/utils/map-concurrent"
 type PropTransform = Parameters<typeof transformProps>[1]
 
 import type {
+  OberonAdapter,
   OberonClientConfig,
   OberonComponentRecord,
   OberonComponentMeta,
@@ -15,7 +16,7 @@ async function applyTransform(
   key: string,
   transforms: PropTransform,
   getComponent: (key: string) => Promise<OberonComponentRecord | null>,
-  updateComponentData: (data: OberonComponentRecord) => Promise<void>,
+  updateComponent: OberonAdapter["updateComponent"],
 ): Promise<TransformResult> {
   try {
     const component = await getComponent(key)
@@ -28,10 +29,9 @@ async function applyTransform(
       }
     }
 
-    await updateComponentData({
+    await updateComponent({
       ...component,
       data: transformProps(component.data, transforms),
-      updatedAt: new Date(),
       updatedBy: "migration",
     })
 
@@ -56,16 +56,16 @@ export async function* applyTransforms({
   transforms,
   components,
   getComponent,
-  updateComponentData,
+  updateComponent,
 }: {
   transforms: PropTransform
   components: OberonComponentMeta[]
   getComponent: (key: string) => Promise<OberonComponentRecord | null>
-  updateComponentData: (data: OberonComponentRecord) => Promise<void>
+  updateComponent: OberonAdapter["updateComponent"]
 }): AsyncGenerator<TransformResult, void, void> {
   yield* mapConcurrent(
     components,
-    ({ key }) => applyTransform(key, transforms, getComponent, updateComponentData),
+    ({ key }) => applyTransform(key, transforms, getComponent, updateComponent),
     MAX_CONCURRENCY,
   )
 }

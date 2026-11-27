@@ -123,6 +123,9 @@ export function composeAdapter(
     return allImages || []
   }
 
+  const updateComponent: OberonAdapter["updateComponent"] = (component) =>
+    adapter.updateComponent({ ...component, updatedAt: new Date() })
+
   const getConfig = async () => {
     const site = await adapter.getSite()
 
@@ -161,7 +164,7 @@ export function composeAdapter(
         transforms,
         components,
         getComponent: (key) => adapter.getComponent({ key }),
-        updateComponentData: adapter.updateComponentData,
+        updateComponent,
       })
 
       for await (const result of results) {
@@ -190,6 +193,7 @@ export function composeAdapter(
     getConfig,
     handleRequest,
     migrateData,
+    updateComponent,
     will,
     whoWill,
   }

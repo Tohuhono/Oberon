@@ -3,7 +3,7 @@ import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 
 import { USE_DEVELOPMENT_DATABASE_PLUGIN, type OberonPlugin } from "@oberoncms/core"
-import { getAdapter, migrateComponentStorage } from "@oberoncms/sqlite/adapter"
+import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
@@ -25,7 +25,7 @@ export const plugin: OberonPlugin = () => ({
       return
     }
 
-    await migrateComponentStorage(db, {
+    await migrate(db, {
       migrationsFolder,
     })
 
@@ -45,7 +45,7 @@ export const plugin: OberonPlugin = () => ({
     getKV: () => getAdapter(getClient).getKV,
     getSite: () => getAdapter(getClient).getSite,
     putKV: () => getAdapter(getClient).putKV,
-    updateComponentData: () => getAdapter(getClient).updateComponentData,
+    updateComponent: () => getAdapter(getClient).updateComponent,
     updateSite: () => getAdapter(getClient).updateSite,
     addUser: () => getAdapter(getClient).addUser,
     deleteUser: () => getAdapter(getClient).deleteUser,

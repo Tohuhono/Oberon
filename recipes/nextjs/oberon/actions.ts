@@ -91,9 +91,9 @@ export const actions = {
     "use server"
     return actionHandler.migrateData(MigrateDataSchema.parse(data))
   },
-  publishComponentData: async (data) => {
+  publishComponent: async (data) => {
     "use server"
-    return actionHandler.publishComponentData(PublishComponentSchema.parse(data))
+    return actionHandler.publishComponent(PublishComponentSchema.parse(data))
   },
   signIn: async (data) => {
     "use server"

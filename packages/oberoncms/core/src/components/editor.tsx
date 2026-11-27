@@ -49,7 +49,7 @@ export function Editor({
   data: Data | null
   config: Config
 }) {
-  const { publishComponentData } = useOberonActions()
+  const { publishComponent } = useOberonActions()
   const [localData, setLocalData] = useLocalData(path, config)
 
   const { activeTab, setActiveTab } = useSidebarTab()
@@ -57,7 +57,7 @@ export function Editor({
   const [previewMode, setPreviewMode] = useState<PreviewMode>("follow")
 
   const onPublish = async (pageData: Data) => {
-    await publishComponentData({
+    await publishComponent({
       key: path,
       type: "page",
       data: pageData,

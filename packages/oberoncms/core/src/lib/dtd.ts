@@ -177,13 +177,14 @@ export const ComponentRecordSchema = PageSchema.extend({
 export const AddComponentSchema = z.object({
   key: PageKeySchema,
   type: ComponentTypeSchema,
+  data: PuckDataSchema.optional(),
 })
-
-export const DeleteComponentSchema = AddComponentSchema
 
 export const GetComponentSchema = z.object({ key: ComponentKeySchema })
 
-export const PublishComponentSchema = AddComponentSchema.extend({ data: PuckDataSchema })
+export const DeleteComponentSchema = GetComponentSchema
+
+export const PublishComponentSchema = AddComponentSchema.required({ data: true })
 
 export const ComponentMetaSchema = z.object({
   key: ComponentKeySchema,
@@ -323,7 +324,7 @@ export type OberonDatabaseAdapter = {
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updateComponentData: (data: OberonComponentRecord) => Promise<void>
+  updateComponent: (data: OberonComponentRecord) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -347,7 +348,8 @@ export type OberonHandler = {
   [key in OberonMethod]?: (req: Request) => Promise<Response> | Response
 }
 
-export type OberonAdapter = OberonPluginAdapter & {
+export type OberonAdapter = Omit<OberonPluginAdapter, "updateComponent"> & {
+  updateComponent: (data: Omit<OberonComponentRecord, "updatedAt">) => Promise<void>
   can: (data: z.infer<typeof CanSchema>) => Promise<boolean>
   handleRequest: (
     request: Request,
@@ -437,7 +439,7 @@ export type OberonServerActions = {
   migrateData: (
     data?: z.infer<typeof MigrateDataSchema>,
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishComponentData: (
+  publishComponent: (
     data: z.infer<typeof PublishComponentSchema>,
   ) => OberonResponse<{ key: string }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>

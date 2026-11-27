@@ -28,7 +28,7 @@ function useInvalidatingServerActions(serverActions: OberonServerActions) {
       deleteImage: invalidateAfter(serverActions.deleteImage),
       deleteComponent: invalidateAfter(serverActions.deleteComponent),
       deleteUser: invalidateAfter(serverActions.deleteUser),
-      publishComponentData: invalidateAfter(serverActions.publishComponentData),
+      publishComponent: invalidateAfter(serverActions.publishComponent),
     } satisfies OberonServerActions
   }, [serverActions, router])
 }

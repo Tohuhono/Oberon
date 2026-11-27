@@ -1,7 +1,12 @@
 import "server-cli-only"
 import { createHash } from "crypto"
 
-import { type OberonPlugin, type OberonPluginAdapter, ResponseError } from "@oberoncms/core"
+import {
+  ComponentTypeSchema,
+  type OberonPlugin,
+  type OberonPluginAdapter,
+  ResponseError,
+} from "@oberoncms/core"
 import { walkAsyncStep } from "walkjs"
 import { z } from "zod"
 
@@ -55,9 +60,17 @@ async function getAsset(
 async function getAllPublishedClasses(
   adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent">,
 ) {
-  const pages = await adapter.listComponents("page")
-  const records = await Promise.all(pages.map(({ key }) => adapter.getComponent({ key })))
-  return extractTailwindClasses(records.map((record) => record?.data))
+  const classes = new Set<string>()
+  for (const type of ComponentTypeSchema.options) {
+    for (const { key } of await adapter.listComponents(type)) {
+      const component = await adapter.getComponent({ key })
+      if (!component) continue
+      for (const className of await extractTailwindClasses(component.data)) {
+        classes.add(className)
+      }
+    }
+  }
+  return [...classes].sort()
 }
 
 async function syncStyles(
@@ -146,7 +159,7 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
     }
   },
   adapter: {
-    updateComponentData:
+    updateComponent:
       ({ getAdapter, next }) =>
       async (page) => {
         try {

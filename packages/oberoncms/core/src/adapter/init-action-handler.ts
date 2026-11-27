@@ -1,7 +1,5 @@
 import {
   INITIAL_DATA,
-  AddComponentSchema,
-  PublishComponentSchema,
   ResponseError,
   type OberonAdapter,
   type OberonResponse,
@@ -49,17 +47,12 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
 
       return { key, data: component.data }
     },
-    addComponent: (input) =>
+    addComponent: (component) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })
-        const parsed = AddComponentSchema.safeParse(input)
-        if (!parsed.success) {
-          throw new ResponseError(parsed.error.issues[0]?.message ?? "Invalid Component data")
-        }
-        const data = parsed.data
         await adapter.addComponent({
-          ...data,
-          data: INITIAL_DATA,
+          ...component,
+          data: component.data ?? INITIAL_DATA,
           updatedAt: new Date(),
           updatedBy: user.email,
         })
@@ -137,22 +130,15 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         const user = await adapter.whoWill({ action: "site", permission: "write" })
         return adapter.migrateData(user)
       }),
-    publishComponentData: (input) =>
+    publishComponent: (component) =>
       transport(
         async () => {
           const user = await adapter.whoWill({ action: "pages", permission: "write" })
-          const parsed = PublishComponentSchema.safeParse(input)
-          if (!parsed.success) {
-            throw new ResponseError("Invalid Component data")
-          }
-          const data = parsed.data
-
-          await adapter.updateComponentData({
-            ...data,
-            updatedAt: new Date(),
+          await adapter.updateComponent({
+            ...component,
             updatedBy: user.email,
           })
-          return { key: data.key }
+          return { key: component.key }
         },
         { successMessage: ({ key }) => `Successfully published ${key}` },
       ),

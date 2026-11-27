@@ -16,7 +16,7 @@ export const databasePlugin: OberonPlugin = () => ({
     getKV: () => notImplemented("getKV"),
     getSite: () => notImplemented("getSite"),
     putKV: () => notImplemented("putKV"),
-    updateComponentData: () => notImplemented("updateComponentData"),
+    updateComponent: () => notImplemented("updateComponent"),
     updateSite: () => notImplemented("updateSite"),
     // OberonAuthAdapter
     addUser: () => notImplemented("addUser"),

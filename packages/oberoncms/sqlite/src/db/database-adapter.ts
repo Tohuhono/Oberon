@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto"
 
-import { JsonValueSchema, ComponentRecordSchema, type OberonDatabaseAdapter } from "@oberoncms/core"
+import { JsonValueSchema, type OberonDatabaseAdapter } from "@oberoncms/core"
 import { UserSchema } from "@oberoncms/core"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
@@ -57,11 +57,8 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
   addComponent: async ({ key, type, data, updatedAt, updatedBy }) => {
     await db().insert(components).values({ key, type, data, updatedAt, updatedBy }).execute()
   },
-  deleteComponent: async ({ key, type }) => {
-    await db()
-      .delete(components)
-      .where(and(eq(components.key, key), eq(components.type, type)))
-      .execute()
+  deleteComponent: async ({ key }) => {
+    await db().delete(components).where(eq(components.key, key)).execute()
   },
   deleteKV: async ({ namespace, key }) => {
     await db()
@@ -72,9 +69,7 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
   getComponent: async ({ key }) => {
     const result = await db().select().from(components).where(eq(components.key, key)).execute()
 
-    const component = result[0] && ComponentRecordSchema.parse(result[0])
-
-    return component ?? null
+    return result[0] ?? null
   },
   getKV: async ({ namespace, key }) => {
     const result = await db()
@@ -87,13 +82,13 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
 
     return value === undefined ? null : JsonValueSchema.parse(value)
   },
-  updateComponentData: async ({ key, type, data, updatedAt, updatedBy }) => {
+  updateComponent: async ({ key, type, data, updatedAt, updatedBy }) => {
     await db()
       .insert(components)
       .values({ key, type, data, updatedAt, updatedBy })
       .onConflictDoUpdate({
         target: components.key,
-        set: { data },
+        set: { data, updatedAt, updatedBy },
       })
       .execute()
   },

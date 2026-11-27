@@ -78,10 +78,7 @@ export const OberonClientProvider = ({
       getConfig: unwrapServerAction("getConfig", serverActions.getConfig),
       getComponent: unwrapServerAction("getComponent", serverActions.getComponent),
       migrateData: unwrapServerAction("migrateData", serverActions.migrateData),
-      publishComponentData: unwrapServerAction(
-        "publishComponentData",
-        serverActions.publishComponentData,
-      ),
+      publishComponent: unwrapServerAction("publishComponent", serverActions.publishComponent),
       signIn: unwrapServerAction("signIn", serverActions.signIn),
       signOut: unwrapServerAction("signOut", serverActions.signOut),
     }

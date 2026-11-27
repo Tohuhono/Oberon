@@ -17,9 +17,8 @@ export async function getMetaData(
   }
 
   const component = await getComponent({ key: slug })
-  const data = component?.type === "page" ? component.data : undefined
 
   return {
-    title: data?.root.title || "Oberon CMS",
+    title: component?.data.root.props?.title || component?.data.root.title || "Oberon CMS",
   }
 }

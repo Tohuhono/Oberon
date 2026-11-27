@@ -35,7 +35,7 @@ export const plugin: OberonPlugin = ({ phase }) => ({
               await next(page)
               await invalidateByTag(await pageTag(page.key))
             },
-          updateComponentData:
+          updateComponent:
             ({ next }) =>
             async (page) => {
               await next(page)

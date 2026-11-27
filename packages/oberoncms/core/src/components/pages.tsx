@@ -28,7 +28,7 @@ function copyKey(optimisticPages: OberonComponentMeta[], key: OberonComponentMet
 }
 
 const useOberonPages = (pages: OberonComponentMeta[]) => {
-  const { deleteComponent, addComponent, getComponent, publishComponentData } = useOberonActions()
+  const { deleteComponent, addComponent, getComponent } = useOberonActions()
   const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonComponentMeta[]>(pages)
   const [isPending, startTransition] = useTransition()
 
@@ -52,11 +52,7 @@ const useOberonPages = (pages: OberonComponentMeta[]) => {
           { key: newKey, type: "page", updatedAt: new Date(), updatedBy: "", pending: true },
         ])
         const component = await getComponent({ key })
-        if (component) {
-          await publishComponentData({ key: newKey, type: "page", data: component.data })
-        } else {
-          await addComponent({ key: newKey, type: "page" })
-        }
+        await addComponent({ key: newKey, type: "page", data: component?.data })
       })
     },
     deletePage: (key: OberonComponentMeta["key"]) => {
@@ -64,7 +60,7 @@ const useOberonPages = (pages: OberonComponentMeta[]) => {
         optimisticPageUpdate(
           optimisticPages.map((page) => (page.key === key ? { ...page, pending: true } : page)),
         )
-        await deleteComponent({ key, type: "page" })
+        await deleteComponent({ key })
       })
     },
   }

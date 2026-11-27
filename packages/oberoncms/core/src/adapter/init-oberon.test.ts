@@ -178,7 +178,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter: {
           listComponents: () => async () => [],
           getSite: () => async () => undefined,
-          updateComponentData: () => async () => {},
+          updateComponent: () => async () => {},
           updateSite: () => async () => {},
         },
       }
@@ -221,7 +221,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
             : {
                 listComponents: () => async () => [],
                 getSite: () => async () => undefined,
-                updateComponentData: () => async () => {},
+                updateComponent: () => async () => {},
                 updateSite: () => async () => {},
               },
       }
@@ -249,7 +249,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       adapter: {
         listComponents: () => async () => [],
         getSite: () => async () => undefined,
-        updateComponentData: () => async () => {
+        updateComponent: () => async () => {
           events.push("welcome")
         },
         updateSite: () => async () => {

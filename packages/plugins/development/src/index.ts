@@ -7,7 +7,7 @@ import {
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonPlugin,
 } from "@oberoncms/core"
-import { getAdapter, migrateComponentStorage } from "@oberoncms/sqlite/adapter"
+import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
 
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient, initialise } from "./db/client"
@@ -35,7 +35,7 @@ export const plugin: OberonPlugin = () => {
           return
         }
 
-        await migrateComponentStorage(db, {
+        await migrate(db, {
           migrationsFolder,
         })
 
@@ -68,7 +68,7 @@ export const plugin: OberonPlugin = () => {
         getKV: () => adapter.getKV,
         getSite: () => adapter.getSite,
         putKV: () => adapter.putKV,
-        updateComponentData: () => adapter.updateComponentData,
+        updateComponent: () => adapter.updateComponent,
         updateSite: () => adapter.updateSite,
         addUser: () => adapter.addUser,
         deleteUser: () => adapter.deleteUser,

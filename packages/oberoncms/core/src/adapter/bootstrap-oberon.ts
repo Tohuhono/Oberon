@@ -15,7 +15,7 @@ export async function bootstrapOberon(config: OberonConfig) {
   const allPages = await adapter.listComponents("page")
   if (!allPages.length) {
     console.log("Initialising welcome page")
-    await adapter.updateComponentData(getInitialData())
+    await adapter.updateComponent(getInitialData())
   }
 
   const site = await adapter.getSite()

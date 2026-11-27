@@ -36,7 +36,7 @@ async function getContext(
       return {
         action,
         slug,
-        data: component?.type === "page" ? component.data : null,
+        data: component?.data ?? null,
       }
     }
     case "users":

@@ -27,6 +27,6 @@ export const stubbedAdapter = {
   getKV: notImplemented("getKV"),
   getSite: notImplemented("getSite"),
   putKV: notImplemented("putKV"),
-  updateComponentData: notImplemented("updateComponentData"),
+  updateComponent: notImplemented("updateComponent"),
   updateSite: notImplemented("updateSite"),
 } satisfies OberonPluginAdapter
