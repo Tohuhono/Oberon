@@ -2,7 +2,9 @@ import "server-cli-only"
 import { createHash } from "crypto"
 
 import {
-  getComponentStyleProps,
+  createComponentStyleReader,
+  getSharedComponentRecords,
+  type OberonComponentRecord,
   type OberonClientConfig,
   type OberonPlugin,
   type OberonPluginAdapter,
@@ -65,18 +67,22 @@ async function getAllPublishedClasses(
   adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent">,
   client: OberonClientConfig,
 ) {
-  const [pages, shared] = await Promise.all([
-    adapter.listComponents("page"),
-    adapter.listComponents("shared"),
-  ])
-  const components = await Promise.all(
-    [...pages, ...shared].map(({ key }) => adapter.getComponent({ key })),
-  )
-  const { props, exposedClassKeys } = getComponentStyleProps(
-    components.filter((component) => component !== null),
-    client,
-  )
-  return extractTailwindClasses(props, exposedClassKeys)
+  const shared = await getSharedComponentRecords(adapter)
+  const { readProps, exposedClassKeys } = createComponentStyleReader(shared, client)
+  const classes = new Set<string>()
+  const addClasses = async (component: OberonComponentRecord) => {
+    for (const className of await extractTailwindClasses(readProps(component), exposedClassKeys)) {
+      classes.add(className)
+    }
+  }
+
+  for (const component of shared) await addClasses(component)
+  for (const { key } of await adapter.listComponents("page")) {
+    const component = await adapter.getComponent({ key })
+    if (component?.type === "page") await addClasses(component)
+  }
+
+  return [...classes].sort()
 }
 
 async function syncStyles(

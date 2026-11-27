@@ -7,7 +7,7 @@ import {
   JsonValueSchema,
   type MigrationResult,
   type OberonClientConfig,
-  type OberonDatabaseAdapter,
+  type OberonAdapter,
   type OberonComponentRecord,
   type OberonComponentMeta,
   type OberonPluginAdapter,
@@ -57,7 +57,7 @@ export async function* migrateComponents(
   adapter: OberonPluginAdapter,
   config: OberonClientConfig,
   user: OberonUser,
-  updateComponent: OberonDatabaseAdapter["updateComponentData"],
+  updateComponent: OberonAdapter["updateComponent"],
 ): AsyncGenerator<TransformResult | MigrationResult> {
   let storedComponents: OberonComponentMeta[] = []
   let status: TransformResult["status"] = "success"

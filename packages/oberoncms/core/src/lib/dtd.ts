@@ -214,19 +214,6 @@ export const ComponentRecordSchema = z.discriminatedUnion("type", [
   }),
 ])
 
-function validateComponentKey(
-  value: { key: string; type: ComponentType },
-  context: z.RefinementCtx,
-) {
-  const result = (value.type === "page" ? PageKeySchema : ComponentKeySchema).safeParse(value.key)
-  if (!result.success) {
-    context.addIssue({
-      code: "custom",
-      message: result.error.issues[0]?.message ?? "Invalid component key",
-    })
-  }
-}
-
 export const AddComponentSchema = z.discriminatedUnion("type", [
   z.object({ key: PageKeySchema, type: z.literal("page"), data: PuckDataSchema.optional() }),
   z.object({
@@ -236,15 +223,11 @@ export const AddComponentSchema = z.discriminatedUnion("type", [
   }),
 ])
 
-export const DeleteComponentSchema = z
-  .object({
-    key: ComponentKeySchema,
-    type: ComponentTypeSchema,
-    expectedUpdatedAt: ExpectedUpdatedAtSchema,
-  })
-  .superRefine(validateComponentKey)
-
 export const GetComponentSchema = z.object({ key: ComponentKeySchema })
+
+export const DeleteComponentSchema = GetComponentSchema.extend({
+  expectedUpdatedAt: ExpectedUpdatedAtSchema,
+})
 
 export const PublishComponentSchema = z.discriminatedUnion("type", [
   z.object({
@@ -401,7 +384,7 @@ export type OberonDatabaseAdapter = {
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updateComponentData: (data: OberonComponentRecord & { expectedUpdatedAt?: Date }) => Promise<Date>
+  updateComponent: (data: OberonComponentRecord & { expectedUpdatedAt?: Date }) => Promise<Date>
   withComponentTransaction: <Result>(write: () => Promise<Result>) => Promise<Result>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
@@ -429,7 +412,10 @@ export type OberonHandler = {
   [key in OberonMethod]?: (req: Request) => Promise<Response> | Response
 }
 
-export type OberonAdapter = OberonPluginAdapter & {
+export type OberonAdapter = Omit<OberonPluginAdapter, "updateComponent"> & {
+  updateComponent: (
+    data: z.infer<typeof PublishComponentSchema> & Pick<OberonComponentRecord, "updatedBy">,
+  ) => Promise<Date>
   can: (data: z.infer<typeof CanSchema>) => Promise<boolean>
   handleRequest: (
     request: Request,
@@ -521,7 +507,7 @@ export type OberonServerActions = {
   migrateData: (
     data?: z.infer<typeof MigrateDataSchema>,
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishComponentData: (
+  publishComponent: (
     data: z.infer<typeof PublishComponentSchema>,
   ) => OberonResponse<{ key: string; type: ComponentType; updatedAt: Date }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>

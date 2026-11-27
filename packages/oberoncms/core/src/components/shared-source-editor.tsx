@@ -132,7 +132,7 @@ function EditableSharedSource({
   returnTo,
   session,
 }: Parameters<typeof ReadOnlySharedSource>[0]) {
-  const { publishComponentData } = useOberonActions()
+  const { publishComponent } = useOberonActions()
   const { refresh } = useOberonNavigation()
   const draft = useSharedDraft(source.key)
   const publication = useDraftPublication({ ...draft, updatedAt: source.updatedAt })
@@ -151,7 +151,7 @@ function EditableSharedSource({
     try {
       const data = toSourceData(nextData)
       await publication.publish((expectedUpdatedAt) =>
-        publishComponentData({ key: source.key, type: "shared", data, expectedUpdatedAt }),
+        publishComponent({ key: source.key, type: "shared", data, expectedUpdatedAt }),
       )
     } catch (error) {
       setPublishError(

@@ -254,7 +254,7 @@ developmentAdapterTest.describe(
             updatedAt,
             updatedBy,
           }),
-          adapter.deleteComponent({ key, type: "shared" }),
+          adapter.deleteComponent({ key }),
         ])
 
         expect(publication.status).toBe("fulfilled")
@@ -305,7 +305,7 @@ developmentAdapterTest.describe(
                 listComponents: () => storage.listComponents,
                 getComponent: () => storage.getComponent,
                 getSite: () => storage.getSite,
-                updateComponentData: () => storage.updateComponentData,
+                updateComponent: () => storage.updateComponent,
                 updateSite: () => storage.updateSite,
                 withComponentTransaction: () => storage.withComponentTransaction,
               },

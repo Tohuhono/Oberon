@@ -177,7 +177,6 @@ export function SharedComponents({
                 onDelete={async () => {
                   await deleteComponent({
                     key: item.key,
-                    type: "shared",
                     expectedUpdatedAt: item.updatedAt,
                   })
                   refresh()

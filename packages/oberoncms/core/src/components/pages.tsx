@@ -72,7 +72,6 @@ const useOberonPages = (pages: OberonComponentMeta[], config: Config) => {
         )
         await deleteComponent({
           key,
-          type: "page",
           ...(existingPage ? { expectedUpdatedAt: existingPage.updatedAt } : {}),
         })
         clearPageDraft(key, config)

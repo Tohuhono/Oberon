@@ -191,7 +191,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter: {
           listComponents: () => async () => [],
           getSite: () => async () => undefined,
-          updateComponentData: () => async () => new Date(),
+          updateComponent: () => async () => new Date(),
           updateSite: () => async () => {},
         },
       }
@@ -234,7 +234,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
             : {
                 listComponents: () => async () => [],
                 getSite: () => async () => undefined,
-                updateComponentData: () => async () => new Date(),
+                updateComponent: () => async () => new Date(),
                 updateSite: () => async () => {},
               },
       }
@@ -262,7 +262,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       adapter: {
         listComponents: () => async () => [],
         getSite: () => async () => undefined,
-        updateComponentData: () => async () => {
+        updateComponent: () => async () => {
           events.push("welcome")
           return new Date()
         },
@@ -304,7 +304,7 @@ describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, 
           role: "admin",
         }),
         getComponent: () => async () => ({ ...page, updatedAt: persistedAt }),
-        updateComponentData: () => async () => persistedAt,
+        updateComponent: () => async () => persistedAt,
       },
     })
     const adapter = initAdapter({
@@ -313,7 +313,7 @@ describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, 
     })
 
     await expect(
-      createActionHandler(adapter).publishComponentData({
+      createActionHandler(adapter).publishComponent({
         key: page.key,
         type: "page",
         data: page.data,
@@ -327,7 +327,7 @@ describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, 
 
   it("validates references before publishing a Page or creating a Shared component", async () => {
     const addComponent = vi.fn(async () => {})
-    const updateComponentData = vi.fn(async () => new Date())
+    const updateComponent = vi.fn(async () => new Date())
     const plugin: OberonPlugin = () => ({
       name: "component-storage",
       adapter: {
@@ -338,7 +338,7 @@ describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, 
         }),
         listComponents: () => async () => [],
         addComponent: () => addComponent,
-        updateComponentData: () => updateComponentData,
+        updateComponent: () => updateComponent,
       },
     })
     const adapter = initAdapter({
@@ -354,7 +354,7 @@ describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, 
     }
 
     await expect(
-      actions.publishComponentData({ type: "page", key: "/", data: tree }),
+      actions.publishComponent({ type: "page", key: "/", data: tree }),
     ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
     await expect(
       actions.addComponent({
@@ -364,7 +364,7 @@ describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, 
       }),
     ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
     expect(addComponent).not.toHaveBeenCalled()
-    expect(updateComponentData).not.toHaveBeenCalled()
+    expect(updateComponent).not.toHaveBeenCalled()
 
     const suppliedData = { root: { props: { title: "Supplied" } }, content: [] }
     await expect(

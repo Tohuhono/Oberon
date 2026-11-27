@@ -115,8 +115,8 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
       ...(await adapter.listComponents("shared")),
     ]
 
-    for (const { key, type } of components) {
-      await adapter.deleteComponent({ key, type })
+    for (const { key } of components) {
+      await adapter.deleteComponent({ key })
     }
   })
 
@@ -124,7 +124,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "keeps previous stylesheet URLs available after styles change or are cleared",
     async ({ expect, adapter, plugin }) => {
       const publish = async (page: OberonComponentRecord) => {
-        await adapter.updateComponentData(page)
+        await adapter.updateComponent(page)
         await plugin.adapter?.onComponentWrite?.({
           getAdapter: () => asFinalAdapter(adapter),
           next: async () => {},
@@ -158,7 +158,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("text-red-500 md:grid text-red-500")
 
-      await adapter.updateComponentData(page)
+      await adapter.updateComponent(page)
       await plugin.adapter?.onComponentWrite?.({
         getAdapter: () => asFinalAdapter(adapter),
         next: async () => {},
@@ -188,7 +188,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("prose dark:prose-invert lg:prose-lg p-1")
 
-      await adapter.updateComponentData(page)
+      await adapter.updateComponent(page)
       await expect(
         plugin.adapter?.onComponentWrite?.({
           getAdapter: () => asFinalAdapter(adapter),
@@ -266,7 +266,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "reconciles missing assets during bootstrap",
     async ({ expect, adapter, plugin }) => {
       const page = createPage("underline")
-      await adapter.updateComponentData(page)
+      await adapter.updateComponent(page)
       await plugin.adapter?.onComponentWrite?.({
         getAdapter: () => asFinalAdapter(adapter),
         next: async () => {},

@@ -27,7 +27,7 @@ import type { OberonPlugin } from "@oberoncms/core"
 export const plugin: OberonPlugin = () => ({
   name: "component-log",
   adapter: {
-    updateComponentData:
+    updateComponent:
       ({ next }) =>
       async (component) => {
         const updatedAt = await next(component)
@@ -46,13 +46,13 @@ static return type omits the current method to discourage self-recursion. A prov
 
 Use the exported types for exact method signatures.
 
-| Type                    | Methods                                                                                                                                                                                                                                                                        |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `OberonDatabaseAdapter` | `addComponent`, `deleteComponent`, `listComponents`, `getComponent`, `updateComponentData`, `withComponentTransaction`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
-| `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                                                                         |
-| `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                                                                            |
-| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                                                                    |
-| `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                                                                      |
+| Type                    | Methods                                                                                                                                                                                                                                                                    |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OberonDatabaseAdapter` | `addComponent`, `deleteComponent`, `listComponents`, `getComponent`, `updateComponent`, `withComponentTransaction`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
+| `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                                                                     |
+| `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                                                                        |
+| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                                                                |
+| `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                                                                  |
 
 `hasPermission` returns a boolean synchronously. The final Adapter also supplies permission helpers,
 route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
@@ -61,11 +61,11 @@ Each Component record stores the authored Puck data and its publication metadata
 uses its public path as the key. The `shared` type keeps a stable key across display name changes.
 
 `getComponent({ key })` returns the record for a unique key or `null` if it is missing.
-`listComponents(type)` returns metadata for records of that type without loading their Puck data.
-Database Plugins implement `withComponentTransaction` to serialize competing writes. Component, Site
-state, and key-value operations in the callback use the same transaction. Use `onComponentWrite` to
-update derived data such as Tailwind style assets as part of publication. Use `onComponentChange`
-for cache invalidation after the transaction commits.
+`deleteComponent({ key })` uses the same key. `listComponents(type)` returns metadata for records of
+that type without loading their Puck data. Database Plugins implement `withComponentTransaction` to
+serialize competing writes. Component, Site state, and key-value operations in the callback use the
+same transaction. Use `onComponentWrite` to update derived data such as Tailwind style assets as
+part of publication. Use `onComponentChange` for cache invalidation after the transaction commits.
 
 ## Bootstrap
 

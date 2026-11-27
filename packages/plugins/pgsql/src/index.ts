@@ -48,7 +48,7 @@ export const plugin: OberonPlugin = () => {
       getKV: () => adapter.getKV,
       getSite: () => adapter.getSite,
       putKV: () => adapter.putKV,
-      updateComponentData: () => adapter.updateComponentData,
+      updateComponent: () => adapter.updateComponent,
       updateSite: () => adapter.updateSite,
       addUser: () => adapter.addUser,
       deleteUser: () => adapter.deleteUser,

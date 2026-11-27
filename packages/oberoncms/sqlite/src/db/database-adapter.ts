@@ -80,13 +80,12 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
         .values({ key, type, data, updatedAt, updatedBy })
         .execute()
     },
-    deleteComponent: async ({ key, type, expectedUpdatedAt }) => {
+    deleteComponent: async ({ key, expectedUpdatedAt }) => {
       const query = componentsDb()
         .delete(components)
         .where(
           and(
             eq(components.key, key),
-            eq(components.type, type),
             ...(expectedUpdatedAt ? [eq(components.updatedAt, expectedUpdatedAt)] : []),
           ),
         )
@@ -125,7 +124,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
 
       return value === undefined ? null : JsonValueSchema.parse(value)
     },
-    updateComponentData: async ({ key, type, data, updatedAt, updatedBy, expectedUpdatedAt }) => {
+    updateComponent: async ({ key, type, data, updatedAt, updatedBy, expectedUpdatedAt }) => {
       const changes = {
         data,
         updatedAt: sql`max(${updatedAt.getTime()}, ${components.updatedAt} + 1)`,

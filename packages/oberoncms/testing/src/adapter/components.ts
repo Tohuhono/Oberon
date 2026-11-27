@@ -17,7 +17,7 @@ export function testComponents(test: AdapterTestAPI) {
           "deleteComponent" in adapter &&
           "listComponents" in adapter &&
           "getComponent" in adapter &&
-          "updateComponentData" in adapter
+          "updateComponent" in adapter
         ),
       )
     })
@@ -51,7 +51,7 @@ export function testComponents(test: AdapterTestAPI) {
         updatedBy: "test@example.com",
       })
 
-      await adapter.deleteComponent({ key, type: "shared" })
+      await adapter.deleteComponent({ key })
     })
 
     test("keeps Component keys unique across types", async ({ adapter, expect }) => {
@@ -66,16 +66,19 @@ export function testComponents(test: AdapterTestAPI) {
       })
 
       await expect(
-        adapter.addComponent({
+        adapter.updateComponent({
           key,
           type: "shared",
           data: sharedData,
           updatedAt: new Date(),
           updatedBy: "test@example.com",
         }),
-      ).rejects.toThrow()
+      ).rejects.toThrow(
+        new ResponseError("A Component with this key already exists with a different type."),
+      )
 
-      await adapter.deleteComponent({ key, type: "page" })
+      await expect(adapter.getComponent({ key })).resolves.toMatchObject({ key, type: "page" })
+      await adapter.deleteComponent({ key })
     })
 
     test("rejects stale Component publishes and deletes", async ({ adapter, expect }) => {
@@ -89,7 +92,7 @@ export function testComponents(test: AdapterTestAPI) {
         updatedAt: createdAt,
         updatedBy: "test@example.com",
       })
-      const publishedAt = await adapter.updateComponentData({
+      const publishedAt = await adapter.updateComponent({
         key,
         type: "shared",
         data: sharedData,
@@ -100,7 +103,7 @@ export function testComponents(test: AdapterTestAPI) {
 
       expect(publishedAt.getTime()).toBeGreaterThan(createdAt.getTime())
 
-      const staleWrite = adapter.updateComponentData({
+      const staleWrite = adapter.updateComponent({
         key,
         type: "shared",
         data: sharedData,
@@ -112,12 +115,10 @@ export function testComponents(test: AdapterTestAPI) {
         new ResponseError("Component changed since you loaded it. Reload and try again."),
       )
 
-      await expect(
-        adapter.deleteComponent({ key, type: "shared", expectedUpdatedAt: createdAt }),
-      ).rejects.toThrow(
+      await expect(adapter.deleteComponent({ key, expectedUpdatedAt: createdAt })).rejects.toThrow(
         new ResponseError("Component changed since you loaded it. Reload and try again."),
       )
-      await adapter.deleteComponent({ key, type: "shared", expectedUpdatedAt: publishedAt })
+      await adapter.deleteComponent({ key, expectedUpdatedAt: publishedAt })
     })
   })
 }

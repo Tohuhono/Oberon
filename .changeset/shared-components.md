@@ -16,4 +16,5 @@ public routes render instances from the current published Shared component. Tail
 include styles from Shared components and content owned by their instances.
 
 Component transactions keep publication, derived styles, and data migrations consistent. Revision
-checks protect published data from stale drafts.
+checks protect published data from stale drafts. SQLite bootstrap converts existing publication
+timestamps to milliseconds for revision checks.

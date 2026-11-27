@@ -3,6 +3,7 @@ import { createElement } from "react"
 import { withSharedComponent } from "../components/shared-component-render"
 import {
   ResponseError,
+  type OberonAdapter,
   type OberonClientConfig,
   type OberonComponentRecord,
   type OberonPluginAdapter,
@@ -60,12 +61,13 @@ export function componentWrites(adapter: OberonPluginAdapter, config: OberonClie
     await adapter.onComponentChange(component)
   }
 
-  const updateInTransaction: OberonPluginAdapter["updateComponentData"] = async (component) => {
-    await prepare(component)
-    return adapter.updateComponentData({ ...component, updatedAt: new Date() })
+  const updateInTransaction: OberonAdapter["updateComponent"] = async (component) => {
+    const record = { ...component, updatedAt: new Date() }
+    await prepare(record)
+    return adapter.updateComponent(record)
   }
 
-  const updateComponentData: OberonPluginAdapter["updateComponentData"] = async (component) => {
+  const updateComponent: OberonAdapter["updateComponent"] = async (component) => {
     const updatedAt = await adapter.withComponentTransaction(async () => {
       const persistedAt = await updateInTransaction(component)
       await adapter.onComponentWrite()
@@ -75,9 +77,10 @@ export function componentWrites(adapter: OberonPluginAdapter, config: OberonClie
     return updatedAt
   }
 
-  const deleteComponent: OberonPluginAdapter["deleteComponent"] = async (component) => {
-    await adapter.withComponentTransaction(async () => {
-      if (component.type === "shared") {
+  const deleteComponent: OberonPluginAdapter["deleteComponent"] = async (input) => {
+    const deletedComponent = await adapter.withComponentTransaction(async () => {
+      const component = await adapter.getComponent({ key: input.key })
+      if (component?.type === "shared") {
         const library = await getSharedComponentLibrary(adapter)
         const sharedConfig = withSharedComponent(config, render, library)
         const consumers = Object.entries(library)
@@ -107,11 +110,12 @@ export function componentWrites(adapter: OberonPluginAdapter, config: OberonClie
         }
       }
 
-      await adapter.deleteComponent(component)
-      await adapter.onComponentWrite()
+      await adapter.deleteComponent(input)
+      if (component) await adapter.onComponentWrite()
+      return component
     })
-    await adapter.onComponentChange(component)
+    if (deletedComponent) await adapter.onComponentChange(deletedComponent)
   }
 
-  return { addComponent, updateComponentData, deleteComponent, updateInTransaction }
+  return { addComponent, updateComponent, deleteComponent, updateInTransaction }
 }

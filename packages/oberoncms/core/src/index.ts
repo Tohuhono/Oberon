@@ -1,7 +1,7 @@
 export * from "./lib/dtd"
 export * from "./lib/utils"
 export * from "./lib/get-metadata"
-export { getComponentStyleProps } from "./lib/component-style-props"
+export { createComponentStyleReader } from "./lib/component-style-props"
 export {
   createSharedExposureKey,
   getSharedComponentRecords,

@@ -34,7 +34,7 @@ function PageEditor({
   config,
   sharedComponents,
 }: Parameters<typeof Editor>[0]) {
-  const { publishComponentData } = useOberonActions()
+  const { publishComponent } = useOberonActions()
   const editorSession = useMemo(
     () =>
       withSharedEditorComponents(config, sharedComponents, (props) => (
@@ -50,7 +50,7 @@ function PageEditor({
     if (publication.isStale) return
     const storedData = editorSession.toStoredData(pageData)
     await publication.publish((expectedUpdatedAt) =>
-      publishComponentData({ key: path, type: "page", data: storedData, expectedUpdatedAt }),
+      publishComponent({ key: path, type: "page", data: storedData, expectedUpdatedAt }),
     )
   }
 

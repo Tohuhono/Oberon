@@ -104,9 +104,9 @@ const migrateData = createServerFn({ method: "POST" })
   .validator(MigrateDataSchema)
   .handler(({ data }) => actionHandler.migrateData(data))
 
-const publishComponentData = createServerFn({ method: "POST" })
+const publishComponent = createServerFn({ method: "POST" })
   .validator(PublishComponentSchema)
-  .handler(({ data }) => actionHandler.publishComponentData(data))
+  .handler(({ data }) => actionHandler.publishComponent(data))
 
 const signIn = createServerFn({ method: "POST" })
   .validator(SignInSchema)
@@ -133,7 +133,7 @@ export const actions = {
   getConfig: (data) => getConfig({ data }),
   getComponent: (data) => getComponent({ data }),
   migrateData: (data) => migrateData({ data }),
-  publishComponentData: (data) => publishComponentData({ data }),
+  publishComponent: (data) => publishComponent({ data }),
   signIn: (data) => signIn({ data }),
   signOut: (data) => signOut({ data }),
 } satisfies OberonServerActions

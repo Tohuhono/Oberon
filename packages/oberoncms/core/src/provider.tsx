@@ -44,11 +44,14 @@ async function getContext(
       }
     case "edit":
     case "preview": {
-      const component = await getComponent({ key: slug })
+      const key =
+        action === "preview" && typeof searchParams.key === "string" ? searchParams.key : slug
+      const component = await getComponent({ key })
+      const data = component?.type === "shared" ? component.data.tree : component?.data
       return {
         action,
-        slug,
-        data: component?.type === "page" ? component.data : null,
+        slug: key,
+        data: action === "edit" && component?.type !== "page" ? null : (data ?? null),
         updatedAt: component?.updatedAt ?? null,
         sharedComponents: await getSharedComponentLibrary({ listComponents, getComponent }),
       }

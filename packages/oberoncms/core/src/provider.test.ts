@@ -1,6 +1,7 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
-import type { OberonAdapter, OberonServerActions } from "./lib/dtd"
+import type { OberonAdapter, OberonServerActions, OberonSharedComponentRecord } from "./lib/dtd"
+import { getMetaData } from "./lib/get-metadata"
 import { getOberonClientContext, OberonProvider } from "./provider"
 
 describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-core"] }, () => {
@@ -38,6 +39,26 @@ describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-c
     ).rejects.toThrow("not-found")
 
     expect(notFound).toHaveBeenCalledOnce()
+  })
+
+  it("reads preview and metadata for a Shared component by its key", async () => {
+    const source: OberonSharedComponentRecord = {
+      key: "shared-banner",
+      type: "shared",
+      data: { name: "Banner", tree: { content: [], root: {} }, exposures: [], defaults: {} },
+      updatedAt: new Date(),
+      updatedBy: "editor@example.com",
+    }
+    const adapter = fromPartial<OberonAdapter>({
+      can: async () => true,
+      listComponents: async () => [],
+      getComponent: async ({ key }: { key: string }) => (key === source.key ? source : null),
+    })
+
+    await expect(
+      getOberonClientContext({ adapter, path: ["preview"], searchParams: { key: source.key } }),
+    ).resolves.toMatchObject({ action: "preview", slug: source.key, data: source.data.tree })
+    await expect(getMetaData(adapter, source.key)).resolves.toEqual({ title: source.data.name })
   })
 
   it.each([
