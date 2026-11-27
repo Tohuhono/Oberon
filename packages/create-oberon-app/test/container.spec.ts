@@ -36,10 +36,11 @@ test.describe.serial("Initialise Pod", { tag: "@initialise-pod" }, () => {
   })
 
   test("Start Pod", async () => {
-    test.setTimeout(150_000)
     await expect(startPod()).resolves.not.toThrow()
 
-    await waitForServer(`http://localhost:${VERDACCIO_PORT}${VERDACCIO_PING_PATH}`)
+    await expect(
+      waitForServer(`http://localhost:${VERDACCIO_PORT}${VERDACCIO_PING_PATH}`),
+    ).resolves.toBeTruthy()
   })
 
   test("Publish packages", async () => {
@@ -102,7 +103,6 @@ test.describe.serial("Initialise Tanstack", { tag: "@initialise-tanstack" }, () 
   })
 
   test("Start Oberon App", async () => {
-    test.setTimeout(150_000)
     await expect(
       execInContainer(
         `pnpm run start --host 0.0.0.0 --port ${TANSTACK_APP_PORT} > ${TANSTACK_SERVER_LOG_PATH} 2>&1`,
@@ -113,7 +113,7 @@ test.describe.serial("Initialise Tanstack", { tag: "@initialise-tanstack" }, () 
       ),
     ).resolves.not.toThrow()
 
-    await waitForServer(TANSTACK_BASE_URL)
+    await expect(waitForServer(TANSTACK_BASE_URL)).resolves.toBeTruthy()
   })
 })
 
@@ -157,7 +157,6 @@ test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
   })
 
   test("Start Oberon App", async () => {
-    test.setTimeout(150_000)
     await expect(
       execInContainer(`pnpm run start -p ${NEXTJS_APP_PORT} > ${NEXTJS_SERVER_LOG_PATH} 2>&1`, {
         container: NEXTJS_CONTAINER_NAME,
@@ -165,7 +164,7 @@ test.describe.serial("Initialise Nextjs", { tag: "@initialise-nextjs" }, () => {
       }),
     ).resolves.not.toThrow()
 
-    await waitForServer(NEXTJS_BASE_URL)
+    await expect(waitForServer(NEXTJS_BASE_URL)).resolves.toBeTruthy()
   })
 })
 

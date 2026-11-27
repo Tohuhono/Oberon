@@ -1,70 +1,73 @@
 import { transformProps } from "@puckeditor/core"
-
-import {
-  type MigrationResult,
-  type OberonClientConfig,
-  type OberonDatabaseAdapter,
-  type OberonComponentMeta,
-  type OberonPluginAdapter,
-  type OberonUser,
-  type TransformResult,
-  type TransformVersions,
-} from "../lib/dtd"
+import { mapConcurrent } from "@tohuhono/utils/map-concurrent"
 
 type PropTransform = Parameters<typeof transformProps>[1]
 
-export async function* migrateComponents(
-  adapter: OberonPluginAdapter,
-  config: OberonClientConfig,
-  user: OberonUser,
-  updateComponent: OberonDatabaseAdapter["updateComponentData"],
-): AsyncGenerator<TransformResult | MigrationResult> {
-  let storedComponents: OberonComponentMeta[] = []
-  let status: TransformResult["status"] = "success"
+import type {
+  OberonClientConfig,
+  OberonComponentRecord,
+  OberonComponentMeta,
+  TransformResult,
+  TransformVersions,
+} from "../lib/dtd"
+
+async function applyTransform(
+  key: string,
+  transforms: PropTransform,
+  getComponent: (key: string) => Promise<OberonComponentRecord | null>,
+  updateComponentData: (data: OberonComponentRecord) => Promise<void>,
+): Promise<TransformResult> {
   try {
-    await adapter.withComponentTransaction(async () => {
-      const site = await adapter.getSite()
-      const { components, transforms } = getTransforms(site?.components, config)
-      if (!transforms) return
+    const component = await getComponent(key)
 
-      storedComponents = await adapter.listComponents("page")
-
-      for (const { key } of storedComponents) {
-        const component = await adapter.getComponent({ key })
-        if (!component) continue
-        await updateComponent({
-          ...component,
-          data: transformProps(component.data, transforms, config),
-          expectedUpdatedAt: component.updatedAt,
-          updatedBy: user.email,
-        })
+    if (!component) {
+      return {
+        type: "transform",
+        key,
+        status: "success",
       }
+    }
 
-      await adapter.updateSite({
-        version: config.version,
-        components,
-        updatedAt: new Date(),
-        updatedBy: user.email,
-      })
-      if (storedComponents.length) await adapter.onComponentWrite()
+    await updateComponentData({
+      ...component,
+      data: transformProps(component.data, transforms),
+      updatedAt: new Date(),
+      updatedBy: "migration",
     })
+
+    return {
+      type: "transform",
+      key,
+      status: "success",
+    }
   } catch (error) {
     console.error(error)
-    status = "error"
+    return {
+      type: "transform",
+      key,
+      status: "error",
+    }
   }
+}
 
-  const summary: MigrationResult = {
-    type: "summary",
-    total: storedComponents.length,
-    error: [],
-    success: [],
-  }
-  for (const component of storedComponents) {
-    if (status === "success") await adapter.onComponentChange(component)
-    summary[status].push(component.key)
-    yield { type: "transform", key: component.key, status }
-  }
-  yield summary
+const MAX_CONCURRENCY = 10
+
+export async function* applyTransforms({
+  transforms,
+  components,
+  getComponent,
+  updateComponentData,
+}: {
+  transforms: PropTransform
+  components: OberonComponentMeta[]
+  getComponent: (key: string) => Promise<OberonComponentRecord | null>
+  updateComponentData: (data: OberonComponentRecord) => Promise<void>
+}): AsyncGenerator<TransformResult, void, void> {
+  yield* mapConcurrent(
+    components,
+    ({ key }) => applyTransform(key, transforms, getComponent, updateComponentData),
+    MAX_CONCURRENCY,
+  )
 }
 
 export function getComponentTransformVersions({ components }: OberonClientConfig) {

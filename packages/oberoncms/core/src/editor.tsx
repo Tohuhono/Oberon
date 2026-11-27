@@ -27,8 +27,7 @@ const previewConfig = {
 }
 
 export function OberonClient({ config }: { config: OberonClientConfig }) {
-  const context = useOberonClient()
-  const { action, data, slug } = context
+  const { action, data, slug } = useOberonClient()
   const { notFound } = useOberonNavigation()
 
   if (action === "login") {
@@ -36,7 +35,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
   }
 
   if (action === "edit") {
-    return <Editor path={slug} data={data} config={config} updatedAt={context.updatedAt} />
+    return <Editor path={slug} data={data} config={config} />
   }
 
   if (action === "preview") {
@@ -58,7 +57,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
           >
             {action === "users" && <Users users={data} />}
             {action === "images" && <Images images={data} />}
-            {action === "pages" && <Pages pages={data} config={config} />}
+            {action === "pages" && <Pages pages={data} />}
             {action === "site" && <Site config={data} />}
           </div>
         </div>

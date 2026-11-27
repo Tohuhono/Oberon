@@ -1,9 +1,9 @@
-import { getPageMetadata } from "@oberoncms/core"
-import { cache } from "react"
+import { getMetaData } from "@oberoncms/core"
+import { Render } from "@oberoncms/core/render"
 
-import { adapter, RenderPage } from "@/oberon/adapter"
-
-const getPage = cache((key: string) => adapter.getPage({ key }))
+import { actions } from "@/oberon/actions"
+import { adapter } from "@/oberon/adapter"
+import { clientConfig } from "@/oberon/client.config"
 
 function getActiveHash(value: unknown) {
   return typeof value === "object" &&
@@ -38,14 +38,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
   const { path = [] } = await params
-  const page = await getPage(`/${path.join("/")}`)
-  return getPageMetadata(page.data)
+  return getMetaData(adapter, path)
 }
 
 export default async function OberonRender({ params }: { params: Promise<{ path?: string[] }> }) {
   const { path = [] } = await params
-  const page = await getPage(`/${path.join("/")}`)
 
+  const page = await actions.resolvePath({ key: `/${path.join("/")}` })
   const stylesheets = await getDynamicStylesheets()
 
   return (
@@ -53,7 +52,7 @@ export default async function OberonRender({ params }: { params: Promise<{ path?
       {stylesheets.map((href) => (
         <link key={href} rel="stylesheet" href={href} precedence="oberon-dynamic" />
       ))}
-      <RenderPage page={page} />
+      <Render data={page.data} config={clientConfig} />
     </>
   )
 }

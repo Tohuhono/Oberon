@@ -138,7 +138,9 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
       plugins: [plugin],
     })
 
-    await expect(adapter.getPage({ key: "/missing" })).rejects.toBe(missing)
+    await expect(createActionHandler(adapter).resolvePath({ key: "/missing" })).rejects.toBe(
+      missing,
+    )
     expect(notFound).toHaveBeenCalledOnce()
   })
 
@@ -176,7 +178,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter: {
           listComponents: () => async () => [],
           getSite: () => async () => undefined,
-          updateComponentData: () => async () => new Date(),
+          updateComponentData: () => async () => {},
           updateSite: () => async () => {},
         },
       }
@@ -219,7 +221,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
             : {
                 listComponents: () => async () => [],
                 getSite: () => async () => undefined,
-                updateComponentData: () => async () => new Date(),
+                updateComponentData: () => async () => {},
                 updateSite: () => async () => {},
               },
       }
@@ -249,7 +251,6 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         getSite: () => async () => undefined,
         updateComponentData: () => async () => {
           events.push("welcome")
-          return new Date()
         },
         updateSite: () => async () => {
           events.push("site")
@@ -273,65 +274,5 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     })
 
     expect(events).toEqual(["function", "first", "second", "welcome", "site"])
-  })
-})
-
-describe("Component publishing", { tags: ["ai", "feature-component-storage"] }, () => {
-  it("returns the persisted timestamp after publishing a Component", async () => {
-    const page = getInitialData()
-    const persistedAt = new Date("2026-10-13T00:00:00.000Z")
-    const plugin: OberonPlugin = () => ({
-      name: "persisted-component-timestamp",
-      adapter: {
-        getCurrentUser: () => async () => ({
-          id: "editor",
-          email: "editor@example.com",
-          role: "admin",
-        }),
-        getComponent: () => async () => ({ ...page, updatedAt: persistedAt }),
-        updateComponentData: () => async () => persistedAt,
-      },
-    })
-    const adapter = initAdapter({
-      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-      plugins: [plugin],
-    })
-
-    await expect(
-      createActionHandler(adapter).publishComponentData({
-        key: page.key,
-        type: "page",
-        data: page.data,
-        expectedUpdatedAt: page.updatedAt,
-      }),
-    ).resolves.toMatchObject({
-      status: "success",
-      result: { key: page.key, type: "page", updatedAt: persistedAt },
-    })
-  })
-
-  it("uses supplied Page data when creating a Component", async () => {
-    const addComponent = vi.fn(async () => {})
-    const plugin: OberonPlugin = () => ({
-      name: "component-storage",
-      adapter: {
-        getCurrentUser: () => async () => ({
-          id: "editor",
-          email: "editor@example.com",
-          role: "admin",
-        }),
-        addComponent: () => addComponent,
-      },
-    })
-    const adapter = initAdapter({
-      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-      plugins: [plugin],
-    })
-    const actions = createActionHandler(adapter)
-    const suppliedData = { root: { props: { title: "Supplied" } }, content: [] }
-    await expect(
-      actions.addComponent({ type: "page", key: "/", data: suppliedData }),
-    ).resolves.toMatchObject({ status: "success" })
-    expect(addComponent).toHaveBeenCalledWith(expect.objectContaining({ data: suppliedData }))
   })
 })

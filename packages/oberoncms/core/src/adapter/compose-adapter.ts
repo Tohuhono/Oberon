@@ -2,16 +2,17 @@ import { streamResponse } from "@tohuhono/utils"
 
 import { version } from "../../package.json" with { type: "json" }
 import {
+  type MigrationResult,
   type OberonAdapter,
   type OberonConfig,
   type OberonHandler,
   type OberonPluginPhase,
   type OberonUser,
+  type TransformResult,
   ResponseError,
 } from "../lib/dtd"
-import { componentWrites } from "./component-writes"
 import { initPlugins } from "./init-plugins"
-import { getTransforms, migrateComponents } from "./transforms"
+import { applyTransforms, getComponentTransformVersions, getTransforms } from "./transforms"
 
 const sortComponents = (a: { key: string }, b: { key: string }) => {
   if (a.key < b.key) {
@@ -102,13 +103,6 @@ export function composeAdapter(
     return data
   }
 
-  const getPage: OberonAdapter["getPage"] = async ({ key }) => {
-    await will({ action: "pages", permission: "read" })
-    const component = await adapter.getComponent({ key })
-    if (component?.type !== "page") return adapter.notFound()
-    return { key, data: component.data }
-  }
-
   const getAllPaths = async () => {
     const result = await adapter.listComponents("page")
     const data = result.map((row) => ({
@@ -129,8 +123,6 @@ export function composeAdapter(
     return allImages || []
   }
 
-  const { updateInTransaction, ...writes } = componentWrites(adapter)
-
   const getConfig = async () => {
     const site = await adapter.getSite()
 
@@ -146,20 +138,56 @@ export function composeAdapter(
     return siteConfig
   }
 
-  const migrateData: OberonAdapter["migrateData"] = streamResponse((user: OberonUser) =>
-    migrateComponents(adapter, config, user, updateInTransaction),
+  const migrateData = streamResponse<TransformResult | MigrationResult, [OberonUser]>(
+    async function* (user: OberonUser) {
+      const summary: MigrationResult = {
+        type: "summary",
+        error: [],
+        success: [],
+        total: 0,
+      }
+
+      const site = await adapter.getSite()
+
+      const { transforms } = getTransforms(site?.components, config)
+
+      if (!transforms) {
+        return summary
+      }
+
+      const components = await listComponents("page")
+
+      const results = applyTransforms({
+        transforms,
+        components,
+        getComponent: (key) => adapter.getComponent({ key }),
+        updateComponentData: adapter.updateComponentData,
+      })
+
+      for await (const result of results) {
+        summary[result.status].push(result.key)
+        yield result
+      }
+
+      await adapter.updateSite({
+        version: config.version,
+        components: getComponentTransformVersions(config),
+        updatedAt: new Date(),
+        updatedBy: user.email,
+      })
+
+      yield { ...summary, total: components.length }
+    },
   )
 
   const finalAdapter: OberonAdapter = {
     ...adapter,
     can,
-    ...writes,
     getAllImages,
     listComponents,
     getAllPaths,
     getAllUsers,
     getConfig,
-    getPage,
     handleRequest,
     migrateData,
     will,

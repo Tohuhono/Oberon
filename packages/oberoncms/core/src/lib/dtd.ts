@@ -148,18 +148,9 @@ export type JsonValue = z.infer<typeof JsonValueSchema>
 /*
  * Components
  */
-const PuckNodeSchema = z.looseObject({
-  type: z.string().min(1),
-  props: z.looseObject({ id: z.string().optional() }),
-  readOnly: z.record(z.string(), z.boolean().optional()).optional(),
-})
-
-export const PuckDataSchema: z.ZodType<Data> = z.looseObject({
-  content: z.array(PuckNodeSchema),
-  root: z.looseObject({
-    props: z.looseObject({}).optional(),
-  }),
-  zones: z.record(z.string(), z.array(PuckNodeSchema)).optional(),
+const PuckDataSchema: z.ZodType<Data> = z.looseObject({
+  content: z.array(z.custom<Data["content"][number]>()),
+  root: z.looseObject({}),
 })
 
 const PageKeySchema = z
@@ -178,10 +169,6 @@ export const ComponentTypeSchema = z.enum(["page"])
 export type ComponentType = z.infer<typeof ComponentTypeSchema>
 
 const ComponentKeySchema = z.string().min(1, "Component key cannot be empty")
-const ExpectedUpdatedAtSchema = z
-  .union([z.date(), z.iso.datetime().transform((value) => new Date(value))])
-  .optional()
-
 export const ComponentRecordSchema = PageSchema.extend({
   key: ComponentKeySchema,
   type: ComponentTypeSchema,
@@ -190,20 +177,13 @@ export const ComponentRecordSchema = PageSchema.extend({
 export const AddComponentSchema = z.object({
   key: PageKeySchema,
   type: ComponentTypeSchema,
-  data: PuckDataSchema.optional(),
 })
 
-export const DeleteComponentSchema = z.object({
-  key: PageKeySchema,
-  type: ComponentTypeSchema,
-  expectedUpdatedAt: ExpectedUpdatedAtSchema,
-})
+export const DeleteComponentSchema = AddComponentSchema
 
 export const GetComponentSchema = z.object({ key: ComponentKeySchema })
 
-export const PublishComponentSchema = AddComponentSchema.required({ data: true }).extend({
-  expectedUpdatedAt: ExpectedUpdatedAtSchema,
-})
+export const PublishComponentSchema = AddComponentSchema.extend({ data: PuckDataSchema })
 
 export const ComponentMetaSchema = z.object({
   key: ComponentKeySchema,
@@ -343,8 +323,7 @@ export type OberonDatabaseAdapter = {
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updateComponentData: (data: OberonComponentRecord & { expectedUpdatedAt?: Date }) => Promise<Date>
-  withComponentTransaction: <Result>(write: () => Promise<Result>) => Promise<Result>
+  updateComponentData: (data: OberonComponentRecord) => Promise<void>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -360,10 +339,7 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
-  OberonRoutingAdapter & {
-    onComponentWrite: () => Promise<void>
-    onComponentChange: (component: Pick<OberonComponentRecord, "key" | "type">) => Promise<void>
-  }
+  OberonRoutingAdapter
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
@@ -382,7 +358,6 @@ export type OberonAdapter = OberonPluginAdapter & {
     action: AdapterActionGroup
     permission: AdapterPermission
   }) => Promise<OberonUser>
-  getPage: (data: { key: string }) => Promise<{ key: string; data: PageData }>
   getAllPaths: () => Promise<Array<{ path: string[] }>>
   getConfig: () => Promise<OberonSiteConfig>
   migrateData: (user: OberonUser) => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
@@ -464,7 +439,7 @@ export type OberonServerActions = {
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
   publishComponentData: (
     data: z.infer<typeof PublishComponentSchema>,
-  ) => OberonResponse<{ key: string; type: ComponentType; updatedAt: Date }>
+  ) => OberonResponse<{ key: string }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
@@ -477,7 +452,6 @@ type DescriminatedContext =
   | {
       action: "edit" | "preview"
       data: Data | null
-      updatedAt: Date | null
     }
   | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }

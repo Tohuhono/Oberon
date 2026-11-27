@@ -1,5 +1,3 @@
-import { ResponseError } from "@oberoncms/core"
-
 import type { AdapterTestAPI } from "../adapter"
 
 const data = {
@@ -72,48 +70,6 @@ export function testComponents(test: AdapterTestAPI) {
       ).rejects.toThrow()
 
       await adapter.deleteComponent({ key, type: "page" })
-    })
-
-    test("rejects stale Component publishes and deletes", async ({ adapter, expect }) => {
-      const key = `/component-${crypto.randomUUID()}`
-      const createdAt = new Date("2026-01-01T00:00:00.000Z")
-
-      await adapter.addComponent({
-        key,
-        type: "page",
-        data,
-        updatedAt: createdAt,
-        updatedBy: "test@example.com",
-      })
-      const publishedAt = await adapter.updateComponentData({
-        key,
-        type: "page",
-        data,
-        updatedAt: createdAt,
-        updatedBy: "test@example.com",
-        expectedUpdatedAt: createdAt,
-      })
-
-      expect(publishedAt.getTime()).toBeGreaterThan(createdAt.getTime())
-
-      const staleWrite = adapter.updateComponentData({
-        key,
-        type: "page",
-        data,
-        updatedAt: new Date("2026-01-03T00:00:00.000Z"),
-        updatedBy: "test@example.com",
-        expectedUpdatedAt: createdAt,
-      })
-      await expect(staleWrite).rejects.toThrow(
-        new ResponseError("Component changed since you loaded it. Reload and try again."),
-      )
-
-      await expect(
-        adapter.deleteComponent({ key, type: "page", expectedUpdatedAt: createdAt }),
-      ).rejects.toThrow(
-        new ResponseError("Component changed since you loaded it. Reload and try again."),
-      )
-      await adapter.deleteComponent({ key, type: "page", expectedUpdatedAt: publishedAt })
     })
   })
 }

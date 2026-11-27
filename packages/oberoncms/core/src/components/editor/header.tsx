@@ -38,9 +38,7 @@ export function EditorHistory() {
 export const Header = ({
   path,
   onPublish,
-  publishDisabled,
 }: {
-  publishDisabled: boolean
   path: string
   onPublish: (data: Data) => Promise<void>
 }) => {
@@ -62,7 +60,7 @@ export const Header = ({
         View
       </Button>
       <Button
-        disabled={isPublishing || publishDisabled}
+        disabled={isPublishing}
         onClick={async () => {
           setIsPublishing(true)
           try {

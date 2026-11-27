@@ -1,6 +1,6 @@
 import { Render, type Config, type Data } from "@puckeditor/core"
 
-import { usePageDraft } from "../hooks/use-component-draft"
+import { useLocalData } from "../hooks/use-local-data"
 
 export function Preview({
   path,
@@ -11,12 +11,11 @@ export function Preview({
   config: Config
   data: Data | null
 }) {
-  const { draft } = usePageDraft(path, config)
-  const previewData = draft?.data ?? data
+  const localData = useLocalData(path, config)[0]
 
-  if (!previewData) {
+  if (!localData || !data) {
     return null
   }
 
-  return <Render data={previewData} config={config} />
+  return <Render data={localData} config={config} />
 }

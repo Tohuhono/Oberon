@@ -146,29 +146,23 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
     }
   },
   adapter: {
-    onComponentWrite:
+    updateComponentData:
       ({ getAdapter, next }) =>
-      async () => {
-        await next()
-        await syncAfterWrite(getAdapter())
+      async (page) => {
+        try {
+          await next(page)
+          await syncStyles(getAdapter())
+        } catch (error) {
+          if (error instanceof ResponseError) {
+            throw error
+          }
+
+          throw new ResponseError(
+            error instanceof Error && error.message
+              ? `Failed to update Tailwind styles: ${error.message}`
+              : "Failed to update Tailwind styles",
+          )
+        }
       },
   },
 })
-
-async function syncAfterWrite(
-  adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent" | "getKV" | "putKV">,
-) {
-  try {
-    await syncStyles(adapter)
-  } catch (error) {
-    if (error instanceof ResponseError) {
-      throw error
-    }
-
-    throw new ResponseError(
-      error instanceof Error && error.message
-        ? `Failed to update Tailwind styles: ${error.message}`
-        : "Failed to update Tailwind styles",
-    )
-  }
-}

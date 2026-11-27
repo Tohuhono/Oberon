@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { Config } from "@puckeditor/core"
 import { Button, buttonVariants } from "@tohuhono/ui/button"
 import { LocalDate } from "@tohuhono/ui/date"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@tohuhono/ui/form"
@@ -12,7 +11,6 @@ import { Fragment, useOptimistic, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { clearPageDraft } from "../hooks/use-component-draft"
 import { useOberonActions } from "../hooks/use-oberon"
 import { PageSchema, type OberonComponentMeta } from "../lib/dtd"
 
@@ -29,16 +27,13 @@ function copyKey(optimisticPages: OberonComponentMeta[], key: OberonComponentMet
   return newKey
 }
 
-const useOberonPages = (pages: OberonComponentMeta[], config: Config) => {
-  const { deleteComponent, addComponent, getComponent } = useOberonActions()
+const useOberonPages = (pages: OberonComponentMeta[]) => {
+  const { deleteComponent, addComponent, getComponent, publishComponentData } = useOberonActions()
   const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonComponentMeta[]>(pages)
   const [isPending, startTransition] = useTransition()
-  const uniquePages = optimisticPages.filter(
-    (page, index, allPages) => allPages.findIndex(({ key }) => key === page.key) === index,
-  )
 
   return {
-    pages: uniquePages,
+    pages: optimisticPages,
     isPending,
     addPage: (page: z.infer<typeof AddPageKeySchema>) => {
       startTransition(async () => {
@@ -57,25 +52,19 @@ const useOberonPages = (pages: OberonComponentMeta[], config: Config) => {
           { key: newKey, type: "page", updatedAt: new Date(), updatedBy: "", pending: true },
         ])
         const component = await getComponent({ key })
-        await addComponent({
-          key: newKey,
-          type: "page",
-          data: component?.type === "page" ? component.data : undefined,
-        })
+        if (component) {
+          await publishComponentData({ key: newKey, type: "page", data: component.data })
+        } else {
+          await addComponent({ key: newKey, type: "page" })
+        }
       })
     },
     deletePage: (key: OberonComponentMeta["key"]) => {
       startTransition(async () => {
-        const existingPage = optimisticPages.find((component) => component.key === key)
         optimisticPageUpdate(
           optimisticPages.map((page) => (page.key === key ? { ...page, pending: true } : page)),
         )
-        await deleteComponent({
-          key,
-          type: "page",
-          ...(existingPage ? { expectedUpdatedAt: existingPage.updatedAt } : {}),
-        })
-        clearPageDraft(key, config)
+        await deleteComponent({ key, type: "page" })
       })
     },
   }
@@ -89,14 +78,8 @@ const parsePath = (key: string) => {
   return (key.charAt(0) === "/" ? key : "/" + key).replace(" ", "_")
 }
 
-export function Pages({
-  pages: serverPages,
-  config,
-}: {
-  pages: OberonComponentMeta[]
-  config: Config
-}) {
-  const { pages, isPending, deletePage, addPage, copyPage } = useOberonPages(serverPages, config)
+export function Pages({ pages: serverPages }: { pages: OberonComponentMeta[] }) {
+  const { pages, isPending, deletePage, addPage, copyPage } = useOberonPages(serverPages)
 
   const form = useForm<z.infer<typeof AddPageKeySchema>>({
     resolver: zodResolver(AddPageKeySchema),

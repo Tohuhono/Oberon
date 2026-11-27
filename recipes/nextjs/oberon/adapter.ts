@@ -1,6 +1,6 @@
 import "server-cli-only"
-import { initOberon } from "@oberoncms/core/render"
+import { initAdapter } from "@oberoncms/core/adapter"
 
 import { config } from "./config"
 
-export const { adapter, RenderPage } = initOberon(config)
+export const adapter = initAdapter(config)

@@ -15,10 +15,4 @@ and publication metadata. SQLite bootstrap converts their timestamps to millisec
 
 Breaking. Replace Page-specific Adapter capabilities, actions, and schemas with Component
 operations. Update custom Plugins and action transports to use the new operations. `getComponent`
-reads a record by key, and `listComponents` lists metadata by type. Public routes use
-`adapter.getPage` and `RenderPage` to resolve a Page once.
-
-Page drafts keep their base publication timestamp to detect conflicting edits. Component writes
-reconcile Tailwind style assets in a database transaction. Plugins can invalidate caches with
-`onComponentChange` after the transaction commits. Component data migrations and Site version
-updates commit together, so a failed transform can be retried.
+reads a record by key, and `listComponents` lists metadata by type.

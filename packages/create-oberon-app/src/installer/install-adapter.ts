@@ -103,6 +103,18 @@ export const config = defineConfig({
 `
 }
 
+const createAdapter = () => {
+  return `
+import "server-cli-only"
+
+import { initAdapter } from "@oberoncms/core/adapter"
+
+import { config } from "./config"
+
+export const adapter = initAdapter(config)
+`
+}
+
 export async function installAdapter(
   oberonPath: string,
   pluginPath: string,
@@ -117,6 +129,8 @@ export async function installAdapter(
   }
 
   const config = createConfig(plugins, recipe)
+  const adapter = createAdapter()
 
   await writeFile(path.join(oberonPath, "config.ts"), config)
+  await writeFile(path.join(oberonPath, "adapter.ts"), adapter)
 }

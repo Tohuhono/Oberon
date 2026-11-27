@@ -8,7 +8,6 @@ import {
   AddUserSchema,
   defineOberonComponent,
   PageSchema,
-  PublishComponentSchema,
   SignInSchema,
   UserSchema,
 } from "./dtd"
@@ -140,34 +139,11 @@ describe("defineOberonComponent", { tags: ["ai", "feature-component-typing"] }, 
 })
 
 describe("Component input schemas", { tags: ["ai", "feature-component-storage"] }, () => {
-  it.each([
-    { root: [], content: [] },
-    { root: {}, content: [null] },
-    { root: {}, content: [{ type: "Text", props: [] }] },
-  ])("rejects malformed Puck structures before publication", (data) => {
-    expect(PublishComponentSchema.safeParse({ key: "/test", type: "page", data }).success).toBe(
-      false,
-    )
-  })
-
   it("requires a route for a Page Component key", () => {
     expect(AddComponentSchema.parse({ key: "/articles/first-article", type: "page" })).toEqual({
       key: "/articles/first-article",
       type: "page",
     })
     expect(AddComponentSchema.safeParse({ key: "Article", type: "page" }).success).toBe(false)
-  })
-
-  it("parses serialized optimistic-concurrency timestamps", () => {
-    const updatedAt = new Date("2026-10-13T00:00:00.000Z")
-
-    expect(
-      PublishComponentSchema.parse({
-        key: "/test",
-        type: "page",
-        data: { content: [], root: { props: {} } },
-        expectedUpdatedAt: updatedAt.toISOString(),
-      }),
-    ).toMatchObject({ expectedUpdatedAt: updatedAt })
   })
 })

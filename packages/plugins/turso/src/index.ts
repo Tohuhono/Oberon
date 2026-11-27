@@ -11,49 +11,45 @@ import { getClient } from "./db/client"
 // oxlint-disable-next-line unicorn/prefer-import-meta-properties -- Bundled output does not preserve import.meta.dirname.
 const migrationsFolder = resolve(dirname(fileURLToPath(import.meta.url)), "../src/db/migrations")
 
-export const plugin: OberonPlugin = () => {
-  const adapter = getAdapter(getClient)
-  return {
-    name,
-    version,
-    disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
-    bootstrap: async () => {
-      console.log(`Migrating database`)
+export const plugin: OberonPlugin = () => ({
+  name,
+  version,
+  disabled: USE_DEVELOPMENT_DATABASE_PLUGIN,
+  bootstrap: async () => {
+    console.log(`Migrating database`)
 
-      const db = getClient()
+    const db = getClient()
 
-      if (!db) {
-        console.log("Prepare: No Database Connection Configured")
-        return
-      }
+    if (!db) {
+      console.log("Prepare: No Database Connection Configured")
+      return
+    }
 
-      await migrateComponentStorage(db, {
-        migrationsFolder,
-      })
+    await migrateComponentStorage(db, {
+      migrationsFolder,
+    })
 
-      console.log(`Database migration complete`)
-    },
-    adapter: {
-      getAuthDatabase: () => adapter.getAuthDatabase,
-      getAuthPlugins: () => adapter.getAuthPlugins,
-      addComponent: () => adapter.addComponent,
-      withComponentTransaction: () => adapter.withComponentTransaction,
-      addImage: () => adapter.addImage,
-      deleteComponent: () => adapter.deleteComponent,
-      deleteImage: () => adapter.deleteImage,
-      deleteKV: () => adapter.deleteKV,
-      getAllImages: () => adapter.getAllImages,
-      listComponents: () => adapter.listComponents,
-      getComponent: () => adapter.getComponent,
-      getKV: () => adapter.getKV,
-      getSite: () => adapter.getSite,
-      putKV: () => adapter.putKV,
-      updateComponentData: () => adapter.updateComponentData,
-      updateSite: () => adapter.updateSite,
-      addUser: () => adapter.addUser,
-      deleteUser: () => adapter.deleteUser,
-      changeRole: () => adapter.changeRole,
-      getAllUsers: () => adapter.getAllUsers,
-    },
-  }
-}
+    console.log(`Database migration complete`)
+  },
+  adapter: {
+    getAuthDatabase: () => getAdapter(getClient).getAuthDatabase,
+    getAuthPlugins: () => getAdapter(getClient).getAuthPlugins,
+    addComponent: () => getAdapter(getClient).addComponent,
+    addImage: () => getAdapter(getClient).addImage,
+    deleteComponent: () => getAdapter(getClient).deleteComponent,
+    deleteImage: () => getAdapter(getClient).deleteImage,
+    deleteKV: () => getAdapter(getClient).deleteKV,
+    getAllImages: () => getAdapter(getClient).getAllImages,
+    listComponents: () => getAdapter(getClient).listComponents,
+    getComponent: () => getAdapter(getClient).getComponent,
+    getKV: () => getAdapter(getClient).getKV,
+    getSite: () => getAdapter(getClient).getSite,
+    putKV: () => getAdapter(getClient).putKV,
+    updateComponentData: () => getAdapter(getClient).updateComponentData,
+    updateSite: () => getAdapter(getClient).updateSite,
+    addUser: () => getAdapter(getClient).addUser,
+    deleteUser: () => getAdapter(getClient).deleteUser,
+    changeRole: () => getAdapter(getClient).changeRole,
+    getAllUsers: () => getAdapter(getClient).getAllUsers,
+  },
+})

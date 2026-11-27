@@ -37,7 +37,6 @@ async function getContext(
         action,
         slug,
         data: component?.type === "page" ? component.data : null,
-        updatedAt: component?.updatedAt ?? null,
       }
     }
     case "users":

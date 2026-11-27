@@ -41,7 +41,14 @@ export async function transport<T>(
 
 export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
-    resolvePath: adapter.getPage,
+    resolvePath: async ({ key }) => {
+      await adapter.will({ action: "pages", permission: "read" })
+      const component = await adapter.getComponent({ key })
+
+      if (component?.type !== "page") return adapter.notFound()
+
+      return { key, data: component.data }
+    },
     addComponent: (input) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })
@@ -52,7 +59,7 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         const data = parsed.data
         await adapter.addComponent({
           ...data,
-          data: data.data ?? INITIAL_DATA,
+          data: INITIAL_DATA,
           updatedAt: new Date(),
           updatedBy: user.email,
         })
@@ -140,12 +147,12 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
           }
           const data = parsed.data
 
-          const updatedAt = await adapter.updateComponentData({
+          await adapter.updateComponentData({
             ...data,
             updatedAt: new Date(),
             updatedBy: user.email,
           })
-          return { key: data.key, type: data.type, updatedAt }
+          return { key: data.key }
         },
         { successMessage: ({ key }) => `Successfully published ${key}` },
       ),

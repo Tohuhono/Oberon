@@ -101,23 +101,20 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
 
     await adapter.deleteKV({ namespace: pluginName, key: "state" })
 
-    const components = await adapter.listComponents("page")
+    const pages = await adapter.listComponents("page")
 
-    for (const { key, type } of components) {
-      await adapter.deleteComponent({ key, type })
+    for (const { key } of pages) {
+      await adapter.deleteComponent({ key, type: "page" })
     }
   })
 
   tailwindTest(
     "keeps previous stylesheet URLs available after styles change or are cleared",
     async ({ expect, adapter, plugin }) => {
-      const publish = async (page: OberonComponentRecord) => {
-        await adapter.updateComponentData(page)
-        await plugin.adapter?.onComponentWrite?.({
-          getAdapter: () => asFinalAdapter(adapter),
-          next: async () => {},
-        })()
-      }
+      const publish = plugin.adapter!.updateComponentData!({
+        getAdapter: () => asFinalAdapter(adapter),
+        next: adapter.updateComponentData,
+      })
       await publish(createPage("underline"))
       const [firstHref] = await getStylesheets(adapter)
 
@@ -146,11 +143,10 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("text-red-500 md:grid text-red-500")
 
-      await adapter.updateComponentData(page)
-      await plugin.adapter?.onComponentWrite?.({
+      await plugin.adapter?.updateComponentData?.({
         getAdapter: () => asFinalAdapter(adapter),
-        next: async () => {},
-      })()
+        next: adapter.updateComponentData,
+      })(page)
 
       const state = await getState(adapter)
 
@@ -176,12 +172,11 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     async ({ expect, adapter, plugin }) => {
       const page = createPage("prose dark:prose-invert lg:prose-lg p-1")
 
-      await adapter.updateComponentData(page)
       await expect(
-        plugin.adapter?.onComponentWrite?.({
+        plugin.adapter?.updateComponentData?.({
           getAdapter: () => asFinalAdapter(adapter),
-          next: async () => {},
-        })(),
+          next: adapter.updateComponentData,
+        })(page),
       ).resolves.toBeUndefined()
 
       const state = await getState(adapter)
@@ -195,11 +190,10 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "reconciles missing assets during bootstrap",
     async ({ expect, adapter, plugin }) => {
       const page = createPage("underline")
-      await adapter.updateComponentData(page)
-      await plugin.adapter?.onComponentWrite?.({
+      await plugin.adapter?.updateComponentData?.({
         getAdapter: () => asFinalAdapter(adapter),
-        next: async () => {},
-      })()
+        next: adapter.updateComponentData,
+      })(page)
 
       await plugin.bootstrap?.()
 
@@ -232,9 +226,7 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "fails loudly during bootstrap when KV storage is unavailable",
     async ({ expect }) => {
       const adapter = fromPartial<OberonAdapter>({
-        listComponents: async () => [
-          { key: "/", type: "page", updatedAt: new Date(), updatedBy: "test" },
-        ],
+        listComponents: async () => [{ key: "/" }],
         getComponent: async () => createPage("underline"),
         getKV: async () => {
           throw new NotImplementedError("This action is not available in the demo")
@@ -261,10 +253,8 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "fails loudly during page updates when KV storage is unavailable",
     async ({ expect }) => {
       const adapter = fromPartial<OberonAdapter>({
-        onComponentWrite: async () => {},
-        listComponents: async () => [
-          { key: "/", type: "page", updatedAt: new Date(), updatedBy: "test" },
-        ],
+        updateComponentData: async () => {},
+        listComponents: async () => [{ key: "/" }],
         getComponent: async () => createPage("underline"),
         getKV: async () => {
           throw new NotImplementedError("This action is not available in the demo")
@@ -274,11 +264,13 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
         },
       })
       const plugin = tailwindPlugin({ getAdapter: () => adapter, phase: "runtime" })
+      const page = createPage("underline")
+
       await expect(
-        plugin.adapter?.onComponentWrite?.({
+        plugin.adapter?.updateComponentData?.({
           getAdapter: () => asFinalAdapter(adapter),
-          next: adapter.onComponentWrite,
-        })(),
+          next: adapter.updateComponentData,
+        })(page),
       ).rejects.toThrow(new NotImplementedError("This action is not available in the demo"))
 
       const response = await plugin.handlers
@@ -293,10 +285,8 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
     "surfaces generic Tailwind update failures as response errors",
     async ({ expect }) => {
       const adapter = fromPartial<OberonAdapter>({
-        onComponentWrite: async () => {},
-        listComponents: async () => [
-          { key: "/", type: "page", updatedAt: new Date(), updatedBy: "test" },
-        ],
+        updateComponentData: async () => {},
+        listComponents: async () => [{ key: "/" }],
         getComponent: async () => createPage("underline"),
         getKV: async () => null,
         putKV: async () => {
@@ -304,11 +294,13 @@ tailwindTest.describe("tailwind plugin", { tags: ["ai", "issue-314"] }, () => {
         },
       })
       const plugin = tailwindPlugin({ getAdapter: () => adapter, phase: "runtime" })
+      const page = createPage("underline")
+
       await expect(
-        plugin.adapter?.onComponentWrite?.({
+        plugin.adapter?.updateComponentData?.({
           getAdapter: () => adapter,
-          next: adapter.onComponentWrite,
-        })(),
+          next: adapter.updateComponentData,
+        })(page),
       ).rejects.toThrow(new ResponseError("Failed to update Tailwind styles: boom"))
     },
   )

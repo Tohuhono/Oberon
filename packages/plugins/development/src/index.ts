@@ -58,7 +58,6 @@ export const plugin: OberonPlugin = () => {
         getAuthDatabase: () => adapter.getAuthDatabase,
         getAuthPlugins: () => adapter.getAuthPlugins,
         addComponent: () => adapter.addComponent,
-        withComponentTransaction: () => adapter.withComponentTransaction,
         addImage: () => adapter.addImage,
         deleteComponent: () => adapter.deleteComponent,
         deleteImage: () => adapter.deleteImage,
