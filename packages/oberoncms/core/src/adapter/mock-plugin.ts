@@ -16,14 +16,12 @@ const mockSite = {
 
 const mockPage = getInitialData()
 
-const mockAllPages = [
-  {
-    key: mockPage.key,
-    type: mockPage.type,
-    updatedAt: mockPage.updatedAt,
-    updatedBy: mockPage.updatedBy,
-  },
-]
+const mockPageMeta = {
+  key: mockPage.key,
+  type: mockPage.type,
+  updatedAt: mockPage.updatedAt,
+  updatedBy: mockPage.updatedBy,
+}
 
 function notAvailable(): never {
   throw new NotImplementedError("This action is not available in the demo")
@@ -41,7 +39,7 @@ export const mockPlugin: OberonPlugin = () => ({
     deleteKV: () => notAvailable,
     deleteUser: () => notAvailable,
     getAllImages: () => async () => [],
-    listComponents: () => async (type) => mockAllPages.filter((page) => page.type === type),
+    listComponents: () => async (type) => (type === mockPage.type ? [mockPageMeta] : []),
     getAllUsers: () => async () => [mockUser],
     getCurrentUser: () => async () => mockUser,
     getComponent:

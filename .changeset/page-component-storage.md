@@ -16,4 +16,4 @@ and publication metadata.
 Breaking. Replace Page-specific Adapter capabilities, actions, and schemas with Component
 operations. Update custom Plugins and action transports to use the new operations. `getComponent`
 reads a record by key, and `listComponents` lists metadata by type. Use `updateComponent` in Plugins
-and `publishComponent` in action transports.
+and `publishComponent` in action transports. Use `componentTag` for Component cache tags.
