@@ -66,6 +66,37 @@ test.describe("CMS Edit Actions", { tag: "@cms" }, () => {
     await expect(cms.getByRole("button", { name: "Publish", exact: true })).toBeVisible()
   })
 
+  test(
+    "undoes and redoes a Page text edit",
+    { tag: "@playground" },
+    async ({ cms, cmsSeededPageKey }) => {
+      await cms.clock.install()
+      await cms.goto(`/cms/edit${cmsSeededPageKey}`)
+
+      const undo = cms.getByRole("button", { name: "Undo", exact: true })
+      const redo = cms.getByRole("button", { name: "Redo", exact: true })
+      await expect(undo).toBeDisabled()
+      await expect(redo).toBeDisabled()
+
+      await insertTextComponent(cms)
+      await cms.clock.runFor(250)
+      const text = "Page editor history"
+      const content = cms.locator('textarea[name="text"]')
+      const previewText = cms.frameLocator("iframe#preview-frame").getByText(text, { exact: true })
+      await content.fill(text)
+      await expect(previewText).toBeVisible()
+      await cms.clock.runFor(250)
+
+      await undo.click()
+      await expect(content).toHaveValue("")
+      await expect(previewText).toHaveCount(0)
+
+      await redo.click()
+      await expect(previewText).toBeVisible()
+      await expect(redo).toBeDisabled()
+    },
+  )
+
   test("provides viewport controls for the preview", async ({ cms, cmsSeededPageKey }) => {
     await cms.goto(`/cms/edit${cmsSeededPageKey}`)
 
