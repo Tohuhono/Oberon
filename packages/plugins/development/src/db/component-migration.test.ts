@@ -11,7 +11,7 @@ const rootDirectory = resolve(import.meta.dirname, "../../../../../")
 const migrationsFolder = resolve(import.meta.dirname, "./migrations")
 const legacyFile = resolve(rootDirectory, ".tmp/development-component-migration.test.db")
 
-describe("development component migration", { tags: ["ai", "feature-shared-components"] }, () => {
+describe("development component migration", { tags: ["ai", "feature-component-storage"] }, () => {
   it("upgrades the migration history and preserves existing Page records", async () => {
     await mkdir(dirname(legacyFile), { recursive: true })
     await rm(legacyFile, { force: true })
