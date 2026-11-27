@@ -20,7 +20,7 @@ import { useState } from "react"
 import useSWR from "swr"
 
 import { useOberonActions, useOberonNavigation } from "../hooks/use-oberon"
-import { INITIAL_DATA, type OberonSharedFragment } from "../lib/dtd"
+import { INITIAL_DATA, type OberonSharedComponentRecord } from "../lib/dtd"
 import { findSharedReferences, sourceEditorUrl } from "../lib/shared-components"
 import { Menu } from "./menu"
 import { SharedComponentCard } from "./shared-component-card"
@@ -33,12 +33,12 @@ export function SharedComponents({
   returnTo,
   clientConfig,
 }: {
-  sources: OberonSharedFragment[]
+  sources: OberonSharedComponentRecord[]
   sourceId: string | null
   returnTo: string | null
   clientConfig: Config
 }) {
-  const { addFragment, deleteFragment, can } = useOberonActions()
+  const { addComponent, deleteComponent, can } = useOberonActions()
   const { navigate, refresh } = useOberonNavigation()
   const [name, setName] = useState("")
   const [isCreating, setIsCreating] = useState(false)
@@ -85,7 +85,7 @@ export function SharedComponents({
     setCreateError(null)
     try {
       const key = `shared-${crypto.randomUUID()}`
-      await addFragment({
+      await addComponent({
         key,
         type: "shared",
         data: { name: name.trim(), tree: INITIAL_DATA, exposures: [], defaults: {} },
@@ -175,7 +175,7 @@ export function SharedComponents({
                 canWrite={canWrite}
                 nestedInCount={nestedInCounts.get(item.key) ?? 0}
                 onDelete={async () => {
-                  await deleteFragment({
+                  await deleteComponent({
                     key: item.key,
                     type: "shared",
                     expectedUpdatedAt: item.updatedAt,

@@ -1,10 +1,10 @@
 export * from "./lib/dtd"
 export * from "./lib/utils"
 export * from "./lib/get-metadata"
-export { getFragmentStyleProps } from "./lib/fragment-style-props"
+export { getComponentStyleProps } from "./lib/component-style-props"
 export {
   createSharedExposureKey,
-  getSharedComponentFragments,
+  getSharedComponentRecords,
   getSharedComponentLibrary,
 } from "./lib/shared-components"
 export { Antifouc } from "@tohuhono/ui/antifouc"

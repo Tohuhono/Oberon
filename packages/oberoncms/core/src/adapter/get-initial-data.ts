@@ -1,6 +1,6 @@
-import type { OberonFragment } from "../lib/dtd"
+import type { OberonComponentRecord } from "../lib/dtd"
 
-export function getInitialData(): Extract<OberonFragment, { type: "page" }> {
+export function getInitialData(): Extract<OberonComponentRecord, { type: "page" }> {
   return {
     key: "/",
     type: "page",

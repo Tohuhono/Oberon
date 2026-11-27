@@ -1,7 +1,7 @@
 import type { Config, Data } from "@puckeditor/core"
 import { useMemo } from "react"
 
-import { usePageDraft } from "../hooks/use-fragment-draft"
+import { usePageDraft } from "../hooks/use-component-draft"
 import type { SharedComponentData } from "../lib/dtd"
 import { ResolvedPreview } from "./editor/resolved-preview"
 import { withSharedEditorComponents } from "./shared-component-render"

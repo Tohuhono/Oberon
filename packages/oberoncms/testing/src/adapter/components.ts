@@ -3,30 +3,30 @@ import { ResponseError } from "@oberoncms/core"
 import type { AdapterTestAPI } from "../adapter"
 
 const data = {
-  content: [{ type: "Text", props: { id: "text", text: "Fragment" } }],
-  root: { props: { title: "Fragment" } },
+  content: [{ type: "Text", props: { id: "text", text: "Component" } }],
+  root: { props: { title: "Component" } },
 }
-const sharedData = { name: "Fragment", tree: data, exposures: [], defaults: {} }
+const sharedData = { name: "Component", tree: data, exposures: [], defaults: {} }
 
-export function testFragments(test: AdapterTestAPI) {
-  test.describe("Fragments", () => {
+export function testComponents(test: AdapterTestAPI) {
+  test.describe("Components", () => {
     test.beforeEach(async ({ adapter, skip }) => {
       skip(
         !(
-          "addFragment" in adapter &&
-          "deleteFragment" in adapter &&
-          "getAllFragments" in adapter &&
-          "getFragmentData" in adapter &&
-          "updateFragmentData" in adapter
+          "addComponent" in adapter &&
+          "deleteComponent" in adapter &&
+          "listComponents" in adapter &&
+          "getComponent" in adapter &&
+          "updateComponentData" in adapter
         ),
       )
     })
 
     test("lists metadata by type and reads data by key", async ({ adapter, expect }) => {
-      const key = `fragment-${crypto.randomUUID()}`
+      const key = `component-${crypto.randomUUID()}`
       const updatedAt = new Date("2026-01-01T00:00:00.000Z")
 
-      await adapter.addFragment({
+      await adapter.addComponent({
         key,
         type: "shared",
         data: sharedData,
@@ -34,16 +34,16 @@ export function testFragments(test: AdapterTestAPI) {
         updatedBy: "test@example.com",
       })
 
-      await expect(adapter.getAllFragments("page")).resolves.not.toContainEqual(
+      await expect(adapter.listComponents("page")).resolves.not.toContainEqual(
         expect.objectContaining({ key }),
       )
-      await expect(adapter.getAllFragments("shared")).resolves.toContainEqual({
+      await expect(adapter.listComponents("shared")).resolves.toContainEqual({
         key,
         type: "shared",
         updatedAt,
         updatedBy: "test@example.com",
       })
-      await expect(adapter.getFragmentData({ key })).resolves.toMatchObject({
+      await expect(adapter.getComponent({ key })).resolves.toMatchObject({
         key,
         type: "shared",
         data: sharedData,
@@ -51,13 +51,13 @@ export function testFragments(test: AdapterTestAPI) {
         updatedBy: "test@example.com",
       })
 
-      await adapter.deleteFragment({ key, type: "shared" })
+      await adapter.deleteComponent({ key, type: "shared" })
     })
 
-    test("keeps Fragment keys unique across types", async ({ adapter, expect }) => {
-      const key = `fragment-${crypto.randomUUID()}`
+    test("keeps Component keys unique across types", async ({ adapter, expect }) => {
+      const key = `component-${crypto.randomUUID()}`
 
-      await adapter.addFragment({
+      await adapter.addComponent({
         key,
         type: "page",
         data,
@@ -66,7 +66,7 @@ export function testFragments(test: AdapterTestAPI) {
       })
 
       await expect(
-        adapter.addFragment({
+        adapter.addComponent({
           key,
           type: "shared",
           data: sharedData,
@@ -75,21 +75,21 @@ export function testFragments(test: AdapterTestAPI) {
         }),
       ).rejects.toThrow()
 
-      await adapter.deleteFragment({ key, type: "page" })
+      await adapter.deleteComponent({ key, type: "page" })
     })
 
-    test("rejects stale Fragment publishes and deletes", async ({ adapter, expect }) => {
-      const key = `fragment-${crypto.randomUUID()}`
+    test("rejects stale Component publishes and deletes", async ({ adapter, expect }) => {
+      const key = `component-${crypto.randomUUID()}`
       const createdAt = new Date("2026-01-01T00:00:00.000Z")
 
-      await adapter.addFragment({
+      await adapter.addComponent({
         key,
         type: "shared",
         data: sharedData,
         updatedAt: createdAt,
         updatedBy: "test@example.com",
       })
-      const publishedAt = await adapter.updateFragmentData({
+      const publishedAt = await adapter.updateComponentData({
         key,
         type: "shared",
         data: sharedData,
@@ -100,7 +100,7 @@ export function testFragments(test: AdapterTestAPI) {
 
       expect(publishedAt.getTime()).toBeGreaterThan(createdAt.getTime())
 
-      const staleWrite = adapter.updateFragmentData({
+      const staleWrite = adapter.updateComponentData({
         key,
         type: "shared",
         data: sharedData,
@@ -109,15 +109,15 @@ export function testFragments(test: AdapterTestAPI) {
         expectedUpdatedAt: createdAt,
       })
       await expect(staleWrite).rejects.toThrow(
-        new ResponseError("Fragment changed since you loaded it. Reload and try again."),
+        new ResponseError("Component changed since you loaded it. Reload and try again."),
       )
 
       await expect(
-        adapter.deleteFragment({ key, type: "shared", expectedUpdatedAt: createdAt }),
+        adapter.deleteComponent({ key, type: "shared", expectedUpdatedAt: createdAt }),
       ).rejects.toThrow(
-        new ResponseError("Fragment changed since you loaded it. Reload and try again."),
+        new ResponseError("Component changed since you loaded it. Reload and try again."),
       )
-      await adapter.deleteFragment({ key, type: "shared", expectedUpdatedAt: publishedAt })
+      await adapter.deleteComponent({ key, type: "shared", expectedUpdatedAt: publishedAt })
     })
   })
 }

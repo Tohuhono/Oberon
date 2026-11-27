@@ -7,7 +7,7 @@ import {
   useBrowserDraftsReady,
   useDraftPublication,
   usePageDraft,
-} from "../hooks/use-fragment-draft"
+} from "../hooks/use-component-draft"
 import { useOberonActions } from "../hooks/use-oberon"
 import { INITIAL_DATA, type SharedComponentData } from "../lib/dtd"
 import { DraftConflict } from "./editor/draft-conflict"
@@ -34,7 +34,7 @@ function PageEditor({
   config,
   sharedComponents,
 }: Parameters<typeof Editor>[0]) {
-  const { publishFragmentData } = useOberonActions()
+  const { publishComponentData } = useOberonActions()
   const editorSession = useMemo(
     () =>
       withSharedEditorComponents(config, sharedComponents, (props) => (
@@ -50,7 +50,7 @@ function PageEditor({
     if (publication.isStale) return
     const storedData = editorSession.toStoredData(pageData)
     await publication.publish((expectedUpdatedAt) =>
-      publishFragmentData({ key: path, type: "page", data: storedData, expectedUpdatedAt }),
+      publishComponentData({ key: path, type: "page", data: storedData, expectedUpdatedAt }),
     )
   }
 

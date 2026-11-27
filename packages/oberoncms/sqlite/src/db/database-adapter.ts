@@ -3,7 +3,7 @@ import { AsyncLocalStorage } from "node:async_hooks"
 
 import {
   JsonValueSchema,
-  FragmentSchema,
+  ComponentRecordSchema,
   ResponseError,
   type OberonDatabaseAdapter,
 } from "@oberoncms/core"
@@ -13,16 +13,16 @@ import { z } from "zod"
 
 import type { DatabaseClient } from "./client"
 import { user } from "./schema"
-import { fragments, images, kv, site } from "./schema"
+import { components, images, kv, site } from "./schema"
 
 export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdapter {
   const transaction = new AsyncLocalStorage<
     Parameters<Parameters<DatabaseClient["transaction"]>[0]>[0]
   >()
-  const fragmentsDb = () => transaction.getStore() ?? db()
+  const componentsDb = () => transaction.getStore() ?? db()
   let pendingWrite = Promise.resolve()
   return {
-    withFragmentTransaction: (write) => {
+    withComponentTransaction: (write) => {
       const result = pendingWrite.then(() => db().transaction((tx) => transaction.run(tx, write)))
       pendingWrite = result.then(
         () => {},
@@ -31,7 +31,7 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       return result
     },
     getSite: async () => {
-      const result = await fragmentsDb()
+      const result = await componentsDb()
         .select({
           version: site.version,
           components: site.components,
@@ -43,13 +43,13 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
         .execute()
       return result[0]
     },
-    updateSite: async ({ version, components, updatedAt, updatedBy }) => {
-      await fragmentsDb()
+    updateSite: async ({ version, components: componentVersions, updatedAt, updatedBy }) => {
+      await componentsDb()
         .insert(site)
-        .values({ id: 1, version, components, updatedAt, updatedBy })
+        .values({ id: 1, version, components: componentVersions, updatedAt, updatedBy })
         .onConflictDoUpdate({
           target: site.id,
-          set: { version, components, updatedAt, updatedBy },
+          set: { version, components: componentVersions, updatedAt, updatedBy },
         })
         .execute()
     },
@@ -74,48 +74,48 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
         .from(images)
         .execute()
     },
-    addFragment: async ({ key, type, data, updatedAt, updatedBy }) => {
-      await fragmentsDb()
-        .insert(fragments)
+    addComponent: async ({ key, type, data, updatedAt, updatedBy }) => {
+      await componentsDb()
+        .insert(components)
         .values({ key, type, data, updatedAt, updatedBy })
         .execute()
     },
-    deleteFragment: async ({ key, type, expectedUpdatedAt }) => {
-      const query = fragmentsDb()
-        .delete(fragments)
+    deleteComponent: async ({ key, type, expectedUpdatedAt }) => {
+      const query = componentsDb()
+        .delete(components)
         .where(
           and(
-            eq(fragments.key, key),
-            eq(fragments.type, type),
-            ...(expectedUpdatedAt ? [eq(fragments.updatedAt, expectedUpdatedAt)] : []),
+            eq(components.key, key),
+            eq(components.type, type),
+            ...(expectedUpdatedAt ? [eq(components.updatedAt, expectedUpdatedAt)] : []),
           ),
         )
-        .returning({ key: fragments.key })
+        .returning({ key: components.key })
       const result = await query.execute()
 
       if (expectedUpdatedAt && !result.length) {
-        throw new ResponseError("Fragment changed since you loaded it. Reload and try again.")
+        throw new ResponseError("Component changed since you loaded it. Reload and try again.")
       }
     },
     deleteKV: async ({ namespace, key }) => {
-      await fragmentsDb()
+      await componentsDb()
         .delete(kv)
         .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
         .execute()
     },
-    getFragmentData: async ({ key }) => {
-      const result = await fragmentsDb()
+    getComponent: async ({ key }) => {
+      const result = await componentsDb()
         .select()
-        .from(fragments)
-        .where(eq(fragments.key, key))
+        .from(components)
+        .where(eq(components.key, key))
         .execute()
 
-      const fragment = result[0] && FragmentSchema.parse(result[0])
+      const component = result[0] && ComponentRecordSchema.parse(result[0])
 
-      return fragment ?? null
+      return component ?? null
     },
     getKV: async ({ namespace, key }) => {
-      const result = await fragmentsDb()
+      const result = await componentsDb()
         .select({ value: kv.value })
         .from(kv)
         .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
@@ -125,28 +125,28 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
 
       return value === undefined ? null : JsonValueSchema.parse(value)
     },
-    updateFragmentData: async ({ key, type, data, updatedAt, updatedBy, expectedUpdatedAt }) => {
+    updateComponentData: async ({ key, type, data, updatedAt, updatedBy, expectedUpdatedAt }) => {
       const changes = {
         data,
-        updatedAt: sql`max(${updatedAt.getTime()}, ${fragments.updatedAt} + 1)`,
+        updatedAt: sql`max(${updatedAt.getTime()}, ${components.updatedAt} + 1)`,
         updatedBy,
       }
-      const condition = and(eq(fragments.key, key), eq(fragments.type, type))
-      const returning = { updatedAt: fragments.updatedAt }
+      const condition = and(eq(components.key, key), eq(components.type, type))
+      const returning = { updatedAt: components.updatedAt }
       const [persisted] = expectedUpdatedAt
-        ? await fragmentsDb()
-            .update(fragments)
+        ? await componentsDb()
+            .update(components)
             .set(changes)
-            .where(and(condition, eq(fragments.updatedAt, expectedUpdatedAt)))
+            .where(and(condition, eq(components.updatedAt, expectedUpdatedAt)))
             .returning(returning)
             .execute()
-        : await fragmentsDb()
-            .insert(fragments)
+        : await componentsDb()
+            .insert(components)
             .values({ key, type, data, updatedAt, updatedBy })
             .onConflictDoUpdate({
-              target: fragments.key,
+              target: components.key,
               set: changes,
-              where: eq(fragments.type, type),
+              where: eq(components.type, type),
             })
             .returning(returning)
             .execute()
@@ -154,14 +154,14 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
       if (!persisted) {
         throw new ResponseError(
           expectedUpdatedAt
-            ? "Fragment changed since you loaded it. Reload and try again."
-            : "A Fragment with this key already exists with a different type.",
+            ? "Component changed since you loaded it. Reload and try again."
+            : "A Component with this key already exists with a different type.",
         )
       }
       return persisted.updatedAt
     },
     putKV: async ({ namespace, key, value }) => {
-      await fragmentsDb()
+      await componentsDb()
         .insert(kv)
         .values({ namespace, key, value })
         .onConflictDoUpdate({
@@ -170,16 +170,16 @@ export function getDatabaseAdapter(db: () => DatabaseClient): OberonDatabaseAdap
         })
         .execute()
     },
-    getAllFragments: async (type) => {
-      return await fragmentsDb()
+    listComponents: async (type) => {
+      return await componentsDb()
         .select({
-          key: fragments.key,
-          type: fragments.type,
-          updatedAt: fragments.updatedAt,
-          updatedBy: fragments.updatedBy,
+          key: components.key,
+          type: components.type,
+          updatedAt: components.updatedAt,
+          updatedBy: components.updatedBy,
         })
-        .from(fragments)
-        .where(eq(fragments.type, type))
+        .from(components)
+        .where(eq(components.type, type))
         .execute()
     },
     getAllUsers: async () => {

@@ -22,7 +22,7 @@ function pageDraftKey(path: string, config: Config) {
 }
 
 export function usePageDraft(path: string, config: Config) {
-  return useFragmentDraft(pageDraftKey(path, config), pageDraftSchema)
+  return useComponentDraft(pageDraftKey(path, config), pageDraftSchema)
 }
 
 export function clearPageDraft(path: string, config: Config) {
@@ -30,10 +30,10 @@ export function clearPageDraft(path: string, config: Config) {
 }
 
 export function useSharedDraft(key: string) {
-  return useFragmentDraft(`shared:${key}`, sharedDraftSchema)
+  return useComponentDraft(`shared:${key}`, sharedDraftSchema)
 }
 
-function useFragmentDraft<Draft>(storageKey: string, schema: z.ZodType<Draft>) {
+function useComponentDraft<Draft>(storageKey: string, schema: z.ZodType<Draft>) {
   const [draft, setDraft] = useLocalStorage(storageKey, {
     parser(raw) {
       if (!raw) return null

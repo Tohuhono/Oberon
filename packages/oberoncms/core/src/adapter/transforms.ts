@@ -8,8 +8,8 @@ import {
   type MigrationResult,
   type OberonClientConfig,
   type OberonDatabaseAdapter,
-  type OberonFragment,
-  type OberonFragmentMeta,
+  type OberonComponentRecord,
+  type OberonComponentMeta,
   type OberonPluginAdapter,
   type OberonUser,
   type TransformResult,
@@ -19,12 +19,16 @@ import { getNodeById, getSharedComponentLibrary, isSlotContent } from "../lib/sh
 
 type PropTransform = Parameters<typeof transformProps>[1]
 
-function transformFragment(fragment: OberonFragment, transforms: PropTransform, config: Config) {
-  if (fragment.type === "page") {
-    return { ...fragment, data: transformProps(fragment.data, transforms, config) }
+function transformComponent(
+  component: OberonComponentRecord,
+  transforms: PropTransform,
+  config: Config,
+) {
+  if (component.type === "page") {
+    return { ...component, data: transformProps(component.data, transforms, config) }
   }
 
-  const { tree, defaults, exposures, name } = fragment.data
+  const { tree, defaults, exposures, name } = component.data
   const transformedDefaults = Object.fromEntries(
     Object.entries(defaults).map(([exposureKey, value]) => {
       const exposure = exposures.find((item) => item.key === exposureKey)
@@ -39,7 +43,7 @@ function transformFragment(fragment: OberonFragment, transforms: PropTransform, 
     }),
   )
   return {
-    ...fragment,
+    ...component,
     data: {
       name,
       exposures,
@@ -49,23 +53,23 @@ function transformFragment(fragment: OberonFragment, transforms: PropTransform, 
   }
 }
 
-export async function* migrateFragments(
+export async function* migrateComponents(
   adapter: OberonPluginAdapter,
   config: OberonClientConfig,
   user: OberonUser,
-  updateFragment: OberonDatabaseAdapter["updateFragmentData"],
+  updateComponent: OberonDatabaseAdapter["updateComponentData"],
 ): AsyncGenerator<TransformResult | MigrationResult> {
-  let fragments: OberonFragmentMeta[] = []
+  let storedComponents: OberonComponentMeta[] = []
   let status: TransformResult["status"] = "success"
   try {
-    await adapter.withFragmentTransaction(async () => {
+    await adapter.withComponentTransaction(async () => {
       const site = await adapter.getSite()
       const { components, transforms } = getTransforms(site?.components, config)
       if (!transforms) return
 
-      fragments = [
-        ...(await adapter.getAllFragments("page")),
-        ...(await adapter.getAllFragments("shared")),
+      storedComponents = [
+        ...(await adapter.listComponents("page")),
+        ...(await adapter.listComponents("shared")),
       ]
       const transformConfig = withSharedComponent(
         config,
@@ -73,12 +77,12 @@ export async function* migrateFragments(
         await getSharedComponentLibrary(adapter),
       )
 
-      for (const { key } of fragments) {
-        const fragment = await adapter.getFragmentData({ key })
-        if (!fragment) continue
-        await updateFragment({
-          ...transformFragment(fragment, transforms, transformConfig),
-          expectedUpdatedAt: fragment.updatedAt,
+      for (const { key } of storedComponents) {
+        const component = await adapter.getComponent({ key })
+        if (!component) continue
+        await updateComponent({
+          ...transformComponent(component, transforms, transformConfig),
+          expectedUpdatedAt: component.updatedAt,
           updatedBy: user.email,
         })
       }
@@ -89,7 +93,7 @@ export async function* migrateFragments(
         updatedAt: new Date(),
         updatedBy: user.email,
       })
-      if (fragments.length) await adapter.onFragmentWrite()
+      if (storedComponents.length) await adapter.onComponentWrite()
     })
   } catch (error) {
     console.error(error)
@@ -98,14 +102,14 @@ export async function* migrateFragments(
 
   const summary: MigrationResult = {
     type: "summary",
-    total: fragments.length,
+    total: storedComponents.length,
     error: [],
     success: [],
   }
-  for (const fragment of fragments) {
-    if (status === "success") await adapter.onFragmentChange(fragment)
-    summary[status].push(fragment.key)
-    yield { type: "transform", key: fragment.key, status }
+  for (const component of storedComponents) {
+    if (status === "success") await adapter.onComponentChange(component)
+    summary[status].push(component.key)
+    yield { type: "transform", key: component.key, status }
   }
   yield summary
 }

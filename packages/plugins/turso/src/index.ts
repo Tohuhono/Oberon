@@ -3,7 +3,7 @@ import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 
 import { USE_DEVELOPMENT_DATABASE_PLUGIN, type OberonPlugin } from "@oberoncms/core"
-import { getAdapter, migrate } from "@oberoncms/sqlite/adapter"
+import { getAdapter, migrateComponentStorage } from "@oberoncms/sqlite/adapter"
 
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient } from "./db/client"
@@ -27,7 +27,7 @@ export const plugin: OberonPlugin = () => {
         return
       }
 
-      await migrate(db, {
+      await migrateComponentStorage(db, {
         migrationsFolder,
       })
 
@@ -36,19 +36,19 @@ export const plugin: OberonPlugin = () => {
     adapter: {
       getAuthDatabase: () => adapter.getAuthDatabase,
       getAuthPlugins: () => adapter.getAuthPlugins,
-      addFragment: () => adapter.addFragment,
-      withFragmentTransaction: () => adapter.withFragmentTransaction,
+      addComponent: () => adapter.addComponent,
+      withComponentTransaction: () => adapter.withComponentTransaction,
       addImage: () => adapter.addImage,
-      deleteFragment: () => adapter.deleteFragment,
+      deleteComponent: () => adapter.deleteComponent,
       deleteImage: () => adapter.deleteImage,
       deleteKV: () => adapter.deleteKV,
       getAllImages: () => adapter.getAllImages,
-      getAllFragments: () => adapter.getAllFragments,
-      getFragmentData: () => adapter.getFragmentData,
+      listComponents: () => adapter.listComponents,
+      getComponent: () => adapter.getComponent,
       getKV: () => adapter.getKV,
       getSite: () => adapter.getSite,
       putKV: () => adapter.putKV,
-      updateFragmentData: () => adapter.updateFragmentData,
+      updateComponentData: () => adapter.updateComponentData,
       updateSite: () => adapter.updateSite,
       addUser: () => adapter.addUser,
       deleteUser: () => adapter.deleteUser,

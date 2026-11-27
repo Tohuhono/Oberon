@@ -22,13 +22,13 @@ function useInvalidatingServerActions(serverActions: OberonServerActions) {
     return {
       ...serverActions,
       addImage: invalidateAfter(serverActions.addImage),
-      addFragment: invalidateAfter(serverActions.addFragment),
+      addComponent: invalidateAfter(serverActions.addComponent),
       addUser: invalidateAfter(serverActions.addUser),
       changeRole: invalidateAfter(serverActions.changeRole),
       deleteImage: invalidateAfter(serverActions.deleteImage),
-      deleteFragment: invalidateAfter(serverActions.deleteFragment),
+      deleteComponent: invalidateAfter(serverActions.deleteComponent),
       deleteUser: invalidateAfter(serverActions.deleteUser),
-      publishFragmentData: invalidateAfter(serverActions.publishFragmentData),
+      publishComponentData: invalidateAfter(serverActions.publishComponentData),
     } satisfies OberonServerActions
   }, [serverActions, router])
 }

@@ -147,7 +147,7 @@ export const JsonValueSchema = z.json()
 export type JsonValue = z.infer<typeof JsonValueSchema>
 
 /*
- * Fragments
+ * Components
  */
 const PuckNodeSchema = z.looseObject({
   type: z.string().min(1),
@@ -195,18 +195,18 @@ export const PageSchema = z.object({
   updatedBy: z.string(),
 })
 
-export const FragmentTypeSchema = z.enum(["page", "shared"])
-export type FragmentType = z.infer<typeof FragmentTypeSchema>
+export const ComponentTypeSchema = z.enum(["page", "shared"])
+export type ComponentType = z.infer<typeof ComponentTypeSchema>
 
-const FragmentKeySchema = z.string().min(1, "Fragment key cannot be empty")
+const ComponentKeySchema = z.string().min(1, "Component key cannot be empty")
 const ExpectedUpdatedAtSchema = z
   .union([z.date(), z.iso.datetime().transform((value) => new Date(value))])
   .optional()
 
-export const FragmentSchema = z.discriminatedUnion("type", [
-  PageSchema.extend({ key: FragmentKeySchema, type: z.literal("page") }),
+export const ComponentRecordSchema = z.discriminatedUnion("type", [
+  PageSchema.extend({ key: ComponentKeySchema, type: z.literal("page") }),
   z.object({
-    key: FragmentKeySchema,
+    key: ComponentKeySchema,
     type: z.literal("shared"),
     data: SharedComponentDataSchema,
     updatedAt: z.date(),
@@ -214,36 +214,39 @@ export const FragmentSchema = z.discriminatedUnion("type", [
   }),
 ])
 
-function validateFragmentKey(value: { key: string; type: FragmentType }, context: z.RefinementCtx) {
-  const result = (value.type === "page" ? PageKeySchema : FragmentKeySchema).safeParse(value.key)
+function validateComponentKey(
+  value: { key: string; type: ComponentType },
+  context: z.RefinementCtx,
+) {
+  const result = (value.type === "page" ? PageKeySchema : ComponentKeySchema).safeParse(value.key)
   if (!result.success) {
     context.addIssue({
       code: "custom",
-      message: result.error.issues[0]?.message ?? "Invalid fragment key",
+      message: result.error.issues[0]?.message ?? "Invalid component key",
     })
   }
 }
 
-export const AddFragmentSchema = z.discriminatedUnion("type", [
+export const AddComponentSchema = z.discriminatedUnion("type", [
   z.object({ key: PageKeySchema, type: z.literal("page"), data: PuckDataSchema.optional() }),
   z.object({
-    key: FragmentKeySchema,
+    key: ComponentKeySchema,
     type: z.literal("shared"),
     data: SharedComponentDataSchema,
   }),
 ])
 
-export const DeleteFragmentSchema = z
+export const DeleteComponentSchema = z
   .object({
-    key: FragmentKeySchema,
-    type: FragmentTypeSchema,
+    key: ComponentKeySchema,
+    type: ComponentTypeSchema,
     expectedUpdatedAt: ExpectedUpdatedAtSchema,
   })
-  .superRefine(validateFragmentKey)
+  .superRefine(validateComponentKey)
 
-export const GetFragmentDataSchema = z.object({ key: FragmentKeySchema })
+export const GetComponentSchema = z.object({ key: ComponentKeySchema })
 
-export const PublishFragmentSchema = z.discriminatedUnion("type", [
+export const PublishComponentSchema = z.discriminatedUnion("type", [
   z.object({
     key: PageKeySchema,
     type: z.literal("page"),
@@ -251,29 +254,29 @@ export const PublishFragmentSchema = z.discriminatedUnion("type", [
     expectedUpdatedAt: ExpectedUpdatedAtSchema,
   }),
   z.object({
-    key: FragmentKeySchema,
+    key: ComponentKeySchema,
     type: z.literal("shared"),
     data: SharedComponentDataSchema,
     expectedUpdatedAt: ExpectedUpdatedAtSchema,
   }),
 ])
 
-export const FragmentMetaSchema = z.object({
-  key: FragmentKeySchema,
-  type: FragmentTypeSchema,
+export const ComponentMetaSchema = z.object({
+  key: ComponentKeySchema,
+  type: ComponentTypeSchema,
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
 
-export type OberonFragment = z.infer<typeof FragmentSchema>
+export type OberonComponentRecord = z.infer<typeof ComponentRecordSchema>
 
-export type OberonSharedFragment = Extract<OberonFragment, { type: "shared" }>
+export type OberonSharedComponentRecord = Extract<OberonComponentRecord, { type: "shared" }>
 
-export type OberonFragmentMeta = MaybeOptimistic<z.infer<typeof FragmentMetaSchema>>
+export type OberonComponentMeta = MaybeOptimistic<z.infer<typeof ComponentMetaSchema>>
 
 // Cannot infer from zod because we need nextjs to understand Page keys are valid Routes.
 export type OberonPageMeta = MaybeOptimistic<
-  z.infer<typeof FragmentMetaSchema> & {
+  z.infer<typeof ComponentMetaSchema> & {
     key: OberonRoute
     type: "page"
   }
@@ -386,20 +389,20 @@ export type OberonAuthAdapter = {
 }
 
 export type OberonDatabaseAdapter = {
-  addFragment: (fragment: OberonFragment) => Promise<void>
+  addComponent: (component: OberonComponentRecord) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  deleteFragment: (data: z.infer<typeof DeleteFragmentSchema>) => Promise<void>
+  deleteComponent: (data: z.infer<typeof DeleteComponentSchema>) => Promise<void>
   // TODO uploadthing
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void>
   deleteKV: (data: { namespace: string; key: string }) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
-  getAllFragments: (type: FragmentType) => Promise<OberonFragmentMeta[]>
-  getFragmentData: (data: z.infer<typeof GetFragmentDataSchema>) => Promise<OberonFragment | null>
+  listComponents: (type: ComponentType) => Promise<OberonComponentMeta[]>
+  getComponent: (data: z.infer<typeof GetComponentSchema>) => Promise<OberonComponentRecord | null>
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updateFragmentData: (data: OberonFragment & { expectedUpdatedAt?: Date }) => Promise<Date>
-  withFragmentTransaction: <Result>(write: () => Promise<Result>) => Promise<Result>
+  updateComponentData: (data: OberonComponentRecord & { expectedUpdatedAt?: Date }) => Promise<Date>
+  withComponentTransaction: <Result>(write: () => Promise<Result>) => Promise<Result>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -416,8 +419,8 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
   OberonRoutingAdapter & {
-    onFragmentWrite: () => Promise<void>
-    onFragmentChange: (fragment: Pick<OberonFragment, "key" | "type">) => Promise<void>
+    onComponentWrite: () => Promise<void>
+    onComponentChange: (component: Pick<OberonComponentRecord, "key" | "type">) => Promise<void>
   }
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
@@ -480,7 +483,7 @@ export type OberonResponse<T = unknown> = Promise<
 >
 
 export const GetAllImagesSchema = z.undefined()
-export const GetAllFragmentsSchema = z.object({ type: FragmentTypeSchema })
+export const ListComponentsSchema = z.object({ type: ComponentTypeSchema })
 export const GetAllPathsSchema = z.undefined()
 export const GetAllUsersSchema = z.undefined()
 export const GetConfigSchema = z.undefined()
@@ -491,10 +494,10 @@ export const ResolvePathSchema = z.object({ key: z.string() })
 
 export type OberonServerActions = {
   resolvePath: (data: z.infer<typeof ResolvePathSchema>) => Promise<{ key: string; data: PageData }>
-  addFragment: (fragment: z.infer<typeof AddFragmentSchema>) => OberonResponse<void>
+  addComponent: (component: z.infer<typeof AddComponentSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
-  deleteFragment: (data: z.infer<typeof DeleteFragmentSchema>) => OberonResponse<void>
+  deleteComponent: (data: z.infer<typeof DeleteComponentSchema>) => OberonResponse<void>
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => OberonResponse<void>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
@@ -504,23 +507,23 @@ export type OberonServerActions = {
     data: z.infer<typeof ChangeRoleSchema>,
   ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
   getAllImages: (data?: z.infer<typeof GetAllImagesSchema>) => OberonResponse<OberonImage[]>
-  getAllFragments: (
-    data: z.infer<typeof GetAllFragmentsSchema>,
-  ) => OberonResponse<OberonFragmentMeta[]>
+  listComponents: (
+    data: z.infer<typeof ListComponentsSchema>,
+  ) => OberonResponse<OberonComponentMeta[]>
   getAllPaths: (
     data?: z.infer<typeof GetAllPathsSchema>,
   ) => OberonResponse<Array<{ path: string[] }>>
   getAllUsers: (data?: z.infer<typeof GetAllUsersSchema>) => OberonResponse<OberonUser[]>
   getConfig: (data?: z.infer<typeof GetConfigSchema>) => OberonResponse<OberonSiteConfig>
-  getFragmentData: (
-    data: z.infer<typeof GetFragmentDataSchema>,
-  ) => OberonResponse<OberonFragment | null>
+  getComponent: (
+    data: z.infer<typeof GetComponentSchema>,
+  ) => OberonResponse<OberonComponentRecord | null>
   migrateData: (
     data?: z.infer<typeof MigrateDataSchema>,
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishFragmentData: (
-    data: z.infer<typeof PublishFragmentSchema>,
-  ) => OberonResponse<{ key: string; type: FragmentType; updatedAt: Date }>
+  publishComponentData: (
+    data: z.infer<typeof PublishComponentSchema>,
+  ) => OberonResponse<{ key: string; type: ComponentType; updatedAt: Date }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
@@ -538,11 +541,11 @@ type DescriminatedContext =
     }
   | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: OberonFragmentMeta[] }
+  | { action: "pages"; data: OberonComponentMeta[] }
   | {
       action: "library"
       data: {
-        sources: OberonSharedFragment[]
+        sources: OberonSharedComponentRecord[]
         sourceId: string | null
         returnTo: string | null
       }

@@ -11,7 +11,7 @@ import type {
   OberonServerActions,
 } from "./lib/dtd"
 import { ResponseError } from "./lib/dtd"
-import { getSharedComponentFragments, getSharedComponentLibrary } from "./lib/shared-components"
+import { getSharedComponentRecords, getSharedComponentLibrary } from "./lib/shared-components"
 import { parseClientAction, resolveSlug } from "./lib/utils"
 
 function pageEditorReturnPath(value: unknown) {
@@ -26,7 +26,7 @@ function pageEditorReturnPath(value: unknown) {
 }
 
 async function getContext(
-  { getFragmentData, getAllImages, getAllFragments, getAllUsers, getConfig }: OberonAdapter,
+  { getComponent, getAllImages, listComponents, getAllUsers, getConfig }: OberonAdapter,
   action: ClientAction,
   slug: string,
   searchParams: OberonQueryParams,
@@ -44,13 +44,13 @@ async function getContext(
       }
     case "edit":
     case "preview": {
-      const fragment = await getFragmentData({ key: slug })
+      const component = await getComponent({ key: slug })
       return {
         action,
         slug,
-        data: fragment?.type === "page" ? fragment.data : null,
-        updatedAt: fragment?.updatedAt ?? null,
-        sharedComponents: await getSharedComponentLibrary({ getAllFragments, getFragmentData }),
+        data: component?.type === "page" ? component.data : null,
+        updatedAt: component?.updatedAt ?? null,
+        sharedComponents: await getSharedComponentLibrary({ listComponents, getComponent }),
       }
     }
     case "users":
@@ -75,14 +75,14 @@ async function getContext(
       return {
         action,
         slug,
-        data: await getAllFragments("page"),
+        data: await listComponents("page"),
       }
     case "library":
       return {
         action,
         slug,
         data: {
-          sources: await getSharedComponentFragments({ getAllFragments, getFragmentData }),
+          sources: await getSharedComponentRecords({ listComponents, getComponent }),
           sourceId: typeof searchParams.source === "string" ? searchParams.source : null,
           returnTo: pageEditorReturnPath(searchParams.returnTo),
         },

@@ -1,16 +1,16 @@
-import type { FragmentType, OberonFragment } from "@oberoncms/core"
+import type { ComponentType, OberonComponentRecord } from "@oberoncms/core"
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
 
-export const fragments = sqliteTable(
-  "fragments",
+export const components = sqliteTable(
+  "components",
   {
     key: text("key").notNull().primaryKey(),
-    type: text("type").$type<FragmentType>().notNull().default("page"),
-    data: text("data", { mode: "json" }).$type<OberonFragment["data"]>().notNull(),
+    type: text("type").$type<ComponentType>().notNull().default("page"),
+    data: text("data", { mode: "json" }).$type<OberonComponentRecord["data"]>().notNull(),
     updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
     updatedBy: text("updated_by").notNull(),
   },
   (table) => ({
-    fragmentsTypeIdx: index("fragments_type_idx").on(table.type),
+    componentsTypeIdx: index("components_type_idx").on(table.type),
   }),
 )

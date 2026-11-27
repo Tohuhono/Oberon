@@ -49,7 +49,7 @@ describe("server routing surfaces", { tags: ["ai", "feature-remove-nextjs-from-c
   ])("checks a Shared source return path of %s", async (returnTo, expected) => {
     const adapter = fromPartial<OberonAdapter>({
       can: async () => true,
-      getAllFragments: async () => [],
+      listComponents: async () => [],
     })
     await expect(
       getOberonClientContext({ adapter, path: ["library"], searchParams: { returnTo } }),

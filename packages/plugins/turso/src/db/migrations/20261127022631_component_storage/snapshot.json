@@ -1,27 +1,15 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "0e52d747-b991-4f73-98f4-7c4c6c356cd8",
-  "prevIds": ["86258624-c3e0-4c2e-9ea9-d92c86c5d956"],
+  "id": "79704cca-055d-4e39-a08d-afa16b256d77",
+  "prevIds": ["690140ac-8b8a-432f-8f48-6a3016c120c9"],
   "ddl": [
     {
       "name": "account",
       "entityType": "tables"
     },
     {
-      "name": "session",
-      "entityType": "tables"
-    },
-    {
-      "name": "user",
-      "entityType": "tables"
-    },
-    {
-      "name": "verification",
-      "entityType": "tables"
-    },
-    {
-      "name": "fragments",
+      "name": "components",
       "entityType": "tables"
     },
     {
@@ -33,7 +21,19 @@
       "entityType": "tables"
     },
     {
+      "name": "session",
+      "entityType": "tables"
+    },
+    {
       "name": "site",
+      "entityType": "tables"
+    },
+    {
+      "name": "user",
+      "entityType": "tables"
+    },
+    {
+      "name": "verification",
       "entityType": "tables"
     },
     {
@@ -167,6 +167,166 @@
       "entityType": "columns"
     },
     {
+      "table": "components",
+      "name": "key",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "components",
+      "name": "type",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "'page'",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "components",
+      "name": "data",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "components",
+      "name": "updated_at",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "components",
+      "name": "updated_by",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "key",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "url",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "alt",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "size",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "height",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "width",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "updated_at",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "images",
+      "name": "updated_by",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "kv",
+      "name": "namespace",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "kv",
+      "name": "key",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "kv",
+      "name": "value",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
       "table": "session",
       "name": "id",
       "type": "text",
@@ -239,6 +399,56 @@
     {
       "table": "session",
       "name": "user_id",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "site",
+      "name": "id",
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "site",
+      "name": "version",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "site",
+      "name": "components",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "site",
+      "name": "updated_at",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "site",
+      "name": "updated_by",
       "type": "text",
       "notNull": true,
       "autoincrement": false,
@@ -387,221 +597,25 @@
       "entityType": "columns"
     },
     {
-      "table": "fragments",
-      "name": "key",
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "fragments",
-      "name": "type",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": "'page'",
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "fragments",
-      "name": "data",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "fragments",
-      "name": "updated_at",
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "fragments",
-      "name": "updated_by",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "key",
-      "type": "text",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "url",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "alt",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "size",
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "height",
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "width",
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "updated_at",
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "images",
-      "name": "updated_by",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "kv",
-      "name": "namespace",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "kv",
-      "name": "key",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "kv",
-      "name": "value",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "site",
-      "name": "id",
-      "type": "integer",
-      "notNull": false,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "site",
-      "name": "version",
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "site",
-      "name": "components",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "site",
-      "name": "updated_at",
-      "type": "integer",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
-      "table": "site",
-      "name": "updated_by",
-      "type": "text",
-      "notNull": true,
-      "autoincrement": false,
-      "default": null,
-      "generated": null,
-      "entityType": "columns"
-    },
-    {
       "table": "account",
       "name": "account_userId_idx",
       "columns": [
         {
           "value": "user_id",
+          "isExpression": false
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "components",
+      "name": "components_type_idx",
+      "columns": [
+        {
+          "value": "type",
           "isExpression": false
         }
       ],
@@ -667,20 +681,6 @@
       "entityType": "indexes"
     },
     {
-      "table": "fragments",
-      "name": "fragments_type_idx",
-      "columns": [
-        {
-          "value": "type",
-          "isExpression": false
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "origin": "manual",
-      "entityType": "indexes"
-    },
-    {
       "table": "account",
       "name": "account_user_id_user_id_fk",
       "columns": ["user_id"],
@@ -717,8 +717,29 @@
       "entityType": "pks"
     },
     {
+      "table": "components",
+      "name": "pages_pk",
+      "columns": ["key"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "images",
+      "name": "images_pk",
+      "columns": ["key"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
       "table": "session",
       "name": "session_pk",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "site",
+      "name": "site_pk",
       "columns": ["id"],
       "nameExplicit": false,
       "entityType": "pks"
@@ -736,28 +757,7 @@
       "columns": ["id"],
       "nameExplicit": false,
       "entityType": "pks"
-    },
-    {
-      "table": "fragments",
-      "name": "pages_pk",
-      "columns": ["key"],
-      "nameExplicit": false,
-      "entityType": "pks"
-    },
-    {
-      "table": "images",
-      "name": "images_pk",
-      "columns": ["key"],
-      "nameExplicit": false,
-      "entityType": "pks"
-    },
-    {
-      "table": "site",
-      "name": "site_pk",
-      "columns": ["id"],
-      "nameExplicit": false,
-      "entityType": "pks"
     }
   ],
-  "renames": ["pages->fragments"]
+  "renames": ["pages->components"]
 }

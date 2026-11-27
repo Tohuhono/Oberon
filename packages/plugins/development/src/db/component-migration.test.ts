@@ -3,15 +3,15 @@ import { dirname, resolve } from "node:path"
 
 import { describe, expect, it } from "@dev/vitest"
 import { createClient } from "@libsql/client"
+import { migrateComponentStorage } from "@oberoncms/sqlite/adapter"
 import { drizzle } from "drizzle-orm/libsql"
-import { migrate } from "drizzle-orm/libsql/migrator"
 import { readMigrationFiles } from "drizzle-orm/migrator"
 
 const rootDirectory = resolve(import.meta.dirname, "../../../../../")
 const migrationsFolder = resolve(import.meta.dirname, "./migrations")
-const legacyFile = resolve(rootDirectory, ".tmp/development-fragment-migration.test.db")
+const legacyFile = resolve(rootDirectory, ".tmp/development-component-migration.test.db")
 
-describe("development fragment migration", { tags: ["ai", "feature-shared-components"] }, () => {
+describe("development component migration", { tags: ["ai", "feature-shared-components"] }, () => {
   it("upgrades the migration history and preserves existing Page records", async () => {
     await mkdir(dirname(legacyFile), { recursive: true })
     await rm(legacyFile, { force: true })
@@ -23,7 +23,7 @@ describe("development fragment migration", { tags: ["ai", "feature-shared-compon
 
     try {
       const migrations = readMigrationFiles({ migrationsFolder })
-      const boundary = migrations.findIndex(({ name }) => name.endsWith("_fragment_storage"))
+      const boundary = migrations.findIndex(({ name }) => name.endsWith("_component_storage"))
       expect(boundary).toBeGreaterThan(0)
 
       await client.execute(
@@ -42,14 +42,16 @@ describe("development fragment migration", { tags: ["ai", "feature-shared-compon
         args: ["/existing", data, updatedAt, updatedBy],
       })
 
-      await migrate(drizzle({ client }), { migrationsFolder })
+      const db = drizzle({ client })
+      await migrateComponentStorage(db, { migrationsFolder })
+      await migrateComponentStorage(db, { migrationsFolder })
 
       const history = await client.execute("SELECT name FROM __drizzle_migrations ORDER BY name")
       expect(history.rows.map(({ name }) => name)).toEqual(
         migrations.map(({ name }) => name).sort(),
       )
       const migrated = await client.execute(
-        "SELECT key, type, data, updated_at, updated_by FROM fragments",
+        "SELECT key, type, data, updated_at, updated_by FROM components",
       )
       expect(migrated.rows).toEqual([
         {

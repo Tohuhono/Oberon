@@ -17,7 +17,7 @@ import { Link } from "@tohuhono/ui/link"
 import { useState } from "react"
 
 import { useOberonNavigation } from "../hooks/use-oberon"
-import type { OberonSharedFragment } from "../lib/dtd"
+import type { OberonSharedComponentRecord } from "../lib/dtd"
 import { sourceEditorUrl } from "../lib/shared-components"
 
 export function SharedComponentCard({
@@ -26,7 +26,7 @@ export function SharedComponentCard({
   nestedInCount,
   onDelete,
 }: {
-  source: OberonSharedFragment
+  source: OberonSharedComponentRecord
   canWrite: boolean
   nestedInCount: number
   onDelete: () => Promise<void>

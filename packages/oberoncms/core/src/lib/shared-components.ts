@@ -1,6 +1,6 @@
 import { migrate, walkTree, type Config, type Data } from "@puckeditor/core"
 
-import type { OberonAdapter, OberonSharedFragment, SharedComponentData } from "./dtd"
+import type { OberonAdapter, OberonSharedComponentRecord, SharedComponentData } from "./dtd"
 import { ResponseError } from "./dtd"
 
 export const SHARED_COMPONENT_TYPE = "SharedComponent"
@@ -9,19 +9,19 @@ export function createSharedExposureKey() {
   return `instance_${crypto.randomUUID().replaceAll("-", "_")}`
 }
 
-export async function getSharedComponentFragments(
-  adapter: Pick<OberonAdapter, "getAllFragments" | "getFragmentData">,
-): Promise<OberonSharedFragment[]> {
-  const fragments = await adapter.getAllFragments("shared")
-  const records = await Promise.all(fragments.map(({ key }) => adapter.getFragmentData({ key })))
-  return records.filter((fragment) => fragment?.type === "shared")
+export async function getSharedComponentRecords(
+  adapter: Pick<OberonAdapter, "listComponents" | "getComponent">,
+): Promise<OberonSharedComponentRecord[]> {
+  const components = await adapter.listComponents("shared")
+  const records = await Promise.all(components.map(({ key }) => adapter.getComponent({ key })))
+  return records.filter((component) => component?.type === "shared")
 }
 
 export async function getSharedComponentLibrary(
-  adapter: Pick<OberonAdapter, "getAllFragments" | "getFragmentData">,
+  adapter: Pick<OberonAdapter, "listComponents" | "getComponent">,
 ) {
-  const fragments = await getSharedComponentFragments(adapter)
-  return Object.fromEntries(fragments.map(({ key, data }) => [key, data]))
+  const components = await getSharedComponentRecords(adapter)
+  return Object.fromEntries(components.map(({ key, data }) => [key, data]))
 }
 
 export function getNodeById(data: Data, config: Config, id: string) {

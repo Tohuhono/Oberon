@@ -12,13 +12,13 @@ import { Fragment, useOptimistic, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { clearPageDraft } from "../hooks/use-fragment-draft"
+import { clearPageDraft } from "../hooks/use-component-draft"
 import { useOberonActions } from "../hooks/use-oberon"
-import { PageSchema, type OberonFragmentMeta } from "../lib/dtd"
+import { PageSchema, type OberonComponentMeta } from "../lib/dtd"
 
 const AddPageKeySchema = PageSchema.pick({ key: true })
 
-function copyKey(optimisticPages: OberonFragmentMeta[], key: OberonFragmentMeta["key"]) {
+function copyKey(optimisticPages: OberonComponentMeta[], key: OberonComponentMeta["key"]) {
   let iterator = 0
   let newKey = `${key}_copy`
 
@@ -29,9 +29,9 @@ function copyKey(optimisticPages: OberonFragmentMeta[], key: OberonFragmentMeta[
   return newKey
 }
 
-const useOberonPages = (pages: OberonFragmentMeta[], config: Config) => {
-  const { deleteFragment, addFragment, getFragmentData } = useOberonActions()
-  const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonFragmentMeta[]>(pages)
+const useOberonPages = (pages: OberonComponentMeta[], config: Config) => {
+  const { deleteComponent, addComponent, getComponent } = useOberonActions()
+  const [optimisticPages, optimisticPageUpdate] = useOptimistic<OberonComponentMeta[]>(pages)
   const [isPending, startTransition] = useTransition()
   const uniquePages = optimisticPages.filter(
     (page, index, allPages) => allPages.findIndex(({ key }) => key === page.key) === index,
@@ -46,31 +46,31 @@ const useOberonPages = (pages: OberonFragmentMeta[], config: Config) => {
           ...optimisticPages,
           { ...page, type: "page", updatedAt: new Date(), updatedBy: "", pending: true },
         ])
-        await addFragment({ ...page, type: "page" })
+        await addComponent({ ...page, type: "page" })
       })
     },
-    copyPage: (key: OberonFragmentMeta["key"]) => {
+    copyPage: (key: OberonComponentMeta["key"]) => {
       startTransition(async () => {
         const newKey = copyKey(optimisticPages, key)
         optimisticPageUpdate([
           ...optimisticPages,
           { key: newKey, type: "page", updatedAt: new Date(), updatedBy: "", pending: true },
         ])
-        const fragment = await getFragmentData({ key })
-        await addFragment({
+        const component = await getComponent({ key })
+        await addComponent({
           key: newKey,
           type: "page",
-          data: fragment?.type === "page" ? fragment.data : undefined,
+          data: component?.type === "page" ? component.data : undefined,
         })
       })
     },
-    deletePage: (key: OberonFragmentMeta["key"]) => {
+    deletePage: (key: OberonComponentMeta["key"]) => {
       startTransition(async () => {
-        const existingPage = optimisticPages.find((fragment) => fragment.key === key)
+        const existingPage = optimisticPages.find((component) => component.key === key)
         optimisticPageUpdate(
           optimisticPages.map((page) => (page.key === key ? { ...page, pending: true } : page)),
         )
-        await deleteFragment({
+        await deleteComponent({
           key,
           type: "page",
           ...(existingPage ? { expectedUpdatedAt: existingPage.updatedAt } : {}),
@@ -93,7 +93,7 @@ export function Pages({
   pages: serverPages,
   config,
 }: {
-  pages: OberonFragmentMeta[]
+  pages: OberonComponentMeta[]
   config: Config
 }) {
   const { pages, isPending, deletePage, addPage, copyPage } = useOberonPages(serverPages, config)

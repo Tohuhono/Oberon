@@ -1,9 +1,7 @@
-import { fragmentTag, type OberonPlugin } from "@oberoncms/core"
+import { componentTag, type OberonPlugin } from "@oberoncms/core"
 import { createMiddleware } from "@tanstack/react-start"
 import { appendResponseHeader, setResponseHeader } from "@tanstack/react-start/server"
 import { addCacheTag, invalidateByTag } from "@vercel/functions"
-
-const sharedComponentsTag = "oberon-shared"
 
 export const applyCDNHeaders = createMiddleware().server(async ({ request, next }) => {
   const cacheable =
@@ -25,25 +23,17 @@ export const plugin: OberonPlugin = ({ phase }) => ({
   adapter:
     phase === "runtime"
       ? {
-          getFragmentData:
+          getComponent:
             ({ next }) =>
             async ({ key }) => {
-              const fragment = await next({ key })
-              // Public Pages can read the entire library. One Shared tag fits Vercel's response tag limit.
-              if (fragment?.type === "page" || (!fragment && key.startsWith("/"))) {
-                await addCacheTag([await fragmentTag(key), sharedComponentsTag])
-              } else {
-                await addCacheTag(sharedComponentsTag)
-              }
-              return fragment
+              await addCacheTag(await componentTag(key))
+              return next({ key })
             },
-          onFragmentChange:
+          onComponentChange:
             ({ next }) =>
-            async (fragment) => {
-              await next(fragment)
-              await invalidateByTag(
-                fragment.type === "page" ? await fragmentTag(fragment.key) : sharedComponentsTag,
-              )
+            async (component) => {
+              await next(component)
+              await invalidateByTag(await componentTag(component.key))
             },
         }
       : {},

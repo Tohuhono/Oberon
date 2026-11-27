@@ -6,7 +6,7 @@ export function getPageMetadata(data?: PageData) {
 }
 
 export async function getMetaData(
-  { getFragmentData }: OberonAdapter,
+  { getComponent }: OberonAdapter,
   path: string[] = [],
   action?: string,
 ) {
@@ -20,7 +20,7 @@ export async function getMetaData(
     }
   }
 
-  const fragment = await getFragmentData({ key: slug })
+  const component = await getComponent({ key: slug })
 
-  return getPageMetadata(fragment?.type === "page" ? fragment.data : undefined)
+  return getPageMetadata(component?.type === "page" ? component.data : undefined)
 }

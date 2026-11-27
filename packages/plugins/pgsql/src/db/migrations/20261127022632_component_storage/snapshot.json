@@ -2,7 +2,7 @@
   "type": "diff",
   "version": "10",
   "dialect": "postgres",
-  "id": "93faf501-802b-4457-a9fb-867e531b185e",
+  "id": "a9f8fd9f-bd37-4aea-af2c-64904850b7ff",
   "prevIds": ["bd1852f6-9d5e-4865-8454-dc6c346e5e7c"],
   "footprints": [
     {
@@ -13,46 +13,46 @@
         "n|tbl|public.pages",
         "n|rel|public.pages",
         "n|type|public.pages",
-        "s|tbl|public.fragments",
-        "n|tbl|public.fragments",
-        "n|rel|public.fragments",
-        "n|type|public.fragments"
+        "s|tbl|public.components",
+        "n|tbl|public.components",
+        "n|rel|public.components",
+        "n|type|public.components"
       ],
       "reads": ["n|sch|public"]
     },
     {
       "statementType": "rename_index",
-      "statementTarget": ["index", "public", "fragments", "pages_key_idx"],
+      "statementTarget": ["index", "public", "components", "pages_key_idx"],
       "writes": [
         "s|idx|public.pages_key_idx",
         "n|idx|public.pages_key_idx",
         "n|rel|public.pages_key_idx",
-        "s|idx|public.fragments_key_idx",
-        "n|idx|public.fragments_key_idx",
-        "n|rel|public.fragments_key_idx"
+        "s|idx|public.components_key_idx",
+        "n|idx|public.components_key_idx",
+        "n|rel|public.components_key_idx"
       ],
-      "reads": ["e|tbl|public.fragments", "n|sch|public", "e|col|public.fragments.key"]
+      "reads": ["e|tbl|public.components", "n|sch|public", "e|col|public.components.key"]
     },
     {
       "statementType": "add_column",
-      "statementTarget": ["column", "public", "fragments", "type"],
+      "statementTarget": ["column", "public", "components", "type"],
       "writes": [
-        "s|col|public.fragments.type",
-        "n|col|public.fragments.type",
-        "e|col|public.fragments.type"
+        "s|col|public.components.type",
+        "n|col|public.components.type",
+        "e|col|public.components.type"
       ],
-      "reads": ["n|tbl|public.fragments", "n|sch|public"]
+      "reads": ["n|tbl|public.components", "n|sch|public"]
     },
     {
       "statementType": "create_index",
-      "statementTarget": ["index", "public", "fragments", "fragments_type_idx"],
+      "statementTarget": ["index", "public", "components", "components_type_idx"],
       "writes": [
-        "s|idx|public.fragments_type_idx",
-        "n|idx|public.fragments_type_idx",
-        "e|idx|public.fragments_type_idx",
-        "n|rel|public.fragments_type_idx"
+        "s|idx|public.components_type_idx",
+        "n|idx|public.components_type_idx",
+        "e|idx|public.components_type_idx",
+        "n|rel|public.components_type_idx"
       ],
-      "reads": ["n|tbl|public.fragments", "n|sch|public", "n|col|public.fragments.type"]
+      "reads": ["n|tbl|public.components", "n|sch|public", "n|col|public.components.type"]
     }
   ],
   "deltas": [
@@ -60,21 +60,21 @@
       "op": "rename",
       "key": "tables\u0000[\"public\",\"pages\"]",
       "set": {
-        "name": "fragments"
+        "name": "components"
       }
     },
     {
       "op": "rename",
       "key": "indexes\u0000[\"public\",\"pages_key_idx\"]",
       "set": {
-        "name": "fragments_key_idx"
+        "name": "components_key_idx"
       }
     },
     {
       "op": "create",
       "row": {
         "schema": "public",
-        "table": "fragments",
+        "table": "components",
         "name": "type",
         "type": "text",
         "typeSchema": null,
@@ -90,8 +90,8 @@
       "op": "create",
       "row": {
         "schema": "public",
-        "table": "fragments",
-        "name": "fragments_type_idx",
+        "table": "components",
+        "name": "components_type_idx",
         "nameExplicit": true,
         "columns": [
           {

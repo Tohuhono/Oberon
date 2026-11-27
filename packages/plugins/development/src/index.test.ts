@@ -117,7 +117,7 @@ developmentAdapterTest.describe(
     developmentAdapterTest(
       "keeps page updatedBy as a write-time snapshot after auth user changes",
       async ({ adapter }) => {
-        if (!adapter.addUser || !adapter.addFragment || !adapter.getAllFragments) {
+        if (!adapter.addUser || !adapter.addComponent || !adapter.listComponents) {
           throw new Error("Development plugin adapter is missing page or user methods")
         }
 
@@ -126,7 +126,7 @@ developmentAdapterTest.describe(
           role: "admin",
         })
 
-        await adapter.addFragment({
+        await adapter.addComponent({
           key: "/write-time-snapshot",
           type: "page",
           data: INITIAL_DATA,
@@ -135,7 +135,7 @@ developmentAdapterTest.describe(
         })
 
         const readUpdatedBy = async () => {
-          const pages = await adapter.getAllFragments("page")
+          const pages = await adapter.listComponents("page")
 
           return pages.find((page) => page.key === "/write-time-snapshot")?.updatedBy
         }
@@ -165,11 +165,11 @@ developmentAdapterTest.describe(
 )
 
 developmentAdapterTest.describe(
-  "Fragment writes",
+  "Component writes",
   { tags: ["ai", "feature-shared-components"] },
   () => {
     developmentAdapterTest(
-      "rolls back the Fragment and derived data when a publication effect fails",
+      "rolls back the Component and derived data when a publication effect fails",
       async ({ adapter: storage }) => {
         const { initAdapter } = await import("@oberoncms/core/adapter")
         const key = "/failed-publication"
@@ -178,16 +178,16 @@ developmentAdapterTest.describe(
           client: fromPartial({ version: 1, components: {} }),
           plugins: [
             ({ getAdapter: getRuntimeAdapter }) => ({
-              name: "fragment-storage",
+              name: "component-storage",
               adapter: {
-                addFragment: () => storage.addFragment,
-                getFragmentData: () => storage.getFragmentData,
-                withFragmentTransaction: () => storage.withFragmentTransaction,
+                addComponent: () => storage.addComponent,
+                getComponent: () => storage.getComponent,
+                withComponentTransaction: () => storage.withComponentTransaction,
                 getKV: () => storage.getKV,
                 putKV: () => storage.putKV,
-                onFragmentWrite: () => async () => {
+                onComponentWrite: () => async () => {
                   const runtimeAdapter = getRuntimeAdapter()
-                  expect(await runtimeAdapter.getFragmentData({ key })).toMatchObject({ key })
+                  expect(await runtimeAdapter.getComponent({ key })).toMatchObject({ key })
                   await runtimeAdapter.putKV({ ...effect, value: "derived asset" })
                   throw new Error("Publication effect failed")
                 },
@@ -197,7 +197,7 @@ developmentAdapterTest.describe(
         })
 
         await expect(
-          adapter.addFragment({
+          adapter.addComponent({
             key,
             type: "page",
             data: INITIAL_DATA,
@@ -205,7 +205,7 @@ developmentAdapterTest.describe(
             updatedBy: "test@example.com",
           }),
         ).rejects.toThrow("Publication effect failed")
-        await expect(adapter.getFragmentData({ key })).resolves.toBeNull()
+        await expect(adapter.getComponent({ key })).resolves.toBeNull()
         await expect(adapter.getKV(effect)).resolves.toBeNull()
       },
     )
@@ -218,13 +218,13 @@ developmentAdapterTest.describe(
           client: fromPartial({ version: 1, components: {} }),
           plugins: [
             () => ({
-              name: "fragment-storage",
+              name: "component-storage",
               adapter: {
-                addFragment: () => storage.addFragment,
-                deleteFragment: () => storage.deleteFragment,
-                getAllFragments: () => storage.getAllFragments,
-                getFragmentData: () => storage.getFragmentData,
-                withFragmentTransaction: () => storage.withFragmentTransaction,
+                addComponent: () => storage.addComponent,
+                deleteComponent: () => storage.deleteComponent,
+                listComponents: () => storage.listComponents,
+                getComponent: () => storage.getComponent,
+                withComponentTransaction: () => storage.withComponentTransaction,
               },
             }),
           ],
@@ -233,7 +233,7 @@ developmentAdapterTest.describe(
         const updatedAt = new Date()
         const updatedBy = "test@example.com"
 
-        await adapter.addFragment({
+        await adapter.addComponent({
           key,
           type: "shared",
           data: { name: "Source", tree: INITIAL_DATA, exposures: [], defaults: {} },
@@ -242,7 +242,7 @@ developmentAdapterTest.describe(
         })
 
         const [publication, deletion] = await Promise.allSettled([
-          adapter.addFragment({
+          adapter.addComponent({
             key: "/transaction-page",
             type: "page",
             data: {
@@ -254,7 +254,7 @@ developmentAdapterTest.describe(
             updatedAt,
             updatedBy,
           }),
-          adapter.deleteFragment({ key, type: "shared" }),
+          adapter.deleteComponent({ key, type: "shared" }),
         ])
 
         expect(publication.status).toBe("fulfilled")
@@ -262,7 +262,7 @@ developmentAdapterTest.describe(
           status: "rejected",
           reason: { message: expect.stringContaining("/transaction-page") },
         })
-        await expect(adapter.getFragmentData({ key })).resolves.toMatchObject({ type: "shared" })
+        await expect(adapter.getComponent({ key })).resolves.toMatchObject({ type: "shared" })
       },
     )
   },
@@ -300,21 +300,21 @@ developmentAdapterTest.describe(
           }),
           plugins: [
             () => ({
-              name: "fragment-storage",
+              name: "component-storage",
               adapter: {
-                getAllFragments: () => storage.getAllFragments,
-                getFragmentData: () => storage.getFragmentData,
+                listComponents: () => storage.listComponents,
+                getComponent: () => storage.getComponent,
                 getSite: () => storage.getSite,
-                updateFragmentData: () => storage.updateFragmentData,
+                updateComponentData: () => storage.updateComponentData,
                 updateSite: () => storage.updateSite,
-                withFragmentTransaction: () => storage.withFragmentTransaction,
+                withComponentTransaction: () => storage.withComponentTransaction,
               },
             }),
           ],
         })
 
         await storage.updateSite({ ...publication, version: 1, components: { Text: 0 } })
-        await storage.addFragment({
+        await storage.addComponent({
           ...publication,
           key: page,
           type: "page",
@@ -323,7 +323,7 @@ developmentAdapterTest.describe(
             content: [{ type: "Text", props: { id: "page-text", text: "page" } }],
           },
         })
-        await storage.addFragment({
+        await storage.addComponent({
           ...publication,
           key: shared,
           type: "shared",
@@ -349,7 +349,7 @@ developmentAdapterTest.describe(
           error: expect.arrayContaining([page, shared]),
         })
         await expect(storage.getSite()).resolves.toMatchObject({ components: { Text: 0 } })
-        await expect(storage.getFragmentData({ key: page })).resolves.toMatchObject({
+        await expect(storage.getComponent({ key: page })).resolves.toMatchObject({
           data: { content: [{ props: { text: "page" } }] },
         })
 
@@ -359,10 +359,10 @@ developmentAdapterTest.describe(
           success: expect.arrayContaining([page, shared]),
         })
         await expect(storage.getSite()).resolves.toMatchObject({ components: { Text: 1 } })
-        await expect(storage.getFragmentData({ key: page })).resolves.toMatchObject({
+        await expect(storage.getComponent({ key: page })).resolves.toMatchObject({
           data: { content: [{ props: { text: "page migrated" } }] },
         })
-        await expect(storage.getFragmentData({ key: shared })).resolves.toMatchObject({
+        await expect(storage.getComponent({ key: shared })).resolves.toMatchObject({
           data: { tree: { content: [{ props: { text: "shared migrated" } }] } },
         })
       },

@@ -50,7 +50,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
-        getAllFragments: () => async (type) => [
+        listComponents: () => async (type) => [
           { key: "/database", type, updatedAt: new Date(), updatedBy: "system" },
         ],
       },
@@ -102,11 +102,11 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
 
   it.each(["/", "/guides/start"])("resolves Page data for %s", async (key) => {
     const page = getInitialData()
-    const getFragmentData = vi.fn(async () => page)
+    const getComponent = vi.fn(async () => page)
     const plugin: OberonPlugin = () => ({
       name: "page-resolution",
       adapter: {
-        getFragmentData: () => getFragmentData,
+        getComponent: () => getComponent,
       },
     })
     const adapter = initAdapter({
@@ -118,11 +118,11 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
       key,
       data: page.data,
     })
-    expect(getFragmentData).toHaveBeenCalledExactlyOnceWith({ key })
+    expect(getComponent).toHaveBeenCalledExactlyOnceWith({ key })
   })
 
   it.each(["missing", "shared"] as const)(
-    "routes a %s Fragment as a missing Page",
+    "routes a %s Component as a missing Page",
     async (kind) => {
       const missing = new Error("not-found")
       const notFound = vi.fn((): never => {
@@ -131,7 +131,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
       const plugin: OberonPlugin = () => ({
         name: "missing-page",
         adapter: {
-          getFragmentData: () => async () =>
+          getComponent: () => async () =>
             kind === "shared"
               ? {
                   ...getInitialData(),
@@ -158,13 +158,13 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
   )
 
   it("checks Page permission before path resolution reads data", async () => {
-    const getFragmentData = vi.fn(async () => getInitialData())
+    const getComponent = vi.fn(async () => getInitialData())
     const plugin: OberonPlugin = () => ({
       name: "private-pages",
       adapter: {
         hasPermission: () => () => false,
         getCurrentUser: () => async () => null,
-        getFragmentData: () => getFragmentData,
+        getComponent: () => getComponent,
       },
     })
     const adapter = initAdapter({
@@ -175,7 +175,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     await expect(createActionHandler(adapter).resolvePath({ key: "/private" })).rejects.toThrow(
       "You do not have permission to perform this action",
     )
-    expect(getFragmentData).not.toHaveBeenCalled()
+    expect(getComponent).not.toHaveBeenCalled()
   })
 })
 
@@ -189,9 +189,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       return {
         name: "shared-config-plugin",
         adapter: {
-          getAllFragments: () => async () => [],
+          listComponents: () => async () => [],
           getSite: () => async () => undefined,
-          updateFragmentData: () => async () => new Date(),
+          updateComponentData: () => async () => new Date(),
           updateSite: () => async () => {},
         },
       }
@@ -219,7 +219,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter:
           phase === "runtime"
             ? {
-                getAllFragments: () => async (type) =>
+                listComponents: () => async (type) =>
                   type === "page"
                     ? [
                         {
@@ -232,9 +232,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
                     : [],
               }
             : {
-                getAllFragments: () => async () => [],
+                listComponents: () => async () => [],
                 getSite: () => async () => undefined,
-                updateFragmentData: () => async () => new Date(),
+                updateComponentData: () => async () => new Date(),
                 updateSite: () => async () => {},
               },
       }
@@ -248,7 +248,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const adapter = initAdapter(config)
     await bootstrapOberon(config)
 
-    await expect(adapter.getAllFragments("page")).resolves.toEqual([
+    await expect(adapter.listComponents("page")).resolves.toEqual([
       { key: "/runtime", type: "page", updatedAt: expect.any(Date), updatedBy: "system" },
     ])
     expect(phases).toEqual(["runtime", "bootstrap"])
@@ -260,9 +260,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const firstPlugin: OberonPlugin = ({ getAdapter }) => ({
       name: "first-plugin",
       adapter: {
-        getAllFragments: () => async () => [],
+        listComponents: () => async () => [],
         getSite: () => async () => undefined,
-        updateFragmentData: () => async () => {
+        updateComponentData: () => async () => {
           events.push("welcome")
           return new Date()
         },
@@ -291,20 +291,20 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
   })
 })
 
-describe("Fragment publishing", { tags: ["ai", "feature-shared-components"] }, () => {
-  it("returns the persisted timestamp after publishing a Fragment", async () => {
+describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, () => {
+  it("returns the persisted timestamp after publishing a Component", async () => {
     const page = getInitialData()
     const persistedAt = new Date("2026-10-13T00:00:00.000Z")
     const plugin: OberonPlugin = () => ({
-      name: "persisted-fragment-timestamp",
+      name: "persisted-component-timestamp",
       adapter: {
         getCurrentUser: () => async () => ({
           id: "editor",
           email: "editor@example.com",
           role: "admin",
         }),
-        getFragmentData: () => async () => ({ ...page, updatedAt: persistedAt }),
-        updateFragmentData: () => async () => persistedAt,
+        getComponent: () => async () => ({ ...page, updatedAt: persistedAt }),
+        updateComponentData: () => async () => persistedAt,
       },
     })
     const adapter = initAdapter({
@@ -313,7 +313,7 @@ describe("Fragment publishing", { tags: ["ai", "feature-shared-components"] }, (
     })
 
     await expect(
-      createActionHandler(adapter).publishFragmentData({
+      createActionHandler(adapter).publishComponentData({
         key: page.key,
         type: "page",
         data: page.data,
@@ -326,19 +326,19 @@ describe("Fragment publishing", { tags: ["ai", "feature-shared-components"] }, (
   })
 
   it("validates references before publishing a Page or creating a Shared component", async () => {
-    const addFragment = vi.fn(async () => {})
-    const updateFragmentData = vi.fn(async () => new Date())
+    const addComponent = vi.fn(async () => {})
+    const updateComponentData = vi.fn(async () => new Date())
     const plugin: OberonPlugin = () => ({
-      name: "fragment-storage",
+      name: "component-storage",
       adapter: {
         getCurrentUser: () => async () => ({
           id: "editor",
           email: "editor@example.com",
           role: "admin",
         }),
-        getAllFragments: () => async () => [],
-        addFragment: () => addFragment,
-        updateFragmentData: () => updateFragmentData,
+        listComponents: () => async () => [],
+        addComponent: () => addComponent,
+        updateComponentData: () => updateComponentData,
       },
     })
     const adapter = initAdapter({
@@ -354,22 +354,22 @@ describe("Fragment publishing", { tags: ["ai", "feature-shared-components"] }, (
     }
 
     await expect(
-      actions.publishFragmentData({ type: "page", key: "/", data: tree }),
+      actions.publishComponentData({ type: "page", key: "/", data: tree }),
     ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
     await expect(
-      actions.addFragment({
+      actions.addComponent({
         type: "shared",
         key: "source",
         data: { name: "Source", tree, exposures: [], defaults: {} },
       }),
     ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
-    expect(addFragment).not.toHaveBeenCalled()
-    expect(updateFragmentData).not.toHaveBeenCalled()
+    expect(addComponent).not.toHaveBeenCalled()
+    expect(updateComponentData).not.toHaveBeenCalled()
 
     const suppliedData = { root: { props: { title: "Supplied" } }, content: [] }
     await expect(
-      actions.addFragment({ type: "page", key: "/", data: suppliedData }),
+      actions.addComponent({ type: "page", key: "/", data: suppliedData }),
     ).resolves.toMatchObject({ status: "success" })
-    expect(addFragment).toHaveBeenCalledWith(expect.objectContaining({ data: suppliedData }))
+    expect(addComponent).toHaveBeenCalledWith(expect.objectContaining({ data: suppliedData }))
   })
 })

@@ -4,11 +4,11 @@ import { createElement } from "react"
 import type { ReactNode } from "react"
 
 import {
-  AddFragmentSchema,
+  AddComponentSchema,
   AddUserSchema,
   defineOberonComponent,
   PageSchema,
-  PublishFragmentSchema,
+  PublishComponentSchema,
   SignInSchema,
   UserSchema,
 } from "./dtd"
@@ -139,23 +139,23 @@ describe("defineOberonComponent", { tags: ["ai", "feature-component-typing"] }, 
   })
 })
 
-describe("Fragment input schemas", { tags: ["ai", "feature-shared-components"] }, () => {
+describe("Component input schemas", { tags: ["ai", "feature-shared-components"] }, () => {
   it.each([
     { root: [], content: [] },
     { root: {}, content: [null] },
     { root: {}, content: [{ type: "Text", props: [] }] },
   ])("rejects malformed Puck structures before publication", (data) => {
-    expect(PublishFragmentSchema.safeParse({ key: "/test", type: "page", data }).success).toBe(
+    expect(PublishComponentSchema.safeParse({ key: "/test", type: "page", data }).success).toBe(
       false,
     )
   })
 
-  it("applies route validation only to Page Fragment keys", () => {
-    expect(AddFragmentSchema.parse({ key: "/articles/first-article", type: "page" })).toEqual({
+  it("applies route validation only to Page Component keys", () => {
+    expect(AddComponentSchema.parse({ key: "/articles/first-article", type: "page" })).toEqual({
       key: "/articles/first-article",
       type: "page",
     })
-    expect(AddFragmentSchema.safeParse({ key: "Article", type: "page" }).success).toBe(false)
+    expect(AddComponentSchema.safeParse({ key: "Article", type: "page" }).success).toBe(false)
     const data = {
       name: "Article",
       tree: { content: [], root: { props: {} } },
@@ -163,19 +163,19 @@ describe("Fragment input schemas", { tags: ["ai", "feature-shared-components"] }
       defaults: {},
     }
 
-    expect(AddFragmentSchema.parse({ key: "article", type: "shared", data })).toEqual({
+    expect(AddComponentSchema.parse({ key: "article", type: "shared", data })).toEqual({
       key: "article",
       type: "shared",
       data,
     })
-    expect(AddFragmentSchema.safeParse({ key: "article", type: "shared" }).success).toBe(false)
+    expect(AddComponentSchema.safeParse({ key: "article", type: "shared" }).success).toBe(false)
   })
 
   it("parses serialized optimistic-concurrency timestamps", () => {
     const updatedAt = new Date("2026-10-13T00:00:00.000Z")
 
     expect(
-      PublishFragmentSchema.parse({
+      PublishComponentSchema.parse({
         key: "/test",
         type: "page",
         data: { content: [], root: { props: {} } },

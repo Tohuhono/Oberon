@@ -1,7 +1,7 @@
 import {
   INITIAL_DATA,
-  AddFragmentSchema,
-  PublishFragmentSchema,
+  AddComponentSchema,
+  PublishComponentSchema,
   ResponseError,
   type OberonAdapter,
   type OberonResponse,
@@ -42,16 +42,16 @@ export async function transport<T>(
 export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
     resolvePath: adapter.getPage,
-    addFragment: (input) =>
+    addComponent: (input) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })
-        const parsed = AddFragmentSchema.safeParse(input)
+        const parsed = AddComponentSchema.safeParse(input)
         if (!parsed.success) {
-          throw new ResponseError(parsed.error.issues[0]?.message ?? "Invalid Fragment data")
+          throw new ResponseError(parsed.error.issues[0]?.message ?? "Invalid Component data")
         }
         const data = parsed.data
         const publication = { updatedAt: new Date(), updatedBy: user.email }
-        await adapter.addFragment(
+        await adapter.addComponent(
           data.type === "page"
             ? { ...data, ...publication, data: data.data ?? INITIAL_DATA }
             : { ...data, ...publication },
@@ -70,10 +70,10 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         const { id } = await adapter.addUser({ email, role })
         return { id, email, role }
       }),
-    deleteFragment: (data) =>
+    deleteComponent: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "write" })
-        await adapter.deleteFragment(data)
+        await adapter.deleteComponent(data)
       }),
     deleteImage: (data) =>
       transport(async () => {
@@ -100,10 +100,10 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         await adapter.will({ action: "images", permission: "read" })
         return adapter.getAllImages()
       }),
-    getAllFragments: (data) =>
+    listComponents: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "read" })
-        return adapter.getAllFragments(data.type)
+        return adapter.listComponents(data.type)
       }),
     getAllPaths: () =>
       transport(async () => {
@@ -120,27 +120,27 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         await adapter.will({ action: "site", permission: "read" })
         return adapter.getConfig()
       }),
-    getFragmentData: (data) =>
+    getComponent: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "read" })
-        return adapter.getFragmentData(data)
+        return adapter.getComponent(data)
       }),
     migrateData: () =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "site", permission: "write" })
         return adapter.migrateData(user)
       }),
-    publishFragmentData: (input) =>
+    publishComponentData: (input) =>
       transport(
         async () => {
           const user = await adapter.whoWill({ action: "pages", permission: "write" })
-          const parsed = PublishFragmentSchema.safeParse(input)
+          const parsed = PublishComponentSchema.safeParse(input)
           if (!parsed.success) {
-            throw new ResponseError("Invalid Fragment data")
+            throw new ResponseError("Invalid Component data")
           }
           const data = parsed.data
 
-          const updatedAt = await adapter.updateFragmentData({
+          const updatedAt = await adapter.updateComponentData({
             ...data,
             updatedAt: new Date(),
             updatedBy: user.email,

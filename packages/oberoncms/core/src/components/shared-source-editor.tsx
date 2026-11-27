@@ -10,14 +10,14 @@ import {
   useBrowserDraftsReady,
   useDraftPublication,
   useSharedDraft,
-} from "../hooks/use-fragment-draft"
+} from "../hooks/use-component-draft"
 import { useOberonActions, useOberonNavigation } from "../hooks/use-oberon"
 import {
   readSourceDraft,
   useSharedSourceSettings,
   withSourceSettings,
 } from "../hooks/use-shared-source-settings"
-import type { OberonSharedFragment, SharedComponentData } from "../lib/dtd"
+import type { OberonSharedComponentRecord, SharedComponentData } from "../lib/dtd"
 import { EditorHistory } from "./editor/header"
 import { ResolvedPreview } from "./editor/resolved-preview"
 import { EditorWorkspace } from "./editor/workspace"
@@ -63,7 +63,7 @@ export function SharedSourceEditor({
   returnTo,
   canWrite,
 }: {
-  source: OberonSharedFragment
+  source: OberonSharedComponentRecord
   library: Record<string, SharedComponentData>
   clientConfig: Config
   returnTo: string | null
@@ -99,7 +99,7 @@ function ReadOnlySharedSource({
   returnTo,
   session,
 }: {
-  source: OberonSharedFragment
+  source: OberonSharedComponentRecord
   library: Record<string, SharedComponentData>
   returnTo: string | null
   session: ReturnType<typeof withSharedEditorComponents>
@@ -132,7 +132,7 @@ function EditableSharedSource({
   returnTo,
   session,
 }: Parameters<typeof ReadOnlySharedSource>[0]) {
-  const { publishFragmentData } = useOberonActions()
+  const { publishComponentData } = useOberonActions()
   const { refresh } = useOberonNavigation()
   const draft = useSharedDraft(source.key)
   const publication = useDraftPublication({ ...draft, updatedAt: source.updatedAt })
@@ -151,7 +151,7 @@ function EditableSharedSource({
     try {
       const data = toSourceData(nextData)
       await publication.publish((expectedUpdatedAt) =>
-        publishFragmentData({ key: source.key, type: "shared", data, expectedUpdatedAt }),
+        publishComponentData({ key: source.key, type: "shared", data, expectedUpdatedAt }),
       )
     } catch (error) {
       setPublishError(

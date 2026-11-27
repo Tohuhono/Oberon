@@ -2,7 +2,7 @@ import "server-cli-only"
 import { createHash } from "crypto"
 
 import {
-  getFragmentStyleProps,
+  getComponentStyleProps,
   type OberonClientConfig,
   type OberonPlugin,
   type OberonPluginAdapter,
@@ -62,25 +62,25 @@ async function getAsset(
 }
 
 async function getAllPublishedClasses(
-  adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getFragmentData">,
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent">,
   client: OberonClientConfig,
 ) {
   const [pages, shared] = await Promise.all([
-    adapter.getAllFragments("page"),
-    adapter.getAllFragments("shared"),
+    adapter.listComponents("page"),
+    adapter.listComponents("shared"),
   ])
-  const fragments = await Promise.all(
-    [...pages, ...shared].map(({ key }) => adapter.getFragmentData({ key })),
+  const components = await Promise.all(
+    [...pages, ...shared].map(({ key }) => adapter.getComponent({ key })),
   )
-  const { props, exposedClassKeys } = getFragmentStyleProps(
-    fragments.filter((fragment) => fragment !== null),
+  const { props, exposedClassKeys } = getComponentStyleProps(
+    components.filter((component) => component !== null),
     client,
   )
   return extractTailwindClasses(props, exposedClassKeys)
 }
 
 async function syncStyles(
-  adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getKV" | "getFragmentData" | "putKV">,
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getKV" | "getComponent" | "putKV">,
   client: OberonClientConfig,
 ) {
   const classes = await getAllPublishedClasses(adapter, client)
@@ -166,7 +166,7 @@ export const plugin: OberonPlugin = ({ client, getAdapter: getBootstrapAdapter }
     }
   },
   adapter: {
-    onFragmentWrite:
+    onComponentWrite:
       ({ getAdapter, next }) =>
       async () => {
         await next()
@@ -176,7 +176,7 @@ export const plugin: OberonPlugin = ({ client, getAdapter: getBootstrapAdapter }
 })
 
 async function syncAfterWrite(
-  adapter: Pick<OberonPluginAdapter, "getAllFragments" | "getFragmentData" | "getKV" | "putKV">,
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent" | "getKV" | "putKV">,
   client: OberonClientConfig,
 ) {
   try {

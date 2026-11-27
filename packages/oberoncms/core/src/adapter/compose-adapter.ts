@@ -9,11 +9,11 @@ import {
   type OberonUser,
   ResponseError,
 } from "../lib/dtd"
-import { fragmentWrites } from "./fragment-writes"
+import { componentWrites } from "./component-writes"
 import { initPlugins } from "./init-plugins"
-import { getTransforms, migrateFragments } from "./transforms"
+import { getTransforms, migrateComponents } from "./transforms"
 
-const sortFragments = (a: { key: string }, b: { key: string }) => {
+const sortComponents = (a: { key: string }, b: { key: string }) => {
   if (a.key < b.key) {
     return -1
   }
@@ -95,23 +95,23 @@ export function composeAdapter(
     return handler(request)
   }
 
-  const readAllFragments = adapter.getAllFragments
-  const getAllFragments: OberonAdapter["getAllFragments"] = async (type) => {
-    const result = await readAllFragments(type)
+  const readAllComponents = adapter.listComponents
+  const listComponents: OberonAdapter["listComponents"] = async (type) => {
+    const result = await readAllComponents(type)
 
-    const data = result.sort(sortFragments)
+    const data = result.sort(sortComponents)
     return data
   }
 
   const getPage: OberonAdapter["getPage"] = async ({ key }) => {
     await will({ action: "pages", permission: "read" })
-    const fragment = await adapter.getFragmentData({ key })
-    if (fragment?.type !== "page") return adapter.notFound()
-    return { key, data: fragment.data }
+    const component = await adapter.getComponent({ key })
+    if (component?.type !== "page") return adapter.notFound()
+    return { key, data: component.data }
   }
 
   const getAllPaths = async () => {
-    const result = await adapter.getAllFragments("page")
+    const result = await adapter.listComponents("page")
     const data = result.map((row) => ({
       path: row["key"].split("/").slice(1),
     }))
@@ -130,7 +130,7 @@ export function composeAdapter(
     return allImages || []
   }
 
-  const { updateInTransaction, ...writes } = fragmentWrites(adapter, config)
+  const { updateInTransaction, ...writes } = componentWrites(adapter, config)
 
   const getConfig = async () => {
     const site = await adapter.getSite()
@@ -148,7 +148,7 @@ export function composeAdapter(
   }
 
   const migrateData: OberonAdapter["migrateData"] = streamResponse((user: OberonUser) =>
-    migrateFragments(adapter, config, user, updateInTransaction),
+    migrateComponents(adapter, config, user, updateInTransaction),
   )
 
   const finalAdapter: OberonAdapter = {
@@ -156,7 +156,7 @@ export function composeAdapter(
     can,
     ...writes,
     getAllImages,
-    getAllFragments,
+    listComponents,
     getAllPaths,
     getAllUsers,
     getConfig,

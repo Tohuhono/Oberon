@@ -28,14 +28,14 @@ export const plugin: OberonPlugin = ({ phase }) => {
             getAuthPlugins:
               ({ next }) =>
               () => [...next(), nextCookies()],
-            onFragmentChange:
+            onComponentChange:
               ({ next }) =>
-              async (fragment) => {
-                await next(fragment)
-                if (fragment.type === "page") {
-                  revalidatePath(fragment.key)
-                  revalidatePath(`/cms/edit${fragment.key}`)
-                  revalidatePath(`/cms/preview${fragment.key}`)
+              async (component) => {
+                await next(component)
+                if (component.type === "page") {
+                  revalidatePath(component.key)
+                  revalidatePath(`/cms/edit${component.key}`)
+                  revalidatePath(`/cms/preview${component.key}`)
                 } else {
                   revalidatePath("/", "layout")
                 }

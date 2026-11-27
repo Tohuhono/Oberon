@@ -2,11 +2,11 @@ import { migrate, walkTree, type Config, type Data } from "@puckeditor/core"
 import { createElement } from "react"
 
 import { withSharedComponent } from "../components/shared-component-render"
-import type { OberonFragment } from "./dtd"
+import type { OberonComponentRecord } from "./dtd"
 import { getNodeById, isSlotContent } from "./shared-components"
 
-export function getFragmentStyleProps(fragments: OberonFragment[], config: Config) {
-  const sharedComponents = fragments.filter((fragment) => fragment.type === "shared")
+export function getComponentStyleProps(components: OberonComponentRecord[], config: Config) {
+  const sharedComponents = components.filter((component) => component.type === "shared")
   const library = Object.fromEntries(sharedComponents.map(({ key, data }) => [key, data]))
   const sharedConfig = withSharedComponent(config, () => createElement("div"), library)
   const props: Record<string, unknown>[] = []
@@ -20,13 +20,13 @@ export function getFragmentStyleProps(fragments: OberonFragment[], config: Confi
     props.push(stripped.root.props ?? stripped.root)
   }
 
-  for (const fragment of fragments) {
-    if (fragment.type === "page") {
-      collect(fragment.data)
+  for (const component of components) {
+    if (component.type === "page") {
+      collect(component.data)
       continue
     }
 
-    const { tree, exposures, defaults } = fragment.data
+    const { tree, exposures, defaults } = component.data
     collect(tree)
     for (const exposure of exposures) {
       if (exposure.prop === "className") exposedClassKeys.add(exposure.key)

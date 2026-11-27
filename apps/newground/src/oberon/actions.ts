@@ -1,21 +1,21 @@
 import {
   AddImageSchema,
-  AddFragmentSchema,
+  AddComponentSchema,
   AddUserSchema,
   CanSchema,
   ChangeRoleSchema,
   DeleteImageSchema,
-  DeleteFragmentSchema,
+  DeleteComponentSchema,
   DeleteUserSchema,
   GetAllImagesSchema,
-  GetAllFragmentsSchema,
+  ListComponentsSchema,
   GetAllPathsSchema,
   GetAllUsersSchema,
   GetConfigSchema,
-  GetFragmentDataSchema,
+  GetComponentSchema,
   MigrateDataSchema,
   OberonClientContextRequestSchema,
-  PublishFragmentSchema,
+  PublishComponentSchema,
   ResolvePathSchema,
   SignInSchema,
   SignOutSchema,
@@ -48,9 +48,9 @@ const addImage = createServerFn({ method: "POST" })
   .validator(AddImageSchema)
   .handler(({ data }) => actionHandler.addImage(data))
 
-const addFragment = createServerFn({ method: "POST" })
-  .validator(AddFragmentSchema)
-  .handler(({ data }) => actionHandler.addFragment(data))
+const addComponent = createServerFn({ method: "POST" })
+  .validator(AddComponentSchema)
+  .handler(({ data }) => actionHandler.addComponent(data))
 
 const addUser = createServerFn({ method: "POST" })
   .validator(AddUserSchema)
@@ -68,9 +68,9 @@ const deleteImage = createServerFn({ method: "POST" })
   .validator(DeleteImageSchema)
   .handler(({ data }) => actionHandler.deleteImage(data))
 
-const deleteFragment = createServerFn({ method: "POST" })
-  .validator(DeleteFragmentSchema)
-  .handler(({ data }) => actionHandler.deleteFragment(data))
+const deleteComponent = createServerFn({ method: "POST" })
+  .validator(DeleteComponentSchema)
+  .handler(({ data }) => actionHandler.deleteComponent(data))
 
 const deleteUser = createServerFn({ method: "POST" })
   .validator(DeleteUserSchema)
@@ -80,9 +80,9 @@ const getAllImages = createServerFn({ method: "GET" })
   .validator(GetAllImagesSchema)
   .handler(({ data }) => actionHandler.getAllImages(data))
 
-const getAllFragments = createServerFn({ method: "GET" })
-  .validator(GetAllFragmentsSchema)
-  .handler(({ data }) => actionHandler.getAllFragments(data))
+const listComponents = createServerFn({ method: "GET" })
+  .validator(ListComponentsSchema)
+  .handler(({ data }) => actionHandler.listComponents(data))
 
 const getAllPaths = createServerFn({ method: "GET" })
   .validator(GetAllPathsSchema)
@@ -96,17 +96,17 @@ const getConfig = createServerFn({ method: "GET" })
   .validator(GetConfigSchema)
   .handler(({ data }) => actionHandler.getConfig(data))
 
-const getFragmentData = createServerFn({ method: "POST" })
-  .validator(GetFragmentDataSchema)
-  .handler(({ data }) => actionHandler.getFragmentData(data))
+const getComponent = createServerFn({ method: "POST" })
+  .validator(GetComponentSchema)
+  .handler(({ data }) => actionHandler.getComponent(data))
 
 const migrateData = createServerFn({ method: "POST" })
   .validator(MigrateDataSchema)
   .handler(({ data }) => actionHandler.migrateData(data))
 
-const publishFragmentData = createServerFn({ method: "POST" })
-  .validator(PublishFragmentSchema)
-  .handler(({ data }) => actionHandler.publishFragmentData(data))
+const publishComponentData = createServerFn({ method: "POST" })
+  .validator(PublishComponentSchema)
+  .handler(({ data }) => actionHandler.publishComponentData(data))
 
 const signIn = createServerFn({ method: "POST" })
   .validator(SignInSchema)
@@ -119,21 +119,21 @@ const signOut = createServerFn({ method: "POST" })
 export const actions = {
   resolvePath: (data) => resolvePath({ data }),
   addImage: (data) => addImage({ data }),
-  addFragment: (data) => addFragment({ data }),
+  addComponent: (data) => addComponent({ data }),
   addUser: (data) => addUser({ data }),
   can: (data) => can({ data }),
   changeRole: (data) => changeRole({ data }),
   deleteImage: (data) => deleteImage({ data }),
-  deleteFragment: (data) => deleteFragment({ data }),
+  deleteComponent: (data) => deleteComponent({ data }),
   deleteUser: (data) => deleteUser({ data }),
   getAllImages: (data) => getAllImages({ data }),
-  getAllFragments: (data) => getAllFragments({ data }),
+  listComponents: (data) => listComponents({ data }),
   getAllPaths: (data) => getAllPaths({ data }),
   getAllUsers: (data) => getAllUsers({ data }),
   getConfig: (data) => getConfig({ data }),
-  getFragmentData: (data) => getFragmentData({ data }),
+  getComponent: (data) => getComponent({ data }),
   migrateData: (data) => migrateData({ data }),
-  publishFragmentData: (data) => publishFragmentData({ data }),
+  publishComponentData: (data) => publishComponentData({ data }),
   signIn: (data) => signIn({ data }),
   signOut: (data) => signOut({ data }),
 } satisfies OberonServerActions
