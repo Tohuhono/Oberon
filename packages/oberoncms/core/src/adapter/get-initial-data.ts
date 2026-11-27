@@ -1,8 +1,9 @@
-import type { OberonPage } from "../lib/dtd"
+import type { OberonComponentRecord } from "../lib/dtd"
 
-export function getInitialData(): OberonPage {
+export function getInitialData(): Extract<OberonComponentRecord, { type: "page" }> {
   return {
     key: "/",
+    type: "page",
     data: {
       content: [
         { type: "Welcome", props: { id: "Welcome-1" } },

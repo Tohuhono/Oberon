@@ -32,26 +32,27 @@ export const mockPlugin: OberonPlugin = () => ({
   name: "mock-plugin",
   adapter: {
     addImage: () => notAvailable,
-    addPage: () => notAvailable,
+    addComponent: () => notAvailable,
     addUser: () => async () => mockUser,
     changeRole: () => notAvailable,
     deleteImage: () => notAvailable,
-    deletePage: () => notAvailable,
+    deleteComponent: () => notAvailable,
     deleteKV: () => notAvailable,
     deleteUser: () => notAvailable,
     getAllImages: () => async () => [],
-    getAllPages: () => async () => mockAllPages,
+    listComponents: () => async (type) =>
+      type === "page" ? mockAllPages.map((page) => ({ ...page, type: "page" as const })) : [],
     getAllUsers: () => async () => [mockUser],
     getCurrentUser: () => async () => mockUser,
-    getPageData:
+    getComponent:
       () =>
       async ({ key }) =>
-        key === "/" ? mockPage.data : null,
+        key === mockPage.key ? mockPage : null,
     getKV: () => notAvailable,
     getSite: () => async () => mockSite,
     hasPermission: () => () => true,
     putKV: () => notAvailable,
-    updatePageData: () => notAvailable,
+    updateComponentData: () => notAvailable,
     updateSite: () => notAvailable,
     signIn: () => notAvailable,
     signOut: () => async () => {},

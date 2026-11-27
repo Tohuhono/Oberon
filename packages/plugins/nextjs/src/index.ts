@@ -28,39 +28,13 @@ export const plugin: OberonPlugin = ({ phase }) => {
             getAuthPlugins:
               ({ next }) =>
               () => [...next(), nextCookies()],
-            updatePageData:
+            onComponentChange:
               ({ next }) =>
-              async (page) => {
-                await next(page)
-                revalidatePath(page.key)
-                revalidatePath(`/cms/edit${page.key}`)
-                revalidatePath(`/cms/preview${page.key}`)
-                updateTag("oberon-pages")
-              },
-            addPage:
-              ({ next }) =>
-              async (page) => {
-                await next(page)
-                revalidatePath(page.key)
-                revalidatePath(`/cms/edit${page.key}`)
-                revalidatePath(`/cms/preview${page.key}`)
-                updateTag("oberon-pages")
-              },
-            deletePage:
-              ({ next }) =>
-              async (data) => {
-                await next(data)
-                const { key } = data
-                revalidatePath(key)
-                revalidatePath(`/cms/edit${key}`)
-                revalidatePath(`/cms/preview${key}`)
-                updateTag("oberon-pages")
-              },
-            updateSite:
-              ({ next }) =>
-              async (site) => {
-                await next(site)
-                updateTag("oberon-config")
+              async (component) => {
+                await next(component)
+                revalidatePath(component.key)
+                revalidatePath(`/cms/edit${component.key}`)
+                revalidatePath(`/cms/preview${component.key}`)
               },
             addImage:
               ({ next }) =>
@@ -93,11 +67,6 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 await next(data)
                 updateTag("oberon-users")
               },
-            getPageData: ({ next }) => cache(next, ["oberon-get-page-data"]),
-            getAllPages: ({ next }) =>
-              cache(next, ["oberon-get-all-pages"], {
-                tags: ["oberon-pages"],
-              }),
             getAllUsers: ({ next }) =>
               cache(next, ["oberon-get-all-users"], {
                 tags: ["oberon-users"],
@@ -105,10 +74,6 @@ export const plugin: OberonPlugin = ({ phase }) => {
             getAllImages: ({ next }) =>
               cache(next, ["oberon-get-all-images"], {
                 tags: ["oberon-images"],
-              }),
-            getSite: ({ next }) =>
-              cache(next, ["oberon-get-site"], {
-                tags: ["oberon-config"],
               }),
           }
         : {},

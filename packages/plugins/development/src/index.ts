@@ -7,8 +7,7 @@ import {
   USE_DEVELOPMENT_SEND_PLUGIN,
   type OberonPlugin,
 } from "@oberoncms/core"
-import { getAdapter } from "@oberoncms/sqlite/adapter"
-import { migrate } from "drizzle-orm/libsql/migrator"
+import { getAdapter, migrateComponentStorage } from "@oberoncms/sqlite/adapter"
 
 import { name, version } from "../package.json" with { type: "json" }
 import { getClient, initialise } from "./db/client"
@@ -36,7 +35,7 @@ export const plugin: OberonPlugin = () => {
           return
         }
 
-        await migrate(db, {
+        await migrateComponentStorage(db, {
           migrationsFolder,
         })
 
@@ -58,18 +57,19 @@ export const plugin: OberonPlugin = () => {
       ...(USE_DEVELOPMENT_DATABASE_PLUGIN && {
         getAuthDatabase: () => adapter.getAuthDatabase,
         getAuthPlugins: () => adapter.getAuthPlugins,
-        addPage: () => adapter.addPage,
+        addComponent: () => adapter.addComponent,
+        withComponentTransaction: () => adapter.withComponentTransaction,
         addImage: () => adapter.addImage,
-        deletePage: () => adapter.deletePage,
+        deleteComponent: () => adapter.deleteComponent,
         deleteImage: () => adapter.deleteImage,
         deleteKV: () => adapter.deleteKV,
         getAllImages: () => adapter.getAllImages,
-        getAllPages: () => adapter.getAllPages,
-        getPageData: () => adapter.getPageData,
+        listComponents: () => adapter.listComponents,
+        getComponent: () => adapter.getComponent,
         getKV: () => adapter.getKV,
         getSite: () => adapter.getSite,
         putKV: () => adapter.putKV,
-        updatePageData: () => adapter.updatePageData,
+        updateComponentData: () => adapter.updateComponentData,
         updateSite: () => adapter.updateSite,
         addUser: () => adapter.addUser,
         deleteUser: () => adapter.deleteUser,

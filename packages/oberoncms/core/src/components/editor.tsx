@@ -4,9 +4,14 @@ import "@puckeditor/core/puck.css"
 import { Config, Data, Puck } from "@puckeditor/core"
 import { createContext, useContext, useState, type PropsWithChildren } from "react"
 
-import { useLocalData } from "../hooks/use-local-data"
+import {
+  useBrowserDraftsReady,
+  useDraftPublication,
+  usePageDraft,
+} from "../hooks/use-component-draft"
 import { useOberonActions } from "../hooks/use-oberon"
 import { INITIAL_DATA } from "../lib/dtd"
+import { DraftConflict } from "./editor/draft-conflict"
 import { Header } from "./editor/header"
 import { Preview, PreviewHeading, useViewPort } from "./editor/preview"
 import { PreviewIframe, type PreviewMode } from "./editor/preview-iframe"
@@ -40,35 +45,37 @@ const editorOverrides = {
   iframe: EditorIframe,
 }
 
-export function Editor({
-  path,
-  data,
-  config,
-}: {
+export function Editor(props: {
   path: string
   data: Data | null
+  updatedAt: Date | null
   config: Config
 }) {
-  const { publishPageData } = useOberonActions()
-  const [localData, setLocalData] = useLocalData(path, config)
+  return useBrowserDraftsReady() ? <PageEditor key={props.path} {...props} /> : null
+}
+
+function PageEditor({ path, data, config, updatedAt }: Parameters<typeof Editor>[0]) {
+  const { publishComponentData } = useOberonActions()
+  const draft = usePageDraft(path, config)
+  const publication = useDraftPublication({ ...draft, updatedAt })
 
   const { activeTab, setActiveTab } = useSidebarTab()
   const { currentViewport, setCurrentViewport } = useViewPort()
   const [previewMode, setPreviewMode] = useState<PreviewMode>("follow")
 
   const onPublish = async (pageData: Data) => {
-    await publishPageData({
-      key: path,
-      data: pageData,
-    })
+    if (publication.isStale) return
+    await publication.publish((expectedUpdatedAt) =>
+      publishComponentData({ key: path, type: "page", data: pageData, expectedUpdatedAt }),
+    )
   }
 
   return (
     <PreviewModeContext value={previewMode}>
       <Puck
         config={config}
-        data={data || localData || INITIAL_DATA}
-        onChange={setLocalData}
+        data={draft.draft?.data ?? data ?? INITIAL_DATA}
+        onChange={publication.saveDraft}
         onAction={(action) => {
           if (action.type === "insert") {
             setActiveTab("fields")
@@ -84,7 +91,8 @@ export function Editor({
         "
         >
           <span className="col-span-3">
-            <Header path={path} onPublish={onPublish} />
+            <Header path={path} onPublish={onPublish} publishDisabled={publication.isStale} />
+            {publication.isStale && <DraftConflict {...publication} />}
           </span>
           <PreviewHeading
             className="flex flex-row items-center justify-center gap-6 pt-0.5"

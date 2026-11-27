@@ -1,13 +1,9 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
 import { defineConfig } from "../index"
-import {
-  INITIAL_DATA,
-  NotImplementedError,
-  type OberonClientConfig,
-  type OberonPlugin,
-} from "../lib/dtd"
+import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from "../lib/dtd"
 import { bootstrapOberon } from "./bootstrap-oberon"
+import { getInitialData } from "./get-initial-data"
 import { createActionHandler } from "./init-action-handler"
 import { initAdapter } from "./init-adapter"
 
@@ -54,8 +50,8 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
-        getAllPages: () => async () => [
-          { key: "/database", updatedAt: new Date(), updatedBy: "system" },
+        listComponents: () => async (type) => [
+          { key: "/database", type, updatedAt: new Date(), updatedBy: "system" },
         ],
       },
     })
@@ -105,11 +101,12 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
   })
 
   it.each(["/", "/guides/start"])("resolves Page data for %s", async (key) => {
-    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const page = getInitialData()
+    const getComponent = vi.fn(async () => page)
     const plugin: OberonPlugin = () => ({
       name: "page-resolution",
       adapter: {
-        getPageData: () => getPageData,
+        getComponent: () => getComponent,
       },
     })
     const adapter = initAdapter({
@@ -119,12 +116,12 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
 
     await expect(createActionHandler(adapter).resolvePath({ key })).resolves.toEqual({
       key,
-      data: INITIAL_DATA,
+      data: page.data,
     })
-    expect(getPageData).toHaveBeenCalledExactlyOnceWith({ key })
+    expect(getComponent).toHaveBeenCalledExactlyOnceWith({ key })
   })
 
-  it("resolves a missing Page through the routing adapter", async () => {
+  it("routes a missing Page through the routing adapter", async () => {
     const missing = new Error("not-found")
     const notFound = vi.fn((): never => {
       throw missing
@@ -132,7 +129,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const plugin: OberonPlugin = () => ({
       name: "missing-page",
       adapter: {
-        getPageData: () => async () => null,
+        getComponent: () => async () => null,
         notFound: () => notFound,
       },
     })
@@ -141,20 +138,18 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
       plugins: [plugin],
     })
 
-    await expect(createActionHandler(adapter).resolvePath({ key: "/missing" })).rejects.toBe(
-      missing,
-    )
+    await expect(adapter.getPage({ key: "/missing" })).rejects.toBe(missing)
     expect(notFound).toHaveBeenCalledOnce()
   })
 
   it("checks Page permission before path resolution reads data", async () => {
-    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const getComponent = vi.fn(async () => getInitialData())
     const plugin: OberonPlugin = () => ({
       name: "private-pages",
       adapter: {
         hasPermission: () => () => false,
         getCurrentUser: () => async () => null,
-        getPageData: () => getPageData,
+        getComponent: () => getComponent,
       },
     })
     const adapter = initAdapter({
@@ -165,7 +160,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     await expect(createActionHandler(adapter).resolvePath({ key: "/private" })).rejects.toThrow(
       "You do not have permission to perform this action",
     )
-    expect(getPageData).not.toHaveBeenCalled()
+    expect(getComponent).not.toHaveBeenCalled()
   })
 })
 
@@ -179,9 +174,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       return {
         name: "shared-config-plugin",
         adapter: {
-          getAllPages: () => async () => [],
+          listComponents: () => async () => [],
           getSite: () => async () => undefined,
-          updatePageData: () => async () => {},
+          updateComponentData: () => async () => new Date(),
           updateSite: () => async () => {},
         },
       }
@@ -209,14 +204,22 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter:
           phase === "runtime"
             ? {
-                getAllPages: () => async () => [
-                  { key: "/runtime", updatedAt: new Date(), updatedBy: "system" },
-                ],
+                listComponents: () => async (type) =>
+                  type === "page"
+                    ? [
+                        {
+                          key: "/runtime",
+                          type: "page",
+                          updatedAt: new Date(),
+                          updatedBy: "system",
+                        },
+                      ]
+                    : [],
               }
             : {
-                getAllPages: () => async () => [],
+                listComponents: () => async () => [],
                 getSite: () => async () => undefined,
-                updatePageData: () => async () => {},
+                updateComponentData: () => async () => new Date(),
                 updateSite: () => async () => {},
               },
       }
@@ -230,8 +233,8 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const adapter = initAdapter(config)
     await bootstrapOberon(config)
 
-    await expect(adapter.getAllPages()).resolves.toEqual([
-      { key: "/runtime", updatedAt: expect.any(Date), updatedBy: "system" },
+    await expect(adapter.listComponents("page")).resolves.toEqual([
+      { key: "/runtime", type: "page", updatedAt: expect.any(Date), updatedBy: "system" },
     ])
     expect(phases).toEqual(["runtime", "bootstrap"])
   })
@@ -242,10 +245,11 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const firstPlugin: OberonPlugin = ({ getAdapter }) => ({
       name: "first-plugin",
       adapter: {
-        getAllPages: () => async () => [],
+        listComponents: () => async () => [],
         getSite: () => async () => undefined,
-        updatePageData: () => async () => {
+        updateComponentData: () => async () => {
           events.push("welcome")
+          return new Date()
         },
         updateSite: () => async () => {
           events.push("site")
@@ -269,5 +273,65 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     })
 
     expect(events).toEqual(["function", "first", "second", "welcome", "site"])
+  })
+})
+
+describe("Component publishing", { tags: ["ai", "feature-component-storage"] }, () => {
+  it("returns the persisted timestamp after publishing a Component", async () => {
+    const page = getInitialData()
+    const persistedAt = new Date("2026-10-13T00:00:00.000Z")
+    const plugin: OberonPlugin = () => ({
+      name: "persisted-component-timestamp",
+      adapter: {
+        getCurrentUser: () => async () => ({
+          id: "editor",
+          email: "editor@example.com",
+          role: "admin",
+        }),
+        getComponent: () => async () => ({ ...page, updatedAt: persistedAt }),
+        updateComponentData: () => async () => persistedAt,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+
+    await expect(
+      createActionHandler(adapter).publishComponentData({
+        key: page.key,
+        type: "page",
+        data: page.data,
+        expectedUpdatedAt: page.updatedAt,
+      }),
+    ).resolves.toMatchObject({
+      status: "success",
+      result: { key: page.key, type: "page", updatedAt: persistedAt },
+    })
+  })
+
+  it("uses supplied Page data when creating a Component", async () => {
+    const addComponent = vi.fn(async () => {})
+    const plugin: OberonPlugin = () => ({
+      name: "component-storage",
+      adapter: {
+        getCurrentUser: () => async () => ({
+          id: "editor",
+          email: "editor@example.com",
+          role: "admin",
+        }),
+        addComponent: () => addComponent,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+    const actions = createActionHandler(adapter)
+    const suppliedData = { root: { props: { title: "Supplied" } }, content: [] }
+    await expect(
+      actions.addComponent({ type: "page", key: "/", data: suppliedData }),
+    ).resolves.toMatchObject({ status: "success" })
+    expect(addComponent).toHaveBeenCalledWith(expect.objectContaining({ data: suppliedData }))
   })
 })

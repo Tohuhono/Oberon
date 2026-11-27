@@ -146,41 +146,81 @@ export const JsonValueSchema = z.json()
 export type JsonValue = z.infer<typeof JsonValueSchema>
 
 /*
- * Pages
+ * Components
  */
+const PuckNodeSchema = z.looseObject({
+  type: z.string().min(1),
+  props: z.looseObject({ id: z.string().optional() }),
+  readOnly: z.record(z.string(), z.boolean().optional()).optional(),
+})
+
+export const PuckDataSchema: z.ZodType<Data> = z.looseObject({
+  content: z.array(PuckNodeSchema),
+  root: z.looseObject({
+    props: z.looseObject({}).optional(),
+  }),
+  zones: z.record(z.string(), z.array(PuckNodeSchema)).optional(),
+})
+
+const PageKeySchema = z
+  .string()
+  .regex(/^[0-9a-zA-Z_./-]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
+  .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/u, "Route segments cannot be empty")
+
 export const PageSchema = z.object({
-  key: z
-    .string()
-    .regex(/^[0-9a-zA-Z_.-/]+$/u, "Valid characters: 0-9 a-z A-Z -_./")
-    .regex(/^(\/|\/[^/]+(\/[^/]+)*)$/u, "Route segments cannot be empty"),
-  data: z.looseObject({}),
+  key: PageKeySchema,
+  data: PuckDataSchema,
   updatedAt: z.date(),
   updatedBy: z.string(),
 })
 
-export const AddPageSchema = PageSchema.pick({ key: true })
+export const ComponentTypeSchema = z.enum(["page"])
+export type ComponentType = z.infer<typeof ComponentTypeSchema>
 
-export const DeletePageSchema = PageSchema.pick({ key: true })
+const ComponentKeySchema = z.string().min(1, "Component key cannot be empty")
+const ExpectedUpdatedAtSchema = z
+  .union([z.date(), z.iso.datetime().transform((value) => new Date(value))])
+  .optional()
 
-export const GetPageDataSchema = PageSchema.pick({ key: true })
-
-export const PublishPageSchema = PageSchema.pick({ key: true, data: true })
-
-export const PageMetaSchema = PageSchema.pick({
-  key: true,
-  updatedAt: true,
-  updatedBy: true,
+export const ComponentRecordSchema = PageSchema.extend({
+  key: ComponentKeySchema,
+  type: ComponentTypeSchema,
 })
 
-export type OberonPage = z.infer<typeof PageSchema> & {
-  data: PageData
-  key: OberonRoute
-}
+export const AddComponentSchema = z.object({
+  key: PageKeySchema,
+  type: ComponentTypeSchema,
+  data: PuckDataSchema.optional(),
+})
 
-// Cannot infer from zod because we need nextjs to understand key is a valid Route
+export const DeleteComponentSchema = z.object({
+  key: PageKeySchema,
+  type: ComponentTypeSchema,
+  expectedUpdatedAt: ExpectedUpdatedAtSchema,
+})
+
+export const GetComponentSchema = z.object({ key: ComponentKeySchema })
+
+export const PublishComponentSchema = AddComponentSchema.required({ data: true }).extend({
+  expectedUpdatedAt: ExpectedUpdatedAtSchema,
+})
+
+export const ComponentMetaSchema = z.object({
+  key: ComponentKeySchema,
+  type: ComponentTypeSchema,
+  updatedAt: z.date(),
+  updatedBy: z.string(),
+})
+
+export type OberonComponentRecord = z.infer<typeof ComponentRecordSchema>
+
+export type OberonComponentMeta = MaybeOptimistic<z.infer<typeof ComponentMetaSchema>>
+
+// Cannot infer from zod because we need nextjs to understand Page keys are valid Routes.
 export type OberonPageMeta = MaybeOptimistic<
-  z.infer<typeof PageMetaSchema> & {
+  z.infer<typeof ComponentMetaSchema> & {
     key: OberonRoute
+    type: "page"
   }
 >
 
@@ -291,19 +331,20 @@ export type OberonAuthAdapter = {
 }
 
 export type OberonDatabaseAdapter = {
-  addPage: (page: OberonPage) => Promise<void>
+  addComponent: (component: OberonComponentRecord) => Promise<void>
   addImage: (data: z.infer<typeof ImageSchema>) => Promise<void>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => Promise<void>
+  deleteComponent: (data: z.infer<typeof DeleteComponentSchema>) => Promise<void>
   // TODO uploadthing
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => Promise<void>
   deleteKV: (data: { namespace: string; key: string }) => Promise<void>
   getAllImages: () => Promise<OberonImage[]>
-  getAllPages: () => Promise<OberonPageMeta[]>
-  getPageData: (data: z.infer<typeof DeletePageSchema>) => Promise<Data | null>
+  listComponents: (type: ComponentType) => Promise<OberonComponentMeta[]>
+  getComponent: (data: z.infer<typeof GetComponentSchema>) => Promise<OberonComponentRecord | null>
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updatePageData: (data: OberonPage) => Promise<void>
+  updateComponentData: (data: OberonComponentRecord & { expectedUpdatedAt?: Date }) => Promise<Date>
+  withComponentTransaction: <Result>(write: () => Promise<Result>) => Promise<Result>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -319,7 +360,10 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
-  OberonRoutingAdapter
+  OberonRoutingAdapter & {
+    onComponentWrite: () => Promise<void>
+    onComponentChange: (component: Pick<OberonComponentRecord, "key" | "type">) => Promise<void>
+  }
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
@@ -338,6 +382,7 @@ export type OberonAdapter = OberonPluginAdapter & {
     action: AdapterActionGroup
     permission: AdapterPermission
   }) => Promise<OberonUser>
+  getPage: (data: { key: string }) => Promise<{ key: string; data: PageData }>
   getAllPaths: () => Promise<Array<{ path: string[] }>>
   getConfig: () => Promise<OberonSiteConfig>
   migrateData: (user: OberonUser) => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
@@ -379,7 +424,7 @@ export type OberonResponse<T = unknown> = Promise<
 >
 
 export const GetAllImagesSchema = z.undefined()
-export const GetAllPagesSchema = z.undefined()
+export const ListComponentsSchema = z.object({ type: ComponentTypeSchema })
 export const GetAllPathsSchema = z.undefined()
 export const GetAllUsersSchema = z.undefined()
 export const GetConfigSchema = z.undefined()
@@ -390,10 +435,10 @@ export const ResolvePathSchema = z.object({ key: z.string() })
 
 export type OberonServerActions = {
   resolvePath: (data: z.infer<typeof ResolvePathSchema>) => Promise<{ key: string; data: PageData }>
-  addPage: (page: z.infer<typeof AddPageSchema>) => OberonResponse<void>
+  addComponent: (component: z.infer<typeof AddComponentSchema>) => OberonResponse<void>
   addImage: (data: OberonImage) => OberonResponse<OberonImage[]>
   addUser: (data: z.infer<typeof AddUserSchema>) => OberonResponse<OberonUser | null>
-  deletePage: (data: z.infer<typeof DeletePageSchema>) => OberonResponse<void>
+  deleteComponent: (data: z.infer<typeof DeleteComponentSchema>) => OberonResponse<void>
   deleteImage: (data: z.infer<typeof DeleteImageSchema>) => OberonResponse<void>
   deleteUser: (
     data: z.infer<typeof DeleteUserSchema>,
@@ -403,17 +448,23 @@ export type OberonServerActions = {
     data: z.infer<typeof ChangeRoleSchema>,
   ) => OberonResponse<Pick<OberonUser, "role" | "id"> | null>
   getAllImages: (data?: z.infer<typeof GetAllImagesSchema>) => OberonResponse<OberonImage[]>
-  getAllPages: (data?: z.infer<typeof GetAllPagesSchema>) => OberonResponse<OberonPageMeta[]>
+  listComponents: (
+    data: z.infer<typeof ListComponentsSchema>,
+  ) => OberonResponse<OberonComponentMeta[]>
   getAllPaths: (
     data?: z.infer<typeof GetAllPathsSchema>,
   ) => OberonResponse<Array<{ path: string[] }>>
   getAllUsers: (data?: z.infer<typeof GetAllUsersSchema>) => OberonResponse<OberonUser[]>
   getConfig: (data?: z.infer<typeof GetConfigSchema>) => OberonResponse<OberonSiteConfig>
-  getPageData: (data: z.infer<typeof GetPageDataSchema>) => OberonResponse<Data | null>
+  getComponent: (
+    data: z.infer<typeof GetComponentSchema>,
+  ) => OberonResponse<OberonComponentRecord | null>
   migrateData: (
     data?: z.infer<typeof MigrateDataSchema>,
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
-  publishPageData: (data: z.infer<typeof PublishPageSchema>) => OberonResponse<{ key: string }>
+  publishComponentData: (
+    data: z.infer<typeof PublishComponentSchema>,
+  ) => OberonResponse<{ key: string; type: ComponentType; updatedAt: Date }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
@@ -423,10 +474,14 @@ export type OberonServerActions = {
  */
 
 type DescriminatedContext =
-  | { action: "edit" | "preview"; data: Data | null }
+  | {
+      action: "edit" | "preview"
+      data: Data | null
+      updatedAt: Date | null
+    }
   | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }
-  | { action: "pages"; data: OberonPageMeta[] }
+  | { action: "pages"; data: OberonComponentMeta[] }
   | { action: "site"; data: OberonSiteConfig }
   | {
       action: "login"

@@ -14,7 +14,7 @@ import { ResponseError } from "./lib/dtd"
 import { parseClientAction, resolveSlug } from "./lib/utils"
 
 async function getContext(
-  { getPageData, getAllImages, getAllPages, getAllUsers, getConfig }: OberonAdapter,
+  { getComponent, getAllImages, listComponents, getAllUsers, getConfig }: OberonAdapter,
   action: ClientAction,
   slug: string,
   searchParams: OberonQueryParams,
@@ -31,12 +31,15 @@ async function getContext(
         },
       }
     case "edit":
-    case "preview":
+    case "preview": {
+      const component = await getComponent({ key: slug })
       return {
         action,
         slug,
-        data: await getPageData({ key: slug }),
+        data: component?.type === "page" ? component.data : null,
+        updatedAt: component?.updatedAt ?? null,
       }
+    }
     case "users":
       return {
         action,
@@ -59,7 +62,7 @@ async function getContext(
       return {
         action,
         slug,
-        data: await getAllPages(),
+        data: await listComponents("page"),
       }
   }
 }

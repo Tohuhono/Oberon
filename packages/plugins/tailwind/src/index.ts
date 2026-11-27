@@ -53,31 +53,15 @@ async function getAsset(
 }
 
 async function getAllPublishedClasses(
-  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getPageData">,
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent">,
 ) {
-  const classes = new Set<string>()
-  const pages = await adapter.getAllPages()
-
-  for (const { key } of pages) {
-    const data = await adapter.getPageData({ key })
-    if (!data) continue
-
-    for await (const node of walkAsyncStep(data)) {
-      if (node.key !== "className" || typeof node.val !== "string") {
-        continue
-      }
-
-      for (const cls of node.val.split(classDelimiter)) {
-        if (cls) classes.add(cls)
-      }
-    }
-  }
-
-  return Array.from(classes).sort()
+  const pages = await adapter.listComponents("page")
+  const records = await Promise.all(pages.map(({ key }) => adapter.getComponent({ key })))
+  return extractTailwindClasses(records.map((record) => record?.data))
 }
 
 async function syncStyles(
-  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getKV" | "getPageData" | "putKV">,
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getKV" | "getComponent" | "putKV">,
 ) {
   const classes = await getAllPublishedClasses(adapter)
   const state = await getState(adapter)
@@ -162,23 +146,29 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
     }
   },
   adapter: {
-    updatePageData:
+    onComponentWrite:
       ({ getAdapter, next }) =>
-      async (page) => {
-        try {
-          await next(page)
-          await syncStyles(getAdapter())
-        } catch (error) {
-          if (error instanceof ResponseError) {
-            throw error
-          }
-
-          throw new ResponseError(
-            error instanceof Error && error.message
-              ? `Failed to update Tailwind styles: ${error.message}`
-              : "Failed to update Tailwind styles",
-          )
-        }
+      async () => {
+        await next()
+        await syncAfterWrite(getAdapter())
       },
   },
 })
+
+async function syncAfterWrite(
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent" | "getKV" | "putKV">,
+) {
+  try {
+    await syncStyles(adapter)
+  } catch (error) {
+    if (error instanceof ResponseError) {
+      throw error
+    }
+
+    throw new ResponseError(
+      error instanceof Error && error.message
+        ? `Failed to update Tailwind styles: ${error.message}`
+        : "Failed to update Tailwind styles",
+    )
+  }
+}

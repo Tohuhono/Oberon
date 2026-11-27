@@ -17,7 +17,8 @@ createAdapterTests({
   test,
   getAdapter: async (onCleanup) => {
     const client = new PGlite()
-    const server = new PGLiteSocketServer({ db: client, port: 0 })
+    // pg.Pool can reconnect before PGlite finishes closing a failed connection.
+    const server = new PGLiteSocketServer({ db: client, port: 0, maxConnections: 2 })
     let pool: Pool | undefined
 
     const cleanup = async () => {

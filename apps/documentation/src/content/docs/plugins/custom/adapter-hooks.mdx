@@ -18,20 +18,21 @@ your plugin implements or wraps.
 ## Middleware
 
 Use `next` to call the previous implementation. Later plugins wrap earlier plugins. For
-`[database, tailwind, framework]`, a page update enters the framework hook first and the database
-method last.
+`[database, custom, framework]`, a hook shared by all three Plugins enters the framework hook first
+and the database method last.
 
 ```tsx
 import type { OberonPlugin } from "@oberoncms/core"
 
 export const plugin: OberonPlugin = () => ({
-  name: "page-log",
+  name: "component-log",
   adapter: {
-    updatePageData:
+    updateComponentData:
       ({ next }) =>
-      async (page) => {
-        await next(page)
-        console.info("Page updated", page.key)
+      async (component) => {
+        const updatedAt = await next(component)
+        console.info("Component updated", component.key)
+        return updatedAt
       },
   },
 })
@@ -43,19 +44,28 @@ static return type omits the current method to discourage self-recursion. A prov
 
 ## Method groups
 
-Use the exported types for exact signatures. Methods with input receive one object. Methods without
-input take no arguments.
+Use the exported types for exact method signatures.
 
-| Type                    | Methods                                                                                                                                                                                                                         |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OberonDatabaseAdapter` | `addPage`, `deletePage`, `getAllPages`, `getPageData`, `updatePageData`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
-| `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                          |
-| `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                             |
-| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                     |
-| `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                       |
+| Type                    | Methods                                                                                                                                                                                                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `OberonDatabaseAdapter` | `addComponent`, `deleteComponent`, `listComponents`, `getComponent`, `updateComponentData`, `withComponentTransaction`, `addImage`, `deleteImage`, `getAllImages`, `getSite`, `updateSite`, `getKV`, `putKV`, `deleteKV`, `addUser`, `deleteUser`, `getAllUsers`, `changeRole` |
+| `OberonCanAdapter`      | `getCurrentUser`, `hasPermission`, `signIn`, `signOut`                                                                                                                                                                                                                         |
+| `OberonAuthAdapter`     | `getAuthDatabase`, `getAuthPlugins`                                                                                                                                                                                                                                            |
+| `OberonRoutingAdapter`  | `redirect`, `notFound`, `getRequestHeaders`                                                                                                                                                                                                                                    |
+| `OberonSendAdapter`     | `sendVerificationRequest`                                                                                                                                                                                                                                                      |
 
 `hasPermission` returns a boolean synchronously. The final Adapter also supplies permission helpers,
 route dispatch, and component migration. See [Authentication](/docs/plugins/auth) for access checks.
+
+Each Component record stores the authored Puck data and its publication metadata. The `page` type
+uses its public path as the key.
+
+`getComponent({ key })` returns the record for a unique key or `null` if it is missing.
+`listComponents(type)` returns metadata for records of that type without loading their Puck data.
+Database Plugins implement `withComponentTransaction` to serialize competing writes. Component, Site
+state, and key-value operations in the callback use the same transaction. Use `onComponentWrite` to
+update derived data such as Tailwind style assets as part of publication. Use `onComponentChange`
+for cache invalidation after the transaction commits.
 
 ## Bootstrap
 

@@ -1,6 +1,17 @@
 import { Render as PuckRender } from "@puckeditor/core/rsc"
 
-import type { OberonClientConfig, PageData } from "./lib/dtd"
+import { initAdapter } from "./adapter"
+import type { OberonClientConfig, OberonConfig, PageData } from "./lib/dtd"
+
+export function initOberon(config: OberonConfig) {
+  const adapter = initAdapter(config)
+
+  function RenderPage({ page }: { page: Awaited<ReturnType<typeof adapter.getPage>> }) {
+    return <Render data={page.data} config={config.client} />
+  }
+
+  return { adapter, RenderPage }
+}
 
 export function Render({
   data,
