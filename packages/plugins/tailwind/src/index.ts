@@ -1,7 +1,12 @@
 import "server-cli-only"
 import { createHash } from "crypto"
 
-import { type OberonPlugin, type OberonPluginAdapter, ResponseError } from "@oberoncms/core"
+import {
+  ComponentTypeSchema,
+  type OberonPlugin,
+  type OberonPluginAdapter,
+  ResponseError,
+} from "@oberoncms/core"
 import { walkAsyncStep } from "walkjs"
 import { z } from "zod"
 
@@ -53,31 +58,23 @@ async function getAsset(
 }
 
 async function getAllPublishedClasses(
-  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getPageData">,
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent">,
 ) {
   const classes = new Set<string>()
-  const pages = await adapter.getAllPages()
-
-  for (const { key } of pages) {
-    const data = await adapter.getPageData({ key })
-    if (!data) continue
-
-    for await (const node of walkAsyncStep(data)) {
-      if (node.key !== "className" || typeof node.val !== "string") {
-        continue
-      }
-
-      for (const cls of node.val.split(classDelimiter)) {
-        if (cls) classes.add(cls)
+  for (const type of ComponentTypeSchema.options) {
+    for (const { key } of await adapter.listComponents(type)) {
+      const component = await adapter.getComponent({ key })
+      if (!component) continue
+      for (const className of await extractTailwindClasses(component.data)) {
+        classes.add(className)
       }
     }
   }
-
-  return Array.from(classes).sort()
+  return [...classes].sort()
 }
 
 async function syncStyles(
-  adapter: Pick<OberonPluginAdapter, "getAllPages" | "getKV" | "getPageData" | "putKV">,
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getKV" | "getComponent" | "putKV">,
 ) {
   const classes = await getAllPublishedClasses(adapter)
   const state = await getState(adapter)
@@ -162,7 +159,7 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
     }
   },
   adapter: {
-    updatePageData:
+    updateComponent:
       ({ getAdapter, next }) =>
       async (page) => {
         try {

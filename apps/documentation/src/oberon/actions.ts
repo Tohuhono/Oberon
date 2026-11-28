@@ -1,20 +1,20 @@
 import {
   AddImageSchema,
-  AddPageSchema,
+  AddComponentSchema,
   AddUserSchema,
   CanSchema,
   ChangeRoleSchema,
   DeleteImageSchema,
-  DeletePageSchema,
+  DeleteComponentSchema,
   DeleteUserSchema,
   GetAllImagesSchema,
-  GetAllPagesSchema,
+  ListComponentsSchema,
   GetAllPathsSchema,
   GetAllUsersSchema,
   GetConfigSchema,
-  GetPageDataSchema,
+  GetComponentSchema,
   MigrateDataSchema,
-  PublishPageSchema,
+  PublishComponentSchema,
   ResolvePathSchema,
   SignInSchema,
   SignOutSchema,
@@ -35,9 +35,9 @@ export const actions = {
     "use server"
     return actionHandler.addImage(AddImageSchema.parse(data))
   },
-  addPage: async (data) => {
+  addComponent: async (data) => {
     "use server"
-    return actionHandler.addPage(AddPageSchema.parse(data))
+    return actionHandler.addComponent(AddComponentSchema.parse(data))
   },
   addUser: async (data) => {
     "use server"
@@ -55,9 +55,9 @@ export const actions = {
     "use server"
     return actionHandler.deleteImage(DeleteImageSchema.parse(data))
   },
-  deletePage: async (data) => {
+  deleteComponent: async (data) => {
     "use server"
-    return actionHandler.deletePage(DeletePageSchema.parse(data))
+    return actionHandler.deleteComponent(DeleteComponentSchema.parse(data))
   },
   deleteUser: async (data) => {
     "use server"
@@ -67,9 +67,9 @@ export const actions = {
     "use server"
     return actionHandler.getAllImages(GetAllImagesSchema.parse(data))
   },
-  getAllPages: async (data) => {
+  listComponents: async (data) => {
     "use server"
-    return actionHandler.getAllPages(GetAllPagesSchema.parse(data))
+    return actionHandler.listComponents(ListComponentsSchema.parse(data))
   },
   getAllPaths: async (data) => {
     "use server"
@@ -83,17 +83,17 @@ export const actions = {
     "use server"
     return actionHandler.getConfig(GetConfigSchema.parse(data))
   },
-  getPageData: async (data) => {
+  getComponent: async (data) => {
     "use server"
-    return actionHandler.getPageData(GetPageDataSchema.parse(data))
+    return actionHandler.getComponent(GetComponentSchema.parse(data))
   },
   migrateData: async (data) => {
     "use server"
     return actionHandler.migrateData(MigrateDataSchema.parse(data))
   },
-  publishPageData: async (data) => {
+  publishComponent: async (data) => {
     "use server"
-    return actionHandler.publishPageData(PublishPageSchema.parse(data))
+    return actionHandler.publishComponent(PublishComponentSchema.parse(data))
   },
   signIn: async (data) => {
     "use server"

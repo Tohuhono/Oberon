@@ -3,7 +3,14 @@ import type { SlotComponent } from "@puckeditor/core"
 import { createElement } from "react"
 import type { ReactNode } from "react"
 
-import { AddUserSchema, defineOberonComponent, PageSchema, SignInSchema, UserSchema } from "./dtd"
+import {
+  AddComponentSchema,
+  AddUserSchema,
+  defineOberonComponent,
+  PageSchema,
+  SignInSchema,
+  UserSchema,
+} from "./dtd"
 
 describe("CMS input schemas", { tags: ["ai", "issue-323"] }, () => {
   it.each(["editor@example.com", "editor+cms@example.co.nz"])(
@@ -128,5 +135,15 @@ describe("defineOberonComponent", { tags: ["ai", "feature-component-typing"] }, 
         return image ? createElement("img", { alt: "", src: image.url }) : createElement("div")
       },
     })
+  })
+})
+
+describe("Component input schemas", { tags: ["ai", "feature-component-storage"] }, () => {
+  it("requires a route for a Page Component key", () => {
+    expect(AddComponentSchema.parse({ key: "/articles/first-article", type: "page" })).toEqual({
+      key: "/articles/first-article",
+      type: "page",
+    })
+    expect(AddComponentSchema.safeParse({ key: "Article", type: "page" }).success).toBe(false)
   })
 })

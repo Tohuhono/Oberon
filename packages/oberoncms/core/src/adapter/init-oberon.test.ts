@@ -1,13 +1,9 @@
 import { describe, expect, fromPartial, it, vi } from "@dev/vitest"
 
 import { defineConfig } from "../index"
-import {
-  INITIAL_DATA,
-  NotImplementedError,
-  type OberonClientConfig,
-  type OberonPlugin,
-} from "../lib/dtd"
+import { NotImplementedError, type OberonClientConfig, type OberonPlugin } from "../lib/dtd"
 import { bootstrapOberon } from "./bootstrap-oberon"
+import { getInitialData } from "./get-initial-data"
 import { createActionHandler } from "./init-action-handler"
 import { initAdapter } from "./init-adapter"
 
@@ -54,8 +50,8 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const databasePlugin: OberonPlugin = () => ({
       name: "database-plugin",
       adapter: {
-        getAllPages: () => async () => [
-          { key: "/database", updatedAt: new Date(), updatedBy: "system" },
+        listComponents: () => async (type) => [
+          { key: "/database", type, updatedAt: new Date(), updatedBy: "system" },
         ],
       },
     })
@@ -105,11 +101,12 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
   })
 
   it.each(["/", "/guides/start"])("resolves Page data for %s", async (key) => {
-    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const page = getInitialData()
+    const getComponent = vi.fn(async () => page)
     const plugin: OberonPlugin = () => ({
       name: "page-resolution",
       adapter: {
-        getPageData: () => getPageData,
+        getComponent: () => getComponent,
       },
     })
     const adapter = initAdapter({
@@ -119,12 +116,12 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
 
     await expect(createActionHandler(adapter).resolvePath({ key })).resolves.toEqual({
       key,
-      data: INITIAL_DATA,
+      data: page.data,
     })
-    expect(getPageData).toHaveBeenCalledExactlyOnceWith({ key })
+    expect(getComponent).toHaveBeenCalledExactlyOnceWith({ key })
   })
 
-  it("resolves a missing Page through the routing adapter", async () => {
+  it("routes a missing Page through the routing adapter", async () => {
     const missing = new Error("not-found")
     const notFound = vi.fn((): never => {
       throw missing
@@ -132,7 +129,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     const plugin: OberonPlugin = () => ({
       name: "missing-page",
       adapter: {
-        getPageData: () => async () => null,
+        getComponent: () => async () => null,
         notFound: () => notFound,
       },
     })
@@ -148,13 +145,13 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
   })
 
   it("checks Page permission before path resolution reads data", async () => {
-    const getPageData = vi.fn(async () => INITIAL_DATA)
+    const getComponent = vi.fn(async () => getInitialData())
     const plugin: OberonPlugin = () => ({
       name: "private-pages",
       adapter: {
         hasPermission: () => () => false,
         getCurrentUser: () => async () => null,
-        getPageData: () => getPageData,
+        getComponent: () => getComponent,
       },
     })
     const adapter = initAdapter({
@@ -165,7 +162,7 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     await expect(createActionHandler(adapter).resolvePath({ key: "/private" })).rejects.toThrow(
       "You do not have permission to perform this action",
     )
-    expect(getPageData).not.toHaveBeenCalled()
+    expect(getComponent).not.toHaveBeenCalled()
   })
 })
 
@@ -179,9 +176,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
       return {
         name: "shared-config-plugin",
         adapter: {
-          getAllPages: () => async () => [],
+          listComponents: () => async () => [],
           getSite: () => async () => undefined,
-          updatePageData: () => async () => {},
+          updateComponent: () => async () => {},
           updateSite: () => async () => {},
         },
       }
@@ -209,14 +206,22 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter:
           phase === "runtime"
             ? {
-                getAllPages: () => async () => [
-                  { key: "/runtime", updatedAt: new Date(), updatedBy: "system" },
-                ],
+                listComponents: () => async (type) =>
+                  type === "page"
+                    ? [
+                        {
+                          key: "/runtime",
+                          type: "page",
+                          updatedAt: new Date(),
+                          updatedBy: "system",
+                        },
+                      ]
+                    : [],
               }
             : {
-                getAllPages: () => async () => [],
+                listComponents: () => async () => [],
                 getSite: () => async () => undefined,
-                updatePageData: () => async () => {},
+                updateComponent: () => async () => {},
                 updateSite: () => async () => {},
               },
       }
@@ -230,8 +235,8 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const adapter = initAdapter(config)
     await bootstrapOberon(config)
 
-    await expect(adapter.getAllPages()).resolves.toEqual([
-      { key: "/runtime", updatedAt: expect.any(Date), updatedBy: "system" },
+    await expect(adapter.listComponents("page")).resolves.toEqual([
+      { key: "/runtime", type: "page", updatedAt: expect.any(Date), updatedBy: "system" },
     ])
     expect(phases).toEqual(["runtime", "bootstrap"])
   })
@@ -242,9 +247,9 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     const firstPlugin: OberonPlugin = ({ getAdapter }) => ({
       name: "first-plugin",
       adapter: {
-        getAllPages: () => async () => [],
+        listComponents: () => async () => [],
         getSite: () => async () => undefined,
-        updatePageData: () => async () => {
+        updateComponent: () => async () => {
           events.push("welcome")
         },
         updateSite: () => async () => {

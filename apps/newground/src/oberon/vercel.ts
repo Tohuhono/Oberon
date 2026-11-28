@@ -1,4 +1,4 @@
-import { pageTag, type OberonPlugin } from "@oberoncms/core"
+import { componentTag, type OberonPlugin } from "@oberoncms/core"
 import { createMiddleware } from "@tanstack/react-start"
 import { appendResponseHeader, setResponseHeader } from "@tanstack/react-start/server"
 import { addCacheTag, invalidateByTag } from "@vercel/functions"
@@ -23,29 +23,29 @@ export const plugin: OberonPlugin = ({ phase }) => ({
   adapter:
     phase === "runtime"
       ? {
-          getPageData:
+          getComponent:
             ({ next }) =>
             async (page) => {
-              await addCacheTag(await pageTag(page.key))
+              await addCacheTag(await componentTag(page.key))
               return next(page)
             },
-          addPage:
+          addComponent:
             ({ next }) =>
             async (page) => {
               await next(page)
-              await invalidateByTag(await pageTag(page.key))
+              await invalidateByTag(await componentTag(page.key))
             },
-          updatePageData:
+          updateComponent:
             ({ next }) =>
             async (page) => {
               await next(page)
-              await invalidateByTag(await pageTag(page.key))
+              await invalidateByTag(await componentTag(page.key))
             },
-          deletePage:
+          deleteComponent:
             ({ next }) =>
             async (page) => {
               await next(page)
-              await invalidateByTag(await pageTag(page.key))
+              await invalidateByTag(await componentTag(page.key))
             },
         }
       : {},

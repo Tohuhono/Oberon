@@ -2,7 +2,6 @@ import {
   INITIAL_DATA,
   ResponseError,
   type OberonAdapter,
-  type OberonPage,
   type OberonResponse,
   type OberonServerActions,
 } from "../lib/dtd"
@@ -42,21 +41,18 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
   return {
     resolvePath: async ({ key }) => {
       await adapter.will({ action: "pages", permission: "read" })
-      const data = await adapter.getPageData({ key })
+      const component = await adapter.getComponent({ key })
 
-      if (!data) {
-        return adapter.notFound()
-      }
+      if (component?.type !== "page") return adapter.notFound()
 
-      return { key, data }
+      return { key, data: component.data }
     },
-    addPage: (data) =>
+    addComponent: (component) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })
-        const { key } = data
-        await adapter.addPage({
-          key,
-          data: INITIAL_DATA,
+        await adapter.addComponent({
+          ...component,
+          data: component.data ?? INITIAL_DATA,
           updatedAt: new Date(),
           updatedBy: user.email,
         })
@@ -74,10 +70,10 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         const { id } = await adapter.addUser({ email, role })
         return { id, email, role }
       }),
-    deletePage: (data) =>
+    deleteComponent: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "write" })
-        await adapter.deletePage(data)
+        await adapter.deleteComponent(data)
       }),
     deleteImage: (data) =>
       transport(async () => {
@@ -104,10 +100,10 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         await adapter.will({ action: "images", permission: "read" })
         return adapter.getAllImages()
       }),
-    getAllPages: () =>
+    listComponents: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "read" })
-        return adapter.getAllPages()
+        return adapter.listComponents(data.type)
       }),
     getAllPaths: () =>
       transport(async () => {
@@ -124,43 +120,29 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         await adapter.will({ action: "site", permission: "read" })
         return adapter.getConfig()
       }),
-    getPageData: (data) =>
+    getComponent: (data) =>
       transport(async () => {
         await adapter.will({ action: "pages", permission: "read" })
-        return adapter.getPageData(data)
+        return adapter.getComponent(data)
       }),
     migrateData: () =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "site", permission: "write" })
         return adapter.migrateData(user)
       }),
-    publishPageData: (data) =>
+    publishComponent: (component) =>
       transport(
         async () => {
           const user = await adapter.whoWill({ action: "pages", permission: "write" })
-          const { key, data: pageData } = data
-
-          if (!isPageData(pageData)) {
-            throw new ResponseError("Invalid page data")
-          }
-
-          await adapter.updatePageData({
-            key,
-            data: pageData,
-            updatedAt: new Date(),
+          await adapter.updateComponent({
+            ...component,
             updatedBy: user.email,
           })
-          return { key }
+          return { key: component.key }
         },
-        {
-          successMessage: ({ key }) => `Successfully published ${key}`,
-        },
+        { successMessage: ({ key }) => `Successfully published ${key}` },
       ),
     signIn: (data) => transport(() => adapter.signIn(data)),
     signOut: () => transport(() => adapter.signOut()),
   }
-}
-
-function isPageData(value: unknown): value is OberonPage["data"] {
-  return typeof value === "object" && value !== null && "content" in value && "root" in value
 }

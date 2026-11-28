@@ -1,17 +1,13 @@
 import { randomUUID } from "crypto"
 
-import { JsonValueSchema, type OberonDatabaseAdapter, type PageData } from "@oberoncms/core"
+import { JsonValueSchema, type OberonDatabaseAdapter } from "@oberoncms/core"
 import { UserSchema } from "@oberoncms/core"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
 import type { DatabaseClient } from "./client"
 import { user } from "./schema"
-import { images, kv, pages, site } from "./schema"
-
-function isPageData(value: unknown): value is PageData {
-  return typeof value === "object" && value !== null && "content" in value && "root" in value
-}
+import { components, images, kv, site } from "./schema"
 
 export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdapter => ({
   getSite: async () => {
@@ -27,13 +23,13 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
       .execute()
     return result[0]
   },
-  updateSite: async ({ version, components, updatedAt, updatedBy }) => {
+  updateSite: async ({ version, components: componentVersions, updatedAt, updatedBy }) => {
     await db()
       .insert(site)
-      .values({ id: 1, version, components, updatedAt, updatedBy })
+      .values({ id: 1, version, components: componentVersions, updatedAt, updatedBy })
       .onConflictDoUpdate({
         target: site.id,
-        set: { version, components, updatedAt, updatedBy },
+        set: { version, components: componentVersions, updatedAt, updatedBy },
       })
       .execute()
   },
@@ -58,11 +54,11 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
       .from(images)
       .execute()
   },
-  addPage: async ({ key, data, updatedAt, updatedBy }) => {
-    await db().insert(pages).values({ key, data, updatedAt, updatedBy }).execute()
+  addComponent: async ({ key, type, data, updatedAt, updatedBy }) => {
+    await db().insert(components).values({ key, type, data, updatedAt, updatedBy }).execute()
   },
-  deletePage: async ({ key }) => {
-    await db().delete(pages).where(eq(pages.key, key)).execute()
+  deleteComponent: async ({ key }) => {
+    await db().delete(components).where(eq(components.key, key)).execute()
   },
   deleteKV: async ({ namespace, key }) => {
     await db()
@@ -70,18 +66,10 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
       .where(and(eq(kv.namespace, namespace), eq(kv.key, key)))
       .execute()
   },
-  getPageData: async ({ key }) => {
-    const result = await db()
-      .select({
-        data: pages.data,
-      })
-      .from(pages)
-      .where(eq(pages.key, key))
-      .execute()
+  getComponent: async ({ key }) => {
+    const result = await db().select().from(components).where(eq(components.key, key)).execute()
 
-    const pageData = result[0]?.data
-
-    return isPageData(pageData) ? pageData : null
+    return result[0] ?? null
   },
   getKV: async ({ namespace, key }) => {
     const result = await db()
@@ -94,11 +82,14 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
 
     return value === undefined ? null : JsonValueSchema.parse(value)
   },
-  updatePageData: async ({ key, data, updatedAt, updatedBy }) => {
+  updateComponent: async ({ key, type, data, updatedAt, updatedBy }) => {
     await db()
-      .insert(pages)
-      .values({ key, data, updatedAt, updatedBy })
-      .onConflictDoUpdate({ target: pages.key, set: { data } })
+      .insert(components)
+      .values({ key, type, data, updatedAt, updatedBy })
+      .onConflictDoUpdate({
+        target: components.key,
+        set: { data, updatedAt, updatedBy },
+      })
       .execute()
   },
   putKV: async ({ namespace, key, value }) => {
@@ -111,14 +102,16 @@ export const getDatabaseAdapter = (db: () => DatabaseClient): OberonDatabaseAdap
       })
       .execute()
   },
-  getAllPages: async () => {
+  listComponents: async (type) => {
     return await db()
       .select({
-        key: pages.key,
-        updatedAt: pages.updatedAt,
-        updatedBy: pages.updatedBy,
+        key: components.key,
+        type: components.type,
+        updatedAt: components.updatedAt,
+        updatedBy: components.updatedBy,
       })
-      .from(pages)
+      .from(components)
+      .where(eq(components.type, type))
       .execute()
   },
   getAllUsers: async () => {

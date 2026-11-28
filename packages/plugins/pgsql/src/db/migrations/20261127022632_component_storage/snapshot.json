@@ -1,0 +1,113 @@
+{
+  "type": "diff",
+  "version": "10",
+  "dialect": "postgres",
+  "id": "a9f8fd9f-bd37-4aea-af2c-64904850b7ff",
+  "prevIds": ["bd1852f6-9d5e-4865-8454-dc6c346e5e7c"],
+  "footprints": [
+    {
+      "statementType": "rename_table",
+      "statementTarget": ["table", "public", "pages"],
+      "writes": [
+        "s|tbl|public.pages",
+        "n|tbl|public.pages",
+        "n|rel|public.pages",
+        "n|type|public.pages",
+        "s|tbl|public.components",
+        "n|tbl|public.components",
+        "n|rel|public.components",
+        "n|type|public.components"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "rename_index",
+      "statementTarget": ["index", "public", "components", "pages_key_idx"],
+      "writes": [
+        "s|idx|public.pages_key_idx",
+        "n|idx|public.pages_key_idx",
+        "n|rel|public.pages_key_idx",
+        "s|idx|public.components_key_idx",
+        "n|idx|public.components_key_idx",
+        "n|rel|public.components_key_idx"
+      ],
+      "reads": ["e|tbl|public.components", "n|sch|public", "e|col|public.components.key"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "components", "type"],
+      "writes": [
+        "s|col|public.components.type",
+        "n|col|public.components.type",
+        "e|col|public.components.type"
+      ],
+      "reads": ["n|tbl|public.components", "n|sch|public"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "components", "components_type_idx"],
+      "writes": [
+        "s|idx|public.components_type_idx",
+        "n|idx|public.components_type_idx",
+        "e|idx|public.components_type_idx",
+        "n|rel|public.components_type_idx"
+      ],
+      "reads": ["n|tbl|public.components", "n|sch|public", "n|col|public.components.type"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "rename",
+      "key": "tables\u0000[\"public\",\"pages\"]",
+      "set": {
+        "name": "components"
+      }
+    },
+    {
+      "op": "rename",
+      "key": "indexes\u0000[\"public\",\"pages_key_idx\"]",
+      "set": {
+        "name": "components_key_idx"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "components",
+        "name": "type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'page'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "components",
+        "name": "components_type_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "type",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "entityType": "indexes"
+      }
+    }
+  ]
+}

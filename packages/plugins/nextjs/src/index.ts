@@ -1,4 +1,4 @@
-import { type OberonPlugin } from "@oberoncms/core"
+import { componentTag, type ComponentType, type OberonPlugin } from "@oberoncms/core"
 import { nextCookies } from "better-auth/next-js"
 import { revalidatePath, updateTag, unstable_cache as cache } from "next/cache"
 import { headers } from "next/headers"
@@ -8,6 +8,19 @@ import { connection } from "next/server"
 import { name, version } from "../package.json" with { type: "json" }
 
 export { createRestHandler } from "./handler"
+
+const componentListTag = (type: ComponentType) => `oberon-components-${type}`
+
+async function refreshComponent({ key, type }: { key: string; type: ComponentType }) {
+  updateTag(await componentTag(key))
+  updateTag(componentListTag(type))
+
+  if (type === "page") {
+    revalidatePath(key)
+    revalidatePath(`/cms/edit${key}`)
+    revalidatePath(`/cms/preview${key}`)
+  }
+}
 
 export const plugin: OberonPlugin = ({ phase }) => {
   return {
@@ -28,33 +41,24 @@ export const plugin: OberonPlugin = ({ phase }) => {
             getAuthPlugins:
               ({ next }) =>
               () => [...next(), nextCookies()],
-            updatePageData:
+            updateComponent:
               ({ next }) =>
-              async (page) => {
-                await next(page)
-                revalidatePath(page.key)
-                revalidatePath(`/cms/edit${page.key}`)
-                revalidatePath(`/cms/preview${page.key}`)
-                updateTag("oberon-pages")
+              async (component) => {
+                await next(component)
+                await refreshComponent(component)
               },
-            addPage:
+            addComponent:
               ({ next }) =>
-              async (page) => {
-                await next(page)
-                revalidatePath(page.key)
-                revalidatePath(`/cms/edit${page.key}`)
-                revalidatePath(`/cms/preview${page.key}`)
-                updateTag("oberon-pages")
+              async (component) => {
+                await next(component)
+                await refreshComponent(component)
               },
-            deletePage:
-              ({ next }) =>
-              async (data) => {
-                await next(data)
-                const { key } = data
-                revalidatePath(key)
-                revalidatePath(`/cms/edit${key}`)
-                revalidatePath(`/cms/preview${key}`)
-                updateTag("oberon-pages")
+            deleteComponent:
+              ({ getAdapter, next }) =>
+              async ({ key }) => {
+                const component = await getAdapter().getComponent({ key })
+                await next({ key })
+                if (component) await refreshComponent(component)
               },
             updateSite:
               ({ next }) =>
@@ -93,11 +97,16 @@ export const plugin: OberonPlugin = ({ phase }) => {
                 await next(data)
                 updateTag("oberon-users")
               },
-            getPageData: ({ next }) => cache(next, ["oberon-get-page-data"]),
-            getAllPages: ({ next }) =>
-              cache(next, ["oberon-get-all-pages"], {
-                tags: ["oberon-pages"],
-              }),
+            getComponent:
+              ({ next }) =>
+              async ({ key }) =>
+                cache(next, ["oberon-get-component"], { tags: [await componentTag(key)] })({
+                  key,
+                }),
+            listComponents:
+              ({ next }) =>
+              (type) =>
+                cache(next, ["oberon-list-components"], { tags: [componentListTag(type)] })(type),
             getAllUsers: ({ next }) =>
               cache(next, ["oberon-get-all-users"], {
                 tags: ["oberon-users"],
