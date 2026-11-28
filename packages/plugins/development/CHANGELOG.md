@@ -1,5 +1,32 @@
 # @oberoncms/plugin-development
 
+## 0.11.0
+
+### Minor Changes
+
+- fd254b5: Upgrade Drizzle ORM and Kit to 1.0.0-rc.6. Convert the existing migration histories to
+  the v1 folder format and preserve their SQL and the Page storage schema. Generate migrations from
+  each database Plugin's schema entry point after its workspace dependencies build. Store the
+  migrations with the Plugin that applies them.
+- 61b8438: Store Pages as Component records of type `page`. Migrate existing Pages with their paths,
+  Puck data, and publication metadata.
+
+  Breaking. Replace Page-specific Adapter capabilities, actions, and schemas with Component
+  operations. Update custom Plugins and action transports to use the new operations. `getComponent`
+  reads a record by key, and `listComponents` lists metadata by type. Use `updateComponent` in
+  Plugins and `publishComponent` in action transports. Use `componentTag` for Component cache tags.
+
+### Patch Changes
+
+- aa5944a: Update published packages to the latest dependency versions.
+- Updated dependencies [fd254b5]
+- Updated dependencies [9caa019]
+- Updated dependencies [aa5944a]
+- Updated dependencies [61b8438]
+- Updated dependencies [48e3a22]
+  - @oberoncms/sqlite@0.10.0
+  - @oberoncms/core@0.22.0
+
 ## 0.10.0
 
 ### Minor Changes
