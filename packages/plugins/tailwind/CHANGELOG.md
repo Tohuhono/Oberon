@@ -1,5 +1,28 @@
 # @oberoncms/plugin-tailwind
 
+## 0.22.0
+
+### Minor Changes
+
+- 61b8438: Store Pages as Component records of type `page`. Migrate existing Pages with their paths,
+  Puck data, and publication metadata.
+
+  Breaking. Replace Page-specific Adapter capabilities, actions, and schemas with Component
+  operations. Update custom Plugins and action transports to use the new operations. `getComponent`
+  reads a record by key, and `listComponents` lists metadata by type. Use `updateComponent` in
+  Plugins and `publishComponent` in action transports. Use `componentTag` for Component cache tags.
+
+### Patch Changes
+
+- aa5944a: Update published packages to the latest dependency versions.
+- 48e3a22: Apply stricter lint rules, remove variable shadowing, and keep editor, calendar, and
+  chart component identities stable.
+- Updated dependencies [9caa019]
+- Updated dependencies [aa5944a]
+- Updated dependencies [61b8438]
+- Updated dependencies [48e3a22]
+  - @oberoncms/core@0.22.0
+
 ## 0.21.0
 
 ### Minor Changes

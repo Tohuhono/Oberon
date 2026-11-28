@@ -1,5 +1,21 @@
 # create-oberon-app
 
+## 0.14.0
+
+### Minor Changes
+
+- 61b8438: Store Pages as Component records of type `page`. Migrate existing Pages with their paths,
+  Puck data, and publication metadata.
+
+  Breaking. Replace Page-specific Adapter capabilities, actions, and schemas with Component
+  operations. Update custom Plugins and action transports to use the new operations. `getComponent`
+  reads a record by key, and `listComponents` lists metadata by type. Use `updateComponent` in
+  Plugins and `publishComponent` in action transports. Use `componentTag` for Component cache tags.
+
+### Patch Changes
+
+- aa5944a: Update published packages to the latest dependency versions.
+
 ## 0.13.0
 
 ### Minor Changes
