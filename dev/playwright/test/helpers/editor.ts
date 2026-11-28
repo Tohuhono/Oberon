@@ -1,40 +1,67 @@
-import { expect, type Page } from "@playwright/test"
+import { expect, type Locator, type Page } from "@playwright/test"
 
-export async function insertTextComponent(page: Page) {
-  await expect(page.locator("iframe#preview-frame")).toBeVisible()
+export async function insertComponent(page: Page, name: string, slot?: Locator) {
   await page.getByRole("tab", { name: "Components", exact: true }).click()
 
-  const rootDropZone = page
-    .frameLocator("iframe#preview-frame")
-    .getByTestId("dropzone:root:default-zone")
-  await expect(rootDropZone).toBeVisible()
-  const drawerItemBox = await page.getByTestId("drawer-item:Text").boundingBox()
-  const rootDropZoneBox = await rootDropZone.boundingBox()
+  const dropZone =
+    slot ?? page.frameLocator("iframe#preview-frame").getByTestId("dropzone:root:default-zone")
+  const drawerItem = page
+    .getByRole("tabpanel")
+    .getByRole("button", { name, exact: true })
+    .and(page.getByTestId(/^drawer-item:/u))
+  await dragComponent(page, drawerItem, dropZone, Boolean(slot))
+}
 
-  if (!drawerItemBox || !rootDropZoneBox) {
-    throw new Error("Text drawer item and root drop zone must have bounding boxes")
+export async function dragComponent(
+  page: Page,
+  draggable: Locator,
+  dropZone: Locator,
+  nested: boolean,
+) {
+  await expect(dropZone).toBeVisible()
+  if (nested) await dropZone.scrollIntoViewIfNeeded()
+  await draggable.scrollIntoViewIfNeeded()
+  const draggableBox = await draggable.boundingBox()
+
+  if (!draggableBox) {
+    throw new Error("The dragged component must have a bounding box")
   }
 
-  await page.mouse.move(
-    drawerItemBox.x + drawerItemBox.width / 2,
-    drawerItemBox.y + drawerItemBox.height / 2,
-  )
+  const start = {
+    x: draggableBox.x + draggableBox.width / 2,
+    y: draggableBox.y + draggableBox.height / 2,
+  }
+  await page.mouse.move(start.x, start.y)
   await page.mouse.down()
-  await page.waitForTimeout(250)
-  await page.mouse.move(
-    drawerItemBox.x + drawerItemBox.width / 2 + 10,
-    drawerItemBox.y + drawerItemBox.height / 2,
-    { steps: 5 },
-  )
-  await page.mouse.move(
-    rootDropZoneBox.x + rootDropZoneBox.width / 2,
-    rootDropZoneBox.y + rootDropZoneBox.height / 2,
-    { steps: 20 },
-  )
-  await page.mouse.up()
+  try {
+    await page.mouse.move(start.x + 10, start.y, { steps: 5 })
+    await expect(
+      page.getByRole("status").filter({
+        hasText:
+          /^(?:Picked up draggable item |Draggable item .* was moved over droppable target )/u,
+      }),
+    ).toBeAttached()
+    const dropZoneBox = await dropZone.boundingBox()
+    if (!dropZoneBox) {
+      throw new Error("The drop zone must have a bounding box")
+    }
+    await page.mouse.move(
+      dropZoneBox.x + dropZoneBox.width / 2,
+      dropZoneBox.y + (nested ? dropZoneBox.height / 2 : dropZoneBox.height - 8),
+      { steps: 20 },
+    )
+    // Puck renders a line at the pending insertion point before it commits the drop.
+    await expect(dropZone.locator(":scope > [data-puck-line-placeholder]")).toBeVisible()
+  } finally {
+    await page.mouse.up()
+  }
+}
+
+export async function insertTextComponent(page: Page) {
+  await insertComponent(page, "Text")
   await expect(page.getByRole("tab", { name: "Page Settings", exact: true })).toHaveAttribute(
     "aria-selected",
     "true",
   )
-  await expect(page.locator('textarea[name="text"]')).toBeVisible()
+  await expect(page.getByRole("textbox", { name: "text", exact: true })).toBeEditable()
 }

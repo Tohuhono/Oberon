@@ -1,17 +1,22 @@
 # Plugin shape
 
-A plugin receives the phase and a getter for the final Adapter. It returns its name and optional
-capabilities:
+A Plugin receives the Oberon client config, phase, and a getter for the composed Adapter. The Plugin
+returns its name and optional capabilities.
 
 ```tsx
 import type {
   OberonAdapter,
+  OberonClientConfig,
   OberonHandler,
   OberonPluginAdapterHooks,
   OberonPluginPhase,
 } from "@oberoncms/core"
 
-type Plugin = (context: { getAdapter: () => OberonAdapter; phase: OberonPluginPhase }) => {
+type Plugin = (context: {
+  client: OberonClientConfig
+  getAdapter: () => OberonAdapter
+  phase: OberonPluginPhase
+}) => {
   name: string
   version?: string
   disabled?: boolean

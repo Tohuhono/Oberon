@@ -20,6 +20,8 @@ export function getTitle(action: ClientAction, slug?: string) {
       return "Manage Users"
     case "pages":
       return "Manage Pages"
+    case "library":
+      return "Shared components"
     case "site":
     default:
       return "Oberon CMS"
@@ -31,6 +33,7 @@ export const parseClientAction = (action: unknown): ClientAction | undefined => 
     case "edit":
     case "images":
     case "login":
+    case "library":
     case "pages":
     case "preview":
     case "site":

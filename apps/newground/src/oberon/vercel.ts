@@ -25,27 +25,15 @@ export const plugin: OberonPlugin = ({ phase }) => ({
       ? {
           getComponent:
             ({ next }) =>
-            async (page) => {
-              await addCacheTag(await componentTag(page.key))
-              return next(page)
+            async ({ key }) => {
+              await addCacheTag(await componentTag(key))
+              return next({ key })
             },
-          addComponent:
+          onComponentChange:
             ({ next }) =>
-            async (page) => {
-              await next(page)
-              await invalidateByTag(await componentTag(page.key))
-            },
-          updateComponent:
-            ({ next }) =>
-            async (page) => {
-              await next(page)
-              await invalidateByTag(await componentTag(page.key))
-            },
-          deleteComponent:
-            ({ next }) =>
-            async (page) => {
-              await next(page)
-              await invalidateByTag(await componentTag(page.key))
+            async (component) => {
+              await next(component)
+              await invalidateByTag(await componentTag(component.key))
             },
         }
       : {},

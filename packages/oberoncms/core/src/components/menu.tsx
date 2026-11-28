@@ -16,6 +16,7 @@ export const Menu = ({
 }>) => {
   const { can, signOut } = useOberonActions()
 
+  const { data: showLibrary } = useSWR("/can/library", () => can({ action: "pages" }))
   const { data: showImages } = useSWR("/can/images", () => can({ action: "images" }))
   const { data: showUsers } = useSWR("/can/users", () => can({ action: "users" }))
 
@@ -43,6 +44,11 @@ export const Menu = ({
         <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/pages">
           Pages
         </Link>
+        {showLibrary && (
+          <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/library">
+            Shared
+          </Link>
+        )}
         {showImages && (
           <Link className={buttonVariants({ variant: "outline", size: "sm" })} href="/cms/images">
             Images

@@ -7,6 +7,7 @@ import { Login } from "./components/login"
 import { Menu } from "./components/menu"
 import { Pages } from "./components/pages"
 import { Preview } from "./components/preview"
+import { SharedComponents } from "./components/shared-components"
 import { Site } from "./components/site"
 import { Users } from "./components/users"
 import { useOberonClient, useOberonNavigation } from "./hooks/use-oberon"
@@ -27,7 +28,8 @@ const previewConfig = {
 }
 
 export function OberonClient({ config }: { config: OberonClientConfig }) {
-  const { action, data, slug } = useOberonClient()
+  const context = useOberonClient()
+  const { action, data, slug } = context
   const { notFound } = useOberonNavigation()
 
   if (action === "login") {
@@ -35,11 +37,37 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
   }
 
   if (action === "edit") {
-    return <Editor path={slug} data={data} config={config} />
+    return (
+      <Editor
+        path={slug}
+        data={data}
+        updatedAt={context.updatedAt}
+        config={config}
+        sharedComponents={context.sharedComponents ?? {}}
+      />
+    )
   }
 
   if (action === "preview") {
-    return <Preview path={slug} data={data} config={{ ...previewConfig, ...config }} />
+    return (
+      <Preview
+        path={slug}
+        data={data}
+        config={{ ...previewConfig, ...config }}
+        sharedComponents={context.sharedComponents ?? {}}
+      />
+    )
+  }
+
+  if (action === "library") {
+    return (
+      <SharedComponents
+        sources={data.sources}
+        sourceId={data.sourceId}
+        returnTo={data.returnTo}
+        clientConfig={config}
+      />
+    )
   }
 
   if (["users", "images", "pages", "site"].includes(action)) {
@@ -57,7 +85,7 @@ export function OberonClient({ config }: { config: OberonClientConfig }) {
           >
             {action === "users" && <Users users={data} />}
             {action === "images" && <Images images={data} />}
-            {action === "pages" && <Pages pages={data} />}
+            {action === "pages" && <Pages pages={data} config={config} />}
             {action === "site" && <Site config={data} />}
           </div>
         </div>

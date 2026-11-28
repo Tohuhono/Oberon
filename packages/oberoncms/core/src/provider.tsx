@@ -11,7 +11,19 @@ import type {
   OberonServerActions,
 } from "./lib/dtd"
 import { ResponseError } from "./lib/dtd"
+import { getSharedComponentRecords, getSharedComponentLibrary } from "./lib/shared-components"
 import { parseClientAction, resolveSlug } from "./lib/utils"
+
+function pageEditorReturnPath(value: unknown) {
+  if (
+    typeof value !== "string" ||
+    !/^\/cms\/edit\/(?:[0-9a-zA-Z_.-]+(?:\/[0-9a-zA-Z_.-]+)*)?$/u.test(value)
+  ) {
+    return null
+  }
+
+  return value.split("/").some((segment) => segment === "." || segment === "..") ? null : value
+}
 
 async function getContext(
   { getComponent, getAllImages, listComponents, getAllUsers, getConfig }: OberonAdapter,
@@ -32,11 +44,16 @@ async function getContext(
       }
     case "edit":
     case "preview": {
-      const component = await getComponent({ key: slug })
+      const key =
+        action === "preview" && typeof searchParams.key === "string" ? searchParams.key : slug
+      const component = await getComponent({ key })
+      const data = component?.type === "shared" ? component.data.tree : component?.data
       return {
         action,
-        slug,
-        data: component?.data ?? null,
+        slug: key,
+        data: action === "edit" && component?.type !== "page" ? null : (data ?? null),
+        updatedAt: component?.updatedAt ?? null,
+        sharedComponents: await getSharedComponentLibrary({ listComponents, getComponent }),
       }
     }
     case "users":
@@ -63,11 +80,24 @@ async function getContext(
         slug,
         data: await listComponents("page"),
       }
+    case "library":
+      return {
+        action,
+        slug,
+        data: {
+          sources: await getSharedComponentRecords({ listComponents, getComponent }),
+          sourceId: typeof searchParams.source === "string" ? searchParams.source : null,
+          returnTo: pageEditorReturnPath(searchParams.returnTo),
+        },
+      }
   }
 }
 
 function getActionGroup(action: Exclude<ClientAction, "login">): AdapterActionGroup {
   if (action === "edit" || action === "preview") {
+    return "pages"
+  }
+  if (action === "library") {
     return "pages"
   }
   return action

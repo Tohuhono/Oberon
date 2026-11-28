@@ -2,7 +2,10 @@ import "server-cli-only"
 import { createHash } from "crypto"
 
 import {
-  ComponentTypeSchema,
+  createComponentStyleReader,
+  getSharedComponentRecords,
+  type OberonComponentRecord,
+  type OberonClientConfig,
   type OberonPlugin,
   type OberonPluginAdapter,
   ResponseError,
@@ -20,11 +23,14 @@ const tailwindStateSchema = z.object({
 
 const classDelimiter = /\s+/u
 
-export async function extractTailwindClasses(data: unknown) {
+export async function extractTailwindClasses(data: unknown, exposedClassKeys = new Set<string>()) {
   const classes = new Set<string>()
 
   for await (const node of walkAsyncStep(data)) {
-    if (node.key !== "className" || typeof node.val !== "string") {
+    if (
+      typeof node.val !== "string" ||
+      (node.key !== "className" && !exposedClassKeys.has(String(node.key)))
+    ) {
       continue
     }
 
@@ -59,24 +65,31 @@ async function getAsset(
 
 async function getAllPublishedClasses(
   adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent">,
+  client: OberonClientConfig,
 ) {
+  const shared = await getSharedComponentRecords(adapter)
+  const { readProps, exposedClassKeys } = createComponentStyleReader(shared, client)
   const classes = new Set<string>()
-  for (const type of ComponentTypeSchema.options) {
-    for (const { key } of await adapter.listComponents(type)) {
-      const component = await adapter.getComponent({ key })
-      if (!component) continue
-      for (const className of await extractTailwindClasses(component.data)) {
-        classes.add(className)
-      }
+  const addClasses = async (component: OberonComponentRecord) => {
+    for (const className of await extractTailwindClasses(readProps(component), exposedClassKeys)) {
+      classes.add(className)
     }
   }
+
+  for (const component of shared) await addClasses(component)
+  for (const { key } of await adapter.listComponents("page")) {
+    const component = await adapter.getComponent({ key })
+    if (component?.type === "page") await addClasses(component)
+  }
+
   return [...classes].sort()
 }
 
 async function syncStyles(
   adapter: Pick<OberonPluginAdapter, "listComponents" | "getKV" | "getComponent" | "putKV">,
+  client: OberonClientConfig,
 ) {
-  const classes = await getAllPublishedClasses(adapter)
+  const classes = await getAllPublishedClasses(adapter, client)
   const state = await getState(adapter)
 
   if (!classes.length) {
@@ -102,7 +115,7 @@ async function syncStyles(
   await adapter.putKV({ namespace: name, key: "state", value: { activeHash: hash, classes } })
 }
 
-export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
+export const plugin: OberonPlugin = ({ client, getAdapter: getBootstrapAdapter }) => ({
   name,
   version,
   handlers: {
@@ -145,7 +158,7 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
   },
   bootstrap: async () => {
     try {
-      await syncStyles(getBootstrapAdapter())
+      await syncStyles(getBootstrapAdapter(), client)
     } catch (error) {
       if (error instanceof ResponseError) {
         throw error
@@ -159,23 +172,30 @@ export const plugin: OberonPlugin = ({ getAdapter: getBootstrapAdapter }) => ({
     }
   },
   adapter: {
-    updateComponent:
+    onComponentWrite:
       ({ getAdapter, next }) =>
-      async (page) => {
-        try {
-          await next(page)
-          await syncStyles(getAdapter())
-        } catch (error) {
-          if (error instanceof ResponseError) {
-            throw error
-          }
-
-          throw new ResponseError(
-            error instanceof Error && error.message
-              ? `Failed to update Tailwind styles: ${error.message}`
-              : "Failed to update Tailwind styles",
-          )
-        }
+      async () => {
+        await next()
+        await syncAfterWrite(getAdapter(), client)
       },
   },
 })
+
+async function syncAfterWrite(
+  adapter: Pick<OberonPluginAdapter, "listComponents" | "getComponent" | "getKV" | "putKV">,
+  client: OberonClientConfig,
+) {
+  try {
+    await syncStyles(adapter, client)
+  } catch (error) {
+    if (error instanceof ResponseError) {
+      throw error
+    }
+
+    throw new ResponseError(
+      error instanceof Error && error.message
+        ? `Failed to update Tailwind styles: ${error.message}`
+        : "Failed to update Tailwind styles",
+    )
+  }
+}

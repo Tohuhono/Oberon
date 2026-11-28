@@ -36,7 +36,7 @@ names, not planned implementation.
 | Term                          | Definition                                                                                                       | Aliases to avoid                                          |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | **Component**                 | A globally keyed record of authored Puck data and its publication metadata.                                      | fragment, document, entry                                 |
-| **Component type**            | A Component's classification, such as `page`.                                                                    | collection                                                |
+| **Component type**            | A Component's classification, such as `page` or `shared`.                                                        | collection                                                |
 | **Page**                      | A Component of type `page` whose slash-prefixed key is its public path.                                          | document, route, entry                                    |
 | **Puck component**            | A configured component used within an authored Puck tree.                                                        | block, widget                                             |
 | **Shared component**          | A named Component authored for reuse inside Pages or other Shared components.                                    | Named composition, shell, partial Page, Shared definition |

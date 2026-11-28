@@ -43,6 +43,7 @@ async function getDevelopmentAdapter(
   const { plugin } = await import("./index")
 
   const developmentPlugin = plugin({
+    client: { version: 1, components: {} },
     getAdapter: () => fromPartial({}),
     phase: "bootstrap",
   })
@@ -158,6 +159,212 @@ developmentAdapterTest.describe(
         await adapter.deleteUser?.({ id: added.id })
 
         expect(await readUpdatedBy()).toBe("snapshot@example.com")
+      },
+    )
+  },
+)
+
+developmentAdapterTest.describe(
+  "Component writes",
+  { tags: ["ai", "feature-shared-components"] },
+  () => {
+    developmentAdapterTest(
+      "rolls back the Component and derived data when a publication effect fails",
+      async ({ adapter: storage }) => {
+        const { initAdapter } = await import("@oberoncms/core/adapter")
+        const key = "/failed-publication"
+        const effect = { namespace: "publication-test", key }
+        const adapter = initAdapter({
+          client: fromPartial({ version: 1, components: {} }),
+          plugins: [
+            ({ getAdapter: getRuntimeAdapter }) => ({
+              name: "component-storage",
+              adapter: {
+                addComponent: () => storage.addComponent,
+                getComponent: () => storage.getComponent,
+                withComponentTransaction: () => storage.withComponentTransaction,
+                getKV: () => storage.getKV,
+                putKV: () => storage.putKV,
+                onComponentWrite: () => async () => {
+                  const runtimeAdapter = getRuntimeAdapter()
+                  expect(await runtimeAdapter.getComponent({ key })).toMatchObject({ key })
+                  await runtimeAdapter.putKV({ ...effect, value: "derived asset" })
+                  throw new Error("Publication effect failed")
+                },
+              },
+            }),
+          ],
+        })
+
+        await expect(
+          adapter.addComponent({
+            key,
+            type: "page",
+            data: INITIAL_DATA,
+            updatedAt: new Date(),
+            updatedBy: "test@example.com",
+          }),
+        ).rejects.toThrow("Publication effect failed")
+        await expect(adapter.getComponent({ key })).resolves.toBeNull()
+        await expect(adapter.getKV(effect)).resolves.toBeNull()
+      },
+    )
+
+    developmentAdapterTest(
+      "serializes publishing a reference with deleting its source",
+      async ({ adapter: storage }) => {
+        const { initAdapter } = await import("@oberoncms/core/adapter")
+        const adapter = initAdapter({
+          client: fromPartial({ version: 1, components: {} }),
+          plugins: [
+            () => ({
+              name: "component-storage",
+              adapter: {
+                addComponent: () => storage.addComponent,
+                deleteComponent: () => storage.deleteComponent,
+                listComponents: () => storage.listComponents,
+                getComponent: () => storage.getComponent,
+                withComponentTransaction: () => storage.withComponentTransaction,
+              },
+            }),
+          ],
+        })
+        const key = "transaction-source"
+        const updatedAt = new Date()
+        const updatedBy = "test@example.com"
+
+        await adapter.addComponent({
+          key,
+          type: "shared",
+          data: { name: "Source", tree: INITIAL_DATA, exposures: [], defaults: {} },
+          updatedAt,
+          updatedBy,
+        })
+
+        const [publication, deletion] = await Promise.allSettled([
+          adapter.addComponent({
+            key: "/transaction-page",
+            type: "page",
+            data: {
+              ...INITIAL_DATA,
+              content: [
+                { type: "SharedComponent", props: { id: "instance", sharedComponentKey: key } },
+              ],
+            },
+            updatedAt,
+            updatedBy,
+          }),
+          adapter.deleteComponent({ key }),
+        ])
+
+        expect(publication.status).toBe("fulfilled")
+        expect(deletion).toMatchObject({
+          status: "rejected",
+          reason: { message: expect.stringContaining("/transaction-page") },
+        })
+        await expect(adapter.getComponent({ key })).resolves.toMatchObject({ type: "shared" })
+      },
+    )
+  },
+)
+
+developmentAdapterTest.describe(
+  "Component migrations",
+  { tags: ["ai", "feature-shared-components"] },
+  () => {
+    developmentAdapterTest(
+      "rolls back a Page update when a Shared transform fails",
+      async ({ adapter: storage }) => {
+        const { initAdapter } = await import("@oberoncms/core/adapter")
+        const updatedAt = new Date()
+        const user = { id: "editor", email: "editor@example.com", role: "admin" as const }
+        const page = "/migration-page"
+        const shared = "migration-shared"
+        const publication = { updatedAt, updatedBy: user.email }
+        let failShared = true
+
+        const adapter = initAdapter({
+          client: fromPartial({
+            version: 1,
+            components: {
+              Text: {
+                transforms: [
+                  (props: Record<string, unknown>) => {
+                    if (props.text === "shared" && failShared)
+                      throw new Error("Shared transform failed")
+                    return { ...props, text: String(props.text) + " migrated" }
+                  },
+                ],
+              },
+            },
+          }),
+          plugins: [
+            () => ({
+              name: "component-storage",
+              adapter: {
+                listComponents: () => storage.listComponents,
+                getComponent: () => storage.getComponent,
+                getSite: () => storage.getSite,
+                updateComponent: () => storage.updateComponent,
+                updateSite: () => storage.updateSite,
+                withComponentTransaction: () => storage.withComponentTransaction,
+              },
+            }),
+          ],
+        })
+
+        await storage.updateSite({ ...publication, version: 1, components: { Text: 0 } })
+        await storage.addComponent({
+          ...publication,
+          key: page,
+          type: "page",
+          data: {
+            ...INITIAL_DATA,
+            content: [{ type: "Text", props: { id: "page-text", text: "page" } }],
+          },
+        })
+        await storage.addComponent({
+          ...publication,
+          key: shared,
+          type: "shared",
+          data: {
+            name: "Shared",
+            tree: {
+              ...INITIAL_DATA,
+              content: [{ type: "Text", props: { id: "shared-text", text: "shared" } }],
+            },
+            exposures: [],
+            defaults: {},
+          },
+        })
+
+        const migrate = async () => {
+          let chunk = await adapter.migrateData(user)
+          while (chunk.next && chunk.iteratorResult.value?.type !== "summary")
+            chunk = await chunk.next
+          return chunk.iteratorResult.value
+        }
+
+        await expect(migrate()).resolves.toMatchObject({
+          error: expect.arrayContaining([page, shared]),
+        })
+        await expect(storage.getSite()).resolves.toMatchObject({ components: { Text: 0 } })
+        await expect(storage.getComponent({ key: page })).resolves.toMatchObject({
+          data: { content: [{ props: { text: "page" } }] },
+        })
+
+        failShared = false
+        await expect(migrate()).resolves.toMatchObject({
+          error: [],
+          success: expect.arrayContaining([page, shared]),
+        })
+        await expect(storage.getSite()).resolves.toMatchObject({ components: { Text: 1 } })
+        await expect(storage.getComponent({ key: page })).resolves.toMatchObject({
+          data: { content: [{ props: { text: "page migrated" } }] },
+        })
+        await expect(storage.getComponent({ key: shared })).resolves.toMatchObject({
+          data: { tree: { content: [{ props: { text: "shared migrated" } }] } },
+        })
       },
     )
   },

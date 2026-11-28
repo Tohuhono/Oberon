@@ -54,7 +54,7 @@ export async function expectCmsPagePersisted(page: Page, key: string) {
     .toBe(true)
 }
 
-async function createCmsPage(page: Page, key: string) {
+export async function createCmsPage(page: Page, key: string) {
   await page.goto("/cms/pages")
   const pagePathInput = page.getByLabel("Page path", { exact: true })
   await expect(pagePathInput).toBeEditable()
@@ -66,7 +66,7 @@ async function createCmsPage(page: Page, key: string) {
   await expectCmsPagePersisted(page, key)
 }
 
-async function deleteCmsPages(page: Page, key: string) {
+export async function deleteCmsPages(page: Page, key: string) {
   await page.goto("/cms/pages")
   await expect(page.getByLabel("Page path", { exact: true })).toBeEditable()
 

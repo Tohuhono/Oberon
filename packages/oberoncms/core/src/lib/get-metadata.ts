@@ -1,9 +1,13 @@
-import type { OberonAdapter } from "./dtd"
+import type { OberonAdapter, PageData } from "./dtd"
 import { getTitle, parseClientAction, resolveSlug } from "./utils"
+
+export function getPageMetadata(data?: PageData, fallback = "Oberon CMS") {
+  return { title: data?.root.props?.title || data?.root.title || fallback }
+}
 
 export async function getMetaData(
   { getComponent }: OberonAdapter,
-  path: string[] = [],
+  path: string | string[] = [],
   action?: string,
 ) {
   const slug = resolveSlug(path)
@@ -16,9 +20,9 @@ export async function getMetaData(
     }
   }
 
-  const component = await getComponent({ key: slug })
+  const component = await getComponent({ key: typeof path === "string" ? path : slug })
 
-  return {
-    title: component?.data.root.props?.title || component?.data.root.title || "Oberon CMS",
-  }
+  return component?.type === "shared"
+    ? getPageMetadata(component.data.tree, component.data.name)
+    : getPageMetadata(component?.data)
 }

@@ -1,22 +1,37 @@
-import { Render, type Config, type Data } from "@puckeditor/core"
+import type { Config, Data } from "@puckeditor/core"
+import { useMemo } from "react"
 
-import { useLocalData } from "../hooks/use-local-data"
+import { usePageDraft } from "../hooks/use-component-draft"
+import type { SharedComponentData } from "../lib/dtd"
+import { ResolvedPreview } from "./editor/resolved-preview"
+import { withSharedEditorComponents } from "./shared-component-render"
 
 export function Preview({
   path,
   data,
   config,
+  sharedComponents,
 }: {
   path: string
   config: Config
   data: Data | null
+  sharedComponents: Record<string, SharedComponentData>
 }) {
-  const [localData] = useLocalData(path, config)
-  const preview = localData ?? data
+  const session = useMemo(
+    () =>
+      withSharedEditorComponents(config, sharedComponents, (props) => (
+        <ResolvedPreview {...props} />
+      )),
+    [config, sharedComponents],
+  )
+  const { draft } = usePageDraft(path, config)
+  const preview = draft?.data ?? data
 
-  if (!preview) {
-    return null
-  }
-
-  return <Render data={preview} config={config} />
+  return preview ? (
+    <ResolvedPreview
+      data={session.toEditorData(preview)}
+      config={session.config}
+      metadata={{ sharedComponents }}
+    />
+  ) : null
 }

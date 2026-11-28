@@ -28,5 +28,8 @@ export const stubbedAdapter = {
   getSite: notImplemented("getSite"),
   putKV: notImplemented("putKV"),
   updateComponent: notImplemented("updateComponent"),
+  withComponentTransaction: (write) => write(),
+  onComponentWrite: async () => {},
+  onComponentChange: async () => {},
   updateSite: notImplemented("updateSite"),
 } satisfies OberonPluginAdapter

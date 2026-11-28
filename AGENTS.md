@@ -9,6 +9,7 @@ create-oberon-app script
 - CRITICAL: Format always use `pnpm format` from root to format files. Do not filter, just run on
   all.
 
+- Git checkout: read [checkout rules](.agents/WORKFLOW.md) before choosing where to work.
 - Run all lifecycle commands from repo root
 - Use canonical root `pnpm` scripts below rather than reconstructing task graphs manually.
 - If the existing root scripts do not cover your lifecycle need, stop and ask to add or update a

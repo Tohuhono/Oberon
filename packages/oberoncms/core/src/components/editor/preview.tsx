@@ -205,7 +205,7 @@ export const Preview = ({
             transform: `scale(${scale})`,
           }}
         >
-          <Puck.Preview id="preview-frame" />
+          <Puck.Preview />
         </div>
       </div>
     </div>

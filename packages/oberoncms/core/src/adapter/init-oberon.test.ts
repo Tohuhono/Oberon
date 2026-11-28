@@ -121,28 +121,41 @@ describe("adapter handlers", { tags: ["ai", "feature-runtime-composition"] }, ()
     expect(getComponent).toHaveBeenCalledExactlyOnceWith({ key })
   })
 
-  it("routes a missing Page through the routing adapter", async () => {
-    const missing = new Error("not-found")
-    const notFound = vi.fn((): never => {
-      throw missing
-    })
-    const plugin: OberonPlugin = () => ({
-      name: "missing-page",
-      adapter: {
-        getComponent: () => async () => null,
-        notFound: () => notFound,
-      },
-    })
-    const adapter = initAdapter({
-      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
-      plugins: [plugin],
-    })
+  it.each(["missing", "shared"] as const)(
+    "routes a %s Component as a missing Page",
+    async (kind) => {
+      const missing = new Error("not-found")
+      const notFound = vi.fn((): never => {
+        throw missing
+      })
+      const plugin: OberonPlugin = () => ({
+        name: "missing-page",
+        adapter: {
+          getComponent: () => async () =>
+            kind === "shared"
+              ? {
+                  ...getInitialData(),
+                  type: "shared",
+                  data: {
+                    name: "Header",
+                    tree: getInitialData().data,
+                    exposures: [],
+                    defaults: {},
+                  },
+                }
+              : null,
+          notFound: () => notFound,
+        },
+      })
+      const adapter = initAdapter({
+        client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+        plugins: [plugin],
+      })
 
-    await expect(createActionHandler(adapter).resolvePath({ key: "/missing" })).rejects.toBe(
-      missing,
-    )
-    expect(notFound).toHaveBeenCalledOnce()
-  })
+      await expect(adapter.getPage({ key: "/missing" })).rejects.toBe(missing)
+      expect(notFound).toHaveBeenCalledOnce()
+    },
+  )
 
   it("checks Page permission before path resolution reads data", async () => {
     const getComponent = vi.fn(async () => getInitialData())
@@ -178,7 +191,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         adapter: {
           listComponents: () => async () => [],
           getSite: () => async () => undefined,
-          updateComponent: () => async () => {},
+          updateComponent: () => async () => new Date(),
           updateSite: () => async () => {},
         },
       }
@@ -221,7 +234,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
             : {
                 listComponents: () => async () => [],
                 getSite: () => async () => undefined,
-                updateComponent: () => async () => {},
+                updateComponent: () => async () => new Date(),
                 updateSite: () => async () => {},
               },
       }
@@ -251,6 +264,7 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
         getSite: () => async () => undefined,
         updateComponent: () => async () => {
           events.push("welcome")
+          return new Date()
         },
         updateSite: () => async () => {
           events.push("site")
@@ -274,5 +288,88 @@ describe("phase-aware plugin composition", { tags: ["ai", "feature-runtime-compo
     })
 
     expect(events).toEqual(["function", "first", "second", "welcome", "site"])
+  })
+})
+
+describe("Component publishing", { tags: ["ai", "feature-shared-components"] }, () => {
+  it("returns the persisted timestamp after publishing a Component", async () => {
+    const page = getInitialData()
+    const persistedAt = new Date("2026-10-13T00:00:00.000Z")
+    const plugin: OberonPlugin = () => ({
+      name: "persisted-component-timestamp",
+      adapter: {
+        getCurrentUser: () => async () => ({
+          id: "editor",
+          email: "editor@example.com",
+          role: "admin",
+        }),
+        getComponent: () => async () => ({ ...page, updatedAt: persistedAt }),
+        updateComponent: () => async () => persistedAt,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+
+    await expect(
+      createActionHandler(adapter).publishComponent({
+        key: page.key,
+        type: "page",
+        data: page.data,
+        expectedUpdatedAt: page.updatedAt,
+      }),
+    ).resolves.toMatchObject({
+      status: "success",
+      result: { key: page.key, type: "page", updatedAt: persistedAt },
+    })
+  })
+
+  it("validates references before publishing a Page or creating a Shared component", async () => {
+    const addComponent = vi.fn(async () => {})
+    const updateComponent = vi.fn(async () => new Date())
+    const plugin: OberonPlugin = () => ({
+      name: "component-storage",
+      adapter: {
+        getCurrentUser: () => async () => ({
+          id: "editor",
+          email: "editor@example.com",
+          role: "admin",
+        }),
+        listComponents: () => async () => [],
+        addComponent: () => addComponent,
+        updateComponent: () => updateComponent,
+      },
+    })
+    const adapter = initAdapter({
+      client: fromPartial<OberonClientConfig>({ version: 1, components: {} }),
+      plugins: [plugin],
+    })
+    const actions = createActionHandler(adapter)
+    const tree = {
+      root: {},
+      content: [
+        { type: "SharedComponent", props: { id: "instance", sharedComponentKey: "missing" } },
+      ],
+    }
+
+    await expect(
+      actions.publishComponent({ type: "page", key: "/", data: tree }),
+    ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
+    await expect(
+      actions.addComponent({
+        type: "shared",
+        key: "source",
+        data: { name: "Source", tree, exposures: [], defaults: {} },
+      }),
+    ).resolves.toMatchObject({ status: "error", message: expect.stringContaining("missing") })
+    expect(addComponent).not.toHaveBeenCalled()
+    expect(updateComponent).not.toHaveBeenCalled()
+
+    const suppliedData = { root: { props: { title: "Supplied" } }, content: [] }
+    await expect(
+      actions.addComponent({ type: "page", key: "/", data: suppliedData }),
+    ).resolves.toMatchObject({ status: "success" })
+    expect(addComponent).toHaveBeenCalledWith(expect.objectContaining({ data: suppliedData }))
   })
 })

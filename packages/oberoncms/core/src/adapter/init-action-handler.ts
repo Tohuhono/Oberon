@@ -39,23 +39,16 @@ export async function transport<T>(
 
 export function createActionHandler(adapter: OberonAdapter): OberonServerActions {
   return {
-    resolvePath: async ({ key }) => {
-      await adapter.will({ action: "pages", permission: "read" })
-      const component = await adapter.getComponent({ key })
-
-      if (component?.type !== "page") return adapter.notFound()
-
-      return { key, data: component.data }
-    },
-    addComponent: (component) =>
+    resolvePath: adapter.getPage,
+    addComponent: (data) =>
       transport(async () => {
         const user = await adapter.whoWill({ action: "pages", permission: "write" })
-        await adapter.addComponent({
-          ...component,
-          data: component.data ?? INITIAL_DATA,
-          updatedAt: new Date(),
-          updatedBy: user.email,
-        })
+        const publication = { updatedAt: new Date(), updatedBy: user.email }
+        await adapter.addComponent(
+          data.type === "page"
+            ? { ...data, ...publication, data: data.data ?? INITIAL_DATA }
+            : { ...data, ...publication },
+        )
       }),
     addImage: (data) =>
       transport(async () => {
@@ -130,17 +123,22 @@ export function createActionHandler(adapter: OberonAdapter): OberonServerActions
         const user = await adapter.whoWill({ action: "site", permission: "write" })
         return adapter.migrateData(user)
       }),
-    publishComponent: (component) =>
+    publishComponent: (data) =>
       transport(
         async () => {
           const user = await adapter.whoWill({ action: "pages", permission: "write" })
-          await adapter.updateComponent({
-            ...component,
+          const updatedAt = await adapter.updateComponent({
+            ...data,
             updatedBy: user.email,
           })
-          return { key: component.key }
+          return { key: data.key, type: data.type, updatedAt }
         },
-        { successMessage: ({ key }) => `Successfully published ${key}` },
+        {
+          successMessage: ({ key, type }) =>
+            type === "page"
+              ? `Successfully published ${key}`
+              : `Successfully published ${type} ${key}`,
+        },
       ),
     signIn: (data) => transport(() => adapter.signIn(data)),
     signOut: () => transport(() => adapter.signOut()),

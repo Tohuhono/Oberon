@@ -39,7 +39,7 @@ export const mockPlugin: OberonPlugin = () => ({
     deleteKV: () => notAvailable,
     deleteUser: () => notAvailable,
     getAllImages: () => async () => [],
-    listComponents: () => async () => [mockPageMeta],
+    listComponents: () => async (type) => (type === mockPage.type ? [mockPageMeta] : []),
     getAllUsers: () => async () => [mockUser],
     getCurrentUser: () => async () => mockUser,
     getComponent:

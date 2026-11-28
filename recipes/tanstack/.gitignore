@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # Dependencies and package manager artifacts
-/node_modules/
-/.pnp
+node_modules
+.pnp
 .pnp.js
 .yarn/install-state.gz
 
@@ -24,8 +24,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build and framework output
-/build/
-/dist/
+build
+dist
 /dist-ssr/
 /.next/
 /out/
@@ -35,6 +35,9 @@ yarn-error.log*
 .tanstack
 .vinxi
 __unconfig*
+.rollup.cache
+.turbo
+vite.config.*.timestamp-*
 
 # Deployment tooling
 .vercel
@@ -46,13 +49,19 @@ __unconfig*
 next-env.d.ts
 
 # Test artifacts and coverage
-/coverage/
-/test-results/
+coverage
+test-results
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 /test/results/
 /test/playwright-report/
+test/playwright/report
+test/playwright/results
+test/playwright/.cache
+
+# Oberon
+.oberon
 
 # Project-specific temporary files
 /media/

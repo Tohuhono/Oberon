@@ -31,4 +31,6 @@ Use [CONTEXT.md](CONTEXT.md) for domain names. Read relevant `.agents/adr/` deci
 The Development, Turso, and PostgreSQL Plugins each own the migration history in their
 `src/db/migrations` folder. The Development and Turso Plugins use the shared schema from
 `@oberoncms/sqlite/schema`. Run `pnpm generate:migrations` from the repository root. Turbo builds
-the Plugins' workspace dependencies before it runs Drizzle Kit.
+the Plugins' workspace dependencies before it runs Drizzle Kit. Regenerate unreleased schema
+migrations when the schema changes. Keep data conversion in bootstrap when Drizzle Kit cannot
+generate it.

@@ -110,6 +110,7 @@ export const clientActions = [
   "users",
   "images",
   "pages",
+  "library",
   "site",
   "login",
 ] as const
@@ -148,10 +149,39 @@ export type JsonValue = z.infer<typeof JsonValueSchema>
 /*
  * Components
  */
-const PuckDataSchema: z.ZodType<Data> = z.looseObject({
-  content: z.array(z.custom<Data["content"][number]>()),
-  root: z.looseObject({}),
+const PuckNodeSchema = z.looseObject({
+  type: z.string().min(1),
+  props: z.looseObject({ id: z.string().optional() }),
+  readOnly: z.record(z.string(), z.boolean().optional()).optional(),
 })
+
+export const PuckDataSchema: z.ZodType<Data> = z.looseObject({
+  content: z.array(PuckNodeSchema),
+  root: z.looseObject({
+    props: z.looseObject({}).optional(),
+  }),
+  zones: z.record(z.string(), z.array(PuckNodeSchema)).optional(),
+})
+
+export const SharedExposureKeySchema = z
+  .string()
+  .regex(/^instance_[0-9a-f]{8}(?:_[0-9a-f]{4}){3}_[0-9a-f]{12}$/iu)
+
+export const SharedExposureSchema = z.object({
+  key: SharedExposureKeySchema,
+  nodeId: z.string().min(1),
+  prop: z.string().min(1),
+  label: z.string().trim().min(1),
+})
+
+export const SharedComponentDataSchema = z.object({
+  name: z.string().trim().min(1),
+  tree: PuckDataSchema,
+  exposures: z.array(SharedExposureSchema),
+  defaults: z.record(z.string(), JsonValueSchema),
+})
+
+export type SharedComponentData = z.infer<typeof SharedComponentDataSchema>
 
 const PageKeySchema = z
   .string()
@@ -165,26 +195,54 @@ export const PageSchema = z.object({
   updatedBy: z.string(),
 })
 
-export const ComponentTypeSchema = z.enum(["page"])
+export const ComponentTypeSchema = z.enum(["page", "shared"])
 export type ComponentType = z.infer<typeof ComponentTypeSchema>
 
 const ComponentKeySchema = z.string().min(1, "Component key cannot be empty")
-export const ComponentRecordSchema = PageSchema.extend({
-  key: ComponentKeySchema,
-  type: ComponentTypeSchema,
-})
+const ExpectedUpdatedAtSchema = z
+  .union([z.date(), z.iso.datetime().transform((value) => new Date(value))])
+  .optional()
 
-export const AddComponentSchema = z.object({
-  key: PageKeySchema,
-  type: ComponentTypeSchema,
-  data: PuckDataSchema.optional(),
-})
+export const ComponentRecordSchema = z.discriminatedUnion("type", [
+  PageSchema.extend({ key: ComponentKeySchema, type: z.literal("page") }),
+  z.object({
+    key: ComponentKeySchema,
+    type: z.literal("shared"),
+    data: SharedComponentDataSchema,
+    updatedAt: z.date(),
+    updatedBy: z.string(),
+  }),
+])
+
+export const AddComponentSchema = z.discriminatedUnion("type", [
+  z.object({ key: PageKeySchema, type: z.literal("page"), data: PuckDataSchema.optional() }),
+  z.object({
+    key: ComponentKeySchema,
+    type: z.literal("shared"),
+    data: SharedComponentDataSchema,
+  }),
+])
 
 export const GetComponentSchema = z.object({ key: ComponentKeySchema })
 
-export const DeleteComponentSchema = GetComponentSchema
+export const DeleteComponentSchema = GetComponentSchema.extend({
+  expectedUpdatedAt: ExpectedUpdatedAtSchema,
+})
 
-export const PublishComponentSchema = AddComponentSchema.required({ data: true })
+export const PublishComponentSchema = z.discriminatedUnion("type", [
+  z.object({
+    key: PageKeySchema,
+    type: z.literal("page"),
+    data: PuckDataSchema,
+    expectedUpdatedAt: ExpectedUpdatedAtSchema,
+  }),
+  z.object({
+    key: ComponentKeySchema,
+    type: z.literal("shared"),
+    data: SharedComponentDataSchema,
+    expectedUpdatedAt: ExpectedUpdatedAtSchema,
+  }),
+])
 
 export const ComponentMetaSchema = z.object({
   key: ComponentKeySchema,
@@ -194,6 +252,8 @@ export const ComponentMetaSchema = z.object({
 })
 
 export type OberonComponentRecord = z.infer<typeof ComponentRecordSchema>
+
+export type OberonSharedComponentRecord = Extract<OberonComponentRecord, { type: "shared" }>
 
 export type OberonComponentMeta = MaybeOptimistic<z.infer<typeof ComponentMetaSchema>>
 
@@ -324,7 +384,8 @@ export type OberonDatabaseAdapter = {
   getKV: (data: { namespace: string; key: string }) => Promise<JsonValue | null>
   getSite: () => Promise<OberonSite | undefined>
   putKV: (data: { namespace: string; key: string; value: JsonValue }) => Promise<void>
-  updateComponent: (data: OberonComponentRecord) => Promise<void>
+  updateComponent: (data: OberonComponentRecord & { expectedUpdatedAt?: Date }) => Promise<Date>
+  withComponentTransaction: <Result>(write: () => Promise<Result>) => Promise<Result>
   updateSite: (data: z.infer<typeof SiteSchema>) => Promise<void>
   addUser: (data: z.infer<typeof AddUserSchema>) => Promise<OberonUser>
   deleteUser: (data: z.infer<typeof DeleteUserSchema>) => Promise<void>
@@ -340,7 +401,10 @@ export type OberonPluginAdapter = OberonDatabaseAdapter &
   OberonCanAdapter &
   OberonSendAdapter &
   OberonAuthAdapter &
-  OberonRoutingAdapter
+  OberonRoutingAdapter & {
+    onComponentWrite: () => Promise<void>
+    onComponentChange: (component: Pick<OberonComponentRecord, "key" | "type">) => Promise<void>
+  }
 
 export type OberonMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
@@ -349,7 +413,9 @@ export type OberonHandler = {
 }
 
 export type OberonAdapter = Omit<OberonPluginAdapter, "updateComponent"> & {
-  updateComponent: (data: Omit<OberonComponentRecord, "updatedAt">) => Promise<void>
+  updateComponent: (
+    data: z.infer<typeof PublishComponentSchema> & Pick<OberonComponentRecord, "updatedBy">,
+  ) => Promise<Date>
   can: (data: z.infer<typeof CanSchema>) => Promise<boolean>
   handleRequest: (
     request: Request,
@@ -360,6 +426,7 @@ export type OberonAdapter = Omit<OberonPluginAdapter, "updateComponent"> & {
     action: AdapterActionGroup
     permission: AdapterPermission
   }) => Promise<OberonUser>
+  getPage: (data: { key: string }) => Promise<{ key: string; data: PageData }>
   getAllPaths: () => Promise<Array<{ path: string[] }>>
   getConfig: () => Promise<OberonSiteConfig>
   migrateData: (user: OberonUser) => Promise<StreamResponseChunk<TransformResult | MigrationResult>>
@@ -377,6 +444,7 @@ export type OberonPluginAdapterHooks = {
 }
 
 export type OberonPlugin = (context: {
+  client: OberonClientConfig
   getAdapter: () => OberonAdapter
   phase: OberonPluginPhase
 }) => {
@@ -441,7 +509,7 @@ export type OberonServerActions = {
   ) => OberonResponse<StreamResponseChunk<TransformResult | MigrationResult>>
   publishComponent: (
     data: z.infer<typeof PublishComponentSchema>,
-  ) => OberonResponse<{ key: string }>
+  ) => OberonResponse<{ key: string; type: ComponentType; updatedAt: Date }>
   signIn: (data: z.infer<typeof SignInSchema>) => OberonResponse<void>
   signOut: (data?: z.infer<typeof SignOutSchema>) => OberonResponse<void>
 }
@@ -454,10 +522,20 @@ type DescriminatedContext =
   | {
       action: "edit" | "preview"
       data: Data | null
+      updatedAt: Date | null
+      sharedComponents?: Record<string, SharedComponentData>
     }
   | { action: "users"; data: OberonUser[] }
   | { action: "images"; data: OberonImage[] }
   | { action: "pages"; data: OberonComponentMeta[] }
+  | {
+      action: "library"
+      data: {
+        sources: OberonSharedComponentRecord[]
+        sourceId: string | null
+        returnTo: string | null
+      }
+    }
   | { action: "site"; data: OberonSiteConfig }
   | {
       action: "login"
